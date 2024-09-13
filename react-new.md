@@ -2675,7 +2675,7 @@ Returning undefined won't work.
 
 ### **How to pretty print JSON with React?**
 
-We can use <pre> tag so that the formatting of the JSON.stringify() is retained:
+We can use `<pre>` tag so that the formatting of the JSON.stringify() is retained:
 
 ```jsx
 const data = { name: 'John', age: 42 };
