@@ -1107,7 +1107,7 @@ Multi-line comments:
 **Syntax:**
 ```jsx
 {/* This is a comment */}
-
+```
 **[⬆ Back to Top](#table-of-contents)**
 
 ## What is the purpose of using super constructor with props argument?
@@ -1137,12 +1137,25 @@ class MyComponent extends React.Component {
     console.log(this.props); // prints { name: 'John', age: 42 }
   }
 }
+
+**Purpose:** To initialize the parent class (React.Component) with the props, allowing access to `this.props` in the constructor of a class component.
+
+**Example:**
+```jsx
+constructor(props) {
+  super(props);
+  this.state = { /* state initialization */ };
+}
+```
+
 The above code snippets reveals that this.props is different only within the constructor. It would be the same outside the constructor.
 
 **[⬆ Back to Top](#table-of-contents)**
 
 ## What is reconciliation?
 When a component's props or state change, React decides whether an actual DOM update is necessary by comparing the newly returned element with the previously rendered one. When they are not equal, React will update the DOM. This process is called reconciliation.
+
+**Definition:** Reconciliation is the process by which React updates the DOM with changes based on the virtual DOM’s diffing algorithm.
 
 **[⬆ Back to Top](#table-of-contents)**
 
@@ -1151,6 +1164,14 @@ If you are using ES6 or the Babel transpiler to transform your JSX code then you
 handleInputChange(event) {
 this.setState({ [event.target.id]: event.target.value })
 }
+
+**Example:**
+```jsx
+this.setState(prevState => ({
+  [dynamicKey]: newValue
+}));
+```
+
 **[⬆ Back to Top](#table-of-contents)**
 
 ## What would be the common mistake of function being called every time the component renders?
@@ -1164,6 +1185,9 @@ render() {
 // Correct: handleClick is passed as a reference!
 return <button onClick={this.handleClick}>{'Click Me'}</button>
 }
+
+**Mistake:** Defining a function inside the render method. This creates a new function on every render, causing unnecessary re-renders of child components.
+
 **[⬆ Back to Top](#table-of-contents)**
 
 ## Is lazy function supports named exports?
@@ -1177,6 +1201,9 @@ export { SomeComponent as default } from './MoreComponents.js';
 Now you can import the module using lazy function as below,
 import React, { lazy } from 'react';
 const SomeComponent = lazy(() => import('./IntermediateComponent.js'));
+
+**No:** `React.lazy` supports default exports only. Named exports should be wrapped in a default export.
+
 **[⬆ Back to Top](#table-of-contents)**
 
 ## Why React uses className over class attribute?
@@ -1184,6 +1211,9 @@ class is a keyword in JavaScript, and JSX is an extension of JavaScript. That's 
 render() {
 return <span className={'menu navigation-menu'}>{'Menu'}</span>
 }
+
+**Reason:** `class` is a reserved keyword in JavaScript, so React uses `className` to avoid conflicts.
+
 **[⬆ Back to Top](#table-of-contents)**
 
 ## What are fragments?
@@ -1207,6 +1237,17 @@ return (
   </>
 )
 }
+
+**Definition:** Fragments let you group multiple elements without adding extra nodes to the DOM.
+
+**Example:**
+```jsx
+<>
+  <Child1 />
+  <Child2 />
+</>
+```
+
 **[⬆ Back to Top](#table-of-contents)**
 
 ## Why fragments are better than container divs?
@@ -1215,6 +1256,9 @@ Below are the list of reasons,
 Fragments are a bit faster and use less memory by not creating an extra DOM node. This only has a real benefit on very large and deep trees.
 Some CSS mechanisms like Flexbox and CSS Grid have a special parent-child relationships, and adding divs in the middle makes it hard to keep the desired layout.
 The DOM Inspector is less cluttered.
+
+**Reason:** Fragments do not add extra nodes to the DOM, which helps keep the DOM structure cleaner and avoids unnecessary elements.
+
 **[⬆ Back to Top](#table-of-contents)**
 
 ## What are portals in React?
@@ -1222,10 +1266,26 @@ Portal is a recommended way to render children into a DOM node that exists outsi
 ReactDOM.createPortal(child, container);
 The first argument is any render-able React child, such as an element, string, or fragment. The second argument is a DOM element.
 
+**Definition:** Portals allow rendering children into a different part of the DOM outside of the parent component’s DOM hierarchy.
+
+**Example:**
+```jsx
+ReactDOM.createPortal(child, container)
+```
+
 **[⬆ Back to Top](#table-of-contents)**
 
 ## What are stateless components?
 If the behaviour is independent of its state then it can be a stateless component. You can use either a function or a class for creating stateless components. But unless you need to use a lifecycle hook in your components, you should go for function components. There are a lot of benefits if you decide to use function components here; they are easy to write, understand, and test, a little faster, and you can avoid the this keyword altogether.
+
+**Definition:** Stateless components are components that do not manage state and only rely on props for rendering.
+
+**Example:**
+```jsx
+function StatelessComponent(props) {
+  return <div>{props.text}</div>;
+}
+```
 
 **[⬆ Back to Top](#table-of-contents)**
 
@@ -1255,6 +1315,23 @@ const App = (props) => {
     // JSX
   )
 }
+
+**Definition:** Stateful components manage their own state and use it to control rendering and behavior.
+
+**Example:**
+```jsx
+class StatefulComponent extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { count: 0 };
+  }
+
+  render() {
+    return <div>{this.state.count}</div>;
+  }
+}
+```
+
 **[⬆ Back to Top](#table-of-contents)**
 
 ## How to apply validation on props in React?
