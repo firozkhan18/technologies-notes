@@ -23805,6 +23805,530 @@ public class BestTimeToBuyAndSellStockStream {
 ```
 These solutions cover a wide range of LeetCode problems. If you need more details on any specific problem or want additional problems solved, feel free to ask!
 
+1. The Climbing Stairs problem
+This is one of the most popular coding problems which can be solved using the Dynamic Programming technique. In this problem, you are climbing a staircase. It takes n steps to reach the top. Each time you can either climb 1 or 2 steps. The question is, in how many distinct ways can you climb to the top?
+
+Note: Given n will be a positive integer.
+
+Example 1:
+
+Input: 2
+Output: 2
+Explanation: There are two ways to climb to the top.
+1. 1 step + 1 step
+2. 2 steps
+
+
+Example 2:
+
+Input: 3
+Output: 3
+Explanation: There are three ways to climb to the top.
+1. 1 step + 1 step + 1 step
+2. 1 step + 2 steps
+3. 2 steps + 1 step.
+
+
+
+
+2. The Knapsack problem [Solved]
+This is another common Dynamic programming-based coding problem and a pattern which can solve many such questions. In this type of problem, you will be given the weights and profits of ’N’ items, put these items in a knapsack which has a capacity ‘C’. Your goal: get the maximum profit from the items in the knapsack. Each item can only be selected once.
+
+A common example of this optimization problem involves which fruits in the knapsack you’d include getting maximum profit. Here’s the weight and profit of each fruit:
+
+Items: { Apple, Orange, Banana, Melon }
+Weight: { 2, 3, 1, 4 }
+Profit: { 4, 5, 3, 7 }
+Knapsack capacity: 5
+
+Let’s try to put different combinations of fruits in the knapsack, such that their total weight is not more than 5.
+
+Apple + Orange (total weight 5) => 9 profit
+Apple + Banana (total weight 3) => 7 profit
+Orange + Banana (total weight 4) => 8 profit
+Banana + Melon (total weight 5) => 10 profit
+
+This shows that Banana + Melon is the best combination, as it gives us the maximum profit and the total weight does not exceed the capacity. You can also see this free lesson from the Dynamic Programming course on Educative for a detailed solution to this problem. 
+
+How to solve knapsack problem using dynamic programming
+
+
+
+
+3. Edit Distance Problem
+This is one of the easier dynamic programming problems. In this question, you will be given two words word1 and word2, to find the minimum number of operations required to convert word1 to word2.
+
+You have the following 3 operations permitted on a word:
+Insert a character
+Delete a character
+Replace a character
+
+Example 1:
+Input: word1 = "horse", word2 = "ros"
+Output: 3
+Explanation:
+horse -> rorse (replace 'h' with 'r')
+rorse -> rose (remove 'r')
+rose -> ros (remove 'e')
+
+
+
+
+2. Longest palindromic subsequence
+This is another common Dynamic programming question and pattern. In this type of DP question, you will be given a sequence, find the length of its Longest Palindromic Subsequence (or LPS). In a palindromic subsequence, elements read the same backward and forward.
+
+A subsequence is a sequence that can be derived from another sequence by deleting some or no elements without changing the order of the remaining elements.
+
+Example 1:
+Input:
+"bbbab"
+
+Output:
+4
+
+Explanation: LPS is "bbbb".
+
+
+
+
+4. Best Time to Buy and Sell Stock
+This is one of the hard Dynamic programming problems which need some experience to solve. In this question, you will be given an array for which the ith element is the price of a given stock on day i.
+
+If you were only permitted to complete at most one transaction (i.e., buy one and sell one share of the stock), design an algorithm to find the maximum profit.
+
+Note that you cannot sell a stock before you buy one.
+
+Example 1:
+Input: [7,1,5,3,6,4]
+Output: 5
+Explanation: Buy on day 2 (price = 1) and sell on day 5 (price = 6), profit = 6-1 = 5.
+Not 7-1 = 6, as the selling price needs to be larger than buying price.
+
+You can try this problem on your own but if you stuck you can also see the solution here on Educative. 
+
+DP Coding Problems from Coding Interviews
+
+
+
+
+5. The Fibonacci problem
+This is one of the easiest dynamic programming questions and many of you have already solved it without even knowing that you are using Dynamic programming. This is also the most common example of DP and many instructors use Fibonacci numbers to teach Dynamic programming. In this question, you will be asked to write a function to calculate the nth Fibonacci number.
+
+
+Fibonacci numbers are a series of numbers in which each number is the sum of the two preceding numbers. The first few Fibonacci numbers are 0, 1, 2, 3, 5, 8, and so on.
+
+
+We can define the Fibonacci numbers as:
+
+
+Fib(n) = Fib(n-1) + Fib(n-2) for n > 1
+
+
+Given that: Fib(0) = 0, and Fib(1) = 1
+
+You can also see my solution of how to calculate the Nth Fibonacci number in Java to learn more about how to solve this problem. 
+
+Dynamic Programming questions with solutions
+
+
+
+6. The Coin Change Problem
+You are given coins of different denominations and a total amount of money amount. Write a function to compute the fewest number of coins that you need to make up that amount. If that amount of money cannot be made up of any combination of the coins, return -1.
+
+Example 1:
+Input: coins = [1, 2, 5], amount = 11
+Output: 3
+Explanation: 11 = 5 + 5 + 1
+
+
+
+
+7. Longest common substring
+Given two strings 1’ and ‘s2’, find the length of the longest substring common in both the strings.
+
+
+Example 1:
+
+Input: s1 = “abdca”
+s2 = “cbda”
+
+Output: 2
+
+Explanation: The longest common substring is “bd”.
+
+
+
+
+8. Longest common subsequence
+Given two strings 1’ and ‘s2’, find the length of the longest subsequence which is common in both the strings.
+
+Example 1:
+Input: s1 = “abdca”
+s2 = “cbda”
+
+Output: 3
+Explanation: The longest substring is “bda”.
+
+
+
+9. Equal Subset Sum Partition Problem
+This is another popular Dynamic Programming question that is very similar to the Knapsack problem. If you know how to solve knapsack then you can solve this too. 
+
+In his problem you are given a set of positive numbers, find if we can partition it into two subsets such that the sum of elements in both the subsets is equal.
+
+
+Example 1:
+Input: {1, 2, 3, 4}
+Output: True
+Explanation: The given set can be partitioned into two subsets with equal sum: {1, 4} & {2, 3}
+
+Example 2:
+Input: {1, 1, 3, 4, 7}
+Output: True
+Explanation: The given set can be partitioned into two subsets with equal sum: {1, 3, 4} & {1, 7}
+
+Example 3:
+Input: {2, 3, 4, 6}
+Output: False
+Explanation: The given set cannot be partitioned into two subsets with an equal sum.
+
+You can try solving the problem on your own but if you stuck then you can also see the solution here on Educative. This free lesson is part of their Dynamic Programming course which explains this problem in detail and also shows you how to solve it in your browser. 
+
+Dynamic Programming Interview Questions
+
+
+
+
+10. Continuous Subarray Sum
+This is another popular dynamic programming-based coding problem from interviews. In this problem, you will be given a list of non-negative numbers and a target integer k, write a function to check if the array has a continuous subarray of size at least 2 that sums up to a multiple of k, that is, sums up to n*k where n is also an integer.
+
+Example 1:
+Input: [23, 2, 4, 6, 7], k=6
+
+Output: True
+Explanation: Because [2, 4] is a continuous subarray of size 2 and sums up to 6.
+
+### Dynamic Programming Problems and Solutions
+
+Here’s a detailed list of common dynamic programming problems along with Java solutions.
+
+#### 1. The Climbing Stairs Problem
+
+**Problem Statement:** You are climbing a staircase. It takes `n` steps to reach the top. Each time you can either climb 1 or 2 steps. In how many distinct ways can you climb to the top?
+
+**Java Solution:**
+```java
+public class ClimbingStairs {
+    public int climbStairs(int n) {
+        if (n <= 1) return 1;
+        int[] dp = new int[n + 1];
+        dp[0] = 1;
+        dp[1] = 1;
+        for (int i = 2; i <= n; i++) {
+            dp[i] = dp[i - 1] + dp[i - 2];
+        }
+        return dp[n];
+    }
+
+    public static void main(String[] args) {
+        ClimbingStairs cs = new ClimbingStairs();
+        System.out.println(cs.climbStairs(2)); // Output: 2
+        System.out.println(cs.climbStairs(3)); // Output: 3
+    }
+}
+```
+
+#### 2. The Knapsack Problem
+
+**Problem Statement:** Given weights and profits of `N` items, and a knapsack capacity `C`, find the maximum profit you can get. Each item can only be selected once.
+
+**Java Solution:**
+```java
+public class Knapsack {
+    public int knapSack(int capacity, int[] weights, int[] profits, int n) {
+        int[][] dp = new int[n + 1][capacity + 1];
+        for (int i = 0; i <= n; i++) {
+            for (int w = 0; w <= capacity; w++) {
+                if (i == 0 || w == 0) {
+                    dp[i][w] = 0;
+                } else if (weights[i - 1] <= w) {
+                    dp[i][w] = Math.max(profits[i - 1] + dp[i - 1][w - weights[i - 1]], dp[i - 1][w]);
+                } else {
+                    dp[i][w] = dp[i - 1][w];
+                }
+            }
+        }
+        return dp[n][capacity];
+    }
+
+    public static void main(String[] args) {
+        Knapsack ks = new Knapsack();
+        int[] weights = {2, 3, 1, 4};
+        int[] profits = {4, 5, 3, 7};
+        int capacity = 5;
+        System.out.println(ks.knapSack(capacity, weights, profits, weights.length)); // Output: 10
+    }
+}
+```
+
+#### 3. Edit Distance Problem
+
+**Problem Statement:** Given two words, find the minimum number of operations required to convert one word into the other.
+
+**Java Solution:**
+```java
+public class EditDistance {
+    public int minDistance(String word1, String word2) {
+        int m = word1.length();
+        int n = word2.length();
+        int[][] dp = new int[m + 1][n + 1];
+
+        for (int i = 0; i <= m; i++) {
+            for (int j = 0; j <= n; j++) {
+                if (i == 0) {
+                    dp[i][j] = j;
+                } else if (j == 0) {
+                    dp[i][j] = i;
+                } else if (word1.charAt(i - 1) == word2.charAt(j - 1)) {
+                    dp[i][j] = dp[i - 1][j - 1];
+                } else {
+                    dp[i][j] = 1 + Math.min(dp[i - 1][j - 1], Math.min(dp[i - 1][j], dp[i][j - 1]));
+                }
+            }
+        }
+        return dp[m][n];
+    }
+
+    public static void main(String[] args) {
+        EditDistance ed = new EditDistance();
+        System.out.println(ed.minDistance("horse", "ros")); // Output: 3
+    }
+}
+```
+
+#### 4. Longest Palindromic Subsequence
+
+**Problem Statement:** Find the length of the longest palindromic subsequence in a given sequence.
+
+**Java Solution:**
+```java
+public class LongestPalindromicSubsequence {
+    public int longestPalindromeSubseq(String s) {
+        int n = s.length();
+        int[][] dp = new int[n][n];
+        for (int i = 0; i < n; i++) {
+            dp[i][i] = 1;
+        }
+        for (int cl = 2; cl <= n; cl++) {
+            for (int i = 0; i < n - cl + 1; i++) {
+                int j = i + cl - 1;
+                if (s.charAt(i) == s.charAt(j) && cl == 2) {
+                    dp[i][j] = 2;
+                } else if (s.charAt(i) == s.charAt(j)) {
+                    dp[i][j] = dp[i + 1][j - 1] + 2;
+                } else {
+                    dp[i][j] = Math.max(dp[i][j - 1], dp[i + 1][j]);
+                }
+            }
+        }
+        return dp[0][n - 1];
+    }
+
+    public static void main(String[] args) {
+        LongestPalindromicSubsequence lps = new LongestPalindromicSubsequence();
+        System.out.println(lps.longestPalindromeSubseq("bbbab")); // Output: 4
+    }
+}
+```
+
+#### 5. Best Time to Buy and Sell Stock
+
+**Problem Statement:** Given an array where the ith element is the price of a given stock on day i, find the maximum profit you can achieve if you are allowed to complete at most one transaction.
+
+**Java Solution:**
+```java
+public class BestTimeToBuyAndSellStock {
+    public int maxProfit(int[] prices) {
+        int minPrice = Integer.MAX_VALUE;
+        int maxProfit = 0;
+        for (int price : prices) {
+            if (price < minPrice) {
+                minPrice = price;
+            } else if (price - minPrice > maxProfit) {
+                maxProfit = price - minPrice;
+            }
+        }
+        return maxProfit;
+    }
+
+    public static void main(String[] args) {
+        BestTimeToBuyAndSellStock stock = new BestTimeToBuyAndSellStock();
+        System.out.println(stock.maxProfit(new int[]{7, 1, 5, 3, 6, 4})); // Output: 5
+    }
+}
+```
+
+#### 6. The Coin Change Problem
+
+**Problem Statement:** Given coins of different denominations and a total amount, compute the fewest number of coins needed to make up that amount.
+
+**Java Solution:**
+```java
+public class CoinChange {
+    public int coinChange(int[] coins, int amount) {
+        int[] dp = new int[amount + 1];
+        Arrays.fill(dp, amount + 1);
+        dp[0] = 0;
+        for (int i = 1; i <= amount; i++) {
+            for (int coin : coins) {
+                if (i - coin >= 0) {
+                    dp[i] = Math.min(dp[i], dp[i - coin] + 1);
+                }
+            }
+        }
+        return dp[amount] > amount ? -1 : dp[amount];
+    }
+
+    public static void main(String[] args) {
+        CoinChange cc = new CoinChange();
+        System.out.println(cc.coinChange(new int[]{1, 2, 5}, 11)); // Output: 3
+    }
+}
+```
+
+#### 7. Longest Common Substring
+
+**Problem Statement:** Given two strings, find the length of the longest substring common to both.
+
+**Java Solution:**
+```java
+public class LongestCommonSubstring {
+    public int longestCommonSubstring(String s1, String s2) {
+        int m = s1.length();
+        int n = s2.length();
+        int[][] dp = new int[m + 1][n + 1];
+        int maxLength = 0;
+        for (int i = 1; i <= m; i++) {
+            for (int j = 1; j <= n; j++) {
+                if (s1.charAt(i - 1) == s2.charAt(j - 1)) {
+                    dp[i][j] = dp[i - 1][j - 1] + 1;
+                    maxLength = Math.max(maxLength, dp[i][j]);
+                } else {
+                    dp[i][j] = 0;
+                }
+            }
+        }
+        return maxLength;
+    }
+
+    public static void main(String[] args) {
+        LongestCommonSubstring lcs = new LongestCommonSubstring();
+        System.out.println(lcs.longestCommonSubstring("abdca", "cbda")); // Output: 2
+    }
+}
+```
+
+#### 8. Longest Common Subsequence
+
+**Problem Statement:** Given two strings, find the length of the longest subsequence that is common to both.
+
+**Java Solution:**
+```java
+public class LongestCommonSubsequence {
+    public int longestCommonSubsequence(String s1, String s2) {
+        int m = s1.length();
+        int n = s2.length();
+        int[][] dp = new int[m + 1][n + 1];
+        for (
+
+int i = 1; i <= m; i++) {
+            for (int j = 1; j <= n; j++) {
+                if (s1.charAt(i - 1) == s2.charAt(j - 1)) {
+                    dp[i][j] = dp[i - 1][j - 1] + 1;
+                } else {
+                    dp[i][j] = Math.max(dp[i - 1][j], dp[i][j - 1]);
+                }
+            }
+        }
+        return dp[m][n];
+    }
+
+    public static void main(String[] args) {
+        LongestCommonSubsequence lcs = new LongestCommonSubsequence();
+        System.out.println(lcs.longestCommonSubsequence("abdca", "cbda")); // Output: 3
+    }
+}
+```
+
+#### 9. Equal Subset Sum Partition Problem
+
+**Problem Statement:** Given a set of positive numbers, find if it can be partitioned into two subsets such that the sum of elements in both subsets is equal.
+
+**Java Solution:**
+```java
+public class EqualSubsetSumPartition {
+    public boolean canPartition(int[] nums) {
+        int sum = 0;
+        for (int num : nums) {
+            sum += num;
+        }
+        if (sum % 2 != 0) return false;
+        int target = sum / 2;
+        boolean[] dp = new boolean[target + 1];
+        dp[0] = true;
+        for (int num : nums) {
+            for (int j = target; j >= num; j--) {
+                dp[j] = dp[j] || dp[j - num];
+            }
+        }
+        return dp[target];
+    }
+
+    public static void main(String[] args) {
+        EqualSubsetSumPartition partition = new EqualSubsetSumPartition();
+        System.out.println(partition.canPartition(new int[]{1, 2, 3, 4})); // Output: True
+    }
+}
+```
+
+#### 10. Continuous Subarray Sum
+
+**Problem Statement:** Given a list of non-negative numbers and a target integer `k`, check if the array has a continuous subarray of size at least 2 that sums up to a multiple of `k`.
+
+**Java Solution:**
+```java
+import java.util.HashMap;
+
+public class ContinuousSubarraySum {
+    public boolean checkSubarraySum(int[] nums, int k) {
+        if (nums.length < 2) return false;
+        HashMap<Integer, Integer> map = new HashMap<>();
+        map.put(0, -1);
+        int sum = 0;
+        for (int i = 0; i < nums.length; i++) {
+            sum += nums[i];
+            if (k != 0) {
+                sum %= k;
+            }
+            if (map.containsKey(sum)) {
+                if (i - map.get(sum) > 1) {
+                    return true;
+                }
+            } else {
+                map.put(sum, i);
+            }
+        }
+        return false;
+    }
+
+    public static void main(String[] args) {
+        ContinuousSubarraySum css = new ContinuousSubarraySum();
+        System.out.println(css.checkSubarraySum(new int[]{23, 2, 4, 6, 7}, 6)); // Output: True
+    }
+}
+```
+
+
 </details>
 <details>
 <summary><b>4.7 Employee Management Java 8 Coding Interview Questions</b></summary>
