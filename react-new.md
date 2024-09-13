@@ -133,7 +133,7 @@
 |     | **React Router** |
 | 129 | [What is React Router?](#what-is-react-router) |
 | 130 | [How React Router is different from history library?](#how-react-router-is-different-from-history-library) |
-| 131 | [What are the &lt;Router&gt; components of React Router v4?](#what-are-the-router-components-of-react-router-v4) |
+| 131 | [What are the <Router> components of React Router v4?](#what-are-the-router-components-of-react-router-v4) |
 | 132 | [What is the purpose of push and replace methods of history?](#what-is-the-purpose-of-push-and-replace-methods-of-history) |
 | 133 | [How do you programmatically navigate using React router v4?](#how-do-you-programmatically-navigate-using-react-router-v4) |
 | 134 | [How to get query parameters in React Router v4](#how-to-get-query-parameters-in-react-router-v4) |
@@ -345,7 +345,7 @@ React is an **open-source frontend JavaScript library** which is used for buildi
 
 [**⬆ Back to Top**](#table-of-contents)
 
-**What are the major features of React?**
+### **What are the major features of React?**
 
 The major features of React are:
 
@@ -356,11 +356,11 @@ The major features of React are:
 
 [**⬆ Back to Top**](#table-of-contents)
 
-**What is JSX?**
+### **What is JSX?**
 
 _JSX_ is a XML-like syntax extension to ECMAScript (the acronym stands for _JavaScript XML_). Basically it just provides syntactic sugar for the React.createElement() function, giving us expressiveness of JavaScript along with HTML like template syntax.
 
-In the example below text inside &lt;h1&gt; tag is returned as JavaScript function to the render function.
+In the example below text inside <h1> tag is returned as JavaScript function to the render function.
 
 class App extends React.Component {
 
@@ -368,11 +368,11 @@ render() {
 
 return (
 
-&lt;div&gt;
+<div>
 
-&lt;h1&gt;{'Welcome to React world!'}&lt;/h1&gt;
+<h1>{'Welcome to React world!'}</h1>
 
-&lt;/div&gt;
+</div>
 
 );
 
@@ -382,12 +382,12 @@ return (
 
 [**⬆ Back to Top**](#table-of-contents)
 
-**What is the difference between Element and Component?**
+### **What is the difference between Element and Component?**
 
 An _Element_ is a plain object describing what you want to appear on the screen in terms of the DOM nodes or other components. _Elements_ can contain other _Elements_ in their props. Creating a React element is cheap. Once an element is created, it is never mutated.
 
 The object representation of React Element would be as follows:
-
+```jsx
 const element = React.createElement('div', { id: 'login-btn' }, 'Login');
 
 The above React.createElement() function returns an object:
@@ -405,75 +405,75 @@ id: 'login-btn'
 }
 
 }
-
+```
 And finally it renders to the DOM using ReactDOM.render():
-
-&lt;div id="login-btn"&gt;Login&lt;/div&gt;
-
+```jsx
+<div id="login-btn">Login</div>
+```
 Whereas a **component** can be declared in several different ways. It can be a class with a render() method. Alternatively, in simple cases, it can be defined as a function. In either case, it takes props as an input, and returns a JSX tree as the output:
-
+```jsx
 const Button = ({ onLogin }) => (
 
-&lt;div id={'login-btn'} onClick={onLogin}&gt;
+<div id={'login-btn'} onClick={onLogin}>
 
 Login
 
-&lt;/div&gt;
+</div>
 
 );
-
+```
 Then JSX gets transpiled to a React.createElement() function tree:
-
+```jsx
 const Button = ({ onLogin }) =>
 
 React.createElement('div', { id: 'login-btn', onClick: onLogin }, 'Login');
-
+```
 [**⬆ Back to Top**](#table-of-contents)
 
-**How to create components in React?**
+### **How to create components in React?**
 
 There are two possible ways to create a component.
 
 1. **Function Components:** This is the simplest way to create a component. Those are pure JavaScript functions that accept props object as first parameter and return React elements:
-
+```jsx
 function Greeting({ message }) {
 
-return &lt;h1&gt;{\`Hello, ${message}\`}&lt;/h1&gt;;
+return <h1>{\`Hello, ${message}\`}</h1>;
 
 }
-
+```
 1. **Class Components:** You can also use ES6 class to define a component. The above function component can be written as:
-
+```jsx
 class Greeting extends React.Component {
 
 render() {
 
-return &lt;h1&gt;{\`Hello, ${this.props.message}\`}&lt;/h1&gt;;
+return <h1>{\`Hello, ${this.props.message}\`}</h1>;
 
 }
 
 }
-
+```
 [**⬆ Back to Top**](#table-of-contents)
 
-**When to use a Class Component over a Function Component?**
+### **When to use a Class Component over a Function Component?**
 
 If the component needs _state or lifecycle methods_ then use class component otherwise use function component. _However, from React 16.8 with the addition of Hooks, you could use state , lifecycle methods and other features that were only available in class component right in your function component._
 
 [**⬆ Back to Top**](#table-of-contents)
 
-**What are Pure Components?**
+### **What are Pure Components?**
 
 _React.PureComponent_ is exactly the same as _React.Component_ except that it handles the shouldComponentUpdate() method for you. When props or state changes, _PureComponent_ will do a shallow comparison on both props and state. _Component_ on the other hand won't compare current props and state to next out of the box. Thus, the component will re-render by default whenever shouldComponentUpdate is called.
 
 [**⬆ Back to Top**](#table-of-contents)
 
-**What is state in React?**
+### **What is state in React?**
 
 _State_ of a component is an object that holds some information that may change over the lifetime of the component. We should always try to make our state as simple as possible and minimize the number of stateful components.
 
 Let's create an user component with message state,
-
+```jsx
 class User extends React.Component {
 
 constructor(props) {
@@ -492,25 +492,25 @@ render() {
 
 return (
 
-&lt;div&gt;
+<div>
 
-&lt;h1&gt;{this.state.message}&lt;/h1&gt;
+<h1>{this.state.message}</h1>
 
-&lt;/div&gt;
+</div>
 
 );
 
 }
 
 }
-
+````
 ![state](data:image/jpeg;base64,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)
 
 State is similar to props, but it is private and fully controlled by the component. i.e, It is not accessible to any component other than the one that owns and sets it.
 
 [**⬆ Back to Top**](#table-of-contents)
 
-**What are props in React?**
+### **What are props in React?**
 
 _Props_ are inputs to components. They are single values or objects containing a set of values that are passed to components on creation using a naming convention similar to HTML-tag attributes. They are data passed down from a parent component to a child component.
 
@@ -521,67 +521,67 @@ The primary purpose of props in React is to provide following component function
 3. Use via this.props.reactProp inside component's render() method.
 
 For example, let us create an element with reactProp property:
-
-&lt;Element reactProp={'1'} /&gt;
-
+```jsx
+<Element reactProp={'1'} />
+```
 This reactProp (or whatever you came up with) name then becomes a property attached to React's native props object which originally already exists on all components created using React library.
-
+```jsx
 props.reactProp
-
+```
 [**⬆ Back to Top**](#table-of-contents)
 
-**What is the difference between state and props?**
+### **What is the difference between state and props?**
 
 Both _props_ and _state_ are plain JavaScript objects. While both of them hold information that influences the output of render, they are different in their functionality with respect to component. Props get passed to the component similar to function parameters whereas state is managed within the component similar to variables declared within a function.
 
 [**⬆ Back to Top**](#table-of-contents)
 
-**Why should we not update the state directly?**
+### **Why should we not update the state directly?**
 
 If you try to update state directly then it won't re-render the component.
 
 //Wrong
-
+```jsx
 this.state.message = 'Hello world';
-
+````
 Instead use setState() method. It schedules an update to a component's state object. When state changes, the component responds by re-rendering.
 
 //Correct
-
+```jsx
 this.setState({ message: 'Hello World' });
-
+```
 **Note:** You can directly assign to the state object either in _constructor_ or using latest javascript's class field declaration syntax.
 
 [**⬆ Back to Top**](#table-of-contents)
 
-**What is the purpose of callback function as an argument of setState()?**
+### **What is the purpose of callback function as an argument of setState()?**
 
 The callback function is invoked when setState finished and the component gets rendered. Since setState() is **asynchronous** the callback function is used for any post action.
 
 **Note:** It is recommended to use lifecycle method rather than this callback function.
-
+```jsx
 setState({ name: 'John' }, () => console.log('The name has updated and component re-rendered'));
-
+```
 [**⬆ Back to Top**](#table-of-contents)
 
-**What is the difference between HTML and React event handling?**
+### **What is the difference between HTML and React event handling?**
 
 Below are some of the main differences between HTML and React event handling,
 
 1. In HTML, the event name should be in _lowercase_:
-
-&lt;button onclick="activateLasers()"&gt;&lt;/button&gt;
-
+```jsx
+<button onclick="activateLasers()"></button>
+```
 Whereas in React it follows _camelCase_ convention:
-
-&lt;button onClick={activateLasers}&gt;
-
+```jsx
+<button onClick={activateLasers}>
+```
 1. In HTML, you can return false to prevent default behavior:
-
-&lt;a href="#" onclick='console.log("The link was clicked."); return false;' /&gt;
-
+```jsx
+<a href="#" onclick='console.log("The link was clicked."); return false;' />
+```
 Whereas in React you must call preventDefault() explicitly:
-
+```jsx
 function handleClick(event) {
 
 event.preventDefault();
@@ -589,12 +589,12 @@ event.preventDefault();
 console.log('The link was clicked.');
 
 }
-
+```
 1. In HTML, you need to invoke the function by appending () Whereas in react you should not append () with the function name. (refer "activateLasers" function in the first point for example)
 
 [**⬆ Back to Top**](#table-of-contents)
 
-**How to bind methods or event handlers in JSX callbacks?**
+### **How to bind methods or event handlers in JSX callbacks?**
 
 There are 3 possible ways to achieve this:
 
@@ -626,29 +626,29 @@ console.log('this is:', this);
 
 };
 
-&lt;button onClick={this.handleClick}&gt;{'Click me'}&lt;/button&gt;
+<button onClick={this.handleClick}>{'Click me'}</button>
 
 1. **Arrow functions in callbacks:** You can use _arrow functions_ directly in the callbacks.
 
-&lt;button onClick={(event) =&gt; this.handleClick(event)}>{'Click me'}&lt;/button&gt;
+<button onClick={(event) => this.handleClick(event)}>{'Click me'}</button>
 
 **Note:** If the callback is passed as prop to child components, those components might do an extra re-rendering. In those cases, it is preferred to go with .bind() or _public class fields syntax_ approach considering performance.
 
 [**⬆ Back to Top**](#table-of-contents)
 
-**How to pass a parameter to an event handler or callback?**
+### **How to pass a parameter to an event handler or callback?**
 
 You can use an _arrow function_ to wrap around an _event handler_ and pass parameters:
 
-&lt;button onClick={() =&gt; this.handleClick(id)} />
+<button onClick={() => this.handleClick(id)} />
 
 This is an equivalent to calling .bind:
 
-&lt;button onClick={this.handleClick.bind(this, id)} /&gt;
+<button onClick={this.handleClick.bind(this, id)} />
 
 Apart from these two approaches, you can also pass arguments to a function which is defined as arrow function
 
-&lt;button onClick={this.handleClick(id)} /&gt;;
+<button onClick={this.handleClick(id)} />;
 
 handleClick = (id) => () => {
 
@@ -658,27 +658,27 @@ console.log('Hello, your ticket number is', id);
 
 [**⬆ Back to Top**](#table-of-contents)
 
-**What are synthetic events in React?**
+### **What are synthetic events in React?**
 
 SyntheticEvent is a cross-browser wrapper around the browser's native event. It's API is same as the browser's native event, including stopPropagation() and preventDefault(), except the events work identically across all browsers.
 
 [**⬆ Back to Top**](#table-of-contents)
 
-**What are inline conditional expressions?**
+### **What are inline conditional expressions?**
 
 You can use either _if statements_ or _ternary expressions_ which are available from JS to conditionally render expressions. Apart from these approaches, you can also embed any expressions in JSX by wrapping them in curly braces and then followed by JS logical operator &&.
 
-&lt;h1&gt;Hello!&lt;/h1&gt;;
+<h1>Hello!</h1>;
 
 {
 
 messages.length > 0 && !isLogin ? (
 
-&lt;h2&gt;You have {messages.length} unread messages.&lt;/h2&gt;
+<h2>You have {messages.length} unread messages.</h2>
 
 ) : (
 
-&lt;h2&gt;You don't have unread messages.&lt;/h2&gt;
+<h2>You don't have unread messages.</h2>
 
 );
 
@@ -686,17 +686,17 @@ messages.length > 0 && !isLogin ? (
 
 [**⬆ Back to Top**](#table-of-contents)
 
-**What is "key" prop and what is the benefit of using it in arrays of elements?**
+### **What is "key" prop and what is the benefit of using it in arrays of elements?**
 
 A key is a special string attribute you **should** include when creating arrays of elements. _Key_ prop helps React identify which items have changed, are added, or are removed.
 
 Most often we use ID from our data as _key_:
 
-const todoItems = todos.map((todo) => &lt;li key={todo.id}&gt;{todo.text}&lt;/li&gt;);
+const todoItems = todos.map((todo) => <li key={todo.id}>{todo.text}</li>);
 
 When you don't have stable IDs for rendered items, you may use the item _index_ as a _key_ as a last resort:
 
-const todoItems = todos.map((todo, index) => &lt;li key={index}&gt;{todo.text}&lt;/li&gt;);
+const todoItems = todos.map((todo, index) => <li key={index}>{todo.text}</li>);
 
 **Note:**
 
@@ -706,13 +706,13 @@ const todoItems = todos.map((todo, index) => &lt;li key={index}&gt;{todo.text}&l
 
 [**⬆ Back to Top**](#table-of-contents)
 
-**What is the use of refs?**
+### **What is the use of refs?**
 
 The _ref_ is used to return a reference to the element. They _should be avoided_ in most cases, however, they can be useful when you need a direct access to the DOM element or an instance of a component.
 
 [**⬆ Back to Top**](#table-of-contents)
 
-**How to create refs?**
+### **How to create refs?**
 
 There are two approaches
 
@@ -730,7 +730,7 @@ this.myRef = React.createRef();
 
 render() {
 
-return &lt;div ref={this.myRef} /&gt;;
+return <div ref={this.myRef} />;
 
 }
 
@@ -786,17 +786,17 @@ You can also use _refs_ in function components using **closures**. **Note**: You
 
 [**⬆ Back to Top**](#table-of-contents)
 
-**What are forward refs?**
+### **What are forward refs?**
 
 _Ref forwarding_ is a feature that lets some components take a _ref_ they receive, and pass it further down to a child.
 
 const ButtonElement = React.forwardRef((props, ref) => (
 
-&lt;button ref={ref} className="CustomButton"&gt;
+<button ref={ref} className="CustomButton">
 
 {props.children}
 
-&lt;/button&gt;
+</button>
 
 ));
 
@@ -804,11 +804,11 @@ const ButtonElement = React.forwardRef((props, ref) => (
 
 const ref = React.createRef();
 
-&lt;ButtonElement ref={ref}&gt;{'Forward Ref'}&lt;/ButtonElement&gt;;
+<ButtonElement ref={ref}>{'Forward Ref'}</ButtonElement>;
 
 [**⬆ Back to Top**](#table-of-contents)
 
-**Which is preferred option with in callback refs and findDOMNode()?**
+### **Which is preferred option with in callback refs and findDOMNode()?**
 
 It is preferred to use _callback refs_ over findDOMNode() API. Because findDOMNode() prevents certain improvements in React in the future.
 
@@ -824,7 +824,7 @@ findDOMNode(this).scrollIntoView();
 
 render() {
 
-return &lt;div /&gt;;
+return <div />;
 
 }
 
@@ -850,7 +850,7 @@ this.node.current.scrollIntoView();
 
 render() {
 
-return &lt;div ref={this.node} /&gt;;
+return <div ref={this.node} />;
 
 }
 
@@ -858,7 +858,7 @@ return &lt;div ref={this.node} /&gt;;
 
 [**⬆ Back to Top**](#table-of-contents)
 
-**Why are String Refs legacy?**
+### **Why are String Refs legacy?**
 
 If you worked with React before, you might be familiar with an older API where the ref attribute is a string, like ref={'textInput'}, and the DOM node is accessed as this.refs.textInput. We advise against it because _string refs have below issues_, and are considered legacy. String refs were **removed in React v16**.
 
@@ -873,17 +873,17 @@ renderRow = (index) => {
 
 // This won't work. Ref will get attached to DataTable rather than MyComponent:
 
-return &lt;input ref={'input-' + index} /&gt;;
+return <input ref={'input-' + index} />;
 
 // This would work though! Callback refs are awesome.
 
-return &lt;input ref={(input) =&gt; (this\['input-' + index\] = input)} />;
+return <input ref={(input) => (this\['input-' + index\] = input)} />;
 
 };
 
 render() {
 
-return &lt;DataTable data={this.props.data} renderRow={this.renderRow} /&gt;;
+return <DataTable data={this.props.data} renderRow={this.renderRow} />;
 
 }
 
@@ -891,13 +891,13 @@ return &lt;DataTable data={this.props.data} renderRow={this.renderRow} /&gt;;
 
 [**⬆ Back to Top**](#table-of-contents)
 
-**What is Virtual DOM?**
+### **What is Virtual DOM?**
 
 The _Virtual DOM_ (VDOM) is an in-memory representation of _Real DOM_. The representation of a UI is kept in memory and synced with the "real" DOM. It's a step that happens between the render function being called and the displaying of elements on the screen. This entire process is called _reconciliation_.
 
 [**⬆ Back to Top**](#table-of-contents)
 
-**How Virtual DOM works?**
+### **How Virtual DOM works?**
 
 The _Virtual DOM_ works in three simple steps.
 
@@ -915,25 +915,25 @@ The _Virtual DOM_ works in three simple steps.
 
 [**⬆ Back to Top**](#table-of-contents)
 
-**What is the difference between Shadow DOM and Virtual DOM?**
+### **What is the difference between Shadow DOM and Virtual DOM?**
 
 The _Shadow DOM_ is a browser technology designed primarily for scoping variables and CSS in _web components_. The _Virtual DOM_ is a concept implemented by libraries in JavaScript on top of browser APIs.
 
 [**⬆ Back to Top**](#table-of-contents)
 
-**What is React Fiber?**
+### **What is React Fiber?**
 
 Fiber is the new _reconciliation_ engine or reimplementation of core algorithm in React v16. The goal of React Fiber is to increase its suitability for areas like animation, layout, gestures, ability to pause, abort, or reuse work and assign priority to different types of updates; and new concurrency primitives.
 
 [**⬆ Back to Top**](#table-of-contents)
 
-**What is the main goal of React Fiber?**
+### **What is the main goal of React Fiber?**
 
 The goal of _React Fiber_ is to increase its suitability for areas like animation, layout, and gestures. Its headline feature is **incremental rendering**: the ability to split rendering work into chunks and spread it out over multiple frames.
 
 [**⬆ Back to Top**](#table-of-contents)
 
-**What are controlled components?**
+### **What are controlled components?**
 
 A component that controls the input elements within the forms on subsequent user input is called **Controlled Component**, i.e, every state mutation will have an associated handler function.
 
@@ -947,7 +947,7 @@ this.setState({value: event.target.value.toUpperCase()})
 
 [**⬆ Back to Top**](#table-of-contents)
 
-**What are uncontrolled components?**
+### **What are uncontrolled components?**
 
 The **Uncontrolled Components** are the ones that store their own state internally, and you query the DOM using a ref to find its current value when you need it. This is a bit more like traditional HTML.
 
@@ -977,19 +977,19 @@ render() {
 
 return (
 
-&lt;form onSubmit={this.handleSubmit}&gt;
+<form onSubmit={this.handleSubmit}>
 
-&lt;label&gt;
+<label>
 
 {'Name:'}
 
-&lt;input type="text" ref={this.input} /&gt;
+<input type="text" ref={this.input} />
 
-&lt;/label&gt;
+</label>
 
-&lt;input type="submit" value="Submit" /&gt;
+<input type="submit" value="Submit" />
 
-&lt;/form&gt;
+</form>
 
 );
 
@@ -1001,19 +1001,19 @@ In most cases, it's recommend to use controlled components to implement forms.
 
 [**⬆ Back to Top**](#table-of-contents)
 
-**What is the difference between createElement and cloneElement?**
+### **What is the difference between createElement and cloneElement?**
 
 JSX elements will be transpiled to React.createElement() functions to create React elements which are going to be used for the object representation of UI. Whereas cloneElement is used to clone an element and pass it new props.
 
 [**⬆ Back to Top**](#table-of-contents)
 
-**What is Lifting State Up in React?**
+### **What is Lifting State Up in React?**
 
 When several components need to share the same changing data then it is recommended to _lift the shared state up_ to their closest common ancestor. That means if two child components share the same data from its parent, then move the state to parent instead of maintaining local state in both of the child components.
 
 [**⬆ Back to Top**](#table-of-contents)
 
-**What are the different phases of component lifecycle?**
+### **What are the different phases of component lifecycle?**
 
 The component lifecycle has three distinct lifecycle phases:
 
@@ -1037,7 +1037,7 @@ Before React 16.3
 
 [**⬆ Back to Top**](#table-of-contents)
 
-**What are the lifecycle methods of React?**
+### **What are the lifecycle methods of React?**
 
 Before React 16.3
 
@@ -1060,7 +1060,7 @@ React 16.3+
 
 [**⬆ Back to Top**](#table-of-contents)
 
-**What are Higher-Order Components?**
+### **What are Higher-Order Components?**
 
 A _higher-order component_ (_HOC_) is a function that takes a component and returns a new component. Basically, it's a pattern that is derived from React's compositional nature.
 
@@ -1077,7 +1077,7 @@ HOC can be used for many use cases:
 
 [**⬆ Back to Top**](#table-of-contents)
 
-**How to create props proxy for HOC component?**
+### **How to create props proxy for HOC component?**
 
 You can add/edit props passed to the component using _props proxy_ pattern like this:
 
@@ -1099,7 +1099,7 @@ showFeatureY: true,
 
 };
 
-return &lt;WrappedComponent {...this.props} {...newProps} /&gt;;
+return <WrappedComponent {...this.props} {...newProps} />;
 
 }
 
@@ -1109,7 +1109,7 @@ return &lt;WrappedComponent {...this.props} {...newProps} /&gt;;
 
 [**⬆ Back to Top**](#table-of-contents)
 
-**What is context?**
+### **What is context?**
 
 _Context_ provides a way to pass data through the component tree without having to pass props down manually at every level.
 
@@ -1119,7 +1119,7 @@ const { Provider, Consumer } = React.createContext(defaultValue);
 
 [**⬆ Back to Top**](#table-of-contents)
 
-**What is children prop?**
+### **What is children prop?**
 
 _Children_ is a prop (this.props.children) that allow you to pass components as data to other components, just like any other prop you use. Component tree put between component's opening and closing tag will be passed to that component as children prop.
 
@@ -1131,7 +1131,7 @@ const MyDiv = React.createClass({
 
 render: function () {
 
-return &lt;div&gt;{this.props.children}&lt;/div&gt;;
+return <div>{this.props.children}</div>;
 
 },
 
@@ -1139,13 +1139,13 @@ return &lt;div&gt;{this.props.children}&lt;/div&gt;;
 
 ReactDOM.render(
 
-&lt;MyDiv&gt;
+<MyDiv>
 
-&lt;span&gt;{'Hello'}&lt;/span&gt;
+<span>{'Hello'}</span>
 
-&lt;span&gt;{'World'}&lt;/span&gt;
+<span>{'World'}</span>
 
-&lt;/MyDiv&gt;,
+</MyDiv>,
 
 node,
 
@@ -1153,23 +1153,23 @@ node,
 
 [**⬆ Back to Top**](#table-of-contents)
 
-**How to write comments in React?**
+### **How to write comments in React?**
 
 The comments in React/JSX are similar to JavaScript Multiline comments but are wrapped in curly braces.
 
 **Single-line comments:**
 
-&lt;div&gt;
+<div>
 
 {/\* Single-line comments(In vanilla JavaScript, the single-line comments are represented by double slash(//)) \*/}
 
 {\`Welcome ${user}, let's play React\`}
 
-&lt;/div&gt;
+</div>
 
 **Multi-line comments:**
 
-&lt;div&gt;
+<div>
 
 {/\* Multi-line comments for more than
 
@@ -1177,11 +1177,11 @@ one line \*/}
 
 {\`Welcome ${user}, let's play React\`}
 
-&lt;/div&gt;
+</div>
 
 [**⬆ Back to Top**](#table-of-contents)
 
-**What is the purpose of using super constructor with props argument?**
+### **What is the purpose of using super constructor with props argument?**
 
 A child class constructor cannot make use of this reference until super() method has been called. The same applies for ES6 sub-classes as well. The main reason of passing props parameter to super() call is to access this.props in your child constructors.
 
@@ -1229,13 +1229,13 @@ The above code snippets reveals that this.props is different only within the con
 
 [**⬆ Back to Top**](#table-of-contents)
 
-**What is reconciliation?**
+### **What is reconciliation?**
 
 When a component's props or state change, React decides whether an actual DOM update is necessary by comparing the newly returned element with the previously rendered one. When they are not equal, React will update the DOM. This process is called _reconciliation_.
 
 [**⬆ Back to Top**](#table-of-contents)
 
-**How to set state with a dynamic key name?**
+### **How to set state with a dynamic key name?**
 
 If you are using ES6 or the Babel transpiler to transform your JSX code then you can accomplish this with _computed property names_.
 
@@ -1247,7 +1247,7 @@ this.setState({ \[event.target.id\]: event.target.value })
 
 [**⬆ Back to Top**](#table-of-contents)
 
-**What would be the common mistake of function being called every time the component renders?**
+### **What would be the common mistake of function being called every time the component renders?**
 
 You need to make sure that function is not being called while passing the function as a parameter.
 
@@ -1255,7 +1255,7 @@ render() {
 
 // Wrong: handleClick is called instead of passed as a reference!
 
-return &lt;button onClick={this.handleClick()}&gt;{'Click Me'}&lt;/button&gt;
+return <button onClick={this.handleClick()}>{'Click Me'}</button>
 
 }
 
@@ -1265,13 +1265,13 @@ render() {
 
 // Correct: handleClick is passed as a reference!
 
-return &lt;button onClick={this.handleClick}&gt;{'Click Me'}&lt;/button&gt;
+return <button onClick={this.handleClick}>{'Click Me'}</button>
 
 }
 
 [**⬆ Back to Top**](#table-of-contents)
 
-**Is lazy function supports named exports?**
+### **Is lazy function supports named exports?**
 
 No, currently React.lazy function supports default exports only. If you would like to import modules which are named exports, you can create an intermediate module that reexports it as the default. It also ensures that tree shaking keeps working and don’t pull unused components. Let's take a component file which exports multiple named components,
 
@@ -1295,19 +1295,19 @@ const SomeComponent = lazy(() => import('./IntermediateComponent.js'));
 
 [**⬆ Back to Top**](#table-of-contents)
 
-**Why React uses className over class attribute?**
+### **Why React uses className over class attribute?**
 
 class is a keyword in JavaScript, and JSX is an extension of JavaScript. That's the principal reason why React uses className instead of class. Pass a string as the className prop.
 
 render() {
 
-return &lt;span className={'menu navigation-menu'}&gt;{'Menu'}&lt;/span&gt;
+return <span className={'menu navigation-menu'}>{'Menu'}</span>
 
 }
 
 [**⬆ Back to Top**](#table-of-contents)
 
-**What are fragments?**
+### **What are fragments?**
 
 It's common pattern in React which is used for a component to return multiple elements. _Fragments_ let you group a list of children without adding extra nodes to the DOM.
 
@@ -1315,15 +1315,15 @@ render() {
 
 return (
 
-&lt;React.Fragment&gt;
+<React.Fragment>
 
-&lt;ChildA /&gt;
+<ChildA />
 
-&lt;ChildB /&gt;
+<ChildB />
 
-&lt;ChildC /&gt;
+<ChildC />
 
-&lt;/React.Fragment&gt;
+</React.Fragment>
 
 )
 
@@ -1337,13 +1337,13 @@ return (
 
 <>
 
-&lt;ChildA /&gt;
+<ChildA />
 
-&lt;ChildB /&gt;
+<ChildB />
 
-&lt;ChildC /&gt;
+<ChildC />
 
-&lt;/&gt;
+</>
 
 )
 
@@ -1351,7 +1351,7 @@ return (
 
 [**⬆ Back to Top**](#table-of-contents)
 
-**Why fragments are better than container divs?**
+### **Why fragments are better than container divs?**
 
 Below are the list of reasons,
 
@@ -1361,7 +1361,7 @@ Below are the list of reasons,
 
 [**⬆ Back to Top**](#table-of-contents)
 
-**What are portals in React?**
+### **What are portals in React?**
 
 _Portal_ is a recommended way to render children into a DOM node that exists outside the DOM hierarchy of the parent component.
 
@@ -1371,13 +1371,13 @@ The first argument is any render-able React child, such as an element, string, o
 
 [**⬆ Back to Top**](#table-of-contents)
 
-**What are stateless components?**
+### **What are stateless components?**
 
 If the behaviour is independent of its state then it can be a stateless component. You can use either a function or a class for creating stateless components. But unless you need to use a lifecycle hook in your components, you should go for function components. There are a lot of benefits if you decide to use function components here; they are easy to write, understand, and test, a little faster, and you can avoid the this keyword altogether.
 
 [**⬆ Back to Top**](#table-of-contents)
 
-**What are stateful components?**
+### **What are stateful components?**
 
 If the behaviour of a component is dependent on the _state_ of the component then it can be termed as stateful component. These _stateful components_ are always _class components_ and have a state that gets initialized in the constructor.
 
@@ -1399,7 +1399,7 @@ render() {
 
 }
 
-**React 16.8 Update:**
+### **React 16.8 Update:**
 
 Hooks let you use state and other React features without writing classes.
 
@@ -1421,7 +1421,7 @@ return (
 
 [**⬆ Back to Top**](#table-of-contents)
 
-**How to apply validation on props in React?**
+### **How to apply validation on props in React?**
 
 When the application is running in _development mode_, React will automatically check all props that we set on components to make sure they have _correct type_. If the type is incorrect, React will generate warning messages in the console. It's disabled in _production mode_ due to performance impact. The mandatory props are defined with isRequired.
 
@@ -1460,11 +1460,11 @@ return (
 
 <>
 
-&lt;h1&gt;{\`Welcome, ${this.props.name}\`}&lt;/h1&gt;
+<h1>{\`Welcome, ${this.props.name}\`}</h1>
 
-&lt;h2&gt;{\`Age, ${this.props.age}\`}&lt;/h2&gt;
+<h2>{\`Age, ${this.props.age}\`}</h2>
 
-&lt;/&gt;
+</>
 
 );
 
@@ -1476,7 +1476,7 @@ return (
 
 [**⬆ Back to Top**](#table-of-contents)
 
-**What are the advantages of React?**
+### **What are the advantages of React?**
 
 Below are the list of main advantages of React,
 
@@ -1488,7 +1488,7 @@ Below are the list of main advantages of React,
 
 [**⬆ Back to Top**](#table-of-contents)
 
-**What are the limitations of React?**
+### **What are the limitations of React?**
 
 Apart from the advantages, there are few limitations of React too,
 
@@ -1500,7 +1500,7 @@ Apart from the advantages, there are few limitations of React too,
 
 [**⬆ Back to Top**](#table-of-contents)
 
-**What are error boundaries in React v16?**
+### **What are error boundaries in React v16?**
 
 _Error boundaries_ are components that catch JavaScript errors anywhere in their child component tree, log those errors, and display a fallback UI instead of the component tree that crashed.
 
@@ -1538,7 +1538,7 @@ if (this.state.hasError) {
 
 // You can render any custom fallback UI
 
-return &lt;h1&gt;{'Something went wrong.'}&lt;/h1&gt;;
+return <h1>{'Something went wrong.'}</h1>;
 
 }
 
@@ -1550,27 +1550,27 @@ return this.props.children;
 
 After that use it as a regular component:
 
-&lt;ErrorBoundary&gt;
+<ErrorBoundary>
 
-&lt;MyWidget /&gt;
+<MyWidget />
 
-&lt;/ErrorBoundary&gt;
+</ErrorBoundary>
 
 [**⬆ Back to Top**](#table-of-contents)
 
-**How error boundaries handled in React v15?**
+### **How error boundaries handled in React v15?**
 
 React v15 provided very basic support for _error boundaries_ using unstable_handleError method. It has been renamed to componentDidCatch in React v16.
 
 [**⬆ Back to Top**](#table-of-contents)
 
-**What are the recommended ways for static type checking?**
+### **What are the recommended ways for static type checking?**
 
 Normally we use _PropTypes library_ (React.PropTypes moved to a prop-types package since React v15.5) for _type checking_ in the React applications. For large code bases, it is recommended to use _static type checkers_ such as Flow or TypeScript, that perform type checking at compile time and provide auto-completion features.
 
 [**⬆ Back to Top**](#table-of-contents)
 
-**What is the use of react-dom package?**
+### **What is the use of react-dom package?**
 
 The react-dom package provides _DOM-specific methods_ that can be used at the top level of your app. Most of the components are not required to use this module. Some of the methods of this package are:
 
@@ -1582,7 +1582,7 @@ The react-dom package provides _DOM-specific methods_ that can be used at the to
 
 [**⬆ Back to Top**](#table-of-contents)
 
-**What is the purpose of render method of react-dom?**
+### **What is the purpose of render method of react-dom?**
 
 This method is used to render a React element into the DOM in the supplied container and return a reference to the component. If the React element was previously rendered into container, it will perform an update on it and only mutate the DOM as necessary to reflect the latest changes.
 
@@ -1592,7 +1592,7 @@ If the optional callback is provided, it will be executed after the component is
 
 [**⬆ Back to Top**](#table-of-contents)
 
-**What is ReactDOMServer?**
+### **What is ReactDOMServer?**
 
 The ReactDOMServer object enables you to render components to static markup (typically used on node server). This object is mainly used for _server-side rendering_ (SSR). The following methods can be used in both the server and browser environments:
 
@@ -1609,13 +1609,13 @@ import MyPage from './MyPage';
 
 app.get('/', (req, res) => {
 
-res.write('&lt;!DOCTYPE html&gt;&lt;html&gt;&lt;head&gt;&lt;title&gt;My Page&lt;/title&gt;&lt;/head&gt;&lt;body&gt;');
+res.write('<!DOCTYPE html><html><head><title>My Page</title></head><body>');
 
-res.write('&lt;div id="content"&gt;');
+res.write('<div id="content">');
 
-res.write(renderToString(&lt;MyPage /&gt;));
+res.write(renderToString(<MyPage />));
 
-res.write('&lt;/div&gt;&lt;/body&gt;&lt;/html&gt;');
+res.write('</div></body></html>');
 
 res.end();
 
@@ -1623,7 +1623,7 @@ res.end();
 
 [**⬆ Back to Top**](#table-of-contents)
 
-**How to use innerHTML in React?**
+### **How to use innerHTML in React?**
 
 The dangerouslySetInnerHTML attribute is React's replacement for using innerHTML in the browser DOM. Just like innerHTML, it is risky to use this attribute considering cross-site scripting (XSS) attacks. You just need to pass a \__html object as key and HTML text as value.
 
@@ -1637,13 +1637,13 @@ return { \__html: 'First &middot; Second' };
 
 function MyComponent() {
 
-return &lt;div dangerouslySetInnerHTML={createMarkup()} /&gt;;
+return <div dangerouslySetInnerHTML={createMarkup()} />;
 
 }
 
 [**⬆ Back to Top**](#table-of-contents)
 
-**How to use styles in React?**
+### **How to use styles in React?**
 
 The style attribute accepts a JavaScript object with camelCased properties rather than a CSS string. This is consistent with the DOM style JavaScript property, is more efficient, and prevents XSS security holes.
 
@@ -1657,7 +1657,7 @@ backgroundImage: 'url(' + imgUrl + ')',
 
 function HelloWorldComponent() {
 
-return &lt;div style={divStyle}&gt;Hello World!&lt;/div&gt;;
+return <div style={divStyle}>Hello World!</div>;
 
 }
 
@@ -1665,7 +1665,7 @@ Style keys are camelCased in order to be consistent with accessing the propertie
 
 [**⬆ Back to Top**](#table-of-contents)
 
-**How events are different in React?**
+### **How events are different in React?**
 
 Handling events in React elements has some syntactic differences:
 
@@ -1674,13 +1674,13 @@ Handling events in React elements has some syntactic differences:
 
 [**⬆ Back to Top**](#table-of-contents)
 
-**What will happen if you use setState() in constructor?**
+### **What will happen if you use setState() in constructor?**
 
 When you use setState(), then apart from assigning to the object state React also re-renders the component and all its children. You would get error like this: _Can only update a mounted or mounting component._ So we need to use this.state to initialize variables inside constructor.
 
 [**⬆ Back to Top**](#table-of-contents)
 
-**What is the impact of indexes as keys?**
+### **What is the impact of indexes as keys?**
 
 Keys should be stable, predictable, and unique so that React can keep track of elements.
 
@@ -1688,7 +1688,7 @@ In the below code snippet each element's key will be based on ordering, rather t
 
 {
 
-todos.map((todo, index) => &lt;Todo {...todo} key={index} /&gt;);
+todos.map((todo, index) => <Todo {...todo} key={index} />);
 
 }
 
@@ -1696,13 +1696,13 @@ If you use element data for unique key, assuming todo.id is unique to this list 
 
 {
 
-todos.map((todo) => &lt;Todo {...todo} key={todo.id} /&gt;);
+todos.map((todo) => <Todo {...todo} key={todo.id} />);
 
 }
 
 [**⬆ Back to Top**](#table-of-contents)
 
-**Is it good to use setState() in componentWillMount() method?**
+### **Is it good to use setState() in componentWillMount() method?**
 
 Yes, it is safe to use setState() inside componentWillMount() method. But at the same it is recommended to avoid async initialization in componentWillMount() lifecycle method. componentWillMount() is invoked immediately before mounting occurs. It is called before render(), therefore setting state in this method will not trigger a re-render. Avoid introducing any side-effects or subscriptions in this method. We need to make sure async calls for component initialization happened in componentDidMount() instead of componentWillMount().
 
@@ -1724,7 +1724,7 @@ messages: \[...result.data\]
 
 [**⬆ Back to Top**](#table-of-contents)
 
-**What will happen if you use props in initial state?**
+### **What will happen if you use props in initial state?**
 
 If the props on the component are changed without the component being refreshed, the new prop value will never be displayed because the constructor function will never update the current state of the component. The initialization of state from props only runs when the component is first created.
 
@@ -1748,7 +1748,7 @@ inputValue: this.props.inputValue,
 
 render() {
 
-return &lt;div&gt;{this.state.inputValue}&lt;/div&gt;;
+return <div>{this.state.inputValue}</div>;
 
 }
 
@@ -1772,7 +1772,7 @@ record: \[\],
 
 render() {
 
-return &lt;div&gt;{this.props.inputValue}&lt;/div&gt;;
+return <div>{this.props.inputValue}</div>;
 
 }
 
@@ -1780,19 +1780,19 @@ return &lt;div&gt;{this.props.inputValue}&lt;/div&gt;;
 
 [**⬆ Back to Top**](#table-of-contents)
 
-**How do you conditionally render components?**
+### **How do you conditionally render components?**
 
 In some cases you want to render different components depending on some state. JSX does not render false or undefined, so you can use conditional _short-circuiting_ to render a given part of your component only if a certain condition is true.
 
 const MyComponent = ({ name, address }) => (
 
-&lt;div&gt;
+<div>
 
-&lt;h2&gt;{name}&lt;/h2&gt;
+<h2>{name}</h2>
 
-{address && &lt;p&gt;{address}&lt;/p&gt;}
+{address && <p>{address}</p>}
 
-&lt;/div&gt;
+</div>
 
 );
 
@@ -1800,31 +1800,31 @@ If you need an if-else condition then use _ternary operator_.
 
 const MyComponent = ({ name, address }) => (
 
-&lt;div&gt;
+<div>
 
-&lt;h2&gt;{name}&lt;/h2&gt;
+<h2>{name}</h2>
 
-{address ? &lt;p&gt;{address}&lt;/p&gt; : &lt;p&gt;{'Address is not available'}&lt;/p&gt;}
+{address ? <p>{address}</p> : <p>{'Address is not available'}</p>}
 
-&lt;/div&gt;
+</div>
 
 );
 
 [**⬆ Back to Top**](#table-of-contents)
 
-**Why we need to be careful when spreading props on DOM elements?**
+### **Why we need to be careful when spreading props on DOM elements?**
 
 When we _spread props_ we run into the risk of adding unknown HTML attributes, which is a bad practice. Instead we can use prop destructuring with ...rest operator, so it will add only required props.
 
 For example,
 
-const ComponentA = () => &lt;ComponentB isDisplay={true} className={'componentStyle'} /&gt;;
+const ComponentA = () => <ComponentB isDisplay={true} className={'componentStyle'} />;
 
-const ComponentB = ({ isDisplay, ...domProps }) => &lt;div {...domProps}&gt;{'ComponentB'}&lt;/div&gt;;
+const ComponentB = ({ isDisplay, ...domProps }) => <div {...domProps}>{'ComponentB'}</div>;
 
 [**⬆ Back to Top**](#table-of-contents)
 
-**How you use decorators in React?**
+### **How you use decorators in React?**
 
 You can _decorate_ your _class_ components, which is the same as passing the component into a function. **Decorators** are flexible and readable way of modifying component functionality.
 
@@ -1858,7 +1858,7 @@ document.title = title;
 
 render() {
 
-return &lt;WrappedComponent {...this.props} /&gt;;
+return <WrappedComponent {...this.props} />;
 
 }
 
@@ -1870,7 +1870,7 @@ return &lt;WrappedComponent {...this.props} /&gt;;
 
 [**⬆ Back to Top**](#table-of-contents)
 
-**How do you memoize a component?**
+### **How do you memoize a component?**
 
 There are memoize libraries available which can be used on function components.
 
@@ -1884,13 +1884,13 @@ const MemoizedFoo = moize.react(Component);
 
 const Consumer = () => {
 
-&lt;div&gt;
+<div>
 
 {'I will memoize the following entry:'}
 
-&lt;MemoizedFoo /&gt;
+<MemoizedFoo />
 
-&lt;/div&gt;;
+</div>;
 
 };
 
@@ -1908,7 +1908,7 @@ export default React.memo(MyFunctionComponent);
 
 [**⬆ Back to Top**](#table-of-contents)
 
-**How you implement Server Side Rendering or SSR?**
+### **How you implement Server Side Rendering or SSR?**
 
 React is already equipped to handle rendering on Node servers. A special version of the DOM renderer is available, which follows the same pattern as on the client side.
 
@@ -1916,19 +1916,19 @@ import ReactDOMServer from 'react-dom/server';
 
 import App from './App';
 
-ReactDOMServer.renderToString(&lt;App /&gt;);
+ReactDOMServer.renderToString(<App />);
 
 This method will output the regular HTML as a string, which can be then placed inside a page body as part of the server response. On the client side, React detects the pre-rendered content and seamlessly picks up where it left off.
 
 [**⬆ Back to Top**](#table-of-contents)
 
-**How to enable production mode in React?**
+### **How to enable production mode in React?**
 
 You should use Webpack's DefinePlugin method to set NODE_ENV to production, by which it strip out things like propType validation and extra warnings. Apart from this, if you minify the code, for example, Uglify's dead-code elimination to strip out development only code and comments, it will drastically reduce the size of your bundle.
 
 [**⬆ Back to Top**](#table-of-contents)
 
-**What is CRA and its benefits?**
+### **What is CRA and its benefits?**
 
 The create-react-app CLI tool allows you to quickly create & run React applications with no configuration step.
 
@@ -1963,7 +1963,7 @@ It includes everything we need to build a React app:
 
 [**⬆ Back to Top**](#table-of-contents)
 
-**What is the lifecycle methods order in mounting?**
+### **What is the lifecycle methods order in mounting?**
 
 The lifecycle methods are called in the following order when an instance of a component is being created and inserted into the DOM.
 
@@ -1974,7 +1974,7 @@ The lifecycle methods are called in the following order when an instance of a co
 
 [**⬆ Back to Top**](#table-of-contents)
 
-**What are the lifecycle methods going to be deprecated in React v16?**
+### **What are the lifecycle methods going to be deprecated in React v16?**
 
 The following lifecycle methods going to be unsafe coding practices and will be more problematic with async rendering.
 
@@ -1986,7 +1986,7 @@ Starting with React v16.3 these methods are aliased with UNSAFE_ prefix, and the
 
 [**⬆ Back to Top**](#table-of-contents)
 
-**What is the purpose of getDerivedStateFromProps() lifecycle method?**
+### **What is the purpose of getDerivedStateFromProps() lifecycle method?**
 
 The new static getDerivedStateFromProps() lifecycle method is invoked after a component is instantiated as well as before it is re-rendered. It can return an object to update state, or null to indicate that the new props do not require any state updates.
 
@@ -2004,7 +2004,7 @@ This lifecycle method along with componentDidUpdate() covers all the use cases o
 
 [**⬆ Back to Top**](#table-of-contents)
 
-**What is the purpose of getSnapshotBeforeUpdate() lifecycle method?**
+### **What is the purpose of getSnapshotBeforeUpdate() lifecycle method?**
 
 The new getSnapshotBeforeUpdate() lifecycle method is called right before DOM updates. The return value from this method will be passed as the third parameter to componentDidUpdate().
 
@@ -2022,13 +2022,13 @@ This lifecycle method along with componentDidUpdate() covers all the use cases o
 
 [**⬆ Back to Top**](#table-of-contents)
 
-**Do Hooks replace render props and higher order components?**
+### **Do Hooks replace render props and higher order components?**
 
 Both render props and higher-order components render only a single child but in most of the cases Hooks are a simpler way to serve this by reducing nesting in your tree.
 
 [**⬆ Back to Top**](#table-of-contents)
 
-**What is the recommended way for naming components?**
+### **What is the recommended way for naming components?**
 
 It is recommended to name the component by reference instead of using displayName.
 
@@ -2052,7 +2052,7 @@ export default class TodoApp extends React.Component {
 
 [**⬆ Back to Top**](#table-of-contents)
 
-**What is the recommended ordering of methods in component class?**
+### **What is the recommended ordering of methods in component class?**
 
 _Recommended_ ordering of methods from _mounting_ to _render stage_:
 
@@ -2073,7 +2073,7 @@ _Recommended_ ordering of methods from _mounting_ to _render stage_:
 
 [**⬆ Back to Top**](#table-of-contents)
 
-**What is a switching component?**
+### **What is a switching component?**
 
 A _switching component_ is a component that renders one of many components. We need to use object to map prop values to components.
 
@@ -2103,7 +2103,7 @@ const Page = (props) => {
 
 const Handler = PAGES\[props.page\] || ContactPage;
 
-return &lt;Handler {...props} /&gt;;
+return <Handler {...props} />;
 
 };
 
@@ -2117,7 +2117,7 @@ page: PropTypes.oneOf(Object.keys(PAGES)).isRequired,
 
 [**⬆ Back to Top**](#table-of-contents)
 
-**Why we need to pass a function to setState()?**
+### **Why we need to pass a function to setState()?**
 
 The reason behind for this is that setState() is an asynchronous operation. React batches state changes for performance reasons, so the state may not change immediately after setState() is called. That means you should not rely on the current state when calling setState() since you can't be sure what that state will be. The solution is to pass a function to setState(), with the previous state as an argument. By doing this you can avoid issues with the user getting the old state value on access due to the asynchronous nature of setState().
 
@@ -2145,7 +2145,7 @@ count: prevState.count + props.increment,
 
 **(OR)**
 
-**Why function is preferred over object for setState()?**
+### **Why function is preferred over object for setState()?**
 
 React may batch multiple setState() calls into a single update for performance. Because this.props and this.state may be updated asynchronously, you should not rely on their values for calculating the next state.
 
@@ -2171,9 +2171,9 @@ counter: prevState.counter + props.increment,
 
 [**⬆ Back to Top**](#table-of-contents)
 
-**What is strict mode in React?**
+### **What is strict mode in React?**
 
-React.StrictMode is a useful component for highlighting potential problems in an application. Just like &lt;Fragment&gt;, &lt;StrictMode&gt; does not render any extra DOM elements. It activates additional checks and warnings for its descendants. These checks apply for _development mode_ only.
+React.StrictMode is a useful component for highlighting potential problems in an application. Just like <Fragment>, <StrictMode> does not render any extra DOM elements. It activates additional checks and warnings for its descendants. These checks apply for _development mode_ only.
 
 import React from 'react';
 
@@ -2181,35 +2181,35 @@ function ExampleApplication() {
 
 return (
 
-&lt;div&gt;
+<div>
 
-&lt;Header /&gt;
+<Header />
 
-&lt;React.StrictMode&gt;
+<React.StrictMode>
 
-&lt;div&gt;
+<div>
 
-&lt;ComponentOne /&gt;
+<ComponentOne />
 
-&lt;ComponentTwo /&gt;
+<ComponentTwo />
 
-&lt;/div&gt;
+</div>
 
-&lt;/React.StrictMode&gt;
+</React.StrictMode>
 
-&lt;Footer /&gt;
+<Footer />
 
-&lt;/div&gt;
+</div>
 
 );
 
 }
 
-In the example above, the _strict mode_ checks apply to &lt;ComponentOne&gt; and &lt;ComponentTwo&gt; components only.
+In the example above, the _strict mode_ checks apply to <ComponentOne> and <ComponentTwo> components only.
 
 [**⬆ Back to Top**](#table-of-contents)
 
-**What are React Mixins?**
+### **What are React Mixins?**
 
 _Mixins_ are a way to totally separate components to have a common functionality. Mixins **should not be used** and can be replaced with _higher-order components_ or _decorators_.
 
@@ -2227,7 +2227,7 @@ mixins: \[PureRenderMixin\],
 
 [**⬆ Back to Top**](#table-of-contents)
 
-**Why is isMounted() an anti-pattern and what is the proper solution?**
+### **Why is isMounted() an anti-pattern and what is the proper solution?**
 
 The primary use case for isMounted() is to avoid calling setState() after a component has been unmounted, because it will emit a warning.
 
@@ -2243,7 +2243,7 @@ An optimal solution would be to find places where setState() might be called aft
 
 [**⬆ Back to Top**](#table-of-contents)
 
-**What are the Pointer Events supported in React?**
+### **What are the Pointer Events supported in React?**
 
 _Pointer Events_ provide a unified way of handling all input events. In the old days we had a mouse and respective event listeners to handle them but nowadays we have many devices which don't correlate to having a mouse, like phones with touch surface or pens. We need to remember that these events will only work in browsers that support the _Pointer Events_ specification.
 
@@ -2262,7 +2262,7 @@ The following event types are now available in _React DOM_:
 
 [**⬆ Back to Top**](#table-of-contents)
 
-**Why should component names start with capital letter?**
+### **Why should component names start with capital letter?**
 
 If you are rendering your component using JSX, the name of that component has to begin with a capital letter otherwise React will throw an error as unrecognized tag. This convention is because only HTML elements and SVG tags can begin with a lowercase letter.
 
@@ -2278,7 +2278,7 @@ class myComponent extends Component {
 
 render() {
 
-return &lt;div /&gt;;
+return <div />;
 
 }
 
@@ -2290,7 +2290,7 @@ While when imported in another file it should start with capital letter:
 
 import MyComponent from './MyComponent';
 
-**What are the exceptions on React component naming?**
+### **What are the exceptions on React component naming?**
 
 The component names should start with a uppercase letter but there are few exceptions on this convention. The lowercase tag names with a dot (property accessors) are still considered as valid component names.
 
@@ -2300,7 +2300,7 @@ render(){
 
 return (
 
-&lt;obj.component /&gt; // \`React.createElement(obj.component)\`
+<obj.component /> // \`React.createElement(obj.component)\`
 
 )
 
@@ -2308,27 +2308,27 @@ return (
 
 [**⬆ Back to Top**](#table-of-contents)
 
-**Are custom DOM attributes supported in React v16?**
+### **Are custom DOM attributes supported in React v16?**
 
 Yes. In the past, React used to ignore unknown DOM attributes. If you wrote JSX with an attribute that React doesn't recognize, React would just skip it.
 
 For example, let's take a look at the below attribute:
 
-&lt;div mycustomattribute={'something'} /&gt;
+<div mycustomattribute={'something'} />
 
 Would render an empty div to the DOM with React v15:
 
-&lt;div /&gt;
+<div />
 
 In React v16 any unknown attributes will end up in the DOM:
 
-&lt;div mycustomattribute="something" /&gt;
+<div mycustomattribute="something" />
 
 This is useful for supplying browser-specific non-standard attributes, trying new DOM APIs, and integrating with opinionated third-party libraries.
 
 [**⬆ Back to Top**](#table-of-contents)
 
-**What is the difference between constructor and getInitialState?**
+### **What is the difference between constructor and getInitialState?**
 
 You should initialize state in the constructor when using ES6 classes, and getInitialState() method when using React.createClass().
 
@@ -2370,7 +2370,7 @@ return {
 
 [**⬆ Back to Top**](#table-of-contents)
 
-**Can you force a component to re-render without calling setState?**
+### **Can you force a component to re-render without calling setState?**
 
 By default, when your component's state or props change, your component will re-render. If your render() method depends on some other data, you can tell React that the component needs re-rendering by calling forceUpdate().
 
@@ -2380,7 +2380,7 @@ It is recommended to avoid all uses of forceUpdate() and only read from this.pro
 
 [**⬆ Back to Top**](#table-of-contents)
 
-**What is the difference between super() and super(props) in React using ES6 classes?**
+### **What is the difference between super() and super(props) in React using ES6 classes?**
 
 When you want to access this.props in constructor() then you should pass props to super() method.
 
@@ -2416,55 +2416,55 @@ Outside constructor() both will display same value for this.props.
 
 [**⬆ Back to Top**](#table-of-contents)
 
-**How to loop inside JSX?**
+### **How to loop inside JSX?**
 
 You can simply use Array.prototype.map with ES6 _arrow function_ syntax.
 
 For example, the items array of objects is mapped into an array of components:
 
-&lt;tbody&gt;
+<tbody>
 
 {items.map((item) => (
 
-&lt;SomeComponent key={item.id} name={item.name} /&gt;
+<SomeComponent key={item.id} name={item.name} />
 
 ))}
 
-&lt;/tbody&gt;
+</tbody>
 
 But you can't iterate using for loop:
 
-&lt;tbody&gt;
+<tbody>
 
 for (let i = 0; i < items.length; i++) {
 
-&lt;SomeComponent key={items\[i\].id} name={items\[i\].name} /&gt;
+<SomeComponent key={items\[i\].id} name={items\[i\].name} />
 
 }
 
-&lt;/tbody&gt;
+</tbody>
 
 This is because JSX tags are transpiled into _function calls_, and you can't use statements inside expressions. This may change thanks to do expressions which are _stage 1 proposal_.
 
 [**⬆ Back to Top**](#table-of-contents)
 
-**How do you access props in attribute quotes?**
+### **How do you access props in attribute quotes?**
 
 React (or JSX) doesn't support variable interpolation inside an attribute value. The below representation won't work:
 
-&lt;img className="image" src="images/{this.props.image}" /&gt;
+<img className="image" src="images/{this.props.image}" />
 
 But you can put any JS expression inside curly braces as the entire attribute value. So the below expression works:
 
-&lt;img className="image" src={'images/' + this.props.image} /&gt;
+<img className="image" src={'images/' + this.props.image} />
 
 Using _template strings_ will also work:
 
-&lt;img className="image" src={\`images/${this.props.image}\`} /&gt;
+<img className="image" src={\`images/${this.props.image}\`} />
 
 [**⬆ Back to Top**](#table-of-contents)
 
-**What is React proptype array with shape?**
+### **What is React proptype array with shape?**
 
 If you want to pass an array of objects to a component with a particular shape then use React.PropTypes.shape() as an argument to React.PropTypes.arrayOf().
 
@@ -2486,29 +2486,29 @@ fontSize: React.PropTypes.number.isRequired,
 
 [**⬆ Back to Top**](#table-of-contents)
 
-**How to conditionally apply class attributes?**
+### **How to conditionally apply class attributes?**
 
 You shouldn't use curly braces inside quotes because it is going to be evaluated as a string.
 
-&lt;div className="btn-panel {this.props.visible ? 'show' : 'hidden'}"&gt;
+<div className="btn-panel {this.props.visible ? 'show' : 'hidden'}">
 
 Instead you need to move curly braces outside (don't forget to include spaces between class names):
 
-&lt;div className={'btn-panel ' + (this.props.visible ? 'show' : 'hidden')}&gt;
+<div className={'btn-panel ' + (this.props.visible ? 'show' : 'hidden')}>
 
 _Template strings_ will also work:
 
-&lt;div className={\`btn-panel ${this.props.visible ? 'show' : 'hidden'}\`}&gt;
+<div className={\`btn-panel ${this.props.visible ? 'show' : 'hidden'}\`}>
 
 [**⬆ Back to Top**](#table-of-contents)
 
-**What is the difference between React and ReactDOM?**
+### **What is the difference between React and ReactDOM?**
 
 The react package contains React.createElement(), React.Component, React.Children, and other helpers related to elements and component classes. You can think of these as the isomorphic or universal helpers that you need to build components. The react-dom package contains ReactDOM.render(), and in react-dom/server we have _server-side rendering_ support with ReactDOMServer.renderToString() and ReactDOMServer.renderToStaticMarkup().
 
 [**⬆ Back to Top**](#table-of-contents)
 
-**Why ReactDOM is separated from React?**
+### **Why ReactDOM is separated from React?**
 
 The React team worked on extracting all DOM-related features into a separate library called _ReactDOM_. React v0.14 is the first release in which the libraries are split. By looking at some of the packages, react-native, react-art, react-canvas, and react-three, it has become clear that the beauty and essence of React has nothing to do with browsers or the DOM.
 
@@ -2516,35 +2516,35 @@ To build more environments that React can render to, React team planned to split
 
 [**⬆ Back to Top**](#table-of-contents)
 
-**How to use React label element?**
+### **How to use React label element?**
 
-If you try to render a &lt;label&gt; element bound to a text input using the standard for attribute, then it produces HTML missing that attribute and prints a warning to the console.
+If you try to render a <label> element bound to a text input using the standard for attribute, then it produces HTML missing that attribute and prints a warning to the console.
 
-&lt;label for={'user'}&gt;{'User'}&lt;/label&gt;
+<label for={'user'}>{'User'}</label>
 
-&lt;input type={'text'} id={'user'} /&gt;
+<input type={'text'} id={'user'} />
 
 Since for is a reserved keyword in JavaScript, use htmlFor instead.
 
-&lt;label htmlFor={'user'}&gt;{'User'}&lt;/label&gt;
+<label htmlFor={'user'}>{'User'}</label>
 
-&lt;input type={'text'} id={'user'} /&gt;
+<input type={'text'} id={'user'} />
 
 [**⬆ Back to Top**](#table-of-contents)
 
-**How to combine multiple inline style objects?**
+### **How to combine multiple inline style objects?**
 
 You can use _spread operator_ in regular React:
 
-&lt;button style={{ ...styles.panel.button, ...styles.panel.submitButton }}&gt;{'Submit'}&lt;/button&gt;
+<button style={{ ...styles.panel.button, ...styles.panel.submitButton }}>{'Submit'}</button>
 
 If you're using React Native then you can use the array notation:
 
-&lt;button style={\[styles.panel.button, styles.panel.submitButton\]}&gt;{'Submit'}&lt;/button&gt;
+<button style={\[styles.panel.button, styles.panel.submitButton\]}>{'Submit'}</button>
 
 [**⬆ Back to Top**](#table-of-contents)
 
-**How to re-render the view when the browser is resized?**
+### **How to re-render the view when the browser is resized?**
 
 You can listen to the resize event in componentDidMount() and then update the dimensions (width and height). You should remove the listener in componentWillUnmount() method.
 
@@ -2586,11 +2586,11 @@ render() {
 
 return (
 
-&lt;span&gt;
+<span>
 
 {this.state.width} x {this.state.height}
 
-&lt;/span&gt;
+</span>
 
 );
 
@@ -2600,13 +2600,13 @@ return (
 
 [**⬆ Back to Top**](#table-of-contents)
 
-**What is the difference between setState() and replaceState() methods?**
+### **What is the difference between setState() and replaceState() methods?**
 
 When you use setState() the current and previous states are merged. replaceState() throws out the current state, and replaces it with only what you provide. Usually setState() is used unless you really need to remove all previous keys for some reason. You can also set state to false/null in setState() instead of using replaceState().
 
 [**⬆ Back to Top**](#table-of-contents)
 
-**How to listen to state changes?**
+### **How to listen to state changes?**
 
 The componentDidUpdate lifecycle method will be called when state changes. You can compare provided state and props values with current state and props to determine if something meaningful changed.
 
@@ -2616,7 +2616,7 @@ componentDidUpdate(object prevProps, object prevState)
 
 [**⬆ Back to Top**](#table-of-contents)
 
-**What is the recommended approach of removing an array element in React state?**
+### **What is the recommended approach of removing an array element in React state?**
 
 The better approach is to use Array.prototype.filter() method.
 
@@ -2634,7 +2634,7 @@ data: this.state.data.filter((item, i) => i !== index)
 
 [**⬆ Back to Top**](#table-of-contents)
 
-**Is it possible to use React without rendering HTML?**
+### **Is it possible to use React without rendering HTML?**
 
 It is possible with latest version (>=16.2). Below are the possible options:
 
@@ -2658,13 +2658,13 @@ return \[\]
 
 render() {
 
-return &lt;React.Fragment&gt;&lt;/React.Fragment&gt;
+return <React.Fragment></React.Fragment>
 
 }
 
 render() {
 
-return &lt;></&gt;
+return <></>
 
 }
 
@@ -2672,9 +2672,9 @@ Returning undefined won't work.
 
 [**⬆ Back to Top**](#table-of-contents)
 
-**How to pretty print JSON with React?**
+### **How to pretty print JSON with React?**
 
-We can use &lt;pre&gt; tag so that the formatting of the JSON.stringify() is retained:
+We can use <pre> tag so that the formatting of the JSON.stringify() is retained:
 
 const data = { name: 'John', age: 42 };
 
@@ -2682,23 +2682,23 @@ class User extends React.Component {
 
 render() {
 
-return &lt;pre&gt;{JSON.stringify(data, null, 2)}&lt;/pre&gt;;
+return <pre>{JSON.stringify(data, null, 2)}</pre>;
 
 }
 
 }
 
-React.render(&lt;User /&gt;, document.getElementById('container'));
+React.render(<User />, document.getElementById('container'));
 
 [**⬆ Back to Top**](#table-of-contents)
 
-**Why you can't update props in React?**
+### **Why you can't update props in React?**
 
 The React philosophy is that props should be _immutable_ and _top-down_. This means that a parent can send any prop values to a child, but the child can't modify received props.
 
 [**⬆ Back to Top**](#table-of-contents)
 
-**How to focus an input element on page load?**
+### **How to focus an input element on page load?**
 
 You can do it by creating _ref_ for input element and using it in componentDidMount():
 
@@ -2714,13 +2714,13 @@ render() {
 
 return (
 
-&lt;div&gt;
+<div>
 
-&lt;input defaultValue={"Won't focus"} /&gt;
+<input defaultValue={"Won't focus"} />
 
-&lt;input ref={(input) =&gt; (this.nameInput = input)} defaultValue={'Will focus'} />
+<input ref={(input) => (this.nameInput = input)} defaultValue={'Will focus'} />
 
-&lt;/div&gt;
+</div>
 
 );
 
@@ -2728,11 +2728,11 @@ return (
 
 }
 
-ReactDOM.render(&lt;App /&gt;, document.getElementById('app'));
+ReactDOM.render(<App />, document.getElementById('app'));
 
 [**⬆ Back to Top**](#table-of-contents)
 
-**What are the possible ways of updating objects in state?**
+### **What are the possible ways of updating objects in state?**
 
 1. **Calling setState() with an object to merge with state:**
 
@@ -2759,17 +2759,17 @@ age: 42,
 
 [**⬆ Back to Top**](#table-of-contents)
 
-**How can we find the version of React at runtime in the browser?**
+### **How can we find the version of React at runtime in the browser?**
 
 You can use React.version to get the version.
 
 const REACT_VERSION = React.version;
 
-ReactDOM.render(&lt;div&gt;{\`React version: ${REACT_VERSION}\`}&lt;/div&gt;, document.getElementById('app'));
+ReactDOM.render(<div>{\`React version: ${REACT_VERSION}\`}</div>, document.getElementById('app'));
 
 [**⬆ Back to Top**](#table-of-contents)
 
-**What are the approaches to include polyfills in your create-react-app?**
+### **What are the approaches to include polyfills in your create-react-app?**
 
 There are approaches to include polyfills in create-react-app,
 
@@ -2787,13 +2787,13 @@ import 'core-js/fn/number/is-nan';
 
 Use the polyfill.io CDN to retrieve custom, browser-specific polyfills by adding this line to index.html:
 
-&lt;script src="<https://cdn.polyfill.io/v2/polyfill.min.js?features=default,Array.prototype.includes"&gt;&lt;/script>&gt;
+<script src="<https://cdn.polyfill.io/v2/polyfill.min.js?features=default,Array.prototype.includes"></script>>
 
 In the above script we had to explicitly request the Array.prototype.includes feature as it is not included in the default feature set.
 
 [**⬆ Back to Top**](#table-of-contents)
 
-**How to use https instead of http in create-react-app?**
+### **How to use https instead of http in create-react-app?**
 
 You just need to use HTTPS=true configuration. You can edit your package.json scripts section:
 
@@ -2807,7 +2807,7 @@ or just run set HTTPS=true && npm start
 
 [**⬆ Back to Top**](#table-of-contents)
 
-**How to avoid using relative path imports in create-react-app?**
+### **How to avoid using relative path imports in create-react-app?**
 
 Create a file called .env in the project root and write the import path:
 
@@ -2817,7 +2817,7 @@ After that restart the development server. Now you should be able to import anyt
 
 [**⬆ Back to Top**](#table-of-contents)
 
-**How to add Google Analytics for React Router?**
+### **How to add Google Analytics for React Router?**
 
 Add a listener on the history object to record each page view:
 
@@ -2831,7 +2831,7 @@ window.ga('send', 'pageview', location.pathname + location.search);
 
 [**⬆ Back to Top**](#table-of-contents)
 
-**How to update a component every second?**
+### **How to update a component every second?**
 
 You need to use setInterval() to trigger the change, but you also need to clear the timer when the component unmounts to prevent errors and memory leaks.
 
@@ -2849,7 +2849,7 @@ clearInterval(this.interval)
 
 [**⬆ Back to Top**](#table-of-contents)
 
-**How do you apply vendor prefixes to inline styles in React?**
+### **How do you apply vendor prefixes to inline styles in React?**
 
 React _does not_ apply _vendor prefixes_ automatically. You need to add vendor prefixes manually.
 
@@ -2869,7 +2869,7 @@ msTransform: 'rotate(90deg)', // 'ms' is the only lowercase vendor prefix
 
 [**⬆ Back to Top**](#table-of-contents)
 
-**How to import and export components using React and ES6?**
+### **How to import and export components using React and ES6?**
 
 You should use default for exporting the components
 
@@ -2881,7 +2881,7 @@ export default class MyProfile extends React.Component {
 
 render() {
 
-return &lt;User type="customer"&gt;//...&lt;/User&gt;;
+return <User type="customer">//...</User>;
 
 }
 
@@ -2891,13 +2891,13 @@ With the export specifier, the MyProfile is going to be the member and exported 
 
 [**⬆ Back to Top**](#table-of-contents)
 
-**Why is a component constructor called only once?**
+### **Why is a component constructor called only once?**
 
 React's _reconciliation_ algorithm assumes that without any information to the contrary, if a custom component appears in the same place on subsequent renders, it's the same component as before, so reuses the previous instance rather than creating a new one.
 
 [**⬆ Back to Top**](#table-of-contents)
 
-**How to define constants in React?**
+### **How to define constants in React?**
 
 You can use ES7 static field to define constant.
 
@@ -2911,7 +2911,7 @@ _Static fields_ are part of the _Class Fields_ stage 3 proposal.
 
 [**⬆ Back to Top**](#table-of-contents)
 
-**How to programmatically trigger click event in React?**
+### **How to programmatically trigger click event in React?**
 
 You could use the ref prop to acquire a reference to the underlying HTMLInputElement object through a callback, store the reference as a class property, then use that reference to later trigger a click from your event handlers using the HTMLElement.click method.
 
@@ -2919,7 +2919,7 @@ This can be done in two steps:
 
 1. Create ref in render method:
 
-&lt;input ref={(input) =&gt; (this.inputElement = input)} />
+<input ref={(input) => (this.inputElement = input)} />
 
 1. Apply click event in your event handler:
 
@@ -2927,13 +2927,13 @@ this.inputElement.click();
 
 [**⬆ Back to Top**](#table-of-contents)
 
-**Is it possible to use async/await in plain React?**
+### **Is it possible to use async/await in plain React?**
 
 If you want to use async/await in React, you will need _Babel_ and [transform-async-to-generator](https://babeljs.io/docs/en/babel-plugin-transform-async-to-generator) plugin. React Native ships with Babel and a set of transforms.
 
 [**⬆ Back to Top**](#table-of-contents)
 
-**What are the common folder structures for React?**
+### **What are the common folder structures for React?**
 
 There are two common practices for React project file structure.
 
@@ -3013,13 +3013,13 @@ components/
 
 [**⬆ Back to Top**](#table-of-contents)
 
-**What are the popular packages for animation?**
+### **What are the popular packages for animation?**
 
 _React Transition Group_ and _React Motion_ are popular animation packages in React ecosystem.
 
 [**⬆ Back to Top**](#table-of-contents)
 
-**What is the benefit of styles modules?**
+### **What is the benefit of styles modules?**
 
 It is recommended to avoid hard coding style values in components. Any values that are likely to be used across different UI components should be extracted into their own modules.
 
@@ -3043,7 +3043,7 @@ import { space, colors } from './styles';
 
 [**⬆ Back to Top**](#table-of-contents)
 
-**What are the popular React-specific linters?**
+### **What are the popular React-specific linters?**
 
 ESLint is a popular JavaScript linter. There are plugins available that analyse specific code styles. One of the most common for React is an npm package called eslint-plugin-react. By default, it will check a number of best practices, with rules checking things from keys in iterators to a complete set of prop types.
 
@@ -3051,7 +3051,7 @@ Another popular plugin is eslint-plugin-jsx-a11y, which will help fix common iss
 
 [**⬆ Back to Top**](#table-of-contents)
 
-**How to make AJAX call and in which component lifecycle methods should I make an AJAX call?**
+### **How to make AJAX call and in which component lifecycle methods should I make an AJAX call?**
 
 You can use AJAX libraries such as Axios, jQuery AJAX, and the browser built-in fetch. You should fetch data in the componentDidMount() lifecycle method. This is so you can use setState() to update your component when the data is retrieved.
 
@@ -3107,25 +3107,25 @@ const { error, employees } = this.state;
 
 if (error) {
 
-return &lt;div&gt;Error: {error.message}&lt;/div&gt;;
+return <div>Error: {error.message}</div>;
 
 } else {
 
 return (
 
-&lt;ul&gt;
+<ul>
 
 {employees.map((employee) => (
 
-&lt;li key={employee.name}&gt;
+<li key={employee.name}>
 
 {employee.name}-{employee.experience}
 
-&lt;/li&gt;
+</li>
 
 ))}
 
-&lt;/ul&gt;
+</ul>
 
 );
 
@@ -3141,7 +3141,7 @@ return (
 
 **Render Props** is a simple technique for sharing code between components using a prop whose value is a function. The below component uses render prop which returns a React element.
 
-&lt;DataProvider render={(data) =&gt; &lt;h1&gt;{\`Hello ${data.target}\`}&lt;/h1&gt;} />
+<DataProvider render={(data) => <h1>{\`Hello ${data.target}\`}</h1>} />
 
 Libraries such as React Router and DownShift are using this pattern.
 
@@ -3161,13 +3161,13 @@ React Router is a wrapper around the history library which handles interaction w
 
 [**⬆ Back to Top**](#table-of-contents)
 
-**What are the &lt;Router&gt; components of React Router v4?**
+**What are the <Router> components of React Router v4?**
 
-React Router v4 provides below 3 &lt;Router&gt; components:
+React Router v4 provides below 3 <Router> components:
 
-1. &lt;BrowserRouter&gt;
-2. &lt;HashRouter&gt;
-3. &lt;MemoryRouter&gt;
+1. <BrowserRouter>
+2. <HashRouter>
+3. <MemoryRouter>
 
 The above components will create _browser_, _hash_, and _memory_ history instances. React Router v4 makes the properties and methods of the history instance associated with your router available through the context in the router object.
 
@@ -3210,13 +3210,13 @@ history.push('/new-location');
 
 {'Click Me!'}
 
-&lt;/button&gt;
+</button>
 
 ));
 
-1. **Using &lt;Route&gt; component and render props pattern:**
+1. **Using <Route> component and render props pattern:**
 
-The &lt;Route&gt; component passes the same props as withRouter(), so you will be able to access the history methods through the history prop.
+The <Route> component passes the same props as withRouter(), so you will be able to access the history methods through the history prop.
 
 import { Route } from 'react-router-dom';
 
@@ -3240,7 +3240,7 @@ history.push('/new-location');
 
 {'Click Me!'}
 
-&lt;/button&gt;
+</button>
 
 )}
 
@@ -3268,7 +3268,7 @@ context.history.push('/new-location');
 
 {'Click Me!'}
 
-&lt;/button&gt;
+</button>
 
 );
 
@@ -3304,25 +3304,25 @@ You should use a _polyfill_ for IE11.
 
 **Why you get "Router may have only one child element" warning?**
 
-You have to wrap your Route's in a &lt;Switch&gt; block because &lt;Switch&gt; is unique in that it renders a route exclusively.
+You have to wrap your Route's in a <Switch> block because <Switch> is unique in that it renders a route exclusively.
 
 At first you need to add Switch to your imports:
 
 import { Switch, Router, Route } from 'react-router';
 
-Then define the routes within &lt;Switch&gt; block:
+Then define the routes within <Switch> block:
 
-&lt;Router&gt;
+<Router>
 
-&lt;Switch&gt;
+<Switch>
 
-&lt;Route {/\* ... \*/} /&gt;
+<Route {/\* ... \*/} />
 
-&lt;Route {/\* ... \*/} /&gt;
+<Route {/\* ... \*/} />
 
-&lt;/Switch&gt;
+</Switch>
 
-&lt;/Router&gt;
+</Router>
 
 [**⬆ Back to Top**](#table-of-contents)
 
@@ -3346,17 +3346,17 @@ The search property is used to pass query params in push() method.
 
 **How to implement _default_ or _NotFound_ page?**
 
-A &lt;Switch&gt; renders the first child &lt;Route&gt; that matches. A &lt;Route&gt; with no path always matches. So you just need to simply drop path attribute as below
+A <Switch> renders the first child <Route> that matches. A <Route> with no path always matches. So you just need to simply drop path attribute as below
 
-&lt;Switch&gt;
+<Switch>
 
-&lt;Route exact path="/" component={Home} /&gt;
+<Route exact path="/" component={Home} />
 
-&lt;Route path="/user" component={User} /&gt;
+<Route path="/user" component={User} />
 
-&lt;Route component={NotFound} /&gt;
+<Route component={NotFound} />
 
-&lt;/Switch&gt;
+</Switch>
 
 [**⬆ Back to Top**](#table-of-contents)
 
@@ -3376,7 +3376,7 @@ export default createBrowserHistory({
 
 });
 
-1. You should use the &lt;Router&gt; component instead of built-in routers. Imported the above history.js inside index.js file:
+1. You should use the <Router> component instead of built-in routers. Imported the above history.js inside index.js file:
 
 import { Router } from 'react-router-dom';
 
@@ -3386,11 +3386,11 @@ import App from './App';
 
 ReactDOM.render(
 
-&lt;Router history={history}&gt;
+<Router history={history}>
 
-&lt;App /&gt;
+<App />
 
-&lt;/Router&gt;,
+</Router>,
 
 holder,
 
@@ -3408,7 +3408,7 @@ history.push('/go-here');
 
 **How to perform automatic redirect after login?**
 
-The react-router package provides &lt;Redirect&gt; component in React Router. Rendering a &lt;Redirect&gt; will navigate to a new location. Like server-side redirects, the new location will override the current location in the history stack.
+The react-router package provides <Redirect> component in React Router. Rendering a <Redirect> will navigate to a new location. Like server-side redirects, the new location will override the current location in the history stack.
 
 import React, { Component } from 'react';
 
@@ -3420,11 +3420,11 @@ render() {
 
 if (this.state.isLoggedIn === true) {
 
-return &lt;Redirect to="/your/redirect/page" /&gt;;
+return <Redirect to="/your/redirect/page" />;
 
 } else {
 
-return &lt;div&gt;{'Login Please'}&lt;/div&gt;;
+return <div>{'Login Please'}</div>;
 
 }
 
@@ -3462,7 +3462,7 @@ The library provides two ways to format strings, numbers, and dates:
 
 1. **Using react components:**
 
-&lt;FormattedMessage id={'account'} defaultMessage={'The amount is less than minimum balance.'} /&gt;
+<FormattedMessage id={'account'} defaultMessage={'The amount is less than minimum balance.'} />
 
 1. **Using an API:**
 
@@ -3482,9 +3482,9 @@ formatMessage(messages.accountMessage);
 
 [**⬆ Back to Top**](#table-of-contents)
 
-**How to use &lt;FormattedMessage&gt; as placeholder using React Intl?**
+**How to use <FormattedMessage> as placeholder using React Intl?**
 
-The &lt;Formatted... /&gt; components from react-intl return elements, not plain text, so they can't be used for placeholders, alt text, etc. In that case, you should use lower level API formatMessage(). You can inject the intl object into your component using injectIntl() higher-order component and then format the message using formatMessage() available on that object.
+The <Formatted... /> components from react-intl return elements, not plain text, so they can't be used for placeholders, alt text, etc. In that case, you should use lower level API formatMessage(). You can inject the intl object into your component using injectIntl() higher-order component and then format the message using formatMessage() available on that object.
 
 import React from 'react';
 
@@ -3494,7 +3494,7 @@ const MyComponent = ({ intl }) => {
 
 const placeholder = intl.formatMessage({ id: 'messageId' });
 
-return &lt;input placeholder={placeholder} /&gt;;
+return <input placeholder={placeholder} />;
 
 };
 
@@ -3514,7 +3514,7 @@ You can get the current locale in any component of your application using inject
 
 import { injectIntl, intlShape } from 'react-intl';
 
-const MyComponent = ({ intl }) => &lt;div&gt;{\`The current locale is ${intl.locale}\`}&lt;/div&gt;;
+const MyComponent = ({ intl }) => <div>{\`The current locale is ${intl.locale}\`}</div>;
 
 MyComponent.propTypes = {
 
@@ -3542,7 +3542,7 @@ day: 'numeric',
 
 });
 
-const MyComponent = ({ intl }) => &lt;div&gt;{\`The formatted date is ${stringDate}\`}&lt;/div&gt;;
+const MyComponent = ({ intl }) => <div>{\`The formatted date is ${stringDate}\`}</div>;
 
 MyComponent.propTypes = {
 
@@ -3566,13 +3566,13 @@ function MyComponent() {
 
 return (
 
-&lt;div&gt;
+<div>
 
-&lt;span className={'heading'}&gt;{'Title'}&lt;/span&gt;
+<span className={'heading'}>{'Title'}</span>
 
-&lt;span className={'description'}&gt;{'Description'}&lt;/span&gt;
+<span className={'description'}>{'Description'}</span>
 
-&lt;/div&gt;
+</div>
 
 );
 
@@ -3586,7 +3586,7 @@ import ShallowRenderer from 'react-test-renderer/shallow';
 
 const renderer = new ShallowRenderer();
 
-renderer.render(&lt;MyComponent /&gt;);
+renderer.render(<MyComponent />);
 
 const result = renderer.getRenderOutput();
 
@@ -3594,9 +3594,9 @@ expect(result.type).toBe('div');
 
 expect(result.props.children).toEqual(\[
 
-&lt;span className={'heading'}&gt;{'Title'}&lt;/span&gt;,
+<span className={'heading'}>{'Title'}</span>,
 
-&lt;span className={'description'}&gt;{'Description'}&lt;/span&gt;,
+<span className={'description'}>{'Description'}</span>,
 
 \]);
 
@@ -3608,11 +3608,11 @@ This package provides a renderer that can be used to render components to pure J
 
 import TestRenderer from 'react-test-renderer';
 
-const Link = ({ page, children }) => &lt;a href={page}&gt;{children}&lt;/a&gt;;
+const Link = ({ page, children }) => <a href={page}>{children}</a>;
 
 const testRenderer = TestRenderer.create(
 
-&lt;Link page={'<https://www.facebook.com/'}&gt;{'Facebook'}&lt;/Link>&gt;,
+<Link page={'<https://www.facebook.com/'}>{'Facebook'}</Link>>,
 
 );
 
@@ -3821,7 +3821,7 @@ this.props.fetchData();
 
 render() {
 
-return this.props.isLoaded ? &lt;div&gt;{'Loaded'}&lt;/div&gt; : &lt;div&gt;{'Not Loaded'}&lt;/div&gt;;
+return this.props.isLoaded ? <div>{'Loaded'}</div> : <div>{'Not Loaded'}</div>;
 
 }
 
@@ -3854,7 +3854,7 @@ class App extends React.Component {
 
 render() {
 
-return &lt;div&gt;{this.props.containerData}&lt;/div&gt;;
+return <div>{this.props.containerData}</div>;
 
 }
 
@@ -4056,7 +4056,7 @@ Keep your data in the Redux store, and the UI related state internally in the co
 
 The best way to access your store in a component is to use the connect() function, that creates a new component that wraps around your existing one. This pattern is called _Higher-Order Components_, and is generally the preferred way of extending a component's functionality in React. This allows you to map state and action creators to your component, and have them passed in automatically as your store updates.
 
-Let's take an example of &lt;FilterLink&gt; component using connect:
+Let's take an example of <FilterLink> component using connect:
 
 import { connect } from 'react-redux';
 
@@ -4200,7 +4200,7 @@ If the ownProps parameter is specified, React Redux will pass the props that wer
 
 import ConnectedComponent from './containers/ConnectedComponent';
 
-&lt;ConnectedComponent user={'john'} /&gt;;
+<ConnectedComponent user={'john'} />;
 
 The ownProps inside your mapStateToProps() and mapDispatchToProps() functions will be an object:
 
@@ -4467,7 +4467,7 @@ import 'font-awesome/css/font-awesome.min.css';
 
 render() {
 
-return &lt;div&gt;&lt;i className={'fa fa-spinner'} /&gt;&lt;/div&gt;
+return <div><i className={'fa fa-spinner'} /></div>
 
 }
 
@@ -4497,7 +4497,7 @@ You need to follow below steps to use Polymer in React,
 
 1. Create a Polymer element:
 
-&lt;link rel="import" href="../../bower_components/polymer/polymer.html" /&gt;;
+<link rel="import" href="../../bower_components/polymer/polymer.html" />;
 
 Polymer({
 
@@ -4513,7 +4513,7 @@ this.textContent = 'I am a calender';
 
 1. Create the Polymer component HTML tag by importing it in a HTML document, e.g. import it in the index.html of your React application:
 
-&lt;link rel="import" href="./src/polymer-components/calender-element.html" /&gt;
+<link rel="import" href="./src/polymer-components/calender-element.html" />
 
 1. Use that element in the JSX file:
 
@@ -4523,7 +4523,7 @@ class MyComponent extends React.Component {
 
 render() {
 
-return &lt;calender-element /&gt;;
+return <calender-element />;
 
 }
 
@@ -4576,13 +4576,13 @@ styled-components is a JavaScript library for styling React applications. It rem
 
 **Give an example of Styled Components?**
 
-Lets create &lt;Title&gt; and &lt;Wrapper&gt; components with specific styles for each.
+Lets create <Title> and <Wrapper> components with specific styles for each.
 
 import React from 'react';
 
 import styled from 'styled-components';
 
-// Create a &lt;Title&gt; component that renders an &lt;h1&gt; which is centered, red and sized at 1.5em
+// Create a <Title> component that renders an <h1> which is centered, red and sized at 1.5em
 
 const Title = styled.h1\`
 
@@ -4594,7 +4594,7 @@ color: palevioletred;
 
 \`;
 
-// Create a &lt;Wrapper&gt; component that renders a &lt;section&gt; with some padding and a papayawhip background
+// Create a <Wrapper> component that renders a <section> with some padding and a papayawhip background
 
 const Wrapper = styled.section\`
 
@@ -4606,11 +4606,11 @@ background: papayawhip;
 
 These two variables, Title and Wrapper, are now components that you can render just like any other react component.
 
-&lt;Wrapper&gt;
+<Wrapper>
 
-&lt;Title&gt;{'Lets start first styled component!'}&lt;/Title&gt;
+<Title>{'Lets start first styled component!'}</Title>
 
-&lt;/Wrapper&gt;
+</Wrapper>
 
 [**⬆ Back to Top**](#table-of-contents)
 
@@ -4828,13 +4828,13 @@ import { ReactComponent as Logo } from './logo.svg';
 
 const App = () => (
 
-&lt;div&gt;
+<div>
 
 {/\* Logo is an actual react component \*/}
 
-&lt;Logo /&gt;
+<Logo />
 
-&lt;/div&gt;
+</div>
 
 );
 
@@ -4858,15 +4858,15 @@ render() {
 
 return (
 
-&lt;form onSubmit={this.handleSubmit}&gt;
+<form onSubmit={this.handleSubmit}>
 
-&lt;input type="text" ref={(input) =&gt; (this.input = input)} /> // Access DOM input in handle
+<input type="text" ref={(input) => (this.input = input)} /> // Access DOM input in handle
 
 submit
 
-&lt;button type="submit"&gt;Submit&lt;/button&gt;
+<button type="submit">Submit</button>
 
-&lt;/form&gt;
+</form>
 
 );
 
@@ -4894,13 +4894,13 @@ render() {
 
 return (
 
-&lt;form onSubmit={this.handleSubmit}&gt;
+<form onSubmit={this.handleSubmit}>
 
-&lt;input type="text" ref={this.setSearchInput} /&gt; // Access DOM input in handle submit
+<input type="text" ref={this.setSearchInput} /> // Access DOM input in handle submit
 
-&lt;button type="submit"&gt;Submit&lt;/button&gt;
+<button type="submit">Submit</button>
 
-&lt;/form&gt;
+</form>
 
 );
 
@@ -4935,7 +4935,7 @@ return class PP extends React.Component {
 
 render() {
 
-return &lt;WrappedComponent {...this.props} /&gt;;
+return <WrappedComponent {...this.props} />;
 
 }
 
@@ -4967,7 +4967,7 @@ return super.render();
 
 You should be passing the numbers via curly braces({}) where as strings in quotes
 
-React.render(&lt;User age={30} department={'IT'} /&gt;, document.getElementById('container'));
+React.render(<User age={30} department={'IT'} />, document.getElementById('container'));
 
 [**⬆ Back to Top**](#table-of-contents)
 
@@ -4997,7 +4997,7 @@ import App from './App';
 
 import registerServiceWorker from './registerServiceWorker';
 
-ReactDOM.render(&lt;App /&gt;, document.getElementById('root'));
+ReactDOM.render(<App />, document.getElementById('root'));
 
 registerServiceWorker();
 
@@ -5025,11 +5025,11 @@ function MyComponent() {
 
 return (
 
-&lt;div&gt;
+<div>
 
-&lt;OtherComponent /&gt;
+<OtherComponent />
 
-&lt;/div&gt;
+</div>
 
 );
 
@@ -5075,7 +5075,7 @@ For example, let us take the below list of developers,
 
 const ReactJSDevs = () => {
 
-return \[&lt;li key="1"&gt;John&lt;/li&gt;, &lt;li key="2"&gt;Jackie&lt;/li&gt;, &lt;li key="3"&gt;Jordan&lt;/li&gt;\];
+return \[<li key="1">John</li>, <li key="2">Jackie</li>, <li key="3">Jordan</li>\];
 
 };
 
@@ -5085,17 +5085,17 @@ const JSDevs = () => {
 
 return (
 
-&lt;ul&gt;
+<ul>
 
-&lt;li&gt;Brad&lt;/li&gt;
+<li>Brad</li>
 
-&lt;li&gt;Brodge&lt;/li&gt;
+<li>Brodge</li>
 
-&lt;ReactJSDevs /&gt;
+<ReactJSDevs />
 
-&lt;li&gt;Brandon&lt;/li&gt;
+<li>Brandon</li>
 
-&lt;/ul&gt;
+</ul>
 
 );
 
@@ -5153,15 +5153,15 @@ render() {
 
 return (
 
-&lt;div&gt;
+<div>
 
 {this.state.value}
 
-&lt;button onClick={this.handleIncrement}&gt;+&lt;/button&gt;
+<button onClick={this.handleIncrement}>+</button>
 
-&lt;button onClick={this.handleDecrement}&gt;-&lt;/button&gt;
+<button onClick={this.handleDecrement}>-</button>
 
-&lt;/div&gt;
+</div>
 
 );
 
@@ -5187,13 +5187,13 @@ const \[count, setCount\] = useState(0);
 
 return (
 
-&lt;div&gt;
+<div>
 
-&lt;p&gt;You clicked {count} times&lt;/p&gt;
+<p>You clicked {count} times</p>
 
-&lt;button onClick={() =&gt; setCount(count + 1)}>Click me&lt;/button&gt;
+<button onClick={() => setCount(count + 1)}>Click me</button>
 
-&lt;/div&gt;
+</div>
 
 );
 
@@ -5263,8 +5263,8 @@ Below are the major differences between Flux and Redux
 
 Below are the main benefits of React Router V4 module,
 
-1. In React Router v4(version 4), the API is completely about components. A router can be visualized as a single component(&lt;BrowserRouter&gt;) which wraps specific child router components(&lt;Route&gt;).
-2. You don't need to manually set history. The router module will take care history by wrapping routes with &lt;BrowserRouter&gt; component.
+1. In React Router v4(version 4), the API is completely about components. A router can be visualized as a single component(<BrowserRouter>) which wraps specific child router components(<Route>).
+2. You don't need to manually set history. The router module will take care history by wrapping routes with <BrowserRouter> component.
 3. The application size is reduced by adding only the specific router module(Web, core, or native)
 
 [**⬆ Back to Top**](#table-of-contents)
@@ -5325,11 +5325,11 @@ render() {
 
 if (this.state.error) {
 
-return &lt;h1&gt;Caught an error.&lt;/h1&gt;;
+return <h1>Caught an error.</h1>;
 
 }
 
-return &lt;div onClick={this.handleClick}&gt;Click Me&lt;/div&gt;;
+return <div onClick={this.handleClick}>Click Me</div>;
 
 }
 
@@ -5357,11 +5357,11 @@ showButton();
 
 Whereas error boundaries wrap declarative code as below,
 
-&lt;ErrorBoundary&gt;
+<ErrorBoundary>
 
-&lt;MyComponent /&gt;
+<MyComponent />
 
-&lt;/ErrorBoundary&gt;
+</ErrorBoundary>
 
 So if an error occurs in a **componentDidUpdate** method caused by a **setState** somewhere deep in the tree, it will still correctly propagate to the closest error boundary.
 
@@ -5402,7 +5402,7 @@ The render() method is the only required method in a class component. i.e, All m
 
 Below are the list of following types used and return from render method,
 
-1. **React elements:** Elements that instruct React to render a DOM node. It includes html elements such as &lt;div/&gt; and user defined elements.
+1. **React elements:** Elements that instruct React to render a DOM node. It includes html elements such as <div/> and user defined elements.
 2. **Arrays and fragments:** Return multiple elements to render as Arrays and Fragments to wrap multiple elements
 3. **Portals:** Render children into a different DOM subtree.
 4. **String and numbers:** Render both Strings and Numbers as text nodes in the DOM
@@ -5459,7 +5459,7 @@ If props.color is not provided then it will set the default value to 'red'. i.e,
 
 render() {
 
-return &lt;MyButton /&gt; ; // props.color will be set to red
+return <MyButton /> ; // props.color will be set to red
 
 }
 
@@ -5507,7 +5507,7 @@ if (this.state.hasError) {
 
 // You can render any custom fallback UI
 
-return &lt;h1&gt;Something went wrong.&lt;/h1&gt;;
+return <h1>Something went wrong.</h1>;
 
 }
 
@@ -5622,11 +5622,11 @@ render() {
 
 return (
 
-&lt;div&gt;
+<div>
 
-&lt;button onClick={this.handleClick}&gt;Load&lt;/button&gt;
+<button onClick={this.handleClick}>Load</button>
 
-&lt;/div&gt;
+</div>
 
 );
 
@@ -5658,23 +5658,23 @@ function Glossary(props) {
 
 return (
 
-&lt;dl&gt;
+<dl>
 
 {props.items.map((item) => (
 
 // Without the \`key\`, React will fire a key warning
 
-&lt;React.Fragment key={item.id}&gt;
+<React.Fragment key={item.id}>
 
-&lt;dt&gt;{item.term}&lt;/dt&gt;
+<dt>{item.term}</dt>
 
-&lt;dd&gt;{item.description}&lt;/dd&gt;
+<dd>{item.description}</dd>
 
-&lt;/React.Fragment&gt;
+</React.Fragment>
 
 ))}
 
-&lt;/dl&gt;
+</dl>
 
 );
 
@@ -5690,11 +5690,11 @@ As of React 16, both standard or custom DOM attributes are fully supported. Sinc
 
 Let us take few props with respect to standard HTML attributes,
 
-&lt;div tabIndex="-1" /&gt; // Just like node.tabIndex DOM API
+<div tabIndex="-1" /> // Just like node.tabIndex DOM API
 
-&lt;div className="Button" /&gt; // Just like node.className DOM API
+<div className="Button" /> // Just like node.className DOM API
 
-&lt;input readOnly={true} /&gt; // Just like node.readOnly DOM API
+<input readOnly={true} /> // Just like node.readOnly DOM API
 
 These props work similarly to the corresponding HTML attributes, with the exception of the special cases. It also support all SVG attributes.
 
@@ -5716,7 +5716,7 @@ const EnhancedComponent = enhance(MyComponent);
 
 // That causes the entire subtree to unmount/remount each time!
 
-return &lt;EnhancedComponent /&gt;;
+return <EnhancedComponent />;
 
 }
 
@@ -5770,7 +5770,7 @@ For example, If you don't name the render function or not using displayName prop
 
 const WrappedComponent = React.forwardRef((props, ref) => {
 
-return &lt;LogProps {...props} forwardedRef={ref} /&gt;;
+return <LogProps {...props} forwardedRef={ref} />;
 
 });
 
@@ -5778,7 +5778,7 @@ But If you name the render function then it will appear as **”ForwardRef(myFun
 
 const WrappedComponent = React.forwardRef(function myFunction(props, ref) {
 
-return &lt;LogProps {...props} forwardedRef={ref} /&gt;;
+return <LogProps {...props} forwardedRef={ref} />;
 
 });
 
@@ -5794,7 +5794,7 @@ class LogProps extends React.Component {
 
 function forwardRef(props, ref) {
 
-return &lt;LogProps {...props} forwardedRef={ref} /&gt;;
+return <LogProps {...props} forwardedRef={ref} />;
 
 }
 
@@ -5818,9 +5818,9 @@ If you pass no value for a prop, it defaults to true. This behavior is available
 
 For example, below expressions are equivalent,
 
-&lt;MyInput autocomplete /&gt;
+<MyInput autocomplete />
 
-&lt;MyInput autocomplete={true} /&gt;
+<MyInput autocomplete={true} />
 
 **Note:** It is not recommended to use this approach because it can be confused with the ES6 object shorthand (example, {name} which is short for {name: name})
 
@@ -5843,7 +5843,7 @@ Next.js is a popular and lightweight framework for static and server‑rendered 
 
 You can pass event handlers and other functions as props to child components. It can be used in child component as below,
 
-&lt;button onClick="{this.handleClick}"&gt;&lt;/button&gt;
+<button onClick="{this.handleClick}"></button>
 
 [**⬆ Back to Top**](#table-of-contents)
 
@@ -5861,7 +5861,7 @@ console.log('Click happened');
 
 render() {
 
-return &lt;button onClick={() =&gt; this.handleClick()}>Click Me&lt;/button&gt;;
+return <button onClick={() => this.handleClick()}>Click Me</button>;
 
 }
 
@@ -5889,7 +5889,7 @@ For example, you can embed user input as below,
 
 const name = response.potentiallyMaliciousInput;
 
-const element = &lt;h1&gt;{name}&lt;/h1&gt;;
+const element = <h1>{name}</h1>;
 
 This way you can prevent XSS(Cross-site-scripting) attacks in the application.
 
@@ -5905,13 +5905,13 @@ function tick() {
 
 const element = (
 
-&lt;div&gt;
+<div>
 
-&lt;h1&gt;Hello, world!&lt;/h1&gt;
+<h1>Hello, world!</h1>
 
-&lt;h2&gt;It is {new Date().toLocaleTimeString()}.&lt;/h2&gt;
+<h2>It is {new Date().toLocaleTimeString()}.</h2>
 
-&lt;/div&gt;
+</div>
 
 );
 
@@ -5995,9 +5995,9 @@ During iterations or loops, it is common to pass an extra parameter to an event 
 
 Let us take an example of user details updated in a grid,
 
-&lt;button onClick={(e) =&gt; this.updateUser(userId, e)}>Update User details&lt;/button&gt;
+<button onClick={(e) => this.updateUser(userId, e)}>Update User details</button>
 
-&lt;button onClick={this.updateUser.bind(this, userId)}&gt;Update User details&lt;/button&gt;
+<button onClick={this.updateUser.bind(this, userId)}>Update User details</button>
 
 In both the approaches, the synthetic argument e is passed as a second argument. You need to pass it explicitly for arrow functions and it forwarded automatically for bind method.
 
@@ -6015,7 +6015,7 @@ return null;
 
 }
 
-return &lt;div className="greeting"&gt;welcome, {props.name}&lt;/div&gt;;
+return <div className="greeting">welcome, {props.name}</div>;
 
 }
 
@@ -6033,15 +6033,15 @@ render() {
 
 return (
 
-&lt;div&gt;
+<div>
 
 //Prevent component render if it is not loggedIn
 
-&lt;Greeting loggedIn={this.state.loggedIn} /&gt;
+<Greeting loggedIn={this.state.loggedIn} />
 
-&lt;UserDetails name={this.state.name}&gt;
+<UserDetails name={this.state.name}>
 
-&lt;/div&gt;
+</div>
 
 );
 
@@ -6071,43 +6071,43 @@ function Book(props) {
 
 const index = (
 
-&lt;ul&gt;
+<ul>
 
 {props.pages.map((page) => (
 
-&lt;li key={page.id}&gt;{page.title}&lt;/li&gt;
+<li key={page.id}>{page.title}</li>
 
 ))}
 
-&lt;/ul&gt;
+</ul>
 
 );
 
 const content = props.pages.map((page) => (
 
-&lt;div key={page.id}&gt;
+<div key={page.id}>
 
-&lt;h3&gt;{page.title}&lt;/h3&gt;
+<h3>{page.title}</h3>
 
-&lt;p&gt;{page.content}&lt;/p&gt;
+<p>{page.content}</p>
 
-&lt;p&gt;{page.pageNumber}&lt;/p&gt;
+<p>{page.pageNumber}</p>
 
-&lt;/div&gt;
+</div>
 
 ));
 
 return (
 
-&lt;div&gt;
+<div>
 
 {index}
 
-&lt;hr /&gt;
+<hr />
 
 {content}
 
-&lt;/div&gt;
+</div>
 
 );
 
@@ -6163,11 +6163,11 @@ render() {
 
 return (
 
-&lt;div className="App"&gt;
+<div className="App">
 
-&lt;vaadin-date-picker label="When were you born?"&gt;&lt;/vaadin-date-picker&gt;
+<vaadin-date-picker label="When were you born?"></vaadin-date-picker>
 
-&lt;/div&gt;
+</div>
 
 );
 
@@ -6215,11 +6215,11 @@ function MyComponent() {
 
 return (
 
-&lt;div&gt;
+<div>
 
-&lt;OtherComponent /&gt;
+<OtherComponent />
 
-&lt;/div&gt;
+</div>
 
 );
 
@@ -6241,15 +6241,15 @@ function MyComponent() {
 
 return (
 
-&lt;div&gt;
+<div>
 
-&lt;Suspense fallback={<div&gt;Loading...&lt;/div&gt;}>
+<Suspense fallback={<div>Loading...</div>}>
 
-&lt;OtherComponent /&gt;
+<OtherComponent />
 
-&lt;/Suspense&gt;
+</Suspense>
 
-&lt;/div&gt;
+</div>
 
 );
 
@@ -6275,21 +6275,21 @@ const About = lazy(() => import('./routes/About'));
 
 const App = () => (
 
-&lt;Router&gt;
+<Router>
 
-&lt;Suspense fallback={<div&gt;Loading...&lt;/div&gt;}>
+<Suspense fallback={<div>Loading...</div>}>
 
-&lt;Switch&gt;
+<Switch>
 
-&lt;Route exact path="/" component={Home} /&gt;
+<Route exact path="/" component={Home} />
 
-&lt;Route path="/about" component={About} /&gt;
+<Route path="/about" component={About} />
 
-&lt;/Switch&gt;
+</Switch>
 
-&lt;/Suspense&gt;
+</Suspense>
 
-&lt;/Router&gt;
+</Router>
 
 );
 
@@ -6315,11 +6315,11 @@ render() {
 
 return (
 
-&lt;ThemeContext.Provider value="nova"&gt;
+<ThemeContext.Provider value="nova">
 
-&lt;Toolbar /&gt;
+<Toolbar />
 
-&lt;/ThemeContext.Provider&gt;
+</ThemeContext.Provider>
 
 );
 
@@ -6333,11 +6333,11 @@ function Toolbar(props) {
 
 return (
 
-&lt;div&gt;
+<div>
 
-&lt;ThemedButton /&gt;
+<ThemedButton />
 
-&lt;/div&gt;
+</div>
 
 );
 
@@ -6351,7 +6351,7 @@ static contextType = ThemeContext;
 
 render() {
 
-return &lt;Button theme={this.context} /&gt;;
+return <Button theme={this.context} />;
 
 }
 
@@ -6439,11 +6439,11 @@ A Consumer is a React component that subscribes to context changes. It requires 
 
 Lets take a simple example,
 
-&lt;MyContext.Consumer&gt;
+<MyContext.Consumer>
 
 {value => /\* render something based on the context value \*/}
 
-&lt;/MyContext.Consumer&gt;
+</MyContext.Consumer>
 
 [**⬆ Back to Top**](#table-of-contents)
 
@@ -6459,11 +6459,11 @@ render() {
 
 return (
 
-&lt;Provider value={{ something: 'something' }}&gt;
+<Provider value={{ something: 'something' }}>
 
-&lt;Toolbar /&gt;
+<Toolbar />
 
-&lt;/Provider&gt;
+</Provider>
 
 );
 
@@ -6491,11 +6491,11 @@ render() {
 
 return (
 
-&lt;Provider value={this.state.value}&gt;
+<Provider value={this.state.value}>
 
-&lt;Toolbar /&gt;
+<Toolbar />
 
-&lt;/Provider&gt;
+</Provider>
 
 );
 
@@ -6531,7 +6531,7 @@ const {forwardedRef, ...rest} = this.props;
 
 // Assign the custom prop "forwardedRef" as a ref
 
-return &lt;Component ref={forwardedRef} {...rest} /&gt;;
+return <Component ref={forwardedRef} {...rest} />;
 
 }
 
@@ -6539,7 +6539,7 @@ return &lt;Component ref={forwardedRef} {...rest} /&gt;;
 
 return React.forwardRef((props, ref) => {
 
-return &lt;LogProps {...props} forwardedRef={ref} /&gt;;
+return <LogProps {...props} forwardedRef={ref} />;
 
 });
 
@@ -6633,7 +6633,7 @@ console.log(this.state.message);
 
 render: function () {
 
-return &lt;h1&gt;Hello, {this.props.name}&lt;/h1&gt;;
+return <h1>Hello, {this.props.name}</h1>;
 
 },
 
@@ -6653,13 +6653,13 @@ class Greeting extends React.Component {
 
 render() {
 
-return &lt;div&gt;Hello {this.props.message}&lt;/div&gt;;
+return <div>Hello {this.props.message}</div>;
 
 }
 
 }
 
-ReactDOM.render(&lt;Greeting message="World" /&gt;, document.getElementById('root'));
+ReactDOM.render(<Greeting message="World" />, document.getElementById('root'));
 
 You can write the same code without JSX as below,
 
@@ -6701,50 +6701,50 @@ When diffing two trees, React first compares the two root elements. The behavior
 1. **Elements Of Different Types:** Whenever the root elements have different types, React will tear down the old tree and build the new tree from scratch. For example, elements to, or from to of different types lead a full rebuild.
 2. **DOM Elements Of The Same Type:** When comparing two React DOM elements of the same type, React looks at the attributes of both, keeps the same underlying DOM node, and only updates the changed attributes. Lets take an example with same DOM elements except className attribute,
 
-&lt;div className="show" title="ReactJS" /&gt;
+<div className="show" title="ReactJS" />
 
-&lt;div className="hide" title="ReactJS" /&gt;
+<div className="hide" title="ReactJS" />
 
 1. **Component Elements Of The Same Type:** When a component updates, the instance stays the same, so that state is maintained across renders. React updates the props of the underlying component instance to match the new element, and calls componentWillReceiveProps() and componentWillUpdate() on the underlying instance. After that, the render() method is called and the diff algorithm recurses on the previous result and the new result.
 2. **Recursing On Children:** when recursing on the children of a DOM node, React just iterates over both lists of children at the same time and generates a mutation whenever there’s a difference. For example, when adding an element at the end of the children, converting between these two trees works well.
 
-&lt;ul&gt;
+<ul>
 
-&lt;li&gt;first&lt;/li&gt;
+<li>first</li>
 
-&lt;li&gt;second&lt;/li&gt;
+<li>second</li>
 
-&lt;/ul&gt;
+</ul>
 
-&lt;ul&gt;
+<ul>
 
-&lt;li&gt;first&lt;/li&gt;
+<li>first</li>
 
-&lt;li&gt;second&lt;/li&gt;
+<li>second</li>
 
-&lt;li&gt;third&lt;/li&gt;
+<li>third</li>
 
-&lt;/ul&gt;
+</ul>
 
 1. **Handling keys:** React supports a key attribute. When children have keys, React uses the key to match children in the original tree with children in the subsequent tree. For example, adding a key can make the tree conversion efficient,
 
-&lt;ul&gt;
+<ul>
 
-&lt;li key="2015"&gt;Duke&lt;/li&gt;
+<li key="2015">Duke</li>
 
-&lt;li key="2016"&gt;Villanova&lt;/li&gt;
+<li key="2016">Villanova</li>
 
-&lt;/ul&gt;
+</ul>
 
-&lt;ul&gt;
+<ul>
 
-&lt;li key="2014"&gt;Connecticut&lt;/li&gt;
+<li key="2014">Connecticut</li>
 
-&lt;li key="2015"&gt;Duke&lt;/li&gt;
+<li key="2015">Duke</li>
 
-&lt;li key="2016"&gt;Villanova&lt;/li&gt;
+<li key="2016">Villanova</li>
 
-&lt;/ul&gt;
+</ul>
 
 [**⬆ Back to Top**](#table-of-contents)
 
@@ -6766,11 +6766,11 @@ Even though the pattern named render props, you don’t have to use a prop named
 
 children={(mouse) => (
 
-&lt;p&gt;
+<p>
 
 The mouse position is {mouse.x}, {mouse.y}
 
-&lt;/p&gt;
+</p>
 
 )}
 
@@ -6778,19 +6778,19 @@ The mouse position is {mouse.x}, {mouse.y}
 
 Actually children prop doesn’t need to be named in the list of “attributes” in JSX element. Instead, you can keep it directly inside element,
 
-&lt;Mouse&gt;
+<Mouse>
 
 {(mouse) => (
 
-&lt;p&gt;
+<p>
 
 The mouse position is {mouse.x}, {mouse.y}
 
-&lt;/p&gt;
+</p>
 
 )}
 
-&lt;/Mouse&gt;
+</Mouse>
 
 While using this above technique(without any name), explicitly state that children should be a function in your propTypes.
 
@@ -6818,7 +6818,7 @@ return class extends React.Component {
 
 render() {
 
-return &lt;Mouse render={(mouse) =&gt; &lt;Component {...this.props} mouse={mouse} /&gt;} />;
+return <Mouse render={(mouse) => <Component {...this.props} mouse={mouse} />} />;
 
 }
 
@@ -6840,7 +6840,7 @@ Windowing is a technique that only renders a small subset of your rows at any gi
 
 The falsy values such as false, null, undefined, and true are valid children but they don't render anything. If you still want to display them then you need to convert it to string. Let's take an example on how to convert to a string,
 
-&lt;div&gt;My JavaScript variable is {String(myVariable)}.&lt;/div&gt;
+<div>My JavaScript variable is {String(myVariable)}.</div>
 
 [**⬆ Back to Top**](#table-of-contents)
 
@@ -6860,9 +6860,9 @@ render() {
 
 return (
 
-&lt;form onSubmit={this.handleSubmit}&gt;
+<form onSubmit={this.handleSubmit}>
 
-&lt;label&gt;
+<label>
 
 User Name:
 
@@ -6874,11 +6874,11 @@ type="text"
 
 ref={this.input} />
 
-&lt;/label&gt;
+</label>
 
-&lt;input type="submit" value="Submit" /&gt;
+<input type="submit" value="Submit" />
 
-&lt;/form&gt;
+</form>
 
 );
 
@@ -6976,19 +6976,19 @@ setData(result.data);
 
 return (
 
-&lt;ul&gt;
+<ul>
 
 {data.hits.map((item) => (
 
-&lt;li key={item.objectID}&gt;
+<li key={item.objectID}>
 
-&lt;a href={item.url}&gt;{item.title}&lt;/a&gt;
+<a href={item.url}>{item.title}</a>
 
-&lt;/li&gt;
+</li>
 
 ))}
 
-&lt;/ul&gt;
+</ul>
 
 );
 
@@ -7152,11 +7152,11 @@ const { someData, dispatch } = this.props;
 
 // in es 5
 
-&lt;SomeComponent someData={this.props.someData} dispatch={this.props.dispatch} /&gt;
+<SomeComponent someData={this.props.someData} dispatch={this.props.dispatch} />
 
 // in es6
 
-&lt;SomeComponent {...this.props} /&gt;
+<SomeComponent {...this.props} />
 
 1. Arrow functions: Makes compact syntax
 
@@ -7164,13 +7164,13 @@ const { someData, dispatch } = this.props;
 
 var users = usersList.map(function (user) {
 
-return &lt;li&gt;{user.name}&lt;/li&gt;;
+return <li>{user.name}</li>;
 
 });
 
 // es 6
 
-const users = usersList.map((user) => &lt;li&gt;{user.name}&lt;/li&gt;);
+const users = usersList.map((user) => <li>{user.name}</li>);
 
 [**⬆ Back to Top**](#table-of-contents)
 
@@ -7180,15 +7180,15 @@ The Concurrent rendering makes React apps to be more responsive by rendering com
 
 // 1. Part of an app by wrapping with ConcurrentMode
 
-&lt;React.unstable_ConcurrentMode&gt;
+<React.unstable_ConcurrentMode>
 
-&lt;Something /&gt;
+<Something />
 
-&lt;/React.unstable_ConcurrentMode&gt;;
+</React.unstable_ConcurrentMode>;
 
 // 2. Whole app using createRoot
 
-ReactDOM.unstable_createRoot(domNode).render(&lt;App /&gt;);
+ReactDOM.unstable_createRoot(domNode).render(<App />);
 
 [**⬆ Back to Top**](#table-of-contents)
 
@@ -7200,7 +7200,7 @@ Both refers the same thing. Previously concurrent Mode being referred to as "Asy
 
 **Can I use javascript urls in react16.9?**
 
-Yes, you can use javascript: URLs but it will log a warning in the console. Because URLs starting with javascript: are dangerous by including unsanitized output in a tag like &lt;a href&gt; and create a security hole.
+Yes, you can use javascript: URLs but it will log a warning in the console. Because URLs starting with javascript: are dangerous by including unsanitized output in a tag like <a href> and create a security hole.
 
 const companyProfile = {
 
@@ -7210,7 +7210,7 @@ website: "javascript: alert('Your website is hacked')",
 
 // It will log a warning
 
-&lt;a href={companyProfile.website}&gt;More details&lt;/a&gt;;
+<a href={companyProfile.website}>More details</a>;
 
 Remember that the future versions will throw an error for javascript URLs.
 
@@ -7255,11 +7255,11 @@ In contrast, the declarative approach would be:
 
 if (this.state.liked) {
 
-return &lt;blueLike /&gt;;
+return <blueLike />;
 
 } else {
 
-return &lt;greyLike /&gt;;
+return <greyLike />;
 
 }
 
@@ -7302,15 +7302,15 @@ import AuthState from './context/auth/AuthState';
 
 ReactDOM.render(
 
-&lt;React.StrictMode&gt;
+<React.StrictMode>
 
-&lt;AuthState&gt;
+<AuthState>
 
-&lt;App /&gt;
+<App />
 
-&lt;/AuthState&gt;
+</AuthState>
 
-&lt;/React.StrictMode&gt;,
+</React.StrictMode>,
 
 document.getElementById('root'),
 
@@ -7388,7 +7388,7 @@ import React from 'react';
 
 function App() {
 
-return &lt;h1&gt;Good morning!!&lt;/h1&gt;;
+return <h1>Good morning!!</h1>;
 
 }
 
@@ -7408,7 +7408,7 @@ The new JSX transform doesn't require any React imports
 
 function App() {
 
-return &lt;h1&gt;Good morning!!&lt;/h1&gt;;
+return <h1>Good morning!!</h1>;
 
 }
 
