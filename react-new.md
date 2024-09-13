@@ -2676,6 +2676,7 @@ Returning undefined won't work.
 ### **How to pretty print JSON with React?**
 
 We can use <pre> tag so that the formatting of the JSON.stringify() is retained:
+
 ```jsx
 const data = { name: 'John', age: 42 };
 
@@ -2691,6 +2692,7 @@ return <pre>{JSON.stringify(data, null, 2)}</pre>;
 
 React.render(<User />, document.getElementById('container'));
 ```
+
 [**⬆ Back to Top**](#table-of-contents)
 
 ### **Why you can't update props in React?**
@@ -2731,6 +2733,7 @@ return (
 
 ReactDOM.render(<App />, document.getElementById('app'));
 ```
+
 [**⬆ Back to Top**](#table-of-contents)
 
 ### **What are the possible ways of updating objects in state?**
