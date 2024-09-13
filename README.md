@@ -13,14 +13,21 @@ Hide/Show table of contents
 |2 | [**Cheat-Sheet-Kafka**](Cheat-Sheet-Kafka.md)|
 |3 | [**Cheat-Sheet-Kubernetes**](Cheat-Sheet-Kubernetes.md)|
 |4 | [**Cheat-Sheet-Linux**](Cheat-Sheet-Linux.md)|
-|5 | [**Q&A-Angular**](FAQ-Angular.md)|
-|6 | [**Q&A-Angular-87**](FAQ-Angular-87.md)|
-|7 | [**Q&A-Design-Patterns**](FAQ-Design-Patterns.md)|
-|8 | [**Q&A-JavaScript**](FAQ-JavaScript.md)|
-|9 | [**Q&A-React**](FAQ-React.md)|
-|10 | [**Q&A-React-Advanced**](FAQ-React-Advanced.md)|
-|11 | [**Q&A-React-300**](FAQ-React-300.md)|
-|12| [**Q&A-React**](Q&A-React.md)|
+
+</details>
+
+<details open>
+<summary>
+Hide/Show table of contents
+</summary
+
+|1 | [**Q&A-Angular**](FAQ-Angular.md)|
+|2 | [**Q&A-Angular-87**](FAQ-Angular-87.md)|
+|3 | [**Q&A-Design-Patterns**](FAQ-Design-Patterns.md)|
+|4 | [**Q&A-JavaScript**](FAQ-JavaScript.md)|
+|5 | [**Q&A-React**](FAQ-React.md)|
+|6 | [**Q&A-React-Advanced**](FAQ-React-Advanced.md)|
+|7 | [**Q&A-React**](Q&A-React.md)|
 
 </details>
 
