@@ -16,6 +16,8 @@ Hide/Show table of contents
 
 </details>
 
+### Table of Contents
+
 <details open>
 <summary>
 Hide/Show table of contents
