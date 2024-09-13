@@ -4580,8 +4580,8 @@ styled-components is a JavaScript library for styling React applications. It rem
 
 ### **Give an example of Styled Components?**
 
-Lets create <Title> and <Wrapper> components with specific styles for each.
-
+Lets create `<Title>` and <Wrapper> components with specific styles for each.
+```jsx
 import React from 'react';
 
 import styled from 'styled-components';
@@ -4597,25 +4597,19 @@ text-align: center;
 color: palevioletred;
 
 \`;
-
+```
 // Create a <Wrapper> component that renders a <section> with some padding and a papayawhip background
-
-const Wrapper = styled.section\`
-
-padding: 4em;
-
-background: papayawhip;
-
-\`;
-
+```jsx
+const Wrapper = styled.section\`padding: 4em; background: papayawhip;\`;
+```
 These two variables, Title and Wrapper, are now components that you can render just like any other react component.
-
+```jsx
 <Wrapper>
 
 <Title>{'Lets start first styled component!'}</Title>
 
 </Wrapper>
-
+```
 [**⬆ Back to Top**](#table-of-contents)
 
 ### **What is Relay?**
