@@ -2676,7 +2676,7 @@ Returning undefined won't work.
 ### **How to pretty print JSON with React?**
 
 We can use <pre> tag so that the formatting of the JSON.stringify() is retained:
-
+```jsx
 const data = { name: 'John', age: 42 };
 
 class User extends React.Component {
@@ -2690,7 +2690,7 @@ return <pre>{JSON.stringify(data, null, 2)}</pre>;
 }
 
 React.render(<User />, document.getElementById('container'));
-
+```
 [**⬆ Back to Top**](#table-of-contents)
 
 ### **Why you can't update props in React?**
@@ -2702,7 +2702,7 @@ The React philosophy is that props should be _immutable_ and _top-down_. This me
 ### **How to focus an input element on page load?**
 
 You can do it by creating _ref_ for input element and using it in componentDidMount():
-
+```jsx
 class App extends React.Component {
 
 componentDidMount() {
@@ -2730,7 +2730,7 @@ return (
 }
 
 ReactDOM.render(<App />, document.getElementById('app'));
-
+```
 [**⬆ Back to Top**](#table-of-contents)
 
 ### **What are the possible ways of updating objects in state?**
@@ -2745,7 +2745,7 @@ ReactDOM.render(<App />, document.getElementById('app'));
 - this.setState({ user });
 
 1. **Calling setState() with a function:**
-
+```jsx
 this.setState((prevState) => ({
 
 user: {
@@ -2757,7 +2757,7 @@ age: 42,
 },
 
 }));
-
+```
 [**⬆ Back to Top**](#table-of-contents)
 
 ### **How can we find the version of React at runtime in the browser?**
@@ -2777,13 +2777,13 @@ There are approaches to include polyfills in create-react-app,
 1. **Manual import from core-js:**
 
 Create a file called (something like) polyfills.js and import it into root index.js file. Run npm install core-js or yarn add core-js and import your specific required features.
-
+```jsx
 import 'core-js/fn/array/find';
 
 import 'core-js/fn/array/includes';
 
 import 'core-js/fn/number/is-nan';
-
+```
 1. **Using Polyfill service:**
 
 Use the polyfill.io CDN to retrieve custom, browser-specific polyfills by adding this line to index.html:
