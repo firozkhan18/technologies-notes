@@ -52,7 +52,7 @@ Hide/Show table of contents
 |1 | [**Q&A-Design-Patterns**](FAQ-Design-Patterns.md)|
 
 ## Java Programing Exercises
-* [java-basic-exercises-001-Basic-1](java-basic-exercises-001-Basic-1.md)
+* [java-basic-exercises-001-Basic-1](java/java-basic-exercises-001-Basic-1.md)
 * [java-basic-exercises-002-Basic-2](java-basic-exercises-002-Basic-2.md)
 * [java-basic-exercises-003-Recursive](java-basic-exercises-003-Recursive.md)
 * [java-basic-exercises-004-Exception](java-basic-exercises-004-Exception.md)
@@ -87,7 +87,7 @@ Hide/Show table of contents
 * [java-programming-question-answer-2](java-programming-question-answer-2.md)
 * [java-programming-question-answer-3-emp-mgmt](java-programming-question-answer-3-emp-mgmt.md)
 * [java-programming-question-answer-4-java-8](java-programming-question-answer-4-java-8.md)
-* [java-programming-question-answer-5-java-8](java-programming-question-answer-5-java-8.md
+* [java-programming-question-answer-5-java-8](java-programming-question-answer-5-java-8.md)
 
 </details>
 
