@@ -1,4 +1,6 @@
-# Interview Questions & Answers
+# Java Full Stack Interview Questions & Answers
+
+## Cheat Sheets
 
 ### Table of Contents
 
@@ -16,6 +18,8 @@ Hide/Show table of contents
 
 </details>
 
+## Interview Questions & Answers - Java Script, Angular & React
+
 ### Table of Contents
 
 <details open>
@@ -32,6 +36,21 @@ Hide/Show table of contents
 |5 | [**Q&A-React**](FAQ-React.md)|
 |6 | [**Q&A-React-Advanced**](FAQ-React-Advanced.md)|
 |7 | [**Q&A-React**](Q&A-React.md)|
+
+</details>
+
+## Interview Questions & Answers - Java & J2EE Technologies
+
+### Table of Contents
+
+<details open>
+<summary>
+Hide/Show table of contents
+</summary>
+ 
+| No. | Topics |
+|---- | ---------|
+|1 | [**Q&A-Design-Patterns**](FAQ-Design-Patterns.md)|
 
 </details>
 
