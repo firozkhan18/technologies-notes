@@ -679,6 +679,8 @@ There will be a warning message in the console if the key prop is not present on
 ## What is the use of refs?
 The ref is used to return a reference to the element. They should be avoided in most cases, however, they can be useful when you need a direct access to the DOM element or an instance of a component.
 
+**Definition:** Refs are used to access and interact directly with DOM elements or React component instances.
+
 **[⬆ Back to Top](#table-of-contents)**
 
 ## How to create refs?
@@ -719,6 +721,19 @@ class SearchBar extends Component {
 }
 You can also use refs in function components using closures. Note: You can also use inline ref callbacks even though it is not a recommended approach
 
+**Example:**
+```jsx
+const inputRef = useRef(null);
+<input ref={inputRef} />
+```
+**Definition:** Forward refs allow components to forward refs to their children, enabling access to child DOM nodes or components.
+
+**Example:**
+```jsx
+const FancyInput = forwardRef((props, ref) => (
+  <input ref={ref} {...props} />
+));
+```
 **[⬆ Back to Top](#table-of-contents)**
 
 ## What are forward refs?
@@ -732,6 +747,9 @@ const ButtonElement = React.forwardRef((props, ref) => (
 // Create ref to the DOM button:
 const ref = React.createRef();
 <ButtonElement ref={ref}>{'Forward Ref'}</ButtonElement>;
+
+**Preferred:** Callback refs are preferred as `findDOMNode()` is considered legacy and less efficient.
+
 **[⬆ Back to Top](#table-of-contents)**
 
 ## Which is preferred option with in callback refs and findDOMNode()?
@@ -761,6 +779,9 @@ class MyComponent extends Component {
     return <div ref={this.node} />;
   }
 }
+
+**Preferred:** Callback refs are preferred as `findDOMNode()` is considered legacy and less efficient.
+
 **[⬆ Back to Top](#table-of-contents)**
 
 ## Why are String Refs legacy?
@@ -783,10 +804,15 @@ class MyComponent extends Component {
     return <DataTable data={this.props.data} renderRow={this.renderRow} />;
   }
 }
+
+**Reason:** String refs are considered legacy because they are less flexible and less reliable compared to callback refs and `React.createRef()`.
+
 **[⬆ Back to Top](#table-of-contents)**
 
 ## What is Virtual DOM?
 The Virtual DOM (VDOM) is an in-memory representation of Real DOM. The representation of a UI is kept in memory and synced with the "real" DOM. It's a step that happens between the render function being called and the displaying of elements on the screen. This entire process is called reconciliation.
+
+**Definition:** The Virtual DOM is a lightweight copy of the real DOM. React uses it to optimize rendering by updating only the parts of the real DOM that have changed.
 
 **[⬆ Back to Top](#table-of-contents)**
 
@@ -802,20 +828,32 @@ Alt Text
 Once the calculations are done, the real DOM will be updated with only the things that have actually changed.
 Alt Text
 
+**Process:**
+1. **Render:** React creates a virtual representation of the UI.
+2. **Diffing:** React compares the new virtual DOM with the previous one.
+3. **Reconciliation:** React updates the real DOM based on the differences.
+
 **[⬆ Back to Top](#table-of-contents)**
 
 ## What is the difference between Shadow DOM and Virtual DOM?
 The Shadow DOM is a browser technology designed primarily for scoping variables and CSS in web components. The Virtual DOM is a concept implemented by libraries in JavaScript on top of browser APIs.
+
+- **Shadow DOM:** Encapsulates styles and structure of a component, providing a separate DOM tree.
+- **Virtual DOM:** A performance optimization for updating the real DOM efficiently by minimizing direct manipulations.
 
 **[⬆ Back to Top](#table-of-contents)**
 
 ## What is React Fiber?
 Fiber is the new reconciliation engine or reimplementation of core algorithm in React v16. The goal of React Fiber is to increase its suitability for areas like animation, layout, gestures, ability to pause, abort, or reuse work and assign priority to different types of updates; and new concurrency primitives.
 
+**Definition:** React Fiber is a complete rewrite of the React core algorithm that improves rendering performance and introduces features like incremental rendering and better support for async rendering.
+
 **[⬆ Back to Top](#table-of-contents)**
 
 ## What is the main goal of React Fiber?
 The goal of React Fiber is to increase its suitability for areas like animation, layout, and gestures. Its headline feature is incremental rendering: the ability to split rendering work into chunks and spread it out over multiple frames.
+
+**Goal:** To enable incremental rendering, allowing React to pause, abort, and continue rendering work, improving user experience and performance.
 
 **[⬆ Back to Top](#table-of-contents)**
 
@@ -826,6 +864,14 @@ For example, to write all the names in uppercase letters, we use handleChange as
 handleChange(event) {
 this.setState({value: event.target.value.toUpperCase()})
 }
+
+**Definition:** Controlled components are form elements whose value is controlled by React state. Changes are handled through event handlers.
+
+**Example:**
+```jsx
+<input type="text" value={this.state.value} onChange={this.handleChange} />
+```
+
 **[⬆ Back to Top](#table-of-contents)**
 
 ## What are uncontrolled components?
@@ -858,15 +904,27 @@ class UserProfile extends React.Component {
 }
 In most cases, it's recommend to use controlled components to implement forms.
 
+**Definition:** Uncontrolled components store their own state internally and access values through refs rather than state.
+
+**Example:**
+```jsx
+<input type="text" ref={this.inputRef} />
+```
+
 **[⬆ Back to Top](#table-of-contents)**
 
 ## What is the difference between createElement and cloneElement?
 JSX elements will be transpiled to React.createElement() functions to create React elements which are going to be used for the object representation of UI. Whereas cloneElement is used to clone an element and pass it new props.
 
+- **`createElement`:** Creates a new React element.
+- **`cloneElement`:** Clones and returns a new element with additional props.
+- 
 **[⬆ Back to Top](#table-of-contents)**
 
 ## What is Lifting State Up in React?
 When several components need to share the same changing data then it is recommended to lift the shared state up to their closest common ancestor. That means if two child components share the same data from its parent, then move the state to parent instead of maintaining local state in both of the child components.
+
+**Definition:** Moving state from a child component to its parent so that multiple child components can share and synchronize the state.
 
 **[⬆ Back to Top](#table-of-contents)**
 
@@ -895,6 +953,10 @@ Before React 16.3
 
 Alt Text
 
+- **Mounting:** Component is being created and inserted into the DOM.
+- **Updating:** Component is being re-rendered due to state or prop changes.
+- **Unmounting:** Component is being removed from the DOM.
+
 **[⬆ Back to Top](#table-of-contents)**
 
 ## What are the lifecycle methods of React?
@@ -915,6 +977,12 @@ shouldComponentUpdate: Determines if the component will be updated or not. By de
 getSnapshotBeforeUpdate: Executed right before rendered output is committed to the DOM. Any value returned by this will be passed into componentDidUpdate(). This is useful to capture information from the DOM i.e. scroll position.
 componentDidUpdate: Mostly it is used to update the DOM in response to prop or state changes. This will not fire if shouldComponentUpdate() returns false.
 componentWillUnmount It will be used to cancel any outgoing network requests, or remove all event listeners associated with the component.
+
+**Class Component Lifecycle Methods:**
+- **Mounting:** `constructor()`, `componentDidMount()`
+- **Updating:** `shouldComponentUpdate()`, `componentDidUpdate()`
+- **Unmounting:** `componentWillUnmount()`
+
 **[⬆ Back to Top](#table-of-contents)**
 
 ## What are Higher-Order Components?
@@ -928,6 +996,23 @@ Code reuse, logic and bootstrap abstraction.
 Render hijacking.
 State abstraction and manipulation.
 Props manipulation.
+
+**Definition:** Higher-Order Components (HOCs) are functions that take a component and return a new component with enhanced functionality.
+
+**Example:**
+```jsx
+function withLogging(WrappedComponent) {
+  return class extends React.Component {
+    componentDidMount() {
+      console.log('Component mounted');
+    }
+    render() {
+      return <WrappedComponent {...this.props} />;
+    }
+  };
+}
+```
+
 **[⬆ Back to Top](#table-of-contents)**
 
 ## How to create props proxy for HOC component?
@@ -946,6 +1031,21 @@ function HOC(WrappedComponent) {
     }
   };
 }
+
+**Example:**
+```jsx
+const withPropsProxy = (WrappedComponent) => {
+  return class extends React.Component {
+    render() {
+      const
+
+ newProps = { ...this.props, newProp: 'value' };
+      return <WrappedComponent {...newProps} />;
+    }
+  };
+};
+```
+
 **[⬆ Back to Top](#table-of-contents)**
 
 ## What is context?
@@ -953,6 +1053,9 @@ Context provides a way to pass data through the component tree without having to
 
 For example, authenticated user, locale preference, UI theme need to be accessed in the application by many components.
 const { Provider, Consumer } = React.createContext(defaultValue);
+
+**Definition:** Context provides a way to pass data through the component tree without having to pass props down manually at every level.
+
 **[⬆ Back to Top](#table-of-contents)**
 
 ## What is children prop?
@@ -974,6 +1077,16 @@ ReactDOM.render(
   </MyDiv>,
   node,
 );
+
+**Definition:** The `children` prop is a special prop that allows components to pass nested elements to their children.
+
+**Example:**
+```jsx
+function Container({ children }) {
+  return <div>{children}</div>;
+}
+```
+
 **[⬆ Back to Top](#table-of-contents)**
 
 ## How to write comments in React?
@@ -990,6 +1103,10 @@ Multi-line comments:
   one line */}
   {`Welcome ${user}, let's play React`}
 </div>
+
+**Syntax:**
+```jsx
+{/* This is a comment */}
 
 **[⬆ Back to Top](#table-of-contents)**
 
