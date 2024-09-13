@@ -29,13 +29,12 @@ Hide/Show table of contents
  
 | No. | Topics |
 |---- | ---------|
-|1 | [**Q&A-Angular**](FAQ-Angular.md)|
-|2 | [**Q&A-Angular-87**](FAQ-Angular-87.md)|
-|3 | [**Q&A-Design-Patterns**](FAQ-Design-Patterns.md)|
-|4 | [**Q&A-JavaScript**](FAQ-JavaScript.md)|
-|5 | [**Q&A-React**](FAQ-React.md)|
-|6 | [**Q&A-React-Advanced**](FAQ-React-Advanced.md)|
-|7 | [**Q&A-React**](Q&A-React.md)|
+|1 | [**Q&A-JavaScript**](FAQ-JavaScript.md)|
+|2 | [**Q&A-Angular**](FAQ-Angular.md)|
+|3 | [**Q&A-Angular-87**](FAQ-Angular-87.md)|
+|4 | [**Q&A-React**](FAQ-React.md)|
+|5| [**Q&A-React-Advanced**](FAQ-React-Advanced.md)|
+|6 | [**Q&A-React**](Q&A-React.md)|
 
 </details>
 
