@@ -23750,7 +23750,59 @@ public class KeyboardRow {
     }
 }
 ```
+### 501. Find Maximum Single Sell Profit
 
+**Problem Statement**
+
+Given a list of daily stock prices (integers for simplicity), return the buy and sell prices for making the maximum profit.
+
+We need to maximize the single buy/sell profit. If we can’t make any profit, we’ll try to minimize the loss. For the below examples, buy (orange) and sell (green) prices for making a maximum profit are highlighted.
+
+```java
+import java.util.Arrays;
+import java.util.OptionalInt;
+
+public class BestTimeToBuyAndSellStockStream {
+
+    public static int[] findBestBuySellPrices(int[] prices) {
+        if (prices == null || prices.length < 2) {
+            return new int[]{-1, -1}; // Not enough data to make a transaction
+        }
+
+        // Variables to store the results
+        final int[] result = {prices[0], prices[0]}; // Initialize with first price
+
+        // Variables to track the minimum price seen so far and maximum profit
+        final int[] minPrice = {prices[0]};
+        final int[] maxProfit = {0};
+
+        // Process the prices using a stream
+        Arrays.stream(prices).forEach(price -> {
+            // Check if current price is lower than the minimum price found so far
+            if (price < minPrice[0]) {
+                minPrice[0] = price;
+                result[0] = price; // Update buy price
+            }
+
+            // Calculate potential profit with current price
+            int profit = price - minPrice[0];
+            if (profit > maxProfit[0]) {
+                maxProfit[0] = profit;
+                result[1] = price; // Update sell price
+            }
+        });
+
+        return result;
+    }
+
+    public static void main(String[] args) {
+        int[] prices = {7, 1, 5, 3, 6, 4};
+        int[] result = findBestBuySellPrices(prices);
+        System.out.println("Buy at: " + result[0]);
+        System.out.println("Sell at: " + result[1]);
+    }
+}
+```
 These solutions cover a wide range of LeetCode problems. If you need more details on any specific problem or want additional problems solved, feel free to ask!
 
 </details>
