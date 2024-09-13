@@ -900,7 +900,7 @@ The _Virtual DOM_ (VDOM) is an in-memory representation of _Real DOM_. The repre
 
 ### **How Virtual DOM works?**
 
-   The _Virtual DOM_ works in three simple steps.
+    The _Virtual DOM_ works in three simple steps.
 
     1. Whenever any underlying data changes, the entire UI is re-rendered in Virtual DOM representation.
 
