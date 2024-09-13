@@ -3,339 +3,339 @@
 | **No.** | **Questions** |
 | --- | --- |
 |     | **Core React** |
-| 1   | [What is React?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-is-react) |
-| 2   | [What are the major features of React?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-are-the-major-features-of-react) |
-| 3   | [What is JSX?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-is-jsx) |
-| 4   | [What is the difference between Element and Component?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-is-the-difference-between-element-and-component) |
-| 5   | [How to create components in React?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#how-to-create-components-in-react) |
-| 6   | [When to use a Class Component over a Function Component?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#when-to-use-a-class-component-over-a-function-component) |
-| 7   | [What are Pure Components?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-are-pure-components) |
-| 8   | [What is state in React?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-is-state-in-react) |
-| 9   | [What are props in React?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-are-props-in-react) |
-| 10  | [What is the difference between state and props?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-is-the-difference-between-state-and-props) |
-| 11  | [Why should we not update the state directly?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#why-should-we-not-update-the-state-directly) |
-| 12  | [What is the purpose of callback function as an argument of setState()?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-is-the-purpose-of-callback-function-as-an-argument-of-setstate) |
-| 13  | [What is the difference between HTML and React event handling?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-is-the-difference-between-html-and-react-event-handling) |
-| 14  | [How to bind methods or event handlers in JSX callbacks?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#how-to-bind-methods-or-event-handlers-in-jsx-callbacks) |
-| 15  | [How to pass a parameter to an event handler or callback?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#how-to-pass-a-parameter-to-an-event-handler-or-callback) |
-| 16  | [What are synthetic events in React?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-are-synthetic-events-in-react) |
-| 17  | [What are inline conditional expressions?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-are-inline-conditional-expressions) |
-| 18  | [What is "key" prop and what is the benefit of using it in arrays of elements?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-is-key-prop-and-what-is-the-benefit-of-using-it-in-arrays-of-elements) |
-| 19  | [What is the use of refs?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-is-the-use-of-refs) |
-| 20  | [How to create refs?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#how-to-create-refs) |
-| 21  | [What are forward refs?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-are-forward-refs) |
-| 22  | [Which is preferred option with in callback refs and findDOMNode()?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#which-is-preferred-option-with-in-callback-refs-and-finddomnode) |
-| 23  | [Why are String Refs legacy?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#why-are-string-refs-legacy) |
-| 24  | [What is Virtual DOM?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-is-virtual-dom) |
-| 25  | [How Virtual DOM works?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#how-virtual-dom-works) |
-| 26  | [What is the difference between Shadow DOM and Virtual DOM?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-is-the-difference-between-shadow-dom-and-virtual-dom) |
-| 27  | [What is React Fiber?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-is-react-fiber) |
-| 28  | [What is the main goal of React Fiber?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-is-the-main-goal-of-react-fiber) |
-| 29  | [What are controlled components?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-are-controlled-components) |
-| 30  | [What are uncontrolled components?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-are-uncontrolled-components) |
-| 31  | [What is the difference between createElement and cloneElement?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-is-the-difference-between-createelement-and-cloneelement) |
-| 32  | [What is Lifting State Up in React?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-is-lifting-state-up-in-react) |
-| 33  | [What are the different phases of component lifecycle?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-are-the-different-phases-of-component-lifecycle) |
-| 34  | [What are the lifecycle methods of React?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-are-the-lifecycle-methods-of-react) |
-| 35  | [What are Higher-Order components?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-are-higher-order-components) |
-| 36  | [How to create props proxy for HOC component?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#how-to-create-props-proxy-for-hoc-component) |
-| 37  | [What is context?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-is-context) |
-| 38  | [What is children prop?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-is-children-prop) |
-| 39  | [How to write comments in React?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#how-to-write-comments-in-react) |
-| 40  | [What is the purpose of using super constructor with props argument?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-is-the-purpose-of-using-super-constructor-with-props-argument) |
-| 41  | [What is reconciliation?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-is-reconciliation) |
-| 42  | [How to set state with a dynamic key name?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#how-to-set-state-with-a-dynamic-key-name) |
-| 43  | [What would be the common mistake of function being called every time the component renders?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-would-be-the-common-mistake-of-function-being-called-every-time-the-component-renders) |
-| 44  | [Is lazy function supports named exports?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#is-lazy-function-supports-named-exports) |
-| 45  | [Why React uses className over class attribute?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#why-react-uses-classname-over-class-attribute) |
-| 46  | [What are fragments?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-are-fragments) |
-| 47  | [Why fragments are better than container divs?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#why-fragments-are-better-than-container-divs) |
-| 48  | [What are portals in React?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-are-portals-in-react) |
-| 49  | [What are stateless components?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-are-stateless-components) |
-| 50  | [What are stateful components?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-are-stateful-components) |
-| 51  | [How to apply validation on props in React?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#how-to-apply-validation-on-props-in-react) |
-| 52  | [What are the advantages of React?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-are-the-advantages-of-react) |
-| 53  | [What are the limitations of React?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-are-the-limitations-of-react) |
-| 54  | [What are error boundaries in React v16](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-are-error-boundaries-in-react-v16) |
-| 55  | [How error boundaries handled in React v15?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#how-error-boundaries-handled-in-react-v15) |
-| 56  | [What are the recommended ways for static type checking?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-are-the-recommended-ways-for-static-type-checking) |
-| 57  | [What is the use of react-dom package?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-is-the-use-of-react-dom-package) |
-| 58  | [What is the purpose of render method of react-dom?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-is-the-purpose-of-render-method-of-react-dom) |
-| 59  | [What is ReactDOMServer?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-is-reactdomserver) |
-| 60  | [How to use InnerHtml in React?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#how-to-use-innerhtml-in-react) |
-| 61  | [How to use styles in React?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#how-to-use-styles-in-react) |
-| 62  | [How events are different in React?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#how-events-are-different-in-react) |
-| 63  | [What will happen if you use setState in constructor?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-will-happen-if-you-use-setstate-in-constructor) |
-| 64  | [What is the impact of indexes as keys?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-is-the-impact-of-indexes-as-keys) |
-| 65  | [Is it good to use setState() in componentWillMount() method?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#is-it-good-to-use-setstate-in-componentwillmount-method) |
-| 66  | [What will happen if you use props in initial state?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-will-happen-if-you-use-props-in-initial-state) |
-| 67  | [How do you conditionally render components?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#how-do-you-conditionally-render-components) |
-| 68  | [Why we need to be careful when spreading props on DOM elements??](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#why-we-need-to-be-careful-when-spreading-props-on-dom-elements) |
-| 69  | [How you use decorators in React?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#how-you-use-decorators-in-react) |
-| 70  | [How do you memoize a component?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#how-do-you-memoize-a-component) |
-| 71  | [How you implement Server-Side Rendering or SSR?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#how-you-implement-server-side-rendering-or-ssr) |
-| 72  | [How to enable production mode in React?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#how-to-enable-production-mode-in-react) |
-| 73  | [What is CRA and its benefits?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-is-cra-and-its-benefits) |
-| 74  | [What is the lifecycle methods order in mounting?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-is-the-lifecycle-methods-order-in-mounting) |
-| 75  | [What are the lifecycle methods going to be deprecated in React v16?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-are-the-lifecycle-methods-going-to-be-deprecated-in-react-v16) |
-| 76  | [What is the purpose of getDerivedStateFromProps() lifecycle method?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-is-the-purpose-of-getderivedstatefromprops-lifecycle-method) |
-| 77  | [What is the purpose of getSnapshotBeforeUpdate() lifecycle method?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-is-the-purpose-of-getsnapshotbeforeupdate-lifecycle-method) |
-| 78  | [Do Hooks replace render props and higher order components?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#do-hooks-replace-render-props-and-higher-order-components) |
-| 79  | [What is the recommended way for naming components?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-is-the-recommended-way-for-naming-components) |
-| 80  | [What is the recommended ordering of methods in component class?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-is-the-recommended-ordering-of-methods-in-component-class) |
-| 81  | [What is a switching component?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-is-a-switching-component) |
-| 82  | [Why we need to pass a function to setState()?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#why-we-need-to-pass-a-function-to-setstate) |
-| 83  | [What is strict mode in React?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-is-strict-mode-in-react) |
-| 84  | [What are React Mixins?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-are-react-mixins) |
-| 85  | [Why is isMounted() an anti-pattern and what is the proper solution?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#why-is-ismounted-an-anti-pattern-and-what-is-the-proper-solution) |
-| 86  | [What are the Pointer Events supported in React?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-are-the-pointer-events-supported-in-react) |
-| 87  | [Why should component names start with capital letter?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#why-should-component-names-start-with-capital-letter) |
-| 88  | [Are custom DOM attributes supported in React v16?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#are-custom-dom-attributes-supported-in-react-v16) |
-| 89  | [What is the difference between constructor and getInitialState?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-is-the-difference-between-constructor-and-getinitialstate) |
-| 90  | [Can you force a component to re-render without calling setState?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#can-you-force-a-component-to-re-render-without-calling-setstate) |
-| 91  | [What is the difference between super() and super(props) in React using ES6 classes?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-is-the-difference-between-super-and-superprops-in-react-using-es6-classes) |
-| 92  | [How to loop inside JSX?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#how-to-loop-inside-jsx) |
-| 93  | [How do you access props in attribute quotes?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#how-do-you-access-props-in-attribute-quotes) |
-| 94  | [What is React PropType array with shape?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-is-react-proptype-array-with-shape) |
-| 95  | [How to conditionally apply class attributes?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#how-to-conditionally-apply-class-attributes) |
-| 96  | [What is the difference between React and ReactDOM?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-is-the-difference-between-react-and-reactdom) |
-| 97  | [Why ReactDOM is separated from React?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#why-reactdom-is-separated-from-react) |
-| 98  | [How to use React label element?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#how-to-use-react-label-element) |
-| 99  | [How to combine multiple inline style objects?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#how-to-combine-multiple-inline-style-objects) |
-| 100 | [How to re-render the view when the browser is resized?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#how-to-re-render-the-view-when-the-browser-is-resized) |
-| 101 | [What is the difference between setState and replaceState methods?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-is-the-difference-between-setstate-and-replacestate-methods) |
-| 102 | [How to listen to state changes?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#how-to-listen-to-state-changes) |
-| 103 | [What is the recommended approach of removing an array element in react state?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-is-the-recommended-approach-of-removing-an-array-element-in-react-state) |
-| 104 | [Is it possible to use React without rendering HTML?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#is-it-possible-to-use-react-without-rendering-html) |
-| 105 | [How to pretty print JSON with React?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#how-to-pretty-print-json-with-react) |
-| 106 | [Why you can't update props in React?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#why-you-cant-update-props-in-react) |
-| 107 | [How to focus an input element on page load?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#how-to-focus-an-input-element-on-page-load) |
-| 108 | [What are the possible ways of updating objects in state?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-are-the-possible-ways-of-updating-objects-in-state) |
-| 110 | [How can we find the version of React at runtime in the browser?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#how-can-we-find-the-version-of-react-at-runtime-in-the-browser) |
-| 111 | [What are the approaches to include polyfills in your create-react-app?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-are-the-approaches-to-include-polyfills-in-your-create-react-app) |
-| 112 | [How to use https instead of http in create-react-app?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#how-to-use-https-instead-of-http-in-create-react-app) |
-| 113 | [How to avoid using relative path imports in create-react-app?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#how-to-avoid-using-relative-path-imports-in-create-react-app) |
-| 114 | [How to add Google Analytics for react-router?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#how-to-add-google-analytics-for-react-router) |
-| 115 | [How to update a component every second?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#how-to-update-a-component-every-second) |
-| 116 | [How do you apply vendor prefixes to inline styles in React?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#how-do-you-apply-vendor-prefixes-to-inline-styles-in-react) |
-| 117 | [How to import and export components using react and ES6?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#how-to-import-and-export-components-using-react-and-es6) |
-| 118 | [What are the exceptions on React component naming?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-are-the-exceptions-on-react-component-naming) |
-| 119 | [Why is a component constructor called only once?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#why-is-a-component-constructor-called-only-once) |
-| 120 | [How to define constants in React?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#how-to-define-constants-in-react) |
-| 121 | [How to programmatically trigger click event in React?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#how-to-programmatically-trigger-click-event-in-react) |
-| 122 | [Is it possible to use async/await in plain React?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#is-it-possible-to-use-asyncawait-in-plain-react) |
-| 123 | [What are the common folder structures for React?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-are-the-common-folder-structures-for-react) |
-| 124 | [What are the popular packages for animation?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-are-the-popular-packages-for-animation) |
-| 125 | [What is the benefit of styles modules?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-is-the-benefit-of-styles-modules) |
-| 126 | [What are the popular React-specific linters?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-are-the-popular-react-specific-linters) |
-| 127 | [How to make AJAX call and In which component lifecycle methods should I make an AJAX call?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#how-to-make-ajax-call-and-in-which-component-lifecycle-methods-should-i-make-an-ajax-call) |
-| 128 | [What are render props?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-are-render-props) |
+| 1   | [What is React?](#what-is-react) |
+| 2   | [What are the major features of React?](#what-are-the-major-features-of-react) |
+| 3   | [What is JSX?](#what-is-jsx) |
+| 4   | [What is the difference between Element and Component?](#what-is-the-difference-between-element-and-component) |
+| 5   | [How to create components in React?](#how-to-create-components-in-react) |
+| 6   | [When to use a Class Component over a Function Component?](#when-to-use-a-class-component-over-a-function-component) |
+| 7   | [What are Pure Components?](#what-are-pure-components) |
+| 8   | [What is state in React?](#what-is-state-in-react) |
+| 9   | [What are props in React?](#what-are-props-in-react) |
+| 10  | [What is the difference between state and props?](#what-is-the-difference-between-state-and-props) |
+| 11  | [Why should we not update the state directly?](#why-should-we-not-update-the-state-directly) |
+| 12  | [What is the purpose of callback function as an argument of setState()?](#what-is-the-purpose-of-callback-function-as-an-argument-of-setstate) |
+| 13  | [What is the difference between HTML and React event handling?](#what-is-the-difference-between-html-and-react-event-handling) |
+| 14  | [How to bind methods or event handlers in JSX callbacks?](#how-to-bind-methods-or-event-handlers-in-jsx-callbacks) |
+| 15  | [How to pass a parameter to an event handler or callback?](#how-to-pass-a-parameter-to-an-event-handler-or-callback) |
+| 16  | [What are synthetic events in React?](#what-are-synthetic-events-in-react) |
+| 17  | [What are inline conditional expressions?](#what-are-inline-conditional-expressions) |
+| 18  | [What is "key" prop and what is the benefit of using it in arrays of elements?](#what-is-key-prop-and-what-is-the-benefit-of-using-it-in-arrays-of-elements) |
+| 19  | [What is the use of refs?](#what-is-the-use-of-refs) |
+| 20  | [How to create refs?](#how-to-create-refs) |
+| 21  | [What are forward refs?](#what-are-forward-refs) |
+| 22  | [Which is preferred option with in callback refs and findDOMNode()?](#which-is-preferred-option-with-in-callback-refs-and-finddomnode) |
+| 23  | [Why are String Refs legacy?](#why-are-string-refs-legacy) |
+| 24  | [What is Virtual DOM?](#what-is-virtual-dom) |
+| 25  | [How Virtual DOM works?](#how-virtual-dom-works) |
+| 26  | [What is the difference between Shadow DOM and Virtual DOM?](#what-is-the-difference-between-shadow-dom-and-virtual-dom) |
+| 27  | [What is React Fiber?](#what-is-react-fiber) |
+| 28  | [What is the main goal of React Fiber?](#what-is-the-main-goal-of-react-fiber) |
+| 29  | [What are controlled components?](#what-are-controlled-components) |
+| 30  | [What are uncontrolled components?](#what-are-uncontrolled-components) |
+| 31  | [What is the difference between createElement and cloneElement?](#what-is-the-difference-between-createelement-and-cloneelement) |
+| 32  | [What is Lifting State Up in React?](#what-is-lifting-state-up-in-react) |
+| 33  | [What are the different phases of component lifecycle?](#what-are-the-different-phases-of-component-lifecycle) |
+| 34  | [What are the lifecycle methods of React?](#what-are-the-lifecycle-methods-of-react) |
+| 35  | [What are Higher-Order components?](#what-are-higher-order-components) |
+| 36  | [How to create props proxy for HOC component?](#how-to-create-props-proxy-for-hoc-component) |
+| 37  | [What is context?](#what-is-context) |
+| 38  | [What is children prop?](#what-is-children-prop) |
+| 39  | [How to write comments in React?](#how-to-write-comments-in-react) |
+| 40  | [What is the purpose of using super constructor with props argument?](#what-is-the-purpose-of-using-super-constructor-with-props-argument) |
+| 41  | [What is reconciliation?](#what-is-reconciliation) |
+| 42  | [How to set state with a dynamic key name?](#how-to-set-state-with-a-dynamic-key-name) |
+| 43  | [What would be the common mistake of function being called every time the component renders?](#what-would-be-the-common-mistake-of-function-being-called-every-time-the-component-renders) |
+| 44  | [Is lazy function supports named exports?](#is-lazy-function-supports-named-exports) |
+| 45  | [Why React uses className over class attribute?](#why-react-uses-classname-over-class-attribute) |
+| 46  | [What are fragments?](#what-are-fragments) |
+| 47  | [Why fragments are better than container divs?](#why-fragments-are-better-than-container-divs) |
+| 48  | [What are portals in React?](#what-are-portals-in-react) |
+| 49  | [What are stateless components?](#what-are-stateless-components) |
+| 50  | [What are stateful components?](#what-are-stateful-components) |
+| 51  | [How to apply validation on props in React?](#how-to-apply-validation-on-props-in-react) |
+| 52  | [What are the advantages of React?](#what-are-the-advantages-of-react) |
+| 53  | [What are the limitations of React?](#what-are-the-limitations-of-react) |
+| 54  | [What are error boundaries in React v16](#what-are-error-boundaries-in-react-v16) |
+| 55  | [How error boundaries handled in React v15?](#how-error-boundaries-handled-in-react-v15) |
+| 56  | [What are the recommended ways for static type checking?](#what-are-the-recommended-ways-for-static-type-checking) |
+| 57  | [What is the use of react-dom package?](#what-is-the-use-of-react-dom-package) |
+| 58  | [What is the purpose of render method of react-dom?](#what-is-the-purpose-of-render-method-of-react-dom) |
+| 59  | [What is ReactDOMServer?](#what-is-reactdomserver) |
+| 60  | [How to use InnerHtml in React?](#how-to-use-innerhtml-in-react) |
+| 61  | [How to use styles in React?](#how-to-use-styles-in-react) |
+| 62  | [How events are different in React?](#how-events-are-different-in-react) |
+| 63  | [What will happen if you use setState in constructor?](#what-will-happen-if-you-use-setstate-in-constructor) |
+| 64  | [What is the impact of indexes as keys?](#what-is-the-impact-of-indexes-as-keys) |
+| 65  | [Is it good to use setState() in componentWillMount() method?](#is-it-good-to-use-setstate-in-componentwillmount-method) |
+| 66  | [What will happen if you use props in initial state?](#what-will-happen-if-you-use-props-in-initial-state) |
+| 67  | [How do you conditionally render components?](#how-do-you-conditionally-render-components) |
+| 68  | [Why we need to be careful when spreading props on DOM elements??](#why-we-need-to-be-careful-when-spreading-props-on-dom-elements) |
+| 69  | [How you use decorators in React?](#how-you-use-decorators-in-react) |
+| 70  | [How do you memoize a component?](#how-do-you-memoize-a-component) |
+| 71  | [How you implement Server-Side Rendering or SSR?](#how-you-implement-server-side-rendering-or-ssr) |
+| 72  | [How to enable production mode in React?](#how-to-enable-production-mode-in-react) |
+| 73  | [What is CRA and its benefits?](#what-is-cra-and-its-benefits) |
+| 74  | [What is the lifecycle methods order in mounting?](#what-is-the-lifecycle-methods-order-in-mounting) |
+| 75  | [What are the lifecycle methods going to be deprecated in React v16?](#what-are-the-lifecycle-methods-going-to-be-deprecated-in-react-v16) |
+| 76  | [What is the purpose of getDerivedStateFromProps() lifecycle method?](#what-is-the-purpose-of-getderivedstatefromprops-lifecycle-method) |
+| 77  | [What is the purpose of getSnapshotBeforeUpdate() lifecycle method?](#what-is-the-purpose-of-getsnapshotbeforeupdate-lifecycle-method) |
+| 78  | [Do Hooks replace render props and higher order components?](#do-hooks-replace-render-props-and-higher-order-components) |
+| 79  | [What is the recommended way for naming components?](#what-is-the-recommended-way-for-naming-components) |
+| 80  | [What is the recommended ordering of methods in component class?](#what-is-the-recommended-ordering-of-methods-in-component-class) |
+| 81  | [What is a switching component?](#what-is-a-switching-component) |
+| 82  | [Why we need to pass a function to setState()?](#why-we-need-to-pass-a-function-to-setstate) |
+| 83  | [What is strict mode in React?](#what-is-strict-mode-in-react) |
+| 84  | [What are React Mixins?](#what-are-react-mixins) |
+| 85  | [Why is isMounted() an anti-pattern and what is the proper solution?](#why-is-ismounted-an-anti-pattern-and-what-is-the-proper-solution) |
+| 86  | [What are the Pointer Events supported in React?](#what-are-the-pointer-events-supported-in-react) |
+| 87  | [Why should component names start with capital letter?](#why-should-component-names-start-with-capital-letter) |
+| 88  | [Are custom DOM attributes supported in React v16?](#are-custom-dom-attributes-supported-in-react-v16) |
+| 89  | [What is the difference between constructor and getInitialState?](#what-is-the-difference-between-constructor-and-getinitialstate) |
+| 90  | [Can you force a component to re-render without calling setState?](#can-you-force-a-component-to-re-render-without-calling-setstate) |
+| 91  | [What is the difference between super() and super(props) in React using ES6 classes?](#what-is-the-difference-between-super-and-superprops-in-react-using-es6-classes) |
+| 92  | [How to loop inside JSX?](#how-to-loop-inside-jsx) |
+| 93  | [How do you access props in attribute quotes?](#how-do-you-access-props-in-attribute-quotes) |
+| 94  | [What is React PropType array with shape?](#what-is-react-proptype-array-with-shape) |
+| 95  | [How to conditionally apply class attributes?](#how-to-conditionally-apply-class-attributes) |
+| 96  | [What is the difference between React and ReactDOM?](#what-is-the-difference-between-react-and-reactdom) |
+| 97  | [Why ReactDOM is separated from React?](#why-reactdom-is-separated-from-react) |
+| 98  | [How to use React label element?](#how-to-use-react-label-element) |
+| 99  | [How to combine multiple inline style objects?](#how-to-combine-multiple-inline-style-objects) |
+| 100 | [How to re-render the view when the browser is resized?](#how-to-re-render-the-view-when-the-browser-is-resized) |
+| 101 | [What is the difference between setState and replaceState methods?](#what-is-the-difference-between-setstate-and-replacestate-methods) |
+| 102 | [How to listen to state changes?](#how-to-listen-to-state-changes) |
+| 103 | [What is the recommended approach of removing an array element in react state?](#what-is-the-recommended-approach-of-removing-an-array-element-in-react-state) |
+| 104 | [Is it possible to use React without rendering HTML?](#is-it-possible-to-use-react-without-rendering-html) |
+| 105 | [How to pretty print JSON with React?](#how-to-pretty-print-json-with-react) |
+| 106 | [Why you can't update props in React?](#why-you-cant-update-props-in-react) |
+| 107 | [How to focus an input element on page load?](#how-to-focus-an-input-element-on-page-load) |
+| 108 | [What are the possible ways of updating objects in state?](#what-are-the-possible-ways-of-updating-objects-in-state) |
+| 110 | [How can we find the version of React at runtime in the browser?](#how-can-we-find-the-version-of-react-at-runtime-in-the-browser) |
+| 111 | [What are the approaches to include polyfills in your create-react-app?](#what-are-the-approaches-to-include-polyfills-in-your-create-react-app) |
+| 112 | [How to use https instead of http in create-react-app?](#how-to-use-https-instead-of-http-in-create-react-app) |
+| 113 | [How to avoid using relative path imports in create-react-app?](#how-to-avoid-using-relative-path-imports-in-create-react-app) |
+| 114 | [How to add Google Analytics for react-router?](#how-to-add-google-analytics-for-react-router) |
+| 115 | [How to update a component every second?](#how-to-update-a-component-every-second) |
+| 116 | [How do you apply vendor prefixes to inline styles in React?](#how-do-you-apply-vendor-prefixes-to-inline-styles-in-react) |
+| 117 | [How to import and export components using react and ES6?](#how-to-import-and-export-components-using-react-and-es6) |
+| 118 | [What are the exceptions on React component naming?](#what-are-the-exceptions-on-react-component-naming) |
+| 119 | [Why is a component constructor called only once?](#why-is-a-component-constructor-called-only-once) |
+| 120 | [How to define constants in React?](#how-to-define-constants-in-react) |
+| 121 | [How to programmatically trigger click event in React?](#how-to-programmatically-trigger-click-event-in-react) |
+| 122 | [Is it possible to use async/await in plain React?](#is-it-possible-to-use-asyncawait-in-plain-react) |
+| 123 | [What are the common folder structures for React?](#what-are-the-common-folder-structures-for-react) |
+| 124 | [What are the popular packages for animation?](#what-are-the-popular-packages-for-animation) |
+| 125 | [What is the benefit of styles modules?](#what-is-the-benefit-of-styles-modules) |
+| 126 | [What are the popular React-specific linters?](#what-are-the-popular-react-specific-linters) |
+| 127 | [How to make AJAX call and In which component lifecycle methods should I make an AJAX call?](#how-to-make-ajax-call-and-in-which-component-lifecycle-methods-should-i-make-an-ajax-call) |
+| 128 | [What are render props?](#what-are-render-props) |
 |     | **React Router** |
-| 129 | [What is React Router?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-is-react-router) |
-| 130 | [How React Router is different from history library?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#how-react-router-is-different-from-history-library) |
-| 131 | [What are the &lt;Router&gt; components of React Router v4?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-are-the-router-components-of-react-router-v4) |
-| 132 | [What is the purpose of push and replace methods of history?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-is-the-purpose-of-push-and-replace-methods-of-history) |
-| 133 | [How do you programmatically navigate using React router v4?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#how-do-you-programmatically-navigate-using-react-router-v4) |
-| 134 | [How to get query parameters in React Router v4](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#how-to-get-query-parameters-in-react-router-v4) |
-| 135 | [Why you get "Router may have only one child element" warning?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#why-you-get-router-may-have-only-one-child-element-warning) |
-| 136 | [How to pass params to history.push method in React Router v4?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#how-to-pass-params-to-historypush-method-in-react-router-v4) |
-| 137 | [How to implement default or NotFound page?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#how-to-implement-default-or-notfound-page) |
-| 138 | [How to get history on React Router v4?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#how-to-get-history-on-react-router-v4) |
-| 139 | [How to perform automatic redirect after login?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#how-to-perform-automatic-redirect-after-login) |
+| 129 | [What is React Router?](#what-is-react-router) |
+| 130 | [How React Router is different from history library?](#how-react-router-is-different-from-history-library) |
+| 131 | [What are the &lt;Router&gt; components of React Router v4?](#what-are-the-router-components-of-react-router-v4) |
+| 132 | [What is the purpose of push and replace methods of history?](#what-is-the-purpose-of-push-and-replace-methods-of-history) |
+| 133 | [How do you programmatically navigate using React router v4?](#how-do-you-programmatically-navigate-using-react-router-v4) |
+| 134 | [How to get query parameters in React Router v4](#how-to-get-query-parameters-in-react-router-v4) |
+| 135 | [Why you get "Router may have only one child element" warning?](#why-you-get-router-may-have-only-one-child-element-warning) |
+| 136 | [How to pass params to history.push method in React Router v4?](#how-to-pass-params-to-historypush-method-in-react-router-v4) |
+| 137 | [How to implement default or NotFound page?](#how-to-implement-default-or-notfound-page) |
+| 138 | [How to get history on React Router v4?](#how-to-get-history-on-react-router-v4) |
+| 139 | [How to perform automatic redirect after login?](#how-to-perform-automatic-redirect-after-login) |
 |     | **React Internationalization** |
-| 140 | [What is React-Intl?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-is-react-intl) |
-| 141 | [What are the main features of React Intl?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-are-the-main-features-of-react-intl) |
-| 142 | [What are the two ways of formatting in React Intl?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-are-the-two-ways-of-formatting-in-react-intl) |
-| 143 | [How to use FormattedMessage as placeholder using React Intl?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#how-to-use-formattedmessage-as-placeholder-using-react-intl) |
-| 144 | [How to access current locale with React Intl](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#how-to-access-current-locale-with-react-intl) |
-| 145 | [How to format date using React Intl?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#how-to-format-date-using-react-intl) |
+| 140 | [What is React-Intl?](#what-is-react-intl) |
+| 141 | [What are the main features of React Intl?](#what-are-the-main-features-of-react-intl) |
+| 142 | [What are the two ways of formatting in React Intl?](#what-are-the-two-ways-of-formatting-in-react-intl) |
+| 143 | [How to use FormattedMessage as placeholder using React Intl?](#how-to-use-formattedmessage-as-placeholder-using-react-intl) |
+| 144 | [How to access current locale with React Intl](#how-to-access-current-locale-with-react-intl) |
+| 145 | [How to format date using React Intl?](#how-to-format-date-using-react-intl) |
 |     | **React Testing** |
-| 146 | [What is Shallow Renderer in React testing?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-is-shallow-renderer-in-react-testing) |
-| 147 | [What is TestRenderer package in React?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-is-testrenderer-package-in-react) |
-| 148 | [What is the purpose of ReactTestUtils package?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-is-the-purpose-of-reacttestutils-package) |
-| 149 | [What is Jest?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-is-jest) |
-| 150 | [What are the advantages of Jest over Jasmine?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-are-the-advantages-of-jest-over-jasmine) |
-| 151 | [Give a simple example of Jest test case](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#give-a-simple-example-of-jest-test-case) |
+| 146 | [What is Shallow Renderer in React testing?](#what-is-shallow-renderer-in-react-testing) |
+| 147 | [What is TestRenderer package in React?](#what-is-testrenderer-package-in-react) |
+| 148 | [What is the purpose of ReactTestUtils package?](#what-is-the-purpose-of-reacttestutils-package) |
+| 149 | [What is Jest?](#what-is-jest) |
+| 150 | [What are the advantages of Jest over Jasmine?](#what-are-the-advantages-of-jest-over-jasmine) |
+| 151 | [Give a simple example of Jest test case](#give-a-simple-example-of-jest-test-case) |
 |     | **React Redux** |
-| 152 | [What is Flux?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-is-flux) |
-| 153 | [What is Redux?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-is-redux) |
-| 154 | [What are the core principles of Redux?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-are-the-core-principles-of-redux) |
-| 155 | [What are the downsides of Redux compared to Flux?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-are-the-downsides-of-redux-compared-to-flux) |
-| 156 | [What is the difference between mapStateToProps() and mapDispatchToProps()?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-is-the-difference-between-mapstatetoprops-and-mapdispatchtoprops) |
-| 157 | [Can I dispatch an action in reducer?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#can-i-dispatch-an-action-in-reducer) |
-| 158 | [How to access Redux store outside a component?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#how-to-access-redux-store-outside-a-component) |
-| 159 | [What are the drawbacks of MVW pattern](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-are-the-drawbacks-of-mvw-pattern) |
-| 160 | [Are there any similarities between Redux and RxJS?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#are-there-any-similarities-between-redux-and-rxjs) |
-| 161 | [How to dispatch an action on load?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#how-to-dispatch-an-action-on-load) |
-| 162 | [How to use connect from React Redux?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#how-to-use-connect-from-react-redux) |
-| 163 | [How to reset state in Redux?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#how-to-reset-state-in-redux) |
-| 164 | [Whats the purpose of at symbol in the redux connect decorator?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#whats-the-purpose-of-at-symbol-in-the-redux-connect-decorator) |
-| 165 | [What is the difference between React context and React Redux?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-is-the-difference-between-react-context-and-react-redux) |
-| 166 | [Why are Redux state functions called reducers?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#why-are-redux-state-functions-called-reducers) |
-| 167 | [How to make AJAX request in Redux?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#how-to-make-ajax-request-in-redux) |
-| 168 | [Should I keep all component's state in Redux store?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#should-i-keep-all-components-state-in-redux-store) |
-| 169 | [What is the proper way to access Redux store?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-is-the-proper-way-to-access-redux-store) |
-| 170 | [What is the difference between component and container in React Redux?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-is-the-difference-between-component-and-container-in-react-redux) |
-| 171 | [What is the purpose of the constants in Redux?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-is-the-purpose-of-the-constants-in-redux) |
-| 172 | [What are the different ways to write mapDispatchToProps()?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-are-the-different-ways-to-write-mapdispatchtoprops) |
-| 173 | [What is the use of the ownProps parameter in mapStateToProps() and mapDispatchToProps()?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-is-the-use-of-the-ownprops-parameter-in-mapstatetoprops-and-mapdispatchtoprops) |
-| 174 | [How to structure Redux top level directories?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#how-to-structure-redux-top-level-directories) |
-| 175 | [What is redux-saga?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-is-redux-saga) |
-| 176 | [What is the mental model of redux-saga?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-is-the-mental-model-of-redux-saga) |
-| 177 | [What are the differences between call and put in redux-saga](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-are-the-differences-between-call-and-put-in-redux-saga) |
-| 178 | [What is Redux Thunk?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-is-redux-thunk) |
-| 179 | [What are the differences between redux-saga and redux-thunk](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-are-the-differences-between-redux-saga-and-redux-thunk) |
-| 180 | [What is Redux DevTools?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-is-redux-devtools) |
-| 181 | [What are the features of Redux DevTools?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-are-the-features-of-redux-devtools) |
-| 182 | [What are Redux selectors and Why to use them?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-are-redux-selectors-and-why-to-use-them) |
-| 183 | [What is Redux Form?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-is-redux-form) |
-| 184 | [What are the main features of Redux Form?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-are-the-main-features-of-redux-form) |
-| 185 | [How to add multiple middlewares to Redux?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#how-to-add-multiple-middlewares-to-redux) |
-| 186 | [How to set initial state in Redux?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#how-to-set-initial-state-in-redux) |
-| 187 | [How Relay is different from Redux?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#how-relay-is-different-from-redux) |
-| 188 | [What is an action in Redux?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-is-an-action-in-redux) |
+| 152 | [What is Flux?](#what-is-flux) |
+| 153 | [What is Redux?](#what-is-redux) |
+| 154 | [What are the core principles of Redux?](#what-are-the-core-principles-of-redux) |
+| 155 | [What are the downsides of Redux compared to Flux?](#what-are-the-downsides-of-redux-compared-to-flux) |
+| 156 | [What is the difference between mapStateToProps() and mapDispatchToProps()?](#what-is-the-difference-between-mapstatetoprops-and-mapdispatchtoprops) |
+| 157 | [Can I dispatch an action in reducer?](#can-i-dispatch-an-action-in-reducer) |
+| 158 | [How to access Redux store outside a component?](#how-to-access-redux-store-outside-a-component) |
+| 159 | [What are the drawbacks of MVW pattern](#what-are-the-drawbacks-of-mvw-pattern) |
+| 160 | [Are there any similarities between Redux and RxJS?](#are-there-any-similarities-between-redux-and-rxjs) |
+| 161 | [How to dispatch an action on load?](#how-to-dispatch-an-action-on-load) |
+| 162 | [How to use connect from React Redux?](#how-to-use-connect-from-react-redux) |
+| 163 | [How to reset state in Redux?](#how-to-reset-state-in-redux) |
+| 164 | [Whats the purpose of at symbol in the redux connect decorator?](#whats-the-purpose-of-at-symbol-in-the-redux-connect-decorator) |
+| 165 | [What is the difference between React context and React Redux?](#what-is-the-difference-between-react-context-and-react-redux) |
+| 166 | [Why are Redux state functions called reducers?](#why-are-redux-state-functions-called-reducers) |
+| 167 | [How to make AJAX request in Redux?](#how-to-make-ajax-request-in-redux) |
+| 168 | [Should I keep all component's state in Redux store?](#should-i-keep-all-components-state-in-redux-store) |
+| 169 | [What is the proper way to access Redux store?](#what-is-the-proper-way-to-access-redux-store) |
+| 170 | [What is the difference between component and container in React Redux?](#what-is-the-difference-between-component-and-container-in-react-redux) |
+| 171 | [What is the purpose of the constants in Redux?](#what-is-the-purpose-of-the-constants-in-redux) |
+| 172 | [What are the different ways to write mapDispatchToProps()?](#what-are-the-different-ways-to-write-mapdispatchtoprops) |
+| 173 | [What is the use of the ownProps parameter in mapStateToProps() and mapDispatchToProps()?](#what-is-the-use-of-the-ownprops-parameter-in-mapstatetoprops-and-mapdispatchtoprops) |
+| 174 | [How to structure Redux top level directories?](#how-to-structure-redux-top-level-directories) |
+| 175 | [What is redux-saga?](#what-is-redux-saga) |
+| 176 | [What is the mental model of redux-saga?](#what-is-the-mental-model-of-redux-saga) |
+| 177 | [What are the differences between call and put in redux-saga](#what-are-the-differences-between-call-and-put-in-redux-saga) |
+| 178 | [What is Redux Thunk?](#what-is-redux-thunk) |
+| 179 | [What are the differences between redux-saga and redux-thunk](#what-are-the-differences-between-redux-saga-and-redux-thunk) |
+| 180 | [What is Redux DevTools?](#what-is-redux-devtools) |
+| 181 | [What are the features of Redux DevTools?](#what-are-the-features-of-redux-devtools) |
+| 182 | [What are Redux selectors and Why to use them?](#what-are-redux-selectors-and-why-to-use-them) |
+| 183 | [What is Redux Form?](#what-is-redux-form) |
+| 184 | [What are the main features of Redux Form?](#what-are-the-main-features-of-redux-form) |
+| 185 | [How to add multiple middlewares to Redux?](#how-to-add-multiple-middlewares-to-redux) |
+| 186 | [How to set initial state in Redux?](#how-to-set-initial-state-in-redux) |
+| 187 | [How Relay is different from Redux?](#how-relay-is-different-from-redux) |
+| 188 | [What is an action in Redux?](#what-is-an-action-in-redux) |
 |     | **React Native** |
-| 188 | [What is the difference between React Native and React?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-is-the-difference-between-react-native-and-react) |
-| 189 | [How to test React Native apps?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#how-to-test-react-native-apps) |
-| 190 | [How to do logging in React Native?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#how-to-do-logging-in-react-native) |
-| 191 | [How to debug your React Native?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#how-to-debug-your-react-native) |
+| 188 | [What is the difference between React Native and React?](#what-is-the-difference-between-react-native-and-react) |
+| 189 | [How to test React Native apps?](#how-to-test-react-native-apps) |
+| 190 | [How to do logging in React Native?](#how-to-do-logging-in-react-native) |
+| 191 | [How to debug your React Native?](#how-to-debug-your-react-native) |
 |     | **React supported libraries and Integration** |
-| 192 | [What is reselect and how it works?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-is-reselect-and-how-it-works) |
-| 193 | [What is Flow?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-is-flow) |
-| 194 | [What is the difference between Flow and PropTypes?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-is-the-difference-between-flow-and-proptypes) |
-| 195 | [How to use font-awesome icons in React?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#how-to-use-font-awesome-icons-in-react) |
-| 196 | [What is React Dev Tools?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-is-react-dev-tools) |
-| 197 | [Why is DevTools not loading in Chrome for local files?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#why-is-devtools-not-loading-in-chrome-for-local-files) |
-| 198 | [How to use Polymer in React?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#how-to-use-polymer-in-react) |
-| 199 | [What are the advantages of React over Vue.js?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-are-the-advantages-of-react-over-vuejs) |
-| 200 | [What is the difference between React and Angular?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-is-the-difference-between-react-and-angular) |
-| 201 | [Why React tab is not showing up in DevTools?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#why-react-tab-is-not-showing-up-in-devtools) |
-| 202 | [What are styled components?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-are-styled-components) |
-| 203 | [Give an example of Styled Components?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#give-an-example-of-styled-components) |
-| 204 | [What is Relay?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-is-relay) |
-| 205 | [How to use TypeScript in create-react-app application?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#how-to-use-typescript-in-create-react-app-application) |
+| 192 | [What is reselect and how it works?](#what-is-reselect-and-how-it-works) |
+| 193 | [What is Flow?](#what-is-flow) |
+| 194 | [What is the difference between Flow and PropTypes?](#what-is-the-difference-between-flow-and-proptypes) |
+| 195 | [How to use font-awesome icons in React?](#how-to-use-font-awesome-icons-in-react) |
+| 196 | [What is React Dev Tools?](#what-is-react-dev-tools) |
+| 197 | [Why is DevTools not loading in Chrome for local files?](#why-is-devtools-not-loading-in-chrome-for-local-files) |
+| 198 | [How to use Polymer in React?](#how-to-use-polymer-in-react) |
+| 199 | [What are the advantages of React over Vue.js?](#what-are-the-advantages-of-react-over-vuejs) |
+| 200 | [What is the difference between React and Angular?](#what-is-the-difference-between-react-and-angular) |
+| 201 | [Why React tab is not showing up in DevTools?](#why-react-tab-is-not-showing-up-in-devtools) |
+| 202 | [What are styled components?](#what-are-styled-components) |
+| 203 | [Give an example of Styled Components?](#give-an-example-of-styled-components) |
+| 204 | [What is Relay?](#what-is-relay) |
+| 205 | [How to use TypeScript in create-react-app application?](#how-to-use-typescript-in-create-react-app-application) |
 |     | **Miscellaneous** |
-| 206 | [What are the main features of reselect library?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-are-the-main-features-of-reselect-library) |
-| 207 | [Give an example of reselect usage?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#give-an-example-of-reselect-usage) |
-| 209 | [Does the statics object work with ES6 classes in React?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#does-the-statics-object-work-with-es6-classes-in-react) |
-| 210 | [Can Redux only be used with React?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#can-redux-only-be-used-with-react) |
-| 211 | [Do you need to have a particular build tool to use Redux?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#do-you-need-to-have-a-particular-build-tool-to-use-redux) |
-| 212 | [How Redux Form initialValues get updated from state?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#how-redux-form-initialvalues-get-updated-from-state) |
-| 213 | [How React PropTypes allow different type for one prop?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#how-react-proptypes-allow-different-types-for-one-prop) |
-| 214 | [Can I import an SVG file as react component?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#can-i-import-an-svg-file-as-react-component) |
-| 215 | [Why are inline ref callbacks or functions not recommended?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#why-are-inline-ref-callbacks-or-functions-not-recommended) |
-| 216 | [What is render hijacking in React?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-is-render-hijacking-in-react) |
-| 217 | [What are HOC factory implementations?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-are-hoc-factory-implementations) |
-| 218 | [How to pass numbers to React component?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#how-to-pass-numbers-to-react-component) |
-| 219 | [Do I need to keep all my state into Redux? Should I ever use react internal state?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#do-i-need-to-keep-all-my-state-into-redux-should-i-ever-use-react-internal-state) |
-| 220 | [What is the purpose of registerServiceWorker in React?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-is-the-purpose-of-registerserviceworker-in-react) |
-| 221 | [What is React memo function?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-is-react-memo-function) |
-| 222 | [What is React lazy function?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-is-react-lazy-function) |
-| 223 | [How to prevent unnecessary updates using setState?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#how-to-prevent-unnecessary-updates-using-setstate) |
-| 224 | [How do you render Array, Strings and Numbers in React 16 Version?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#how-do-you-render-array-strings-and-numbers-in-react-16-version) |
-| 225 | [How to use class field declarations syntax in React classes?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#how-to-use-class-field-declarations-syntax-in-react-classes) |
-| 226 | [What are hooks?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-are-hooks) |
-| 227 | [What are the rules needs to follow for hooks?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-are-the-rules-needs-to-follow-for-hooks) |
-| 228 | [How to ensure hooks followed the rules in your project?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#how-to-ensure-hooks-followed-the-rules-in-your-project) |
-| 229 | [What are the differences between Flux and Redux?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-are-the-differences-between-flux-and-redux) |
-| 230 | [What are the benefits of React Router V4?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-are-the-benefits-of-react-router-v4) |
-| 231 | [Can you describe about componentDidCatch lifecycle method signature?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#can-you-describe-about-componentdidcatch-lifecycle-method-signature) |
-| 232 | [In which scenarios error boundaries do not catch errors?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#in-which-scenarios-error-boundaries-do-not-catch-errors) |
-| 233 | [Why do not you need error boundaries for event handlers?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#why-do-not-you-need-error-boundaries-for-event-handlers) |
-| 234 | [What is the difference between try catch block and error boundaries?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-is-the-difference-between-try-catch-block-and-error-boundaries) |
-| 235 | [What is the behavior of uncaught errors in react 16?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-is-the-behavior-of-uncaught-errors-in-react-16) |
-| 236 | [What is the proper placement for error boundaries?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-is-the-proper-placement-for-error-boundaries) |
-| 237 | [What is the benefit of component stack trace from error boundary?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-is-the-benefit-of-component-stack-trace-from-error-boundary) |
-| 238 | [What is the required method to be defined for a class component?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-is-the-required-method-to-be-defined-for-a-class-component) |
-| 239 | [What are the possible return types of render method?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-are-the-possible-return-types-of-render-method) |
-| 240 | [What is the main purpose of constructor?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-is-the-main-purpose-of-constructor) |
-| 241 | [Is it mandatory to define constructor for React component?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#is-it-mandatory-to-define-constructor-for-react-component) |
-| 242 | [What are default props?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-are-default-props) |
-| 243 | [Why should not call setState in componentWillUnmount?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#why-should-not-call-setstate-in-componentwillunmount) |
-| 244 | [What is the purpose of getDerivedStateFromError?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-is-the-purpose-of-getderivedstatefromerror) |
-| 245 | [What is the methods order when component re-rendered?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-is-the-methods-order-when-component-re-rendered) |
-| 246 | [What are the methods invoked during error handling?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-are-the-methods-invoked-during-error-handling) |
-| 247 | [What is the purpose of displayName class property?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-is-the-purpose-of-displayname-class-property) |
-| 248 | [What is the browser support for react applications?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-is-the-browser-support-for-react-applications) |
-| 249 | [What is the purpose of unmountComponentAtNode method?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-is-the-purpose-of-unmountcomponentatnode-method) |
-| 250 | [What is code-splitting?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-is-code-splitting) |
-| 251 | [What is the benefit of strict mode?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-is-the-benefit-of-strict-mode) |
-| 252 | [What are Keyed Fragments?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-are-keyed-fragments) |
-| 253 | [Does React support all HTML attributes?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#does-react-support-all-html-attributes) |
-| 254 | [What are the limitations with HOCs?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-are-the-limitations-with-hocs) |
-| 255 | [How to debug forwardRefs in DevTools?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#how-to-debug-forwardrefs-in-devtools) |
-| 256 | [When component props defaults to true?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#when-component-props-defaults-to-true) |
-| 257 | [What is NextJS and major features of it?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-is-nextjs-and-major-features-of-it) |
-| 258 | [How do you pass an event handler to a component?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#how-do-you-pass-an-event-handler-to-a-component) |
-| 259 | [Is it good to use arrow functions in render methods?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#is-it-good-to-use-arrow-functions-in-render-methods) |
-| 260 | [How to prevent a function from being called multiple times?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#how-to-prevent-a-function-from-being-called-multiple-times) |
-| 261 | [How JSX prevents Injection Attacks?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#how-jsx-prevents-injection-attacks) |
-| 262 | [How do you update rendered elements?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#how-do-you-update-rendered-elements) |
-| 263 | [How do you say that props are read only?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#how-do-you-say-that-props-are-read-only) |
-| 264 | [How do you say that state updates are merged?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#how-do-you-say-that-state-updates-are-merged) |
-| 265 | [How do you pass arguments to an event handler?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#how-do-you-pass-arguments-to-an-event-handler) |
-| 266 | [How to prevent component from rendering?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#how-to-prevent-component-from-rendering) |
-| 267 | [What are the conditions to safely use the index as a key?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-are-the-conditions-to-safely-use-the-index-as-a-key) |
-| 268 | [Is it keys should be globally unique?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#is-it-keys-should-be-globally-unique) |
-| 269 | [What is the popular choice for form handling?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-is-the-popular-choice-for-form-handling) |
-| 270 | [What are the advantages of formik over redux form library?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-are-the-advantages-of-formik-over-redux-form-library) |
-| 271 | [Why do you not required to use inheritance?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#why-do-you-not-required-to-use-inheritance) |
-| 272 | [Can I use web components in react application?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#can-i-use-web-components-in-react-application) |
-| 273 | [What is dynamic import?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-is-dynamic-import) |
-| 274 | [What are loadable components?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-are-loadable-components) |
-| 275 | [What is suspense component?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-is-suspense-component) |
-| 276 | [What is route based code splitting?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-is-route-based-code-splitting) |
-| 277 | [Give an example on How to use context?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#give-an-example-on-how-to-use-context) |
-| 278 | [What is the purpose of default value in context?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-is-the-purpose-of-default-value-in-context) |
-| 279 | [How do you use contextType?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#how-do-you-use-contexttype) |
-| 280 | [What is a consumer?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-is-a-consumer) |
-| 281 | [How do you solve performance corner cases while using context?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#how-do-you-solve-performance-corner-cases-while-using-context) |
-| 282 | [What is the purpose of forward ref in HOCs?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-is-the-purpose-of-forward-ref-in-hocs) |
-| 283 | [Is it ref argument available for all functions or class components?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#is-it-ref-argument-available-for-all-functions-or-class-components) |
-| 284 | [Why do you need additional care for component libraries while using forward refs?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#why-do-you-need-additional-care-for-component-libraries-while-using-forward-refs) |
-| 285 | [How to create react class components without ES6?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#how-to-create-react-class-components-without-es6) |
-| 286 | [Is it possible to use react without JSX?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#is-it-possible-to-use-react-without-jsx) |
-| 287 | [What is diffing algorithm?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-is-diffing-algorithm) |
-| 288 | [What are the rules covered by diffing algorithm?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-are-the-rules-covered-by-diffing-algorithm) |
-| 289 | [When do you need to use refs?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#when-do-you-need-to-use-refs) |
-| 290 | [Is it prop must be named as render for render props?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#is-it-prop-must-be-named-as-render-for-render-props) |
-| 291 | [What are the problems of using render props with pure components?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-are-the-problems-of-using-render-props-with-pure-components) |
-| 292 | [How do you create HOC using render props?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#how-do-you-create-hoc-using-render-props) |
-| 293 | [What is windowing technique?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-is-windowing-technique) |
-| 294 | [How do you print falsy values in JSX?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#how-do-you-print-falsy-values-in-jsx) |
-| 295 | [What is the typical use case of portals?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-is-the-typical-use-case-of-portals?) |
-| 296 | [How do you set default value for uncontrolled component?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#how-do-you-set-default-value-for-uncontrolled-component) |
-| 297 | [What is your favorite React stack?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-is-your-favorite-react-stack) |
-| 298 | [What is the difference between Real DOM and Virtual DOM?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-is-the-difference-between-real-dom-and-virtual-dom) |
-| 299 | [How to add Bootstrap to a react application?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#how-to-add-bootstrap-to-a-react-application) |
-| 300 | [Can you list down top websites or applications using react as front end framework?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#can-you-list-down-top-websites-or-applications-using-react-as-front-end-framework) |
-| 301 | [Is it recommended to use CSS In JS technique in React?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#is-it-recommended-to-use-css-in-js-technique-in-react) |
-| 302 | [Do I need to rewrite all my class components with hooks?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#do-i-need-to-rewrite-all-my-class-components-with-hooks) |
-| 303 | [How to fetch data with React Hooks?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#how-to-fetch-data-with-react-hooks) |
-| 304 | [Is Hooks cover all use cases for classes?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#is-hooks-cover-all-use-cases-for-classes) |
-| 305 | [What is the stable release for hooks support?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-is-the-stable-release-for-hooks-support) |
-| 306 | [Why do we use array destructuring (square brackets notation) in useState?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#why-do-we-use-array-destructuring-square-brackets-notation-in-usestate) |
-| 307 | [What are the sources used for introducing hooks?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-are-the-sources-used-for-introducing-hooks) |
-| 308 | [How do you access imperative API of web components?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#how-do-you-access-imperative-api-of-web-components) |
-| 309 | [What is formik?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-is-formik) |
-| 310 | [What are typical middleware choices for handling asynchronous calls in Redux?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-are-typical-middleware-choices-for-handling-asynchronous-calls-in-redux) |
-| 311 | [Do browsers understand JSX code?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#do-browsers-understand-jsx-code) |
-| 312 | [Describe about data flow in react?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#describe-about-data-flow-in-react) |
-| 313 | [What is react scripts?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-is-react-scripts) |
-| 314 | [What are the features of create react app?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-are-the-features-of-create-react-app) |
-| 315 | [What is the purpose of renderToNodeStream method?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-is-the-purpose-of-rendertonodestream-method) |
-| 316 | [What is MobX?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-is-mobx) |
-| 317 | [What are the differences between Redux and MobX?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-are-the-differences-between-redux-and-mobx) |
-| 318 | [Should I learn ES6 before learning ReactJS?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#should-i-learn-es6-before-learning-reactjs) |
-| 319 | [What is Concurrent Rendering?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-is-concurrent-rendering) |
-| 320 | [What is the difference between async mode and concurrent mode?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-is-the-difference-between-async-mode-and-concurrent-mode) |
-| 321 | [Can I use javascript urls in react16.9?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#can-i-use-javascript-urls-in-react169) |
-| 322 | [What is the purpose of eslint plugin for hooks?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-is-the-purpose-of-eslint-plugin-for-hooks) |
-| 323 | [What is the difference between Imperative and Declarative in React?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-is-the-difference-between-imperative-and-declarative-in-react) |
-| 324 | [What are the benefits of using typescript with reactjs?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-are-the-benefits-of-using-typescript-with-reactjs) |
-| 325 | [How do you make sure that user remains authenticated on page refresh while using Context API State Management?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#how-do-you-make-sure-that-user-remains-authenticated-on-page-refresh-while-using-context-api-state-management) |
-| 326 | [What are the benefits of new JSX transform?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#what-are-the-benefits-of-new-jsx-transform) |
-| 327 | [How does new JSX transform different from old transform?](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#how-does-new-jsx-transform-different-from-old-transform) |
+| 206 | [What are the main features of reselect library?](#what-are-the-main-features-of-reselect-library) |
+| 207 | [Give an example of reselect usage?](#give-an-example-of-reselect-usage) |
+| 209 | [Does the statics object work with ES6 classes in React?](#does-the-statics-object-work-with-es6-classes-in-react) |
+| 210 | [Can Redux only be used with React?](#can-redux-only-be-used-with-react) |
+| 211 | [Do you need to have a particular build tool to use Redux?](#do-you-need-to-have-a-particular-build-tool-to-use-redux) |
+| 212 | [How Redux Form initialValues get updated from state?](#how-redux-form-initialvalues-get-updated-from-state) |
+| 213 | [How React PropTypes allow different type for one prop?](#how-react-proptypes-allow-different-types-for-one-prop) |
+| 214 | [Can I import an SVG file as react component?](#can-i-import-an-svg-file-as-react-component) |
+| 215 | [Why are inline ref callbacks or functions not recommended?](#why-are-inline-ref-callbacks-or-functions-not-recommended) |
+| 216 | [What is render hijacking in React?](#what-is-render-hijacking-in-react) |
+| 217 | [What are HOC factory implementations?](#what-are-hoc-factory-implementations) |
+| 218 | [How to pass numbers to React component?](#how-to-pass-numbers-to-react-component) |
+| 219 | [Do I need to keep all my state into Redux? Should I ever use react internal state?](#do-i-need-to-keep-all-my-state-into-redux-should-i-ever-use-react-internal-state) |
+| 220 | [What is the purpose of registerServiceWorker in React?](#what-is-the-purpose-of-registerserviceworker-in-react) |
+| 221 | [What is React memo function?](#what-is-react-memo-function) |
+| 222 | [What is React lazy function?](#what-is-react-lazy-function) |
+| 223 | [How to prevent unnecessary updates using setState?](#how-to-prevent-unnecessary-updates-using-setstate) |
+| 224 | [How do you render Array, Strings and Numbers in React 16 Version?](#how-do-you-render-array-strings-and-numbers-in-react-16-version) |
+| 225 | [How to use class field declarations syntax in React classes?](#how-to-use-class-field-declarations-syntax-in-react-classes) |
+| 226 | [What are hooks?](#what-are-hooks) |
+| 227 | [What are the rules needs to follow for hooks?](#what-are-the-rules-needs-to-follow-for-hooks) |
+| 228 | [How to ensure hooks followed the rules in your project?](#how-to-ensure-hooks-followed-the-rules-in-your-project) |
+| 229 | [What are the differences between Flux and Redux?](#what-are-the-differences-between-flux-and-redux) |
+| 230 | [What are the benefits of React Router V4?](#what-are-the-benefits-of-react-router-v4) |
+| 231 | [Can you describe about componentDidCatch lifecycle method signature?](#can-you-describe-about-componentdidcatch-lifecycle-method-signature) |
+| 232 | [In which scenarios error boundaries do not catch errors?](#in-which-scenarios-error-boundaries-do-not-catch-errors) |
+| 233 | [Why do not you need error boundaries for event handlers?](#why-do-not-you-need-error-boundaries-for-event-handlers) |
+| 234 | [What is the difference between try catch block and error boundaries?](#what-is-the-difference-between-try-catch-block-and-error-boundaries) |
+| 235 | [What is the behavior of uncaught errors in react 16?](#what-is-the-behavior-of-uncaught-errors-in-react-16) |
+| 236 | [What is the proper placement for error boundaries?](#what-is-the-proper-placement-for-error-boundaries) |
+| 237 | [What is the benefit of component stack trace from error boundary?](#what-is-the-benefit-of-component-stack-trace-from-error-boundary) |
+| 238 | [What is the required method to be defined for a class component?](#what-is-the-required-method-to-be-defined-for-a-class-component) |
+| 239 | [What are the possible return types of render method?](#what-are-the-possible-return-types-of-render-method) |
+| 240 | [What is the main purpose of constructor?](#what-is-the-main-purpose-of-constructor) |
+| 241 | [Is it mandatory to define constructor for React component?](#is-it-mandatory-to-define-constructor-for-react-component) |
+| 242 | [What are default props?](#what-are-default-props) |
+| 243 | [Why should not call setState in componentWillUnmount?](#why-should-not-call-setstate-in-componentwillunmount) |
+| 244 | [What is the purpose of getDerivedStateFromError?](#what-is-the-purpose-of-getderivedstatefromerror) |
+| 245 | [What is the methods order when component re-rendered?](#what-is-the-methods-order-when-component-re-rendered) |
+| 246 | [What are the methods invoked during error handling?](#what-are-the-methods-invoked-during-error-handling) |
+| 247 | [What is the purpose of displayName class property?](#what-is-the-purpose-of-displayname-class-property) |
+| 248 | [What is the browser support for react applications?](#what-is-the-browser-support-for-react-applications) |
+| 249 | [What is the purpose of unmountComponentAtNode method?](#what-is-the-purpose-of-unmountcomponentatnode-method) |
+| 250 | [What is code-splitting?](#what-is-code-splitting) |
+| 251 | [What is the benefit of strict mode?](#what-is-the-benefit-of-strict-mode) |
+| 252 | [What are Keyed Fragments?](#what-are-keyed-fragments) |
+| 253 | [Does React support all HTML attributes?](#does-react-support-all-html-attributes) |
+| 254 | [What are the limitations with HOCs?](#what-are-the-limitations-with-hocs) |
+| 255 | [How to debug forwardRefs in DevTools?](#how-to-debug-forwardrefs-in-devtools) |
+| 256 | [When component props defaults to true?](#when-component-props-defaults-to-true) |
+| 257 | [What is NextJS and major features of it?](#what-is-nextjs-and-major-features-of-it) |
+| 258 | [How do you pass an event handler to a component?](#how-do-you-pass-an-event-handler-to-a-component) |
+| 259 | [Is it good to use arrow functions in render methods?](#is-it-good-to-use-arrow-functions-in-render-methods) |
+| 260 | [How to prevent a function from being called multiple times?](#how-to-prevent-a-function-from-being-called-multiple-times) |
+| 261 | [How JSX prevents Injection Attacks?](#how-jsx-prevents-injection-attacks) |
+| 262 | [How do you update rendered elements?](#how-do-you-update-rendered-elements) |
+| 263 | [How do you say that props are read only?](#how-do-you-say-that-props-are-read-only) |
+| 264 | [How do you say that state updates are merged?](#how-do-you-say-that-state-updates-are-merged) |
+| 265 | [How do you pass arguments to an event handler?](#how-do-you-pass-arguments-to-an-event-handler) |
+| 266 | [How to prevent component from rendering?](#how-to-prevent-component-from-rendering) |
+| 267 | [What are the conditions to safely use the index as a key?](#what-are-the-conditions-to-safely-use-the-index-as-a-key) |
+| 268 | [Is it keys should be globally unique?](#is-it-keys-should-be-globally-unique) |
+| 269 | [What is the popular choice for form handling?](#what-is-the-popular-choice-for-form-handling) |
+| 270 | [What are the advantages of formik over redux form library?](#what-are-the-advantages-of-formik-over-redux-form-library) |
+| 271 | [Why do you not required to use inheritance?](#why-do-you-not-required-to-use-inheritance) |
+| 272 | [Can I use web components in react application?](#can-i-use-web-components-in-react-application) |
+| 273 | [What is dynamic import?](#what-is-dynamic-import) |
+| 274 | [What are loadable components?](#what-are-loadable-components) |
+| 275 | [What is suspense component?](#what-is-suspense-component) |
+| 276 | [What is route based code splitting?](#what-is-route-based-code-splitting) |
+| 277 | [Give an example on How to use context?](#give-an-example-on-how-to-use-context) |
+| 278 | [What is the purpose of default value in context?](#what-is-the-purpose-of-default-value-in-context) |
+| 279 | [How do you use contextType?](#how-do-you-use-contexttype) |
+| 280 | [What is a consumer?](#what-is-a-consumer) |
+| 281 | [How do you solve performance corner cases while using context?](#how-do-you-solve-performance-corner-cases-while-using-context) |
+| 282 | [What is the purpose of forward ref in HOCs?](#what-is-the-purpose-of-forward-ref-in-hocs) |
+| 283 | [Is it ref argument available for all functions or class components?](#is-it-ref-argument-available-for-all-functions-or-class-components) |
+| 284 | [Why do you need additional care for component libraries while using forward refs?](#why-do-you-need-additional-care-for-component-libraries-while-using-forward-refs) |
+| 285 | [How to create react class components without ES6?](#how-to-create-react-class-components-without-es6) |
+| 286 | [Is it possible to use react without JSX?](#is-it-possible-to-use-react-without-jsx) |
+| 287 | [What is diffing algorithm?](#what-is-diffing-algorithm) |
+| 288 | [What are the rules covered by diffing algorithm?](#what-are-the-rules-covered-by-diffing-algorithm) |
+| 289 | [When do you need to use refs?](#when-do-you-need-to-use-refs) |
+| 290 | [Is it prop must be named as render for render props?](#is-it-prop-must-be-named-as-render-for-render-props) |
+| 291 | [What are the problems of using render props with pure components?](#what-are-the-problems-of-using-render-props-with-pure-components) |
+| 292 | [How do you create HOC using render props?](#how-do-you-create-hoc-using-render-props) |
+| 293 | [What is windowing technique?](#what-is-windowing-technique) |
+| 294 | [How do you print falsy values in JSX?](#how-do-you-print-falsy-values-in-jsx) |
+| 295 | [What is the typical use case of portals?](#what-is-the-typical-use-case-of-portals?) |
+| 296 | [How do you set default value for uncontrolled component?](#how-do-you-set-default-value-for-uncontrolled-component) |
+| 297 | [What is your favorite React stack?](#what-is-your-favorite-react-stack) |
+| 298 | [What is the difference between Real DOM and Virtual DOM?](#what-is-the-difference-between-real-dom-and-virtual-dom) |
+| 299 | [How to add Bootstrap to a react application?](#how-to-add-bootstrap-to-a-react-application) |
+| 300 | [Can you list down top websites or applications using react as front end framework?](#can-you-list-down-top-websites-or-applications-using-react-as-front-end-framework) |
+| 301 | [Is it recommended to use CSS In JS technique in React?](#is-it-recommended-to-use-css-in-js-technique-in-react) |
+| 302 | [Do I need to rewrite all my class components with hooks?](#do-i-need-to-rewrite-all-my-class-components-with-hooks) |
+| 303 | [How to fetch data with React Hooks?](#how-to-fetch-data-with-react-hooks) |
+| 304 | [Is Hooks cover all use cases for classes?](#is-hooks-cover-all-use-cases-for-classes) |
+| 305 | [What is the stable release for hooks support?](#what-is-the-stable-release-for-hooks-support) |
+| 306 | [Why do we use array destructuring (square brackets notation) in useState?](#why-do-we-use-array-destructuring-square-brackets-notation-in-usestate) |
+| 307 | [What are the sources used for introducing hooks?](#what-are-the-sources-used-for-introducing-hooks) |
+| 308 | [How do you access imperative API of web components?](#how-do-you-access-imperative-api-of-web-components) |
+| 309 | [What is formik?](#what-is-formik) |
+| 310 | [What are typical middleware choices for handling asynchronous calls in Redux?](#what-are-typical-middleware-choices-for-handling-asynchronous-calls-in-redux) |
+| 311 | [Do browsers understand JSX code?](#do-browsers-understand-jsx-code) |
+| 312 | [Describe about data flow in react?](#describe-about-data-flow-in-react) |
+| 313 | [What is react scripts?](#what-is-react-scripts) |
+| 314 | [What are the features of create react app?](#what-are-the-features-of-create-react-app) |
+| 315 | [What is the purpose of renderToNodeStream method?](#what-is-the-purpose-of-rendertonodestream-method) |
+| 316 | [What is MobX?](#what-is-mobx) |
+| 317 | [What are the differences between Redux and MobX?](#what-are-the-differences-between-redux-and-mobx) |
+| 318 | [Should I learn ES6 before learning ReactJS?](#should-i-learn-es6-before-learning-reactjs) |
+| 319 | [What is Concurrent Rendering?](#what-is-concurrent-rendering) |
+| 320 | [What is the difference between async mode and concurrent mode?](#what-is-the-difference-between-async-mode-and-concurrent-mode) |
+| 321 | [Can I use javascript urls in react16.9?](#can-i-use-javascript-urls-in-react169) |
+| 322 | [What is the purpose of eslint plugin for hooks?](#what-is-the-purpose-of-eslint-plugin-for-hooks) |
+| 323 | [What is the difference between Imperative and Declarative in React?](#what-is-the-difference-between-imperative-and-declarative-in-react) |
+| 324 | [What are the benefits of using typescript with reactjs?](#what-are-the-benefits-of-using-typescript-with-reactjs) |
+| 325 | [How do you make sure that user remains authenticated on page refresh while using Context API State Management?](#how-do-you-make-sure-that-user-remains-authenticated-on-page-refresh-while-using-context-api-state-management) |
+| 326 | [What are the benefits of new JSX transform?](#what-are-the-benefits-of-new-jsx-transform) |
+| 327 | [How does new JSX transform different from old transform?](#how-does-new-jsx-transform-different-from-old-transform) |
 
 **Core React**
 
@@ -343,7 +343,7 @@
 
 React is an **open-source frontend JavaScript library** which is used for building user interfaces especially for single page applications. It is used for handling view layer for web and mobile apps. React was created by [Jordan Walke](https://github.com/jordwalke), a software engineer working for Facebook. React was first deployed on Facebook's News Feed in 2011 and on Instagram in 2012.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What are the major features of React?**
 
@@ -354,7 +354,7 @@ The major features of React are:
 - Follows **Unidirectional** data flow or data binding.
 - Uses **reusable/composable** UI components to develop the view.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What is JSX?**
 
@@ -380,7 +380,7 @@ return (
 
 }
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What is the difference between Element and Component?**
 
@@ -428,7 +428,7 @@ const Button = ({ onLogin }) =>
 
 React.createElement('div', { id: 'login-btn', onClick: onLogin }, 'Login');
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **How to create components in React?**
 
@@ -454,19 +454,19 @@ return &lt;h1&gt;{\`Hello, ${this.props.message}\`}&lt;/h1&gt;;
 
 }
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **When to use a Class Component over a Function Component?**
 
 If the component needs _state or lifecycle methods_ then use class component otherwise use function component. _However, from React 16.8 with the addition of Hooks, you could use state , lifecycle methods and other features that were only available in class component right in your function component._
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What are Pure Components?**
 
 _React.PureComponent_ is exactly the same as _React.Component_ except that it handles the shouldComponentUpdate() method for you. When props or state changes, _PureComponent_ will do a shallow comparison on both props and state. _Component_ on the other hand won't compare current props and state to next out of the box. Thus, the component will re-render by default whenever shouldComponentUpdate is called.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What is state in React?**
 
@@ -508,7 +508,7 @@ return (
 
 State is similar to props, but it is private and fully controlled by the component. i.e, It is not accessible to any component other than the one that owns and sets it.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What are props in React?**
 
@@ -528,13 +528,13 @@ This reactProp (or whatever you came up with) name then becomes a property attac
 
 props.reactProp
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What is the difference between state and props?**
 
 Both _props_ and _state_ are plain JavaScript objects. While both of them hold information that influences the output of render, they are different in their functionality with respect to component. Props get passed to the component similar to function parameters whereas state is managed within the component similar to variables declared within a function.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **Why should we not update the state directly?**
 
@@ -552,7 +552,7 @@ this.setState({ message: 'Hello World' });
 
 **Note:** You can directly assign to the state object either in _constructor_ or using latest javascript's class field declaration syntax.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What is the purpose of callback function as an argument of setState()?**
 
@@ -562,7 +562,7 @@ The callback function is invoked when setState finished and the component gets r
 
 setState({ name: 'John' }, () => console.log('The name has updated and component re-rendered'));
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What is the difference between HTML and React event handling?**
 
@@ -592,7 +592,7 @@ console.log('The link was clicked.');
 
 1. In HTML, you need to invoke the function by appending () Whereas in react you should not append () with the function name. (refer "activateLasers" function in the first point for example)
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **How to bind methods or event handlers in JSX callbacks?**
 
@@ -634,7 +634,7 @@ console.log('this is:', this);
 
 **Note:** If the callback is passed as prop to child components, those components might do an extra re-rendering. In those cases, it is preferred to go with .bind() or _public class fields syntax_ approach considering performance.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **How to pass a parameter to an event handler or callback?**
 
@@ -656,13 +656,13 @@ console.log('Hello, your ticket number is', id);
 
 };
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What are synthetic events in React?**
 
 SyntheticEvent is a cross-browser wrapper around the browser's native event. It's API is same as the browser's native event, including stopPropagation() and preventDefault(), except the events work identically across all browsers.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What are inline conditional expressions?**
 
@@ -684,7 +684,7 @@ messages.length > 0 && !isLogin ? (
 
 }
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What is "key" prop and what is the benefit of using it in arrays of elements?**
 
@@ -704,13 +704,13 @@ const todoItems = todos.map((todo, index) => &lt;li key={index}&gt;{todo.text}&l
 2. If you extract list item as separate component then apply _keys_ on list component instead of li tag.
 3. There will be a warning message in the console if the key prop is not present on list items.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What is the use of refs?**
 
 The _ref_ is used to return a reference to the element. They _should be avoided_ in most cases, however, they can be useful when you need a direct access to the DOM element or an instance of a component.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **How to create refs?**
 
@@ -784,7 +784,7 @@ ref={this.setInputSearchRef}
 
 You can also use _refs_ in function components using **closures**. **Note**: You can also use inline ref callbacks even though it is not a recommended approach
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What are forward refs?**
 
@@ -806,7 +806,7 @@ const ref = React.createRef();
 
 &lt;ButtonElement ref={ref}&gt;{'Forward Ref'}&lt;/ButtonElement&gt;;
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **Which is preferred option with in callback refs and findDOMNode()?**
 
@@ -856,7 +856,7 @@ return &lt;div ref={this.node} /&gt;;
 
 }
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **Why are String Refs legacy?**
 
@@ -889,13 +889,13 @@ return &lt;DataTable data={this.props.data} renderRow={this.renderRow} /&gt;;
 
 }
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What is Virtual DOM?**
 
 The _Virtual DOM_ (VDOM) is an in-memory representation of _Real DOM_. The representation of a UI is kept in memory and synced with the "real" DOM. It's a step that happens between the render function being called and the displaying of elements on the screen. This entire process is called _reconciliation_.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **How Virtual DOM works?**
 
@@ -913,25 +913,25 @@ The _Virtual DOM_ works in three simple steps.
 
 ![Alt Text](data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAV0AAAEsCAMAAABXKJDhAAABWVBMVEVHcEwGCxQAAAAAAAEICxMAAAACAAE4AwYCAwYBAQMJDBYAAAAAAAEBAQMAAQIAAQIAAAAAAAACBAf+AAACAAEAAAAuUpEvUpAAAAABAgP3AQP8AAABAQIAAQEAAQICBQkuUpL/AAAAAAAAAAD9AAD7AwX/AAAcMVcAAAAtT4woR3wAAAD/AAD+AAD6AAAAAAD/AAAuUpEAAAACAAH/AAAAAAD/AAD/AAAsToj8AAAAAAAsT4v9AAAuVJb/AAAuUY/+AAAQHTQpS4MnQ3YoR37+AAD+AAAAAAAsToksUI3/AAD/AAD/AAAtUY8pSH8tUY4AAAD9AAAYK0ssTIYXKUn6AAD/AAAqQHAtUI0hOGQsS4UAAAAtUI3/AAD/AAAjP3AVJUEVJkQkQXHnAAFLQXNxBQnOBguVBQqBEyEhPGqoEB6HAAA+AgSWJUFgAACTGi8vVZcvU5MAAABqSaLQAAAAcHRSTlMAA0cnCxwVAQIGCVA1DhE/OvtlCVzd9/3uVh8CMCwicO7S0eQRBUCVwIwWsdgqNJH124IkyfZOuuxbyeSr+3vKmHpMv9FwZqY3uYfCoXYirJsWg6BTjuQtZabYuFzds69lO2rW8JfT4sN+yFp8pExba7WMmgAAHLlJREFUeNrsmmtv28gVhnmneBHJYUVpFEiid1ggdIiWCI0pUnpbN44L2tjGFpIAyUa76CJtsilatBb//4eeoShZSiJZor2tsDvvBycih7dnzpzzzpCCwMXFxcXFxcXFxcXFxcXFxcX1s5eueUxDrbWpleoNjfn/Dbs6wrNlzVhuY6oD2Hik6PVP25PF+b6W6g1WGovyzc51UmyvveVTOJ6tOHZ77+iKfglCUeIrG1qFZazO/68FZSUaxKm9QKZI4zwqS0wKy6n4ykGZ2/O98qTMR8t9asehedut2VFpb/kUEg6Gwzg09pMuCIfKbnQrwKFWB3cWodk2hNOhPqOLknqvNqardLXi5nz3QLfF6Bo+scT9o0tTPxxHZeBuTZf4TFmM4dhqOKoFRXiSwbYEIxQP9IpuSTOniuuQlit0jTDqCw3oiuKG2BWcmAz2jy6WBLHtYxpuTTepjlTUDimxD8NRySiK+5qpC4YmJRQVWkUXo2qv2A8QXqFrk3lU70TXsOQNsSsIPk3FfaQL0UfQeDe6TF5eEnhiKUITWRcWaQD7LUa3SFAgiS2PoGS8TFcZU1/cna7Zz+1NsQuXjOz9pGtHNJttaduSZLMcrLdty/KqGrWOrtjHyBfMMYpcfXHKASknGqObejmKh2qCiJst07WjgFFQJYlVtrZkOVAULZA7qqEbsmS5FqMLnsaSBux2jH6AQ8uSW7PdXu1yjCE09Smj6xQoM/aObkeVrQkAqn7bRYRQMIaIlMcBQlHh6evpCkpeFoIal+P2clZFeFDRVaQAJQUNLGWZrghnY807OGAnHQSlV2VpqKx5dgTMdDUjtMQBLW3dTaISBamqm/2oqpqZUe+eSNAVLTkNIOUHiNHVQ7pFsfwf00U4ijCiWQVoGNMgSSJaOEJKSTKJqiS6lq5QlDlDEy6P9D6e8UoVE9I5paFiLtM1E1Ton9FFeVHEmCbQreqY0rxICCptcULzBDaHpprFlMZF0RedlEYT2EtsXR8lFMfJZEZXsDB199KR4bCCK46h4humRHBfT1PZUHwaDW6lG5X+8jmtBV2hnVI6doQVuqNgloRW6WILsoBFUGpACEah2lJYZhCTUBU1uCnoYhfP0mofR/22KCfgV8wMRR1NVGaZQRgGyN87RxYXBNXW6ohQC+LKSFHa9rTq2dkjraUrJmX8Wex2KLJruoKaxPDcK3S9aGZPPqPL7gaRI2dSpk5d1VquUbVkl5/TLcoUNupSREZqTlNzUdWg31C6f1VNlFOKq8kTVP84AREEhQkmtxYMUncDXWCYCdqkTJbyXTstA3lOV1dZGVqhK62nC+QjTyYl6+G5Z2jLnQkNRgu6bfAp7BZjij07qkrygu5G4/N/8wy6WoB5qgY1LsaVQqclZzmBGYO0ni4YXSoJRgYe7CZ4YUQX7TndOtVuSxdwuUBXWjgyw0sJyWl0Q1cjZTy7xXTImgsrsbuPdJmNQhN4Vju4qQt2HqWeR9bT1Z0QV7Nd8GBBpz1fcCAokvTt6dpLdFsWDWw1Lzutmq7ej4Jw0MFLdI24zMTF0Jl1yk3spntJ12CTNUNox+UsAStye4xSTZfX0lVGVoFLwgwbHFzi1NVEQfOyAOyHKWyga9d0JcxMoFg7jAoTeOOJZhaVT6noOjGCu7LmdD12XIZylm0EcaA4UNqUG7rgPLK9pCu0ITfAlKCDaWENbT9J1QSKi+EGX6CLY1BOcInqhRMzBFcaEdgYoTKqVhfW03XqCINIm0h2CMaL0aVjd2AllC1ASAEtpMEQDK6tEuqDcanosja2Fw6GOc192+6n5Ai6BqfScFh7Bjei/f2kC5N/NsoVGOxgUSnO2mCMUjCZ5bjTXrNGhgu7HqOmBQ1n62b5LEesp2ukZSJWXcIuFSW1f2OXRRFbqTP9qLqHEhzZuCRZShDOJIOtZkB7SXRJyXazqcP8dsuKLvSCvF90LRJ7s4fu5HlfFEwphVqWSo6uhXGeWlmedJQOGS+WXZyEVMqTzHVuFlJUK50QkmSWOgOuJuRmCdfwSbHonlafkuqH0i/yQrITwmZ2tChInHnVTNbwsri6xlAYpfkkk8Z54Yq6409IEmpCa5BNSD722ZUUN62aJkdwWIYKZ78WGlqGWC8RtESDpTNdFA2x2tYS4d9qP/xZ6hBjJnH1dQY7Drbpi5/Lx9xchaWEvB4urI0Of1gNxH1x6Yyt2UV0tuoI5xSN+obqJq35LdaXNar92gR3Wr/4t01ihrNPlurnxf9OcvHEEbjUmMj3T1dP76GHfg7Ba0WZeN90dZukbc62WqQktn7PdJ3xNi88fhHSMn/lnbBaJHddO7QLj3Pl4uLi4uLi4uLi4uLi2ifpc3EU9yzx8vz0uzen5+ePqtVwDvj+pLx+c3Xy+KDbPTh+fHJ4eqksvcLguptarw8fd6fX0+n1NfyZdg8u3mgm53s/KeHR85Pe9Yp6B1enmsLeqHE8d9TlVff6U017x+8uFZOH712zwvlFd3r9BR0fjhxl+T0x1+4e7Pzki2xB3cPXGsd7J7iXF701cK+nB/844njv5MQOp+tCF/Aev5MBL8+9Te3C84P1cCE3nL0aAV5Ot6FdeLwJ7vW0+3IwckyeGxqGbm8j3evp21dDtW3wL78ahe7JZrgwrXjoQmXjwdvE6r45uAUuC94BC16Od3fDcDW9le6Tp7bMg/cnqGkz2/CtO+CZt4lOe7fTnZ5Z9pFmipzWrnp+O1yYUfzg8tTQZBZ8uA3dJ08llho43V0tw8st6F4DXXvk8MS7M92LbWK398LyjhyTe7JdM8PJNrHL6Moanw3vPA++2iZ2uy8sXtaaxO7L7aoap9so7x72ON2fLjO82SZ234acbqPYPX+yRVF71uFVrYmMR7ebhmn34Ywud2S7VjXz9sQLabfDZxON6Iqnx7cF7/SZ35f4IlmjsvboqrdFYnCHKn9z2aCsGafdzcHbO/N5UWuaGozLiz9MN2bdh52+ZKs87TZKvMbpptcT096zWehyt9ssNTjvNnwu0jsLWejyLxqaBq/54OW61z/T3vELMAxe9bETZ9UoeH/74eOXK9u09/eP/wLDMFB56Dal++s//e0/h19KDtPeWfrjR5hJsI9FeOg20q/+/NXvNfnd20+zw3TaffbUf//je8gL/FuRpqH7u+//qCia/Orlk97Sl6bA9uyh3+l33n/4J0zTeF5opt9885cHoqFoR94Pf33bndbqPTn79inAtdx/f/j6AU+6DfXg628eMNOrPPove1fbk7gShS20FJC3gKGB4gtJwUAKKZEUCFxEESIKGFTQNeC+uK43u3tv7P//cmeK7sUVaAstM106PwAOD2eec54zM+dQsUDk8kP95K58Uq/vA2gBtrZAjPrxUOUscBdaiepIpGVN4XVQ9ljAthnZCn6CyEY2N21+zzbl4Bpx0UJ3IXBLfDMxznoJ9xhfv+1l+QOx7R3KR7q42nnGgneBlY3XQi+iwgnYweegDuwxj7xi2/YdB3xORQBqrnEWVtpJ974Qnaw4uEivw0FRO2BRlANgO37K6hTjjZCFltZM9yyenNjyNOzi6ia9Xh9YXi+A1uUcp7mJajzJWnhpI93mqPQWMxrww2vbXtdkC4Foe8LJraWmfJOMn4XeRSsaIDxeb15fZ/I1ixs0yYhCRb0/siW+ZHGD+sXV4lkNeVboLJ+10jL1tRu+lNCUX2hx9XUnXZGvaiTSJF9NWMCpAjdzXulp9fZmXLSoV9U2b59ntJNJLZ+xoFOBU5VfxA2BIrbSMmUZUeIbi1Aom7QUsfLKLliVcSaqfNKCb35Ee1O70bZ6FUsRK+mCxUsybDZ/ZnHDPNJt8qXFAaJLfNNKy+aIgvhSgZ/r562DCuMEbfTeUsQzXa+Wzy65sy1FPDOiNfjS8sQdFy14pywiGa+GdPD/c0sRTwn4mfMKp8vHtK0z4vdO19apDCPyTSvr/Z10q3oRJvikpJWWvdVZ4qChlxCwFPE7tszXerp9GlDEFvW+UQF6uhtrKeI3VHmmb/Ew1LfOiP+XAK+XHXXcC5Yi/iVf432dcyhWF2XyZ5Bu4V53R2MbvHVGLMuIft6AO4y9WsFSxIB0G6OSEREoU7AUMWRIY45rWFHvUGnCtcC9Gw2KeM2pl2sbl5muvSKGtRvj/GvNz4gXuOyoTaXES+tLvWw2b2hcp9f61nS0XTD4gDxaqKxrWrbMvRtLESuy4mKXHTUq4pG4lugm8/0V7Fqudh5dQ+rVt2A+53vW8R0xrN2sxqfEUWPdJBvbHJVWFG6AYlmztMyw2s20rJdbN0WcWenrvazuZx94k+7ylx0tRTyTCRv8apNQoFuya0O64qoFlHN9FDGdya/+TGZtFHGvjeCGbagRXwtFvILazQxFvAYPVtjSqIEkfq9DZy02u5LazdRYyjf+9LQM1m4QbVBElLTKX9iPo3spHW3f/9GKGD5URbc76T/mjNhJptPdbjpNuiaah9FJHunPg5213vy5tDs9NtNN/NbiDOdF3AxTF4e53OFFqnOalhvfyVuzgHhrcv38hCKmu8epqxawsnXVOU6/ac+HsRZLDy9yYUn6S+7zHC63Ojck7IdJ92r5DOKwAhTx670q92nqcE828VmSmPJh6tTrchG4d1B3nV7tTbQof5aYcGuYhs1cGyPkHe+cr+1d6G4qN9lJ/ZlhDjtdEnd4053c+/76xYsbHyniIPVfOmu5h4fvZoRI4daxA29806nw1NkQrePsQ7uHwVgIrn0e3XDfTpvbJkm5Lw6vG194u1fhGUNjDr9/y2IxdQMo4mhnxuwgpvwFdvvGFN701cxxaOGvj3BiDHp4E2L+n5mDmaQ9fOElO+HZ07rCrc94DOQJ/TNn3iBzd73jwBPe4bwplFL4ahsHeNmb+YNe658pLCcNKsynlcqf7BT6mTzk/DmvErO/jePQK/ft/BmUIHHwHyCf4kec5iSF2drXdgxHvHaVRitLxU/oZ6ERKeUpr4ED/Lihs6c4+/cj8jl+tJLrys4bo3CbKua+UJ4KXo7AqdUo3YK4VZ6uHb70YDeH9CanjG7x0g+dF6Hd6StFK5+ZD37chmvTx3vPKuxGPRS8q+wDz9LJpgcyL07E0FE2G9gdQTu32nm8p8LMYtBvx2t2OZlSg+7dJ/82Ukq7Dauwsnhpw4wa0hdq0C0GEdudUoHuc/gSToDGCt1DVegeobWbVoUus7+JlsDeo5tTgy5ztBk4QImumh32LO1v+vHKydT5bvho7BXIolqKUee7iMPDO3RbqphhFy26hBpmAFoYoEvhhC55pQbd8i7ccwh9txOW1OQMEdzQVZWRnQQRM8NQheZ5Lh7h5rvEUAWjSXXU6J6WVfhuOYgb7xKnKuoM4f0ttDmDU014YOpbuOUMauwG6W4Ecb5LqhDsDPQBvPJd2qUcjpmTYAStVqMJ5UID8IEtm+fA58ZIq9HK1CBBp0AcLoh0Syk+MB9R+8A0dH1KmTpzsot8yzldQwXnha4r+wBONTJgt0I8hjEN0C6FtDxCE12F+MDUgetid7JGE97U3FQdpGMwFqPNI2nCfT3XCRjourgRg2x394KR5mSRR0E5Y0DrFE5XOjWHG6TiPnRd7M7VgN2+z4fMbJ/YH7suYqegCfLgYuYek0BIA1bidyYM7Hb5rg9neK80Bhf9fQbgBN6b1gx4pXA9CDfYAXauC1Ne0jEDXqYMwAVmo77OMGYwx+fp3iuFP+5uQV7Az3WB3cAtqOv6e3glmRZwMdsJnCD29vXBq5UfgJUwG/PheE0PcIN355+nr28eJECrvz79BIE4gIfZ0EpH7MvJb1ZKzNd9GdzYjgOvXHciZJQeHh4/lsMMfEvzLD/6Kdb3fz79HYSei8X1aBleyn69f1dkXp78AGiLJx+eHoObtjG4zg0cF5F5EPox//V+/a5YZJhwsXzy4Si4tfX49AjBxcRs2XvtnuvLj3flYhhYWTypX+4ePT79BPsL18vRYEUrQiVKHcQCtk/BS7COdgG0kU2b7e+HHw6vGxefkOHd2fb4I8EjaCV0gEhk6/v3f2UXIPAEN1QV8lnS66DssYDftvmybP7A9r/fKlEsaOEXvOSLla9m2mz+H9/6gLxw9dxEaTAQCRCTIb7bHk/AD1bA49k+oBziQyOEVdHJ5QZW7thjL1YGPDG7vfnQJLF9UJWNC9UQSMyAY/gcFHVgl9cBRTl8pK/PYzVTTrbS64AA/2+lo/aQwfStMB29F+QhaTS03E16fQ55+byk20UQE0908cF3wkpgZsiVwbazVuhMeJ1ELePrAraD5XbJj5tpNslj1rQKWgnMdEMz3dABnM5f74ixI93mYHLvA9OB7XC9dj5IVEfYzZt8Z2UC017TyZHw2yxU+mX9StcKhR6Ghr+1Un5HjN3KFASljlSrbAu7ONY4dtbi2oKKJrfVQXIDe3jFQRMzAgs1BF5FO6qoGfoMwxEgWHXWYsWBoGpIWtYE3LDRq2DVWYvO5AV1E3zZxgD/Zpc0Xj7QawtqlQKeIfldcolRr+lQVVDdmhn4RR//Zpdc7RyXXtOJkjBQP+CeLQ1K+HdjxKbXND2u3WjI3fL4N8JlRUwUcbQgtLVIMBACTdAIF5N5xBO1G9VMMjLBDHsshmImmgOtZQ9nqGaGiX04KOIkL2gnqMy5CQYpJ0Qe8RajAenWtLO/OZpkI+81zdWEhcRBqG+GsVHRSgUl9SYawmJ/LzwGwl+ysUh7TbOwYL7Y3gHcUMWfGxJNXkRmZSYvLDxZyxwN9Lk+MkXMtYUlKnWm4AYQtRFlN3LtZvHQhN8R8VRuQHVGLA6WK8ckqrwJuCHUQDEgg9VYu5ma8JjgGIjmDJ+GPhUaYdmrNXSWN8NwjUx+5UMx5drN8ukyFnUoBR9IiPHmatMyWDDXgTR7ZjgG2kic8asVlsm4oEcoZc0xinbFijiqfO9G5bZrmuEYaLVnxFxf0GuKIZIZl9r3WHMkroobEvDejX4R2QzzELn+qs4Cgcj6/bLjcm5hAm7YWJUipjPngp6hiDPFMdBGcjU1veVqN1O5wQTHQE6oiI3fY0vWbqat0sAER8Twipbh8ZddtnYzPWSYYYR9Nl8zOC2jl6/dTA0ZlR7+6LKGK+Le8rWbaf+ZOGiYILCFzuJZYz9fMGQTh6qmmKMcNfTWNKvpsqNGbjDDHOWkgbMj2SQgXYOYJzkywRHxRqLEGyZ9tF521MYNfNIE1MvVjErLQgveu1EbLwtm4AagiA1xsERzMDDQveAQcjNwQ5JvGMENyYGOtZtpW8MMx0BGpTfRc8FgqWISbuDa+pvZqwlG/3baHMdA8GGCzmayVYE3vBbANk3BDXSJ10MR0786AMgPVdkVbDozHAPBd8TJ2VipWE53+njYSXVuj0/TLoLI5oVVHNvRmfjkpiOIcdMP2PIDq2Y1vftJRUyQN8e3AKvhcZd0EcqmEt3hVS63F37+a28v1+qcyk3GVtGPKdHkX1+Q0uTpMHXVOmz91971vahuROEbjfnhb9IlwTZxU2gb9KEQtg8LMpVNLOiDK6hFXS6sbpcL25c6//9Lz0zUja5J5kInmdIO7JvDfuc7Z07OJDPnW/TW1MMCEazGdsTyeD3zB65pme7An61XQLCUhlTvT30Ua5CI3Ncvf/ys59JIinwGivw7nfnH/7/3Z1OCWhx+vznuiKVxb0BaHR47SVp+b9WoSsnd4qrB5FLZAL2GKzmXJmjRTUG1/3l4jsEcrumyE4VeiALyjbg/vejmjHEqUrU/vSqEMwkUMiefB/J4BknpUq5vFjRzQcA0NLIjlh6vdPHFlrtYJTU77CdJcgyXSiOPToM//P7LXz66AgABAlmYXoff/fT9b+PrXd6xOdtdpVfrLxL1TvxlLv1dpW//fE1CMKVNUIXIDtqPv355SmpCbk52SuMjvVIvRR9rGORBr5QiS+y/CNNj9tOn1auVrAmzuEKvnCq4jCe7HOgdD1MgwPoRpfOwnKZqhM2eU7mkN9UyeLDAFN4i7P1ZmhQTmrQFaUmeIcZk3b/cXcSB1EPpOj3+kndXeGmarnOFerYQ9EoZcmcYhW2iqhCjd+xniDehBW8hhsfhnsnBhcfuOkPAEbtb+2yh61mhu0eDJZ1SWOhCdlqIoLTBoNRnhSUiBX+Kg8es0AV6Pb4COJmhS4JXAJUYNcjUHsX323osiWnZM/YorPEUb9KCbLFfNBdA4Uhn0J81ParRduQqMzGQyNnWOYrPVXsMarTPAqhzsUiP4jCu4NmfMJhmzql8Eyd2+0MGCE+dwpXlVBbZXGuwja2ylc9gGtrwlFQds0BwH4pXRWSRfMYA1D4CVZlMQ88cxZZZMj+w65XqRaeGKZOg9hwi8QBUZTJtH3KUMVbXJkty8krtgtVo1R4bUCJMHeUwKWCZgUadEjfF2uxqN0pOxMGFJl6pxyCqvre8d/1Z9TNiid1RpLTLxzSWkgGKhsI11tUFZmP3BFRjzAwdmvX4xC5LTUhSf8GCzwDU/Ep21TELu+jALp+sx5gZyPIplF1typZ3O60TUMaagSe7a5cNdOHssgDF9/N3dlWmUh55HDODyliRFc9uwLCbwPcPscwgLZhKeY5PNW3lM0Mo9qn2OGTYq42MOLss1ebIoBUZp9jtz1iqFqP4mqHP8BbH2ty87w1UjSHxoo3BczdRnTKwGwddFLsMkYjN+c17vUu+tjOsyhuOO2FVYqhb3DPQRZVkq8zUgEe3ndg7GU3PfqiERofnWxydITWcgy7qsSZnVbzY9Ixa7F2pKmXa5s6Ng4A8J9B65ssn1zto2Bf6jkzTxz7OCl26xk4ZTMqyDYXG+Yx/PjVkvmS+BF1U4lV6Zhq92PJuojUmnRyipMf7E2Rdrh8GVEkOBhmhawiQGIig62pipZEbQhS0nBhXYNtqkmEZ57jR9H6qg81ng1QMleI/CuuNICU34NEDiYKzbyiaLgfDxBcp7sagKY/naRxVqq5mKCU13UbrrfDzIgBUeUncsFkDyAsQiGfLnEwJhinkUndwjRtNb64SHYyeSESQ1VP8cRFNkhPpBXIPgXgWBWRKMLlqHJlALON8lgCyk7JLOEqGwgeDJrOmADrrKuSGysu1M6bYGhGcUSBql1N2C/fKJ4mIXIf7IS4tkV5IC4TcelcR4og0LPRmZRleVg4Ym2FE7sdApFPs7dC9OOC0IYYdyOVsmaQ3lN3bh9PnaOBBzo0iQowjphAHzcru7cnEOM4ticMjuZeBqAG9j+XW2/PgZJ472oAzOhG5/I9+g4MblfJyMTi/dhRSDC0gt6FLQpw+h4UuKxV76YX3Fo6GdR96txFOIPfKKqfG3dVL2/kmHD2Nwmfv4faGcEsm5HLwG2pJoLcNqAeui/bIdAcjL/JvyxaH3KjGalbKwJUHXI0oVwblqm3fXSU3oleBOa1SqVbrdG46nU6NcOt087mVEtGrdJ12afvgeRvPm4N7I/865OS5JM6tS02vNpU7p92iVNFRK9E4TAwCMA5c0i3XYVI0Wu26c1dRcrvPROmtlO029XANvEsxQ0A0hSKXJlJAeueccVXupuFUNeBXgUll267X67btwO8hcPMzDOilC4igpqPdtol/G1VdE6t5jhYhBahOnXDllAFmk1z8UpPzNcyRm0BwpdKFP0VpEm5zNIw6GFB3ywDbccqAGbgV6bLlGVeNJqHqyJWcxRXMIQTLDTJk+Hnudh08DC5WADG4V64KyO0RKUBtnLiSsnGqlOBoSORafO6gI9SkhwDpIqCLdAn7A9ITVxL7XXyVzNNYWzrwIfg4RKX2naoDV5/+ReOrWnb8P/6T429K1kMGGArkhQAAAABJRU5ErkJggg==)
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What is the difference between Shadow DOM and Virtual DOM?**
 
 The _Shadow DOM_ is a browser technology designed primarily for scoping variables and CSS in _web components_. The _Virtual DOM_ is a concept implemented by libraries in JavaScript on top of browser APIs.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What is React Fiber?**
 
 Fiber is the new _reconciliation_ engine or reimplementation of core algorithm in React v16. The goal of React Fiber is to increase its suitability for areas like animation, layout, gestures, ability to pause, abort, or reuse work and assign priority to different types of updates; and new concurrency primitives.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What is the main goal of React Fiber?**
 
 The goal of _React Fiber_ is to increase its suitability for areas like animation, layout, and gestures. Its headline feature is **incremental rendering**: the ability to split rendering work into chunks and spread it out over multiple frames.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What are controlled components?**
 
@@ -945,7 +945,7 @@ this.setState({value: event.target.value.toUpperCase()})
 
 }
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What are uncontrolled components?**
 
@@ -999,19 +999,19 @@ return (
 
 In most cases, it's recommend to use controlled components to implement forms.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What is the difference between createElement and cloneElement?**
 
 JSX elements will be transpiled to React.createElement() functions to create React elements which are going to be used for the object representation of UI. Whereas cloneElement is used to clone an element and pass it new props.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What is Lifting State Up in React?**
 
 When several components need to share the same changing data then it is recommended to _lift the shared state up_ to their closest common ancestor. That means if two child components share the same data from its parent, then move the state to parent instead of maintaining local state in both of the child components.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What are the different phases of component lifecycle?**
 
@@ -1035,7 +1035,7 @@ Before React 16.3
 
 ![Alt Text](data:image/png;base64,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)
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What are the lifecycle methods of React?**
 
@@ -1058,7 +1058,7 @@ React 16.3+
 - **componentDidUpdate:** Mostly it is used to update the DOM in response to prop or state changes. This will not fire if shouldComponentUpdate() returns false.
 - **componentWillUnmount** It will be used to cancel any outgoing network requests, or remove all event listeners associated with the component.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What are Higher-Order Components?**
 
@@ -1075,7 +1075,7 @@ HOC can be used for many use cases:
 3. State abstraction and manipulation.
 4. Props manipulation.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **How to create props proxy for HOC component?**
 
@@ -1107,7 +1107,7 @@ return &lt;WrappedComponent {...this.props} {...newProps} /&gt;;
 
 }
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What is context?**
 
@@ -1117,7 +1117,7 @@ For example, authenticated user, locale preference, UI theme need to be accessed
 
 const { Provider, Consumer } = React.createContext(defaultValue);
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What is children prop?**
 
@@ -1151,7 +1151,7 @@ node,
 
 );
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **How to write comments in React?**
 
@@ -1179,7 +1179,7 @@ one line \*/}
 
 &lt;/div&gt;
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What is the purpose of using super constructor with props argument?**
 
@@ -1227,13 +1227,13 @@ console.log(this.props); // prints { name: 'John', age: 42 }
 
 The above code snippets reveals that this.props is different only within the constructor. It would be the same outside the constructor.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What is reconciliation?**
 
 When a component's props or state change, React decides whether an actual DOM update is necessary by comparing the newly returned element with the previously rendered one. When they are not equal, React will update the DOM. This process is called _reconciliation_.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **How to set state with a dynamic key name?**
 
@@ -1245,7 +1245,7 @@ this.setState({ \[event.target.id\]: event.target.value })
 
 }
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What would be the common mistake of function being called every time the component renders?**
 
@@ -1269,7 +1269,7 @@ return &lt;button onClick={this.handleClick}&gt;{'Click Me'}&lt;/button&gt;
 
 }
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **Is lazy function supports named exports?**
 
@@ -1293,7 +1293,7 @@ import React, { lazy } from 'react';
 
 const SomeComponent = lazy(() => import('./IntermediateComponent.js'));
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **Why React uses className over class attribute?**
 
@@ -1305,7 +1305,7 @@ return &lt;span className={'menu navigation-menu'}&gt;{'Menu'}&lt;/span&gt;
 
 }
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What are fragments?**
 
@@ -1349,7 +1349,7 @@ return (
 
 }
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **Why fragments are better than container divs?**
 
@@ -1359,7 +1359,7 @@ Below are the list of reasons,
 2. Some CSS mechanisms like _Flexbox_ and _CSS Grid_ have a special parent-child relationships, and adding divs in the middle makes it hard to keep the desired layout.
 3. The DOM Inspector is less cluttered.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What are portals in React?**
 
@@ -1369,13 +1369,13 @@ ReactDOM.createPortal(child, container);
 
 The first argument is any render-able React child, such as an element, string, or fragment. The second argument is a DOM element.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What are stateless components?**
 
 If the behaviour is independent of its state then it can be a stateless component. You can use either a function or a class for creating stateless components. But unless you need to use a lifecycle hook in your components, you should go for function components. There are a lot of benefits if you decide to use function components here; they are easy to write, understand, and test, a little faster, and you can avoid the this keyword altogether.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What are stateful components?**
 
@@ -1419,7 +1419,7 @@ return (
 
 }
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **How to apply validation on props in React?**
 
@@ -1474,7 +1474,7 @@ return (
 
 **Note:** In React v15.5 _PropTypes_ were moved from React.PropTypes to prop-types library.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What are the advantages of React?**
 
@@ -1486,7 +1486,7 @@ Below are the list of main advantages of React,
 4. Easy to integrate with frameworks (Angular, Backbone) since it is only a view library.
 5. Easy to write unit and integration tests with tools such as Jest.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What are the limitations of React?**
 
@@ -1498,7 +1498,7 @@ Apart from the advantages, there are few limitations of React too,
 4. The code complexity increases with inline templating and JSX.
 5. Too many smaller components leading to over engineering or boilerplate.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What are error boundaries in React v16?**
 
@@ -1556,19 +1556,19 @@ After that use it as a regular component:
 
 &lt;/ErrorBoundary&gt;
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **How error boundaries handled in React v15?**
 
 React v15 provided very basic support for _error boundaries_ using unstable_handleError method. It has been renamed to componentDidCatch in React v16.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What are the recommended ways for static type checking?**
 
 Normally we use _PropTypes library_ (React.PropTypes moved to a prop-types package since React v15.5) for _type checking_ in the React applications. For large code bases, it is recommended to use _static type checkers_ such as Flow or TypeScript, that perform type checking at compile time and provide auto-completion features.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What is the use of react-dom package?**
 
@@ -1580,7 +1580,7 @@ The react-dom package provides _DOM-specific methods_ that can be used at the to
 4. findDOMNode()
 5. createPortal()
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What is the purpose of render method of react-dom?**
 
@@ -1590,7 +1590,7 @@ ReactDOM.render(element, container\[, callback\])
 
 If the optional callback is provided, it will be executed after the component is rendered or updated.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What is ReactDOMServer?**
 
@@ -1621,7 +1621,7 @@ res.end();
 
 });
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **How to use innerHTML in React?**
 
@@ -1641,7 +1641,7 @@ return &lt;div dangerouslySetInnerHTML={createMarkup()} /&gt;;
 
 }
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **How to use styles in React?**
 
@@ -1663,7 +1663,7 @@ return &lt;div style={divStyle}&gt;Hello World!&lt;/div&gt;;
 
 Style keys are camelCased in order to be consistent with accessing the properties on DOM nodes in JavaScript (e.g. node.style.backgroundImage).
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **How events are different in React?**
 
@@ -1672,13 +1672,13 @@ Handling events in React elements has some syntactic differences:
 1. React event handlers are named using camelCase, rather than lowercase.
 2. With JSX you pass a function as the event handler, rather than a string.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What will happen if you use setState() in constructor?**
 
 When you use setState(), then apart from assigning to the object state React also re-renders the component and all its children. You would get error like this: _Can only update a mounted or mounting component._ So we need to use this.state to initialize variables inside constructor.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What is the impact of indexes as keys?**
 
@@ -1700,7 +1700,7 @@ todos.map((todo) => &lt;Todo {...todo} key={todo.id} /&gt;);
 
 }
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **Is it good to use setState() in componentWillMount() method?**
 
@@ -1722,7 +1722,7 @@ messages: \[...result.data\]
 
 }
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What will happen if you use props in initial state?**
 
@@ -1778,7 +1778,7 @@ return &lt;div&gt;{this.props.inputValue}&lt;/div&gt;;
 
 }
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **How do you conditionally render components?**
 
@@ -1810,7 +1810,7 @@ const MyComponent = ({ name, address }) => (
 
 );
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **Why we need to be careful when spreading props on DOM elements?**
 
@@ -1822,7 +1822,7 @@ const ComponentA = () => &lt;ComponentB isDisplay={true} className={'componentSt
 
 const ComponentB = ({ isDisplay, ...domProps }) => &lt;div {...domProps}&gt;{'ComponentB'}&lt;/div&gt;;
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **How you use decorators in React?**
 
@@ -1868,7 +1868,7 @@ return &lt;WrappedComponent {...this.props} /&gt;;
 
 **Note:** Decorators are a feature that didn't make it into ES7, but are currently a _stage 2 proposal_.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **How do you memoize a component?**
 
@@ -1906,7 +1906,7 @@ OR;
 
 export default React.memo(MyFunctionComponent);
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **How you implement Server Side Rendering or SSR?**
 
@@ -1920,13 +1920,13 @@ ReactDOMServer.renderToString(&lt;App /&gt;);
 
 This method will output the regular HTML as a string, which can be then placed inside a page body as part of the server response. On the client side, React detects the pre-rendered content and seamlessly picks up where it left off.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **How to enable production mode in React?**
 
 You should use Webpack's DefinePlugin method to set NODE_ENV to production, by which it strip out things like propType validation and extra warnings. Apart from this, if you minify the code, for example, Uglify's dead-code elimination to strip out development only code and comments, it will drastically reduce the size of your bundle.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What is CRA and its benefits?**
 
@@ -1961,7 +1961,7 @@ It includes everything we need to build a React app:
 5. A live development server that warns about common mistakes.
 6. A build script to bundle JS, CSS, and images for production, with hashes and sourcemaps.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What is the lifecycle methods order in mounting?**
 
@@ -1972,7 +1972,7 @@ The lifecycle methods are called in the following order when an instance of a co
 3. render()
 4. componentDidMount()
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What are the lifecycle methods going to be deprecated in React v16?**
 
@@ -1984,7 +1984,7 @@ The following lifecycle methods going to be unsafe coding practices and will be 
 
 Starting with React v16.3 these methods are aliased with UNSAFE_ prefix, and the unprefixed version will be removed in React v17.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What is the purpose of getDerivedStateFromProps() lifecycle method?**
 
@@ -2002,7 +2002,7 @@ static getDerivedStateFromProps(props, state) {
 
 This lifecycle method along with componentDidUpdate() covers all the use cases of componentWillReceiveProps().
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What is the purpose of getSnapshotBeforeUpdate() lifecycle method?**
 
@@ -2020,13 +2020,13 @@ getSnapshotBeforeUpdate(prevProps, prevState) {
 
 This lifecycle method along with componentDidUpdate() covers all the use cases of componentWillUpdate().
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **Do Hooks replace render props and higher order components?**
 
 Both render props and higher-order components render only a single child but in most of the cases Hooks are a simpler way to serve this by reducing nesting in your tree.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What is the recommended way for naming components?**
 
@@ -2050,7 +2050,7 @@ export default class TodoApp extends React.Component {
 
 }
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What is the recommended ordering of methods in component class?**
 
@@ -2071,7 +2071,7 @@ _Recommended_ ordering of methods from _mounting_ to _render stage_:
 13. optional render methods like renderNavigation() or renderProfilePicture()
 14. render()
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What is a switching component?**
 
@@ -2115,7 +2115,7 @@ page: PropTypes.oneOf(Object.keys(PAGES)).isRequired,
 
 };
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **Why we need to pass a function to setState()?**
 
@@ -2169,7 +2169,7 @@ counter: prevState.counter + props.increment,
 
 }));
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What is strict mode in React?**
 
@@ -2207,7 +2207,7 @@ return (
 
 In the example above, the _strict mode_ checks apply to &lt;ComponentOne&gt; and &lt;ComponentTwo&gt; components only.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What are React Mixins?**
 
@@ -2225,7 +2225,7 @@ mixins: \[PureRenderMixin\],
 
 });
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **Why is isMounted() an anti-pattern and what is the proper solution?**
 
@@ -2241,7 +2241,7 @@ Checking isMounted() before calling setState() does eliminate the warning, but i
 
 An optimal solution would be to find places where setState() might be called after a component has unmounted, and fix them. Such situations most commonly occur due to callbacks, when a component is waiting for some data and gets unmounted before the data arrives. Ideally, any callbacks should be canceled in componentWillUnmount(), prior to unmounting.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What are the Pointer Events supported in React?**
 
@@ -2260,7 +2260,7 @@ The following event types are now available in _React DOM_:
 9. onPointerOver
 10. onPointerOut
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **Why should component names start with capital letter?**
 
@@ -2306,7 +2306,7 @@ return (
 
 }
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **Are custom DOM attributes supported in React v16?**
 
@@ -2326,7 +2326,7 @@ In React v16 any unknown attributes will end up in the DOM:
 
 This is useful for supplying browser-specific non-standard attributes, trying new DOM APIs, and integrating with opinionated third-party libraries.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What is the difference between constructor and getInitialState?**
 
@@ -2368,7 +2368,7 @@ return {
 
 **Note:** React.createClass() is deprecated and removed in React v16. Use plain JavaScript classes instead.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **Can you force a component to re-render without calling setState?**
 
@@ -2378,7 +2378,7 @@ component.forceUpdate(callback);
 
 It is recommended to avoid all uses of forceUpdate() and only read from this.props and this.state in render().
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What is the difference between super() and super(props) in React using ES6 classes?**
 
@@ -2414,7 +2414,7 @@ console.log(this.props); // undefined
 
 Outside constructor() both will display same value for this.props.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **How to loop inside JSX?**
 
@@ -2446,7 +2446,7 @@ for (let i = 0; i < items.length; i++) {
 
 This is because JSX tags are transpiled into _function calls_, and you can't use statements inside expressions. This may change thanks to do expressions which are _stage 1 proposal_.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **How do you access props in attribute quotes?**
 
@@ -2462,7 +2462,7 @@ Using _template strings_ will also work:
 
 &lt;img className="image" src={\`images/${this.props.image}\`} /&gt;
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What is React proptype array with shape?**
 
@@ -2484,7 +2484,7 @@ fontSize: React.PropTypes.number.isRequired,
 
 };
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **How to conditionally apply class attributes?**
 
@@ -2500,13 +2500,13 @@ _Template strings_ will also work:
 
 &lt;div className={\`btn-panel ${this.props.visible ? 'show' : 'hidden'}\`}&gt;
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What is the difference between React and ReactDOM?**
 
 The react package contains React.createElement(), React.Component, React.Children, and other helpers related to elements and component classes. You can think of these as the isomorphic or universal helpers that you need to build components. The react-dom package contains ReactDOM.render(), and in react-dom/server we have _server-side rendering_ support with ReactDOMServer.renderToString() and ReactDOMServer.renderToStaticMarkup().
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **Why ReactDOM is separated from React?**
 
@@ -2514,7 +2514,7 @@ The React team worked on extracting all DOM-related features into a separate lib
 
 To build more environments that React can render to, React team planned to split the main React package into two: react and react-dom. This paves the way to writing components that can be shared between the web version of React and React Native.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **How to use React label element?**
 
@@ -2530,7 +2530,7 @@ Since for is a reserved keyword in JavaScript, use htmlFor instead.
 
 &lt;input type={'text'} id={'user'} /&gt;
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **How to combine multiple inline style objects?**
 
@@ -2542,7 +2542,7 @@ If you're using React Native then you can use the array notation:
 
 &lt;button style={\[styles.panel.button, styles.panel.submitButton\]}&gt;{'Submit'}&lt;/button&gt;
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **How to re-render the view when the browser is resized?**
 
@@ -2598,13 +2598,13 @@ return (
 
 }
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What is the difference between setState() and replaceState() methods?**
 
 When you use setState() the current and previous states are merged. replaceState() throws out the current state, and replaces it with only what you provide. Usually setState() is used unless you really need to remove all previous keys for some reason. You can also set state to false/null in setState() instead of using replaceState().
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **How to listen to state changes?**
 
@@ -2614,7 +2614,7 @@ componentDidUpdate(object prevProps, object prevState)
 
 **Note:** The previous releases of ReactJS also uses componentWillUpdate(object nextProps, object nextState) for state changes. It has been deprecated in latest releases.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What is the recommended approach of removing an array element in React state?**
 
@@ -2632,7 +2632,7 @@ data: this.state.data.filter((item, i) => i !== index)
 
 }
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **Is it possible to use React without rendering HTML?**
 
@@ -2670,7 +2670,7 @@ return &lt;></&gt;
 
 Returning undefined won't work.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **How to pretty print JSON with React?**
 
@@ -2690,13 +2690,13 @@ return &lt;pre&gt;{JSON.stringify(data, null, 2)}&lt;/pre&gt;;
 
 React.render(&lt;User /&gt;, document.getElementById('container'));
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **Why you can't update props in React?**
 
 The React philosophy is that props should be _immutable_ and _top-down_. This means that a parent can send any prop values to a child, but the child can't modify received props.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **How to focus an input element on page load?**
 
@@ -2730,7 +2730,7 @@ return (
 
 ReactDOM.render(&lt;App /&gt;, document.getElementById('app'));
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What are the possible ways of updating objects in state?**
 
@@ -2757,7 +2757,7 @@ age: 42,
 
 }));
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **How can we find the version of React at runtime in the browser?**
 
@@ -2767,7 +2767,7 @@ const REACT_VERSION = React.version;
 
 ReactDOM.render(&lt;div&gt;{\`React version: ${REACT_VERSION}\`}&lt;/div&gt;, document.getElementById('app'));
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What are the approaches to include polyfills in your create-react-app?**
 
@@ -2791,7 +2791,7 @@ Use the polyfill.io CDN to retrieve custom, browser-specific polyfills by adding
 
 In the above script we had to explicitly request the Array.prototype.includes feature as it is not included in the default feature set.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **How to use https instead of http in create-react-app?**
 
@@ -2805,7 +2805,7 @@ You just need to use HTTPS=true configuration. You can edit your package.json sc
 
 or just run set HTTPS=true && npm start
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **How to avoid using relative path imports in create-react-app?**
 
@@ -2815,7 +2815,7 @@ NODE_PATH=src/app
 
 After that restart the development server. Now you should be able to import anything inside src/app without relative paths.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **How to add Google Analytics for React Router?**
 
@@ -2829,7 +2829,7 @@ window.ga('send', 'pageview', location.pathname + location.search);
 
 });
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **How to update a component every second?**
 
@@ -2847,7 +2847,7 @@ clearInterval(this.interval)
 
 }
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **How do you apply vendor prefixes to inline styles in React?**
 
@@ -2867,7 +2867,7 @@ msTransform: 'rotate(90deg)', // 'ms' is the only lowercase vendor prefix
 
 />
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **How to import and export components using React and ES6?**
 
@@ -2889,13 +2889,13 @@ return &lt;User type="customer"&gt;//...&lt;/User&gt;;
 
 With the export specifier, the MyProfile is going to be the member and exported to this module and the same can be imported without mentioning the name in other components.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **Why is a component constructor called only once?**
 
 React's _reconciliation_ algorithm assumes that without any information to the contrary, if a custom component appears in the same place on subsequent renders, it's the same component as before, so reuses the previous instance rather than creating a new one.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **How to define constants in React?**
 
@@ -2909,7 +2909,7 @@ static DEFAULT_PAGINATION = 10;
 
 _Static fields_ are part of the _Class Fields_ stage 3 proposal.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **How to programmatically trigger click event in React?**
 
@@ -2925,13 +2925,13 @@ This can be done in two steps:
 
 this.inputElement.click();
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **Is it possible to use async/await in plain React?**
 
 If you want to use async/await in React, you will need _Babel_ and [transform-async-to-generator](https://babeljs.io/docs/en/babel-plugin-transform-async-to-generator) plugin. React Native ships with Babel and a set of transforms.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What are the common folder structures for React?**
 
@@ -3011,13 +3011,13 @@ components/
 
 └─ ProfileHeader.css
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What are the popular packages for animation?**
 
 _React Transition Group_ and _React Motion_ are popular animation packages in React ecosystem.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What is the benefit of styles modules?**
 
@@ -3041,7 +3041,7 @@ And then imported individually in other components:
 
 import { space, colors } from './styles';
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What are the popular React-specific linters?**
 
@@ -3049,7 +3049,7 @@ ESLint is a popular JavaScript linter. There are plugins available that analyse 
 
 Another popular plugin is eslint-plugin-jsx-a11y, which will help fix common issues with accessibility. As JSX offers slightly different syntax to regular HTML, issues with alt text and tabindex, for example, will not be picked up by regular plugins.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **How to make AJAX call and in which component lifecycle methods should I make an AJAX call?**
 
@@ -3135,7 +3135,7 @@ return (
 
 }
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What are render props?**
 
@@ -3147,19 +3147,19 @@ Libraries such as React Router and DownShift are using this pattern.
 
 **React Router**
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What is React Router?**
 
 React Router is a powerful routing library built on top of React that helps you add new screens and flows to your application incredibly quickly, all while keeping the URL in sync with what's being displayed on the page.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **How React Router is different from history library?**
 
 React Router is a wrapper around the history library which handles interaction with the browser's window.history with its browser and hash histories. It also provides memory history which is useful for environments that don't have global history, such as mobile app development (React Native) and unit testing with Node.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What are the &lt;Router&gt; components of React Router v4?**
 
@@ -3171,7 +3171,7 @@ React Router v4 provides below 3 &lt;Router&gt; components:
 
 The above components will create _browser_, _hash_, and _memory_ history instances. React Router v4 makes the properties and methods of the history instance associated with your router available through the context in the router object.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What is the purpose of push() and replace() methods of history?**
 
@@ -3182,7 +3182,7 @@ A history instance has two methods for navigation purpose.
 
 If you think of the history as an array of visited locations, push() will add a new location to the array and replace() will replace the current location in the array with the new one.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **How do you programmatically navigate using React Router v4?**
 
@@ -3282,7 +3282,7 @@ push: React.PropTypes.func.isRequired,
 
 };
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **How to get query parameters in React Router v4?**
 
@@ -3300,7 +3300,7 @@ const foo = params.get('name');
 
 You should use a _polyfill_ for IE11.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **Why you get "Router may have only one child element" warning?**
 
@@ -3324,7 +3324,7 @@ Then define the routes within &lt;Switch&gt; block:
 
 &lt;/Router&gt;
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **How to pass params to history.push method in React Router v4?**
 
@@ -3342,7 +3342,7 @@ state: { detail: response.data },
 
 The search property is used to pass query params in push() method.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **How to implement _default_ or _NotFound_ page?**
 
@@ -3358,7 +3358,7 @@ A &lt;Switch&gt; renders the first child &lt;Route&gt; that matches. A &lt;Route
 
 &lt;/Switch&gt;
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **How to get history on React Router v4?**
 
@@ -3404,7 +3404,7 @@ import history from './history';
 
 history.push('/go-here');
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **How to perform automatic redirect after login?**
 
@@ -3434,13 +3434,13 @@ return &lt;div&gt;{'Login Please'}&lt;/div&gt;;
 
 **React Internationalization**
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What is React Intl?**
 
 The _React Intl_ library makes internalization in React straightforward, with off-the-shelf components and an API that can handle everything from formatting strings, dates, and numbers, to pluralization. React Intl is part of _FormatJS_ which provides bindings to React via its components and API.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What are the main features of React Intl?**
 
@@ -3454,7 +3454,7 @@ Below are the main features of React Intl,
 6. Runs in the browser and Node.
 7. Built on standards.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What are the two ways of formatting in React Intl?**
 
@@ -3480,7 +3480,7 @@ defaultMessage: 'The amount is less than minimum balance.',
 
 formatMessage(messages.accountMessage);
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **How to use &lt;FormattedMessage&gt; as placeholder using React Intl?**
 
@@ -3506,7 +3506,7 @@ intl: intlShape.isRequired,
 
 export default injectIntl(MyComponent);
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **How to access current locale with React Intl?**
 
@@ -3524,7 +3524,7 @@ intl: intlShape.isRequired,
 
 export default injectIntl(MyComponent);
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **How to format date using React Intl?**
 
@@ -3554,7 +3554,7 @@ export default injectIntl(MyComponent);
 
 **React Testing**
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What is Shallow Renderer in React testing?**
 
@@ -3600,7 +3600,7 @@ expect(result.props.children).toEqual(\[
 
 \]);
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What is TestRenderer package in React?**
 
@@ -3628,19 +3628,19 @@ console.log(testRenderer.toJSON());
 
 // }
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What is the purpose of ReactTestUtils package?**
 
 _ReactTestUtils_ are provided in the with-addons package and allow you to perform actions against a simulated DOM for the purpose of unit testing.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What is Jest?**
 
 _Jest_ is a JavaScript unit testing framework created by Facebook based on Jasmine and provides automated mock creation and a jsdom environment. It's often used for testing components.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What are the advantages of Jest over Jasmine?**
 
@@ -3652,7 +3652,7 @@ There are couple of advantages compared to Jasmine:
 - Runs your tests with a fake DOM implementation (via jsdom) so that your tests can be run on the command line.
 - Runs tests in parallel processes so that they finish sooner.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **Give a simple example of Jest test case**
 
@@ -3694,7 +3694,7 @@ PASS ./sum.test.js
 
 **React Redux**
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What is flux?**
 
@@ -3704,13 +3704,13 @@ The workflow between dispatcher, stores and views components with distinct input
 
 ![flux](data:image/png;base64,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)
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What is Redux?**
 
 _Redux_ is a predictable state container for JavaScript apps based on the _Flux design pattern_. Redux can be used together with React, or with any other view library. It is tiny (about 2kB) and has no dependencies.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What are the core principles of Redux?**
 
@@ -3720,7 +3720,7 @@ Redux follows three fundamental principles:
 2. **State is read-only:** The only way to change the state is to emit an action, an object describing what happened. This ensures that neither the views nor the network callbacks will ever write directly to the state.
 3. **Changes are made with pure functions:** To specify how the state tree is transformed by actions, you write reducers. Reducers are just pure functions that take the previous state and an action as parameters, and return the next state.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What are the downsides of Redux compared to Flux?**
 
@@ -3730,7 +3730,7 @@ Instead of saying downsides we can say that there are few compromises of using R
 2. **You're going to have to carefully pick your packages:** While Flux explicitly doesn't try to solve problems such as undo/redo, persistence, or forms, Redux has extension points such as middleware and store enhancers, and it has spawned a rich ecosystem.
 3. **There is no nice Flow integration yet:** Flux currently lets you do very impressive static type checks which Redux doesn't support yet.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What is the difference between mapStateToProps() and mapDispatchToProps()?**
 
@@ -3772,13 +3772,13 @@ onTodoClick,
 
 };
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **Can I dispatch an action in reducer?**
 
 Dispatching an action within a reducer is an **anti-pattern**. Your reducer should be _without side effects_, simply digesting the action payload and returning a new state object. Adding listeners and dispatching actions within the reducer can lead to chained actions and other side effects.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **How to access Redux store outside a component?**
 
@@ -3788,7 +3788,7 @@ store = createStore(myReducer);
 
 export default store;
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What are the drawbacks of MVW pattern?**
 
@@ -3797,7 +3797,7 @@ export default store;
 3. Lot of data changes happens for collaborative applications(like Google Docs).
 4. No way to do undo (travel back in time) easily without adding so much extra code.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **Are there any similarities between Redux and RxJS?**
 
@@ -3805,7 +3805,7 @@ These libraries are very different for very different purposes, but there are so
 
 Redux is a tool for managing state throughout the application. It is usually used as an architecture for UIs. Think of it as an alternative to (half of) Angular. RxJS is a reactive programming library. It is usually used as a tool to accomplish asynchronous tasks in JavaScript. Think of it as an alternative to Promises. Redux uses the Reactive paradigm because the Store is reactive. The Store observes actions from a distance, and changes itself. RxJS also uses the Reactive paradigm, but instead of being an architecture, it gives you basic building blocks, Observables, to accomplish this pattern.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **How to dispatch an action on load?**
 
@@ -3837,7 +3837,7 @@ const mapDispatchToProps = { fetchData };
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **How to use connect() from React Redux?**
 
@@ -3868,7 +3868,7 @@ return { containerData: state.data };
 
 export default connect(mapStateToProps)(App);
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **How to reset state in Redux?**
 
@@ -3920,7 +3920,7 @@ return appReducer(state, action);
 
 };
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **Whats the purpose of at symbol in the Redux connect decorator?**
 
@@ -3990,7 +3990,7 @@ export default class MyApp extends React.Component {
 
 The above examples are almost similar except the usage of decorator. The decorator syntax isn't built into any JavaScript runtimes yet, and is still experimental and subject to change. You can use babel for the decorators support.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What is the difference between React context and React Redux?**
 
@@ -3998,13 +3998,13 @@ You can use **Context** in your application directly and is going to be great fo
 
 Whereas **Redux** is much more powerful and provides a large number of features that the Context API doesn't provide. Also, React Redux uses context internally but it doesn't expose this fact in the public API.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **Why are Redux state functions called reducers?**
 
 Reducers always return the accumulation of the state (based on all previous and current actions). Therefore, they act as a reducer of state. Each time a Redux reducer is called, the state and action are passed as parameters. This state is then reduced (or accumulated) based on the action, and then the next state is returned. You could _reduce_ a collection of actions and an initial state (of the store) on which to perform these actions to get the resulting final state.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **How to make AJAX request in Redux?**
 
@@ -4044,13 +4044,13 @@ return { type: 'SET_Account', data: data };
 
 }
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **Should I keep all component's state in Redux store?**
 
 Keep your data in the Redux store, and the UI related state internally in the component.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What is the proper way to access Redux store?**
 
@@ -4092,7 +4092,7 @@ doSomethingWith(this.context.store);
 
 }
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What is the difference between component and container in React Redux?**
 
@@ -4100,7 +4100,7 @@ doSomethingWith(this.context.store);
 
 **Container** is an informal term for a component that is connected to a Redux store. Containers _subscribe_ to Redux state updates and _dispatch_ actions, and they usually don't render DOM elements; they delegate rendering to presentational child components.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What is the purpose of the constants in Redux?**
 
@@ -4168,7 +4168,7 @@ return state;
 
 };
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What are the different ways to write mapDispatchToProps()?**
 
@@ -4192,7 +4192,7 @@ const mapDispatchToProps = { action };
 
 The third option is just a shorthand for the first one.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What is the use of the ownProps parameter in mapStateToProps() and mapDispatchToProps()?**
 
@@ -4212,7 +4212,7 @@ user: 'john';
 
 You can use this object to decide what to return from those functions.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **How to structure Redux top level directories?**
 
@@ -4226,7 +4226,7 @@ Most of the applications has several top-level directories as below:
 
 This structure works well for small and medium size apps.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What is redux-saga?**
 
@@ -4236,13 +4236,13 @@ It is available in NPM:
 
 $ npm install --save redux-saga
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What is the mental model of redux-saga?**
 
 _Saga_ is like a separate thread in your application, that's solely responsible for side effects. redux-saga is a redux _middleware_, which means this thread can be started, paused and cancelled from the main application with normal Redux actions, it has access to the full Redux application state and it can dispatch Redux actions as well.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What are the differences between call() and put() in redux-saga?**
 
@@ -4270,25 +4270,25 @@ userData,
 
 }
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What is Redux Thunk?**
 
 _Redux Thunk_ middleware allows you to write action creators that return a function instead of an action. The thunk can be used to delay the dispatch of an action, or to dispatch only if a certain condition is met. The inner function receives the store methods dispatch() and getState() as parameters.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What are the differences between redux-saga and redux-thunk?**
 
 Both _Redux Thunk_ and _Redux Saga_ take care of dealing with side effects. In most of the scenarios, Thunk uses _Promises_ to deal with them, whereas Saga uses _Generators_. Thunk is simple to use and Promises are familiar to many developers, Sagas/Generators are more powerful but you will need to learn them. But both middleware can coexist, so you can start with Thunks and introduce Sagas when/if you need them.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What is Redux DevTools?**
 
 _Redux DevTools_ is a live-editing time travel environment for Redux with hot reloading, action replay, and customizable UI. If you don't want to bother with installing Redux DevTools and integrating it into your project, consider using Redux DevTools Extension for Chrome and Firefox.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What are the features of Redux DevTools?**
 
@@ -4300,7 +4300,7 @@ Some of the main features of Redux DevTools are below,
 4. If the reducers throw, you will see during which action this happened, and what the error was.
 5. With persistState() store enhancer, you can persist debug sessions across page reloads.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What are Redux selectors and why to use them?**
 
@@ -4315,13 +4315,13 @@ These selectors have two main benefits,
 1. The selector can compute derived data, allowing Redux to store the minimal possible state
 2. The selector is not recomputed unless one of its arguments changes
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What is Redux Form?**
 
 _Redux Form_ works with React and Redux to enable a form in React to use Redux to store all of its state. Redux Form can be used with raw HTML5 inputs, but it also works very well with common UI frameworks like Material UI, React Widgets and React Bootstrap.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What are the main features of Redux Form?**
 
@@ -4331,7 +4331,7 @@ Some of the main features of Redux Form are:
 2. Validation (sync/async) and submission.
 3. Formatting, parsing and normalization of field values.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **How to add multiple middlewares to Redux?**
 
@@ -4343,7 +4343,7 @@ import { createStore, applyMiddleware } from 'redux';
 
 const createStoreWithMiddleware = applyMiddleware(ReduxThunk, logger)(createStore);
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **How to set initial state in Redux?**
 
@@ -4365,7 +4365,7 @@ todos: \[{ id: 123, name: 'example', completed: false }\],
 
 const store = createStore(rootReducer, initialState);
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **How Relay is different from Redux?**
 
@@ -4385,11 +4385,11 @@ text: 'Add todo item'
 
 }
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **React Native**
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What is the difference between React Native and React?**
 
@@ -4397,13 +4397,13 @@ text: 'Add todo item'
 
 **React Native** is a mobile framework that compiles to native app components, allowing you to build native mobile applications (iOS, Android, and Windows) in JavaScript that allows you to use React to build your components, and implements React under the hood.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **How to test React Native apps?**
 
 React Native can be tested only in mobile simulators like iOS and Android. You can run the app in your mobile using expo app ([https://expo.io](https://expo.io/)) Where it syncs using QR code, your mobile and computer should be in same wireless network.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **How to do logging in React Native?**
 
@@ -4413,7 +4413,7 @@ $ react-native log-ios
 
 $ react-native log-android
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **How to debug your React Native?**
 
@@ -4427,7 +4427,7 @@ Follow the below steps to debug React Native app:
 
 **React supported libraries & Integration**
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What is reselect and how it works?**
 
@@ -4435,13 +4435,13 @@ _Reselect_ is a **selector library** (for Redux) which uses _memoization_ concep
 
 Reselect keeps a copy of the last inputs/outputs of the last call, and recomputes the result only if one of the inputs changes. If the the same inputs are provided twice in a row, Reselect returns the cached output. It's memoization and cache are fully customizable.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What is Flow?**
 
 _Flow_ is a _static type checker_ designed to find type errors in JavaScript. Flow types can express much more fine-grained distinctions than traditional type systems. For example, Flow helps you catch errors involving null, unlike most type systems.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What is the difference between Flow and PropTypes?**
 
@@ -4449,7 +4449,7 @@ Flow is a _static analysis tool_ (static checker) which uses a superset of the l
 
 PropTypes is a _basic type checker_ (runtime checker) which has been patched onto React. It can't check anything other than the types of the props being passed to a given component. If you want more flexible typechecking for your entire project Flow/TypeScript are appropriate choices.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **How to use Font Awesome icons in React?**
 
@@ -4471,7 +4471,7 @@ return &lt;div&gt;&lt;i className={'fa fa-spinner'} /&gt;&lt;/div&gt;
 
 }
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What is React Dev Tools?**
 
@@ -4483,13 +4483,13 @@ The official extensions available for different browsers or environments.
 2. **Firefox extension**
 3. **Standalone app** (Safari, React Native, etc)
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **Why is DevTools not loading in Chrome for local files?**
 
 If you opened a local HTML file in your browser (file://...) then you must first open _Chrome Extensions_ and check Allow access to file URLs.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **How to use Polymer in React?**
 
@@ -4531,7 +4531,7 @@ return &lt;calender-element /&gt;;
 
 export default MyComponent;
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What are the advantages of React over Vue.js?**
 
@@ -4544,7 +4544,7 @@ React has the following advantages over Vue.js:
 
 **Note:** The above list of advantages are purely opinionated and it vary based on the professional experience. But they are helpful as base parameters.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What is the difference between React and Angular?**
 
@@ -4560,19 +4560,19 @@ Let's see the difference between React and Angular in a table format.
 
 **Note:** The above list of differences are purely opinionated and it vary based on the professional experience. But they are helpful as base parameters.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **Why React tab is not showing up in DevTools?**
 
 When the page loads, _React DevTools_ sets a global named \__REACT_DEVTOOLS_GLOBAL_HOOK_\_, then React communicates with that hook during initialization. If the website is not using React or if React fails to communicate with DevTools then it won't show up the tab.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What are Styled Components?**
 
 styled-components is a JavaScript library for styling React applications. It removes the mapping between styles and components, and lets you write actual CSS augmented with JavaScript.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **Give an example of Styled Components?**
 
@@ -4612,13 +4612,13 @@ These two variables, Title and Wrapper, are now components that you can render j
 
 &lt;/Wrapper&gt;
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What is Relay?**
 
 Relay is a JavaScript framework for providing a data layer and client-server communication to web applications using the React view layer.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **How to use TypeScript in create-react-app application?**
 
@@ -4660,7 +4660,7 @@ my-app/
 
 **Miscellaneous**
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What are the main features of Reselect library?**
 
@@ -4726,7 +4726,7 @@ console.log(taxSelector(exampleState)); // 0.172
 
 console.log(totalSelector(exampleState)); // { total: 2.322 }
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **Does the statics object work with ES6 classes in React?**
 
@@ -4776,19 +4776,19 @@ Component.propTypes = {...}
 
 Component.someMethod = function(){....}
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **Can Redux only be used with React?**
 
 Redux can be used as a data store for any UI layer. The most common usage is with React and React Native, but there are bindings available for Angular, Angular 2, Vue, Mithril, and more. Redux simply provides a subscription mechanism which can be used by any other code.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **Do you need to have a particular build tool to use Redux?**
 
 Redux is originally written in ES6 and transpiled for production into ES5 with Webpack and Babel. You should be able to use it regardless of your JavaScript build process. Redux also offers a UMD build that can be used directly without any build process at all.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **How Redux Form initialValues get updated from state?**
 
@@ -4804,7 +4804,7 @@ enableReinitialize: true,
 
 If your initialValues prop gets updated, your form will update too.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **How React PropTypes allow different types for one prop?**
 
@@ -4818,7 +4818,7 @@ size: PropTypes.oneOfType(\[PropTypes.string, PropTypes.number\]),
 
 };
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **Can I import an SVG file as react component?**
 
@@ -4840,7 +4840,7 @@ const App = () => (
 
 **Note**: Don't forget about the curly braces in the import.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **Why are inline ref callbacks or functions not recommended?**
 
@@ -4908,13 +4908,13 @@ return (
 
 }
 
-**Note:** In React v16.3, [**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+**Note:** In React v16.3, [**⬆ Back to Top**](#table-of-contents)
 
 **What is render hijacking in react?**
 
 The concept of render hijacking is the ability to control what a component will output from another component. It actually means that you decorate your component by wrapping it into a Higher-Order component. By wrapping you can inject additional props or make other changes, which can cause changing logic of rendering. It does not actually enables hijacking, but by using HOC you make your component behave in different way.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What are HOC factory implementations?**
 
@@ -4961,7 +4961,7 @@ return super.render();
 
 }
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **How to pass numbers to React component?**
 
@@ -4969,7 +4969,7 @@ You should be passing the numbers via curly braces({}) where as strings in quote
 
 React.render(&lt;User age={30} department={'IT'} /&gt;, document.getElementById('container'));
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **Do I need to keep all my state into Redux? Should I ever use react internal state?**
 
@@ -4983,7 +4983,7 @@ Below are the thumb rules to determine what kind of data should be put into Redu
 4. Is there value to you in being able to restore this state to a given point in time (ie, time travel debugging)?
 5. Do you want to cache the data (i.e, use what's in state if it's already there instead of re-requesting it)?
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What is the purpose of registerServiceWorker in React?**
 
@@ -5001,7 +5001,7 @@ ReactDOM.render(&lt;App /&gt;, document.getElementById('root'));
 
 registerServiceWorker();
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What is React memo function?**
 
@@ -5013,7 +5013,7 @@ const MyComponent = React.memo(function MyComponent(props) {
 
 });
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What is React lazy function?**
 
@@ -5037,7 +5037,7 @@ return (
 
 **Note:** React.lazy and Suspense is not yet available for server-side rendering. If you want to do code-splitting in a server rendered app, we still recommend React Loadable.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **How to prevent unnecessary updates using setState?**
 
@@ -5065,7 +5065,7 @@ return { title: latestAddress };
 
 };
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **How do you render Array, Strings and Numbers in React 16 Version?**
 
@@ -5117,7 +5117,7 @@ return 2018;
 
 }
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **How to use class field declarations syntax in React classes?**
 
@@ -5169,7 +5169,7 @@ return (
 
 }
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What are hooks?**
 
@@ -5199,7 +5199,7 @@ return (
 
 }
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What are the rules needs to follow for hooks?**
 
@@ -5208,7 +5208,7 @@ You need to follow two rules in order to use hooks,
 1. Call Hooks only at the top level of your react functions. i.e, You shouldn’t call Hooks inside loops, conditions, or nested functions. This will ensure that Hooks are called in the same order each time a component renders and it preserves the state of Hooks between multiple useState and useEffect calls.
 2. Call Hooks from React Functions only. i.e, You shouldn’t call Hooks from regular JavaScript functions.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **How to ensure hooks followed the rules in your project?**
 
@@ -5242,7 +5242,7 @@ And apply the below config in your ESLint config file,
 
 **Note:** This plugin is intended to use in Create React App by default.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What are the differences between Flux and Redux?**
 
@@ -5257,7 +5257,7 @@ Below are the major differences between Flux and Redux
 | It has a singleton dispatcher | There is no concept of dispatcher |
 | React components subscribe to the store | Container components uses connect function |
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What are the benefits of React Router V4?**
 
@@ -5267,7 +5267,7 @@ Below are the main benefits of React Router V4 module,
 2. You don't need to manually set history. The router module will take care history by wrapping routes with &lt;BrowserRouter&gt; component.
 3. The application size is reduced by adding only the specific router module(Web, core, or native)
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **Can you describe about componentDidCatch lifecycle method signature?**
 
@@ -5280,7 +5280,7 @@ The method structure would be as follows
 
 componentDidCatch(error, info);
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **In which scenarios error boundaries do not catch errors?**
 
@@ -5291,7 +5291,7 @@ Below are the cases in which error boundaries doesn't work,
 3. During Server side rendering
 4. When errors thrown in the error boundary code itself
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **Why do not you need error boundaries for event handlers?**
 
@@ -5337,7 +5337,7 @@ return &lt;div onClick={this.handleClick}&gt;Click Me&lt;/div&gt;;
 
 The above code is catching the error using vanilla javascript try/catch block instead of error boundaries.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What is the difference between try catch block and error boundaries?**
 
@@ -5365,13 +5365,13 @@ Whereas error boundaries wrap declarative code as below,
 
 So if an error occurs in a **componentDidUpdate** method caused by a **setState** somewhere deep in the tree, it will still correctly propagate to the closest error boundary.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What is the behavior of uncaught errors in react 16?**
 
 In React 16, errors that were not caught by any error boundary will result in unmounting of the whole React component tree. The reason behind this decision is that it is worse to leave corrupted UI in place than to completely remove it. For example, it is worse for a payments app to display a wrong amount than to render nothing.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What is the proper placement for error boundaries?**
 
@@ -5380,7 +5380,7 @@ The granularity of error boundaries usage is up to the developer based on projec
 1. You can wrap top-level route components to display a generic error message for the entire application.
 2. You can also wrap individual components in an error boundary to protect them from crashing the rest of the application.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What is the benefit of component stack trace from error boundary?**
 
@@ -5390,13 +5390,13 @@ For example, BuggyCounter component displays the component stack trace as below,
 
 ![stacktrace](data:image/png;base64,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)
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What is the required method to be defined for a class component?**
 
 The render() method is the only required method in a class component. i.e, All methods other than render method are optional for a class component.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What are the possible return types of render method?**
 
@@ -5408,7 +5408,7 @@ Below are the list of following types used and return from render method,
 4. **String and numbers:** Render both Strings and Numbers as text nodes in the DOM
 5. **Booleans or null:** Doesn't render anything but these types are used to conditionally render content.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What is the main purpose of constructor?**
 
@@ -5429,13 +5429,13 @@ this.handleClick = this.handleClick.bind(this);
 
 }
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **Is it mandatory to define constructor for React component?**
 
 No, it is not mandatory. i.e, If you don’t initialize state and you don’t bind methods, you don’t need to implement a constructor for your React component.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What are default props?**
 
@@ -5465,13 +5465,13 @@ return &lt;MyButton /&gt; ; // props.color will be set to red
 
 **Note:** If you provide null value then it remains null value.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **Why should not call setState in componentWillUnmount?**
 
 You should not call setState() in componentWillUnmount() because once a component instance is unmounted, it will never be mounted again.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What is the purpose of getDerivedStateFromError?**
 
@@ -5517,7 +5517,7 @@ return this.props.children;
 
 }
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What is the methods order when component re-rendered?**
 
@@ -5529,7 +5529,7 @@ An update can be caused by changes to props or state. The below methods are call
 4. getSnapshotBeforeUpdate()
 5. componentDidUpdate()
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What are the methods invoked during error handling?**
 
@@ -5538,7 +5538,7 @@ Below methods are called when there is an error during rendering, in a lifecycle
 1. static getDerivedStateFromError()
 2. componentDidCatch()
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What is the purpose of displayName class property?**
 
@@ -5566,13 +5566,13 @@ return WrappedComponent.displayName || WrappedComponent.name || 'Component';
 
 }
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What is the browser support for react applications?**
 
 React supports all popular browsers, including Internet Explorer 9 and above, although some polyfills are required for older browsers such as IE 9 and IE 10. If you use **es5-shim and es5-sham** polyfill then it even support old browsers that doesn't support ES5 methods.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What is the purpose of unmountComponentAtNode method?**
 
@@ -5582,7 +5582,7 @@ The method signature would be as follows,
 
 ReactDOM.unmountComponentAtNode(container);
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What is code-splitting?**
 
@@ -5636,7 +5636,7 @@ return (
 
 export default App;
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What is the benefit of strict mode?**
 
@@ -5648,7 +5648,7 @@ The will be helpful in the below cases
 4. Detecting **legacy context** API.
 5. Warning about deprecated findDOMNode usage
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What are Keyed Fragments?**
 
@@ -5682,7 +5682,7 @@ return (
 
 **Note:** key is the only attribute that can be passed to Fragment. In the future, there might be a support for additional attributes, such as event handlers.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **Does React support all HTML attributes?**
 
@@ -5698,7 +5698,7 @@ Let us take few props with respect to standard HTML attributes,
 
 These props work similarly to the corresponding HTML attributes, with the exception of the special cases. It also support all SVG attributes.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What are the limitations with HOCs?**
 
@@ -5760,7 +5760,7 @@ return Enhance;
 
 1. **Refs aren’t passed through:** For HOCs you need to pass through all props to the wrapped component but this does not work for refs. This is because ref is not really a prop similar to key. In this case you need to use the React.forwardRef API
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **How to debug forwardRefs in DevTools?**
 
@@ -5810,7 +5810,7 @@ return React.forwardRef(forwardRef);
 
 }
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **When component props defaults to true?**
 
@@ -5824,7 +5824,7 @@ For example, below expressions are equivalent,
 
 **Note:** It is not recommended to use this approach because it can be confused with the ES6 object shorthand (example, {name} which is short for {name: name})
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What is NextJS and major features of it?**
 
@@ -5837,7 +5837,7 @@ Next.js is a popular and lightweight framework for static and server‑rendered 
 5. Able to implement with Express or any other Node.js HTTP server
 6. Customizable with your own Babel and Webpack configurations
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **How do you pass an event handler to a component?**
 
@@ -5845,7 +5845,7 @@ You can pass event handlers and other functions as props to child components. It
 
 &lt;button onClick="{this.handleClick}"&gt;&lt;/button&gt;
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **Is it good to use arrow functions in render methods?**
 
@@ -5869,7 +5869,7 @@ return &lt;button onClick={() =&gt; this.handleClick()}>Click Me&lt;/button&gt;;
 
 **Note:** Using an arrow function in render method creates a new function each time the component renders, which may have performance implications
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **How to prevent a function from being called multiple times?**
 
@@ -5879,7 +5879,7 @@ If you use an event handler such as **onClick or onScroll** and want to prevent 
 2. **Debouncing:** Publish changes after a period of inactivity. For example, it can be used using \_.debounce lodash function
 3. **RequestAnimationFrame throttling:** Changes based on requestAnimationFrame. For example, it can be used using raf-schd lodash function
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **How JSX prevents Injection Attacks?**
 
@@ -5893,7 +5893,7 @@ const element = &lt;h1&gt;{name}&lt;/h1&gt;;
 
 This way you can prevent XSS(Cross-site-scripting) attacks in the application.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **How do you update rendered elements?**
 
@@ -5921,7 +5921,7 @@ ReactDOM.render(element, document.getElementById('root'));
 
 setInterval(tick, 1000);
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **How do you say that props are read only?**
 
@@ -5937,7 +5937,7 @@ return amount + interest;
 
 The above function is called “pure” because it does not attempt to change their inputs, and always return the same result for the same inputs. Hence, React has a single rule saying "All React components must act like pure functions with respect to their props."
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **How do you say that state updates are merged?**
 
@@ -5987,7 +5987,7 @@ comments: response.comments
 
 As mentioned in the above code snippets, this.setState({comments}) updates only comments variable without modifying or replacing posts variable.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **How do you pass arguments to an event handler?**
 
@@ -6001,7 +6001,7 @@ Let us take an example of user details updated in a grid,
 
 In both the approaches, the synthetic argument e is passed as a second argument. You need to pass it explicitly for arrow functions and it forwarded automatically for bind method.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **How to prevent component from rendering?**
 
@@ -6049,7 +6049,7 @@ return (
 
 In the above example, the greeting component skips its rendering section by applying condition and returning null value.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What are the conditions to safely use the index as a key?**
 
@@ -6059,7 +6059,7 @@ There are three conditions to make sure, it is safe use the index as a key.
 2. The items in the list have no ids
 3. The list is never reordered or filtered.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **Is it keys should be globally unique?**
 
@@ -6113,7 +6113,7 @@ return (
 
 }
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What is the popular choice for form handling?**
 
@@ -6127,7 +6127,7 @@ In detail, You can categorize them as follows,
 
 It is used to create a scalable, performant, form helper with a minimal API to solve annoying stuff.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What are the advantages of formik over redux form library?**
 
@@ -6137,13 +6137,13 @@ Below are the main reasons to recommend formik over redux form library,
 2. Redux-Form calls your entire top-level Redux reducer multiple times ON EVERY SINGLE KEYSTROKE. This way it increases input latency for large apps.
 3. Redux-Form is 22.5 kB minified gzipped whereas Formik is 12.7 kB
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **Why do you not required to use inheritance?**
 
 In React, it is recommend using composition instead of inheritance to reuse code between components. Both Props and composition give you all the flexibility you need to customize a component’s look and behavior in an explicit and safe way. Whereas, If you want to reuse non-UI functionality between components, it is suggested to extracting it into a separate JavaScript module. Later components import it and use that function, object, or a class, without extending it.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **Can I use web components in react application?**
 
@@ -6177,7 +6177,7 @@ return (
 
 export default App;
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What is dynamic import?**
 
@@ -6199,7 +6199,7 @@ console.log(math.add(10, 20));
 
 });
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What are loadable components?**
 
@@ -6227,7 +6227,7 @@ return (
 
 Now OtherComponent will be loaded in a separated bundle
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What is suspense component?**
 
@@ -6257,7 +6257,7 @@ return (
 
 As mentioned in the above code, Suspense is wrapped above the lazy component.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What is route based code splitting?**
 
@@ -6295,7 +6295,7 @@ const App = () => (
 
 In the above code, the code splitting will happen at each route level.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **Give an example on How to use context?**
 
@@ -6357,7 +6357,7 @@ return &lt;Button theme={this.context} /&gt;;
 
 }
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What is the purpose of default value in context?**
 
@@ -6367,7 +6367,7 @@ Below code snippet provides default theme value as Luna.
 
 const MyContext = React.createContext(defaultValue);
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **How do you use contextType?**
 
@@ -6431,7 +6431,7 @@ let value = this.context;
 
 }
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What is a consumer?**
 
@@ -6445,7 +6445,7 @@ Lets take a simple example,
 
 &lt;/MyContext.Consumer&gt;
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **How do you solve performance corner cases while using context?**
 
@@ -6503,7 +6503,7 @@ return (
 
 }
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What is the purpose of forward ref in HOCs?**
 
@@ -6589,19 +6589,19 @@ ref={ref}
 
 \`\`\`
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **Is it ref argument available for all functions or class components?**
 
 Regular function or class components don’t receive the ref argument, and ref is not available in props either. The second ref argument only exists when you define a component with React.forwardRef call.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **Why do you need additional care for component libraries while using forward refs?**
 
 When you start using forwardRef in a component library, you should treat it as a breaking change and release a new major version of your library. This is because your library likely has a different behavior such as what refs get assigned to, and what types are exported. These changes can break apps and other libraries that depend on the old behavior.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **How to create react class components without ES6?**
 
@@ -6641,7 +6641,7 @@ return &lt;h1&gt;Hello, {this.props.name}&lt;/h1&gt;;
 
 **Note:** If you use createReactClass then auto binding is available for all methods. i.e, You don't need to use .bind(this) with in constructor for event handlers.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **Is it possible to use react without JSX?**
 
@@ -6681,7 +6681,7 @@ document.getElementById('root'),
 
 );
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What is diffing algorithm?**
 
@@ -6692,7 +6692,7 @@ In this case, for displaying 1000 elements would require in the order of one bil
 1. Two elements of different types will produce different trees.
 2. The developer can hint at which child elements may be stable across different renders with a key prop.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What are the rules covered by diffing algorithm?**
 
@@ -6746,7 +6746,7 @@ When diffing two trees, React first compares the two root elements. The behavior
 
 &lt;/ul&gt;
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **When do you need to use refs?**
 
@@ -6756,7 +6756,7 @@ There are few use cases to go for refs,
 2. Triggering imperative animations.
 3. Integrating with third-party DOM libraries.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **Is it prop must be named as render for render props?**
 
@@ -6800,13 +6800,13 @@ children: PropTypes.func.isRequired,
 
 };
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What are the problems of using render props with pure components?**
 
 If you create a function inside a render method, it negates the purpose of pure component. Because the shallow prop comparison will always return false for new props, and each render in this case will generate a new value for the render prop. You can solve this issue by defining the render function as instance method.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **How do you create HOC using render props?**
 
@@ -6828,13 +6828,13 @@ return &lt;Mouse render={(mouse) =&gt; &lt;Component {...this.props} mouse={mous
 
 This way render props gives the flexibility of using either pattern.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What is windowing technique?**
 
 Windowing is a technique that only renders a small subset of your rows at any given time, and can dramatically reduce the time it takes to re-render the components as well as the number of DOM nodes created. If your application renders long lists of data then this technique is recommended. Both react-window and react-virtualized are popular windowing libraries which provides several reusable components for displaying lists, grids, and tabular data.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **How do you print falsy values in JSX?**
 
@@ -6842,7 +6842,7 @@ The falsy values such as false, null, undefined, and true are valid children but
 
 &lt;div&gt;My JavaScript variable is {String(myVariable)}.&lt;/div&gt;
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What is the typical use case of portals?**
 
@@ -6850,7 +6850,7 @@ React portals are very useful when a parent component has overflow: hidden or ha
 
 For example, dialogs, global message notifications, hovercards, and tooltips.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **How do you set default value for uncontrolled component?**
 
@@ -6886,13 +6886,13 @@ ref={this.input} />
 
 The same applies for select and textArea inputs. But you need to use **defaultChecked** for checkbox and radio inputs.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What is your favorite React stack?**
 
 Even though the tech stack varies from developer to developer, the most popular stack is used in react boilerplate project code. It mainly uses Redux and redux-saga for state management and asynchronous side-effects, react-router for routing purpose, styled-components for styling react components, axios for invoking REST api, and other supported stack such as webpack, reselect, ESNext, Babel. You can clone the project <https://github.com/react-boilerplate/react-boilerplate> and start working on any new react project.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What is the difference between Real DOM and Virtual DOM?**
 
@@ -6906,7 +6906,7 @@ Below are the main differences between Real DOM and Virtual DOM,
 | It causes too much of memory wastage | There is no memory wastage |
 | Creates a new DOM if element updates | It updates the JSX if element update |
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **How to add Bootstrap to a react application?**
 
@@ -6921,7 +6921,7 @@ npm install bootstrap
 2. react-bootstrap
 3. reactstrap
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **Can you list down top websites or applications using react as front end framework?**
 
@@ -6938,19 +6938,19 @@ Below are the top 10 websites using React as their front-end framework,
 9. Netflix
 10. PayPal
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **Is it recommended to use CSS In JS technique in React?**
 
 React does not have any opinion about how styles are defined but if you are a beginner then good starting point is to define your styles in a separate \*.css file as usual and refer to them using className. This functionality is not part of React but came from third-party libraries. But If you want to try a different approach(CSS-In-JS) then styled-components library is a good option.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **Do I need to rewrite all my class components with hooks?**
 
 No. But you can try Hooks in a few components(or new components) without rewriting any existing code. Because there are no plans to remove classes in ReactJS.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **How to fetch data with React Hooks?**
 
@@ -6998,13 +6998,13 @@ export default App;
 
 Remember we provided an empty array as second argument to the effect hook to avoid activating it on component updates but only for the mounting of the component. i.e, It fetches only for component mount.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **Is Hooks cover all use cases for classes?**
 
 Hooks doesn't cover all use cases of classes but there is a plan to add them soon. Currently there are no Hook equivalents to the uncommon **getSnapshotBeforeUpdate** and **componentDidCatch** lifecycles yet.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What is the stable release for hooks support?**
 
@@ -7015,7 +7015,7 @@ React includes a stable implementation of React Hooks in 16.8 release for below 
 3. React Test Renderer
 4. React Shallow Renderer
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **Why do we use array destructuring (square brackets notation) in useState?**
 
@@ -7033,7 +7033,7 @@ Whereas with array destructuring the variables can be accessed as follows:
 
 const \[user, setUser\] = useState('userProfile');
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What are the sources used for introducing hooks?**
 
@@ -7045,13 +7045,13 @@ Hooks got the ideas from several different sources. Below are some of them,
 4. Subscriptions in Rx.
 5. Reducer components in ReasonReact.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **How do you access imperative API of web components?**
 
 Web Components often expose an imperative API to implement its functions. You will need to use a **ref** to interact with the DOM node directly if you want to access imperative API of a web component. But if you are using third-party Web Components, the best solution is to write a React component that behaves as a **wrapper** for your Web Component.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What is formik?**
 
@@ -7061,31 +7061,31 @@ Formik is a small react form library that helps you with the three major problem
 2. Validation and error messages
 3. Handling form submission
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What are typical middleware choices for handling asynchronous calls in Redux?**
 
 Some of the popular middleware choices for handling asynchronous calls in Redux eco system are Redux Thunk, Redux Promise, Redux Saga.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **Do browsers understand JSX code?**
 
 No, browsers can't understand JSX code. You need a transpiler to convert your JSX to regular Javascript that browsers can understand. The most widely used transpiler right now is Babel.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **Describe about data flow in react?**
 
 React implements one-way reactive data flow using props which reduce boilerplate and is easier to understand than traditional two-way data binding.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What is react scripts?**
 
 The react-scripts package is a set of scripts from the create-react-app starter pack which helps you kick off projects without configuring. The react-scripts start command sets up the development environment and starts a server, as well as hot module reloading.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What are the features of create react app?**
 
@@ -7099,13 +7099,13 @@ Below are the list of some of the features provided by create react app.
 6. A build script to bundle JS, CSS, and images for production, with hashes and sourcemaps
 7. An offline-first service worker and a web app manifest, meeting all the Progressive Web App criteria.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What is the purpose of renderToNodeStream method?**
 
 The ReactDOMServer#renderToNodeStream method is used to generate HTML on the server and send the markup down on the initial request for faster page loads. It also helps search engines to crawl your pages easily for SEO purposes. **Note:** Remember this method is not available in the browser but only server.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What is MobX?**
 
@@ -7115,7 +7115,7 @@ npm install mobx --save
 
 npm install mobx-react --save
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What are the differences between Redux and MobX?**
 
@@ -7130,7 +7130,7 @@ Below are the main differences between Redux and MobX,
 | Performance | Need to be improved | Provides better performance |
 | How it stores | Uses JS Object to store | Uses observable to store the data |
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **Should I learn ES6 before learning ReactJS?**
 
@@ -7172,7 +7172,7 @@ return &lt;li&gt;{user.name}&lt;/li&gt;;
 
 const users = usersList.map((user) => &lt;li&gt;{user.name}&lt;/li&gt;);
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What is Concurrent Rendering?**
 
@@ -7190,13 +7190,13 @@ The Concurrent rendering makes React apps to be more responsive by rendering com
 
 ReactDOM.unstable_createRoot(domNode).render(&lt;App /&gt;);
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What is the difference between async mode and concurrent mode?**
 
 Both refers the same thing. Previously concurrent Mode being referred to as "Async Mode" by React team. The name has been changed to highlight React’s ability to perform work on different priority levels. So it avoids the confusion from other approaches to Async Rendering.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **Can I use javascript urls in react16.9?**
 
@@ -7214,7 +7214,7 @@ website: "javascript: alert('Your website is hacked')",
 
 Remember that the future versions will throw an error for javascript URLs.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What is the purpose of eslint plugin for hooks?**
 
@@ -7223,7 +7223,7 @@ The ESLint plugin enforces rules of Hooks to avoid bugs. It assumes that any fun
 1. Calls to Hooks are either inside a PascalCase function (assumed to be a component) or another useSomething function (assumed to be a custom Hook).
 2. Hooks are called in the same order on every render.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What is the difference between Imperative and Declarative in React?**
 
@@ -7265,7 +7265,7 @@ return &lt;greyLike /&gt;;
 
 Because the declarative approach separates concerns, this part of it only needs to handle how the UI should look in a sepecific state, and is therefore much simpler to understand.
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What are the benefits of using typescript with reactjs?**
 
@@ -7276,7 +7276,7 @@ Below are some of the benefits of using typescript with Reactjs,
 3. IDEs such as VS Code was made for TypeScript
 4. Avoid bugs with the ease of readability and Validation
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **How do you make sure that user remains authenticated on page refresh while using Context API State Management?**
 
@@ -7366,7 +7366,7 @@ console.error(err);
 
 };
 
-[**⬆ Back to Top**](https://dev.to/sakhnyuk/300-react-interview-questions-2ko4#table-of-contents)
+[**⬆ Back to Top**](#table-of-contents)
 
 **What are the benefits of new JSX transform?**
 
