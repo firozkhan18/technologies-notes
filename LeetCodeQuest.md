@@ -46,7 +46,8 @@ public static int[] twoSum(int[] nums, int target) {
 
 <details>
 <summary><b>3. Longest Substring Without Repeating Characters</b></summary>
-```java
+
+  ```java
    public static int lengthOfLongestSubstring(String s) {
 
   int start = 0;
@@ -75,6 +76,7 @@ public static int[] twoSum(int[] nums, int target) {
 
 <details>
 <summary><b>4. Median of Two Sorted Arrays</b></summary>
+
 ```java
 public static double findMedianSortedArrays(int[] nums1, int[] nums2) {
 
@@ -132,9 +134,9 @@ public static double findMedianSortedArrays(int[] nums1, int[] nums2) {
 <summary><b>6. Zigzag Conversion</b></summary>
 </details>
 
-<details>
-<summary><b>7. Reverse Integer</b></summary>
-```java
+<details><summary><b>7. Reverse Integer</b></summary>
+
+  ```java
   public static int reverse(int x) {
   int rev = 0;
   while (x != 0) {
@@ -162,6 +164,7 @@ public static double findMedianSortedArrays(int[] nums1, int[] nums2) {
 
 <details>
 <summary><b>9. Palindrome Number</b></summary>
+
 ```java
  public static boolean isPalindrome(int s) {
 
@@ -202,6 +205,7 @@ public static double findMedianSortedArrays(int[] nums1, int[] nums2) {
 
 <details>
 <summary><b>14. Longest Common Prefix</b></summary>
+
 ```java
 public static String longestCommonPrefix(String[] s) {
 
@@ -267,6 +271,7 @@ public static String longestCommonPrefix(String[] s) {
 
 <details>
 <summary><b>27. Remove Element</b></summary>
+
 ```java
 public int removeElement(int[] nums, int val) {
 
@@ -288,6 +293,7 @@ public int removeElement(int[] nums, int val) {
 
 <details>
 <summary><b>28. Find the Index of the First Occurrence in a String</b></summary>
+
 ```java
 public static int find(String haystack, String needle) {
 
@@ -332,6 +338,7 @@ public static int find(String haystack, String needle) {
 
 <details>
 <summary><b>34. Find First and Last Position of Element in Sorted Array</b></summary>
+
 ```java
 public static int[] searchRange(int[] nums, int target) {
 
@@ -451,6 +458,7 @@ public static int[] searchRange(int[] nums, int target) {
 
 <details>
 <summary><b>58. Length of Last Word</b></summary>
+
 ```java
   public static  int lengthOfLastWord(String s) {
 
