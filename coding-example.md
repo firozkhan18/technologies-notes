@@ -1983,3 +1983,149 @@ public class QuickSort {
 ```
 
 These examples provide a basic implementation of the mentioned algorithms. They illustrate how to implement and use these algorithms for searching and sorting tasks. Each algorithm has its own use cases, and the choice of algorithm depends on the specific requirements of your application, such as the size of the data, whether the data is sorted, and the need for stability.
+Java Streams provide a powerful and flexible way to handle collections of data, including performing search operations. Using streams, you can leverage functional programming concepts to make the code more declarative and expressive. Here’s how you can use Java Streams for different types of searches:
+
+### 1. Stream-Based Linear Search
+
+**Concept**: Uses Java Streams to find an element in a collection.
+
+**Example**:
+```java
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+
+public class StreamBasedSearch {
+    public static void main(String[] args) {
+        List<Integer> numbers = Arrays.asList(5, 3, 7, 1, 9);
+        int target = 7;
+
+        // Find the element using Stream API
+        Optional<Integer> result = numbers.stream()
+                                          .filter(num -> num == target)
+                                          .findFirst();
+
+        // Output the result
+        if (result.isPresent()) {
+            System.out.println("Element found: " + result.get());
+        } else {
+            System.out.println("Element not found.");
+        }
+    }
+}
+```
+
+### 2. Stream-Based Binary Search
+
+**Concept**: Uses Java Streams to search in a sorted collection. Note that Streams themselves don't provide a direct binary search, but you can use them in conjunction with traditional algorithms.
+
+**Example**:
+```java
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+
+public class StreamBasedBinarySearch {
+    public static void main(String[] args) {
+        List<Integer> numbers = Arrays.asList(1, 3, 5, 7, 9);
+        int target = 7;
+
+        // Perform binary search using traditional approach and Streams for output
+        int index = binarySearch(numbers, target);
+
+        // Output the result
+        if (index != -1) {
+            System.out.println("Element found at index: " + index);
+        } else {
+            System.out.println("Element not found.");
+        }
+    }
+
+    public static int binarySearch(List<Integer> list, int target) {
+        int left = 0;
+        int right = list.size() - 1;
+
+        while (left <= right) {
+            int mid = left + (right - left) / 2;
+            int midValue = list.get(mid);
+
+            if (midValue == target) {
+                return mid;
+            } else if (midValue < target) {
+                left = mid + 1;
+            } else {
+                right = mid - 1;
+            }
+        }
+        return -1; // Element not found
+    }
+}
+```
+
+### 3. Stream-Based Check for Element Presence
+
+**Concept**: Checks if an element is present in a collection using Streams.
+
+**Example**:
+```java
+import java.util.Arrays;
+import java.util.List;
+
+public class StreamBasedPresenceCheck {
+    public static void main(String[] args) {
+        List<String> words = Arrays.asList("apple", "banana", "cherry");
+        String target = "banana";
+
+        // Check presence using Stream API
+        boolean exists = words.stream()
+                              .anyMatch(word -> word.equals(target));
+
+        // Output the result
+        if (exists) {
+            System.out.println("Element found.");
+        } else {
+            System.out.println("Element not found.");
+        }
+    }
+}
+```
+
+### 4. Stream-Based Search with Custom Condition
+
+**Concept**: Uses Streams to find an element based on a custom condition.
+
+**Example**:
+```java
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+
+public class StreamBasedCustomSearch {
+    public static void main(String[] args) {
+        List<String> words = Arrays.asList("apple", "banana", "cherry");
+
+        // Find a word with more than 5 characters
+        Optional<String> result = words.stream()
+                                       .filter(word -> word.length() > 5)
+                                       .findFirst();
+
+        // Output the result
+        if (result.isPresent()) {
+            System.out.println("Found a word with more than 5 characters: " + result.get());
+        } else {
+            System.out.println("No such word found.");
+        }
+    }
+}
+```
+
+### Summary
+
+Using Java Streams for searching provides a functional and concise way to work with collections. Here’s a quick summary of the common operations:
+
+- **Linear Search**: Use `.filter()` and `.findFirst()` to search for an element.
+- **Binary Search**: While Streams don’t provide direct binary search, you can use traditional algorithms and Streams for additional processing or output.
+- **Check Presence**: Use `.anyMatch()` to determine if any elements meet a condition.
+- **Custom Search**: Use `.filter()` to find elements that meet a specific condition.
+
+These examples demonstrate how Streams can simplify and enhance the readability of search operations, aligning with the functional programming paradigm.
