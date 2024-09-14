@@ -1072,3 +1072,426 @@ BCA
 CBA
 CAB
 ```
+Here's a comprehensive overview of common searching and sorting algorithms in Java. We'll cover several key algorithms for both searching and sorting:
+
+### 1. Searching Algorithms
+
+#### 1.1 Linear Search
+
+Linear Search is the simplest search algorithm. It checks every element in the array until it finds the target or reaches the end of the array.
+
+```java
+public class LinearSearch {
+    public static void main(String[] args) {
+        int[] array = {3, 5, 7, 9, 11};
+        int target = 7;
+        int result = linearSearch(array, target);
+        System.out.println("Element found at index: " + result);
+    }
+
+    public static int linearSearch(int[] array, int target) {
+        for (int i = 0; i < array.length; i++) {
+            if (array[i] == target) {
+                return i; // Return the index if element is found
+            }
+        }
+        return -1; // Return -1 if element is not found
+    }
+}
+```
+
+#### 1.2 Binary Search
+
+Binary Search is more efficient than Linear Search but requires that the array is sorted. It repeatedly divides the search interval in half.
+
+```java
+public class BinarySearch {
+    public static void main(String[] args) {
+        int[] array = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+        int target = 6;
+        int result = binarySearch(array, target);
+        System.out.println("Element found at index: " + result);
+    }
+
+    public static int binarySearch(int[] array, int target) {
+        int left = 0;
+        int right = array.length - 1;
+
+        while (left <= right) {
+            int mid = left + (right - left) / 2;
+            if (array[mid] == target) {
+                return mid; // Return the index if element is found
+            } else if (array[mid] < target) {
+                left = mid + 1;
+            } else {
+                right = mid - 1;
+            }
+        }
+        return -1; // Return -1 if element is not found
+    }
+}
+```
+
+### 2. Sorting Algorithms
+
+#### 2.1 Bubble Sort
+
+Bubble Sort repeatedly steps through the list, compares adjacent elements, and swaps them if they are in the wrong order.
+
+```java
+public class BubbleSort {
+    public static void main(String[] args) {
+        int[] array = {64, 34, 25, 12, 22, 11, 90};
+        bubbleSort(array);
+        System.out.println("Sorted Array: " + java.util.Arrays.toString(array));
+    }
+
+    public static void bubbleSort(int[] array) {
+        int n = array.length;
+        for (int i = 0; i < n - 1; i++) {
+            for (int j = 0; j < n - i - 1; j++) {
+                if (array[j] > array[j + 1]) {
+                    // Swap array[j] and array[j + 1]
+                    int temp = array[j];
+                    array[j] = array[j + 1];
+                    array[j + 1] = temp;
+                }
+            }
+        }
+    }
+}
+```
+
+#### 2.2 Selection Sort
+
+Selection Sort improves on Bubble Sort by selecting the smallest (or largest) element from the unsorted portion and moving it to the sorted portion.
+
+```java
+public class SelectionSort {
+    public static void main(String[] args) {
+        int[] array = {64, 25, 12, 22, 11};
+        selectionSort(array);
+        System.out.println("Sorted Array: " + java.util.Arrays.toString(array));
+    }
+
+    public static void selectionSort(int[] array) {
+        int n = array.length;
+        for (int i = 0; i < n - 1; i++) {
+            int minIndex = i;
+            for (int j = i + 1; j < n; j++) {
+                if (array[j] < array[minIndex]) {
+                    minIndex = j;
+                }
+            }
+            // Swap the found minimum element with the first element
+            int temp = array[minIndex];
+            array[minIndex] = array[i];
+            array[i] = temp;
+        }
+    }
+}
+```
+
+#### 2.3 Insertion Sort
+
+Insertion Sort builds the final sorted array one item at a time. It is much more efficient on small arrays or nearly sorted arrays.
+
+```java
+public class InsertionSort {
+    public static void main(String[] args) {
+        int[] array = {64, 34, 25, 12, 22, 11, 90};
+        insertionSort(array);
+        System.out.println("Sorted Array: " + java.util.Arrays.toString(array));
+    }
+
+    public static void insertionSort(int[] array) {
+        int n = array.length;
+        for (int i = 1; i < n; i++) {
+            int key = array[i];
+            int j = i - 1;
+
+            // Move elements of array[0..i-1], that are greater than key, to one position ahead of their current position
+            while (j >= 0 && array[j] > key) {
+                array[j + 1] = array[j];
+                j = j - 1;
+            }
+            array[j + 1] = key;
+        }
+    }
+}
+```
+
+#### 2.4 Merge Sort
+
+Merge Sort is a divide-and-conquer algorithm that divides the array into halves, recursively sorts each half, and then merges the sorted halves.
+
+```java
+public class MergeSort {
+    public static void main(String[] args) {
+        int[] array = {38, 27, 43, 3, 9, 82, 10};
+        mergeSort(array, 0, array.length - 1);
+        System.out.println("Sorted Array: " + java.util.Arrays.toString(array));
+    }
+
+    public static void mergeSort(int[] array, int left, int right) {
+        if (left < right) {
+            int mid = (left + right) / 2;
+
+            mergeSort(array, left, mid);
+            mergeSort(array, mid + 1, right);
+
+            merge(array, left, mid, right);
+        }
+    }
+
+    public static void merge(int[] array, int left, int mid, int right) {
+        int n1 = mid - left + 1;
+        int n2 = right - mid;
+
+        int[] L = new int[n1];
+        int[] R = new int[n2];
+
+        System.arraycopy(array, left, L, 0, n1);
+        System.arraycopy(array, mid + 1, R, 0, n2);
+
+        int i = 0, j = 0;
+        int k = left;
+        while (i < n1 && j < n2) {
+            if (L[i] <= R[j]) {
+                array[k++] = L[i++];
+            } else {
+                array[k++] = R[j++];
+            }
+        }
+
+        while (i < n1) {
+            array[k++] = L[i++];
+        }
+
+        while (j < n2) {
+            array[k++] = R[j++];
+        }
+    }
+}
+```
+
+#### 2.5 Quick Sort
+
+Quick Sort is an efficient, divide-and-conquer sorting algorithm. It picks an element as a pivot and partitions the array around the pivot.
+
+```java
+public class QuickSort {
+    public static void main(String[] args) {
+        int[] array = {10, 7, 8, 9, 1, 5};
+        quickSort(array, 0, array.length - 1);
+        System.out.println("Sorted Array: " + java.util.Arrays.toString(array));
+    }
+
+    public static void quickSort(int[] array, int low, int high) {
+        if (low < high) {
+            int pi = partition(array, low, high);
+            quickSort(array, low, pi - 1);
+            quickSort(array, pi + 1, high);
+        }
+    }
+
+    public static int partition(int[] array, int low, int high) {
+        int pivot = array[high];
+        int i = (low - 1);
+
+        for (int j = low; j < high; j++) {
+            if (array[j] <= pivot) {
+                i++;
+                int temp = array[i];
+                array[i] = array[j];
+                array[j] = temp;
+            }
+        }
+
+        int temp = array[i + 1];
+        array[i + 1] = array[high];
+        array[high] = temp;
+
+        return i + 1;
+    }
+}
+```
+
+### Summary
+
+- **Linear Search**: Simple but inefficient for large arrays.
+- **Binary Search**: Efficient but requires a sorted array.
+- **Bubble Sort**: Simple but inefficient for large arrays.
+- **Selection Sort**: Simple and intuitive but not the most efficient.
+- **Insertion Sort**: Efficient for small or nearly sorted arrays.
+- **Merge Sort**: Efficient and stable; good for large datasets.
+- **Quick Sort**: Efficient for large datasets but can be less stable.
+
+These examples should give you a good starting point for implementing searching and sorting algorithms in Java.
+Here are examples of commonly used search algorithms in Java:
+
+### 1. Linear Search
+
+Linear search is a straightforward approach where each element in the array is checked sequentially until the target value is found or the end of the array is reached.
+
+```java
+public class LinearSearch {
+    public static void main(String[] args) {
+        int[] array = {3, 5, 7, 9, 11};
+        int target = 7;
+        int result = linearSearch(array, target);
+        System.out.println("Element found at index: " + result);
+    }
+
+    public static int linearSearch(int[] array, int target) {
+        for (int i = 0; i < array.length; i++) {
+            if (array[i] == target) {
+                return i; // Return index if target is found
+            }
+        }
+        return -1; // Return -1 if target is not found
+    }
+}
+```
+
+### 2. Binary Search
+
+Binary search is more efficient than linear search but requires that the array is sorted. It repeatedly divides the search interval in half.
+
+```java
+public class BinarySearch {
+    public static void main(String[] args) {
+        int[] array = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+        int target = 6;
+        int result = binarySearch(array, target);
+        System.out.println("Element found at index: " + result);
+    }
+
+    public static int binarySearch(int[] array, int target) {
+        int left = 0;
+        int right = array.length - 1;
+
+        while (left <= right) {
+            int mid = left + (right - left) / 2;
+            if (array[mid] == target) {
+                return mid; // Return index if target is found
+            } else if (array[mid] < target) {
+                left = mid + 1;
+            } else {
+                right = mid - 1;
+            }
+        }
+        return -1; // Return -1 if target is not found
+    }
+}
+```
+
+### 3. Binary Search with Java Streams
+
+If you prefer using Java Streams, you can utilize binary search on a sorted array with a bit of functional programming style. However, it's worth noting that `Arrays.binarySearch` is more efficient.
+
+```java
+import java.util.Arrays;
+
+public class BinarySearchStream {
+    public static void main(String[] args) {
+        int[] array = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+        int target = 6;
+        int result = Arrays.stream(array)
+                            .boxed()
+                            .toList()
+                            .indexOf(target);
+        System.out.println("Element found at index: " + result);
+    }
+}
+```
+
+### 4. Jump Search
+
+Jump Search is an optimization over linear search. It works on sorted arrays and involves jumping ahead by fixed steps and then performing a linear search in the block where the target could be.
+
+```java
+public class JumpSearch {
+    public static void main(String[] args) {
+        int[] array = {1, 3, 5, 7, 9, 11, 13, 15, 17, 19};
+        int target = 15;
+        int result = jumpSearch(array, target);
+        System.out.println("Element found at index: " + result);
+    }
+
+    public static int jumpSearch(int[] array, int target) {
+        int n = array.length;
+        int step = (int) Math.sqrt(n); // Optimal step size
+        int prev = 0;
+        
+        // Find the block where the element is present
+        while (array[Math.min(step, n) - 1] < target) {
+            prev = step;
+            step += (int) Math.sqrt(n);
+            if (prev >= n) return -1;
+        }
+
+        // Linear search within the block
+        for (int i = prev; i < Math.min(step, n); i++) {
+            if (array[i] == target) {
+                return i;
+            }
+        }
+
+        return -1; // Return -1 if target is not found
+    }
+}
+```
+
+### 5. Interpolation Search
+
+Interpolation Search is an improvement over binary search for uniformly distributed arrays. It estimates where the target might be and adjusts accordingly.
+
+```java
+public class InterpolationSearch {
+    public static void main(String[] args) {
+        int[] array = {10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
+        int target = 70;
+        int result = interpolationSearch(array, target);
+        System.out.println("Element found at index: " + result);
+    }
+
+    public static int interpolationSearch(int[] array, int target) {
+        int low = 0;
+        int high = array.length - 1;
+
+        while (low <= high && target >= array[low] && target <= array[high]) {
+            if (low == high) {
+                if (array[low] == target) {
+                    return low;
+                }
+                return -1;
+            }
+
+            int pos = low + (((high - low) / (array[high] - array[low])) * (target - array[low]));
+
+            if (array[pos] == target) {
+                return pos;
+            }
+
+            if (array[pos] < target) {
+                low = pos + 1;
+            } else {
+                high = pos - 1;
+            }
+        }
+
+        return -1; // Return -1 if target is not found
+    }
+}
+```
+
+### Summary
+
+- **Linear Search**: Simple and effective for small or unsorted arrays.
+- **Binary Search**: Efficient for large sorted arrays.
+- **Jump Search**: Efficient for large sorted arrays with evenly distributed data.
+- **Interpolation Search**: Effective for uniformly distributed sorted arrays.
+- **Stream-Based Search**: Utilizes Java Streams for functional programming.
+
+These search algorithms cover a range of scenarios from simple to advanced, and the choice of algorithm can depend on the specifics of your data and use case.
