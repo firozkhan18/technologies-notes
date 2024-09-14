@@ -45390,4 +45390,205 @@ That's all about how to convert a list of objects List<V> to a map of keys and v
 Though you should be mindful of the essential difference between List and Map data structure like one is ordered collection while the other is not. Transferring values from List to Map means you will lose the order if you don't preserve them like by using a LinkedHashMap.
 
 </details>
+<details><summary><b>Java 8 Collectors: toMap()</b></summary>
+
+ Introduction
+A stream represents a sequence of elements and supports different kinds of operations that lead to the desired result. The source of a stream is usually a Collection or an Array, from which data is streamed from.
+
+Streams differ from collections in several ways; most notably in that the streams are not a data structure that stores elements. They're functional in nature, and it's worth noting that operations on a stream produce a result and typically return another stream, but do not modify its source.
+
+To "solidify" the changes, you collect the elements of a stream back into a Collection.
+
+In this guide, we'll take a look at how to collect Stream elements to a map in Java 8.
+
+Collectors and Stream.collect()
+Collectors represent implementations of the Collector interface, which implements various useful reduction operations, such as accumulating elements into collections, summarizing elements based on a specific parameter, etc.
+
+All predefined implementations can be found within the Collectors class.
+
+You can also very easily implement your own collector and use it instead of the predefined ones, though - you can get pretty far with the built-in collectors, as they cover the vast majority of cases in which you might want to use them.
+
+To be able to use the class in our code we need to import it:
+
+import static java.util.stream.Collectors.*;
+Stream.collect() performs a mutable reduction operation on the elements of the stream.
+
+ADVERTISEMENT
+
+
+A mutable reduction operation collects input elements into a mutable container, such as a Collection, as it processes the elements of the stream.
+
+Guide to Collectors.toMap()
+Amongst many other methods within the Collectors class, we can also find the family of toMap() methods. There are three overloaded variants of the toMap() method with a mandatory pair of Mapper Functions and optional Merge Function and Supplier Function.
+
+Naturally, all three return a Collector that accumulates elements into a Map whose keys and values are the result of applying the provided (mandatory and optional) functions to the input elements.
+
+Depending on the overload we're using, each of the toMap() methods take a different number of arguments that build upon the previous overloaded implementation. We'll touch more on those differences in just a moment.
+
+Let's first define a simple class with a few fields, and a classic constructor, getters and setters:
+
+private String name;
+private String surname;
+private String city;
+private double avgGrade;
+private int age;
+
+// Constructors, Getters, Setters, toString()
+
+The average grade is a double value ranging from 6.0 - 10.0.
+
+Let's instantiate a List of students we'll be using in the examples to come:
+
+List<Student> students = Arrays.asList(
+        new Student("John", "Smith", "Miami", 7.38, 19),
+        new Student("Mike", "Miles", "New York", 8.4, 21),
+        new Student("Michael", "Peterson", "New York", 7.5, 20),
+        new Student("James", "Robertson", "Miami", 9.1, 20),
+        new Student("Kyle", "Miller", "Miami", 9.83, 20)
+);
+Collectors.toMap() with Mapper Functions
+The basic form of the method just takes two mapper functions - a keyMapper and valueMapper:
+
+public static <T,K,U> Collector<T,?,Map<K,U>> 
+    toMap(Function<? super T,? extends K> keyMapper,
+          Function<? super T,? extends U> valueMapper)
+The method is straightforward - keyMapper is a mapping function whose output is the key of the final Map. valueMapper is a mapping function whose output is the value of the final Map. The return value of the method is a Collector which collects elements into a Map, whose pair <K, V> is the result of the previously applied mapping functions.
+
+We'll start by transforming our stream of students into a Map. For the first example let's say we'd like to map our student's names to their average grade, that is create a <K, V> pair that has a <name, avgGrade> form.
+
+For the keyMapper, we'd supply a function corresponding to the method that returns the name, and for the valueMapper, we'd supply a function corresponding to the method that returns the average grade of the student:
+
+Map<String, Double> nameToAvgGrade = students.stream()
+                .collect(Collectors.toMap(Student::getName, Student::getAvgGrade));
+ADVERTISEMENT
+
+
+Note that Student::getName is just a Method Reference - a shorthand representation of the lambda expression student -> student.getName().
+
+If you'd like to read more about Method References, Functional Interfaces and Lambda Expressions in Java - read our Method References in Java 8 and Guide to Functional Interfaces and Lambda Expressions in Java!
+
+Running this code results in a map containing:
+
+{Mike=8.4, James=9.1, Kyle=9.83, Michael=7.5, John=7.38}
+What if we wanted to map the whole a particular Student object to just their name? Java provides a built-in identity() method from the Function interface. This method simply returns a function that always returns its input argument.
+
+That is to say - we can map the identity of each object (the object itself) to their names easily:
+
+Map<String, Student> nameToStudentObject = students.stream()
+                .collect(Collectors.toMap(Student::getName, Function.identity()));
+
+Note: Alternatively instead of using Function.identity() we could've simply used a Lambda expression, element -> element, which just maps each element to itself.
+
+Here, Student::getName is our keyMapper function, and Function.identity() is our valueMapper function, creating a map containing:
+
+{
+Mike=Student{name='Mike', surname='Miles', city='New York', avgGrade=8.4, age=21},
+James=Student{name='James', surname='Robertson', city='Miami', avgGrade=9.1, age=20},
+Kyle=Student{name='Kyle', surname='Miller', city='Miami', avgGrade=9.83, age=20},
+Michael=Student{name='Michael', surname='Peterson', city='New York', avgGrade=7.5, age=20},
+John=Student{name='John', surname='Smith', city='Miami', avgGrade=7.38, age=19}
+}
+Of course this output is not as visually clean as when we mapped the student's names to their average grade, but this just depends on the toString() of the Student class.
+
+Even though this particular overload is the easiest to use it falls short on one very important part - duplicate key elements. If we, for example, had two students named "John", and we wanted to convert our List to a Map like we did in examples above, we'd run into a glaring:
+
+Exception in thread "main" java.lang.IllegalStateException: Duplicate key John (attempted merging values 7.38 and 8.93)
+
+Free eBook: Git Essentials
+Check out our hands-on, practical guide to learning Git, with best-practices, industry-accepted standards, and included cheat sheet. Stop Googling Git commands and actually learn it!
+
+
+Download the eBook  
+The key is - the method tried merging these two values, and assigning the merged value to the unique key - "John" and failed. We may decide to supply a Merge Function that defines how this merge should be done if duplicate keys exist.
+
+If you want to get rid of duplicate keys, you can always just add a distinct() operation to the Stream before collecting it:
+
+Map<String, Double> nameToStudentObject = students.stream()
+        .distinct()
+        .collect(Collectors.toMap(Student::getName, Student::getAvgGrade));
+Collectors.toMap() with Mapper and Merge Functions
+Besides the two Mapper Functions, we can supply a Merge Function:
+
+public static <T,K,U> Collector<T,?,Map<K,U>> 
+    toMap(Function<? super T,? extends K> keyMapper,
+          Function<? super T,? extends U> valueMapper,
+          BinaryOperator<U> mergeFunction)
+The mergeFuction is a function that is called only if there are duplicate key elements present in our final Map that need their values merged and assigned to the one unique key. Its input are two values that is the two values for which keyMapper returned the same key, and merges those two values into a single one.
+
+
+Note: If you have more than two non-unique keys with values, the result of the first merge is considered the first value on the second merge, and so on.
+
+Let's add another John from another city, with a different average grade:
+
+new Student("John Smith", "Las Vegas", 8.93,19)...
+Now comes the tricky part - how do we handle duplicate i.e. clashing keys? We need to specify exactly how we want to handle this scenario. You may decide to just prune away duplicate values with distinct(), throw an exception to raise a noticeable alert or define a strategy for merging.
+
+Pruning elements away might not be what you want, since it could lead to silent failure where certain elements are missing from the final map. More often, we throw an IllegalStateException! The mergeFunction is a BinaryOperator, and the two elements are represented as (a, b).
+
+If you're throwing an exception, you won't really use them (unless for logging or displaying a message), so we can just go ahead and throw the exception in a code block:
+
+Map<String, Double> nameToAvgGrade  = students.stream()
+        .collect(Collectors.toMap(
+                Student::getName,
+                Student::getAvgGrade,
+                  (a, b) ->
+                    { throw new IllegalStateException("Duplicate key");})
+        );
+ADVERTISEMENT
+
+This will throw an exception when the code is run:
+
+Exception in thread "main" java.lang.IllegalStateException: Duplicate key
+The second solution would be to actually define a merging strategy. For instance, you could take the new value, b, or keep the old one, a. Or, you could calculate their mean value and assign that instead:
+
+Map<String, Double> nameToAvgGrade  = students.stream()
+        .collect(Collectors.toMap(Student::getName,
+                Student::getAvgGrade,
+                (a, b) -> { return (a+b)/2;})
+          // Or (a, b) -> (a+b)/2
+        );
+Now, when duplicate keys are present, their mean grade is assigned to the unique key in the final map.
+
+
+Note: As you can see - the Merge Function doesn't really need to merge anything. It can really, be any function, even ones that completely disregard the two operators such as throwing an exception.
+
+Running this piece of code results in a map that contains:
+
+{Mike=8.4, Kyle=9.83, James=9.1, Michael=7.5, John=8.155}
+This solution might be great for you, or it may not be. When clashing occurs, we generally either stop the execution or somehow trim the data, but Java inherently doesn't support the concept of a Multimap where multiple values can be assigned to the same key.
+
+However, if you don't mind using external libraries such as Guava or Apache Commons Collections, they both do support concepts of multimaps in their own right named Multimap and MultiValuedMap respectively.
+
+Collectors.toMap() with a Mapper, Merge and Supplier Functions
+The final overloaded version of the method accepts a Supplier function - which can be used to supply a new implementation of the Map interface to "pack the result in":
+
+public static <T,K,U,M extends Map<K,U>> Collector<T,?,M> 
+    toMap(Function<? super T,? extends K> keyMapper,
+          Function<? super T,? extends U> valueMapper,
+          BinaryOperator<U> mergeFunction,
+          Supplier<M> mapSupplier)
+The mapSupplier function specifies the particular implementation of Map we want to use as our final Map. When we use Map to declare our maps, Java defaults to using a HashMap as the implementation to store them.
+
+This is usually perfectly fine, which is also why it's the default implementation. However, sometimes, the characteristics of a HashMap might not suit you. For instance, if you wanted to keep the original order of the elements from a stream or sort them through intermediate stream operations, a HashMap wouldn't preserve that order and bin the objects based on their hashes. Then - you might choose to use a LinkedHashMap to preserve the order instead.
+
+ADVERTISEMENT
+
+To supply a Supplier, you have to also supply a Merge Function:
+
+
+Map<String, Double> nameToAvgGrade  = students.stream()
+        .collect(Collectors.toMap(Student::getName,
+                Student::getAvgGrade,
+                (a, b) -> (a+b)/2,
+                LinkedHashMap::new)
+        );
+Running the code outputs:
+
+{John=8.155, Mike=8.4, Michael=7.5, James=9.1, Kyle=9.83}
+Since we used the LinkedHashMap, the order of the elements from the original List stayed the same in our Map, as opposed to the binned output we'd get from letting a HashMap decide the locations:
+
+{Mike=8.4, Kyle=9.83, James=9.1, Michael=7.5, John=8.155}
+Conclusion
+In this guide, we've taken a look at how to convert a stream into a map in Java - with a pair of Mapper Functions, a Merge Function and a Supplier.
+</details>
 </details>
