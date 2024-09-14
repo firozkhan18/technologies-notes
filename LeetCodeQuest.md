@@ -4,6 +4,40 @@
 
 <details>
 <summary><b>1. Two Sum</b></summary>
+
+if a=3 c=9 a+b=c
+
+3+b=9
+
+b= 9–3=6
+
+then b=6
+
+We will follow the above logic to solve the problem. We will add the elements into Map and then check the target element by substracting with the keys. if the key found then return the array with indexes.
+```java
+public static int[] twoSum(int[] nums, int target) {
+
+  Map<Integer, Integer> map = new HashMap<Integer, Integer>();
+
+  for (int i = 0; i < nums.length; i++) {
+
+   int req = target - nums[i];
+
+   if (map.containsKey(req)) {
+
+    int arr[] = { map.get(req), i };
+    return arr;
+
+   }
+
+   map.put(nums[i], i);
+
+  }
+
+  return null;
+
+ }
+ ```
 </details>
 
 <details>
@@ -12,10 +46,82 @@
 
 <details>
 <summary><b>3. Longest Substring Without Repeating Characters</b></summary>
+```java
+   public static int lengthOfLongestSubstring(String s) {
+
+  int start = 0;
+  int end = 0;
+  int maxLength = 0;
+  List<Character> list = new ArrayList<Character>();
+
+  while (end < s.length()) {
+
+   if (!list.contains(s.charAt(end))) {
+
+    list.add(s.charAt(end));
+    end++;
+    maxLength = Math.max(maxLength, list.size());
+
+   } else {
+    list.remove(Character.valueOf(s.charAt(start)));
+    start++;
+   }
+
+  }
+  return maxLength;
+ }
+ ```
 </details>
 
 <details>
 <summary><b>4. Median of Two Sorted Arrays</b></summary>
+```java
+public static double findMedianSortedArrays(int[] nums1, int[] nums2) {
+
+  int n1 = nums1.length;
+  int n2 = nums2.length;
+  int merge[] = new int[n1 + n2];
+
+  int i = 0, j = 0, k = 0;
+
+  while (i < n1 && j < n2) {
+
+   if (nums1[i] <= nums2[j]) {
+    merge[k] = nums1[i];
+    i++;
+   } else {
+    merge[k] = nums2[j];
+    j++;
+   }
+
+   k++;
+
+  }
+
+  while (i < n1) {
+   merge[k] = nums1[i];
+   i++;
+   k++;
+  }
+
+  while (j < n2) {
+   merge[k] = nums2[j];
+   j++;
+   k++;
+  }
+
+  int len = merge.length;
+
+  if (len % 2 == 0) {
+
+   return (merge[len / 2] + merge[len / 2 - 1]) / 2.0;
+
+  } else {
+   return merge[len / 2];
+  }
+
+ }
+```
 </details>
 
 <details>
@@ -28,6 +134,26 @@
 
 <details>
 <summary><b>7. Reverse Integer</b></summary>
+```java
+  public static int reverse(int x) {
+  int rev = 0;
+  while (x != 0) {
+
+   int digit = x % 10;
+   if (rev > Integer.MAX_VALUE / 10 || rev < Integer.MIN_VALUE / 10) {
+    return 0;
+   }
+
+   rev = (rev * 10) + digit;
+
+   x = x / 10;
+
+  }
+
+  return rev;
+
+ }
+ ```
 </details>
 
 <details>
@@ -36,6 +162,26 @@
 
 <details>
 <summary><b>9. Palindrome Number</b></summary>
+```java
+ public static boolean isPalindrome(int s) {
+
+  int temp = s;
+  int rev = 0;
+  while (s > 0) {
+
+   int digit = s % 10;
+   rev = (rev * 10) + digit;
+   s = s / 10;
+
+  }
+ 
+  if (rev == temp) {
+   return true;
+  }
+
+  return false;
+ }
+```
 </details>
 
 <details>
@@ -56,6 +202,31 @@
 
 <details>
 <summary><b>14. Longest Common Prefix</b></summary>
+```java
+public static String longestCommonPrefix(String[] s) {
+
+  Arrays.sort(s);
+
+  String s1 = s[0];
+  String s2 = s[s.length - 1];
+  int i = 0;
+
+  while (i < s1.length()) {
+
+   if (s1.charAt(i) == s2.charAt(i)) {
+
+    i++;
+
+   } else {
+    break;
+   }
+
+  }
+
+  return i == 0 ? "" : s1.substring(0, i);
+
+ }
+ ```
 </details>
 
 <details>
@@ -96,10 +267,47 @@
 
 <details>
 <summary><b>27. Remove Element</b></summary>
+```java
+public int removeElement(int[] nums, int val) {
+
+  int count = 0;
+
+  for (int i = 0; i < nums.length; i++) {
+
+   if (nums[i] != val) {
+    nums[count] = nums[i];
+    count++;
+   }
+
+  }
+
+  return count;
+ }
+```
 </details>
 
 <details>
 <summary><b>28. Find the Index of the First Occurrence in a String</b></summary>
+```java
+public static int find(String haystack, String needle) {
+
+  for (int i = 0; i < haystack.length() - needle.length() + 1; i++) {
+
+   if (needle.charAt(0) == haystack.charAt(i)) {
+
+    if (haystack.substring(i, needle.length() + i).equals(needle)) {
+     return i;
+
+    }
+
+   }
+
+  }
+
+  return -1;
+
+ }
+ ```
 </details>
 
 <details>
@@ -124,6 +332,29 @@
 
 <details>
 <summary><b>34. Find First and Last Position of Element in Sorted Array</b></summary>
+```java
+public static int[] searchRange(int[] nums, int target) {
+
+  int[] arr = new int[2];
+  arr[0] = -1;
+  arr[1] = -1;
+
+  for (int i = 0; i < nums.length; i++) {
+
+   if (nums[i] == target) {
+    if (arr[0] == -1) {
+     arr[0] = i;
+    }
+
+    arr[1] = i;
+   }
+
+  }
+
+  return arr;
+
+ }
+```
 </details>
 
 <details>
@@ -220,6 +451,15 @@
 
 <details>
 <summary><b>58. Length of Last Word</b></summary>
+```java
+  public static  int lengthOfLastWord(String s) {
+
+  String[] words = s.trim().split(" ");
+
+  return words[words.length - 1].length();
+
+ }
+```
 </details>
 
 <details>
