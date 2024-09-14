@@ -2121,7 +2121,9 @@ Expected Output
 The area of the hexagon is: 93.53074360871938
 
 
-</details><details><summary><b> 35. Write a Java program to compute the area of a polygon.</b></summary>
+</details>
+
+<details><summary><b> 35. Write a Java program to compute the area of a polygon.</b></summary>
 
 Area of a polygon = (n*s^2)/(4*tan(π/n))
 where n is n-sided polygon and s is the length of a side.
