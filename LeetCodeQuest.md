@@ -781,6 +781,82 @@ Constraints:
 
  }
  ```
+
+To reverse the digits of a signed 32-bit integer and handle edge cases where the reversed integer might exceed the 32-bit signed integer range, you can follow these steps:
+
+### Approach
+
+1. **Handle Edge Cases:**
+   - If the input integer `x` is 0, simply return 0.
+   - Identify if the number is negative, and work with its absolute value for simplicity.
+
+2. **Reverse the Digits:**
+   - Use a loop to extract digits from the end of the number and build the reversed number.
+   - Check for overflow conditions during this process.
+
+3. **Check Overflow:**
+   - Ensure that the reversed number does not exceed the 32-bit signed integer limits (`[-2^31, 2^31 - 1]`).
+
+4. **Return Result:**
+   - Return the reversed integer if within bounds, otherwise return 0.
+
+### Implementation in Java
+
+Here is a Java implementation of the approach:
+
+```java
+public class Solution {
+    public int reverse(int x) {
+        int reversed = 0;
+        int sign = (x < 0) ? -1 : 1;
+        x = Math.abs(x);
+        
+        while (x != 0) {
+            int digit = x % 10;
+            // Check for overflow before it happens
+            if (reversed > (Integer.MAX_VALUE - digit) / 10) {
+                return 0;
+            }
+            reversed = reversed * 10 + digit;
+            x /= 10;
+        }
+        
+        return reversed * sign;
+    }
+}
+```
+
+### Explanation
+
+1. **Initial Setup:**
+   - Determine the sign of `x` and work with its absolute value.
+   - Initialize `reversed` to 0.
+
+2. **Digit Extraction and Reversal:**
+   - In each iteration, extract the last digit of `x` using `x % 10`.
+   - Before updating `reversed`, check if the next operation would cause an overflow by ensuring `reversed` is within bounds.
+
+3. **Overflow Check:**
+   - Use the condition `reversed > (Integer.MAX_VALUE - digit) / 10` to detect overflow before it happens.
+
+4. **Construct Result:**
+   - Multiply `reversed` by the original sign to restore the original sign of `x`.
+
+### Key Points
+
+- **Overflow Handling:**
+  - By checking the potential overflow before it occurs, the algorithm avoids issues with integer overflow. If overflow would occur, the function returns 0.
+
+- **Edge Cases:**
+  - Handles cases where `x` is 0, and cases where the reversed number might exceed the 32-bit signed integer range.
+
+### Time Complexity
+
+- **Time Complexity:** O(log(n)), where `n` is the absolute value of the input integer `x`. This is because the number of digits in `x` is proportional to `log(n)`.
+
+- **Space Complexity:** O(1), as only a few additional variables are used regardless of the size of `x`.
+
+This approach ensures that the function operates efficiently within the constraints and handles all edge cases appropriately.
 </details>
 
 <details>
@@ -984,81 +1060,7 @@ This implementation ensures that the function handles various edge cases and adh
  }
 ```
 
-To reverse the digits of a signed 32-bit integer and handle edge cases where the reversed integer might exceed the 32-bit signed integer range, you can follow these steps:
 
-### Approach
-
-1. **Handle Edge Cases:**
-   - If the input integer `x` is 0, simply return 0.
-   - Identify if the number is negative, and work with its absolute value for simplicity.
-
-2. **Reverse the Digits:**
-   - Use a loop to extract digits from the end of the number and build the reversed number.
-   - Check for overflow conditions during this process.
-
-3. **Check Overflow:**
-   - Ensure that the reversed number does not exceed the 32-bit signed integer limits (`[-2^31, 2^31 - 1]`).
-
-4. **Return Result:**
-   - Return the reversed integer if within bounds, otherwise return 0.
-
-### Implementation in Java
-
-Here is a Java implementation of the approach:
-
-```java
-public class Solution {
-    public int reverse(int x) {
-        int reversed = 0;
-        int sign = (x < 0) ? -1 : 1;
-        x = Math.abs(x);
-        
-        while (x != 0) {
-            int digit = x % 10;
-            // Check for overflow before it happens
-            if (reversed > (Integer.MAX_VALUE - digit) / 10) {
-                return 0;
-            }
-            reversed = reversed * 10 + digit;
-            x /= 10;
-        }
-        
-        return reversed * sign;
-    }
-}
-```
-
-### Explanation
-
-1. **Initial Setup:**
-   - Determine the sign of `x` and work with its absolute value.
-   - Initialize `reversed` to 0.
-
-2. **Digit Extraction and Reversal:**
-   - In each iteration, extract the last digit of `x` using `x % 10`.
-   - Before updating `reversed`, check if the next operation would cause an overflow by ensuring `reversed` is within bounds.
-
-3. **Overflow Check:**
-   - Use the condition `reversed > (Integer.MAX_VALUE - digit) / 10` to detect overflow before it happens.
-
-4. **Construct Result:**
-   - Multiply `reversed` by the original sign to restore the original sign of `x`.
-
-### Key Points
-
-- **Overflow Handling:**
-  - By checking the potential overflow before it occurs, the algorithm avoids issues with integer overflow. If overflow would occur, the function returns 0.
-
-- **Edge Cases:**
-  - Handles cases where `x` is 0, and cases where the reversed number might exceed the 32-bit signed integer range.
-
-### Time Complexity
-
-- **Time Complexity:** O(log(n)), where `n` is the absolute value of the input integer `x`. This is because the number of digits in `x` is proportional to `log(n)`.
-
-- **Space Complexity:** O(1), as only a few additional variables are used regardless of the size of `x`.
-
-This approach ensures that the function operates efficiently within the constraints and handles all edge cases appropriately.
 </details>
 
 <details>
