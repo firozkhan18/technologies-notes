@@ -740,6 +740,27 @@ This approach efficiently handles the conversion and ensures that the zigzag pat
 
 <details><summary><b>7. Reverse Integer</b></summary>
 
+Given a signed 32-bit integer x, return x with its digits reversed. If reversing x causes the value to go outside the signed 32-bit integer range [-231, 231 - 1], then return 0.
+
+Assume the environment does not allow you to store 64-bit integers (signed or unsigned).
+
+Example 1:
+
+Input: x = 123
+Output: 321
+Example 2:
+
+Input: x = -123
+Output: -321
+Example 3:
+
+Input: x = 120
+Output: 21
+ 
+Constraints:
+
+-231 <= x <= 231 - 1
+
   ```java
   public static int reverse(int x) {
   int rev = 0;
@@ -764,6 +785,179 @@ This approach efficiently handles the conversion and ensures that the zigzag pat
 
 <details>
 <summary><b>8. String to Integer (atoi)</b></summary>
+
+Implement the myAtoi(string s) function, which converts a string to a 32-bit signed integer.
+
+The algorithm for myAtoi(string s) is as follows:
+
+Whitespace: Ignore any leading whitespace (" ").
+Signedness: Determine the sign by checking if the next character is '-' or '+', assuming positivity is neither present.
+Conversion: Read the integer by skipping leading zeros until a non-digit character is encountered or the end of the string is reached. If no digits were read, then the result is 0.
+Rounding: If the integer is out of the 32-bit signed integer range [-231, 231 - 1], then round the integer to remain in the range. Specifically, integers less than -231 should be rounded to -231, and integers greater than 231 - 1 should be rounded to 231 - 1.
+Return the integer as the final result.
+
+ 
+
+Example 1:
+
+Input: s = "42"
+
+Output: 42
+
+Explanation:
+
+The underlined characters are what is read in and the caret is the current reader position.
+Step 1: "42" (no characters read because there is no leading whitespace)
+         ^
+Step 2: "42" (no characters read because there is neither a '-' nor '+')
+         ^
+Step 3: "42" ("42" is read in)
+           ^
+Example 2:
+
+Input: s = " -042"
+
+Output: -42
+
+Explanation:
+
+Step 1: "   -042" (leading whitespace is read and ignored)
+            ^
+Step 2: "   -042" ('-' is read, so the result should be negative)
+             ^
+Step 3: "   -042" ("042" is read in, leading zeros ignored in the result)
+               ^
+Example 3:
+
+Input: s = "1337c0d3"
+
+Output: 1337
+
+Explanation:
+
+Step 1: "1337c0d3" (no characters read because there is no leading whitespace)
+         ^
+Step 2: "1337c0d3" (no characters read because there is neither a '-' nor '+')
+         ^
+Step 3: "1337c0d3" ("1337" is read in; reading stops because the next character is a non-digit)
+             ^
+Example 4:
+
+Input: s = "0-1"
+
+Output: 0
+
+Explanation:
+
+Step 1: "0-1" (no characters read because there is no leading whitespace)
+         ^
+Step 2: "0-1" (no characters read because there is neither a '-' nor '+')
+         ^
+Step 3: "0-1" ("0" is read in; reading stops because the next character is a non-digit)
+          ^
+Example 5:
+
+Input: s = "words and 987"
+
+Output: 0
+
+Explanation:
+
+Reading stops at the first non-digit character 'w'.
+
+ 
+
+Constraints:
+
+0 <= s.length <= 200
+s consists of English letters (lower-case and upper-case), digits (0-9), ' ', '+', '-', and '.'.
+
+To implement the `myAtoi` function, which converts a string to a 32-bit signed integer, you'll need to carefully follow the rules specified:
+
+1. **Ignore Leading Whitespace:** Remove any leading whitespace characters.
+2. **Determine the Sign:** Check if the number is positive or negative.
+3. **Convert Characters to Integer:** Read digits and convert them to an integer until a non-digit character is encountered.
+4. **Handle Overflow:** Ensure the result remains within the 32-bit signed integer range.
+5. **Return the Result:** Return the converted integer.
+
+Here's a step-by-step Java implementation of the `myAtoi` function:
+
+### Java Code
+
+```java
+public class Solution {
+    public int myAtoi(String s) {
+        // Define the boundaries for 32-bit signed integers
+        int INT_MIN = Integer.MIN_VALUE;
+        int INT_MAX = Integer.MAX_VALUE;
+        
+        // Trim leading and trailing whitespaces
+        s = s.trim();
+        if (s.isEmpty()) {
+            return 0;
+        }
+        
+        int index = 0;
+        int sign = 1;
+        int result = 0;
+        
+        // Check the sign
+        if (s.charAt(index) == '-') {
+            sign = -1;
+            index++;
+        } else if (s.charAt(index) == '+') {
+            index++;
+        }
+        
+        // Process the digits
+        while (index < s.length() && Character.isDigit(s.charAt(index))) {
+            int digit = s.charAt(index) - '0';
+            
+            // Check for overflow
+            if (result > (INT_MAX - digit) / 10) {
+                return (sign == 1) ? INT_MAX : INT_MIN;
+            }
+            
+            result = result * 10 + digit;
+            index++;
+        }
+        
+        return result * sign;
+    }
+}
+```
+
+### Explanation
+
+1. **Trim Leading Whitespace:**
+   - Use `s.trim()` to remove any leading and trailing whitespace characters.
+
+2. **Initial Checks and Setup:**
+   - If the string is empty after trimming, return 0.
+   - Initialize `index` to track the current position in the string.
+   - Initialize `sign` to handle positive and negative numbers.
+   - Initialize `result` to build the final integer value.
+
+3. **Determine Sign:**
+   - Check if the first non-whitespace character is `'-'` or `'+'`.
+   - Update the `sign` accordingly and increment `index` to move past the sign character.
+
+4. **Convert Characters to Integer:**
+   - Loop through the string while characters are digits.
+   - Convert each digit character to its integer value.
+   - Before adding the digit to `result`, check for overflow:
+     - The overflow condition is if `result` is greater than `(INT_MAX - digit) / 10`. This check ensures that multiplying `result` by 10 and adding the digit will not exceed `INT_MAX`.
+
+5. **Return the Final Result:**
+   - Multiply the final result by `sign` to adjust for negative numbers and return the result.
+
+### Edge Cases Handled
+
+- **Empty Strings:** Return 0.
+- **Invalid Inputs:** Strings that do not start with digits are handled by stopping conversion at the first non-digit character.
+- **Overflow:** Ensure the result does not exceed 32-bit integer boundaries.
+
+This implementation ensures that the function handles various edge cases and adheres to the constraints provided.
 </details>
 
 <details>
@@ -789,6 +983,82 @@ This approach efficiently handles the conversion and ensures that the zigzag pat
   return false;
  }
 ```
+
+To reverse the digits of a signed 32-bit integer and handle edge cases where the reversed integer might exceed the 32-bit signed integer range, you can follow these steps:
+
+### Approach
+
+1. **Handle Edge Cases:**
+   - If the input integer `x` is 0, simply return 0.
+   - Identify if the number is negative, and work with its absolute value for simplicity.
+
+2. **Reverse the Digits:**
+   - Use a loop to extract digits from the end of the number and build the reversed number.
+   - Check for overflow conditions during this process.
+
+3. **Check Overflow:**
+   - Ensure that the reversed number does not exceed the 32-bit signed integer limits (`[-2^31, 2^31 - 1]`).
+
+4. **Return Result:**
+   - Return the reversed integer if within bounds, otherwise return 0.
+
+### Implementation in Java
+
+Here is a Java implementation of the approach:
+
+```java
+public class Solution {
+    public int reverse(int x) {
+        int reversed = 0;
+        int sign = (x < 0) ? -1 : 1;
+        x = Math.abs(x);
+        
+        while (x != 0) {
+            int digit = x % 10;
+            // Check for overflow before it happens
+            if (reversed > (Integer.MAX_VALUE - digit) / 10) {
+                return 0;
+            }
+            reversed = reversed * 10 + digit;
+            x /= 10;
+        }
+        
+        return reversed * sign;
+    }
+}
+```
+
+### Explanation
+
+1. **Initial Setup:**
+   - Determine the sign of `x` and work with its absolute value.
+   - Initialize `reversed` to 0.
+
+2. **Digit Extraction and Reversal:**
+   - In each iteration, extract the last digit of `x` using `x % 10`.
+   - Before updating `reversed`, check if the next operation would cause an overflow by ensuring `reversed` is within bounds.
+
+3. **Overflow Check:**
+   - Use the condition `reversed > (Integer.MAX_VALUE - digit) / 10` to detect overflow before it happens.
+
+4. **Construct Result:**
+   - Multiply `reversed` by the original sign to restore the original sign of `x`.
+
+### Key Points
+
+- **Overflow Handling:**
+  - By checking the potential overflow before it occurs, the algorithm avoids issues with integer overflow. If overflow would occur, the function returns 0.
+
+- **Edge Cases:**
+  - Handles cases where `x` is 0, and cases where the reversed number might exceed the 32-bit signed integer range.
+
+### Time Complexity
+
+- **Time Complexity:** O(log(n)), where `n` is the absolute value of the input integer `x`. This is because the number of digits in `x` is proportional to `log(n)`.
+
+- **Space Complexity:** O(1), as only a few additional variables are used regardless of the size of `x`.
+
+This approach ensures that the function operates efficiently within the constraints and handles all edge cases appropriately.
 </details>
 
 <details>
