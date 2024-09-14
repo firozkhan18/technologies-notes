@@ -1214,6 +1214,2505 @@ Data Transformation : From Stream<T> to Stream<R> | Data Transformation : From S
 Use this method when the mapper function is producing a single value for each input value. | Use this method when the mapper function is producing multiple values for each input value. 
 
 
+<details><summary><b>Extra</b></summary>
+
+
+==================================================================================
+
+In this example, we have a Stream of String values which represent numbers, by using the map() function we have converted this Stream to Stream of Integers. How? by applying Integer.valueOf() on each element of Stream. That's how "1" converted to integer 1 and so on. Once the transformation is done, we have collected the result into a List by converting Stream to List using Collectors.
+
+
+To find the second highest salary using Java 8 features such as `ArrayList` and `Map`, you can follow these steps. I'll provide a complete example that demonstrates how to achieve this using Java 8 streams.
+
+### Example Scenario
+Let's say you have a list of employees, where each employee is represented as a `Map` with `name` and `salary` keys. The goal is to find the second highest salary from this list.
+
+### Step-by-Step Solution
+
+1. **Create the Data**: Define a list of maps where each map contains an employee's details.
+
+2. **Extract Salaries**: Use streams to extract the salaries from the maps.
+
+3. **Find Distinct Salaries**: Collect the salaries into a `Set` to ensure there are no duplicates.
+
+4. **Sort and Get the Second Highest Salary**: Convert the set to a list, sort it, and fetch the second highest salary.
+
+Here’s a complete example in Java 8:
+
+```java
+import java.util.*;
+import java.util.stream.Collectors;
+
+public class SecondHighestSalaryExample {
+    public static void main(String[] args) {
+        // Step 1: Create a list of maps representing employees
+        List<Map<String, Object>> employees = new ArrayList<>();
+        
+        employees.add(createEmployee("Alice", 50000));
+        employees.add(createEmployee("Bob", 70000));
+        employees.add(createEmployee("Charlie", 60000));
+        employees.add(createEmployee("David", 70000));
+        employees.add(createEmployee("Eve", 55000));
+        
+        // Step 2: Extract salaries and find the second highest salary
+        Optional<Integer> secondHighestSalary = employees.stream()
+            .map(e -> (Integer) e.get("salary"))  // Extract salaries
+            .distinct()                           // Remove duplicates
+            .sorted(Comparator.reverseOrder())    // Sort in descending order
+            .skip(1)                              // Skip the highest salary
+            .findFirst();                         // Get the second highest salary
+        
+        // Step 3: Output the result
+        if (secondHighestSalary.isPresent()) {
+            System.out.println("The second highest salary is: " + secondHighestSalary.get());
+        } else {
+            System.out.println("There is no second highest salary.");
+        }
+    }
+
+    // Helper method to create an employee map
+    private static Map<String, Object> createEmployee(String name, int salary) {
+        Map<String, Object> employee = new HashMap<>();
+        employee.put("name", name);
+        employee.put("salary", salary);
+        return employee;
+    }
+}
+```
+
+### Explanation
+
+1. **Data Creation**: The `createEmployee` method is used to generate employee maps with a name and salary.
+
+2. **Stream Operations**:
+   - `map(e -> (Integer) e.get("salary"))`: Extracts the salary from each map.
+   - `distinct()`: Removes duplicate salaries.
+   - `sorted(Comparator.reverseOrder())`: Sorts salaries in descending order.
+   - `skip(1)`: Skips the highest salary.
+   - `findFirst()`: Retrieves the next salary, which is the second highest.
+
+3. **Result Handling**: Checks if the result is present and prints it. If no second highest salary is available (e.g., all salaries are the same), it will inform you accordingly.
+
+## Java 8 Lambda Expression + Stream Interview Questions with Answers
+
+Java Streams API is a powerful feature introduced in Java 8 that allows for functional-style operations on sequences of elements. Interview questions related to streams often test your ability to perform complex data manipulations using this API.
+
+### 1. What is lambda expression of Java 8? (answer)
+As it's name suggests its an expression which allows you to write more succinct code in Java 8. For example (a, b) -> a + b is a lambda expression (look for that arrow ->) which is equal to following code:
+```java
+public int value(int a, int b){
+   return a + b;
+}
+```
+It's also called anonymous function because you are essentially writing the code you write in function but without name. 
+
+### 2. Can you pass lambda expression to a method? When? (answer)
+Yes, you can pass a lambda expression to a method provided it is expecting a functional interface. For example, if a method is accepting a Runnable, Comparable or Comparator then you can pass a lambda expression to it because all these are functional interface in Java 8. 
+
+### 3. What is functional interface in Java 8? (answer)
+A functional interface in Java 8 is an interface with single abstract method. For example, Comparator which has just one abstract method called compare() or Runnable which has just one abstract method called run(). There are many more general purpose functional interface are introduced in JDK on java.util.function package. They are also annotated with @FunctionalInterface but that's optional.
+
+### 4. What is map operation in Java 8? (answer)
+The map operation is used to transform one type to another type but applying a function. For example, if you have list of integer number but you want a List of String then you can use map operation to convert that list of integer into list of String by applying toString() function on each element. It came from functional programming paradigm but now Java 8 also has this. 
+
+### 5. What is method reference? (answer)
+A method reference is shortcut of lambda expression. It further cutdown the boilerplate and make your code more readable. If you have a method which already does what you are doing in lambda expression then you can use method reference in place of lambda expression. For example, if you have a list of integer and your are just printing its values like below:
+```java
+list.forEach(i -> System.out.println(i));
+```
+then you can replace this lambda expression with method reference because System.out.println() already does this i.e. take an argument and prints it.
+
+here is the equivalent code using method reference:
+```java
+list.forEach(System.out::println);
+```
+Remember, double colon operator (::) is used for method reference in Java 8. 
+
+### 6. When can you replace lambda expression with method reference? (answer)
+As explained in previous question, you can replace lambda expression with method reference if you already have an equivalent method which is doing the job of your lambda expression. 
+
+### 7. Can you local variables inside lambda expressions in Java 8? (answer)
+Yes, you can use local variable inside lambda expression but only which are effectively final variables. This rule is same as the local variable used inside Anonymous class. If you remember, we can only use final local variables inside anonymous class. 
+
+### 8. What is effectively final variable in Java 8? (answer)
+This question is generally asked as the follow-up of previous question. An effectively final variable is a variable whose value cannot be changed once created. It's similar to final variable but without final modifier. 
+
+### 9. Can you name some common functional interface of JDK 8? (answer)
+Even though you can name Comparator, Comparable, Runnable, Callable, or EventListener as functional interface, it's better to name new functional interfaces from java.util.function pacakge like Predicate, Consumer, Supplier, or BinaryFunction. 
+
+### 10. What is type inference in lambda expression? (answer)
+Lambda expression supports improved type inference that's why you don't need to define types on both side of lambda operator (->). For example, in following lambda expression 
+```java
+(int a, int b) -> (return a+ b);
+```
+compiler will infer the return value will be an int. This is one of the simplest example, compiler is much more intelligent now to infer type s in more complex situations like below:
+```java
+List<String> carOwners = 
+cars.stream()
+.map(car -> car.getRegistration())
+.map(registration -> RTORecords.getOwner(registration))
+.map(owner -> owner.getName())
+.map(name -> name.toUpperCase())
+.collect(toList());
+```
+In this case, we have not specified that car is object of Car, registration is a String, owner is a Person and name is a String type, instead compiler has inferred it all based upon the information it has e.g. List of String is the result. 
+
+
+### 11. What is flatmap operation in Java? (answer)
+This is another functional programming operation which is now available in Java. It's close cousin of map function, which means it not only transforms but also flatten the list. For example, if you have list of list of Integers but you just need list of String then you can use flatmap to do that. You can see this Java Flatmap tutorial for a live example. 
+
+### 12. What is difference between map and flatmap in Java? (answer)
+As the name suggests, map function just transform one type to another like you can use map to transfer list of integer to list of String or vice-versa but flatmap not only transform but also flatten the list. This means if you list of list of employeeIds then you can create a big list of Employee object by transforming and flattening all those list. See the detailed answer for more detailed discussion and real world examples.
+
+### 13. What is difference between lambda expression and anonymous class in Java 8? (answer)
+Even though both lambda expression and anonymous class server the same purpose of passing code to a method there is a key difference between them from Java perspective. 
+
+An anonymous class is a class while lambda expression is more like anonymous function. You can also pass the Lambda expression to any method which accept a functional interface, I mean those interface which just have one single abstract method but you can pass anonymous class to any method which accept any class, there is no restriction on that. 
+
+Also, Anonymous class can implement more than one abstract method unlike Lambda expression which can only implement one single abstract method considering they can only be used in place where a Functional interface is expected. 
+
+On Implementation also, anonymous class generates a class file but lambda expression doesn't. You can further read Java 8 in Action to learn more about implementation of lambda expression in Java. 
+
+### 14. Can you write more than one line of code in lambda expression? (answer)
+Yes, you can write more than online of code in lambda expression using curly braces, similar to how you define static initializer block. 
+
+Here is an example of lambda expression which is longer than one line:
+```java
+(String first, String second) -> { 
+if(first.equals(second)){ 
+   return true; 
+ }else{ 
+   return false; 
+ } 
+};
+```
+One important thing to note in this case is the return statement, which is mandatory here, unlike one liner lambda where you can just omit them most of the time. 
+
+### 15. What is the benefit of lambda expression of Java 8? (answer)
+The main benefit of lambda expression in Java 8 that now it's easier to pass a code block to a method. Earlier, the only way to do this was wrapping the code inside an Anonymous class, which requires a lot of boilerplate code.
+
+Now, you can achieve the same effect in just a couple of line using lambda expression. This is in my opinion most important Java 8 interview question and if candidate can explain the benefit clearly, he understand Java 8 better than others. 
+
+### 16. Is it mandatory for a lambda expression to have parameters? (answer)
+No, it's not mandatory for a lambda expression to have parameters, you can define a lambda expression without parameters as shown below:
+```java
+() -> System.out.println("lambdas without parameter");
+```
+You can pass this code to any method which accepts a functional interface. 
+
+This example uses Java 8 features effectively to handle collections and perform operations in a functional style.
+
+## How to Convert a List to Map in Java 8 - Example Tutorial
+
+One of the common tasks in Java programming is to convert a list to a map and I have written about this in the past and today we'll see how Java 8 makes this task easier. Btw, be it Java 7 or Java 8, you need to keep something in mind while converting a list to a map because they are two different data structures and have completely different properties. For example, the List interface in Java allows duplicate elements but keys in a Map must be unique, the value can be duplicated but a duplicate key may cause a problem in Java 8. This means a List with duplicates cannot be directly converted into Map without handling the duplicate values properly. 
+
+Similarly, another concern is the order of elements. A list is an ordered collection but the map doesn't guarantee any order unless you decide to use LinkedHashMap, which keeps insertion order, or TreeMap which keeps mapping in the sorted order of keys. This is one of the important details which many Java beginners forget and then spend hours chasing subtle bugs.
+
+If your program has any dependency on the order of elements in the list they will not work as expected if you use a map. So, you should be mindful of these general details while converting a list to a map in Java. This is true irrespective of the Java version.
+
+Btw, if you are new to the Java world, I suggest you first go through a comprehensive course on Java-like The Complete Java Masterclass on Udemy. It not only provides organized and structure learning but also you will learn more in less time.  It's also one of the most up-to-date courses, recently updated for Java 11 features.
+
+Anyway, let's see the task at hand. Assume you have a list of courses and you want to create a map where keys should be the title of the course and value should be the course object itself. How will you do that?
+
+
+
+### How to convert List<V> into Map<K, V> in Java? Example
+It's easy in Java, all you need to do is go through the List, extract a key from each object and add both key and value into the map, but how will you do that in Java 8 style like by using lambda expression and streams?
+
+### How to Convert a List<V> to Map<K,V> in Java 8 - Example Tutorial
+
+
+
+We'll see that but let's first write the JDK 7 version to convert a List<V> into Map<K, V>:
+
+```java
+private Map<String, Course> toMap(List<Course> listOfCourses) {
+    final Map<String, Course> courses = new HashMap<>();
+    for (final Course current : listOfCourses) {
+      hashMap.put(current.getTitle(), current);
+    }
+    return courses;
+  }
+```
+This code is very simple and easy to read, let's now see the Java 8 version to find out whether Java 8 really makes your life easy when it comes to writing day to day code:
+```java
+Map<String, Course > result = listOfCourses
+                                 .stream()
+                                 .collect(
+                                 Collectors.toMap(Course::getTitle,
+                                                 Function.identity()));
+```
+Wow, it just took one line to convert a list of objects into a map, which had taken one function in JDK 7. So, it looks Java 8 really makes the developer's life easy.
+
+Anyway, let's try to understand what's going on here. Well, you have a listOfCourses, which is a List and then you called the stream() method which returns a Stream associated with that list. After that, you have called the collect() method which is used to accumulate elements from Stream.
+
+Since we are not doing any filtering there is no call to filter(), the collect() method then uses a Collector which can combine results in a map. All it needs is one method to extract the key, which is Course::getTitle, and one method to extract value which is Function.identity() i.e. the object itself.
+
+We have also used a method reference to shorten the key extractor. You can further see What's New in Java 8: Lambdas to learn more about how to convert lambda expression to a method reference.
+
+### How to convert List<V> into Map<K,V> in Java 8
+
+Btw, there is a catch here. The ordering of elements has been lost because Map doesn't guarantee any order. If you want to keep Courses in the same order they appeared in the List, we need to use a Map that provides ordering guarantees e.g. LinkedHashMap which keeps elements in the order they are inserted.
+
+We also need to tell this to Collector so that it will collect elements inside a LinkedHashMap rather than a general Map. Let's re-write the code to achieve that:
+
+```java
+ Map<String, Course > result = listOfCourses
+        .stream()
+        .collect(
+        Collectors.toMap(Course::getTitle, 
+                         Function.identity(), 
+                         LinkedHashMap::new));
+```
+This looks good now. The order of elements in both List and Map are the same now, but there is still one more thing you need to take care of to keep this code full proof and pass the test of time.
+
+If you remember, List allows duplicates but if you try to insert a duplicate key in the Map it overrides the values, that would have been a nightmare in this case, but thankfully Java 8 protects you. Instead of silently overwriting a value in such condition, it throws an exception as shown below when it encountered a duplicate element in the source list (see Modern Java in Action )
+
+Though, you can resolve this error by just telling Collector how to resolve collision e.g. what to do when it encounters a duplicate key. It can do nothing and keep the original mapping or it can override and update the value. You can instruct the collector whatever you want by providing an extra parameter to the Collectors.toMap() method as shown in the following code:
+
+```java
+    Map<String, Course > result = listOfCourses
+        .stream()
+        .collect(
+        Collectors.toMap(Course::getTitle, 
+                         Function.identity(),
+                         (e1, e2) -> e2, 
+                         LinkedHashMap::new));
+```
+Here in case of a duplicate, we are using the second element as a key to generated LinkedHashMap. You can also choose the first object or just concatenate the first and second as per your need.
+
+
+That's all about how to convert a list of objects List<V> to a map of keys and values e.g. Map<K, V>. It's super easy in Java 8. All you need to know is how to use the collect() and Collector class of Stream API to do this task. 
+
+Though you should be mindful of the essential difference between List and Map data structure like one is ordered collection while the other is not. Transferring values from List to Map means you will lose the order if you don't preserve them like by using a LinkedHashMap.
+
+</details>
+<details><summary><b>In Java 8, significant enhancements to the Collections Framework</b></summary>
+    
+Java 8 introduced several significant enhancements to the Collections Framework, including new features, improvements, and changes to the internal implementations. Here’s a comprehensive overview of the changes:
+
+### 1. **Introduction of Streams API**
+
+- **Purpose**: The Streams API allows for functional-style operations on collections, making it easier to perform complex queries, transformations, and aggregations on data.
+- **Key Classes and Interfaces**: `Stream`, `IntStream`, `LongStream`, `DoubleStream`
+- **Key Methods**:
+  - **`stream()`**: Converts a collection to a stream.
+  - **`filter()`, `map()`, `reduce()`, `collect()`**: Methods to perform operations on streams.
+  - **Example**:
+    ```java
+    List<String> names = Arrays.asList("John", "Jane", "Jack");
+    List<String> filteredNames = names.stream()
+                                     .filter(name -> name.startsWith("J"))
+                                     .collect(Collectors.toList());
+    ```
+
+### 2. **Default Methods in Interfaces**
+
+- **Purpose**: Default methods allow interfaces to provide a default implementation for methods, which helps in evolving interfaces without breaking existing implementations.
+- **Key Interfaces**:
+  - **`Collection`, `List`, `Set`, `Map`**: Many interfaces in the Collections Framework now have default methods.
+- **Examples**:
+  - **`List` Interface**:
+    ```java
+    default void forEach(Consumer<? super E> action) {
+        Objects.requireNonNull(action);
+        for (E e : this)
+            action.accept(e);
+    }
+    ```
+  - **`Map` Interface**:
+    ```java
+    default V getOrDefault(Object key, V defaultValue) {
+        V v;
+        return ((v = this.get(key)) != null || this.containsKey(key)) ? v : defaultValue;
+    }
+    ```
+
+### 3. **New Methods in Collection Interfaces**
+
+- **Purpose**: New methods were added to the core collection interfaces to support more operations directly on collections.
+- **Examples**:
+  - **`Collection`**:
+    - `removeIf(Predicate<? super E> filter)`: Removes elements that match the given predicate.
+    - `spliterator()`: Returns a `Spliterator` for iterating over the collection.
+  - **`List`**:
+    - `replaceAll(UnaryOperator<E> operator)`: Replaces each element with the result of applying the operator.
+    - `sort(Comparator<? super E> c)`: Sorts the list using the provided comparator.
+  - **`Map`**:
+    - `forEach(BiConsumer<? super K, ? super V> action)`: Performs the given action for each entry.
+    - `merge(K key, V value, BiFunction<? super V, ? super V, ? extends V> remappingFunction)`: Merges the specified value into the map.
+
+### 4. **Improvements to `HashMap`**
+
+- **Tree-Based Buckets**: Introduced to improve performance for buckets with many collisions (see detailed explanation in the previous response).
+- **Enhanced Hash Function**: Provides a better distribution of keys to reduce the likelihood of long chains.
+- **Implementation Details**:
+  - `HashMap` now uses a combination of linked lists and balanced binary trees for handling hash collisions.
+
+### 5. **`ConcurrentHashMap` Enhancements**
+
+- **Purpose**: Improve the performance and scalability of concurrent operations.
+- **Key Changes**:
+  - **New Methods**: Added methods like `forEach`, `reduce`, and `computeIfAbsent`.
+  - **Segment Locking**: Improved internal locking mechanisms to reduce contention.
+- **Example**:
+  ```java
+  ConcurrentHashMap<String, Integer> map = new ConcurrentHashMap<>();
+  map.computeIfAbsent("key", k -> 42);
+  ```
+
+### 6. **`Optional` Class**
+
+- **Purpose**: `Optional` is a container object which may or may not contain a value. It helps to avoid `NullPointerException` and provides a more functional approach to handle optional values.
+- **Key Methods**:
+  - `of(T value)`, `ofNullable(T value)`, `empty()`
+  - `ifPresent(Consumer<? super T> action)`, `orElse(T other)`, `map(Function<? super T, ? extends U> mapper)`
+- **Example**:
+  ```java
+  Optional<String> optional = Optional.of("Hello");
+  optional.ifPresent(System.out::println);
+  ```
+
+### 7. **`Collections` Class Enhancements**
+
+- **Purpose**: `Collections` utility class received new static methods.
+- **Key Methods**:
+  - `unmodifiableCollection`, `unmodifiableList`, `unmodifiableMap`, `unmodifiableSet`: Methods to create unmodifiable views of collections.
+  - `newSetFromMap(Map<T, Boolean> map)`: Creates a set backed by the specified map.
+
+### 8. **`List` Interface Enhancements**
+
+- **Purpose**: Provides additional utility methods for list manipulation.
+- **Key Methods**:
+  - `copyOf(Collection<? extends E> coll)`: Creates an immutable list containing the elements of the given collection.
+  - `of(E... elements)`: Creates an immutable list containing the specified elements.
+
+### 9. **`Set` Interface Enhancements**
+
+- **Purpose**: Enhancements to support immutable sets and other functionalities.
+- **Key Methods**:
+  - `copyOf(Collection<? extends E> coll)`: Creates an immutable set containing the elements of the given collection.
+  - `of(E... elements)`: Creates an immutable set containing the specified elements.
+
+### Summary
+
+Java 8 made significant improvements to the Collections Framework, adding powerful new features such as the Streams API for functional-style operations, default methods in interfaces for better extensibility, and enhancements to core classes like `HashMap` and `ConcurrentHashMap` for better performance and scalability. These changes have greatly enhanced the flexibility, efficiency, and ease of use of Java’s collection classes.
+</details>
+<details><summary><b>details of HashSet, Hashtable, HashMap, and ConcurrentHashMap</b></summary>
+Certainly! Let's dive into the details of `HashSet`, `Hashtable`, `HashMap`, and `ConcurrentHashMap`, including their differences and specific use cases.
+
+### 1. **HashSet**
+
+- **Purpose**: `HashSet` is a collection that implements the `Set` interface and is used to store unique elements.
+- **Underlying Implementation**: Internally backed by a `HashMap`. Each element in the `HashSet` is stored as a key in the underlying `HashMap`, with a constant dummy value (often `Boolean.TRUE`).
+- **Characteristics**:
+  - **No Duplicates**: It does not allow duplicate elements.
+  - **Unordered**: The elements are not stored in any particular order.
+  - **Performance**: Offers constant time performance for basic operations like `add`, `remove`, and `contains` (average case).
+
+```java
+Set<String> set = new HashSet<>();
+set.add("Apple");
+set.add("Banana");
+```
+
+### 2. **Hashtable**
+
+- **Purpose**: `Hashtable` is a legacy class that implements the `Map` interface, used to store key-value pairs.
+- **Characteristics**:
+  - **Synchronized**: All operations are synchronized, making it thread-safe.
+  - **Legacy**: It was part of the original Java 1.0 and has been largely replaced by newer classes like `HashMap` in modern code.
+  - **Null Keys/Values**: Does not allow null keys or null values.
+
+```java
+Hashtable<String, Integer> hashtable = new Hashtable<>();
+hashtable.put("Apple", 1);
+hashtable.put("Banana", 2);
+```
+
+### 3. **HashMap**
+
+- **Purpose**: `HashMap` is a popular implementation of the `Map` interface used to store key-value pairs.
+- **Characteristics**:
+  - **Not Synchronized**: It is not synchronized, so it is not thread-safe by default. For thread safety, you need to synchronize it manually or use `Collections.synchronizedMap`.
+  - **Allows Nulls**: Allows one null key and multiple null values.
+  - **Performance**: Provides constant time performance for basic operations like `get` and `put` (average case), though performance can degrade if hash collisions are high.
+
+```java
+Map<String, Integer> map = new HashMap<>();
+map.put("Apple", 1);
+map.put("Banana", 2);
+```
+
+### 4. **ConcurrentHashMap**
+
+- **Purpose**: `ConcurrentHashMap` is a thread-safe implementation of the `Map` interface designed for concurrent access by multiple threads.
+- **Characteristics**:
+  - **Concurrent Access**: It is designed for concurrent use and provides high performance even with multiple threads accessing the map.
+  - **Segmented Locking**: Prior to Java 8, `ConcurrentHashMap` used a segmented locking mechanism to reduce contention. From Java 8 onwards, it uses a more sophisticated lock-free algorithm with a combination of locks and CAS (Compare-And-Swap) operations.
+  - **No Nulls**: Does not allow null keys or values.
+  - **Performance**: Provides high concurrency and better performance under contention compared to `Hashtable`.
+
+```java
+ConcurrentMap<String, Integer> concurrentMap = new ConcurrentHashMap<>();
+concurrentMap.put("Apple", 1);
+concurrentMap.put("Banana", 2);
+```
+
+### **Comparison Summary**
+
+1. **Thread Safety**:
+   - **`HashSet`**: Not synchronized; not thread-safe.
+   - **`Hashtable`**: Synchronized; thread-safe but outdated.
+   - **`HashMap`**: Not synchronized; not thread-safe by default.
+   - **`ConcurrentHashMap`**: Thread-safe; designed for high concurrency.
+
+2. **Null Keys/Values**:
+   - **`HashSet`**: Allows null elements.
+   - **`Hashtable`**: Does not allow null keys or values.
+   - **`HashMap`**: Allows one null key and multiple null values.
+   - **`ConcurrentHashMap`**: Does not allow null keys or values.
+
+3. **Performance**:
+   - **`HashSet`**: Offers constant time performance for basic operations.
+   - **`Hashtable`**: Synchronized, which can make it slower due to locking.
+   - **`HashMap`**: Offers high performance for non-thread-safe operations.
+   - **`ConcurrentHashMap`**: Designed for high concurrency with good performance under contention.
+
+4. **Use Cases**:
+   - **`HashSet`**: Use when you need a collection of unique elements and do not need thread safety.
+   - **`Hashtable`**: Rarely used in new code due to its legacy nature; prefer newer alternatives.
+   - **`HashMap`**: Use for most general-purpose mapping needs where thread safety is not a concern.
+   - **`ConcurrentHashMap`**: Use in concurrent applications where thread safety and high performance are required.
+</details>
+<details><summary><b>In the Java Collections Framework, the `Map` interface</b></summary>
+In the Java Collections Framework, the `Map` interface is a crucial part that represents a collection of key-value pairs. Java 8 and later versions provide several concrete implementations of the `Map` interface. Here’s a detailed list of the available map implementations:
+
+### 1. **HashMap**
+
+- **Description**: A hash table based implementation of the `Map` interface. It allows for fast retrieval and modification of entries based on hash codes.
+- **Characteristics**:
+  - **Not Synchronized**: Not thread-safe.
+  - **Allows Nulls**: Allows one null key and multiple null values.
+  - **Order**: Does not guarantee any specific order of its entries.
+
+```java
+Map<String, Integer> hashMap = new HashMap<>();
+```
+
+### 2. **LinkedHashMap**
+
+- **Description**: A hash table and linked list implementation of the `Map` interface. It maintains insertion order or access order (if specified).
+- **Characteristics**:
+  - **Not Synchronized**: Not thread-safe.
+  - **Allows Nulls**: Allows one null key and multiple null values.
+  - **Order**: Maintains insertion order or access order.
+
+```java
+Map<String, Integer> linkedHashMap = new LinkedHashMap<>();
+```
+
+### 3. **TreeMap**
+
+- **Description**: A `NavigableMap` implementation based on a Red-Black tree. It orders its entries based on their keys.
+- **Characteristics**:
+  - **Not Synchronized**: Not thread-safe.
+  - **Does Not Allow Null Keys**: Null keys are not allowed, but null values are.
+  - **Order**: Maintains a sorted order of keys.
+
+```java
+Map<String, Integer> treeMap = new TreeMap<>();
+```
+
+### 4. **Hashtable**
+
+- **Description**: A legacy class that implements a hash table. It was part of the original Java 1.0.
+- **Characteristics**:
+  - **Synchronized**: Thread-safe but can be slower due to synchronization.
+  - **Does Not Allow Null Keys or Values**: Null keys and values are not allowed.
+  - **Order**: Does not guarantee any specific order.
+
+```java
+Map<String, Integer> hashtable = new Hashtable<>();
+```
+
+### 5. **ConcurrentHashMap**
+
+- **Description**: A thread-safe implementation of the `Map` interface designed for high concurrency.
+- **Characteristics**:
+  - **Thread-Safe**: Designed for concurrent access with high performance.
+  - **Does Not Allow Null Keys or Values**: Null keys and values are not allowed.
+  - **Order**: Does not guarantee any specific order.
+
+```java
+Map<String, Integer> concurrentHashMap = new ConcurrentHashMap<>();
+```
+
+### 6. **ConcurrentSkipListMap**
+
+- **Description**: A `NavigableMap` implementation that uses a skip list for concurrency. It maintains a sorted order of keys.
+- **Characteristics**:
+  - **Thread-Safe**: Designed for high concurrency.
+  - **Does Not Allow Null Keys**: Null keys are not allowed, but null values are.
+  - **Order**: Maintains a sorted order of keys.
+
+```java
+Map<String, Integer> concurrentSkipListMap = new ConcurrentSkipListMap<>();
+```
+
+### Summary of Map Implementations:
+
+1. **`HashMap`**: Fast and unsynchronized; allows nulls.
+2. **`LinkedHashMap`**: Maintains insertion or access order; unsynchronized.
+3. **`TreeMap`**: Sorted by keys; does not allow null keys; unsynchronized.
+4. **`Hashtable`**: Legacy class; synchronized; does not allow null keys or values.
+5. **`ConcurrentHashMap`**: Thread-safe; does not allow nulls; high concurrency.
+6. **`ConcurrentSkipListMap`**: Thread-safe and sorted; does not allow null keys.
+
+Each of these implementations serves different use cases and offers various performance characteristics and features. Choose the appropriate implementation based on your specific needs, such as thread safety, ordering, and handling of null values.
+</details>
+<details><summary><b>Array vs. ArrayList vs. LinkedList and difference between `Set` and `List`</b></summary>
+    Certainly! Let's break down the differences between `Array`, `ArrayList`, and `LinkedList`, as well as between `Set` and `List` in the Java Collections Framework.
+
+### 1. **Array vs. ArrayList vs. LinkedList**
+
+#### **Array**
+
+- **Description**: A basic data structure that holds a fixed-size collection of elements of the same type.
+- **Characteristics**:
+  - **Size**: Fixed size. Once initialized, its size cannot be changed.
+  - **Access Time**: Provides constant time access (`O(1)`) to elements via index.
+  - **Insertion/Deletion**: Inserting or deleting elements is costly, as it requires shifting elements.
+  - **Memory Efficiency**: More memory-efficient as it does not need to store additional data for structure.
+  - **Syntax**:
+    ```java
+    int[] array = new int[10];
+    array[0] = 1;
+    ```
+
+#### **ArrayList**
+
+- **Description**: A resizable array implementation of the `List` interface.
+- **Characteristics**:
+  - **Size**: Dynamic size. Can grow or shrink as needed.
+  - **Access Time**: Provides constant time access (`O(1)`) to elements via index.
+  - **Insertion/Deletion**: Insertion and deletion are generally costly (`O(n)`) because elements may need to be shifted.
+  - **Memory Efficiency**: Less memory-efficient than arrays due to additional overhead for dynamic resizing.
+  - **Thread Safety**: Not synchronized. For thread safety, use `Collections.synchronizedList` or `CopyOnWriteArrayList`.
+  - **Syntax**:
+    ```java
+    ArrayList<Integer> arrayList = new ArrayList<>();
+    arrayList.add(1);
+    ```
+
+#### **LinkedList**
+
+- **Description**: A doubly-linked list implementation of the `List` and `Deque` interfaces.
+- **Characteristics**:
+  - **Size**: Dynamic size. Can grow or shrink as needed.
+  - **Access Time**: Provides linear time access (`O(n)`) to elements via index, but allows for efficient insertion and deletion.
+  - **Insertion/Deletion**: Efficient (`O(1)`) for adding/removing elements at the beginning or end of the list.
+  - **Memory Efficiency**: Less memory-efficient due to storage of additional pointers (references to previous and next nodes).
+  - **Thread Safety**: Not synchronized. For thread safety, use `Collections.synchronizedList`.
+  - **Syntax**:
+    ```java
+    LinkedList<Integer> linkedList = new LinkedList<>();
+    linkedList.add(1);
+    ```
+
+### 2. **Set vs. List**
+
+#### **Set**
+
+- **Description**: A collection that does not allow duplicate elements.
+- **Key Implementations**:
+  - **`HashSet`**: Uses a hash table. No guarantees on order.
+  - **`LinkedHashSet`**: Maintains insertion order by using a linked list.
+  - **`TreeSet`**: Implements `NavigableSet` and orders elements based on their natural ordering or a specified comparator.
+- **Characteristics**:
+  - **Duplicates**: No duplicate elements allowed.
+  - **Order**: No order guarantee in `HashSet`, insertion order in `LinkedHashSet`, sorted order in `TreeSet`.
+  - **Usage**: Ideal for scenarios where uniqueness of elements is required and order is not a primary concern (except in `LinkedHashSet` or `TreeSet`).
+
+#### **List**
+
+- **Description**: An ordered collection that allows duplicate elements and maintains insertion order.
+- **Key Implementations**:
+  - **`ArrayList`**: Resizable array implementation. Fast random access and iteration.
+  - **`LinkedList`**: Doubly-linked list implementation. Efficient insertions and deletions.
+- **Characteristics**:
+  - **Duplicates**: Allows duplicate elements.
+  - **Order**: Maintains insertion order.
+  - **Usage**: Ideal for scenarios where order matters and/or where duplicate elements are allowed.
+
+### **Comparison Summary**
+
+1. **Array vs. ArrayList vs. LinkedList**:
+   - **Array**: Fixed size, efficient access, inefficient insertions/deletions.
+   - **ArrayList**: Resizable, efficient access, inefficient insertions/deletions, more overhead.
+   - **LinkedList**: Resizable, inefficient access, efficient insertions/deletions, more memory usage.
+
+2. **Set vs. List**:
+   - **Set**: No duplicates, unordered or sorted based on implementation.
+   - **List**: Allows duplicates, maintains insertion order.
+
+### **Use Case Examples**
+
+- **Use an `Array`**: When you know the size of your collection beforehand and need fast access.
+- **Use an `ArrayList`**: When you need a dynamically resizable array and require fast random access.
+- **Use a `LinkedList`**: When you need a list that supports efficient insertions and deletions.
+- **Use a `Set`**: When you need to store unique elements and don't care about the order (unless using `LinkedHashSet` or `TreeSet`).
+- **Use a `List`**: When you need an ordered collection that allows duplicates.
+
+Each of these data structures and collections serves different needs and has different performance characteristics, so choosing the right one depends on your specific requirements.
+</details>
+<details><summary><b>Java 8 Collectors: toMap()</b></summary>
+
+ Introduction
+A stream represents a sequence of elements and supports different kinds of operations that lead to the desired result. The source of a stream is usually a Collection or an Array, from which data is streamed from.
+
+Streams differ from collections in several ways; most notably in that the streams are not a data structure that stores elements. They're functional in nature, and it's worth noting that operations on a stream produce a result and typically return another stream, but do not modify its source.
+
+To "solidify" the changes, you collect the elements of a stream back into a Collection.
+
+In this guide, we'll take a look at how to collect Stream elements to a map in Java 8.
+
+Collectors and Stream.collect()
+Collectors represent implementations of the Collector interface, which implements various useful reduction operations, such as accumulating elements into collections, summarizing elements based on a specific parameter, etc.
+
+All predefined implementations can be found within the Collectors class.
+
+You can also very easily implement your own collector and use it instead of the predefined ones, though - you can get pretty far with the built-in collectors, as they cover the vast majority of cases in which you might want to use them.
+
+To be able to use the class in our code we need to import it:
+
+import static java.util.stream.Collectors.*;
+Stream.collect() performs a mutable reduction operation on the elements of the stream.
+
+ADVERTISEMENT
+
+
+A mutable reduction operation collects input elements into a mutable container, such as a Collection, as it processes the elements of the stream.
+
+Guide to Collectors.toMap()
+Amongst many other methods within the Collectors class, we can also find the family of toMap() methods. There are three overloaded variants of the toMap() method with a mandatory pair of Mapper Functions and optional Merge Function and Supplier Function.
+
+Naturally, all three return a Collector that accumulates elements into a Map whose keys and values are the result of applying the provided (mandatory and optional) functions to the input elements.
+
+Depending on the overload we're using, each of the toMap() methods take a different number of arguments that build upon the previous overloaded implementation. We'll touch more on those differences in just a moment.
+
+Let's first define a simple class with a few fields, and a classic constructor, getters and setters:
+
+private String name;
+private String surname;
+private String city;
+private double avgGrade;
+private int age;
+
+// Constructors, Getters, Setters, toString()
+
+The average grade is a double value ranging from 6.0 - 10.0.
+
+Let's instantiate a List of students we'll be using in the examples to come:
+
+List<Student> students = Arrays.asList(
+        new Student("John", "Smith", "Miami", 7.38, 19),
+        new Student("Mike", "Miles", "New York", 8.4, 21),
+        new Student("Michael", "Peterson", "New York", 7.5, 20),
+        new Student("James", "Robertson", "Miami", 9.1, 20),
+        new Student("Kyle", "Miller", "Miami", 9.83, 20)
+);
+Collectors.toMap() with Mapper Functions
+The basic form of the method just takes two mapper functions - a keyMapper and valueMapper:
+
+public static <T,K,U> Collector<T,?,Map<K,U>> 
+    toMap(Function<? super T,? extends K> keyMapper,
+          Function<? super T,? extends U> valueMapper)
+The method is straightforward - keyMapper is a mapping function whose output is the key of the final Map. valueMapper is a mapping function whose output is the value of the final Map. The return value of the method is a Collector which collects elements into a Map, whose pair <K, V> is the result of the previously applied mapping functions.
+
+We'll start by transforming our stream of students into a Map. For the first example let's say we'd like to map our student's names to their average grade, that is create a <K, V> pair that has a <name, avgGrade> form.
+
+For the keyMapper, we'd supply a function corresponding to the method that returns the name, and for the valueMapper, we'd supply a function corresponding to the method that returns the average grade of the student:
+
+Map<String, Double> nameToAvgGrade = students.stream()
+                .collect(Collectors.toMap(Student::getName, Student::getAvgGrade));
+ADVERTISEMENT
+
+
+Note that Student::getName is just a Method Reference - a shorthand representation of the lambda expression student -> student.getName().
+
+If you'd like to read more about Method References, Functional Interfaces and Lambda Expressions in Java - read our Method References in Java 8 and Guide to Functional Interfaces and Lambda Expressions in Java!
+
+Running this code results in a map containing:
+
+{Mike=8.4, James=9.1, Kyle=9.83, Michael=7.5, John=7.38}
+What if we wanted to map the whole a particular Student object to just their name? Java provides a built-in identity() method from the Function interface. This method simply returns a function that always returns its input argument.
+
+That is to say - we can map the identity of each object (the object itself) to their names easily:
+
+Map<String, Student> nameToStudentObject = students.stream()
+                .collect(Collectors.toMap(Student::getName, Function.identity()));
+
+Note: Alternatively instead of using Function.identity() we could've simply used a Lambda expression, element -> element, which just maps each element to itself.
+
+Here, Student::getName is our keyMapper function, and Function.identity() is our valueMapper function, creating a map containing:
+
+{
+Mike=Student{name='Mike', surname='Miles', city='New York', avgGrade=8.4, age=21},
+James=Student{name='James', surname='Robertson', city='Miami', avgGrade=9.1, age=20},
+Kyle=Student{name='Kyle', surname='Miller', city='Miami', avgGrade=9.83, age=20},
+Michael=Student{name='Michael', surname='Peterson', city='New York', avgGrade=7.5, age=20},
+John=Student{name='John', surname='Smith', city='Miami', avgGrade=7.38, age=19}
+}
+Of course this output is not as visually clean as when we mapped the student's names to their average grade, but this just depends on the toString() of the Student class.
+
+Even though this particular overload is the easiest to use it falls short on one very important part - duplicate key elements. If we, for example, had two students named "John", and we wanted to convert our List to a Map like we did in examples above, we'd run into a glaring:
+
+Exception in thread "main" java.lang.IllegalStateException: Duplicate key John (attempted merging values 7.38 and 8.93)
+
+Free eBook: Git Essentials
+Check out our hands-on, practical guide to learning Git, with best-practices, industry-accepted standards, and included cheat sheet. Stop Googling Git commands and actually learn it!
+
+
+Download the eBook  
+The key is - the method tried merging these two values, and assigning the merged value to the unique key - "John" and failed. We may decide to supply a Merge Function that defines how this merge should be done if duplicate keys exist.
+
+If you want to get rid of duplicate keys, you can always just add a distinct() operation to the Stream before collecting it:
+
+Map<String, Double> nameToStudentObject = students.stream()
+        .distinct()
+        .collect(Collectors.toMap(Student::getName, Student::getAvgGrade));
+Collectors.toMap() with Mapper and Merge Functions
+Besides the two Mapper Functions, we can supply a Merge Function:
+
+public static <T,K,U> Collector<T,?,Map<K,U>> 
+    toMap(Function<? super T,? extends K> keyMapper,
+          Function<? super T,? extends U> valueMapper,
+          BinaryOperator<U> mergeFunction)
+The mergeFuction is a function that is called only if there are duplicate key elements present in our final Map that need their values merged and assigned to the one unique key. Its input are two values that is the two values for which keyMapper returned the same key, and merges those two values into a single one.
+
+
+Note: If you have more than two non-unique keys with values, the result of the first merge is considered the first value on the second merge, and so on.
+
+Let's add another John from another city, with a different average grade:
+
+new Student("John Smith", "Las Vegas", 8.93,19)...
+Now comes the tricky part - how do we handle duplicate i.e. clashing keys? We need to specify exactly how we want to handle this scenario. You may decide to just prune away duplicate values with distinct(), throw an exception to raise a noticeable alert or define a strategy for merging.
+
+Pruning elements away might not be what you want, since it could lead to silent failure where certain elements are missing from the final map. More often, we throw an IllegalStateException! The mergeFunction is a BinaryOperator, and the two elements are represented as (a, b).
+
+If you're throwing an exception, you won't really use them (unless for logging or displaying a message), so we can just go ahead and throw the exception in a code block:
+
+Map<String, Double> nameToAvgGrade  = students.stream()
+        .collect(Collectors.toMap(
+                Student::getName,
+                Student::getAvgGrade,
+                  (a, b) ->
+                    { throw new IllegalStateException("Duplicate key");})
+        );
+ADVERTISEMENT
+
+This will throw an exception when the code is run:
+
+Exception in thread "main" java.lang.IllegalStateException: Duplicate key
+The second solution would be to actually define a merging strategy. For instance, you could take the new value, b, or keep the old one, a. Or, you could calculate their mean value and assign that instead:
+
+Map<String, Double> nameToAvgGrade  = students.stream()
+        .collect(Collectors.toMap(Student::getName,
+                Student::getAvgGrade,
+                (a, b) -> { return (a+b)/2;})
+          // Or (a, b) -> (a+b)/2
+        );
+Now, when duplicate keys are present, their mean grade is assigned to the unique key in the final map.
+
+
+Note: As you can see - the Merge Function doesn't really need to merge anything. It can really, be any function, even ones that completely disregard the two operators such as throwing an exception.
+
+Running this piece of code results in a map that contains:
+
+{Mike=8.4, Kyle=9.83, James=9.1, Michael=7.5, John=8.155}
+This solution might be great for you, or it may not be. When clashing occurs, we generally either stop the execution or somehow trim the data, but Java inherently doesn't support the concept of a Multimap where multiple values can be assigned to the same key.
+
+However, if you don't mind using external libraries such as Guava or Apache Commons Collections, they both do support concepts of multimaps in their own right named Multimap and MultiValuedMap respectively.
+
+Collectors.toMap() with a Mapper, Merge and Supplier Functions
+The final overloaded version of the method accepts a Supplier function - which can be used to supply a new implementation of the Map interface to "pack the result in":
+
+public static <T,K,U,M extends Map<K,U>> Collector<T,?,M> 
+    toMap(Function<? super T,? extends K> keyMapper,
+          Function<? super T,? extends U> valueMapper,
+          BinaryOperator<U> mergeFunction,
+          Supplier<M> mapSupplier)
+The mapSupplier function specifies the particular implementation of Map we want to use as our final Map. When we use Map to declare our maps, Java defaults to using a HashMap as the implementation to store them.
+
+This is usually perfectly fine, which is also why it's the default implementation. However, sometimes, the characteristics of a HashMap might not suit you. For instance, if you wanted to keep the original order of the elements from a stream or sort them through intermediate stream operations, a HashMap wouldn't preserve that order and bin the objects based on their hashes. Then - you might choose to use a LinkedHashMap to preserve the order instead.
+
+ADVERTISEMENT
+
+To supply a Supplier, you have to also supply a Merge Function:
+
+
+Map<String, Double> nameToAvgGrade  = students.stream()
+        .collect(Collectors.toMap(Student::getName,
+                Student::getAvgGrade,
+                (a, b) -> (a+b)/2,
+                LinkedHashMap::new)
+        );
+Running the code outputs:
+
+{John=8.155, Mike=8.4, Michael=7.5, James=9.1, Kyle=9.83}
+Since we used the LinkedHashMap, the order of the elements from the original List stayed the same in our Map, as opposed to the binned output we'd get from letting a HashMap decide the locations:
+
+{Mike=8.4, Kyle=9.83, James=9.1, Michael=7.5, John=8.155}
+Conclusion
+In this guide, we've taken a look at how to convert a stream into a map in Java - with a pair of Mapper Functions, a Merge Function and a Supplier.
+</details>
+<details><summary><b>Finding Duplicate Elements in a Stream</b></summary>
+Introduction
+Introduced in Java 8, the Stream API is commonly used for filtering, mapping and iterating over elements. When working with streams, one of the common tasks is finding duplicate elements.
+
+In this tutorial, we'll be covering several ways to find duplicate elements in a Java Stream.
+
+Collectors.toSet()
+The easiest way to find duplicate elements is by adding the elements into a Set. Sets can't contain duplicate values, and the Set.add() method returns a boolean value which is the result of the operation. If an element isn't added, false is returned, and vice versa.
+
+Let's make a Stream of Strings with some duplicate values. These values are checked via the equals() method, so make sure to have an adequately implemented one for custom classes:
+
+Stream<String> stream = Stream.of("john", "doe", "doe", "tom", "john");
+Now, let's make a Set to store the filtered items. We'll use the filter() method to filter out duplicate values and return them:
+
+ADVERTISEMENT
+
+Set<String> items = new HashSet<>();
+
+stream.filter(n -> !items.add(n))
+        .collect(Collectors.toSet())
+        .forEach(System.out::println);
+Here, we try to add() each element to the Set. If it's not added, due to it being duplicate, we collect that value and print it out:
+
+john
+doe
+Collectors.toMap()
+Alternatively, you can also count the occurrences of duplicate elements and keep that information in a map that contains the duplicate elements as keys and their frequency as values.
+
+Let's create a List of Integer type:
+
+List<Integer> list = Arrays.asList(9, 2, 2, 7, 6, 6, 5, 7);
+Then, let's collect the elements into a Map and count their occurrences:
+
+Map<Integer, Integer> map = list.stream()
+        .collect(Collectors.toMap(Function.identity(), value -> 1, Integer::sum));
+        
+System.out.println(map);
+We haven't removed any elements, just counted their occurrences and stored them into a Map:
+
+{2=2, 5=1, 6=2, 7=2, 9=1}
+Collectors.groupingBy(Function.identity(), Collectors.counting()) with Collectors.toList()
+The Collectors.groupingBy() method is used for grouping elements, based on some property, and returning them as a Map instance.
+
+ADVERTISEMENT
+
+In our case, the method receives two parameters - Function.identity(), that always returns its input arguments and Collectors.counting(), that counts the elements passed in the stream.
+
+Then, we'll use the groupingBy() method to create a map of the frequency of these elements. After that, we can simply filter() the stream for elements that have a frequency higher than 1:
+
+list.stream()
+        // Creates a map {4:1, 5:2, 7:2, 8:2, 9:1}
+        .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()))
+        .entrySet()
+        // Convert back to stream to filter
+        .stream()
+        .filter(element -> element.getValue() > 1)
+        // Collect elements to List and print out the values
+        .collect(Collectors.toList())
+        .forEach(System.out::println);
+This results in:
+
+5=2
+7=2
+8=2
+If you'd like to extract just the duplicate elements, without their frequency, you can throw in an additional map() into the process. After filtering, and before collecting to a list, we'll get only the keys:
+
+.map(Map.Entry::getKey)
+Collections.frequency()
+Collections.frequency() is another method that comes from the Java Collections class that counts the occurrences of a specified element in the input stream by traversing each element. It takes two parameters, the collection and the element whose frequency is to be determined.
+
+Now, we'll filter() the stream for each element that has a frequency() larger than 1:
+
+list.stream()
+        .filter(i -> Collections.frequency(list, i) > 1)
+        //Collect elements to a Set and print out the values 
+        .collect(Collectors.toSet())
+        .forEach(System.out::println);
+
+Free eBook: Git Essentials
+Check out our hands-on, practical guide to learning Git, with best-practices, industry-accepted standards, and included cheat sheet. Stop Googling Git commands and actually learn it!
+
+
+Download the eBook  
+Here, we can either collect to a Set or to a List. If we collect to a list, it'll have all duplicate elements, so some may repeat. If we collect to a set, it'll have unique duplicate elements.
+
+This results in:
+
+5
+7
+8
+Stream.distinct()
+The distinct() method is a stateful method (keeps the state of previous elements in mind) and compares elements using the equals() method. If they are distinct/unique, they're returned back, which we can populate into another list.
+
+Let's make a list with some duplicate values and extract the distinct values:
+
+List<String> list = new ArrayList(Arrays.asList("A", "B", "C", "D", "A", "B", "C", "A", "F", "C"));
+
+List<String> distinctElementList = list.stream()
+        .distinct()
+        .collect(Collectors.toList());
+Now, all non-distinct values have more than one occurrence. If we remove the distinct values, we'll be left with duplicate elements:
+
+for (String distinctElement : distinctElementList) {
+    list.remove(distinctElement);
+}
+Now, let's print out the results:
+
+list.forEach(System.out::print)
+ADVERTISEMENT
+These are the duplicate elements, with their respective occurrences:
+
+ABCAC
+If you'd like to sift through these as well, and only show one occurrence of each duplicate element (instead of all of them separately), you can run them through the distinct() method again:
+
+list.stream()
+        .distinct()
+        .collect(Collectors.toList())
+        .forEach(System.out::print);
+This results in:
+
+ABC
+Conclusion
+In this article, we've gone over a few approaches to finding duplicate elements in a Java Stream.
+
+We've covered the Stream.distinct() method from the Stream API, the Collectors.toSet(), Collectors.toMap() and Collectors.groupingBy() methods from Java Collectors, as well as Collections.frequency() method from Collections framework.
+</details>
+<details><summary><b>Java 8 - Difference Between map() and flatMap()</b></summary>
+Introduction
+While Java is primarily an Object Oriented Language, many concepts of Functional Programming have been incorporated into the language. Functional programming uses functions to create and compose programming logic, typically in a declarative manner (i.e. telling the program what's wanted and not how to do it).
+
+If you'd like to read more about Functional Interfaces and a holistic view into Functional Programming in Java - read our Guide to Functional Interfaces and Lambda Expressions in Java!
+
+With the introduction of JDK 8, Java added a number of key Functional Programming constructs - including map() and flatMap().
+
+
+Note: This guide covers these two functions in the context of their differences.
+
+The map() function is used to transform a stream from one form to another while flatMap() function is a combination of map and flattening operations.
+
+If you'd like to read more about these functions individually with in-depth details, efficiency benchmarks, use-cases and best-practices - read our Java 8 Streams: Definitive Guide to flatMap() and Java 8 - Stream.map() Examples!
+
+Let's begin by first highlighting their differences in Optionals!
+
+Difference Between map() and flatMap() in Optionals
+To understand the difference between map() and flatMap() in Optionals, we need to briefly understand the concept of Optionals first. The optional class was introduced in Java 8 to introduce the easiest way to deal with NullPointerException.
+
+As per the official documentation:
+
+Optional is a container object which may or may not contain a non-null value.
+
+The optional class serves the purpose of representing whether a value is present or not. The Optional class has a wide range of methods that are grouped into two categories:
+
+Creation Methods: These methods are in charge of creating Optional objects according to the use case.
+Instance Methods: These methods operate on an existing Optional object, determining whether the value is present or not, retrieving the wrapper object, manipulating it, and finally returning the updated Optional object.
+ADVERTISEMENT
+map() and flatMap() can both be used with the Optional class, and because they were frequently used to wrap and unwrap nested optionals - they were added methods in the class itself as well.
+
+The signature of the map() function in Optional is:
+
+public<U> Optional<U> map(Function<? super T, ? extends U> mapper)
+The signature of the flatMap() in Optional is:
+
+public<U> Optional<U> flatMap(Function<? super T, Optional<U>> mapper)
+Both the map() and flatMap() functions take mapper functions as arguments and output an Optional<U>. The distinction between these two is noticed when the map() function is used to transform its input into Optional values. The map() function would wrap the existing Optional values with another Optional, whereas the flatMap() function flattens the data structure so that the values keep just one Optional wrapping.
+
+Let us try to understand the problem with the following code:
+
+Optional optionalObj1 = Optional.of("STACK ABUSE")
+  .map(s -> Optional.of("STACK ABUSE"));
+System.out.println(optionalObj1);
+The following is the output of the above:
+
+Optional[Optional[STACK ABUSE]]
+As we can see, the output of map() has been wrapped in an additional Optional. On the other hand, when using a flatMap() instead of a map():
+
+Optional optionalObj2 = Optional.of("STACK ABUSE")
+  .flatMap(s -> Optional.of("STACK ABUSE"));
+System.out.println(optionalObj2);
+We end up with:
+
+Optional[STACK ABUSE]
+flatMap() doesn't re-wrap the result in another Optional, so we're left with the original one. This same behavior can be used to unwrap optionals.
+
+ADVERTISEMENT
+Since simple examples like the one we've covered just now don't perfectly convey when this mechanism really makes or breaks a feature - let's create a small environment in which it does. The following example depicts a Research Management System, which well, keeps track of researchers in an institute.
+
+Given a mock service that fetches a researcher based on some researcherId - we're not guaranteed to have a result back, so each Researcher is wrapped as an optional. Additionally, their StudyArea might not be present for some reason (such as an area not being assigned yet if a researcher is new to the institute), so it's an optional value as well.
+
+That being said, if you were to fetch a researcher and get their area of study, you'd do something along these lines:
+
+Optional<Researcher> researcherOptional = researcherService.findById(researcherId);
+
+Optional<StudyArea> studyAreaOptional = researcherOptional
+    .map(res -> Researcher.getResearchersStudyArea(res.getId()))
+    .filter(studyArea -> studyArea.getTopic().equalsIgnoreCase("Machine Learning"));
+
+System.out.println(studyAreaOptional.isPresent());
+System.out.println(studyAreaOptional);
+System.out.println(studyAreaOptional.get().getTopic());
+Let's check the result of this code:
+
+true 
+Optional[StudyArea@13969fbe] 
+Machine Learning
+Because the StudyArea, which is an optional value depends on another optional value - it's wrapped as a double optional in the result. This doesn't work really well for us, since we'd have to get() the value over and over again. Additionally, even if the StudyArea was in fact, null, the isPresent() check would return true.
+
+An optional of an empty optional, isn't empty itself.
+
+Optional optional1 = Optional.empty();
+Optional optional2 = Optional.of(optional1);
+
+System.out.println(optional2.isPresent());
+// true
+In this scenario - isPresent() checks for something we're not really wanting to check, the second line doesn't really print the StudyArea we want to view and the final line will throw a NullPointerException if the StudyArea isn't actually present. Here - map() does quite a bit of damage because:
+
+Map returns an empty optional if the Researcher object is absent in the optionalResearcher object.
+Map returns an empty optional if the getResearchersStudyArea returns null instead of the StudyArea object.
+Alternatively, you could visualize the pipeline:
+
+Flow chart of Researcher data being transformed with the map and filter functions
+The statement optionalResearcher.map(res -> Researcher.getResearchersStudyArea(res.getId()) will now produce an Optional<Optional<Researcher>> object. We may solve this problem by using flatMap() as it won't wrap the result in another Optional:
+
+Optional<StudyArea> studyAreaOptional = optionalResearcher
+        .flatMap(res -> Researcher.getResearchersStudyArea(res.getId()))
+        .filter(studyArea -> studyArea.getTopic().equalsIgnoreCase("Machine Learning"));
+
+Free eBook: Git Essentials
+Check out our hands-on, practical guide to learning Git, with best-practices, industry-accepted standards, and included cheat sheet. Stop Googling Git commands and actually learn it!
+
+
+Download the eBook  
+Flow chart of Researcher data being transformed with the flatMap and filter functions
+This way - all three lines we've used to display information about the researcher work as intended!
+
+Difference Between map() and flatMap() in Streams
+To understand the difference between map() and flatMap() in Streams, it's worth reminding ourselves how Streams work. The Streams API was introduced in Java 8 and has proven to be an extremely powerful tool for working with collections of objects. A stream can be characterized as a sequence of data, stemming from a source, in which numerous different procedures/transformations can be piped together to produce the desired outcome.
+
+There are three stages to the stream pipeline:
+
+Source: It denotes the origin of a stream.
+Intermediate Operations: These are the intermediary processes that change streams from one form to another, as the name implies. Stream processing can have zero or several intermediate processes.
+Terminal Operations: This is the last step in the process that results in a final state that is the end result of the pipeline. The most common terminal operation is collecting the stream back into a tangible Collection. Without this stage, the outcome would be impossible to obtain.
+map() and flaMap() both are the intermediate operations offered by the Stream in the java.util.stream.Stream package.
+
+The signature of the map() is:
+
+<R> Stream<R> map(Function<? super T, ? extends R> mapper)
+The signature of the flatMap() is:
+
+<R> Stream<R> flatMap(Function<? super T, ? extends Stream<? extends R>> mapper)
+As can be seen from the method signatures, both the map() and flatMap() take mapping functions as arguments and return a Stream<R> as output. The only difference in the arguments is that the map() takes in a Stream<T> as input while flatMap() takes in a Stream<Stream<T>> as input.
+
+
+In short - map() is accepts a Stream<T> and maps its elements onto Stream<R> where each resulting R has a corresponding initial T, while flatMap() accepts a Stream<Stream<T>> and maps each sub-stream's element into a new Stream<R> that represents a flattened list of original streams.
+
+Furthermore, map() and flatMap() can be distinguished in a way that map() generates a single value against an input while flatMap() generates zero or any number values against an input. In other words, map() is used to transform the data while the flatMap()is used to transform and flatten the stream.
+
+Following is the example of one-to-one mapping in map():
+
+List<String> websiteNamesList = Stream.of("Stack", "Abuse")
+            .map(String::toUpperCase)
+            .collect(Collectors.toList());
+
+System.out.println(websiteNamesList);
+ADVERTISEMENT
+This results in:
+
+[STACK, ABUSE]
+We've mapped the original values to their uppercase counterparts - it was a transformative process where a Stream<T> was mapped onto Stream<R>.
+
+On the other hand, if we were working with more complex Streams:
+
+Stream<String> stream1 = Stream.of("Stack", "Abuse");
+Stream<String> stream2 = Stream.of("Real", "Python");
+Stream<Stream<String>> stream = Stream.of(stream1, stream2);
+
+List<String> namesFlattened = stream
+        .flatMap(s -> s)
+        .collect(Collectors.toList());
+
+System.out.println(namesFlattened);
+Here - we've got a stream of streams, where each stream contains a couple of elements. When flat-mapping, we're dealing with streams, not elements. Here, we've just decided to leave the streams as they are (run no operations on them) via s->s, and collect their elements into a list. flatMap() collects the elements of the substreams into a list, not the streams themselves, so we end up with:
+
+[Stack, Abuse, Real, Python]
+A more illustrative example could build upon the Research Management System. Say we want to group data from researchers into categories based on their areas of study in a Map<String, List<Researcher>> map where the key is an area of study and the list corresponds to the people working in it. We would have a list of researchers to work with before grouping them, naturally.
+
+In this entry set - we might want to filter or perform other operations on the researchers themselves. In most cases, map() will not work or behave oddly because we cannot apply many methods, such as filter(), straight to the Map<String, List<Researcher>>. This leads us to the use of flatMap(), where we stream() each list and then perform operations on those elements.
+
+With the preceding scenario in mind, consider the following example, which demonstrates flatMap()'s one-to-many mapping:
+
+ResearchService researchService = new ResearchService();
+Map<String, List<Researcher>> researchMap = new HashMap<>();
+List<Researcher> researcherList = researchService.findAll();
+
+researchMap.put("Machine Learning", researcherList);
+
+List<Researcher> researcherNamesList = researchMap.entrySet().stream()
+        // Stream each value in the map's entryset (list of researchers)
+        .flatMap(researchers -> researchers.getValue().stream())
+        // Arbitrary filter for names starting with "R"
+        .filter(researcher -> researcher.getName().startsWith("R"))
+        // Collect Researcher objects to list
+        .collect(Collectors.toList());
+
+researcherNamesList.forEach(researcher -> {
+    System.out.println(researcher.getName());
+});
+The Researcher class only has an id, name and emailAddress:
+
+public class Researcher {
+    private int id;
+    private String name;
+    private String emailAddress;
+
+    // Constructor, getters and setters 
+}
+And the ResearchService is a mock service that pretends to call a database, returning a list of objects. We can easily mock the service by returning a hard-coded (or generated) list instead:
+
+public class ResearchService {
+
+    public List<Researcher> findAll() {
+        Researcher researcher1 = new Researcher();
+        researcher1.setId(1);
+        researcher1.setEmailAddress("reham.muzzamil12@gmail.com");
+        researcher1.setName("Reham Muzzamil");
+
+        Researcher researcher2 = new Researcher();
+        researcher2.setId(2);
+        researcher2.setEmailAddress("John@gmail.com");
+        researcher2.setName("John Doe");
+        
+        // Researcher researcherN = new Researcher();
+        // ...
+        
+        return Arrays.asList(researcher1, researcher2);
+    }
+}
+ADVERTISEMENT
+If we run the code snippet, even though there's only one list in the map - the entire map was flattened to a list of researchers, filtered out with a filter and the one researcher left is:
+
+Reham Muzzamil
+If we visualize the pipeline, it would look something like this:
+
+Data flow of using the flatMap() function to filter researchers whose name begins with "R"
+If we were to replace flatMap() with map():
+
+.map(researchers -> researchers.getValue().stream()) // Stream<Stream<Researcher>>
+We wouldn't be able to proceed with the filter(), since we'd be working with a nested stream. Instead, we flatten the stream of streams into a single one, and then run operations on these elements.
+
+Conclusion
+In this guide, we have seen the difference between map() and flatMap() in Optional and Stream along with their use-cases and code examples.
+
+To sum up, in the context of the Optional class, both map() and flatMap() are used to transform Optional<T> to Optional<U> but if the mapping function generates an optional value, map() adds an additional layer while flatMap() works smoothly with nested optionals and returns the result in a single layer of optional values.
+
+Similarly, map() and flatMap() can also be applied to Streams - where map() takes in a Stream<T> and returns a Stream<R> where T values are mapped to R, while flatMap() takes in a Stream<Stream<T>> and returns a Stream<R>.
+ </details>
+<details><summary><b>Using Optional in Java 8</b></summary>
+Introduction
+When writing any kind of code in Java, developers tend to work with objects more often than with primitive values (int, boolean, etc). This is because objects are at the very essence of object-oriented programming: they allow a programmer to write abstract code in a clean and structured manner.
+
+Furthermore, every object in Java can either contain a value or not. If it does, its value is stored on the heap and the variable which we are using has a reference to that object. If the object contains no value, this defaults to null - a special placeholder denoting the absence of a value.
+
+The fact that each object can become null, combined with the natural tendency to use objects instead of primitives, means that some arbitrary piece of code might (and often-times will) result in an unexpected NullPointerException.
+
+Before the Optional class was introduced in Java 8, these kind of NullPointerException errors were much more common in everyday life of a Java programmer.
+
+In the following sections, we will dive deeper into explaining Optional and seeing how it can be used to overcome some of the common problems concerning null values.
+
+The Optional Class
+An Optional is essentially a container. It is designed either to store a value or to be "empty" if the value is non-existent - a replacement for the null value. As we will see in some later examples, this replacement is crucial as it allows implicit null-checking for every object represented as an Optional.
+
+This means that explicit null-checking is no longer needed from a programmer's point of view - it becomes enforced by the language itself.
+
+Creating Optionals
+Let's take a look at how easy it is to create instances of Optional and wrap objects that we already have in our applications.
+
+We'll be using our custom class for this, the Spaceship class:
+
+ADVERTISEMENT
+public class Spaceship {
+    private Engine engine;
+    private String pilot;
+
+    // Constructor, Getters and Setters
+}
+And our Engine looks like:
+
+public class Engine {
+    private VelocityMonitor monitor;
+
+    // Constructor, Getters and Setters
+}
+And furthermore, we've got the VelocityMonitor class:
+
+public class VelocityMonitor {
+    private int speed;
+
+    // Constructor, Getters and Setters
+}
+These classes are arbitrary and only serve to make a point, there's no real implementation behind them.
+
+of()
+The first approach to creating Optionals is using the .of() method, passing a reference to a non-null object:
+
+Spaceship falcon = new Spaceship();
+Optional<Spaceship> optionalFalcon = Optional.of(falcon);
+If the falcon was null, the method .of() would throw a NullPointerException.
+
+Without Optional, trying to access any of the fields or methods of falcon (assuming it's null), without performing a null-check would result in a crash of the program.
+
+With Optional, the .of() method notices the null value and throws the NullPointerException immediately - potentially also crashing the program.
+
+If the program crashes in both approaches, why even bother using Optional?
+
+The program wouldn't crash somewhere deeper in the code (when accessing falcon) but at the very first use (initialization) of a null object, minimizing potential damage.
+
+ofNullable()
+If falcon is allowed to be a null, instead of the .of() method, we'd use the .ofNullable() method. They perform the same if the value is non-null. The difference is obvious when the reference points to null in which case - the .ofNullable() method is perfectly contempt with this piece of code:
+
+Spaceship falcon = null;
+Optional<Spaceship> optionalFalcon = Optional.ofNullable(falcon);
+empty()
+And finally, instead of wrapping an existing reference variable (null or non-null), we can create a null value in the context of an Optional. It's kind of like an empty container which returns an empty instance of Optional:
+
+ADVERTISEMENT
+Optional<Spaceship> emptyFalcon = Optional.empty();
+Checking for Values
+After creating Optionals and packing information in them, it's only natural that we'd want to access them.
+
+Before accessing though, we should check if there are any values, or if the Optionals are empty.
+
+isPresent()
+Since catching exceptions is a demanding operation, it would be better to use one of the API methods to check if the value exists before trying to access it - and alter the flow if it doesn't.
+
+If it does, then .get() method can be used to access the value. Though, more on that method in latter sections.
+
+To check if the value is present inside an Optional, we use the .isPresent() method. This is essentially a replacement for the null-check of the old days:
+
+// Without Optional
+Spaceship falcon = hangar.getFalcon();
+if (falcon != null) {
+    System.out.println(falcon.get());
+} else {
+    System.out.printn("The Millennium Falcon is out and about!");
+}
+
+// With Optional
+Optional<Spaceship> optionalFalcon = Optional.ofNullable(hangar.getFalcon());
+if (optionalFalcon.isPresent()) {
+    System.out.println(falcon.get());
+} else {
+    System.out.println("The Millennium Falcon is out and about!");
+}
+Since the falcon can also not be in the hangar, we can also expect a null value, thus .ofNullable() is used.
+
+ifPresent()
+To make things even easier, Optional also contains a conditional method which bypasses the presence check entirely:
+
+Optional<Spaceship> optionalFalcon = Optional.ofNullable(hangar.getFalcon());
+optionalFalcon.ifPresent(System.out::println);
+If a value is present, the contents are printed through a Method Reference. If there's no value in the container, nothing happens. You still might want to use the previous approach if you'd like to define an else {} statement, though.
+
+This reflects what we mentioned earlier when we said that null-checks with Optional are implicit and enforced by the type-system.
+
+isEmpty()
+Another way to check for a value is to use .isEmpty(). Essentially, calling Optional.isEmpty() is the same as calling !Optional.isPresent(). There's no particular difference that exists:
+
+Optional<Spaceship> optionalFalcon = Optional.ofNullable(hangar.getFalcon());
+if (optionalFalcon.isEmpty()) {
+    System.out.println("Please check if the Millennium Falcon has returned in 5 minutes.");
+} else {
+    optionalFalcon.doSomething();
+}
+Nested Null-Checks
+Our Spaceship class, as defined earlier, has an attribute Engine, which has an attribute VelocityMonitor.
+
+Suppose now that we want to access the velocity monitor object and obtain the current velocity of the spaceship, taking into consideration that all these values could potentially be null.
+
+Obtaining the velocity might look something like this:
+
+
+Free eBook: Git Essentials
+Check out our hands-on, practical guide to learning Git, with best-practices, industry-accepted standards, and included cheat sheet. Stop Googling Git commands and actually learn it!
+
+
+Download the eBook  
+if (falcon != null) {
+    Engine engine = falcon.getEngine();
+    if (engine != null) {
+        VelocityMonitor monitor = engine.getVelocityMonitor();
+        if (monitor != null) {
+            Velocity velocity = monitor.getVelocity();
+            System.out.println(velocity);
+        }
+    }
+}
+The above example shows how tedious it is to perform such checks, not to mention the amount of boilerplate code needed to make the checks possible in the first place.
+
+An alternative solution using Optional would be:
+
+Velocity velocity = falcon
+    .flatMap(Spaceship::getEngine)
+    .flatMap(Engine::getVelocityMonitor)
+    .map(VelocityMonitor::getVelocity);
+Note: Not sure what's going on above? Check out the explanation below for the details.
+
+Using this kind of approach, no explicit checks are needed. If any of the objects contain an empty Optional, the end result will also be an empty Optional.
+
+To make things work like this, we need to modify our existing definitions of the Spaceship and Engine classes:
+
+public class Spaceship {
+    private Optional<Engine> engine;
+    private String pilot;
+
+    // Constructor, Getters and Setters
+}
+public class Engine {
+    private Optional<VelocityMonitor> monitor;
+
+    // Constructor, Getters and Setters
+}
+What we have changed are the attribute definitions: they are now wrapped inside Optional objects to make this kind of alternative solution possible.
+
+This might seem a bit tedious at first but if planned from the beginning, it takes almost the same amount of effort typing it.
+
+Furthermore, having an Optional attribute instead of a regular object reflects the fact that the attribute might or might not exist. Notice how this is quite helpful since we don't have semantic meanings of this kind with regular attribute definitions.
+
+Example Explanation
+In this section, we'll take a bit of time to explain the previous example with flatMaps and maps. If you understand it without further explanation, please feel free to skip this section.
+
+ADVERTISEMENT
+The first method call is performed on falcon which is of type Optional<Spaceship>. Calling the getEngine method returns an object of type Optional<Engine>. Combining these two types, the type of the returned object becomes Optional<Optional<Engine>>.
+
+Since we would like to view this object as an Engine container and perform further calls on it, we need some kind of mechanism to "peel off" the outer Optional layer.
+
+Such a mechanism exists and it is called flatMap. This API method combines the map and the flat operations by first applying a function to each of the elements and then flattening the result into a one-level stream.
+
+The map method, on the other hand, only applies a function without flattening the stream. In our case, the use of map and flatMap would give us Optional<Optional<Engine>> and Optional<Engine> respectively.
+
+Calling flatMap on an object of type Optional would therefore yield with a one-level Optional, allowing us to use multiple similar method calls in a succession.
+
+This finally leaves us withOptional<Engine>, which we wanted in the first place.
+
+Alternative results
+.orElse()
+The previous example can be further expanded by using the orElse(T other) method. The method will return the Optional object upon which it is called only if there is a value contained within it.
+
+If the Optional is empty, the method returns the other value. This is essentially an Optional version of the ternary operator:
+
+// Ternary Operator
+Spaceship falcon = maybeFalcon != null ? maybeFalcon : new Spaceship("Millennium Falcon");
+
+// Optional and orElse()
+Spaceship falcon = maybeFalcon.orElse(new Spaceship("Millennium Falcon"));
+As with the ifPresent() method, this kind of approach takes advantage of the lambda expressions to make code more readable and less error-prone.
+
+.orElseGet()
+Instead of providing the other value directly as an argument, we can use a
+Supplier instead. The difference between .orElse() and .orElseGet(), while maybe not evident at first glance, exists:
+
+// orElse()
+Spaceship falcon = maybeFalcon.orElse(new Spaceship("Millennium Falcon"));
+
+// orElseGet()
+Spaceship falcon = maybeFalcon.orElseGet(() -> new Spaceship("Millennium Falcon"));
+If maybeFalcon doesn't contain a value, both methods will return a new Spaceship. In this case, their behavior is the same. The difference becomes clear if maybeFalcon does contain a value.
+
+In the first case, the new Spaceship object will not be returned but it will be created. This will happen regardless of whether or not the value exists. In the second case, the new Spaceship will be created only if maybeFalcon doesn't contain a value.
+
+ADVERTISEMENT
+It's similar to how do-while does the task regardless of the while loop, at least once.
+
+This might seem like a negligible difference but it becomes pretty important if creating spaceships is a demanding operation. In the first case, we're always creating a new object - even if it will never be used.
+
+.orElseGet() should be preferred instead of .orElse() in such cases.
+
+.orElseThrow()
+Instead of returning an alternative value (as we've seen in the previous two sections), we can throw an exception. This is accomplished with the .orElseThrow() method which instead of an alternative value accepts a supplier which returns the exception in case it needs to be thrown.
+
+This can be useful in cases where the end result is of high importance and must not be empty. Throwing an exception in this case might be the safest option:
+
+// Throwing an exception
+Spaceship falcon = maybeFalcon.orElseThrow(NoFuelException::new);
+Getting Values from Optional
+.get()
+After seeing many different ways of checking and accessing the value inside Optional, let's now take a look at one final way of obtaining the value which also uses some of the previously shown methods.
+
+The simplest way to access a value inside an Optional is with .get(). This method returns the value present, or throws a NoSuchElementException if the value is absent:
+
+Optional<Spaceship> optionalFalcon = Optional.ofNullable(hangar.getFalcon());
+if (falcon.isPresent()) {
+    Spaceship falcon = optionalFalcon.get()
+
+    // Fly the falcon
+}
+As expected, the .get() method returns a non-null instance of the Spaceship class and assigns it to the falcon object.
+
+Conclusion
+Optional was introduced to Java as a way to fix the issues with null references. Before Optional, every object was allowed to either contain a value or not (i.e. being null).
+
+The introduction of Optional essentially enforces null-checking by the type-system making it unnecessary to perform such checks manually.
+
+This was a big step both in improving the language and its usability by adding an additional layer of type-checking. Using this system instead of the old-fashioned null-checking allows writing clear and concise code without the need to add boilerplate and perform tiring checks by hand.
+ </details>
+<details><summary><b>Java 8 Collectors: groupingByConcurrent()</b></summary>
+Introduction
+A stream represents a sequence of elements and supports different kinds of operations that lead to the desired result. The source of a stream is usually a Collection or an Array, from which data is streamed from.
+
+Streams differ from collections in several ways; most notably in that the streams are not a data structure that stores elements. They're functional in nature, and it's worth noting that operations on a stream produce a result and typically return another stream, but do not modify its source.
+
+To "solidify" the changes, you collect the elements of a stream back into a Collection.
+
+In this guide, we'll take a look at how to group Stream data in Java with Collectors.groupingBy()!
+
+Collectors and Parallelism
+Collectors represent implementations of the Collector interface, which implements various useful reduction operations, such as accumulating elements into collections, summarizing elements based on a specific parameter, etc.
+
+All predefined implementations can be found within the Collectors class.
+
+You can also very easily implement your own collector and use it instead of the predefined ones, though - you can get pretty far with the built-in collectors, as they cover the vast majority of cases in which you might want to use them.
+
+To be able to use the class in our code we need to import it:
+
+import static java.util.stream.Collectors.*;
+Stream.collect() performs a mutable reduction operation on the elements of the stream.
+
+
+A mutable reduction operation collects input elements into a mutable container, such as a Collection, as it processes the elements of the stream.
+
+ADVERTISEMENT
+
+Parallel computing (parallelism) refers to the process of dividing a problem into two or more subproblems, solving those problems simultaneously, in parallel, with each subproblem being computed on a separate thread, and then combining all of the solutions to the subproblems in one uniform result.
+
+One of the biggest challenges of implementing parallelism in programs that use collections is that the collections are non thread-safe, which means that multiple threads cannot manipulate a collection without introducing thread interference or memory consistency errors. What we also need to note is that parallelism is not necessarily faster than serial execution, although this heavily depends on the amount of data and the number of cores of the CPU.
+
+Tying back into context, streams can be executed in serial or in parallel. When a stream executes in parallel, the Java runtime partitions the stream into multiple substreams. Operations are executed on independent substreams in parallel and then combined into a final result.
+
+When creating a stream, it's always a serial stream unless stated otherwise, that is specifically parallel. To create a parallel stream we invoke the Collection.parallelStream(), which is a method found within the Collection interface.
+
+
+Note: While using this method enables you to more easily implement parallelism, it is still your responsibility to determine if your application is suitable for parallelism at all, based on your knowledge of the hardware you're executing your code on.
+
+Collectors.groupingByConcurrent()
+Collectors.groupingByConcurrent() uses a multi-core architecture and is very similar to Collectors.groupingBy(), as it also behaves like the "GROUP BY" statement in SQL.
+
+It groups objects by a given specific property and store the end result in a ConcurrentMap.
+
+If you'd like to read more about groupingBy(), read our Guide to Java 8 Collectors: groupingBy()!
+
+Let's define a simple class to use throughout the examples. It'll be a representation of a book, with a few fields:
+
+public class Book {
+    private String title;
+    private String author;
+    private int releaseYear;
+    
+    // Constructor, getters, setters, toString()
+}
+With the model in place, let's instantiate a list of a few books that we'll be working with:
+
+List<Book> books = Arrays.asList(
+    new Book("The Lord of the Rings", "J.R.R. Tolkien", 1954),
+    new Book("The Hobbit", "J.R.R. Tolkien", 1937),
+    new Book("Animal Farm", "George Orwell", 1945),
+    new Book("Nineteen Eighty-Four", "George Orwell", 1949),
+    new Book("The Road to Wigan Pier", "George Orwell", 1937),
+    new Book("Lord of the Flies", "William Golding", 1954)
+);
+The groupingByConcurrent() has three overloads within the Collectors class. We'll be going through each one of them and explain the differences in implementation through examples along the way.
+
+Let's start out with the simplest of them.
+
+Collectors.groupingByConcurrent() with a Classifier Function
+The first overload of this method takes only one argument - the classifier function:
+
+public static <T,K> Collector<T,?,ConcurrentMap<K,List<T>>> 
+    groupingByConcurrent(Function<? super T,? extends K> classifier)
+This method returns a Collector that groups the input elements of type T according to the classification function. The classification function maps elements to a key of type K. The collector itself produces a ConcurrentMap<K, List<T>> whose keys represent the values we get by applying the classification function on the input, and whose corresponding values are Lists containing the input elements which map to the associated key.
+
+ADVERTISEMENT
+
+This Collector is both concurrent and unordered. Being unordered, the collection operation doesn't preserve the order of the input by it's encounter. Being concurrent, the result container supports functions being called concurrently with the same result container from multiple threads.
+
+
+This property isn't unique to this specific overload of the groupingByConcurrent() method, but applies to the other two overloads as well.
+
+Let's go ahead and group the books by author:
+
+ConcurrentMap<String, List<Book>> booksByAuthor = books.parallelStream()
+             .collect(Collectors.groupingByConcurrent(Book::getAuthor));
+The collected elements will be unordered - but grouped. Running the same code will result in different sorts of the elements within the groups - but the sort of the groups themselves will be consistent:
+
+{
+J.R.R. Tolkien=[Book{author='J.R.R. Tolkien', title='The Hobbit', releaseYear=1937}, Book{author='J.R.R. Tolkien', title='The Lord of the Rings', releaseYear=1954}], 
+William Golding=[Book{author='William Golding', title='Lord of the Flies', releaseYear=1954}], 
+George Orwell=[Book{author='George Orwell', title='Animal Farm', releaseYear=1945}, Book{author='George Orwell', title='The Road to Wigan Pier', releaseYear=1937}, Book{author='George Orwell', title='Nineteen Eighty-Four', releaseYear=1949}]
+}
+Depending on how the threads in the CPU perform, and which finish their computation first - the Hobbit might appear after the Lord of the Rings, and vice versa.
+
+Benchmarking Sequential and Concurrent Collectors.groupingBy()
+While the difference between the regular groupingBy() and groupingByConcurrent() might not be obvious looking from afar - the underlying principle of grouping is significantly different.
+
+When dealing with large amounts of books, with a decent processor, this approach may improve the performance significantly.
+
+Let's generate a bunch of books and try grouping them sequentially and in parallel ...
+
+List<Book> books = new ArrayList<>();
+List<String> authorList = Arrays.asList(
+            "George Orwell",
+            "Nick Bostrom",
+);
+
+for (int i = 0; i < 100000; i++) {
+    books.add(new Book(
+            String.valueOf(i),
+            authorList.get(new Random().ints(1, 1, authorList.size()).findFirst().getAsInt()),
+            1900));
+}
+
+long startTimeSequential = System.currentTimeMillis();
+Map<String, List<Book>> booksByAuthorSequential = books.stream()
+                .collect(Collectors.groupingBy(Book::getAuthor));
+
+long endTimeSequential = System.currentTimeMillis();
+System.out.printf("Total time for sequential process: %sms\n",  (endTimeSequential-startTimeSequential));
+
+long startTimeParallel = System.currentTimeMillis();
+ ConcurrentMap<String, List<Book>> booksByAuthorParallel = books.parallelStream()
+                .collect(Collectors.groupingByConcurrent(Book::getAuthor));
+long endTimeParallel = System.currentTimeMillis();
+System.out.printf("Total time for parallel process: %sms\n",  (endTimeParallel-startTimeParallel));
+Depending on your system and CPU the sequential process might take longer or shorter than the parallel counterpart. This also heavily depends on the number of groups. If you have a few groups (fewer authors), the process of splitting them up and aggregating the results might offset the parallel approach enough to make it slower than the sequential approach.
+
+
+Note: The fewer groups you're dealing with, the more likely it is for the sequential approach to outperform the parallel one, but this also highly depends on the CPU of the machine you're running the code on.
+
+With just two authors, running this piece of code results in:
+
+Total time for sequential process: 12ms
+Total time for parallel process: 26ms
+
+Free eBook: Git Essentials
+Check out our hands-on, practical guide to learning Git, with best-practices, industry-accepted standards, and included cheat sheet. Stop Googling Git commands and actually learn it!
+
+
+Download the eBook  
+While both processes took a really small amount of time to execute, considering the creation and grouping of 100k objects - the parallel process took significantly longer.
+
+If we were to expand our list with a few more authors:
+
+List <String> authorList = Arrays.asList(
+                "George Orwell",
+                "Nick Bostrom",
+                "Ray Kurzweil",
+                "J.R.R. Tolkien",
+                "Eliezer Yudkowsky",
+                "Stuart Russel",
+                "Max Tegmark",
+                "Anil Seth",
+                "Thomas Metzinger",
+                "Aurélien Geron",
+                "Max Lapan",
+                "Brian Greene",
+                "Frank Wilczek"
+        );
+The results would be pretty similar:
+
+Total time for sequential process: 13ms
+Total time for parallel process: 19ms
+However, if we expanded it significantly:
+
+for (int i = 0; i < 10000; i++) {
+    authorList.add("Author" + i);
+}
+Can you guess what happens now, with 10 thousand authors? Actually - the same thing:
+
+Total time for sequential process: 19ms
+Total time for parallel process: 33ms
+But, if you run this code on another machine that can utilize threads more efficiently, you'll be greeted with:
+
+Total time for sequential process: 97ms
+Total time for parallel process: 52ms
+
+Note: Concurrency isn't a silver bullet that always just works and makes code execute faster.
+
+Collectors.groupingByConcurrent() with Classification Function and Downstream Collector
+The second variation of the method takes two arguments - a classification function, and an additional, downstream collector:
+
+public static <T,K,A,D> Collector<T,?,ConcurrentMap<K,D>>
+    groupingByConcurrent(Function<? super T,? extends K> classifier,
+                         Collector<? super T,A,D> downstream)
+This method returns a Collector that groups the input elements of type T according to the classification function, afterwards applying a reduction operation on the values associated with a given key using the specified downstream Collector.
+
+ADVERTISEMENT
+
+The reduction operation "reduces" the data we've collected by applying an operation that's useful in a specific situation.
+
+If you'd like to read more about reduction in Java in great detail - read our Java 8 Streams: Guide to reduce()!
+
+Let's see an example of this variant of the method. As the downstream here we'll be using mapping(), which takes 2 parameters:
+
+A mapper - a function to be applied to the input elements and
+A downstream collector – a collector which will accept mapped values
+Collectors.mapping() itself does a pretty straightforward job. It adapts a collector accepting elements of one type to accept a different type by applying a mapping function to each input element before accumulation. In our case, we'll map each Student to their name and return those names as a list.
+
+Here we'll once again group our books by the author, but instead of using ConcurrentMap<String, List<Book> we'll use ConcurrentMap<String, List<String> and reduce our books into a simple string:
+
+ConcurrentMap<String, List<String>> booksByAuthor = books.parallelStream()
+    .collect(Collectors.groupingByConcurrent(Book::getAuthor, Collectors.mapping(Book::getTitle, Collectors.toList())));
+These are reductions of books, where we've reduced them to a title, though you could substitute this with any other reduction operation as well:
+
+{
+J.R.R. Tolkien=[The Lord of the Rings, The Hobbit], 
+William Golding=[Lord of the Flies], 
+George Orwell=[Nineteen Eighty-Four, The Road to Wigan Pier, Animal Farm]
+}
+Another very useful application of this overload is that our downstream function can be, well, another Collectors.groupingByConcurrent(). You can thus chain any number of groups, creating nested groups.
+
+Let's group the books by their release year, but within those groups, we'll group the books by authors:
+
+ConcurrentMap<Integer, ConcurrentMap<String, List<String>>> booksByAuthor = books.parallelStream()
+                .collect(Collectors.groupingByConcurrent(Book::getReleaseYear,
+                        Collectors.groupingByConcurrent(Book::getAuthor, Collectors.mapping(Book::getTitle, Collectors.toList()))));
+And get the following output:
+
+{
+1937={J.R.R. Tolkien=[The Hobbit], George Orwell=[The Road to Wigan Pier]}, 
+1954={J.R.R. Tolkien=[The Lord of the Rings], William Golding=[Lord of the Flies]}, 
+1945={George Orwell=[Animal Farm]}, 
+1949={George Orwell=[Nineteen Eighty-Four]}
+}
+Collectors.groupingBy() with Classifier Function, Downstream Collector and Supplier
+The third and last overload of this method takes three arguments. The first and the third are the same as in the previous overload, but the second argument is a supplier method.
+
+The supplier method provides the specific ConcurrentMap implementation we want to use to contain our end result. We have two known classes that implement this interface - ConcurrentHashMap and ConcurrentSkipListMap:
+
+ADVERTISEMENT
+
+public static <T,K,A,D,M extends ConcurrentMap<K,D>> Collector<T,?,M> 
+    groupingByConcurrent(Function<? super T,? extends K> classifier,
+                         Supplier<M> mapFactory,
+                         Collector<? super T,A,D> downstream)
+The return value of this method is the same as the previous overload as well. The only difference with this one is that the ConcurrentMap produced by the collector is created with the supplied factory function.
+
+We'll be doing just one simple example for this overload, since everything is pretty much the same as the previous with the exception of the specified ConcurrentMap implementation:
+
+ConcurrentMap<String, List<String>> booksByAuthor = books.parallelStream()
+    .collect(Collectors.groupingByConcurrent(Book::getAuthor,
+                                             ConcurrentHashMap::new,
+                                             Collectors.mapping(Book::getTitle, Collectors.toList())));
+
+Conclusion
+The Collectors class is a powerful one and allows us to collect streams into collections in various ways.
+
+You can define your own collectors, but the built-in collectors can get you very far as they're generic and can be generalized to the vast majority of tasks you can think of.
+
+In this guide, we've gone through a few examples of using the Collectors.groupingByConcurrent() method, which groups elements together given specific parameters and returns a ConcurrentMap.
+
+By using this method instead of the non-concurrent Collectors.groupingBy() we can fully utilize the multi-core architecture, if the underlying hardware allows us to. However, while using this method enables you to more easily implement parallelism, it is still your responsibility to determine if your application is suitable for parallelism at all.
+
+You've learned how to use the basic form, as well as forms with downstream collectors and suppliers to simplify code and run powerful yet simple functional operations on streams.
+ </details>
+<details><summary><b>Java 8 Collectors: averagingDouble(), averagingLong() and averagingInt()</b></summary>
+Introduction
+A stream represents a sequence of elements and supports different kinds of operations that lead to the desired result. The source of a stream is usually a Collection or an Array, from which data is streamed from.
+
+Streams differ from collections in several ways; most notably in that the streams are not a data structure that stores elements. They're functional in nature, and it's worth noting that operations on a stream produce a result and typically return another stream, but do not modify its source.
+
+To "solidify" the changes, you collect the elements of a stream back into a Collection.
+
+The mathematical operation of finding an arithmetic mean is one we use fairly frequently, and there are many ways we go about performing it.
+
+We'll be doing exactly that in this guide - we'll take a look at how to get a mean/average value for different numerical types within Java through built-in methods within the Collectors class.
+
+ADVERTISEMENT
+
+Note: It's worth noting that you can average the elements themselves, if they're numerical, or reduce them to a numerical representation and then average the reductions, if they aren't.
+
+Collectors and Stream.collect()
+Collectors represent implementations of the Collector interface, which implements various useful reduction operations, such as accumulating elements into collections, summarizing elements based on a specific parameter, etc.
+
+All predefined implementations can be found within the Collectors class.
+
+You can also very easily implement your own collector and use it instead of the predefined ones, though - you can get pretty far with the built-in collectors, as they cover the vast majority of cases in which you might want to use them.
+
+To be able to use the class in our code we need to import it:
+
+import static java.util.stream.Collectors.*;
+Stream.collect() performs a mutable reduction operation on the elements of the stream.
+
+
+A mutable reduction operation collects input elements into a mutable container, such as a Collection, as it processes the elements of the stream.
+
+Definition of the averaging_() Collectors
+The Collectors class has a variety of useful functions, and it so happens that it contains a few that allow us to find a mean value of input elements.
+
+There's a total of three of them: Collectors.averagingInt(), Collectors.averagingDouble() and Collectors.averagingLong().
+
+Let's start off by taking a look at the method signatures:
+
+public static <T> Collector<T,?,Double> averagingInt(ToIntFunction<? super T> mapper)
+
+public static <T> Collector<T,?,Double> averagingDouble(ToDoubleFunction<? super T> mapper)
+
+public static <T> Collector<T,?,Double> averagingLong(ToLongFunction<? super T> mapper)
+
+Note: The generic T in the method signatures represents the type of the input elements we're working with.
+
+ADVERTISEMENT
+The ToIntFunction, ToDoubleFunction and ToLongFunction from java.util.function enable us to perform conversions (reductions) from object types to their primitive int, double or long fields. Let's define a Student class that we can reduce to a numerical field:
+
+public class Student {
+    private String name;
+    private Double grade;
+    private Integer age;
+    private Long examsTaken;
+
+   // Constructor, getters and setters
+Let's also instantiate our students in a List:
+
+List<Student> students = Arrays.asList(
+    new Student("John", 7.56, 21, 17L),
+    new Student("Jane", 8.31, 19, 9L),
+    new Student("Michael", 9.17, 20, 14L),
+    new Student("Danielle", 9.17, 21, 23L),
+    new Student("Joe", 8.92, 22, 25L)
+);
+Besides custom objects - we'll also take a look at how we can use the averaging collectors on primitive data types - that is Lists consisted of only numerical elements.
+
+Collectors.averagingInt()
+This method returns a Collector that produces the arithmetic mean of an integer-valued function applied to the input elements. In the case of no elements being present, the result is 0.
+
+Since all of the averaging methods are pretty straightforward we'll go straight to an example.
+
+The first of the two examples will be using a simple List consisted of Integers. Let's say we have the following:
+
+List<Integer> numbers = Arrays.asList(1, 2, 3, 4, 5);
+Double average = numbers.stream().collect(Collectors.averagingInt(Integer::intValue));
+System.out.println(average);
+We apply the .stream() method to create a stream of Integer objects, after which we use the previously discussed .collect() method to collect the stream with the averagingInt() collector.
+
+
+Free eBook: Git Essentials
+Check out our hands-on, practical guide to learning Git, with best-practices, industry-accepted standards, and included cheat sheet. Stop Googling Git commands and actually learn it!
+
+
+Download the eBook  
+Since the values are already integers, get the intValue through a method reference, effectively performing a 1-to-1 mapping as our ToIntFunction, as there's no conversion required:
+
+3.0
+Next on, in our Student class, the only integer-valued field is age. In the following example we'll be calculating the average age of all of our students:
+
+Double averageAge = students.stream().collect(Collectors.averagingInt(Student::getAge));
+System.out.println("Average student age is: " + averageAge);
+The inner workings when using a field from a user-defined class is the same, the only difference is that we can't average the Student instances, so we reduce them to their age. The ToIntFunction in this case is a method reference to the getAge() method, and through it, we reduce the Student to their age.
+
+This process stays the same in both of our upcoming methods as well, the only thing that'll change is which method we're referencing for the conversion functions. The output of our code snippet is:
+
+Average student age is: 20.6
+Collectors.averagingDouble()
+This method returns a Collector that produces the arithmetic mean of an double-valued function applied to the input elements. In the case of no elements being present, the result is 0.
+
+The Collectors.averagingDouble() differs a tiny bit from averagingInt() given the fact that it works with doubles. The average that's being returned can vary depending on the order in which values are processed, due to the accumulated rounding errors. Values sorted by increasing order tend to produce more accurate results.
+
+If any value is NaN or the sum at any point is NaN - the mean will also be NaN. Additionally, the double format can be represented with all consecutive integers in the range from -253 to 253.
+
+ADVERTISEMENT
+Let's calculate the average value of a list of doubles:
+
+List<Double> numbers = Arrays.asList(3.0, 8.0, 4.0, 11.0);
+Double average = numbers.stream().collect(Collectors.averagingDouble(Double::doubleValue));
+System.out.println(average);
+This results in:
+
+6.5
+Now, let's apply the method to our Student class. The grade field is a double, so we'll use a method reference to that field's getter as the ToDoubleFunction in the averagingDouble() call:
+
+Double averageGrade = students.stream().collect(Collectors.averagingDouble(Student::getGrade));
+System.out.println("Average student grade is: " + averageGrade);
+Running this gives us the following output:
+
+Average student grade is: 8.62
+Collectors.averagingLong()
+The last of the averaging methods is Collectors.averagingLong(). This method as well as the previous two, returns a Collector that produces the arithmetic mean of a long-valued function applied to the input elements. If there are no elements average, 0 is returned.
+
+As with the previous two, we can easily average a list of long values:
+
+ADVERTISEMENT
+List<Long> numbers = Arrays.asList(10L, 15L, 1L, 3L, 7L);
+Double average = numbers.stream().collect(Collectors.averagingDouble(Long::longValue));
+System.out.println(average);
+This results in:
+
+7.2
+Finally, our Student class has a Long-valued examsTaken field, for which we can calculate the mean of. We'll use a method reference to the getExamsTaken() method as the ToLongFunction:
+
+Double averageExamsTaken = students.stream().
+    collect(Collectors.averagingLong(Student::getExamsTaken));
+System.out.println("Average exam taken per student is: " + averageExamsTaken);
+Running this outputs:
+
+Average exam taken per student is: 17.6
+Conclusion
+Many a times we have a need for computing averages of multiple values, and using the provided averaging_() methods of the Collectors class is one of the easiest and most efficient ways to do this in Java.
+
+In this guide, we've gone through all three of them available within the aforementioned class, explained how each of them works on an example of a user-defined class and showed how we can use them in code to achieve the results we were aiming for.
+													 
+</details>
+
+<details><summary><b>Java - Filter a Stream with Lambda Expressions</b></summary>
+Java Streams have been introduced all the way back in Java 8 in 2014, in an effort to introduce verbose Java to a Functional Programming paradigm. Java Streams expose many flexible and powerful functional operations to perform collection processing in one-liners.
+
+Filtering collections based on some predicate remains one of the most commonly used functional operations, and can be performed with a Predicate or more concisely - with a Lambda Expression.
+
+In this short guide, we'll take a look at how you can filter a Java 8 Stream with Lambda Expressions.
+
+
+Advice: If you aren't familiar with functional interfaces, predicates and lambda expressions - for an example-driven intuition-building guide, read our in-depth "Guide to Functional Interfaces and Lambda Expressions in Java"!
+
+Filtering Streams in Java
+In general, any Stream can be filtered via the filter() method, and a given predicate:
+
+Stream<T> filter(Predicate<? super T> predicate)
+Each element in the stream is run against the predicate, and is added to the output stream if the predicate returns true. You can supply a Predicate instance:
+
+ADVERTISEMENT
+Predicate<String> contains = s -> s.contains("_deprecated");
+List<String> results = stream.filter(contains).collect(Collectors.toList());
+Or, simplify it by providing a Lambda Expression:
+
+List<String> results = stream.filter(s -> s.contains("_deprecated"))
+                             .collect(Collectors.toList());
+Or even collapse the Lambda Expression into a method reference:
+
+// Filters empty strings by invoking s -> s.isEmpty() on each element
+List<String> results = stream.filter(String::isEmpty)
+                             .collect(Collectors.toList());
+With method references, you can't pass arguments, though, you can define methods in the object you're filtering and tailor them to be easily filterable (as long as the method doesn't accept arguments and returns a boolean).
+
+Remember that streams are not collections - they're streams of collections, and you'll have to collect them back into any collection such as a List, Map, etc. to give them permanence. Additionally, all operations done on stream elements either intermediate or terminal:
+
+Intermediate operations return a new stream with changes from the previous operation
+Terminal operations return a data type and are meant to end a pipeline of processing on a stream
+filter() is an intermediate operation, and is meant to be chained with other intermediate operations, before the stream is terminated. To persist any changes (such as changes to elements themselves, or filtered results), you'll have to assign the resulting output stream to a new reference variable, through a terminal operation.
+
+
+Note: Even when chaining many lambda expressions, you might not run into readability issues, with proper line breaks.
+
+ADVERTISEMENT
+In the following examples, we'll be working with this list of books:
+
+Book book1 = new Book("001", "Our Mathematical Universe", "Max Tegmark", 432, 2014);
+Book book2 = new Book("002", "Life 3.0", "Max Tegmark", 280, 2017);
+Book book3 = new Book("003", "Sapiens", "Yuval Noah Harari", 443, 2011);
+        
+List<Book> books = Arrays.asList(book1, book2, book3);
+Filter Collection with Stream.filter()
+Let's filter this collection of books. Any predicate goes - so let's for example filter by which books have over 400 pages:
+
+List<Book> results = books.stream()
+                          .filter(b -> b.getPageNumber() > 400)
+                          .collect(Collectors.toList());
+This results in a list which contains:
+
+[
+Book{id='001', name='Our Mathematical Universe', author='Max Tegmark', pageNumber=432, publishedYear=2014}, 
+Book{id='003', name='Sapiens', author='Yuval Noah Harari', pageNumber=443, publishedYear=2011}
+]
+When filtering, a really useful method to chain is map(), which lets you map objects to another value. For example, we can map each book to its name, and thus return only the names of the books that fit the predicate from the filter() call:
+
+List<String> results = books.stream()
+                            .filter(b -> b.getPageNumber() > 400)
+                            .map(Book::getName)
+                            .collect(Collectors.toList());
+This results in a list of strings:
+
+[Our Mathematical Universe, Sapiens]
+Filter Collection on Multiple Predicates with Stream.filter()
+Commonly, we'd like to filter collections by more than one criteria. This can be done by chaining multiple filter() calls or using a short-circuit predicate, which checks for two conditions in a single filter() call.
+
+ List<Book> results = books.stream()
+                    .filter(b -> b.getPageNumber() > 400 && b.getName().length() > 10)
+                    .collect(Collectors.toList());
+                    
+// Or
+
+ List<Book> results2 = books.stream()
+                    .filter(b -> b.getPageNumber() > 400)
+                    .filter(b -> b.getName().length() > 10)
+                    .collect(Collectors.toList());
+
+Free eBook: Git Essentials
+Check out our hands-on, practical guide to learning Git, with best-practices, industry-accepted standards, and included cheat sheet. Stop Googling Git commands and actually learn it!
+
+
+Download the eBook  
+When utilizing multiple criteria - the lambda calls can get somewhat lengthy. At this point, extracting them as standalone predicates might offer more clarity. Though, which approach is faster?
+
+Single Filter with Complex Condition or Multiple Filters?
+It depends on your hardware, how large your collection is, and whether you use parallel streams or not. In general - one filter with a complex condition will outperform multiple filters with simpler conditions (small-to-medium collections), or perform at the same level (very large collections). If your conditions are too long - you may benefit from distributing them over multiple filter() calls, for the improved readability, since performance is very similar.
+
+The best choice is to try both, note the performance on the target device, and adjust your strategy accordingly.
+
+GitHub user volkodavs did a filtering benchmark in throughput operations/s, and hosted the results on the javafilters-benchmarks repository. The results are summarized in an informative table:
+
+
+It shows a clear diminishing of returns at larger collection sizes, with both approaches performing around the same level. Parallel streams benefit significantly at larger collection sizes, but curb the performance at smaller sizes (below ~10k elements). It's worth noting that parallel streams maintained their throughput much better than non-parallel streams, making them significantly more robust to input.
+</details>
+
+<details><summary><b>Java 8 - Stream.map() Examples</b></summary>
+Introduction
+A Stream is a sequence of objects that supports many different methods that can be combined to produce the desired result.
+
+They can be created from numerous data sources, which are most often collections but can also be I/O channels, Arrays, primitive data types etc.
+
+It's important to emphasize that a stream is not a data structure, since it doesn't store any data. It's just a data source wrapper which allows us to operate with data faster, easier and with cleaner code.
+
+A stream also never modifies the original data structure, it just returns the result of the pipelined methods.
+
+Types of Streams
+Streams can be sequential (created with stream()), or parallel (created with parallelStream()). Parallel streams can operate on multiple threads, while sequential streams can't.
+
+Operations on streams can be either intermediate or terminal:
+
+Intermediate operations on streams return a stream. This is why we can chain multiple intermediate operations without using semicolons. Intermediate operations include the following methods:
+
+ADVERTISEMENT
+map(op) - Returns a new stream in which the provided op function is applied to each of the elements in the original stream
+filter(cond) - Returns a new stream which only contains the elements from the original stream that satisfy the condition cond, specified by a predicate
+sorted() - Returns the original stream, but with the elements being sorted
+Terminal operations are either void or return a non-stream result. They're called terminal because we can't chain any more stream operations once we've used a terminal one, without creating a new stream from it and starting again.
+
+Some of the terminal operations are:
+
+collect() - Returns the result of the intermediate operations performed on the original stream
+forEach() - A void method used to iterate through the stream
+reduce() - Returns a single result produced from an entire sequence of elements in the original stream
+In this tutorial, we'll go over the map() operation and how we can use it with Streams to convert/map objects of various types.
+
+Stream.map() Examples
+Let's take a look at a couple of examples and see what we can do with the map() operation.
+
+Stream of Integers to Stream of Strings
+Arrays.asList(1, 2, 3, 4).stream()
+        .map(n -> "Number " + String.valueOf(n))
+        .forEach(n -> System.out.println(n + " as a " + n.getClass().getName()));
+Here, we've made a list of integers and called stream() on the list to create a new stream of data. Then, we've mapped each number n in the list, via the map() method, to a String. The Strings simply consist of "Number" and the String.valueOf(n).
+
+So for each number in our original list, we'll now have a "Number n" String corresponding to it.
+
+Since map() returns a Stream again, we've used the forEach() method to print each element in it.
+
+Running this code results in:
+
+ADVERTISEMENT
+Number 1 as a java.lang.String
+Number 2 as a java.lang.String
+Number 3 as a java.lang.String
+Number 4 as a java.lang.String
+Note: This hasn't altered the original list in the slightest. We've simply processed the data and printed the results. If we wanted to persist this change, we'd collect() the data back into a Collection object such as a List, Map, Set, etc:
+
+List<Integer> list = Arrays.asList(1, 2, 3, 4);
+        
+List<String> mappedList = list.stream()
+        .map(n -> "Number " + String.valueOf(n))
+        .collect(Collectors.toList());
+
+System.out.println(list);
+System.out.println(mappedList);
+This results in:
+
+[1, 2, 3, 4]
+[Number 1, Number 2, Number 3, Number 4]
+Stream of Strings into Stream of Integers
+Now, let's do it the other way around - convert a stream of strings into a stream of integers:
+
+Arrays.asList("1", "2", "3", "4").stream()
+        .map(n -> Integer.parseInt(n))
+        .forEach(n -> System.out.println(n));
+As expected, this code will produce the following output:
+
+1
+2
+3
+4
+List of Objects into List of Other Objects
+Let's say we have a class Point that represents one point in a cartesian coordinate system:
+
+public class Point {
+    int X;
+    int Y;
+    
+    Point(int x, int y){
+        this.X=x;
+        this.Y=y;
+    }
+    
+    @Override
+    public String toString() {
+        return "(" + this.X + ", " + this.Y + ")";
+    }
+    
+}
+Then, say we want to scale a certain shape by a factor of 2, this means we have to take all the points we have, and double both their X and Y values. This can be done by mapping the original values to their scaled counterparts.
+
+
+Free eBook: Git Essentials
+Check out our hands-on, practical guide to learning Git, with best-practices, industry-accepted standards, and included cheat sheet. Stop Googling Git commands and actually learn it!
+
+
+Download the eBook  
+Then, since we'd like to use the new coordinates, we'll collect this data into a new list of scaled points:
+
+List<Point> originalPoints = Arrays.asList(new Point(1, 2),
+                                           new Point(3, 4),
+                                           new Point(5, 6),
+                                           new Point(7, 8));
+System.out.println("Original vertices: " + originalPoints);
+    
+List<Point> scaledPoints = originalPoints
+        .stream()
+        .map(n -> new Point(n.X * 2, n.Y * 2))
+        .collect(Collectors.toList());
+
+System.out.println("Scaled vertices: " + scaledPoints);
+This example will produce the following output:
+
+Original vertices: [(1, 2), (3, 4), (5, 6), (7, 8)]
+Scaled vertices: [(2, 4), (6, 8), (10, 12), (14, 16)]
+Conclusion
+In this article, we explained what streams are in Java. We mentioned some of the basic methods used on streams, and focused specifically on the map() method and how it can be used for stream manipulation.
+
+It is important to mention that streams are not really a mandatory part of programming, however they are more expressive and can significantly improve the readability of your code, which is why they became a common programming practice.
+</details>
+<details><summary><b>Java 8 Streams: Definitive Guide to flatMap()</b></summary>
+Introduction
+Mapping elements from one collection to another, applying a transformative function between them is a fairly common and very powerful operation. Java's functional API supports both map() and flatMap().
+
+If you'd like to read more about map(), read our Java 8 - Stream.map() Examples!
+
+The flatMap() operation is similar to map(). However, flatMap() flattens streams in addition to mapping the elements in those streams.
+
+Flat mapping refers to the process of flattening a stream or collection from a nested/2D stream or collection into their 1D representation:
+
+List of lists: [[1, 2, 3], [4, 5, 6, 7]]
+Flattened list: [1, 2, 3, 4, 5, 6, 7]
+For example, let us say we have a collection of words:
+
+Stream<String> words = Stream.of(
+    "lorem", "ipsum", "dolor", "sit", "amet"
+);
+And, we want to generate a list of all the Character objects in those words. We could create a stream of letters for each word and then combine these streams into a single stream of Character objects.
+
+First, let's try using the map() method. Since we want to chain two transformative functions, let's define them upfront instead of anonymously calling them as Lambda Expressions:
+
+// The member reference replaces `word -> word.chars()` lambda
+Function<String, IntStream> intF = CharSequence::chars;
+This function accepts a String and returns an IntStream - as indicated by the types we've passed in. It transforms a string into an IntStream.
+
+
+Note: You can represent char values using int values. Thus, when you create a stream of primitive char values, the primitive stream version of int values (IntStream) is preferable.
+
+ADVERTISEMENT
+
+Now, we can take this stream and convert the integer values into Character objects. To convert a primitive value to an object - we use the mapToObj() method:
+
+Function<IntStream, Stream<Character>> charF = s -> s.mapToObj(val -> (char) val);
+This function transforms an IntStream into a Stream of characters. Finally, we can chain these two, mapping the words in the original stream to a new stream, in which all of the words have passed through these two transformative functions:
+
+words
+    // Chaining functions
+    .map(intF.andThen(charF))
+    // Observe the mapped values
+    .forEach(s -> System.out.println(s.collect(Collectors.toList())));
+And on running the code snippet, you will get the output:
+
+[l, o, r, e, m]
+[i, p, s, u, m]
+[d, o, l, o, r]
+[s, i, t]
+[a, m, e, t]
+After collecting the stream into a list - we've ended up with a list of lists. Each list contains the characters of one of the words in the original stream. This isn't a flattened list - it's two dimensional.
+
+If we were to flatten the list - it'd only be one list, containing all of the characters from all of the words sequentially.
+
+This is where flatMap() kicks in.
+
+Instead of chaining these two functions as we have, we can map() the words using intF and then flatMap() them using charF:
+
+List listOfLetters = words
+    .map(intF)
+    .flatMap(charF)
+    .collect(Collectors.toList());
+
+System.out.println(listOfLetters);
+Which produces the output:
+
+[l, o, r, e, m, i, p, s, u, m, d, o, l, o, r, s, i, t, a, m, e, t]
+As we can see, flatMap() applies a given function to all the available streams before returning an cumulative stream, instead of a list of them. This feature is useful in other implementations too. Similar to the Stream API, Optional objects also offer map() and flatMap() operations.
+
+For instance, the flatMap() method helps in unwrapping Optional objects, such as Optional<Optional<T>>. On unwrapping, such a nested Optional results in Optional<T>.
+
+In this guide we'll explore the use cases of flatMap() and also put them to practice.
+
+Definitions
+Let's start off with the definitions and the method's signature:
+
+// Full generics' definition omitted for brevity
+<R> Stream<R> flatMap(Function<T, Stream<R>> mapper)
+
+The flatMap() operation returns a cumulative stream, generated from multiple other streams. The elements of the stream are created by applying a mapping function to each element of the constituent streams, and each mapped stream is closed after its own contents have been placed into the cumulative stream.
+
+T represents the class of the objects in the pipeline. R represents the resulting class type of the elements that will be in the new stream. Thus, from our previous example, we can observe how the class types are transforming.
+
+The lambda-bodied Function we've used earlier:
+
+Function<IntStream, Stream<Character>> charF = s -> s.mapToObj(val -> (char) val);
+Is equivalent to:
+
+ADVERTISEMENT
+Function charF = new Function<IntStream, Stream<Character>>(){
+    @Override
+    public Stream<Character> apply(IntStream s){
+        return s.mapToObj(val -> (char) val);
+    }
+};
+The charF function accepts an input T of type IntStream. Then, it applies a mapper, which returns a stream containing elements of type R. And, in this case R is Character.
+
+Conditions
+The mapper that flatMap() uses should be:
+
+Non-interfering
+Stateless
+Remember, from what we have seen, the mapper for the charF function is:
+
+s.mapToObj(val -> (char) val);
+And, when you expand this mapper into its anonymous class equivalent you get:
+
+new IntFunction<Character>(){
+    @override
+    public Character apply(int val){
+        return (char) val;
+    }
+};
+In terms of non-interference, note how the mapper does not modify the elements in the stream. Instead, it creates new elements from the ones in the stream. It casts each int value in the stream into a char value.
+
+Then the flatMap() operation places those new char values into a new stream. Next, it boxes those char values into their Character wrapper object equivalents. This is the standard practice in all collections too. Primitive values like char and int cannot be used in collections or streams for that matter.
+
+The mapper needs to be stateless also. In simple terms, the mapper function should not depend on the state of the stream that is supplying it with elements. In other terms - for the same input, it should absolutely always give the same output.
+
+In our case, we see that the mapper simply casts all the int values it gets from the stream. It does not interrogate the stream's condition in any way. And, in return, you could be sure that the mapper would return predictable results even in multi-threaded operations.
+
+Using flatMap() to Flatten Streams
+Say you want to sum the elements of multiple streams. It would make sense to flatMap() the streams into a single one and then sum all of the elements.
+
+A simple example of a 2D collection of integers is Pascal's Triangle:
+
+[1]
+[1, 1]
+[1, 2, 1]
+...
+A triangle like this can work as a simple stub for streams of other data we may encounter. Working with lists of lists isn't uncommon, but is tricky. For instance, lists of lists are oftentimes created when grouping data together.
+
+If you'd like to read more about grouping, read our Guide to Java 8 Collectors: groupingBy()!
+
+Your data could be grouped by a date and represent the pageviews generated by hour, for example:
+
+{1.1.2021. = [42, 21, 23, 52]},
+{1.2.2021. = [32, 27, 11, 47]},
+...
+If you'd like to calculate the sum of these - you could run a loop for each date or stream/list and sum the elements together. However, reduction operations like this are simpler when you have one stream, instead of many - so you could unwrap these into a single stream via flatMap() before summing.
+
+Let's create a Pascal Triangle generator to stub the functionality of an aggregator that aggregates grouped data:
+
+public class PascalsTriangle {
+    private final int rows;
+    
+    // Constructor that takes the number of rows you want the triangle to have
+    public PascalsTriangle(int rows){
+        this.rows = rows;
+    }
+    
+    // Generates the numbers for every row of the triangle
+    // Then, return a list containing a list of numbers for every row
+    public List<List<Integer>> generate(){
+        List<List<Integer>> t = new ArrayList<>();
+        // Outer loop collects the list of numbers for each row
+        for (int i = 0; i < rows; i++){
+            List<Integer> row = new ArrayList<>();
+            // Inner loop calculates the numbers that will fill a given row
+            for (int j = 0; j <= i; j++) {
+                row.add(
+                    (0 < j && j < i)
+                    ? (
+                        t.get(i - 1).get(j - 1)
+                        + t.get(i - 1).get(j)
+                    )
+                    : 1
+                );
+            }
+            t.add(row);
+        }        
+        return t;
+    }
+}
+Now, let's generate a 10-row triangle and print the contents:
+
+
+Free eBook: Git Essentials
+Check out our hands-on, practical guide to learning Git, with best-practices, industry-accepted standards, and included cheat sheet. Stop Googling Git commands and actually learn it!
+
+
+Download the eBook  
+PascalsTriangle pt = new PascalsTriangle(10);
+List<List<Integer>> vals = pt.generate();
+vals.stream().forEach(System.out::println);
+This results in:
+
+[1]
+[1, 1]
+[1, 2, 1]
+[1, 3, 3, 1]
+[1, 4, 6, 4, 1]
+[1, 5, 10, 10, 5, 1]
+[1, 6, 15, 20, 15, 6, 1]
+[1, 7, 21, 35, 35, 21, 7, 1]
+[1, 8, 28, 56, 70, 56, 28, 8, 1]
+[1, 9, 36, 84, 126, 126, 84, 36, 9, 1]
+We can either flatten the entire list here, and then sum the numbers up or we can sum up the numbers in each list, flatten it and then sum those results.
+
+Code-wise, we can pass in a mapper while flattening a list of streams. Since we're ultimately arriving at an integer, we're flat mapping to an integer. This is a transformative operation and we can define a standalone mapper Function that sums the streams up.
+
+
+Note: For flat mapping to specific types and using mappers to achieve that - we can use the flatMapToInt(), flatMapToLong() and flatMapToDouble() methods. These were introduced as specialized flat mapping methods to avoid explicit or implicit casting during the process, which can prove costly on larger datasets. Previously, we cast each char to a Character because we didn't use a mapper. If you can use a specialized variant, you're mean to use it.
+
+The mapper defines what happens to each stream before flattening. This makes it shorter and cleaner to define a mapper upfront and just run flatMapToInt() on the summed numbers in the lists, summing them together in the end!
+
+Let's start with creating a mapper. We'll override the apply() method of a Function, so that when we pass it into flatMap() it gets applied to the underlying elements (streams):
+
+Function<List<Integer>, IntStream> mapper = new Function<>() {
+    @Override
+    public IntStream apply(List<Integer> list){
+        return IntStream.of(
+                list.stream()
+                    .mapToInt(Integer::intValue)
+                    .sum()
+        );
+    }
+};  
+Or, we could've replaced the entire body with a simple Lambda:
+
+Function<List<Integer>, IntStream> mapper = list -> IntStream.of(
+        list.stream()
+             .mapToInt(Integer::intValue)
+             .sum()
+);
+The mapper accepts a list of integers and returns a sum of the elements. We can use this mapper with flatMap() as:
+
+int total = vals.stream.flatMapToInt(mapper).sum();
+System.out.println(total);
+This results in:
+
+1023
+Using flatMap() for One-Stream-to-Many Operations
+Unlike the map() operation, flatMap() allows you to do multiple transformations to the elements it encounters.
+
+Remember, with map() you can only turn an element of type T into another type R before adding the new element into a stream.
+
+With flatMap(), however, you may turn an element, T, into R and create a stream of Stream<R>.
+
+As we shall see, that capability comes in handy when you want to return multiple values out of a given element back into a stream.
+
+Expand a Stream
+Say, you have a stream of numbers:
+
+Stream<Integer> numbers = Stream.of(1, 2, 3, 4, 5, 6);
+And you want to expand that stream in such a way that every number is duplicated. This is, surprisingly enough, dead simple:
+
+ADVERTISEMENT
+Stream<Integer> duplicatedNumbers = numbers.flatMap(val -> Stream.of(val, val));
+duplicatedNumbers.forEach(System.out::print);
+Here, we flat-mapped the Streams created by each element in the numbers stream, in such a way to contain (val, val). That's it! When we run this code, it results in:
+
+112233445566
+Transform a Stream
+In some use cases, you may not even want to unwrap a stream fully. You may be only interested in tweaking the contents of a nested stream. Here too, flatMap() excels because it allows you to compose new streams in the manner you desire.
+
+Let's take a case where you want to pair up some elements from one stream with those from another stream. Notation-wise, assume you have a stream containing the elements {j, k, l, m}. And, you want to pair them with each of the elements in the stream, {n, o, p}.
+
+You aim to create a stream of pair lists, such as:
+
+[j, n]
+[j, o]
+[j, p]
+[k, n]
+.
+.
+.
+[m, p]
+Accordingly, let's create a pairUp() method, that accepts two streams and pairs them up like this:
+
+public Stream<List<?>> pairUp(List<?> l1, List<?> l2){
+    return l1.stream().flatMap(
+            // Where fromL1 are elements from the first list (l1)
+            fromL1 -> {
+                return l2.stream().map(
+                        // Where fromL2 are elements from the second list (l2)
+                        fromL2 -> {
+                            return Arrays.asList(
+                                    fromL1, fromL2
+                            );
+                        }
+                );
+            }
+    );
+}
+The flatMap() operation in this case saves the pairUp() method from having to return Stream<Stream<List<?>>>. This would have been the case if we would have initiated the operation as:
+
+public Stream<Stream<List<?>>> pairUp(){
+    return l1.stream.map( ... );
+}
+Otherwise, let's run the code:
+
+List<?> l1 = Arrays.asList(1, 2, 3, 4, 5, 6);
+List<?> l2 = Arrays.asList(7, 8, 9);
+
+Stream<List<?>> pairedNumbers = pairUp(l1, l2);
+pairedNumbers.forEach(System.out::println);
+We get the output:
+
+[1, 7]
+[1, 8]
+[1, 9]
+[2, 7]
+[2, 8]
+[2, 9]
+[3, 7]
+[3, 8]
+[3, 9]
+[4, 7]
+[4, 8]
+[4, 9]
+[5, 7]
+[5, 8]
+[5, 9]
+[6, 7]
+[6, 8]
+[6, 9]
+Unwrapping Nested Optionals using flatMap()
+Optionals are containers for objects, useful for eliminating regular null checks and wrapping empty values in containers we can handle more easily and safely.
+
+If you'd like to read more about Optionals, read our Guide to Optionals in Java 8!
+
+We are interested in this type because it offers the map() and flatMap() operations like the Streams API does. See, there are use cases where you end up with Optional<Optional<T>> results. Such results indicate poor code design, and if you can't employ an alternative - you can eliminate nested Optional objects with flatMap().
+
+Let's create an environment in which you could encounter such a situation. We have a Musician who may produce a music Album. And, that Album may have a CoverArt. Of course, someone (say, a graphic designer) would have designed the CoverArt:
+
+public class Musician {
+    private Album album;    
+    public Album getAlbum() {
+        return album;
+    }
+}
+
+public class Album {
+    private CoverArt art;    
+    public CoverArt getCoverArt() {
+        return art;
+    }
+}
+
+public class CoverArt {
+    private String designer;    
+    public String getDesigner() {
+        return designer;
+    }
+}
+In this nested sequence, to get the name of the designer who made the cover art, you could do:
+
+public String getAlbumCoverDesigner(){
+    return musician
+        .getAlbum()
+        .getCoverArt()
+        .getDesigner();
+}
+Yet, code-wise, you are bound to encounter errors if the said Musician has not even released an Album in the first place - a NullPointerException.
+
+ADVERTISEMENT
+Naturally, you can mark these as Optional as they are, in fact optional fields:
+
+public class Musician {
+    private Optional<Album> album;
+    public Optional<Album> getAlbum() {
+        return album;
+    }
+}
+
+public class Album {
+    private Optional<CoverArt> art;
+    public Optional<CoverArt> getCoverArt() {
+        return art;
+    }
+}
+
+// CoverArt remains unchanged
+Still, when someone asks the question about who a CoverArt designer was, you would continue to encounter errors with your code. See, calling the re-done method, getAlbumCoverDesigner() would still fail:
+
+public Optional<String> getAlbumCoverDesigner(){
+    Musician musician = new Musician();
+    
+    Optional.ofNullable(musician)
+        .map(Musician::getAlbum)
+        // Won't compile starting from this line!
+        .map(Album::getCoverArt)
+        .map(CoverArt::getDesigner);
+    // ...
+}
+This is because the lines:
+
+Optional.ofNullable(musician)
+        .map(Musician::getAlbum)
+Return a type Optional<Optional<Album>>. A correct approach would be to use the flatMap() method instead of map().
+
+public Optional<String> getAlbumCoverDesigner(){
+    Musician musician = new Musician();
+        
+    return Optional.ofNullable(musician)
+        .flatMap(Musician::getAlbum)
+        .flatMap(Album::getCoverArt)
+        .map(CoverArt::getDesigner)
+        .orElse("No cover designed");
+}
+Ultimately, the flatMap() method of Optional unwrapped all the nested Optional statements. Yet, you should also notice how orElse() has contributed to the readability of the code. It helps you to provide a default value in case the mapping comes up empty at any point in the chain.
+
+Conclusion
+The Streams API offers several helpful intermediate operations such as map() and flatMap(). And in many cases, the map() method proves sufficient when you need to transform the elements of a stream into another type.
+
+Yet, there are instances when the results of such mapping transformations end up producing streams nested within other streams.
+
+And that could hurt code usability because it only adds an unnecessary layer of complexity.
+
+Fortunately, the flatMap() method is able to combine elements from many streams into the desired stream output. Also, the method gives users the freedom to compose the stream output as they wish. This is contrary to how map() places transformed elements in the same number of streams as found. This means, in terms of stream output, the map operation offers a one-to-one transformation. On the other hand, flatMap() can produce a one-to-many conversion.
+
+The flatMap() method also serves to simplify how the Optional container object works. Whereas the map() method can extract values from an Optional object, it may fail if code design causes the nesting of the optionals. In such cases, flatMap() plays the crucial role of ensuring that no nesting occurs. It transforms objects contained in Optional and returns the result in a single layer of containment.
+</details>
+
 <details>
 <summary>👇<b>3.1 Java 8 Primitive Streams</b></summary>
   
@@ -44738,2502 +47237,4 @@ static class TreeNode<K,V> extends LinkedHashMap.Entry<K,V> {
 Overall, the changes in Java 8 aim to balance the trade-offs between memory consumption and performance, particularly for scenarios where hash collisions are frequent.
 </details>
 
-<details><summary><b>In Java 8, significant enhancements to the Collections Framework</b></summary>
-    
-Java 8 introduced several significant enhancements to the Collections Framework, including new features, improvements, and changes to the internal implementations. Here’s a comprehensive overview of the changes:
-
-### 1. **Introduction of Streams API**
-
-- **Purpose**: The Streams API allows for functional-style operations on collections, making it easier to perform complex queries, transformations, and aggregations on data.
-- **Key Classes and Interfaces**: `Stream`, `IntStream`, `LongStream`, `DoubleStream`
-- **Key Methods**:
-  - **`stream()`**: Converts a collection to a stream.
-  - **`filter()`, `map()`, `reduce()`, `collect()`**: Methods to perform operations on streams.
-  - **Example**:
-    ```java
-    List<String> names = Arrays.asList("John", "Jane", "Jack");
-    List<String> filteredNames = names.stream()
-                                     .filter(name -> name.startsWith("J"))
-                                     .collect(Collectors.toList());
-    ```
-
-### 2. **Default Methods in Interfaces**
-
-- **Purpose**: Default methods allow interfaces to provide a default implementation for methods, which helps in evolving interfaces without breaking existing implementations.
-- **Key Interfaces**:
-  - **`Collection`, `List`, `Set`, `Map`**: Many interfaces in the Collections Framework now have default methods.
-- **Examples**:
-  - **`List` Interface**:
-    ```java
-    default void forEach(Consumer<? super E> action) {
-        Objects.requireNonNull(action);
-        for (E e : this)
-            action.accept(e);
-    }
-    ```
-  - **`Map` Interface**:
-    ```java
-    default V getOrDefault(Object key, V defaultValue) {
-        V v;
-        return ((v = this.get(key)) != null || this.containsKey(key)) ? v : defaultValue;
-    }
-    ```
-
-### 3. **New Methods in Collection Interfaces**
-
-- **Purpose**: New methods were added to the core collection interfaces to support more operations directly on collections.
-- **Examples**:
-  - **`Collection`**:
-    - `removeIf(Predicate<? super E> filter)`: Removes elements that match the given predicate.
-    - `spliterator()`: Returns a `Spliterator` for iterating over the collection.
-  - **`List`**:
-    - `replaceAll(UnaryOperator<E> operator)`: Replaces each element with the result of applying the operator.
-    - `sort(Comparator<? super E> c)`: Sorts the list using the provided comparator.
-  - **`Map`**:
-    - `forEach(BiConsumer<? super K, ? super V> action)`: Performs the given action for each entry.
-    - `merge(K key, V value, BiFunction<? super V, ? super V, ? extends V> remappingFunction)`: Merges the specified value into the map.
-
-### 4. **Improvements to `HashMap`**
-
-- **Tree-Based Buckets**: Introduced to improve performance for buckets with many collisions (see detailed explanation in the previous response).
-- **Enhanced Hash Function**: Provides a better distribution of keys to reduce the likelihood of long chains.
-- **Implementation Details**:
-  - `HashMap` now uses a combination of linked lists and balanced binary trees for handling hash collisions.
-
-### 5. **`ConcurrentHashMap` Enhancements**
-
-- **Purpose**: Improve the performance and scalability of concurrent operations.
-- **Key Changes**:
-  - **New Methods**: Added methods like `forEach`, `reduce`, and `computeIfAbsent`.
-  - **Segment Locking**: Improved internal locking mechanisms to reduce contention.
-- **Example**:
-  ```java
-  ConcurrentHashMap<String, Integer> map = new ConcurrentHashMap<>();
-  map.computeIfAbsent("key", k -> 42);
-  ```
-
-### 6. **`Optional` Class**
-
-- **Purpose**: `Optional` is a container object which may or may not contain a value. It helps to avoid `NullPointerException` and provides a more functional approach to handle optional values.
-- **Key Methods**:
-  - `of(T value)`, `ofNullable(T value)`, `empty()`
-  - `ifPresent(Consumer<? super T> action)`, `orElse(T other)`, `map(Function<? super T, ? extends U> mapper)`
-- **Example**:
-  ```java
-  Optional<String> optional = Optional.of("Hello");
-  optional.ifPresent(System.out::println);
-  ```
-
-### 7. **`Collections` Class Enhancements**
-
-- **Purpose**: `Collections` utility class received new static methods.
-- **Key Methods**:
-  - `unmodifiableCollection`, `unmodifiableList`, `unmodifiableMap`, `unmodifiableSet`: Methods to create unmodifiable views of collections.
-  - `newSetFromMap(Map<T, Boolean> map)`: Creates a set backed by the specified map.
-
-### 8. **`List` Interface Enhancements**
-
-- **Purpose**: Provides additional utility methods for list manipulation.
-- **Key Methods**:
-  - `copyOf(Collection<? extends E> coll)`: Creates an immutable list containing the elements of the given collection.
-  - `of(E... elements)`: Creates an immutable list containing the specified elements.
-
-### 9. **`Set` Interface Enhancements**
-
-- **Purpose**: Enhancements to support immutable sets and other functionalities.
-- **Key Methods**:
-  - `copyOf(Collection<? extends E> coll)`: Creates an immutable set containing the elements of the given collection.
-  - `of(E... elements)`: Creates an immutable set containing the specified elements.
-
-### Summary
-
-Java 8 made significant improvements to the Collections Framework, adding powerful new features such as the Streams API for functional-style operations, default methods in interfaces for better extensibility, and enhancements to core classes like `HashMap` and `ConcurrentHashMap` for better performance and scalability. These changes have greatly enhanced the flexibility, efficiency, and ease of use of Java’s collection classes.
-</details>
-<details><summary><b>details of HashSet, Hashtable, HashMap, and ConcurrentHashMap</b></summary>
-Certainly! Let's dive into the details of `HashSet`, `Hashtable`, `HashMap`, and `ConcurrentHashMap`, including their differences and specific use cases.
-
-### 1. **HashSet**
-
-- **Purpose**: `HashSet` is a collection that implements the `Set` interface and is used to store unique elements.
-- **Underlying Implementation**: Internally backed by a `HashMap`. Each element in the `HashSet` is stored as a key in the underlying `HashMap`, with a constant dummy value (often `Boolean.TRUE`).
-- **Characteristics**:
-  - **No Duplicates**: It does not allow duplicate elements.
-  - **Unordered**: The elements are not stored in any particular order.
-  - **Performance**: Offers constant time performance for basic operations like `add`, `remove`, and `contains` (average case).
-
-```java
-Set<String> set = new HashSet<>();
-set.add("Apple");
-set.add("Banana");
-```
-
-### 2. **Hashtable**
-
-- **Purpose**: `Hashtable` is a legacy class that implements the `Map` interface, used to store key-value pairs.
-- **Characteristics**:
-  - **Synchronized**: All operations are synchronized, making it thread-safe.
-  - **Legacy**: It was part of the original Java 1.0 and has been largely replaced by newer classes like `HashMap` in modern code.
-  - **Null Keys/Values**: Does not allow null keys or null values.
-
-```java
-Hashtable<String, Integer> hashtable = new Hashtable<>();
-hashtable.put("Apple", 1);
-hashtable.put("Banana", 2);
-```
-
-### 3. **HashMap**
-
-- **Purpose**: `HashMap` is a popular implementation of the `Map` interface used to store key-value pairs.
-- **Characteristics**:
-  - **Not Synchronized**: It is not synchronized, so it is not thread-safe by default. For thread safety, you need to synchronize it manually or use `Collections.synchronizedMap`.
-  - **Allows Nulls**: Allows one null key and multiple null values.
-  - **Performance**: Provides constant time performance for basic operations like `get` and `put` (average case), though performance can degrade if hash collisions are high.
-
-```java
-Map<String, Integer> map = new HashMap<>();
-map.put("Apple", 1);
-map.put("Banana", 2);
-```
-
-### 4. **ConcurrentHashMap**
-
-- **Purpose**: `ConcurrentHashMap` is a thread-safe implementation of the `Map` interface designed for concurrent access by multiple threads.
-- **Characteristics**:
-  - **Concurrent Access**: It is designed for concurrent use and provides high performance even with multiple threads accessing the map.
-  - **Segmented Locking**: Prior to Java 8, `ConcurrentHashMap` used a segmented locking mechanism to reduce contention. From Java 8 onwards, it uses a more sophisticated lock-free algorithm with a combination of locks and CAS (Compare-And-Swap) operations.
-  - **No Nulls**: Does not allow null keys or values.
-  - **Performance**: Provides high concurrency and better performance under contention compared to `Hashtable`.
-
-```java
-ConcurrentMap<String, Integer> concurrentMap = new ConcurrentHashMap<>();
-concurrentMap.put("Apple", 1);
-concurrentMap.put("Banana", 2);
-```
-
-### **Comparison Summary**
-
-1. **Thread Safety**:
-   - **`HashSet`**: Not synchronized; not thread-safe.
-   - **`Hashtable`**: Synchronized; thread-safe but outdated.
-   - **`HashMap`**: Not synchronized; not thread-safe by default.
-   - **`ConcurrentHashMap`**: Thread-safe; designed for high concurrency.
-
-2. **Null Keys/Values**:
-   - **`HashSet`**: Allows null elements.
-   - **`Hashtable`**: Does not allow null keys or values.
-   - **`HashMap`**: Allows one null key and multiple null values.
-   - **`ConcurrentHashMap`**: Does not allow null keys or values.
-
-3. **Performance**:
-   - **`HashSet`**: Offers constant time performance for basic operations.
-   - **`Hashtable`**: Synchronized, which can make it slower due to locking.
-   - **`HashMap`**: Offers high performance for non-thread-safe operations.
-   - **`ConcurrentHashMap`**: Designed for high concurrency with good performance under contention.
-
-4. **Use Cases**:
-   - **`HashSet`**: Use when you need a collection of unique elements and do not need thread safety.
-   - **`Hashtable`**: Rarely used in new code due to its legacy nature; prefer newer alternatives.
-   - **`HashMap`**: Use for most general-purpose mapping needs where thread safety is not a concern.
-   - **`ConcurrentHashMap`**: Use in concurrent applications where thread safety and high performance are required.
-</details>
-<details><summary><b>In the Java Collections Framework, the `Map` interface</b></summary>
-In the Java Collections Framework, the `Map` interface is a crucial part that represents a collection of key-value pairs. Java 8 and later versions provide several concrete implementations of the `Map` interface. Here’s a detailed list of the available map implementations:
-
-### 1. **HashMap**
-
-- **Description**: A hash table based implementation of the `Map` interface. It allows for fast retrieval and modification of entries based on hash codes.
-- **Characteristics**:
-  - **Not Synchronized**: Not thread-safe.
-  - **Allows Nulls**: Allows one null key and multiple null values.
-  - **Order**: Does not guarantee any specific order of its entries.
-
-```java
-Map<String, Integer> hashMap = new HashMap<>();
-```
-
-### 2. **LinkedHashMap**
-
-- **Description**: A hash table and linked list implementation of the `Map` interface. It maintains insertion order or access order (if specified).
-- **Characteristics**:
-  - **Not Synchronized**: Not thread-safe.
-  - **Allows Nulls**: Allows one null key and multiple null values.
-  - **Order**: Maintains insertion order or access order.
-
-```java
-Map<String, Integer> linkedHashMap = new LinkedHashMap<>();
-```
-
-### 3. **TreeMap**
-
-- **Description**: A `NavigableMap` implementation based on a Red-Black tree. It orders its entries based on their keys.
-- **Characteristics**:
-  - **Not Synchronized**: Not thread-safe.
-  - **Does Not Allow Null Keys**: Null keys are not allowed, but null values are.
-  - **Order**: Maintains a sorted order of keys.
-
-```java
-Map<String, Integer> treeMap = new TreeMap<>();
-```
-
-### 4. **Hashtable**
-
-- **Description**: A legacy class that implements a hash table. It was part of the original Java 1.0.
-- **Characteristics**:
-  - **Synchronized**: Thread-safe but can be slower due to synchronization.
-  - **Does Not Allow Null Keys or Values**: Null keys and values are not allowed.
-  - **Order**: Does not guarantee any specific order.
-
-```java
-Map<String, Integer> hashtable = new Hashtable<>();
-```
-
-### 5. **ConcurrentHashMap**
-
-- **Description**: A thread-safe implementation of the `Map` interface designed for high concurrency.
-- **Characteristics**:
-  - **Thread-Safe**: Designed for concurrent access with high performance.
-  - **Does Not Allow Null Keys or Values**: Null keys and values are not allowed.
-  - **Order**: Does not guarantee any specific order.
-
-```java
-Map<String, Integer> concurrentHashMap = new ConcurrentHashMap<>();
-```
-
-### 6. **ConcurrentSkipListMap**
-
-- **Description**: A `NavigableMap` implementation that uses a skip list for concurrency. It maintains a sorted order of keys.
-- **Characteristics**:
-  - **Thread-Safe**: Designed for high concurrency.
-  - **Does Not Allow Null Keys**: Null keys are not allowed, but null values are.
-  - **Order**: Maintains a sorted order of keys.
-
-```java
-Map<String, Integer> concurrentSkipListMap = new ConcurrentSkipListMap<>();
-```
-
-### Summary of Map Implementations:
-
-1. **`HashMap`**: Fast and unsynchronized; allows nulls.
-2. **`LinkedHashMap`**: Maintains insertion or access order; unsynchronized.
-3. **`TreeMap`**: Sorted by keys; does not allow null keys; unsynchronized.
-4. **`Hashtable`**: Legacy class; synchronized; does not allow null keys or values.
-5. **`ConcurrentHashMap`**: Thread-safe; does not allow nulls; high concurrency.
-6. **`ConcurrentSkipListMap`**: Thread-safe and sorted; does not allow null keys.
-
-Each of these implementations serves different use cases and offers various performance characteristics and features. Choose the appropriate implementation based on your specific needs, such as thread safety, ordering, and handling of null values.
-</details>
-<details><summary><b>Array vs. ArrayList vs. LinkedList and difference between `Set` and `List`</b></summary>
-    Certainly! Let's break down the differences between `Array`, `ArrayList`, and `LinkedList`, as well as between `Set` and `List` in the Java Collections Framework.
-
-### 1. **Array vs. ArrayList vs. LinkedList**
-
-#### **Array**
-
-- **Description**: A basic data structure that holds a fixed-size collection of elements of the same type.
-- **Characteristics**:
-  - **Size**: Fixed size. Once initialized, its size cannot be changed.
-  - **Access Time**: Provides constant time access (`O(1)`) to elements via index.
-  - **Insertion/Deletion**: Inserting or deleting elements is costly, as it requires shifting elements.
-  - **Memory Efficiency**: More memory-efficient as it does not need to store additional data for structure.
-  - **Syntax**:
-    ```java
-    int[] array = new int[10];
-    array[0] = 1;
-    ```
-
-#### **ArrayList**
-
-- **Description**: A resizable array implementation of the `List` interface.
-- **Characteristics**:
-  - **Size**: Dynamic size. Can grow or shrink as needed.
-  - **Access Time**: Provides constant time access (`O(1)`) to elements via index.
-  - **Insertion/Deletion**: Insertion and deletion are generally costly (`O(n)`) because elements may need to be shifted.
-  - **Memory Efficiency**: Less memory-efficient than arrays due to additional overhead for dynamic resizing.
-  - **Thread Safety**: Not synchronized. For thread safety, use `Collections.synchronizedList` or `CopyOnWriteArrayList`.
-  - **Syntax**:
-    ```java
-    ArrayList<Integer> arrayList = new ArrayList<>();
-    arrayList.add(1);
-    ```
-
-#### **LinkedList**
-
-- **Description**: A doubly-linked list implementation of the `List` and `Deque` interfaces.
-- **Characteristics**:
-  - **Size**: Dynamic size. Can grow or shrink as needed.
-  - **Access Time**: Provides linear time access (`O(n)`) to elements via index, but allows for efficient insertion and deletion.
-  - **Insertion/Deletion**: Efficient (`O(1)`) for adding/removing elements at the beginning or end of the list.
-  - **Memory Efficiency**: Less memory-efficient due to storage of additional pointers (references to previous and next nodes).
-  - **Thread Safety**: Not synchronized. For thread safety, use `Collections.synchronizedList`.
-  - **Syntax**:
-    ```java
-    LinkedList<Integer> linkedList = new LinkedList<>();
-    linkedList.add(1);
-    ```
-
-### 2. **Set vs. List**
-
-#### **Set**
-
-- **Description**: A collection that does not allow duplicate elements.
-- **Key Implementations**:
-  - **`HashSet`**: Uses a hash table. No guarantees on order.
-  - **`LinkedHashSet`**: Maintains insertion order by using a linked list.
-  - **`TreeSet`**: Implements `NavigableSet` and orders elements based on their natural ordering or a specified comparator.
-- **Characteristics**:
-  - **Duplicates**: No duplicate elements allowed.
-  - **Order**: No order guarantee in `HashSet`, insertion order in `LinkedHashSet`, sorted order in `TreeSet`.
-  - **Usage**: Ideal for scenarios where uniqueness of elements is required and order is not a primary concern (except in `LinkedHashSet` or `TreeSet`).
-
-#### **List**
-
-- **Description**: An ordered collection that allows duplicate elements and maintains insertion order.
-- **Key Implementations**:
-  - **`ArrayList`**: Resizable array implementation. Fast random access and iteration.
-  - **`LinkedList`**: Doubly-linked list implementation. Efficient insertions and deletions.
-- **Characteristics**:
-  - **Duplicates**: Allows duplicate elements.
-  - **Order**: Maintains insertion order.
-  - **Usage**: Ideal for scenarios where order matters and/or where duplicate elements are allowed.
-
-### **Comparison Summary**
-
-1. **Array vs. ArrayList vs. LinkedList**:
-   - **Array**: Fixed size, efficient access, inefficient insertions/deletions.
-   - **ArrayList**: Resizable, efficient access, inefficient insertions/deletions, more overhead.
-   - **LinkedList**: Resizable, inefficient access, efficient insertions/deletions, more memory usage.
-
-2. **Set vs. List**:
-   - **Set**: No duplicates, unordered or sorted based on implementation.
-   - **List**: Allows duplicates, maintains insertion order.
-
-### **Use Case Examples**
-
-- **Use an `Array`**: When you know the size of your collection beforehand and need fast access.
-- **Use an `ArrayList`**: When you need a dynamically resizable array and require fast random access.
-- **Use a `LinkedList`**: When you need a list that supports efficient insertions and deletions.
-- **Use a `Set`**: When you need to store unique elements and don't care about the order (unless using `LinkedHashSet` or `TreeSet`).
-- **Use a `List`**: When you need an ordered collection that allows duplicates.
-
-Each of these data structures and collections serves different needs and has different performance characteristics, so choosing the right one depends on your specific requirements.
-</details>
-<details><summary><b>Extra</b></summary>
-
-
-==================================================================================
-
-In this example, we have a Stream of String values which represent numbers, by using the map() function we have converted this Stream to Stream of Integers. How? by applying Integer.valueOf() on each element of Stream. That's how "1" converted to integer 1 and so on. Once the transformation is done, we have collected the result into a List by converting Stream to List using Collectors.
-
-
-To find the second highest salary using Java 8 features such as `ArrayList` and `Map`, you can follow these steps. I'll provide a complete example that demonstrates how to achieve this using Java 8 streams.
-
-### Example Scenario
-Let's say you have a list of employees, where each employee is represented as a `Map` with `name` and `salary` keys. The goal is to find the second highest salary from this list.
-
-### Step-by-Step Solution
-
-1. **Create the Data**: Define a list of maps where each map contains an employee's details.
-
-2. **Extract Salaries**: Use streams to extract the salaries from the maps.
-
-3. **Find Distinct Salaries**: Collect the salaries into a `Set` to ensure there are no duplicates.
-
-4. **Sort and Get the Second Highest Salary**: Convert the set to a list, sort it, and fetch the second highest salary.
-
-Here’s a complete example in Java 8:
-
-```java
-import java.util.*;
-import java.util.stream.Collectors;
-
-public class SecondHighestSalaryExample {
-    public static void main(String[] args) {
-        // Step 1: Create a list of maps representing employees
-        List<Map<String, Object>> employees = new ArrayList<>();
-        
-        employees.add(createEmployee("Alice", 50000));
-        employees.add(createEmployee("Bob", 70000));
-        employees.add(createEmployee("Charlie", 60000));
-        employees.add(createEmployee("David", 70000));
-        employees.add(createEmployee("Eve", 55000));
-        
-        // Step 2: Extract salaries and find the second highest salary
-        Optional<Integer> secondHighestSalary = employees.stream()
-            .map(e -> (Integer) e.get("salary"))  // Extract salaries
-            .distinct()                           // Remove duplicates
-            .sorted(Comparator.reverseOrder())    // Sort in descending order
-            .skip(1)                              // Skip the highest salary
-            .findFirst();                         // Get the second highest salary
-        
-        // Step 3: Output the result
-        if (secondHighestSalary.isPresent()) {
-            System.out.println("The second highest salary is: " + secondHighestSalary.get());
-        } else {
-            System.out.println("There is no second highest salary.");
-        }
-    }
-
-    // Helper method to create an employee map
-    private static Map<String, Object> createEmployee(String name, int salary) {
-        Map<String, Object> employee = new HashMap<>();
-        employee.put("name", name);
-        employee.put("salary", salary);
-        return employee;
-    }
-}
-```
-
-### Explanation
-
-1. **Data Creation**: The `createEmployee` method is used to generate employee maps with a name and salary.
-
-2. **Stream Operations**:
-   - `map(e -> (Integer) e.get("salary"))`: Extracts the salary from each map.
-   - `distinct()`: Removes duplicate salaries.
-   - `sorted(Comparator.reverseOrder())`: Sorts salaries in descending order.
-   - `skip(1)`: Skips the highest salary.
-   - `findFirst()`: Retrieves the next salary, which is the second highest.
-
-3. **Result Handling**: Checks if the result is present and prints it. If no second highest salary is available (e.g., all salaries are the same), it will inform you accordingly.
-
-## Java 8 Lambda Expression + Stream Interview Questions with Answers
-
-Java Streams API is a powerful feature introduced in Java 8 that allows for functional-style operations on sequences of elements. Interview questions related to streams often test your ability to perform complex data manipulations using this API.
-
-### 1. What is lambda expression of Java 8? (answer)
-As it's name suggests its an expression which allows you to write more succinct code in Java 8. For example (a, b) -> a + b is a lambda expression (look for that arrow ->) which is equal to following code:
-```java
-public int value(int a, int b){
-   return a + b;
-}
-```
-It's also called anonymous function because you are essentially writing the code you write in function but without name. 
-
-### 2. Can you pass lambda expression to a method? When? (answer)
-Yes, you can pass a lambda expression to a method provided it is expecting a functional interface. For example, if a method is accepting a Runnable, Comparable or Comparator then you can pass a lambda expression to it because all these are functional interface in Java 8. 
-
-### 3. What is functional interface in Java 8? (answer)
-A functional interface in Java 8 is an interface with single abstract method. For example, Comparator which has just one abstract method called compare() or Runnable which has just one abstract method called run(). There are many more general purpose functional interface are introduced in JDK on java.util.function package. They are also annotated with @FunctionalInterface but that's optional.
-
-### 4. What is map operation in Java 8? (answer)
-The map operation is used to transform one type to another type but applying a function. For example, if you have list of integer number but you want a List of String then you can use map operation to convert that list of integer into list of String by applying toString() function on each element. It came from functional programming paradigm but now Java 8 also has this. 
-
-### 5. What is method reference? (answer)
-A method reference is shortcut of lambda expression. It further cutdown the boilerplate and make your code more readable. If you have a method which already does what you are doing in lambda expression then you can use method reference in place of lambda expression. For example, if you have a list of integer and your are just printing its values like below:
-```java
-list.forEach(i -> System.out.println(i));
-```
-then you can replace this lambda expression with method reference because System.out.println() already does this i.e. take an argument and prints it.
-
-here is the equivalent code using method reference:
-```java
-list.forEach(System.out::println);
-```
-Remember, double colon operator (::) is used for method reference in Java 8. 
-
-### 6. When can you replace lambda expression with method reference? (answer)
-As explained in previous question, you can replace lambda expression with method reference if you already have an equivalent method which is doing the job of your lambda expression. 
-
-### 7. Can you local variables inside lambda expressions in Java 8? (answer)
-Yes, you can use local variable inside lambda expression but only which are effectively final variables. This rule is same as the local variable used inside Anonymous class. If you remember, we can only use final local variables inside anonymous class. 
-
-### 8. What is effectively final variable in Java 8? (answer)
-This question is generally asked as the follow-up of previous question. An effectively final variable is a variable whose value cannot be changed once created. It's similar to final variable but without final modifier. 
-
-### 9. Can you name some common functional interface of JDK 8? (answer)
-Even though you can name Comparator, Comparable, Runnable, Callable, or EventListener as functional interface, it's better to name new functional interfaces from java.util.function pacakge like Predicate, Consumer, Supplier, or BinaryFunction. 
-
-### 10. What is type inference in lambda expression? (answer)
-Lambda expression supports improved type inference that's why you don't need to define types on both side of lambda operator (->). For example, in following lambda expression 
-```java
-(int a, int b) -> (return a+ b);
-```
-compiler will infer the return value will be an int. This is one of the simplest example, compiler is much more intelligent now to infer type s in more complex situations like below:
-```java
-List<String> carOwners = 
-cars.stream()
-.map(car -> car.getRegistration())
-.map(registration -> RTORecords.getOwner(registration))
-.map(owner -> owner.getName())
-.map(name -> name.toUpperCase())
-.collect(toList());
-```
-In this case, we have not specified that car is object of Car, registration is a String, owner is a Person and name is a String type, instead compiler has inferred it all based upon the information it has e.g. List of String is the result. 
-
-
-### 11. What is flatmap operation in Java? (answer)
-This is another functional programming operation which is now available in Java. It's close cousin of map function, which means it not only transforms but also flatten the list. For example, if you have list of list of Integers but you just need list of String then you can use flatmap to do that. You can see this Java Flatmap tutorial for a live example. 
-
-### 12. What is difference between map and flatmap in Java? (answer)
-As the name suggests, map function just transform one type to another like you can use map to transfer list of integer to list of String or vice-versa but flatmap not only transform but also flatten the list. This means if you list of list of employeeIds then you can create a big list of Employee object by transforming and flattening all those list. See the detailed answer for more detailed discussion and real world examples.
-
-### 13. What is difference between lambda expression and anonymous class in Java 8? (answer)
-Even though both lambda expression and anonymous class server the same purpose of passing code to a method there is a key difference between them from Java perspective. 
-
-An anonymous class is a class while lambda expression is more like anonymous function. You can also pass the Lambda expression to any method which accept a functional interface, I mean those interface which just have one single abstract method but you can pass anonymous class to any method which accept any class, there is no restriction on that. 
-
-Also, Anonymous class can implement more than one abstract method unlike Lambda expression which can only implement one single abstract method considering they can only be used in place where a Functional interface is expected. 
-
-On Implementation also, anonymous class generates a class file but lambda expression doesn't. You can further read Java 8 in Action to learn more about implementation of lambda expression in Java. 
-
-### 14. Can you write more than one line of code in lambda expression? (answer)
-Yes, you can write more than online of code in lambda expression using curly braces, similar to how you define static initializer block. 
-
-Here is an example of lambda expression which is longer than one line:
-```java
-(String first, String second) -> { 
-if(first.equals(second)){ 
-   return true; 
- }else{ 
-   return false; 
- } 
-};
-```
-One important thing to note in this case is the return statement, which is mandatory here, unlike one liner lambda where you can just omit them most of the time. 
-
-### 15. What is the benefit of lambda expression of Java 8? (answer)
-The main benefit of lambda expression in Java 8 that now it's easier to pass a code block to a method. Earlier, the only way to do this was wrapping the code inside an Anonymous class, which requires a lot of boilerplate code.
-
-Now, you can achieve the same effect in just a couple of line using lambda expression. This is in my opinion most important Java 8 interview question and if candidate can explain the benefit clearly, he understand Java 8 better than others. 
-
-### 16. Is it mandatory for a lambda expression to have parameters? (answer)
-No, it's not mandatory for a lambda expression to have parameters, you can define a lambda expression without parameters as shown below:
-```java
-() -> System.out.println("lambdas without parameter");
-```
-You can pass this code to any method which accepts a functional interface. 
-
-This example uses Java 8 features effectively to handle collections and perform operations in a functional style.
-
-## How to Convert a List to Map in Java 8 - Example Tutorial
-
-One of the common tasks in Java programming is to convert a list to a map and I have written about this in the past and today we'll see how Java 8 makes this task easier. Btw, be it Java 7 or Java 8, you need to keep something in mind while converting a list to a map because they are two different data structures and have completely different properties. For example, the List interface in Java allows duplicate elements but keys in a Map must be unique, the value can be duplicated but a duplicate key may cause a problem in Java 8. This means a List with duplicates cannot be directly converted into Map without handling the duplicate values properly. 
-
-Similarly, another concern is the order of elements. A list is an ordered collection but the map doesn't guarantee any order unless you decide to use LinkedHashMap, which keeps insertion order, or TreeMap which keeps mapping in the sorted order of keys. This is one of the important details which many Java beginners forget and then spend hours chasing subtle bugs.
-
-If your program has any dependency on the order of elements in the list they will not work as expected if you use a map. So, you should be mindful of these general details while converting a list to a map in Java. This is true irrespective of the Java version.
-
-Btw, if you are new to the Java world, I suggest you first go through a comprehensive course on Java-like The Complete Java Masterclass on Udemy. It not only provides organized and structure learning but also you will learn more in less time.  It's also one of the most up-to-date courses, recently updated for Java 11 features.
-
-Anyway, let's see the task at hand. Assume you have a list of courses and you want to create a map where keys should be the title of the course and value should be the course object itself. How will you do that?
-
-
-
-### How to convert List<V> into Map<K, V> in Java? Example
-It's easy in Java, all you need to do is go through the List, extract a key from each object and add both key and value into the map, but how will you do that in Java 8 style like by using lambda expression and streams?
-
-### How to Convert a List<V> to Map<K,V> in Java 8 - Example Tutorial
-
-
-
-We'll see that but let's first write the JDK 7 version to convert a List<V> into Map<K, V>:
-
-```java
-private Map<String, Course> toMap(List<Course> listOfCourses) {
-    final Map<String, Course> courses = new HashMap<>();
-    for (final Course current : listOfCourses) {
-      hashMap.put(current.getTitle(), current);
-    }
-    return courses;
-  }
-```
-This code is very simple and easy to read, let's now see the Java 8 version to find out whether Java 8 really makes your life easy when it comes to writing day to day code:
-```java
-Map<String, Course > result = listOfCourses
-                                 .stream()
-                                 .collect(
-                                 Collectors.toMap(Course::getTitle,
-                                                 Function.identity()));
-```
-Wow, it just took one line to convert a list of objects into a map, which had taken one function in JDK 7. So, it looks Java 8 really makes the developer's life easy.
-
-Anyway, let's try to understand what's going on here. Well, you have a listOfCourses, which is a List and then you called the stream() method which returns a Stream associated with that list. After that, you have called the collect() method which is used to accumulate elements from Stream.
-
-Since we are not doing any filtering there is no call to filter(), the collect() method then uses a Collector which can combine results in a map. All it needs is one method to extract the key, which is Course::getTitle, and one method to extract value which is Function.identity() i.e. the object itself.
-
-We have also used a method reference to shorten the key extractor. You can further see What's New in Java 8: Lambdas to learn more about how to convert lambda expression to a method reference.
-
-### How to convert List<V> into Map<K,V> in Java 8
-
-Btw, there is a catch here. The ordering of elements has been lost because Map doesn't guarantee any order. If you want to keep Courses in the same order they appeared in the List, we need to use a Map that provides ordering guarantees e.g. LinkedHashMap which keeps elements in the order they are inserted.
-
-We also need to tell this to Collector so that it will collect elements inside a LinkedHashMap rather than a general Map. Let's re-write the code to achieve that:
-
-```java
- Map<String, Course > result = listOfCourses
-        .stream()
-        .collect(
-        Collectors.toMap(Course::getTitle, 
-                         Function.identity(), 
-                         LinkedHashMap::new));
-```
-This looks good now. The order of elements in both List and Map are the same now, but there is still one more thing you need to take care of to keep this code full proof and pass the test of time.
-
-If you remember, List allows duplicates but if you try to insert a duplicate key in the Map it overrides the values, that would have been a nightmare in this case, but thankfully Java 8 protects you. Instead of silently overwriting a value in such condition, it throws an exception as shown below when it encountered a duplicate element in the source list (see Modern Java in Action )
-
-Though, you can resolve this error by just telling Collector how to resolve collision e.g. what to do when it encounters a duplicate key. It can do nothing and keep the original mapping or it can override and update the value. You can instruct the collector whatever you want by providing an extra parameter to the Collectors.toMap() method as shown in the following code:
-
-```java
-    Map<String, Course > result = listOfCourses
-        .stream()
-        .collect(
-        Collectors.toMap(Course::getTitle, 
-                         Function.identity(),
-                         (e1, e2) -> e2, 
-                         LinkedHashMap::new));
-```
-Here in case of a duplicate, we are using the second element as a key to generated LinkedHashMap. You can also choose the first object or just concatenate the first and second as per your need.
-
-
-That's all about how to convert a list of objects List<V> to a map of keys and values e.g. Map<K, V>. It's super easy in Java 8. All you need to know is how to use the collect() and Collector class of Stream API to do this task. 
-
-Though you should be mindful of the essential difference between List and Map data structure like one is ordered collection while the other is not. Transferring values from List to Map means you will lose the order if you don't preserve them like by using a LinkedHashMap.
-
-</details>
-<details><summary><b>Java 8 Collectors: toMap()</b></summary>
-
- Introduction
-A stream represents a sequence of elements and supports different kinds of operations that lead to the desired result. The source of a stream is usually a Collection or an Array, from which data is streamed from.
-
-Streams differ from collections in several ways; most notably in that the streams are not a data structure that stores elements. They're functional in nature, and it's worth noting that operations on a stream produce a result and typically return another stream, but do not modify its source.
-
-To "solidify" the changes, you collect the elements of a stream back into a Collection.
-
-In this guide, we'll take a look at how to collect Stream elements to a map in Java 8.
-
-Collectors and Stream.collect()
-Collectors represent implementations of the Collector interface, which implements various useful reduction operations, such as accumulating elements into collections, summarizing elements based on a specific parameter, etc.
-
-All predefined implementations can be found within the Collectors class.
-
-You can also very easily implement your own collector and use it instead of the predefined ones, though - you can get pretty far with the built-in collectors, as they cover the vast majority of cases in which you might want to use them.
-
-To be able to use the class in our code we need to import it:
-
-import static java.util.stream.Collectors.*;
-Stream.collect() performs a mutable reduction operation on the elements of the stream.
-
-ADVERTISEMENT
-
-
-A mutable reduction operation collects input elements into a mutable container, such as a Collection, as it processes the elements of the stream.
-
-Guide to Collectors.toMap()
-Amongst many other methods within the Collectors class, we can also find the family of toMap() methods. There are three overloaded variants of the toMap() method with a mandatory pair of Mapper Functions and optional Merge Function and Supplier Function.
-
-Naturally, all three return a Collector that accumulates elements into a Map whose keys and values are the result of applying the provided (mandatory and optional) functions to the input elements.
-
-Depending on the overload we're using, each of the toMap() methods take a different number of arguments that build upon the previous overloaded implementation. We'll touch more on those differences in just a moment.
-
-Let's first define a simple class with a few fields, and a classic constructor, getters and setters:
-
-private String name;
-private String surname;
-private String city;
-private double avgGrade;
-private int age;
-
-// Constructors, Getters, Setters, toString()
-
-The average grade is a double value ranging from 6.0 - 10.0.
-
-Let's instantiate a List of students we'll be using in the examples to come:
-
-List<Student> students = Arrays.asList(
-        new Student("John", "Smith", "Miami", 7.38, 19),
-        new Student("Mike", "Miles", "New York", 8.4, 21),
-        new Student("Michael", "Peterson", "New York", 7.5, 20),
-        new Student("James", "Robertson", "Miami", 9.1, 20),
-        new Student("Kyle", "Miller", "Miami", 9.83, 20)
-);
-Collectors.toMap() with Mapper Functions
-The basic form of the method just takes two mapper functions - a keyMapper and valueMapper:
-
-public static <T,K,U> Collector<T,?,Map<K,U>> 
-    toMap(Function<? super T,? extends K> keyMapper,
-          Function<? super T,? extends U> valueMapper)
-The method is straightforward - keyMapper is a mapping function whose output is the key of the final Map. valueMapper is a mapping function whose output is the value of the final Map. The return value of the method is a Collector which collects elements into a Map, whose pair <K, V> is the result of the previously applied mapping functions.
-
-We'll start by transforming our stream of students into a Map. For the first example let's say we'd like to map our student's names to their average grade, that is create a <K, V> pair that has a <name, avgGrade> form.
-
-For the keyMapper, we'd supply a function corresponding to the method that returns the name, and for the valueMapper, we'd supply a function corresponding to the method that returns the average grade of the student:
-
-Map<String, Double> nameToAvgGrade = students.stream()
-                .collect(Collectors.toMap(Student::getName, Student::getAvgGrade));
-ADVERTISEMENT
-
-
-Note that Student::getName is just a Method Reference - a shorthand representation of the lambda expression student -> student.getName().
-
-If you'd like to read more about Method References, Functional Interfaces and Lambda Expressions in Java - read our Method References in Java 8 and Guide to Functional Interfaces and Lambda Expressions in Java!
-
-Running this code results in a map containing:
-
-{Mike=8.4, James=9.1, Kyle=9.83, Michael=7.5, John=7.38}
-What if we wanted to map the whole a particular Student object to just their name? Java provides a built-in identity() method from the Function interface. This method simply returns a function that always returns its input argument.
-
-That is to say - we can map the identity of each object (the object itself) to their names easily:
-
-Map<String, Student> nameToStudentObject = students.stream()
-                .collect(Collectors.toMap(Student::getName, Function.identity()));
-
-Note: Alternatively instead of using Function.identity() we could've simply used a Lambda expression, element -> element, which just maps each element to itself.
-
-Here, Student::getName is our keyMapper function, and Function.identity() is our valueMapper function, creating a map containing:
-
-{
-Mike=Student{name='Mike', surname='Miles', city='New York', avgGrade=8.4, age=21},
-James=Student{name='James', surname='Robertson', city='Miami', avgGrade=9.1, age=20},
-Kyle=Student{name='Kyle', surname='Miller', city='Miami', avgGrade=9.83, age=20},
-Michael=Student{name='Michael', surname='Peterson', city='New York', avgGrade=7.5, age=20},
-John=Student{name='John', surname='Smith', city='Miami', avgGrade=7.38, age=19}
-}
-Of course this output is not as visually clean as when we mapped the student's names to their average grade, but this just depends on the toString() of the Student class.
-
-Even though this particular overload is the easiest to use it falls short on one very important part - duplicate key elements. If we, for example, had two students named "John", and we wanted to convert our List to a Map like we did in examples above, we'd run into a glaring:
-
-Exception in thread "main" java.lang.IllegalStateException: Duplicate key John (attempted merging values 7.38 and 8.93)
-
-Free eBook: Git Essentials
-Check out our hands-on, practical guide to learning Git, with best-practices, industry-accepted standards, and included cheat sheet. Stop Googling Git commands and actually learn it!
-
-
-Download the eBook  
-The key is - the method tried merging these two values, and assigning the merged value to the unique key - "John" and failed. We may decide to supply a Merge Function that defines how this merge should be done if duplicate keys exist.
-
-If you want to get rid of duplicate keys, you can always just add a distinct() operation to the Stream before collecting it:
-
-Map<String, Double> nameToStudentObject = students.stream()
-        .distinct()
-        .collect(Collectors.toMap(Student::getName, Student::getAvgGrade));
-Collectors.toMap() with Mapper and Merge Functions
-Besides the two Mapper Functions, we can supply a Merge Function:
-
-public static <T,K,U> Collector<T,?,Map<K,U>> 
-    toMap(Function<? super T,? extends K> keyMapper,
-          Function<? super T,? extends U> valueMapper,
-          BinaryOperator<U> mergeFunction)
-The mergeFuction is a function that is called only if there are duplicate key elements present in our final Map that need their values merged and assigned to the one unique key. Its input are two values that is the two values for which keyMapper returned the same key, and merges those two values into a single one.
-
-
-Note: If you have more than two non-unique keys with values, the result of the first merge is considered the first value on the second merge, and so on.
-
-Let's add another John from another city, with a different average grade:
-
-new Student("John Smith", "Las Vegas", 8.93,19)...
-Now comes the tricky part - how do we handle duplicate i.e. clashing keys? We need to specify exactly how we want to handle this scenario. You may decide to just prune away duplicate values with distinct(), throw an exception to raise a noticeable alert or define a strategy for merging.
-
-Pruning elements away might not be what you want, since it could lead to silent failure where certain elements are missing from the final map. More often, we throw an IllegalStateException! The mergeFunction is a BinaryOperator, and the two elements are represented as (a, b).
-
-If you're throwing an exception, you won't really use them (unless for logging or displaying a message), so we can just go ahead and throw the exception in a code block:
-
-Map<String, Double> nameToAvgGrade  = students.stream()
-        .collect(Collectors.toMap(
-                Student::getName,
-                Student::getAvgGrade,
-                  (a, b) ->
-                    { throw new IllegalStateException("Duplicate key");})
-        );
-ADVERTISEMENT
-
-This will throw an exception when the code is run:
-
-Exception in thread "main" java.lang.IllegalStateException: Duplicate key
-The second solution would be to actually define a merging strategy. For instance, you could take the new value, b, or keep the old one, a. Or, you could calculate their mean value and assign that instead:
-
-Map<String, Double> nameToAvgGrade  = students.stream()
-        .collect(Collectors.toMap(Student::getName,
-                Student::getAvgGrade,
-                (a, b) -> { return (a+b)/2;})
-          // Or (a, b) -> (a+b)/2
-        );
-Now, when duplicate keys are present, their mean grade is assigned to the unique key in the final map.
-
-
-Note: As you can see - the Merge Function doesn't really need to merge anything. It can really, be any function, even ones that completely disregard the two operators such as throwing an exception.
-
-Running this piece of code results in a map that contains:
-
-{Mike=8.4, Kyle=9.83, James=9.1, Michael=7.5, John=8.155}
-This solution might be great for you, or it may not be. When clashing occurs, we generally either stop the execution or somehow trim the data, but Java inherently doesn't support the concept of a Multimap where multiple values can be assigned to the same key.
-
-However, if you don't mind using external libraries such as Guava or Apache Commons Collections, they both do support concepts of multimaps in their own right named Multimap and MultiValuedMap respectively.
-
-Collectors.toMap() with a Mapper, Merge and Supplier Functions
-The final overloaded version of the method accepts a Supplier function - which can be used to supply a new implementation of the Map interface to "pack the result in":
-
-public static <T,K,U,M extends Map<K,U>> Collector<T,?,M> 
-    toMap(Function<? super T,? extends K> keyMapper,
-          Function<? super T,? extends U> valueMapper,
-          BinaryOperator<U> mergeFunction,
-          Supplier<M> mapSupplier)
-The mapSupplier function specifies the particular implementation of Map we want to use as our final Map. When we use Map to declare our maps, Java defaults to using a HashMap as the implementation to store them.
-
-This is usually perfectly fine, which is also why it's the default implementation. However, sometimes, the characteristics of a HashMap might not suit you. For instance, if you wanted to keep the original order of the elements from a stream or sort them through intermediate stream operations, a HashMap wouldn't preserve that order and bin the objects based on their hashes. Then - you might choose to use a LinkedHashMap to preserve the order instead.
-
-ADVERTISEMENT
-
-To supply a Supplier, you have to also supply a Merge Function:
-
-
-Map<String, Double> nameToAvgGrade  = students.stream()
-        .collect(Collectors.toMap(Student::getName,
-                Student::getAvgGrade,
-                (a, b) -> (a+b)/2,
-                LinkedHashMap::new)
-        );
-Running the code outputs:
-
-{John=8.155, Mike=8.4, Michael=7.5, James=9.1, Kyle=9.83}
-Since we used the LinkedHashMap, the order of the elements from the original List stayed the same in our Map, as opposed to the binned output we'd get from letting a HashMap decide the locations:
-
-{Mike=8.4, Kyle=9.83, James=9.1, Michael=7.5, John=8.155}
-Conclusion
-In this guide, we've taken a look at how to convert a stream into a map in Java - with a pair of Mapper Functions, a Merge Function and a Supplier.
-</details>
-<details><summary><b>Finding Duplicate Elements in a Stream</b></summary>
-Introduction
-Introduced in Java 8, the Stream API is commonly used for filtering, mapping and iterating over elements. When working with streams, one of the common tasks is finding duplicate elements.
-
-In this tutorial, we'll be covering several ways to find duplicate elements in a Java Stream.
-
-Collectors.toSet()
-The easiest way to find duplicate elements is by adding the elements into a Set. Sets can't contain duplicate values, and the Set.add() method returns a boolean value which is the result of the operation. If an element isn't added, false is returned, and vice versa.
-
-Let's make a Stream of Strings with some duplicate values. These values are checked via the equals() method, so make sure to have an adequately implemented one for custom classes:
-
-Stream<String> stream = Stream.of("john", "doe", "doe", "tom", "john");
-Now, let's make a Set to store the filtered items. We'll use the filter() method to filter out duplicate values and return them:
-
-ADVERTISEMENT
-
-Set<String> items = new HashSet<>();
-
-stream.filter(n -> !items.add(n))
-        .collect(Collectors.toSet())
-        .forEach(System.out::println);
-Here, we try to add() each element to the Set. If it's not added, due to it being duplicate, we collect that value and print it out:
-
-john
-doe
-Collectors.toMap()
-Alternatively, you can also count the occurrences of duplicate elements and keep that information in a map that contains the duplicate elements as keys and their frequency as values.
-
-Let's create a List of Integer type:
-
-List<Integer> list = Arrays.asList(9, 2, 2, 7, 6, 6, 5, 7);
-Then, let's collect the elements into a Map and count their occurrences:
-
-Map<Integer, Integer> map = list.stream()
-        .collect(Collectors.toMap(Function.identity(), value -> 1, Integer::sum));
-        
-System.out.println(map);
-We haven't removed any elements, just counted their occurrences and stored them into a Map:
-
-{2=2, 5=1, 6=2, 7=2, 9=1}
-Collectors.groupingBy(Function.identity(), Collectors.counting()) with Collectors.toList()
-The Collectors.groupingBy() method is used for grouping elements, based on some property, and returning them as a Map instance.
-
-ADVERTISEMENT
-
-In our case, the method receives two parameters - Function.identity(), that always returns its input arguments and Collectors.counting(), that counts the elements passed in the stream.
-
-Then, we'll use the groupingBy() method to create a map of the frequency of these elements. After that, we can simply filter() the stream for elements that have a frequency higher than 1:
-
-list.stream()
-        // Creates a map {4:1, 5:2, 7:2, 8:2, 9:1}
-        .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()))
-        .entrySet()
-        // Convert back to stream to filter
-        .stream()
-        .filter(element -> element.getValue() > 1)
-        // Collect elements to List and print out the values
-        .collect(Collectors.toList())
-        .forEach(System.out::println);
-This results in:
-
-5=2
-7=2
-8=2
-If you'd like to extract just the duplicate elements, without their frequency, you can throw in an additional map() into the process. After filtering, and before collecting to a list, we'll get only the keys:
-
-.map(Map.Entry::getKey)
-Collections.frequency()
-Collections.frequency() is another method that comes from the Java Collections class that counts the occurrences of a specified element in the input stream by traversing each element. It takes two parameters, the collection and the element whose frequency is to be determined.
-
-Now, we'll filter() the stream for each element that has a frequency() larger than 1:
-
-list.stream()
-        .filter(i -> Collections.frequency(list, i) > 1)
-        //Collect elements to a Set and print out the values 
-        .collect(Collectors.toSet())
-        .forEach(System.out::println);
-
-Free eBook: Git Essentials
-Check out our hands-on, practical guide to learning Git, with best-practices, industry-accepted standards, and included cheat sheet. Stop Googling Git commands and actually learn it!
-
-
-Download the eBook  
-Here, we can either collect to a Set or to a List. If we collect to a list, it'll have all duplicate elements, so some may repeat. If we collect to a set, it'll have unique duplicate elements.
-
-This results in:
-
-5
-7
-8
-Stream.distinct()
-The distinct() method is a stateful method (keeps the state of previous elements in mind) and compares elements using the equals() method. If they are distinct/unique, they're returned back, which we can populate into another list.
-
-Let's make a list with some duplicate values and extract the distinct values:
-
-List<String> list = new ArrayList(Arrays.asList("A", "B", "C", "D", "A", "B", "C", "A", "F", "C"));
-
-List<String> distinctElementList = list.stream()
-        .distinct()
-        .collect(Collectors.toList());
-Now, all non-distinct values have more than one occurrence. If we remove the distinct values, we'll be left with duplicate elements:
-
-for (String distinctElement : distinctElementList) {
-    list.remove(distinctElement);
-}
-Now, let's print out the results:
-
-list.forEach(System.out::print)
-ADVERTISEMENT
-These are the duplicate elements, with their respective occurrences:
-
-ABCAC
-If you'd like to sift through these as well, and only show one occurrence of each duplicate element (instead of all of them separately), you can run them through the distinct() method again:
-
-list.stream()
-        .distinct()
-        .collect(Collectors.toList())
-        .forEach(System.out::print);
-This results in:
-
-ABC
-Conclusion
-In this article, we've gone over a few approaches to finding duplicate elements in a Java Stream.
-
-We've covered the Stream.distinct() method from the Stream API, the Collectors.toSet(), Collectors.toMap() and Collectors.groupingBy() methods from Java Collectors, as well as Collections.frequency() method from Collections framework.
-</details>
-<details><summary><b>Java 8 - Difference Between map() and flatMap()</b></summary>
-Introduction
-While Java is primarily an Object Oriented Language, many concepts of Functional Programming have been incorporated into the language. Functional programming uses functions to create and compose programming logic, typically in a declarative manner (i.e. telling the program what's wanted and not how to do it).
-
-If you'd like to read more about Functional Interfaces and a holistic view into Functional Programming in Java - read our Guide to Functional Interfaces and Lambda Expressions in Java!
-
-With the introduction of JDK 8, Java added a number of key Functional Programming constructs - including map() and flatMap().
-
-
-Note: This guide covers these two functions in the context of their differences.
-
-The map() function is used to transform a stream from one form to another while flatMap() function is a combination of map and flattening operations.
-
-If you'd like to read more about these functions individually with in-depth details, efficiency benchmarks, use-cases and best-practices - read our Java 8 Streams: Definitive Guide to flatMap() and Java 8 - Stream.map() Examples!
-
-Let's begin by first highlighting their differences in Optionals!
-
-Difference Between map() and flatMap() in Optionals
-To understand the difference between map() and flatMap() in Optionals, we need to briefly understand the concept of Optionals first. The optional class was introduced in Java 8 to introduce the easiest way to deal with NullPointerException.
-
-As per the official documentation:
-
-Optional is a container object which may or may not contain a non-null value.
-
-The optional class serves the purpose of representing whether a value is present or not. The Optional class has a wide range of methods that are grouped into two categories:
-
-Creation Methods: These methods are in charge of creating Optional objects according to the use case.
-Instance Methods: These methods operate on an existing Optional object, determining whether the value is present or not, retrieving the wrapper object, manipulating it, and finally returning the updated Optional object.
-ADVERTISEMENT
-map() and flatMap() can both be used with the Optional class, and because they were frequently used to wrap and unwrap nested optionals - they were added methods in the class itself as well.
-
-The signature of the map() function in Optional is:
-
-public<U> Optional<U> map(Function<? super T, ? extends U> mapper)
-The signature of the flatMap() in Optional is:
-
-public<U> Optional<U> flatMap(Function<? super T, Optional<U>> mapper)
-Both the map() and flatMap() functions take mapper functions as arguments and output an Optional<U>. The distinction between these two is noticed when the map() function is used to transform its input into Optional values. The map() function would wrap the existing Optional values with another Optional, whereas the flatMap() function flattens the data structure so that the values keep just one Optional wrapping.
-
-Let us try to understand the problem with the following code:
-
-Optional optionalObj1 = Optional.of("STACK ABUSE")
-  .map(s -> Optional.of("STACK ABUSE"));
-System.out.println(optionalObj1);
-The following is the output of the above:
-
-Optional[Optional[STACK ABUSE]]
-As we can see, the output of map() has been wrapped in an additional Optional. On the other hand, when using a flatMap() instead of a map():
-
-Optional optionalObj2 = Optional.of("STACK ABUSE")
-  .flatMap(s -> Optional.of("STACK ABUSE"));
-System.out.println(optionalObj2);
-We end up with:
-
-Optional[STACK ABUSE]
-flatMap() doesn't re-wrap the result in another Optional, so we're left with the original one. This same behavior can be used to unwrap optionals.
-
-ADVERTISEMENT
-Since simple examples like the one we've covered just now don't perfectly convey when this mechanism really makes or breaks a feature - let's create a small environment in which it does. The following example depicts a Research Management System, which well, keeps track of researchers in an institute.
-
-Given a mock service that fetches a researcher based on some researcherId - we're not guaranteed to have a result back, so each Researcher is wrapped as an optional. Additionally, their StudyArea might not be present for some reason (such as an area not being assigned yet if a researcher is new to the institute), so it's an optional value as well.
-
-That being said, if you were to fetch a researcher and get their area of study, you'd do something along these lines:
-
-Optional<Researcher> researcherOptional = researcherService.findById(researcherId);
-
-Optional<StudyArea> studyAreaOptional = researcherOptional
-    .map(res -> Researcher.getResearchersStudyArea(res.getId()))
-    .filter(studyArea -> studyArea.getTopic().equalsIgnoreCase("Machine Learning"));
-
-System.out.println(studyAreaOptional.isPresent());
-System.out.println(studyAreaOptional);
-System.out.println(studyAreaOptional.get().getTopic());
-Let's check the result of this code:
-
-true 
-Optional[StudyArea@13969fbe] 
-Machine Learning
-Because the StudyArea, which is an optional value depends on another optional value - it's wrapped as a double optional in the result. This doesn't work really well for us, since we'd have to get() the value over and over again. Additionally, even if the StudyArea was in fact, null, the isPresent() check would return true.
-
-An optional of an empty optional, isn't empty itself.
-
-Optional optional1 = Optional.empty();
-Optional optional2 = Optional.of(optional1);
-
-System.out.println(optional2.isPresent());
-// true
-In this scenario - isPresent() checks for something we're not really wanting to check, the second line doesn't really print the StudyArea we want to view and the final line will throw a NullPointerException if the StudyArea isn't actually present. Here - map() does quite a bit of damage because:
-
-Map returns an empty optional if the Researcher object is absent in the optionalResearcher object.
-Map returns an empty optional if the getResearchersStudyArea returns null instead of the StudyArea object.
-Alternatively, you could visualize the pipeline:
-
-Flow chart of Researcher data being transformed with the map and filter functions
-The statement optionalResearcher.map(res -> Researcher.getResearchersStudyArea(res.getId()) will now produce an Optional<Optional<Researcher>> object. We may solve this problem by using flatMap() as it won't wrap the result in another Optional:
-
-Optional<StudyArea> studyAreaOptional = optionalResearcher
-        .flatMap(res -> Researcher.getResearchersStudyArea(res.getId()))
-        .filter(studyArea -> studyArea.getTopic().equalsIgnoreCase("Machine Learning"));
-
-Free eBook: Git Essentials
-Check out our hands-on, practical guide to learning Git, with best-practices, industry-accepted standards, and included cheat sheet. Stop Googling Git commands and actually learn it!
-
-
-Download the eBook  
-Flow chart of Researcher data being transformed with the flatMap and filter functions
-This way - all three lines we've used to display information about the researcher work as intended!
-
-Difference Between map() and flatMap() in Streams
-To understand the difference between map() and flatMap() in Streams, it's worth reminding ourselves how Streams work. The Streams API was introduced in Java 8 and has proven to be an extremely powerful tool for working with collections of objects. A stream can be characterized as a sequence of data, stemming from a source, in which numerous different procedures/transformations can be piped together to produce the desired outcome.
-
-There are three stages to the stream pipeline:
-
-Source: It denotes the origin of a stream.
-Intermediate Operations: These are the intermediary processes that change streams from one form to another, as the name implies. Stream processing can have zero or several intermediate processes.
-Terminal Operations: This is the last step in the process that results in a final state that is the end result of the pipeline. The most common terminal operation is collecting the stream back into a tangible Collection. Without this stage, the outcome would be impossible to obtain.
-map() and flaMap() both are the intermediate operations offered by the Stream in the java.util.stream.Stream package.
-
-The signature of the map() is:
-
-<R> Stream<R> map(Function<? super T, ? extends R> mapper)
-The signature of the flatMap() is:
-
-<R> Stream<R> flatMap(Function<? super T, ? extends Stream<? extends R>> mapper)
-As can be seen from the method signatures, both the map() and flatMap() take mapping functions as arguments and return a Stream<R> as output. The only difference in the arguments is that the map() takes in a Stream<T> as input while flatMap() takes in a Stream<Stream<T>> as input.
-
-
-In short - map() is accepts a Stream<T> and maps its elements onto Stream<R> where each resulting R has a corresponding initial T, while flatMap() accepts a Stream<Stream<T>> and maps each sub-stream's element into a new Stream<R> that represents a flattened list of original streams.
-
-Furthermore, map() and flatMap() can be distinguished in a way that map() generates a single value against an input while flatMap() generates zero or any number values against an input. In other words, map() is used to transform the data while the flatMap()is used to transform and flatten the stream.
-
-Following is the example of one-to-one mapping in map():
-
-List<String> websiteNamesList = Stream.of("Stack", "Abuse")
-            .map(String::toUpperCase)
-            .collect(Collectors.toList());
-
-System.out.println(websiteNamesList);
-ADVERTISEMENT
-This results in:
-
-[STACK, ABUSE]
-We've mapped the original values to their uppercase counterparts - it was a transformative process where a Stream<T> was mapped onto Stream<R>.
-
-On the other hand, if we were working with more complex Streams:
-
-Stream<String> stream1 = Stream.of("Stack", "Abuse");
-Stream<String> stream2 = Stream.of("Real", "Python");
-Stream<Stream<String>> stream = Stream.of(stream1, stream2);
-
-List<String> namesFlattened = stream
-        .flatMap(s -> s)
-        .collect(Collectors.toList());
-
-System.out.println(namesFlattened);
-Here - we've got a stream of streams, where each stream contains a couple of elements. When flat-mapping, we're dealing with streams, not elements. Here, we've just decided to leave the streams as they are (run no operations on them) via s->s, and collect their elements into a list. flatMap() collects the elements of the substreams into a list, not the streams themselves, so we end up with:
-
-[Stack, Abuse, Real, Python]
-A more illustrative example could build upon the Research Management System. Say we want to group data from researchers into categories based on their areas of study in a Map<String, List<Researcher>> map where the key is an area of study and the list corresponds to the people working in it. We would have a list of researchers to work with before grouping them, naturally.
-
-In this entry set - we might want to filter or perform other operations on the researchers themselves. In most cases, map() will not work or behave oddly because we cannot apply many methods, such as filter(), straight to the Map<String, List<Researcher>>. This leads us to the use of flatMap(), where we stream() each list and then perform operations on those elements.
-
-With the preceding scenario in mind, consider the following example, which demonstrates flatMap()'s one-to-many mapping:
-
-ResearchService researchService = new ResearchService();
-Map<String, List<Researcher>> researchMap = new HashMap<>();
-List<Researcher> researcherList = researchService.findAll();
-
-researchMap.put("Machine Learning", researcherList);
-
-List<Researcher> researcherNamesList = researchMap.entrySet().stream()
-        // Stream each value in the map's entryset (list of researchers)
-        .flatMap(researchers -> researchers.getValue().stream())
-        // Arbitrary filter for names starting with "R"
-        .filter(researcher -> researcher.getName().startsWith("R"))
-        // Collect Researcher objects to list
-        .collect(Collectors.toList());
-
-researcherNamesList.forEach(researcher -> {
-    System.out.println(researcher.getName());
-});
-The Researcher class only has an id, name and emailAddress:
-
-public class Researcher {
-    private int id;
-    private String name;
-    private String emailAddress;
-
-    // Constructor, getters and setters 
-}
-And the ResearchService is a mock service that pretends to call a database, returning a list of objects. We can easily mock the service by returning a hard-coded (or generated) list instead:
-
-public class ResearchService {
-
-    public List<Researcher> findAll() {
-        Researcher researcher1 = new Researcher();
-        researcher1.setId(1);
-        researcher1.setEmailAddress("reham.muzzamil12@gmail.com");
-        researcher1.setName("Reham Muzzamil");
-
-        Researcher researcher2 = new Researcher();
-        researcher2.setId(2);
-        researcher2.setEmailAddress("John@gmail.com");
-        researcher2.setName("John Doe");
-        
-        // Researcher researcherN = new Researcher();
-        // ...
-        
-        return Arrays.asList(researcher1, researcher2);
-    }
-}
-ADVERTISEMENT
-If we run the code snippet, even though there's only one list in the map - the entire map was flattened to a list of researchers, filtered out with a filter and the one researcher left is:
-
-Reham Muzzamil
-If we visualize the pipeline, it would look something like this:
-
-Data flow of using the flatMap() function to filter researchers whose name begins with "R"
-If we were to replace flatMap() with map():
-
-.map(researchers -> researchers.getValue().stream()) // Stream<Stream<Researcher>>
-We wouldn't be able to proceed with the filter(), since we'd be working with a nested stream. Instead, we flatten the stream of streams into a single one, and then run operations on these elements.
-
-Conclusion
-In this guide, we have seen the difference between map() and flatMap() in Optional and Stream along with their use-cases and code examples.
-
-To sum up, in the context of the Optional class, both map() and flatMap() are used to transform Optional<T> to Optional<U> but if the mapping function generates an optional value, map() adds an additional layer while flatMap() works smoothly with nested optionals and returns the result in a single layer of optional values.
-
-Similarly, map() and flatMap() can also be applied to Streams - where map() takes in a Stream<T> and returns a Stream<R> where T values are mapped to R, while flatMap() takes in a Stream<Stream<T>> and returns a Stream<R>.
- </details>
-<details><summary><b>Using Optional in Java 8</b></summary>
-Introduction
-When writing any kind of code in Java, developers tend to work with objects more often than with primitive values (int, boolean, etc). This is because objects are at the very essence of object-oriented programming: they allow a programmer to write abstract code in a clean and structured manner.
-
-Furthermore, every object in Java can either contain a value or not. If it does, its value is stored on the heap and the variable which we are using has a reference to that object. If the object contains no value, this defaults to null - a special placeholder denoting the absence of a value.
-
-The fact that each object can become null, combined with the natural tendency to use objects instead of primitives, means that some arbitrary piece of code might (and often-times will) result in an unexpected NullPointerException.
-
-Before the Optional class was introduced in Java 8, these kind of NullPointerException errors were much more common in everyday life of a Java programmer.
-
-In the following sections, we will dive deeper into explaining Optional and seeing how it can be used to overcome some of the common problems concerning null values.
-
-The Optional Class
-An Optional is essentially a container. It is designed either to store a value or to be "empty" if the value is non-existent - a replacement for the null value. As we will see in some later examples, this replacement is crucial as it allows implicit null-checking for every object represented as an Optional.
-
-This means that explicit null-checking is no longer needed from a programmer's point of view - it becomes enforced by the language itself.
-
-Creating Optionals
-Let's take a look at how easy it is to create instances of Optional and wrap objects that we already have in our applications.
-
-We'll be using our custom class for this, the Spaceship class:
-
-ADVERTISEMENT
-public class Spaceship {
-    private Engine engine;
-    private String pilot;
-
-    // Constructor, Getters and Setters
-}
-And our Engine looks like:
-
-public class Engine {
-    private VelocityMonitor monitor;
-
-    // Constructor, Getters and Setters
-}
-And furthermore, we've got the VelocityMonitor class:
-
-public class VelocityMonitor {
-    private int speed;
-
-    // Constructor, Getters and Setters
-}
-These classes are arbitrary and only serve to make a point, there's no real implementation behind them.
-
-of()
-The first approach to creating Optionals is using the .of() method, passing a reference to a non-null object:
-
-Spaceship falcon = new Spaceship();
-Optional<Spaceship> optionalFalcon = Optional.of(falcon);
-If the falcon was null, the method .of() would throw a NullPointerException.
-
-Without Optional, trying to access any of the fields or methods of falcon (assuming it's null), without performing a null-check would result in a crash of the program.
-
-With Optional, the .of() method notices the null value and throws the NullPointerException immediately - potentially also crashing the program.
-
-If the program crashes in both approaches, why even bother using Optional?
-
-The program wouldn't crash somewhere deeper in the code (when accessing falcon) but at the very first use (initialization) of a null object, minimizing potential damage.
-
-ofNullable()
-If falcon is allowed to be a null, instead of the .of() method, we'd use the .ofNullable() method. They perform the same if the value is non-null. The difference is obvious when the reference points to null in which case - the .ofNullable() method is perfectly contempt with this piece of code:
-
-Spaceship falcon = null;
-Optional<Spaceship> optionalFalcon = Optional.ofNullable(falcon);
-empty()
-And finally, instead of wrapping an existing reference variable (null or non-null), we can create a null value in the context of an Optional. It's kind of like an empty container which returns an empty instance of Optional:
-
-ADVERTISEMENT
-Optional<Spaceship> emptyFalcon = Optional.empty();
-Checking for Values
-After creating Optionals and packing information in them, it's only natural that we'd want to access them.
-
-Before accessing though, we should check if there are any values, or if the Optionals are empty.
-
-isPresent()
-Since catching exceptions is a demanding operation, it would be better to use one of the API methods to check if the value exists before trying to access it - and alter the flow if it doesn't.
-
-If it does, then .get() method can be used to access the value. Though, more on that method in latter sections.
-
-To check if the value is present inside an Optional, we use the .isPresent() method. This is essentially a replacement for the null-check of the old days:
-
-// Without Optional
-Spaceship falcon = hangar.getFalcon();
-if (falcon != null) {
-    System.out.println(falcon.get());
-} else {
-    System.out.printn("The Millennium Falcon is out and about!");
-}
-
-// With Optional
-Optional<Spaceship> optionalFalcon = Optional.ofNullable(hangar.getFalcon());
-if (optionalFalcon.isPresent()) {
-    System.out.println(falcon.get());
-} else {
-    System.out.println("The Millennium Falcon is out and about!");
-}
-Since the falcon can also not be in the hangar, we can also expect a null value, thus .ofNullable() is used.
-
-ifPresent()
-To make things even easier, Optional also contains a conditional method which bypasses the presence check entirely:
-
-Optional<Spaceship> optionalFalcon = Optional.ofNullable(hangar.getFalcon());
-optionalFalcon.ifPresent(System.out::println);
-If a value is present, the contents are printed through a Method Reference. If there's no value in the container, nothing happens. You still might want to use the previous approach if you'd like to define an else {} statement, though.
-
-This reflects what we mentioned earlier when we said that null-checks with Optional are implicit and enforced by the type-system.
-
-isEmpty()
-Another way to check for a value is to use .isEmpty(). Essentially, calling Optional.isEmpty() is the same as calling !Optional.isPresent(). There's no particular difference that exists:
-
-Optional<Spaceship> optionalFalcon = Optional.ofNullable(hangar.getFalcon());
-if (optionalFalcon.isEmpty()) {
-    System.out.println("Please check if the Millennium Falcon has returned in 5 minutes.");
-} else {
-    optionalFalcon.doSomething();
-}
-Nested Null-Checks
-Our Spaceship class, as defined earlier, has an attribute Engine, which has an attribute VelocityMonitor.
-
-Suppose now that we want to access the velocity monitor object and obtain the current velocity of the spaceship, taking into consideration that all these values could potentially be null.
-
-Obtaining the velocity might look something like this:
-
-
-Free eBook: Git Essentials
-Check out our hands-on, practical guide to learning Git, with best-practices, industry-accepted standards, and included cheat sheet. Stop Googling Git commands and actually learn it!
-
-
-Download the eBook  
-if (falcon != null) {
-    Engine engine = falcon.getEngine();
-    if (engine != null) {
-        VelocityMonitor monitor = engine.getVelocityMonitor();
-        if (monitor != null) {
-            Velocity velocity = monitor.getVelocity();
-            System.out.println(velocity);
-        }
-    }
-}
-The above example shows how tedious it is to perform such checks, not to mention the amount of boilerplate code needed to make the checks possible in the first place.
-
-An alternative solution using Optional would be:
-
-Velocity velocity = falcon
-    .flatMap(Spaceship::getEngine)
-    .flatMap(Engine::getVelocityMonitor)
-    .map(VelocityMonitor::getVelocity);
-Note: Not sure what's going on above? Check out the explanation below for the details.
-
-Using this kind of approach, no explicit checks are needed. If any of the objects contain an empty Optional, the end result will also be an empty Optional.
-
-To make things work like this, we need to modify our existing definitions of the Spaceship and Engine classes:
-
-public class Spaceship {
-    private Optional<Engine> engine;
-    private String pilot;
-
-    // Constructor, Getters and Setters
-}
-public class Engine {
-    private Optional<VelocityMonitor> monitor;
-
-    // Constructor, Getters and Setters
-}
-What we have changed are the attribute definitions: they are now wrapped inside Optional objects to make this kind of alternative solution possible.
-
-This might seem a bit tedious at first but if planned from the beginning, it takes almost the same amount of effort typing it.
-
-Furthermore, having an Optional attribute instead of a regular object reflects the fact that the attribute might or might not exist. Notice how this is quite helpful since we don't have semantic meanings of this kind with regular attribute definitions.
-
-Example Explanation
-In this section, we'll take a bit of time to explain the previous example with flatMaps and maps. If you understand it without further explanation, please feel free to skip this section.
-
-ADVERTISEMENT
-The first method call is performed on falcon which is of type Optional<Spaceship>. Calling the getEngine method returns an object of type Optional<Engine>. Combining these two types, the type of the returned object becomes Optional<Optional<Engine>>.
-
-Since we would like to view this object as an Engine container and perform further calls on it, we need some kind of mechanism to "peel off" the outer Optional layer.
-
-Such a mechanism exists and it is called flatMap. This API method combines the map and the flat operations by first applying a function to each of the elements and then flattening the result into a one-level stream.
-
-The map method, on the other hand, only applies a function without flattening the stream. In our case, the use of map and flatMap would give us Optional<Optional<Engine>> and Optional<Engine> respectively.
-
-Calling flatMap on an object of type Optional would therefore yield with a one-level Optional, allowing us to use multiple similar method calls in a succession.
-
-This finally leaves us withOptional<Engine>, which we wanted in the first place.
-
-Alternative results
-.orElse()
-The previous example can be further expanded by using the orElse(T other) method. The method will return the Optional object upon which it is called only if there is a value contained within it.
-
-If the Optional is empty, the method returns the other value. This is essentially an Optional version of the ternary operator:
-
-// Ternary Operator
-Spaceship falcon = maybeFalcon != null ? maybeFalcon : new Spaceship("Millennium Falcon");
-
-// Optional and orElse()
-Spaceship falcon = maybeFalcon.orElse(new Spaceship("Millennium Falcon"));
-As with the ifPresent() method, this kind of approach takes advantage of the lambda expressions to make code more readable and less error-prone.
-
-.orElseGet()
-Instead of providing the other value directly as an argument, we can use a
-Supplier instead. The difference between .orElse() and .orElseGet(), while maybe not evident at first glance, exists:
-
-// orElse()
-Spaceship falcon = maybeFalcon.orElse(new Spaceship("Millennium Falcon"));
-
-// orElseGet()
-Spaceship falcon = maybeFalcon.orElseGet(() -> new Spaceship("Millennium Falcon"));
-If maybeFalcon doesn't contain a value, both methods will return a new Spaceship. In this case, their behavior is the same. The difference becomes clear if maybeFalcon does contain a value.
-
-In the first case, the new Spaceship object will not be returned but it will be created. This will happen regardless of whether or not the value exists. In the second case, the new Spaceship will be created only if maybeFalcon doesn't contain a value.
-
-ADVERTISEMENT
-It's similar to how do-while does the task regardless of the while loop, at least once.
-
-This might seem like a negligible difference but it becomes pretty important if creating spaceships is a demanding operation. In the first case, we're always creating a new object - even if it will never be used.
-
-.orElseGet() should be preferred instead of .orElse() in such cases.
-
-.orElseThrow()
-Instead of returning an alternative value (as we've seen in the previous two sections), we can throw an exception. This is accomplished with the .orElseThrow() method which instead of an alternative value accepts a supplier which returns the exception in case it needs to be thrown.
-
-This can be useful in cases where the end result is of high importance and must not be empty. Throwing an exception in this case might be the safest option:
-
-// Throwing an exception
-Spaceship falcon = maybeFalcon.orElseThrow(NoFuelException::new);
-Getting Values from Optional
-.get()
-After seeing many different ways of checking and accessing the value inside Optional, let's now take a look at one final way of obtaining the value which also uses some of the previously shown methods.
-
-The simplest way to access a value inside an Optional is with .get(). This method returns the value present, or throws a NoSuchElementException if the value is absent:
-
-Optional<Spaceship> optionalFalcon = Optional.ofNullable(hangar.getFalcon());
-if (falcon.isPresent()) {
-    Spaceship falcon = optionalFalcon.get()
-
-    // Fly the falcon
-}
-As expected, the .get() method returns a non-null instance of the Spaceship class and assigns it to the falcon object.
-
-Conclusion
-Optional was introduced to Java as a way to fix the issues with null references. Before Optional, every object was allowed to either contain a value or not (i.e. being null).
-
-The introduction of Optional essentially enforces null-checking by the type-system making it unnecessary to perform such checks manually.
-
-This was a big step both in improving the language and its usability by adding an additional layer of type-checking. Using this system instead of the old-fashioned null-checking allows writing clear and concise code without the need to add boilerplate and perform tiring checks by hand.
- </details>
-<details><summary><b>Java 8 Collectors: groupingByConcurrent()</b></summary>
-Introduction
-A stream represents a sequence of elements and supports different kinds of operations that lead to the desired result. The source of a stream is usually a Collection or an Array, from which data is streamed from.
-
-Streams differ from collections in several ways; most notably in that the streams are not a data structure that stores elements. They're functional in nature, and it's worth noting that operations on a stream produce a result and typically return another stream, but do not modify its source.
-
-To "solidify" the changes, you collect the elements of a stream back into a Collection.
-
-In this guide, we'll take a look at how to group Stream data in Java with Collectors.groupingBy()!
-
-Collectors and Parallelism
-Collectors represent implementations of the Collector interface, which implements various useful reduction operations, such as accumulating elements into collections, summarizing elements based on a specific parameter, etc.
-
-All predefined implementations can be found within the Collectors class.
-
-You can also very easily implement your own collector and use it instead of the predefined ones, though - you can get pretty far with the built-in collectors, as they cover the vast majority of cases in which you might want to use them.
-
-To be able to use the class in our code we need to import it:
-
-import static java.util.stream.Collectors.*;
-Stream.collect() performs a mutable reduction operation on the elements of the stream.
-
-
-A mutable reduction operation collects input elements into a mutable container, such as a Collection, as it processes the elements of the stream.
-
-ADVERTISEMENT
-
-Parallel computing (parallelism) refers to the process of dividing a problem into two or more subproblems, solving those problems simultaneously, in parallel, with each subproblem being computed on a separate thread, and then combining all of the solutions to the subproblems in one uniform result.
-
-One of the biggest challenges of implementing parallelism in programs that use collections is that the collections are non thread-safe, which means that multiple threads cannot manipulate a collection without introducing thread interference or memory consistency errors. What we also need to note is that parallelism is not necessarily faster than serial execution, although this heavily depends on the amount of data and the number of cores of the CPU.
-
-Tying back into context, streams can be executed in serial or in parallel. When a stream executes in parallel, the Java runtime partitions the stream into multiple substreams. Operations are executed on independent substreams in parallel and then combined into a final result.
-
-When creating a stream, it's always a serial stream unless stated otherwise, that is specifically parallel. To create a parallel stream we invoke the Collection.parallelStream(), which is a method found within the Collection interface.
-
-
-Note: While using this method enables you to more easily implement parallelism, it is still your responsibility to determine if your application is suitable for parallelism at all, based on your knowledge of the hardware you're executing your code on.
-
-Collectors.groupingByConcurrent()
-Collectors.groupingByConcurrent() uses a multi-core architecture and is very similar to Collectors.groupingBy(), as it also behaves like the "GROUP BY" statement in SQL.
-
-It groups objects by a given specific property and store the end result in a ConcurrentMap.
-
-If you'd like to read more about groupingBy(), read our Guide to Java 8 Collectors: groupingBy()!
-
-Let's define a simple class to use throughout the examples. It'll be a representation of a book, with a few fields:
-
-public class Book {
-    private String title;
-    private String author;
-    private int releaseYear;
-    
-    // Constructor, getters, setters, toString()
-}
-With the model in place, let's instantiate a list of a few books that we'll be working with:
-
-List<Book> books = Arrays.asList(
-    new Book("The Lord of the Rings", "J.R.R. Tolkien", 1954),
-    new Book("The Hobbit", "J.R.R. Tolkien", 1937),
-    new Book("Animal Farm", "George Orwell", 1945),
-    new Book("Nineteen Eighty-Four", "George Orwell", 1949),
-    new Book("The Road to Wigan Pier", "George Orwell", 1937),
-    new Book("Lord of the Flies", "William Golding", 1954)
-);
-The groupingByConcurrent() has three overloads within the Collectors class. We'll be going through each one of them and explain the differences in implementation through examples along the way.
-
-Let's start out with the simplest of them.
-
-Collectors.groupingByConcurrent() with a Classifier Function
-The first overload of this method takes only one argument - the classifier function:
-
-public static <T,K> Collector<T,?,ConcurrentMap<K,List<T>>> 
-    groupingByConcurrent(Function<? super T,? extends K> classifier)
-This method returns a Collector that groups the input elements of type T according to the classification function. The classification function maps elements to a key of type K. The collector itself produces a ConcurrentMap<K, List<T>> whose keys represent the values we get by applying the classification function on the input, and whose corresponding values are Lists containing the input elements which map to the associated key.
-
-ADVERTISEMENT
-
-This Collector is both concurrent and unordered. Being unordered, the collection operation doesn't preserve the order of the input by it's encounter. Being concurrent, the result container supports functions being called concurrently with the same result container from multiple threads.
-
-
-This property isn't unique to this specific overload of the groupingByConcurrent() method, but applies to the other two overloads as well.
-
-Let's go ahead and group the books by author:
-
-ConcurrentMap<String, List<Book>> booksByAuthor = books.parallelStream()
-             .collect(Collectors.groupingByConcurrent(Book::getAuthor));
-The collected elements will be unordered - but grouped. Running the same code will result in different sorts of the elements within the groups - but the sort of the groups themselves will be consistent:
-
-{
-J.R.R. Tolkien=[Book{author='J.R.R. Tolkien', title='The Hobbit', releaseYear=1937}, Book{author='J.R.R. Tolkien', title='The Lord of the Rings', releaseYear=1954}], 
-William Golding=[Book{author='William Golding', title='Lord of the Flies', releaseYear=1954}], 
-George Orwell=[Book{author='George Orwell', title='Animal Farm', releaseYear=1945}, Book{author='George Orwell', title='The Road to Wigan Pier', releaseYear=1937}, Book{author='George Orwell', title='Nineteen Eighty-Four', releaseYear=1949}]
-}
-Depending on how the threads in the CPU perform, and which finish their computation first - the Hobbit might appear after the Lord of the Rings, and vice versa.
-
-Benchmarking Sequential and Concurrent Collectors.groupingBy()
-While the difference between the regular groupingBy() and groupingByConcurrent() might not be obvious looking from afar - the underlying principle of grouping is significantly different.
-
-When dealing with large amounts of books, with a decent processor, this approach may improve the performance significantly.
-
-Let's generate a bunch of books and try grouping them sequentially and in parallel ...
-
-List<Book> books = new ArrayList<>();
-List<String> authorList = Arrays.asList(
-            "George Orwell",
-            "Nick Bostrom",
-);
-
-for (int i = 0; i < 100000; i++) {
-    books.add(new Book(
-            String.valueOf(i),
-            authorList.get(new Random().ints(1, 1, authorList.size()).findFirst().getAsInt()),
-            1900));
-}
-
-long startTimeSequential = System.currentTimeMillis();
-Map<String, List<Book>> booksByAuthorSequential = books.stream()
-                .collect(Collectors.groupingBy(Book::getAuthor));
-
-long endTimeSequential = System.currentTimeMillis();
-System.out.printf("Total time for sequential process: %sms\n",  (endTimeSequential-startTimeSequential));
-
-long startTimeParallel = System.currentTimeMillis();
- ConcurrentMap<String, List<Book>> booksByAuthorParallel = books.parallelStream()
-                .collect(Collectors.groupingByConcurrent(Book::getAuthor));
-long endTimeParallel = System.currentTimeMillis();
-System.out.printf("Total time for parallel process: %sms\n",  (endTimeParallel-startTimeParallel));
-Depending on your system and CPU the sequential process might take longer or shorter than the parallel counterpart. This also heavily depends on the number of groups. If you have a few groups (fewer authors), the process of splitting them up and aggregating the results might offset the parallel approach enough to make it slower than the sequential approach.
-
-
-Note: The fewer groups you're dealing with, the more likely it is for the sequential approach to outperform the parallel one, but this also highly depends on the CPU of the machine you're running the code on.
-
-With just two authors, running this piece of code results in:
-
-Total time for sequential process: 12ms
-Total time for parallel process: 26ms
-
-Free eBook: Git Essentials
-Check out our hands-on, practical guide to learning Git, with best-practices, industry-accepted standards, and included cheat sheet. Stop Googling Git commands and actually learn it!
-
-
-Download the eBook  
-While both processes took a really small amount of time to execute, considering the creation and grouping of 100k objects - the parallel process took significantly longer.
-
-If we were to expand our list with a few more authors:
-
-List <String> authorList = Arrays.asList(
-                "George Orwell",
-                "Nick Bostrom",
-                "Ray Kurzweil",
-                "J.R.R. Tolkien",
-                "Eliezer Yudkowsky",
-                "Stuart Russel",
-                "Max Tegmark",
-                "Anil Seth",
-                "Thomas Metzinger",
-                "Aurélien Geron",
-                "Max Lapan",
-                "Brian Greene",
-                "Frank Wilczek"
-        );
-The results would be pretty similar:
-
-Total time for sequential process: 13ms
-Total time for parallel process: 19ms
-However, if we expanded it significantly:
-
-for (int i = 0; i < 10000; i++) {
-    authorList.add("Author" + i);
-}
-Can you guess what happens now, with 10 thousand authors? Actually - the same thing:
-
-Total time for sequential process: 19ms
-Total time for parallel process: 33ms
-But, if you run this code on another machine that can utilize threads more efficiently, you'll be greeted with:
-
-Total time for sequential process: 97ms
-Total time for parallel process: 52ms
-
-Note: Concurrency isn't a silver bullet that always just works and makes code execute faster.
-
-Collectors.groupingByConcurrent() with Classification Function and Downstream Collector
-The second variation of the method takes two arguments - a classification function, and an additional, downstream collector:
-
-public static <T,K,A,D> Collector<T,?,ConcurrentMap<K,D>>
-    groupingByConcurrent(Function<? super T,? extends K> classifier,
-                         Collector<? super T,A,D> downstream)
-This method returns a Collector that groups the input elements of type T according to the classification function, afterwards applying a reduction operation on the values associated with a given key using the specified downstream Collector.
-
-ADVERTISEMENT
-
-The reduction operation "reduces" the data we've collected by applying an operation that's useful in a specific situation.
-
-If you'd like to read more about reduction in Java in great detail - read our Java 8 Streams: Guide to reduce()!
-
-Let's see an example of this variant of the method. As the downstream here we'll be using mapping(), which takes 2 parameters:
-
-A mapper - a function to be applied to the input elements and
-A downstream collector – a collector which will accept mapped values
-Collectors.mapping() itself does a pretty straightforward job. It adapts a collector accepting elements of one type to accept a different type by applying a mapping function to each input element before accumulation. In our case, we'll map each Student to their name and return those names as a list.
-
-Here we'll once again group our books by the author, but instead of using ConcurrentMap<String, List<Book> we'll use ConcurrentMap<String, List<String> and reduce our books into a simple string:
-
-ConcurrentMap<String, List<String>> booksByAuthor = books.parallelStream()
-    .collect(Collectors.groupingByConcurrent(Book::getAuthor, Collectors.mapping(Book::getTitle, Collectors.toList())));
-These are reductions of books, where we've reduced them to a title, though you could substitute this with any other reduction operation as well:
-
-{
-J.R.R. Tolkien=[The Lord of the Rings, The Hobbit], 
-William Golding=[Lord of the Flies], 
-George Orwell=[Nineteen Eighty-Four, The Road to Wigan Pier, Animal Farm]
-}
-Another very useful application of this overload is that our downstream function can be, well, another Collectors.groupingByConcurrent(). You can thus chain any number of groups, creating nested groups.
-
-Let's group the books by their release year, but within those groups, we'll group the books by authors:
-
-ConcurrentMap<Integer, ConcurrentMap<String, List<String>>> booksByAuthor = books.parallelStream()
-                .collect(Collectors.groupingByConcurrent(Book::getReleaseYear,
-                        Collectors.groupingByConcurrent(Book::getAuthor, Collectors.mapping(Book::getTitle, Collectors.toList()))));
-And get the following output:
-
-{
-1937={J.R.R. Tolkien=[The Hobbit], George Orwell=[The Road to Wigan Pier]}, 
-1954={J.R.R. Tolkien=[The Lord of the Rings], William Golding=[Lord of the Flies]}, 
-1945={George Orwell=[Animal Farm]}, 
-1949={George Orwell=[Nineteen Eighty-Four]}
-}
-Collectors.groupingBy() with Classifier Function, Downstream Collector and Supplier
-The third and last overload of this method takes three arguments. The first and the third are the same as in the previous overload, but the second argument is a supplier method.
-
-The supplier method provides the specific ConcurrentMap implementation we want to use to contain our end result. We have two known classes that implement this interface - ConcurrentHashMap and ConcurrentSkipListMap:
-
-ADVERTISEMENT
-
-public static <T,K,A,D,M extends ConcurrentMap<K,D>> Collector<T,?,M> 
-    groupingByConcurrent(Function<? super T,? extends K> classifier,
-                         Supplier<M> mapFactory,
-                         Collector<? super T,A,D> downstream)
-The return value of this method is the same as the previous overload as well. The only difference with this one is that the ConcurrentMap produced by the collector is created with the supplied factory function.
-
-We'll be doing just one simple example for this overload, since everything is pretty much the same as the previous with the exception of the specified ConcurrentMap implementation:
-
-ConcurrentMap<String, List<String>> booksByAuthor = books.parallelStream()
-    .collect(Collectors.groupingByConcurrent(Book::getAuthor,
-                                             ConcurrentHashMap::new,
-                                             Collectors.mapping(Book::getTitle, Collectors.toList())));
-
-Conclusion
-The Collectors class is a powerful one and allows us to collect streams into collections in various ways.
-
-You can define your own collectors, but the built-in collectors can get you very far as they're generic and can be generalized to the vast majority of tasks you can think of.
-
-In this guide, we've gone through a few examples of using the Collectors.groupingByConcurrent() method, which groups elements together given specific parameters and returns a ConcurrentMap.
-
-By using this method instead of the non-concurrent Collectors.groupingBy() we can fully utilize the multi-core architecture, if the underlying hardware allows us to. However, while using this method enables you to more easily implement parallelism, it is still your responsibility to determine if your application is suitable for parallelism at all.
-
-You've learned how to use the basic form, as well as forms with downstream collectors and suppliers to simplify code and run powerful yet simple functional operations on streams.
- </details>
-<details><summary><b>Java 8 Collectors: averagingDouble(), averagingLong() and averagingInt()</b></summary>
-Introduction
-A stream represents a sequence of elements and supports different kinds of operations that lead to the desired result. The source of a stream is usually a Collection or an Array, from which data is streamed from.
-
-Streams differ from collections in several ways; most notably in that the streams are not a data structure that stores elements. They're functional in nature, and it's worth noting that operations on a stream produce a result and typically return another stream, but do not modify its source.
-
-To "solidify" the changes, you collect the elements of a stream back into a Collection.
-
-The mathematical operation of finding an arithmetic mean is one we use fairly frequently, and there are many ways we go about performing it.
-
-We'll be doing exactly that in this guide - we'll take a look at how to get a mean/average value for different numerical types within Java through built-in methods within the Collectors class.
-
-ADVERTISEMENT
-
-Note: It's worth noting that you can average the elements themselves, if they're numerical, or reduce them to a numerical representation and then average the reductions, if they aren't.
-
-Collectors and Stream.collect()
-Collectors represent implementations of the Collector interface, which implements various useful reduction operations, such as accumulating elements into collections, summarizing elements based on a specific parameter, etc.
-
-All predefined implementations can be found within the Collectors class.
-
-You can also very easily implement your own collector and use it instead of the predefined ones, though - you can get pretty far with the built-in collectors, as they cover the vast majority of cases in which you might want to use them.
-
-To be able to use the class in our code we need to import it:
-
-import static java.util.stream.Collectors.*;
-Stream.collect() performs a mutable reduction operation on the elements of the stream.
-
-
-A mutable reduction operation collects input elements into a mutable container, such as a Collection, as it processes the elements of the stream.
-
-Definition of the averaging_() Collectors
-The Collectors class has a variety of useful functions, and it so happens that it contains a few that allow us to find a mean value of input elements.
-
-There's a total of three of them: Collectors.averagingInt(), Collectors.averagingDouble() and Collectors.averagingLong().
-
-Let's start off by taking a look at the method signatures:
-
-public static <T> Collector<T,?,Double> averagingInt(ToIntFunction<? super T> mapper)
-
-public static <T> Collector<T,?,Double> averagingDouble(ToDoubleFunction<? super T> mapper)
-
-public static <T> Collector<T,?,Double> averagingLong(ToLongFunction<? super T> mapper)
-
-Note: The generic T in the method signatures represents the type of the input elements we're working with.
-
-ADVERTISEMENT
-The ToIntFunction, ToDoubleFunction and ToLongFunction from java.util.function enable us to perform conversions (reductions) from object types to their primitive int, double or long fields. Let's define a Student class that we can reduce to a numerical field:
-
-public class Student {
-    private String name;
-    private Double grade;
-    private Integer age;
-    private Long examsTaken;
-
-   // Constructor, getters and setters
-Let's also instantiate our students in a List:
-
-List<Student> students = Arrays.asList(
-    new Student("John", 7.56, 21, 17L),
-    new Student("Jane", 8.31, 19, 9L),
-    new Student("Michael", 9.17, 20, 14L),
-    new Student("Danielle", 9.17, 21, 23L),
-    new Student("Joe", 8.92, 22, 25L)
-);
-Besides custom objects - we'll also take a look at how we can use the averaging collectors on primitive data types - that is Lists consisted of only numerical elements.
-
-Collectors.averagingInt()
-This method returns a Collector that produces the arithmetic mean of an integer-valued function applied to the input elements. In the case of no elements being present, the result is 0.
-
-Since all of the averaging methods are pretty straightforward we'll go straight to an example.
-
-The first of the two examples will be using a simple List consisted of Integers. Let's say we have the following:
-
-List<Integer> numbers = Arrays.asList(1, 2, 3, 4, 5);
-Double average = numbers.stream().collect(Collectors.averagingInt(Integer::intValue));
-System.out.println(average);
-We apply the .stream() method to create a stream of Integer objects, after which we use the previously discussed .collect() method to collect the stream with the averagingInt() collector.
-
-
-Free eBook: Git Essentials
-Check out our hands-on, practical guide to learning Git, with best-practices, industry-accepted standards, and included cheat sheet. Stop Googling Git commands and actually learn it!
-
-
-Download the eBook  
-Since the values are already integers, get the intValue through a method reference, effectively performing a 1-to-1 mapping as our ToIntFunction, as there's no conversion required:
-
-3.0
-Next on, in our Student class, the only integer-valued field is age. In the following example we'll be calculating the average age of all of our students:
-
-Double averageAge = students.stream().collect(Collectors.averagingInt(Student::getAge));
-System.out.println("Average student age is: " + averageAge);
-The inner workings when using a field from a user-defined class is the same, the only difference is that we can't average the Student instances, so we reduce them to their age. The ToIntFunction in this case is a method reference to the getAge() method, and through it, we reduce the Student to their age.
-
-This process stays the same in both of our upcoming methods as well, the only thing that'll change is which method we're referencing for the conversion functions. The output of our code snippet is:
-
-Average student age is: 20.6
-Collectors.averagingDouble()
-This method returns a Collector that produces the arithmetic mean of an double-valued function applied to the input elements. In the case of no elements being present, the result is 0.
-
-The Collectors.averagingDouble() differs a tiny bit from averagingInt() given the fact that it works with doubles. The average that's being returned can vary depending on the order in which values are processed, due to the accumulated rounding errors. Values sorted by increasing order tend to produce more accurate results.
-
-If any value is NaN or the sum at any point is NaN - the mean will also be NaN. Additionally, the double format can be represented with all consecutive integers in the range from -253 to 253.
-
-ADVERTISEMENT
-Let's calculate the average value of a list of doubles:
-
-List<Double> numbers = Arrays.asList(3.0, 8.0, 4.0, 11.0);
-Double average = numbers.stream().collect(Collectors.averagingDouble(Double::doubleValue));
-System.out.println(average);
-This results in:
-
-6.5
-Now, let's apply the method to our Student class. The grade field is a double, so we'll use a method reference to that field's getter as the ToDoubleFunction in the averagingDouble() call:
-
-Double averageGrade = students.stream().collect(Collectors.averagingDouble(Student::getGrade));
-System.out.println("Average student grade is: " + averageGrade);
-Running this gives us the following output:
-
-Average student grade is: 8.62
-Collectors.averagingLong()
-The last of the averaging methods is Collectors.averagingLong(). This method as well as the previous two, returns a Collector that produces the arithmetic mean of a long-valued function applied to the input elements. If there are no elements average, 0 is returned.
-
-As with the previous two, we can easily average a list of long values:
-
-ADVERTISEMENT
-List<Long> numbers = Arrays.asList(10L, 15L, 1L, 3L, 7L);
-Double average = numbers.stream().collect(Collectors.averagingDouble(Long::longValue));
-System.out.println(average);
-This results in:
-
-7.2
-Finally, our Student class has a Long-valued examsTaken field, for which we can calculate the mean of. We'll use a method reference to the getExamsTaken() method as the ToLongFunction:
-
-Double averageExamsTaken = students.stream().
-    collect(Collectors.averagingLong(Student::getExamsTaken));
-System.out.println("Average exam taken per student is: " + averageExamsTaken);
-Running this outputs:
-
-Average exam taken per student is: 17.6
-Conclusion
-Many a times we have a need for computing averages of multiple values, and using the provided averaging_() methods of the Collectors class is one of the easiest and most efficient ways to do this in Java.
-
-In this guide, we've gone through all three of them available within the aforementioned class, explained how each of them works on an example of a user-defined class and showed how we can use them in code to achieve the results we were aiming for.
-													 
-</details>
-
-<details><summary><b>Java - Filter a Stream with Lambda Expressions</b></summary>
-Java Streams have been introduced all the way back in Java 8 in 2014, in an effort to introduce verbose Java to a Functional Programming paradigm. Java Streams expose many flexible and powerful functional operations to perform collection processing in one-liners.
-
-Filtering collections based on some predicate remains one of the most commonly used functional operations, and can be performed with a Predicate or more concisely - with a Lambda Expression.
-
-In this short guide, we'll take a look at how you can filter a Java 8 Stream with Lambda Expressions.
-
-
-Advice: If you aren't familiar with functional interfaces, predicates and lambda expressions - for an example-driven intuition-building guide, read our in-depth "Guide to Functional Interfaces and Lambda Expressions in Java"!
-
-Filtering Streams in Java
-In general, any Stream can be filtered via the filter() method, and a given predicate:
-
-Stream<T> filter(Predicate<? super T> predicate)
-Each element in the stream is run against the predicate, and is added to the output stream if the predicate returns true. You can supply a Predicate instance:
-
-ADVERTISEMENT
-Predicate<String> contains = s -> s.contains("_deprecated");
-List<String> results = stream.filter(contains).collect(Collectors.toList());
-Or, simplify it by providing a Lambda Expression:
-
-List<String> results = stream.filter(s -> s.contains("_deprecated"))
-                             .collect(Collectors.toList());
-Or even collapse the Lambda Expression into a method reference:
-
-// Filters empty strings by invoking s -> s.isEmpty() on each element
-List<String> results = stream.filter(String::isEmpty)
-                             .collect(Collectors.toList());
-With method references, you can't pass arguments, though, you can define methods in the object you're filtering and tailor them to be easily filterable (as long as the method doesn't accept arguments and returns a boolean).
-
-Remember that streams are not collections - they're streams of collections, and you'll have to collect them back into any collection such as a List, Map, etc. to give them permanence. Additionally, all operations done on stream elements either intermediate or terminal:
-
-Intermediate operations return a new stream with changes from the previous operation
-Terminal operations return a data type and are meant to end a pipeline of processing on a stream
-filter() is an intermediate operation, and is meant to be chained with other intermediate operations, before the stream is terminated. To persist any changes (such as changes to elements themselves, or filtered results), you'll have to assign the resulting output stream to a new reference variable, through a terminal operation.
-
-
-Note: Even when chaining many lambda expressions, you might not run into readability issues, with proper line breaks.
-
-ADVERTISEMENT
-In the following examples, we'll be working with this list of books:
-
-Book book1 = new Book("001", "Our Mathematical Universe", "Max Tegmark", 432, 2014);
-Book book2 = new Book("002", "Life 3.0", "Max Tegmark", 280, 2017);
-Book book3 = new Book("003", "Sapiens", "Yuval Noah Harari", 443, 2011);
-        
-List<Book> books = Arrays.asList(book1, book2, book3);
-Filter Collection with Stream.filter()
-Let's filter this collection of books. Any predicate goes - so let's for example filter by which books have over 400 pages:
-
-List<Book> results = books.stream()
-                          .filter(b -> b.getPageNumber() > 400)
-                          .collect(Collectors.toList());
-This results in a list which contains:
-
-[
-Book{id='001', name='Our Mathematical Universe', author='Max Tegmark', pageNumber=432, publishedYear=2014}, 
-Book{id='003', name='Sapiens', author='Yuval Noah Harari', pageNumber=443, publishedYear=2011}
-]
-When filtering, a really useful method to chain is map(), which lets you map objects to another value. For example, we can map each book to its name, and thus return only the names of the books that fit the predicate from the filter() call:
-
-List<String> results = books.stream()
-                            .filter(b -> b.getPageNumber() > 400)
-                            .map(Book::getName)
-                            .collect(Collectors.toList());
-This results in a list of strings:
-
-[Our Mathematical Universe, Sapiens]
-Filter Collection on Multiple Predicates with Stream.filter()
-Commonly, we'd like to filter collections by more than one criteria. This can be done by chaining multiple filter() calls or using a short-circuit predicate, which checks for two conditions in a single filter() call.
-
- List<Book> results = books.stream()
-                    .filter(b -> b.getPageNumber() > 400 && b.getName().length() > 10)
-                    .collect(Collectors.toList());
-                    
-// Or
-
- List<Book> results2 = books.stream()
-                    .filter(b -> b.getPageNumber() > 400)
-                    .filter(b -> b.getName().length() > 10)
-                    .collect(Collectors.toList());
-
-Free eBook: Git Essentials
-Check out our hands-on, practical guide to learning Git, with best-practices, industry-accepted standards, and included cheat sheet. Stop Googling Git commands and actually learn it!
-
-
-Download the eBook  
-When utilizing multiple criteria - the lambda calls can get somewhat lengthy. At this point, extracting them as standalone predicates might offer more clarity. Though, which approach is faster?
-
-Single Filter with Complex Condition or Multiple Filters?
-It depends on your hardware, how large your collection is, and whether you use parallel streams or not. In general - one filter with a complex condition will outperform multiple filters with simpler conditions (small-to-medium collections), or perform at the same level (very large collections). If your conditions are too long - you may benefit from distributing them over multiple filter() calls, for the improved readability, since performance is very similar.
-
-The best choice is to try both, note the performance on the target device, and adjust your strategy accordingly.
-
-GitHub user volkodavs did a filtering benchmark in throughput operations/s, and hosted the results on the javafilters-benchmarks repository. The results are summarized in an informative table:
-
-
-It shows a clear diminishing of returns at larger collection sizes, with both approaches performing around the same level. Parallel streams benefit significantly at larger collection sizes, but curb the performance at smaller sizes (below ~10k elements). It's worth noting that parallel streams maintained their throughput much better than non-parallel streams, making them significantly more robust to input.
-</details>
-
-<details><summary><b>Java 8 - Stream.map() Examples</b></summary>
-Introduction
-A Stream is a sequence of objects that supports many different methods that can be combined to produce the desired result.
-
-They can be created from numerous data sources, which are most often collections but can also be I/O channels, Arrays, primitive data types etc.
-
-It's important to emphasize that a stream is not a data structure, since it doesn't store any data. It's just a data source wrapper which allows us to operate with data faster, easier and with cleaner code.
-
-A stream also never modifies the original data structure, it just returns the result of the pipelined methods.
-
-Types of Streams
-Streams can be sequential (created with stream()), or parallel (created with parallelStream()). Parallel streams can operate on multiple threads, while sequential streams can't.
-
-Operations on streams can be either intermediate or terminal:
-
-Intermediate operations on streams return a stream. This is why we can chain multiple intermediate operations without using semicolons. Intermediate operations include the following methods:
-
-ADVERTISEMENT
-map(op) - Returns a new stream in which the provided op function is applied to each of the elements in the original stream
-filter(cond) - Returns a new stream which only contains the elements from the original stream that satisfy the condition cond, specified by a predicate
-sorted() - Returns the original stream, but with the elements being sorted
-Terminal operations are either void or return a non-stream result. They're called terminal because we can't chain any more stream operations once we've used a terminal one, without creating a new stream from it and starting again.
-
-Some of the terminal operations are:
-
-collect() - Returns the result of the intermediate operations performed on the original stream
-forEach() - A void method used to iterate through the stream
-reduce() - Returns a single result produced from an entire sequence of elements in the original stream
-In this tutorial, we'll go over the map() operation and how we can use it with Streams to convert/map objects of various types.
-
-Stream.map() Examples
-Let's take a look at a couple of examples and see what we can do with the map() operation.
-
-Stream of Integers to Stream of Strings
-Arrays.asList(1, 2, 3, 4).stream()
-        .map(n -> "Number " + String.valueOf(n))
-        .forEach(n -> System.out.println(n + " as a " + n.getClass().getName()));
-Here, we've made a list of integers and called stream() on the list to create a new stream of data. Then, we've mapped each number n in the list, via the map() method, to a String. The Strings simply consist of "Number" and the String.valueOf(n).
-
-So for each number in our original list, we'll now have a "Number n" String corresponding to it.
-
-Since map() returns a Stream again, we've used the forEach() method to print each element in it.
-
-Running this code results in:
-
-ADVERTISEMENT
-Number 1 as a java.lang.String
-Number 2 as a java.lang.String
-Number 3 as a java.lang.String
-Number 4 as a java.lang.String
-Note: This hasn't altered the original list in the slightest. We've simply processed the data and printed the results. If we wanted to persist this change, we'd collect() the data back into a Collection object such as a List, Map, Set, etc:
-
-List<Integer> list = Arrays.asList(1, 2, 3, 4);
-        
-List<String> mappedList = list.stream()
-        .map(n -> "Number " + String.valueOf(n))
-        .collect(Collectors.toList());
-
-System.out.println(list);
-System.out.println(mappedList);
-This results in:
-
-[1, 2, 3, 4]
-[Number 1, Number 2, Number 3, Number 4]
-Stream of Strings into Stream of Integers
-Now, let's do it the other way around - convert a stream of strings into a stream of integers:
-
-Arrays.asList("1", "2", "3", "4").stream()
-        .map(n -> Integer.parseInt(n))
-        .forEach(n -> System.out.println(n));
-As expected, this code will produce the following output:
-
-1
-2
-3
-4
-List of Objects into List of Other Objects
-Let's say we have a class Point that represents one point in a cartesian coordinate system:
-
-public class Point {
-    int X;
-    int Y;
-    
-    Point(int x, int y){
-        this.X=x;
-        this.Y=y;
-    }
-    
-    @Override
-    public String toString() {
-        return "(" + this.X + ", " + this.Y + ")";
-    }
-    
-}
-Then, say we want to scale a certain shape by a factor of 2, this means we have to take all the points we have, and double both their X and Y values. This can be done by mapping the original values to their scaled counterparts.
-
-
-Free eBook: Git Essentials
-Check out our hands-on, practical guide to learning Git, with best-practices, industry-accepted standards, and included cheat sheet. Stop Googling Git commands and actually learn it!
-
-
-Download the eBook  
-Then, since we'd like to use the new coordinates, we'll collect this data into a new list of scaled points:
-
-List<Point> originalPoints = Arrays.asList(new Point(1, 2),
-                                           new Point(3, 4),
-                                           new Point(5, 6),
-                                           new Point(7, 8));
-System.out.println("Original vertices: " + originalPoints);
-    
-List<Point> scaledPoints = originalPoints
-        .stream()
-        .map(n -> new Point(n.X * 2, n.Y * 2))
-        .collect(Collectors.toList());
-
-System.out.println("Scaled vertices: " + scaledPoints);
-This example will produce the following output:
-
-Original vertices: [(1, 2), (3, 4), (5, 6), (7, 8)]
-Scaled vertices: [(2, 4), (6, 8), (10, 12), (14, 16)]
-Conclusion
-In this article, we explained what streams are in Java. We mentioned some of the basic methods used on streams, and focused specifically on the map() method and how it can be used for stream manipulation.
-
-It is important to mention that streams are not really a mandatory part of programming, however they are more expressive and can significantly improve the readability of your code, which is why they became a common programming practice.
-</details>
-<details><summary><b>Java 8 Streams: Definitive Guide to flatMap()</b></summary>
-Introduction
-Mapping elements from one collection to another, applying a transformative function between them is a fairly common and very powerful operation. Java's functional API supports both map() and flatMap().
-
-If you'd like to read more about map(), read our Java 8 - Stream.map() Examples!
-
-The flatMap() operation is similar to map(). However, flatMap() flattens streams in addition to mapping the elements in those streams.
-
-Flat mapping refers to the process of flattening a stream or collection from a nested/2D stream or collection into their 1D representation:
-
-List of lists: [[1, 2, 3], [4, 5, 6, 7]]
-Flattened list: [1, 2, 3, 4, 5, 6, 7]
-For example, let us say we have a collection of words:
-
-Stream<String> words = Stream.of(
-    "lorem", "ipsum", "dolor", "sit", "amet"
-);
-And, we want to generate a list of all the Character objects in those words. We could create a stream of letters for each word and then combine these streams into a single stream of Character objects.
-
-First, let's try using the map() method. Since we want to chain two transformative functions, let's define them upfront instead of anonymously calling them as Lambda Expressions:
-
-// The member reference replaces `word -> word.chars()` lambda
-Function<String, IntStream> intF = CharSequence::chars;
-This function accepts a String and returns an IntStream - as indicated by the types we've passed in. It transforms a string into an IntStream.
-
-
-Note: You can represent char values using int values. Thus, when you create a stream of primitive char values, the primitive stream version of int values (IntStream) is preferable.
-
-ADVERTISEMENT
-
-Now, we can take this stream and convert the integer values into Character objects. To convert a primitive value to an object - we use the mapToObj() method:
-
-Function<IntStream, Stream<Character>> charF = s -> s.mapToObj(val -> (char) val);
-This function transforms an IntStream into a Stream of characters. Finally, we can chain these two, mapping the words in the original stream to a new stream, in which all of the words have passed through these two transformative functions:
-
-words
-    // Chaining functions
-    .map(intF.andThen(charF))
-    // Observe the mapped values
-    .forEach(s -> System.out.println(s.collect(Collectors.toList())));
-And on running the code snippet, you will get the output:
-
-[l, o, r, e, m]
-[i, p, s, u, m]
-[d, o, l, o, r]
-[s, i, t]
-[a, m, e, t]
-After collecting the stream into a list - we've ended up with a list of lists. Each list contains the characters of one of the words in the original stream. This isn't a flattened list - it's two dimensional.
-
-If we were to flatten the list - it'd only be one list, containing all of the characters from all of the words sequentially.
-
-This is where flatMap() kicks in.
-
-Instead of chaining these two functions as we have, we can map() the words using intF and then flatMap() them using charF:
-
-List listOfLetters = words
-    .map(intF)
-    .flatMap(charF)
-    .collect(Collectors.toList());
-
-System.out.println(listOfLetters);
-Which produces the output:
-
-[l, o, r, e, m, i, p, s, u, m, d, o, l, o, r, s, i, t, a, m, e, t]
-As we can see, flatMap() applies a given function to all the available streams before returning an cumulative stream, instead of a list of them. This feature is useful in other implementations too. Similar to the Stream API, Optional objects also offer map() and flatMap() operations.
-
-For instance, the flatMap() method helps in unwrapping Optional objects, such as Optional<Optional<T>>. On unwrapping, such a nested Optional results in Optional<T>.
-
-In this guide we'll explore the use cases of flatMap() and also put them to practice.
-
-Definitions
-Let's start off with the definitions and the method's signature:
-
-// Full generics' definition omitted for brevity
-<R> Stream<R> flatMap(Function<T, Stream<R>> mapper)
-
-The flatMap() operation returns a cumulative stream, generated from multiple other streams. The elements of the stream are created by applying a mapping function to each element of the constituent streams, and each mapped stream is closed after its own contents have been placed into the cumulative stream.
-
-T represents the class of the objects in the pipeline. R represents the resulting class type of the elements that will be in the new stream. Thus, from our previous example, we can observe how the class types are transforming.
-
-The lambda-bodied Function we've used earlier:
-
-Function<IntStream, Stream<Character>> charF = s -> s.mapToObj(val -> (char) val);
-Is equivalent to:
-
-ADVERTISEMENT
-Function charF = new Function<IntStream, Stream<Character>>(){
-    @Override
-    public Stream<Character> apply(IntStream s){
-        return s.mapToObj(val -> (char) val);
-    }
-};
-The charF function accepts an input T of type IntStream. Then, it applies a mapper, which returns a stream containing elements of type R. And, in this case R is Character.
-
-Conditions
-The mapper that flatMap() uses should be:
-
-Non-interfering
-Stateless
-Remember, from what we have seen, the mapper for the charF function is:
-
-s.mapToObj(val -> (char) val);
-And, when you expand this mapper into its anonymous class equivalent you get:
-
-new IntFunction<Character>(){
-    @override
-    public Character apply(int val){
-        return (char) val;
-    }
-};
-In terms of non-interference, note how the mapper does not modify the elements in the stream. Instead, it creates new elements from the ones in the stream. It casts each int value in the stream into a char value.
-
-Then the flatMap() operation places those new char values into a new stream. Next, it boxes those char values into their Character wrapper object equivalents. This is the standard practice in all collections too. Primitive values like char and int cannot be used in collections or streams for that matter.
-
-The mapper needs to be stateless also. In simple terms, the mapper function should not depend on the state of the stream that is supplying it with elements. In other terms - for the same input, it should absolutely always give the same output.
-
-In our case, we see that the mapper simply casts all the int values it gets from the stream. It does not interrogate the stream's condition in any way. And, in return, you could be sure that the mapper would return predictable results even in multi-threaded operations.
-
-Using flatMap() to Flatten Streams
-Say you want to sum the elements of multiple streams. It would make sense to flatMap() the streams into a single one and then sum all of the elements.
-
-A simple example of a 2D collection of integers is Pascal's Triangle:
-
-[1]
-[1, 1]
-[1, 2, 1]
-...
-A triangle like this can work as a simple stub for streams of other data we may encounter. Working with lists of lists isn't uncommon, but is tricky. For instance, lists of lists are oftentimes created when grouping data together.
-
-If you'd like to read more about grouping, read our Guide to Java 8 Collectors: groupingBy()!
-
-Your data could be grouped by a date and represent the pageviews generated by hour, for example:
-
-{1.1.2021. = [42, 21, 23, 52]},
-{1.2.2021. = [32, 27, 11, 47]},
-...
-If you'd like to calculate the sum of these - you could run a loop for each date or stream/list and sum the elements together. However, reduction operations like this are simpler when you have one stream, instead of many - so you could unwrap these into a single stream via flatMap() before summing.
-
-Let's create a Pascal Triangle generator to stub the functionality of an aggregator that aggregates grouped data:
-
-public class PascalsTriangle {
-    private final int rows;
-    
-    // Constructor that takes the number of rows you want the triangle to have
-    public PascalsTriangle(int rows){
-        this.rows = rows;
-    }
-    
-    // Generates the numbers for every row of the triangle
-    // Then, return a list containing a list of numbers for every row
-    public List<List<Integer>> generate(){
-        List<List<Integer>> t = new ArrayList<>();
-        // Outer loop collects the list of numbers for each row
-        for (int i = 0; i < rows; i++){
-            List<Integer> row = new ArrayList<>();
-            // Inner loop calculates the numbers that will fill a given row
-            for (int j = 0; j <= i; j++) {
-                row.add(
-                    (0 < j && j < i)
-                    ? (
-                        t.get(i - 1).get(j - 1)
-                        + t.get(i - 1).get(j)
-                    )
-                    : 1
-                );
-            }
-            t.add(row);
-        }        
-        return t;
-    }
-}
-Now, let's generate a 10-row triangle and print the contents:
-
-
-Free eBook: Git Essentials
-Check out our hands-on, practical guide to learning Git, with best-practices, industry-accepted standards, and included cheat sheet. Stop Googling Git commands and actually learn it!
-
-
-Download the eBook  
-PascalsTriangle pt = new PascalsTriangle(10);
-List<List<Integer>> vals = pt.generate();
-vals.stream().forEach(System.out::println);
-This results in:
-
-[1]
-[1, 1]
-[1, 2, 1]
-[1, 3, 3, 1]
-[1, 4, 6, 4, 1]
-[1, 5, 10, 10, 5, 1]
-[1, 6, 15, 20, 15, 6, 1]
-[1, 7, 21, 35, 35, 21, 7, 1]
-[1, 8, 28, 56, 70, 56, 28, 8, 1]
-[1, 9, 36, 84, 126, 126, 84, 36, 9, 1]
-We can either flatten the entire list here, and then sum the numbers up or we can sum up the numbers in each list, flatten it and then sum those results.
-
-Code-wise, we can pass in a mapper while flattening a list of streams. Since we're ultimately arriving at an integer, we're flat mapping to an integer. This is a transformative operation and we can define a standalone mapper Function that sums the streams up.
-
-
-Note: For flat mapping to specific types and using mappers to achieve that - we can use the flatMapToInt(), flatMapToLong() and flatMapToDouble() methods. These were introduced as specialized flat mapping methods to avoid explicit or implicit casting during the process, which can prove costly on larger datasets. Previously, we cast each char to a Character because we didn't use a mapper. If you can use a specialized variant, you're mean to use it.
-
-The mapper defines what happens to each stream before flattening. This makes it shorter and cleaner to define a mapper upfront and just run flatMapToInt() on the summed numbers in the lists, summing them together in the end!
-
-Let's start with creating a mapper. We'll override the apply() method of a Function, so that when we pass it into flatMap() it gets applied to the underlying elements (streams):
-
-Function<List<Integer>, IntStream> mapper = new Function<>() {
-    @Override
-    public IntStream apply(List<Integer> list){
-        return IntStream.of(
-                list.stream()
-                    .mapToInt(Integer::intValue)
-                    .sum()
-        );
-    }
-};  
-Or, we could've replaced the entire body with a simple Lambda:
-
-Function<List<Integer>, IntStream> mapper = list -> IntStream.of(
-        list.stream()
-             .mapToInt(Integer::intValue)
-             .sum()
-);
-The mapper accepts a list of integers and returns a sum of the elements. We can use this mapper with flatMap() as:
-
-int total = vals.stream.flatMapToInt(mapper).sum();
-System.out.println(total);
-This results in:
-
-1023
-Using flatMap() for One-Stream-to-Many Operations
-Unlike the map() operation, flatMap() allows you to do multiple transformations to the elements it encounters.
-
-Remember, with map() you can only turn an element of type T into another type R before adding the new element into a stream.
-
-With flatMap(), however, you may turn an element, T, into R and create a stream of Stream<R>.
-
-As we shall see, that capability comes in handy when you want to return multiple values out of a given element back into a stream.
-
-Expand a Stream
-Say, you have a stream of numbers:
-
-Stream<Integer> numbers = Stream.of(1, 2, 3, 4, 5, 6);
-And you want to expand that stream in such a way that every number is duplicated. This is, surprisingly enough, dead simple:
-
-ADVERTISEMENT
-Stream<Integer> duplicatedNumbers = numbers.flatMap(val -> Stream.of(val, val));
-duplicatedNumbers.forEach(System.out::print);
-Here, we flat-mapped the Streams created by each element in the numbers stream, in such a way to contain (val, val). That's it! When we run this code, it results in:
-
-112233445566
-Transform a Stream
-In some use cases, you may not even want to unwrap a stream fully. You may be only interested in tweaking the contents of a nested stream. Here too, flatMap() excels because it allows you to compose new streams in the manner you desire.
-
-Let's take a case where you want to pair up some elements from one stream with those from another stream. Notation-wise, assume you have a stream containing the elements {j, k, l, m}. And, you want to pair them with each of the elements in the stream, {n, o, p}.
-
-You aim to create a stream of pair lists, such as:
-
-[j, n]
-[j, o]
-[j, p]
-[k, n]
-.
-.
-.
-[m, p]
-Accordingly, let's create a pairUp() method, that accepts two streams and pairs them up like this:
-
-public Stream<List<?>> pairUp(List<?> l1, List<?> l2){
-    return l1.stream().flatMap(
-            // Where fromL1 are elements from the first list (l1)
-            fromL1 -> {
-                return l2.stream().map(
-                        // Where fromL2 are elements from the second list (l2)
-                        fromL2 -> {
-                            return Arrays.asList(
-                                    fromL1, fromL2
-                            );
-                        }
-                );
-            }
-    );
-}
-The flatMap() operation in this case saves the pairUp() method from having to return Stream<Stream<List<?>>>. This would have been the case if we would have initiated the operation as:
-
-public Stream<Stream<List<?>>> pairUp(){
-    return l1.stream.map( ... );
-}
-Otherwise, let's run the code:
-
-List<?> l1 = Arrays.asList(1, 2, 3, 4, 5, 6);
-List<?> l2 = Arrays.asList(7, 8, 9);
-
-Stream<List<?>> pairedNumbers = pairUp(l1, l2);
-pairedNumbers.forEach(System.out::println);
-We get the output:
-
-[1, 7]
-[1, 8]
-[1, 9]
-[2, 7]
-[2, 8]
-[2, 9]
-[3, 7]
-[3, 8]
-[3, 9]
-[4, 7]
-[4, 8]
-[4, 9]
-[5, 7]
-[5, 8]
-[5, 9]
-[6, 7]
-[6, 8]
-[6, 9]
-Unwrapping Nested Optionals using flatMap()
-Optionals are containers for objects, useful for eliminating regular null checks and wrapping empty values in containers we can handle more easily and safely.
-
-If you'd like to read more about Optionals, read our Guide to Optionals in Java 8!
-
-We are interested in this type because it offers the map() and flatMap() operations like the Streams API does. See, there are use cases where you end up with Optional<Optional<T>> results. Such results indicate poor code design, and if you can't employ an alternative - you can eliminate nested Optional objects with flatMap().
-
-Let's create an environment in which you could encounter such a situation. We have a Musician who may produce a music Album. And, that Album may have a CoverArt. Of course, someone (say, a graphic designer) would have designed the CoverArt:
-
-public class Musician {
-    private Album album;    
-    public Album getAlbum() {
-        return album;
-    }
-}
-
-public class Album {
-    private CoverArt art;    
-    public CoverArt getCoverArt() {
-        return art;
-    }
-}
-
-public class CoverArt {
-    private String designer;    
-    public String getDesigner() {
-        return designer;
-    }
-}
-In this nested sequence, to get the name of the designer who made the cover art, you could do:
-
-public String getAlbumCoverDesigner(){
-    return musician
-        .getAlbum()
-        .getCoverArt()
-        .getDesigner();
-}
-Yet, code-wise, you are bound to encounter errors if the said Musician has not even released an Album in the first place - a NullPointerException.
-
-ADVERTISEMENT
-Naturally, you can mark these as Optional as they are, in fact optional fields:
-
-public class Musician {
-    private Optional<Album> album;
-    public Optional<Album> getAlbum() {
-        return album;
-    }
-}
-
-public class Album {
-    private Optional<CoverArt> art;
-    public Optional<CoverArt> getCoverArt() {
-        return art;
-    }
-}
-
-// CoverArt remains unchanged
-Still, when someone asks the question about who a CoverArt designer was, you would continue to encounter errors with your code. See, calling the re-done method, getAlbumCoverDesigner() would still fail:
-
-public Optional<String> getAlbumCoverDesigner(){
-    Musician musician = new Musician();
-    
-    Optional.ofNullable(musician)
-        .map(Musician::getAlbum)
-        // Won't compile starting from this line!
-        .map(Album::getCoverArt)
-        .map(CoverArt::getDesigner);
-    // ...
-}
-This is because the lines:
-
-Optional.ofNullable(musician)
-        .map(Musician::getAlbum)
-Return a type Optional<Optional<Album>>. A correct approach would be to use the flatMap() method instead of map().
-
-public Optional<String> getAlbumCoverDesigner(){
-    Musician musician = new Musician();
-        
-    return Optional.ofNullable(musician)
-        .flatMap(Musician::getAlbum)
-        .flatMap(Album::getCoverArt)
-        .map(CoverArt::getDesigner)
-        .orElse("No cover designed");
-}
-Ultimately, the flatMap() method of Optional unwrapped all the nested Optional statements. Yet, you should also notice how orElse() has contributed to the readability of the code. It helps you to provide a default value in case the mapping comes up empty at any point in the chain.
-
-Conclusion
-The Streams API offers several helpful intermediate operations such as map() and flatMap(). And in many cases, the map() method proves sufficient when you need to transform the elements of a stream into another type.
-
-Yet, there are instances when the results of such mapping transformations end up producing streams nested within other streams.
-
-And that could hurt code usability because it only adds an unnecessary layer of complexity.
-
-Fortunately, the flatMap() method is able to combine elements from many streams into the desired stream output. Also, the method gives users the freedom to compose the stream output as they wish. This is contrary to how map() places transformed elements in the same number of streams as found. This means, in terms of stream output, the map operation offers a one-to-one transformation. On the other hand, flatMap() can produce a one-to-many conversion.
-
-The flatMap() method also serves to simplify how the Optional container object works. Whereas the map() method can extract values from an Optional object, it may fail if code design causes the nesting of the optionals. In such cases, flatMap() plays the crucial role of ensuring that no nesting occurs. It transforms objects contained in Optional and returns the result in a single layer of containment.
-</details>
 </details>
