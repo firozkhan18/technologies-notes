@@ -2562,7 +2562,8 @@ Twinkle, twinkle, little star,
 	How I wonder what you are
 
 
-</details><details><summary><b> 44. Write a Java program that accepts an integer (n) and computes the value of n+nn+nnn.
+</details><details><summary><b> 44. Write a Java program that accepts an integer (n) and computes the value of n+nn+nnn.</b></summary>
+	
 ```java
 import java.util.Scanner;
 
@@ -2588,6 +2589,7 @@ Input number: 5
 
 
 </details><details><summary><b> 45. Write a Java program to find the size of a specified file.</b></summary>
+	
 ```java
 import java.util.Scanner;
 import java.io.File;
@@ -2920,7 +2922,7 @@ Input the third number : 15
 The result is: true
 
 
-</details><details><summary><b> 55. Write a Java program to convert seconds to hours, minutes and seconds.
+</details><details><summary><b> 55. Write a Java program to convert seconds to hours, minutes and seconds.</b></summary>
 ```java
 import java.util.*;
 
