@@ -1,6 +1,6 @@
 # Java Exercises Basic - 1
 
-### 1. Write a Java program to print 'Hello' on screen and your name on a separate line.
+<details><summary><b> 1. Write a Java program to print 'Hello' on screen and your name on a separate line.</b></summary>
 
 Pictorial Presentation:
 
@@ -87,7 +87,7 @@ Alexandra Abramov
 
 
 
-### 2. Write a Java program to print the sum of two numbers.
+</details><details><summary><b> 2. Write a Java program to print the sum of two numbers.</b></summary>
 
 ```java
 public class Exercise2 {
@@ -130,7 +130,7 @@ Expected Output :
 
 
 
-### 3. Write a Java program to divide two numbers and print them on the screen.
+</details><details><summary><b> 3. Write a Java program to divide two numbers and print them on the screen.</b></summary>
 ```java
 public class Exercise3 {
     public static void main(String[] args) {
@@ -173,7 +173,7 @@ Expected Output :
 
 
 
-### 4. Write a Java program to print the results of the following operations.
+</details><details><summary><b> 4. Write a Java program to print the results of the following operations.</b></summary>
 ```java
 public class Exercise4 {
     public static void main(String[] args) {
@@ -222,7 +222,7 @@ Expected Output :
 19
 13
 
-### 5. Write a Java program that takes two numbers as input and displays the product of two numbers.
+</details><details><summary><b> 5. Write a Java program that takes two numbers as input and displays the product of two numbers.</b></summary>
 ```java
 import java.util.Scanner; 
 public class Exercise5 { 
@@ -247,7 +247,7 @@ Input second number: 5
 Expected Output :
 25 x 5 = 125
 
-### 6. Write a Java program to print the sum (addition), multiply, subtract, divide and remainder of two numbers.
+</details><details><summary><b> 6. Write a Java program to print the sum (addition), multiply, subtract, divide and remainder of two numbers.</b></summary>
 
 ```java
 public class Exercise6 {
@@ -353,7 +353,7 @@ Expected Output :
 
 
 
-### 7. Write a Java program that takes a number as input and prints its multiplication table up to 10.
+</details><details><summary><b> 7. Write a Java program that takes a number as input and prints its multiplication table up to 10.</b></summary>
 ```java
 import java.util.Scanner;
  
@@ -418,7 +418,7 @@ Expected Output :
 
 
 
-### 8. Write a Java program to display the following pattern.
+</details><details><summary><b> 8. Write a Java program to display the following pattern.</b></summary>
 Sample Pattern :
 
 
@@ -440,7 +440,7 @@ J  J  aaaaa   V V  aaaaa
 } 
 ```
 
-### 9. Write a Java program to compute the specified expressions and print the output.
+</details><details><summary><b> 9. Write a Java program to compute the specified expressions and print the output.</b></summary>
 ```java
 public class Exercise9 {
  
@@ -466,7 +466,7 @@ Expected Output
 
 
 
-### 10. Write a Java program to compute a specified formula.
+</details><details><summary><b> 10. Write a Java program to compute a specified formula.</b></summary>
 ```java
 public class Exercise10 { 
     public static void main(String[] args) {
@@ -485,7 +485,7 @@ Expected Output
 
 
 
-### 11. Write a Java program to print the area and perimeter of a circle.
+</details><details><summary><b> 11. Write a Java program to print the area and perimeter of a circle.</b></summary>
 ```java
 public class Exercise11 {
     // Define a constant for the radius of the circle
@@ -545,7 +545,7 @@ Area is = 176.71458676442586
 
 
 
-### 12. Write a Java program that takes three numbers as input to calculate and print the average of the numbers.
+</details><details><summary><b> 12. Write a Java program that takes three numbers as input to calculate and print the average of the numbers.</b></summary>
 ```java
 import java.util.Scanner;
  
@@ -631,7 +631,7 @@ public class Main {
 }
 ```
 
-### 13. Write a Java program to print the area and perimeter of a rectangle.
+</details><details><summary><b> 13. Write a Java program to print the area and perimeter of a rectangle.</b></summary>
 ```java
 public class Exercise13 { 
    public static void main(String[] strings) {
@@ -672,7 +672,7 @@ Perimeter is 2 * (5.6 + 8.5) = 28.20
 
 
 
-### 14. Write a Java program to print an American flag on the screen.
+</details><details><summary><b> 14. Write a Java program to print an American flag on the screen.</b></summary>
 Expected Output
 
 * * * * * * ==================================                          
@@ -709,7 +709,7 @@ public class Main {
     }
 }
 ```
-### 15. Write a Java program to swap two variables.
+</details><details><summary><b> 15. Write a Java program to swap two variables.</b></summary>
 
 Java: Swapping two variables
 
@@ -794,7 +794,7 @@ b = a - b subtracts the original 'b' from the updated 'a' and stores the result 
 a = a - b subtracts the updated 'b' (which now contains the original value of 'a') from the updated 'a' and stores the result in 'a'. Now, 'a' contains the original value of 'b'.
 Finally, it prints the values of 'a' and 'b' after the swapping operation.
     
-### 16. Write a Java program to print a face.
+</details><details><summary><b> 16. Write a Java program to print a face.</b></summary>
 
 
 Expected Output
@@ -843,7 +843,7 @@ public class Main {
 }
 ```
 
-### 17. Write a Java program to add two binary numbers.
+</details><details><summary><b> 17. Write a Java program to add two binary numbers.</b></summary>
 
 In digital electronics and mathematics, a binary number is a number expressed in the base-2 numeral system or binary numeral system. This system uses only two symbols: typically 1 (one) and 0 (zero).
 
@@ -924,7 +924,7 @@ Expected Output
 Sum of two binary numbers: 101
 
 
-### 18. Write a Java program to multiply two binary numbers.
+</details><details><summary><b> 18. Write a Java program to multiply two binary numbers.</b></summary>
 
 In digital electronics and  mathematics, a binary number is a number expressed in the base-2 numeral system or binary numeral system. This system uses only two symbols: typically 1 (one) and 0 (zero).
 
@@ -1023,7 +1023,7 @@ Expected Output
 Product of two binary numbers: 110 
 
 
-### 19. Write a Java program to convert an integer number to a binary number.
+</details><details><summary><b> 19. Write a Java program to convert an integer number to a binary number.</b></summary>
 
 Decimal number: The decimal numeral system is the standard system for denoting integer and non-integer numbers. It is also called base-ten positional numeral system.
 
@@ -1092,7 +1092,7 @@ Expected Output
 Binary number is: 101 
 
 
-### 20. Write a Java program to convert a decimal number to a hexadecimal number.
+</details><details><summary><b> 20. Write a Java program to convert a decimal number to a hexadecimal number.</b></summary>
 
 Decimal number: The decimal numeral system is the standard system for denoting integer and non-integer numbers. It is also called base-ten positional numeral system.
 
@@ -1159,7 +1159,7 @@ Expected Output
 Hexadecimal number is : F 
 
 
-### 21. Write a Java program to convert a decimal number to an octal number.
+</details><details><summary><b> 21. Write a Java program to convert a decimal number to an octal number.</b></summary>
 
 Decimal number: The decimal numeral system is the standard system for denoting integer and non-integer numbers. It is also called base-ten positional numeral system.
 
@@ -1225,7 +1225,7 @@ Expected Output
 Octal number is: 17  
 
 
-### 22. Write a Java program to convert a binary number to a decimal number.
+</details><details><summary><b> 22. Write a Java program to convert a binary number to a decimal number.</b></summary>
 
 Binary number: A binary number is a number expressed in the base-2 numeral system or binary numeral system. This system uses only two symbols: typically 1 (one) and 0 (zero).
 
@@ -1286,7 +1286,7 @@ Expected Output
 Decimal Number: 4 
 
 
-### 23. Write a Java program to convert a binary number to a hexadecimal number.
+</details><details><summary><b> 23. Write a Java program to convert a binary number to a hexadecimal number.</b></summary>
 
 Binary number: A binary number is a number expressed in the base-2 numeral system or binary numeral system. This system uses only two symbols: typically 0(zero) and 1(one).
 
@@ -1371,7 +1371,7 @@ Expected Output
 HexaDecimal value: D
 
 
-### 24. Write a Java program to convert a binary number to an octal number.
+</details><details><summary><b> 24. Write a Java program to convert a binary number to an octal number.</b></summary>
 
 Binary number: A binary number is a number expressed in the base-2 numeral system or binary numeral system. This system uses only two symbols: typically 0(zero) and 1(one).
 
@@ -1454,7 +1454,7 @@ Expected Output
 Octal number: 7 
 
 
-### 25. Write a Java program to convert a octal number to a decimal number.
+</details><details><summary><b> 25. Write a Java program to convert a octal number to a decimal number.</b></summary>
 
 Octal number: The octal numeral system is the base-8 number system, and uses the digits 0 to 7.
 
@@ -1517,7 +1517,7 @@ Expected Output
 Equivalent decimal number: 8
 
 
-### 26. Write a Java program to convert a octal number to a binary number.
+</details><details><summary><b> 26. Write a Java program to convert a octal number to a binary number.</b></summary>
 
 Octal number: The octal numeral system is the base-8 number system, and uses the digits 0 to 7.
 
@@ -1590,7 +1590,7 @@ Expected Output
 Equivalent binary number: 111 
 
 
-### 27. Write a Java program to convert a octal number to a hexadecimal number.
+</details><details><summary><b> 27. Write a Java program to convert a octal number to a hexadecimal number.</b></summary>
 
 Octal number: The octal numeral system is the base-8 number system, and uses the digits 0 to 7.
 
@@ -1647,7 +1647,7 @@ Expected Output
 Equivalent hexadecimal number: 40
 
 
-### 28. Write a Java program to convert a hexadecimal value into a decimal number.
+</details><details><summary><b> 28. Write a Java program to convert a hexadecimal value into a decimal number.</b></summary>
 
 Hexadecimal number: This is a positional numeral system with a radix, or base, of 16. Hexadecimal uses sixteen distinct symbols, most often the symbols 0-9 to represent values zero to nine, and A, B, C, D, E, F (or alternatively a, b, c, d, e, f) to represent values ten to fifteen.
 
@@ -1722,7 +1722,7 @@ Expected Output
 Equivalent decimal number is: 37
 
 
-### 29. Write a Java program to convert a hexadecimal number into a binary number.
+</details><details><summary><b> 29. Write a Java program to convert a hexadecimal number into a binary number.</b></summary>
 
 Hexadecimal number: This is a positional numeral system with a radix, or base, of 16. Hexadecimal uses sixteen distinct symbols, most often the symbols 0-9 to represent values zero to nine, and A, B, C, D, E, F (or alternatively a, b, c, d, e, f) to represent values ten to fifteen.
 
@@ -1808,7 +1808,7 @@ Expected Output
 Equivalent Binary Number is: 110111
 
 
-### 30. Write a Java program to convert a hexadecimal value into an octal number.
+</details><details><summary><b> 30. Write a Java program to convert a hexadecimal value into an octal number.</b></summary>
 
 Hexadecimal number: This is a positional numeral system with a radix, or base, of 16. Hexadecimal uses sixteen distinct symbols, most often the symbols 0-9 to represent values zero to nine, and A, B, C, D, E, F (or alternatively a, b, c, d, e, f) to represent values ten to fifteen.
 
@@ -1897,7 +1897,7 @@ Expected Output
 Equivalent of octal number is: 100 
 
 
-### 31. Write a Java program to check whether Java is installed on your computer.
+</details><details><summary><b> 31. Write a Java program to check whether Java is installed on your computer.</b></summary>
 
 ```java
 public class Exercise31 {
@@ -1945,7 +1945,7 @@ Java Vendor URL: http://Java.oracle.com/
 Java Class Path: .
 
 
-### 32. Write a Java program to compare two numbers.
+</details><details><summary><b> 32. Write a Java program to compare two numbers.</b></summary>
 
 Pictorial Presentation:
 
@@ -2012,7 +2012,7 @@ Expected Output
 25 <= 39
 
 
-### 33. Write a Java program and compute the sum of an integer's digits.
+</details><details><summary><b> 33. Write a Java program and compute the sum of an integer's digits.</b></summary>
 
 ```java
 import java.util.Scanner;
@@ -2067,7 +2067,7 @@ Expected Output
 The sum of the digits is: 7
 
 
-### 34. Write a Java program to compute hexagon area.
+</details><details><summary><b> 34. Write a Java program to compute hexagon area.</b></summary>
 ```java
 import java.util.Scanner;
 
@@ -2112,7 +2112,7 @@ Expected Output
 The area of the hexagon is: 93.53074360871938
 
 
-### 35. Write a Java program to compute the area of a polygon.
+</details><details><summary><b> 35. Write a Java program to compute the area of a polygon.</b></summary>
 
 Area of a polygon = (n*s^2)/(4*tan(π/n))
 where n is n-sided polygon and s is the length of a side.
@@ -2179,7 +2179,7 @@ Expected Output
 The area is: 130.82084798405722
 
 
-### 36. Write a Java program to compute the distance between two points on the earth's surface.
+</details><details><summary><b> 36. Write a Java program to compute the distance between two points on the earth's surface.</b></summary>
 
 Distance between the two points [ (x1,y1) & (x2,y2)]
 d = radius * arccos(sin(x1) * sin(x2) + cos(x1) * cos(x2) * cos(y1 - y2))
@@ -2265,7 +2265,7 @@ Expected Output
 The distance between those points is: 1480.0848451069087 km 
 
 
-### 37. Write a Java program to reverse a string.
+</details><details><summary><b> 37. Write a Java program to reverse a string.</b></summary>
 
 ```java
 import java.util.Scanner;
@@ -2311,7 +2311,7 @@ Expected Output
 Reverse string: xof nworb kciuq ehT
 
 
-### 38. Write a Java program to count letters, spaces, numbers and other characters in an input string.
+</details><details><summary><b> 38. Write a Java program to count letters, spaces, numbers and other characters in an input string.</b></summary>
 ```java
 import java.util.Scanner;
 
@@ -2386,7 +2386,7 @@ number: 10
 other: 6
 
 
-### 39. Write a Java program to create and display a unique three-digit number using 1, 2, 3, 4. Also count how many three-digit numbers are there.
+</details><details><summary><b> 39. Write a Java program to create and display a unique three-digit number using 1, 2, 3, 4. Also count how many three-digit numbers are there.</b></summary>
 ```java
 import java.util.Scanner;
 
@@ -2436,7 +2436,7 @@ Expected Output
 Total number of the three-digit-number is 24
 
 
-### 40. Write a Java program to list the available character sets in charset objects.
+</details><details><summary><b> 40. Write a Java program to list the available character sets in charset objects.</b></summary>
 ```java
 import java.nio.charset.Charset;
 
@@ -2487,7 +2487,7 @@ x-windows-950
 x-windows-iso2022jp
 
 
-### 41. Write a Java program to print the ASCII value of a given character.
+</details><details><summary><b> 41. Write a Java program to print the ASCII value of a given character.</b></summary>
 ```java
 public class Exercise41 {
     public static void main(String[] args) {
@@ -2504,7 +2504,7 @@ Expected Output
 The ASCII value of Z is :90
 
 
-### 42. Write a Java program to input and display your password.
+</details><details><summary><b> 42. Write a Java program to input and display your password.</b></summary>
 ```java
 import java.io.Console;
 
@@ -2543,7 +2543,7 @@ Input your Password:
 Your password was: abc@123
 
 
-### 43. Write a Java program to print the following string in a specific format (see output).
+</details><details><summary><b> 43. Write a Java program to print the following string in a specific format (see output).</b></summary>
 ```java
 public class Example43 {
     public static void main(String[] args) {
@@ -2562,7 +2562,7 @@ Twinkle, twinkle, little star,
 	How I wonder what you are
 
 
-### 44. Write a Java program that accepts an integer (n) and computes the value of n+nn+nnn.
+</details><details><summary><b> 44. Write a Java program that accepts an integer (n) and computes the value of n+nn+nnn.
 ```java
 import java.util.Scanner;
 
@@ -2587,7 +2587,7 @@ Input number: 5
 5 + 55  + 555
 
 
-### 45. Write a Java program to find the size of a specified file.
+</details><details><summary><b> 45. Write a Java program to find the size of a specified file.</b></summary>
 ```java
 import java.util.Scanner;
 import java.io.File;
@@ -2606,7 +2606,7 @@ Sample Output:
 /home/students/test.txt : 0 bytes 
 
 
-### 46. Write a Java program to display system time.
+</details><details><summary><b> 46. Write a Java program to display system time.</b></summary>
 ```java
 public class Exercise46 {
   
@@ -2621,7 +2621,7 @@ Sample Output:
 Current Date time: Fri Jun 16 14:17:40 IST 2017 
 
 
-### 47. Write a Java program to display the current date and time in a specific format.
+</details><details><summary><b> 47. Write a Java program to display the current date and time in a specific format.</b></summary>
 ```java
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -2646,7 +2646,7 @@ Sample Output:
 Now: 2017/06/16 08:52:03.066 
 
 
-### 48. Write a Java program to print odd numbers from 1 to 99. Prints one number per line.
+</details><details><summary><b> 48. Write a Java program to print odd numbers from 1 to 99. Prints one number per line.</b></summary>
 ```java
 import java.util.*;
 
@@ -2680,7 +2680,7 @@ Sample Output:
 99 
 
 
-### 49. Write a Java program to accept a number and check whether the number is even or not. Prints 1 if the number is even or 0 if odd.
+</details><details><summary><b> 49. Write a Java program to accept a number and check whether the number is even or not. Prints 1 if the number is even or 0 if odd.</b></summary>
 ```java
 import java.util.*;
 
@@ -2708,7 +2708,7 @@ Input a number: 20
 1
 
 
-### 50. Write a Java program to print numbers between 1 and 100 divisible by 3, 5 and both.
+</details><details><summary><b> 50. Write a Java program to print numbers between 1 and 100 divisible by 3, 5 and both.</b></summary>
 ```java
 public class Exercise50 {
     public static void main(String args[]) {
@@ -2750,7 +2750,7 @@ Divided by 3 & 5:
 15, 30, 45, 60, 75, 90,
 
 
-### 51. Write a Java program to convert a string to an integer.
+</details><details><summary><b> 51. Write a Java program to convert a string to an integer.</b></summary>
 ```java
 import java.util.*;
 
@@ -2782,7 +2782,7 @@ Input a number(string): 25
 The integer value is: 25
 
 
-### 52. Write a Java program to calculate the sum of two integers and return true if the sum is equal to a third integer.
+</details><details><summary><b> 52. Write a Java program to calculate the sum of two integers and return true if the sum is equal to a third integer.</b></summary>
 
 ```java
 import java.util.*;
@@ -2826,7 +2826,7 @@ Input the third number : 15
 The result is: true
 
 
-### 53. Write a Java program that accepts three integers from the user. It returns true if the second number is higher than the first number and the third number is larger than the second number. If "abc" is true, the second number does not need to be larger than the first number.
+</details><details><summary><b> 53. Write a Java program that accepts three integers from the user. It returns true if the second number is higher than the first number and the third number is larger than the second number. If "abc" is true, the second number does not need to be larger than the first number.</b></summary>
 ```java
 import java.util.*;
 
@@ -2874,7 +2874,7 @@ Input the third number : 15
 The result is: true
 
 
-### 54. Write a Java program that accepts three integers from the user and returns true if two or more of them (integers) have the same rightmost digit. The integers are non-negative.
+</details><details><summary><b> 54. Write a Java program that accepts three integers from the user and returns true if two or more of them (integers) have the same rightmost digit. The integers are non-negative.</b></summary>
 ```java
 import java.util.*;
 
@@ -2920,7 +2920,7 @@ Input the third number : 15
 The result is: true
 
 
-### 55. Write a Java program to convert seconds to hours, minutes and seconds.
+</details><details><summary><b> 55. Write a Java program to convert seconds to hours, minutes and seconds.
 ```java
 import java.util.*;
 
@@ -2953,7 +2953,7 @@ Input seconds: 86399
 23:59:59
 
 
-### 56. Write a Java program to find the number of values in a given range divisible by a given value.
+</details><details><summary><b> 56. Write a Java program to find the number of values in a given range divisible by a given value.</b></summary>
 
 Sample Data:
 For example x = 5, y=20 and p =3, find the number of integers within the range x..y and that are divisible by p i.e. { i :x ≤ i ≤ y, i mod p = 0 }
@@ -2994,7 +2994,7 @@ Sample Output:
 5
 
 
-### 57. Write a Java program to accept an integer and count the factors of the number.
+</details><details><summary><b> 57. Write a Java program to accept an integer and count the factors of the number.</b></summary>
 ```java
 import java.util.*;
 
@@ -3034,7 +3034,7 @@ Input an integer: 25
 3
 
 
-### 58. Write a Java program to capitalize the first letter of each word in a sentence.
+</details><details><summary><b> 58. Write a Java program to capitalize the first letter of each word in a sentence.</b></summary>
 ```java
 import java.util.*;
 
@@ -3072,7 +3072,7 @@ Input a Sentence: the quick brown fox jumps over the lazy dog.
 The Quick Brown Fox Jumps Over The Lazy Dog.
 
 
-### 59. Write a Java program to convert a string into lowercase.
+</details><details><summary><b> 59. Write a Java program to convert a string into lowercase.</b></summary>
 ```java
 import java.util.*;
 public class Exercise59 {
@@ -3098,7 +3098,7 @@ Input a String: THE QUICK BROWN FOX JUMPS OVER THE LAZY DOG.
 the quick brown fox jumps over the lazy dog.
 
 
-### 60. Write a Java program to find the penultimate (next to the last) word in a sentence.
+</details><details><summary><b> 60. Write a Java program to find the penultimate (next to the last) word in a sentence.</b></summary>
 ```java
 import java.util.*;
 
@@ -3125,7 +3125,7 @@ Input a String: The quick brown fox jumps over the lazy dog.
 Penultimate word: lazy
 
 
-### 61. Write a Java program to reverse a word.
+</details><details><summary><b> 61. Write a Java program to reverse a word.</b></summary>
 
 ```java
 import java.util.*;
@@ -3164,7 +3164,7 @@ Input a word: dsaf
 Reverse word: fasd
 
 
-### 62. Write a Java program that accepts three integer values and returns true if one is 20 or more less than the others' subtractions.
+</details><details><summary><b> 62. Write a Java program that accepts three integer values and returns true if one is 20 or more less than the others' subtractions.</b></summary>
 ```java
 import java.util.*;
 
@@ -3199,7 +3199,7 @@ Input the third number : 25
 false
 
 
-### 63. Write a Java program that accepts two integer values from the user and returns the largest value. However if the two values are the same, return 0 and find the smallest value if the two values have the same remainder when divided by 6.
+</details><details><summary><b> 63. Write a Java program that accepts two integer values from the user and returns the largest value. However if the two values are the same, return 0 and find the smallest value if the two values have the same remainder when divided by 6.</b></summary>
 
 Write a Java program that accepts two integer values from the user and returns the largest value. However if the two values are the same, return 0 and find the smallest value if the two values have the same remainder when divided by 6.
 Test Data:
@@ -3261,7 +3261,7 @@ Input the second number: 13
 Result: 13
 
 
-### 64. Write a Java program that accepts two integer values between 25 and 75 and returns true if there is a common digit in both numbers.
+</details><details><summary><b> 64. Write a Java program that accepts two integer values between 25 and 75 and returns true if there is a common digit in both numbers.</b></summary>
 ```java
 import java.util.*;
 
@@ -3309,7 +3309,7 @@ Input the second number: 45
 Result: true
 
 
-### 65. Write a Java program to calculate the modules of two numbers without using any inbuilt modulus operator.
+</details><details><summary><b> 65. Write a Java program to calculate the modules of two numbers without using any inbuilt modulus operator.</b></summary>
 
 Test data:
 Input the first number : 5
@@ -3356,7 +3356,7 @@ Input the second number: 7
 5   
 
 
-### 66. Write a Java program to compute the sum of the first 100 prime numbers.
+</details><details><summary><b> 66. Write a Java program to compute the sum of the first 100 prime numbers.</b></summary>
 ```java
 import java.util.*;
 
@@ -3403,7 +3403,7 @@ Sample Output:
 Sum of the first 100 prime numbers: 24133 
 
 
-### 67. Write a Java program to insert a word in the middle of another string.
+</details><details><summary><b> 67. Write a Java program to insert a word in the middle of another string.</b></summary>
 Insert "Tutorial" in the middle of "Python 3.0", so the result will be Python Tutorial 3.0.
 ```java
 import java.lang.*;
@@ -3427,7 +3427,7 @@ Sample Output:
 Python Tutorial 3.0
 
 
-### 68. Write a Java program to create another string of 4 copies of the last 3 characters of the original string. The original string length must be 3 and above.
+</details><details><summary><b> 68. Write a Java program to create another string of 4 copies of the last 3 characters of the original string. The original string length must be 3 and above.</b></summary>
 ```java
 import java.lang.*;
 
@@ -3449,7 +3449,7 @@ Sample Output:
 3.03.03.03.0 
 
 
-### 69. Write a Java program to extract the first half of a even string.
+</details><details><summary><b> 69. Write a Java program to extract the first half of a even string.</b></summary>
 ```java
 import java.lang.*;
 
@@ -3471,7 +3471,7 @@ Sample Output:
 Pyt
 
 
-### 70. Write a Java program to create a string in the form of short_string + long_string + short_string from two strings. The strings must not have the same length.
+</details><details><summary><b> 70. Write a Java program to create a string in the form of short_string + long_string + short_string from two strings. The strings must not have the same length.</b></summary>
 ```java
 import java.lang.*;
 
@@ -3499,7 +3499,7 @@ Sample Output:
 PythonTutorialPython
 
 
-### 71. Write a Java program to create the concatenation of the two strings except removing the first character of each string. The length of the strings must be 1 and above.
+</details><details><summary><b> 71. Write a Java program to create the concatenation of the two strings except removing the first character of each string. The length of the strings must be 1 and above.</b></summary>
 
 ```java
 import java.lang.*;
@@ -3522,7 +3522,7 @@ Sample Output:
 ythonutorial
 
 
-### 72. Write a Java program to create a string taking the first three characters from a given string. If the string length is less than 3 use "#" as substitute characters.
+</details><details><summary><b> 72. Write a Java program to create a string taking the first three characters from a given string. If the string length is less than 3 use "#" as substitute characters.</b></summary>
 
 Test Data: str1 = "Python"
 str2 = " "
@@ -3561,7 +3561,7 @@ Sample Output:
 ###
 
 
-### 73. Write a Java program to create a string taking the first and last characters from two given strings. If the length of each string is 0 use "#" for missing characters.
+</details><details><summary><b> 73. Write a Java program to create a string taking the first and last characters from two given strings. If the length of each string is 0 use "#" for missing characters.</b></summary>
 ```java
 import java.lang.*;
 
@@ -3595,7 +3595,7 @@ Sample Output:
 P#
 
 
-### 74. Write a Java program to test if 10 appears as the first or last element of an array of integers. The array length must be broader than or equal to 2.
+</details><details><summary><b> 74. Write a Java program to test if 10 appears as the first or last element of an array of integers. The array length must be broader than or equal to 2.</b></summary>
 ```java
 import java.lang.*;
 
@@ -3618,7 +3618,7 @@ Test Data: array = 10, -20, 0, 30, 40, 60, 10
 true
 
 
-### 75. Write a Java program to test if the first and last elements of an array of integers are the same. The array length must be broader than or equal to 2.
+</details><details><summary><b> 75. Write a Java program to test if the first and last elements of an array of integers are the same. The array length must be broader than or equal to 2.</b></summary>
 ```java
 import java.lang.*;
 
@@ -3641,7 +3641,7 @@ Sample Output:
 false
 
 
-### 76. Write a Java program to test if the first and last element of two integer arrays are the same. The array length must be greater than or equal to 2.
+</details><details><summary><b> 76. Write a Java program to test if the first and last element of two integer arrays are the same. The array length must be greater than or equal to 2.</b></summary>
 ```java
 public class Main {
     public static void main(String[] args) {
@@ -3675,7 +3675,7 @@ Sample Output:
 false
 
 
-### 77. Write a Java program to create an array of length 2 from two integer arrays with three elements. The newly created array will contain the first and last elements from the two arrays.
+</details><details><summary><b> 77. Write a Java program to create an array of length 2 from two integer arrays with three elements. The newly created array will contain the first and last elements from the two arrays.</b></summary>
 
 ```java
 import java.util.Arrays;
@@ -3709,7 +3709,7 @@ Array2: [5, -50, 10]
 New Array: [50, 10]
 
 
-### 78. Write a Java program to test that a given array of integers of length 2 contains a 4 or a 7.
+</details><details><summary><b> 78. Write a Java program to test that a given array of integers of length 2 contains a 4 or a 7.</b></summary>
 ```java
 import java.util.Arrays;
 
@@ -3737,7 +3737,7 @@ Original Array: [5, 7]
 true 
 
 
-### 79. Write a Java program to rotate an array (length 3) of integers in the left direction.
+</details><details><summary><b> 79. Write a Java program to rotate an array (length 3) of integers in the left direction.</b></summary>
 
 Write a Java program to rotate an array (length 3) of integers in the left direction.
 Test Data: {20, 30, 40}
@@ -3771,7 +3771,7 @@ Original Array: [20, 30, 40]
 Rotated Array: [30, 40, 20]
 
 
-### 80. Write a Java program to get the largest value between the first and last elements of an array (length 3) of integers.
+</details><details><summary><b> 80. Write a Java program to get the largest value between the first and last elements of an array (length 3) of integers.</b></summary>
 ```java
 import java.util.Arrays;
 
@@ -3801,7 +3801,7 @@ Original Array: [20, 30, 40]
 Larger value between first and last element: 40 
 
 
-### 81. Write a Java program to swap the first and last elements of an array (length must be at least 1) and create another array.
+</details><details><summary><b> 81. Write a Java program to swap the first and last elements of an array (length must be at least 1) and create another array.</b></summary>
 ```java
 import java.util.Arrays;
 
@@ -3831,7 +3831,7 @@ Original Array: [20, 30, 40]
 New array after swaping the first and last elements: [40, 30, 20] 
 
 
-### 82. Write a Java program to find the largest element between the first, last, and middle values in an array of integers (even length).
+</details><details><summary><b> 82. Write a Java program to find the largest element between the first, last, and middle values in an array of integers (even length).</b></summary>
 ```java
 import java.util.Arrays;
 
@@ -3865,7 +3865,7 @@ Original Array: [20, 30, 40, 50, 67]
 Largest element between first, last, and middle values: 67 
 
 
-### 83. Write a Java program to multiply the corresponding elements of two integer arrays.
+</details><details><summary><b> 83. Write a Java program to multiply the corresponding elements of two integer arrays.</b></summary>
 ```java
 import java.util.*;
 
@@ -3905,7 +3905,7 @@ Array2: [1, 4, -5, -2]
 Result: 1 12 25 -8
 
 
-### 84. Write a Java program to take the last three characters from a given string. It will add the three characters at both the front and back of the string. String length must be greater than three and more.
+</details><details><summary><b> 84. Write a Java program to take the last three characters from a given string. It will add the three characters at both the front and back of the string. String length must be greater than three and more.</b></summary>
 
 Write a Java program to take the last three characters from a given string. It will add the three characters at both the front and back of the string. String length must be greater than three and more.
 Test data: " Python" will be "honPythonhon"
@@ -3947,7 +3947,7 @@ Sample Output:
 honPythonhon
 
 
-### 85. Write a Java program to check if a string starts with a specified word.
+</details><details><summary><b> 85. Write a Java program to check if a string starts with a specified word.</b></summary>
 
 Sample Data: string1 = "Hello how are you?"
 
@@ -3980,7 +3980,7 @@ Sample Output:
 true
 
 
-### 86. Write a Java program starting with an integer n, divide it by 2 if it is even, or multiply it by 3 and add 1 if it is odd. Repeat the process until n = 1.
+</details><details><summary><b> 86. Write a Java program starting with an integer n, divide it by 2 if it is even, or multiply it by 3 and add 1 if it is odd. Repeat the process until n = 1.</b></summary>
 
 ```java
 Write a Java program starting with an integer n, divide it by 2 if it is even, or multiply it by 3 and add 1 if it is odd. Repeat the process until n = 1.
@@ -4021,7 +4021,7 @@ public class Main {
 }
 ```
 
-### 87. Write a Java program that then reads an integer and calculates the sum of its digits and writes the number of each digit of the sum in English.
+</details><details><summary><b> 87. Write a Java program that then reads an integer and calculates the sum of its digits and writes the number of each digit of the sum in English.</b></summary>
 ```java
 import java.io.*;
 
@@ -4077,7 +4077,7 @@ public class Main {
 }
 ```
 
-### 88. Write a Java program to get the current system environment and system properties.
+</details><details><summary><b> 88. Write a Java program to get the current system environment and system properties.</b></summary>
 ```java
 import java.lang.*;
 
@@ -4098,7 +4098,7 @@ public class Exercise88 {
 }
 ```
 
-### 89. Write a Java program to check whether a security manager has already been established for the current application or not.
+</details><details><summary><b> 89. Write a Java program to check whether a security manager has already been established for the current application or not.</b></summary>
 
 ```java
 import java.lang.*;
@@ -4114,7 +4114,7 @@ public class Exercise89 {
 }
 ```
 
-### 90. Write a Java program to get the value of environment variables PATH, TEMP, USERNAME.
+</details><details><summary><b> 90. Write a Java program to get the value of environment variables PATH, TEMP, USERNAME.</b></summary>
 
 ```java
 import java.lang.*;
@@ -4135,7 +4135,7 @@ public class Exercise90 {
     }
 }
 ```
-### 91. Write a Java program to measure how long code executes in nanoseconds.
+</details><details><summary><b> 91. Write a Java program to measure how long code executes in nanoseconds.</b></summary>
 ```java
 import java.lang.*;
 
@@ -4157,7 +4157,7 @@ public class Exercise91 {
 }
 ```
 
-### 92. Write a Java program to count the number of even and odd elements in a given array of integers.
+</details><details><summary><b> 92. Write a Java program to count the number of even and odd elements in a given array of integers.</b></summary>
 ```java
 import java.util.*;
 
@@ -4191,7 +4191,7 @@ public class Exercise92 {
 }
 ```
 
-### 93. Write a Java program to test if an array of integers contains an element 10 next to 10 or an element 20 next to 20, but not both.
+</details><details><summary><b> 93. Write a Java program to test if an array of integers contains an element 10 next to 10 or an element 20 next to 20, but not both.</b></summary>
 ```java
 import java.util.*;
 public class Exercise93 {
@@ -4227,7 +4227,7 @@ public class Exercise93 {
 }
 ```
 
-### 94. Write a Java program to rearrange all the elements of a given array of integers so that all the odd numbers come before all the even numbers.
+</details><details><summary><b> 94. Write a Java program to rearrange all the elements of a given array of integers so that all the odd numbers come before all the even numbers.</b></summary>
 
 ```java
 import java.util.*;
@@ -4263,7 +4263,7 @@ public class Exercise94 {
     }
 }
 ```
-### 95. Write a Java program to create an array (length # 0) of string values. The elements will contain "0", "1", "2" … through ... n-1.
+</details><details><summary><b> 95. Write a Java program to create an array (length # 0) of string values. The elements will contain "0", "1", "2" … through ... n-1.</b></summary>
 
 ```java
 import java.util.*;
@@ -4286,7 +4286,7 @@ public class Exercise95 {
     }
 }
 ```
-### 96. Write a Java program to check if there is a 10 in an array of integers with a 20 somewhere later on.
+</details><details><summary><b> 96. Write a Java program to check if there is a 10 in an array of integers with a 20 somewhere later on.</b></summary>
 
 ```java
 import java.util.*;
@@ -4320,7 +4320,7 @@ public class Exercise96 {
 }
 ```
 
-### 97. Write a Java program to check if an array of integers contains a specified number next to each other or two same numbers separated by one element.
+</details><details><summary><b> 97. Write a Java program to check if an array of integers contains a specified number next to each other or two same numbers separated by one element.</b></summary>
 ```java
 import java.util.*;
 
@@ -4355,7 +4355,7 @@ public class Exercise97 {
 }
 ```
 
-### 98. Write a Java program to check if the value 20 appears three times and no 20's are next to each other in the array of integers.
+</details><details><summary><b> 98. Write a Java program to check if the value 20 appears three times and no 20's are next to each other in the array of integers.</b></summary>
 
 ```java
 import java.util.*;
@@ -4392,7 +4392,7 @@ public class Exercise98 {
     }
 }
 ```
-### 99. Write a Java program that checks if a specified number appears in every pair of adjacent integers of a given array of integers.
+</details><details><summary><b> 99. Write a Java program that checks if a specified number appears in every pair of adjacent integers of a given array of integers.</b></summary>
 ```java
 import java.util.*;
 
@@ -4421,7 +4421,7 @@ public class Exercise99 {
 }
 ```
 
-### 100. Write a Java program to count the elements that differ by 1 or less between two given arrays of integers with the same length.
+</details><details><summary><b> 100. Write a Java program to count the elements that differ by 1 or less between two given arrays of integers with the same length.</b></summary>
 
 ```java
 import java.util.*;
@@ -4450,7 +4450,7 @@ public class Exercise100 {
 }
 ```
 
-### 101. Write a Java program to determine whether the number 10 in a given array of integers exceeds 20.
+</details><details><summary><b> 101. Write a Java program to determine whether the number 10 in a given array of integers exceeds 20.</b></summary>
 
 ```java
 import java.util.*;
@@ -4477,7 +4477,7 @@ public class Exercise101 {
     }
 }
 ```
-### 102. Write a Java program to check if a specified array of integers contains 10 or 30.
+</details><details><summary><b> 102. Write a Java program to check if a specified array of integers contains 10 or 30.</b></summary>
 
 ```java
 import java.util.*;
@@ -4503,7 +4503,7 @@ public class Exercise102 {
     }
 }
 ```
-### 103. Write a Java program to create an array from a given array of integers. The newly created array will contain elements from the given array after the last element value is 10.
+</details><details><summary><b> 103. Write a Java program to create an array from a given array of integers. The newly created array will contain elements from the given array after the last element value is 10.</b></summary>
 ```java
 import java.util.*;
 
@@ -4530,7 +4530,7 @@ public class Exercise103 {
 }
 ```
 
-### 104. Write a Java program to create an array from a given array of integers. The newly created array will contain the elements from the given array before the last element value of 10.
+</details><details><summary><b> 104. Write a Java program to create an array from a given array of integers. The newly created array will contain the elements from the given array before the last element value of 10.</b></summary>
 
 ```java
 import java.util.*;
@@ -4556,7 +4556,7 @@ public class Exercise104 {
     }
 }
 ```
-### 105. Write a Java program to check if a group of numbers (l) at the start and end of a given array are the same.
+</details><details><summary><b> 105. Write a Java program to check if a group of numbers (l) at the start and end of a given array are the same.</b></summary>
 ```java
 import java.util.*;
 
@@ -4591,7 +4591,7 @@ public class Exercise105 {
 }
 ```
 
-### 106. Write a Java program to create an array left shifted from a given array of integers.
+</details><details><summary><b> 106. Write a Java program to create an array left shifted from a given array of integers.</b></summary>
 
 ```java
 import java.util.*;
@@ -4616,7 +4616,7 @@ public class Exercise106 {
     }
 }
 ```
-### 107. Write a Java program to check if an array of integers contains three increasing adjacent numbers.
+</details><details><summary><b> 107. Write a Java program to check if an array of integers contains three increasing adjacent numbers.</b></summary>
 ```java
 import java.util.*;
 
@@ -4653,7 +4653,7 @@ public class Exercise107 {
 }
 ```
 
-### 108. Write a Java program to add all the digits of a given positive integer until the result has a single digit.
+</details><details><summary><b> 108. Write a Java program to add all the digits of a given positive integer until the result has a single digit.</b></summary>
 
 ```java
 import java.util.Scanner;
@@ -4680,7 +4680,7 @@ public class Example108 {
     }
 }
 ```
-### 109. Write a Java program to form a staircase shape of n coins where every k-th row must have exactly k coins.
+</details><details><summary><b> 109. Write a Java program to form a staircase shape of n coins where every k-th row must have exactly k coins.</b></summary>
 ```java
 Example 1:
 n = 3
@@ -4733,7 +4733,7 @@ public class Example109 {
 }
 ```
 
-### 110. Write a Java program to check whether the given integer is a power of 4 or not.
+</details><details><summary><b> 110. Write a Java program to check whether the given integer is a power of 4 or not.</b></summary>
 
 Pictorial Presentation:
 
@@ -4774,7 +4774,7 @@ public class Example110 {
 Given num = 64, return true. Given num = 6, return false.
 
 
-### 111. Write a Java program to add two numbers without arithmetic operators.
+</details><details><summary><b> 111. Write a Java program to add two numbers without arithmetic operators.</b></summary>
 Given x = 10 and y = 12; result = 22
 ```java
 import java.util.Scanner;
@@ -4803,7 +4803,7 @@ public class Example111 {
 ```
 
 
-### 112. Write a Java program to compute the number of trailing zeros in a factorial.
+</details><details><summary><b> 112. Write a Java program to compute the number of trailing zeros in a factorial.</b></summary>
 7! = 5040, therefore the output should be 1
 
 ```java
@@ -4827,7 +4827,7 @@ public class Example112 {
 }
 ```
 
-### 113. Write a Java program to merge two given sorted arrays of integers and create another sorted array.
+</details><details><summary><b> 113. Write a Java program to merge two given sorted arrays of integers and create another sorted array.</b></summary>
 array1 = [1,2,3,4]
 array2 = [2,5,7, 8]
 result = [1,2,2,3,4,5,7,8]
@@ -4886,7 +4886,7 @@ public class Example113 {
 }
 ```
 
-### 114. Write a Java program that rotates a string by an offset (rotate from left to right.
+</details><details><summary><b> 114. Write a Java program that rotates a string by an offset (rotate from left to right.</b></summary>
 
 ```java
 import java.util.*;
@@ -4933,7 +4933,7 @@ public class Example114 {
     }
 }
 ```
-### 115. Write a Java program to check if a positive number is a palindrome or not.
+</details><details><summary><b> 115. Write a Java program to check if a positive number is a palindrome or not.</b></summary>
 Input a positive integer: 151
 Is 151 is a palindrome number?
 true
@@ -4978,7 +4978,7 @@ public class test {
 }
 ```
 
-### 116. Write a Java program that iterates integers from 1 to 100. For multiples of three print "Fizz" instead of the number and print "Buzz" for five. When the number is divided by three and five, print "fizz buzz".
+</details><details><summary><b> 116. Write a Java program that iterates integers from 1 to 100. For multiples of three print "Fizz" instead of the number and print "Buzz" for five. When the number is divided by three and five, print "fizz buzz".</b></summary>
 
 ```java
 import java.util.*;
@@ -5002,7 +5002,7 @@ public class Exercise116 {
     }
 }
 ```
-### 117. Write a Java program to compute the square root of a given number.
+</details><details><summary><b> 117. Write a Java program to compute the square root of a given number.</b></summary>
 Input a positive integer: 25
 Square root of 25 is: 5
 ```java
@@ -5049,7 +5049,7 @@ public class Exercise117 {
 }
 ```
 
-### 118. Write a Java program to get the first occurrence (Position starts from 0.) of a string within a given string.
+</details><details><summary><b> 118. Write a Java program to get the first occurrence (Position starts from 0.) of a string within a given string.</b></summary>
 ```java
 import java.util.Scanner;
 
@@ -5104,7 +5104,7 @@ public class Main {
 }
 ```
 
-### 119. Write a Java program to get the first occurrence (Position starts from 0.) of an element of a given array.
+</details><details><summary><b> 119. Write a Java program to get the first occurrence (Position starts from 0.) of an element of a given array.</b></summary>
 ```java
 import java.util.Scanner;
 public class Main {
@@ -5144,7 +5144,7 @@ public class Main {
 }
 ```
 
-### 120. Write a Java program that searches for a value in an m x n matrix.
+</details><details><summary><b> 120. Write a Java program that searches for a value in an m x n matrix.</b></summary>
 ```java
 import java.util.Scanner;
 public class Main {
@@ -5208,7 +5208,7 @@ public class Main {
 }
 ```
 
-### 121. Write a Java program to reverse a linked list.
+</details><details><summary><b> 121. Write a Java program to reverse a linked list.</b></summary>
 Example: For linked list 20->40->60->80, the reversed linked list is 80->60->40->20
 ```java
 class LinkedList {
@@ -5272,7 +5272,7 @@ class LinkedList {
 }
 ```
 
-### 122. Write a Java program to find a contiguous subarray with the largest sum from a given array of integers.
+</details><details><summary><b> 122. Write a Java program to find a contiguous subarray with the largest sum from a given array of integers.</b></summary>
 Note: In computer science, the maximum subarray problem is the task of finding the contiguous subarray within a one-dimensional array of numbers which has the largest sum. For example, for the sequence of values −2, 1, −3, 4, −1, 2, 1, −5, 4; the contiguous subarray with the largest sum is 4, −1, 2, 1, with sum 6. The subarray should contain one integer at least. 
 
 The subarray should contain one integer at least.
@@ -5329,7 +5329,7 @@ public class Main {
 }
 ```
 
-### 123. Write a Java program to find the subarray with smallest sum from a given array of integers.
+</details><details><summary><b> 123. Write a Java program to find the subarray with smallest sum from a given array of integers.</b></summary>
 ```java
 import java.util.*;
 
@@ -5364,7 +5364,7 @@ public class Main {
 }
 ```
 
-### 124. Write a Java program to find the index of a value in a sorted array. If the value does not find return the index where it would be if it were inserted in order.
+</details><details><summary><b> 124. Write a Java program to find the index of a value in a sorted array. If the value does not find return the index where it would be if it were inserted in order.</b></summary>
 Example:
 [1, 2, 4, 5, 6] 5(target) -> 3(index)
 [1, 2, 4, 5, 6] 0(target) -> 0(index)
@@ -5418,7 +5418,7 @@ public class Main {
 }
 ```
 
-### 125. Write a Java program to get the preorder traversal of the values of the nodes in a binary tree.
+</details><details><summary><b> 125. Write a Java program to get the preorder traversal of the values of the nodes in a binary tree.</b></summary>
 Example:
     10
    / \
@@ -5492,7 +5492,7 @@ class BinaryTree
 }
 ```
 
-### 126. Write a Java program to get the in-order traversal of its nodes' values in a binary tree.
+</details><details><summary><b> 126. Write a Java program to get the in-order traversal of its nodes' values in a binary tree.</b></summary>
     10
    / \
   20   30
@@ -5565,7 +5565,7 @@ class BinaryTree
 }
 ```
 
-### 127. Write a Java program to get the Postorder traversal of its nodes' values in a binary tree.
+</details><details><summary><b> 127. Write a Java program to get the Postorder traversal of its nodes' values in a binary tree.</b></summary>
     10
    / \
   20   30
@@ -5636,7 +5636,7 @@ class BinaryTree
     }
 }
 ```
-### 128. Write a Java program to calculate the median of a non-sorted array of integers.
+</details><details><summary><b> 128. Write a Java program to calculate the median of a non-sorted array of integers.</b></summary>
 Original array: [10, 2, 38, 22, 38, 23]
 Median of the said array of integers: 30
 Original array: [10, 2, 38, 23, 38, 23, 21]
@@ -5679,7 +5679,7 @@ public class Main {
 }
 ```
 
-### 129. Write a Java program to find a number that appears only once in a given array of integers. All numbers occur twice.
+</details><details><summary><b> 129. Write a Java program to find a number that appears only once in a given array of integers. All numbers occur twice.</b></summary>
 Source Array : [10, 20, 10, 20, 30, 40, 40, 30, 50] 50 appears only once
 
 ```java
@@ -5721,7 +5721,7 @@ public class Main {
 }
 ```
 
-### 130. Write a Java program to find the maximum depth of a given binary tree.
+</details><details><summary><b> 130. Write a Java program to find the maximum depth of a given binary tree.</b></summary>
 Sample Output: The Maximum depth of the binary tree is: 3
 
 ```java
@@ -5764,7 +5764,7 @@ public class BinaryTree {
     }
 }
 ```
-### 131. Write a Java program to find the updated length of a sorted array where each element appears only once (remove duplicates).
+</details><details><summary><b> 131. Write a Java program to find the updated length of a sorted array where each element appears only once (remove duplicates).</b></summary>
 Original array: [1, 1, 2, 3, 3, 3, 4, 5, 6, 7, 7] The length of the original array is: 11 After removing duplicates, the new length of the array is: 7
 
 ```java
@@ -5802,7 +5802,7 @@ class Solution {
     }
 }
 ```
-### 132. Write a Java program to find the updated length of a given sorted array where duplicate elements appear at most twice.
+</details><details><summary><b> 132. Write a Java program to find the updated length of a given sorted array where duplicate elements appear at most twice.</b></summary>
 Original array: [1, 1, 2, 3, 3, 3, 4, 5, 6, 7, 7, 7, 7]
 The length of the original array is: 13
 After removing duplicates, the new length of the array is: 10
@@ -5840,7 +5840,7 @@ class Solution {
     }
 }
 ```
-### 133. Write a Java program to find a path from top left to bottom in the right direction which minimizes the sum of all numbers along its path.
+</details><details><summary><b> 133. Write a Java program to find a path from top left to bottom in the right direction which minimizes the sum of all numbers along its path.</b></summary>
 Note: Move either down or right at any point in time.
 Sample Output: Sum of all numbers along its path: 13
 ```java
@@ -5884,7 +5884,7 @@ public class Solution {
 }
 ```
 
-### 134. Write a Java program to find distinct ways to climb to the top (n steps to reach the top) of stairs. Each time you climb, you can climb 1 or 2 steps.
+</details><details><summary><b> 134. Write a Java program to find distinct ways to climb to the top (n steps to reach the top) of stairs. Each time you climb, you can climb 1 or 2 steps.</b></summary>
 Example: n = 5
 a) 1+1+1+1+1 = 5 b) 1+1+1+2 = 5 c) 1+2+2 = 5 d) 2+2+1 = 5 e) 2+1+1+1 = 5 f) 2+1+2 = 5 g) 1+2+1+1 = 5 h) 1+1+2+1 = 5
 Sample Output: Distinct ways can you climb to the top: 8
@@ -5913,7 +5913,7 @@ class Solution {
 }
 ```
 
-### 135. Write a Java program to remove duplicates from a sorted linked list.
+</details><details><summary><b> 135. Write a Java program to remove duplicates from a sorted linked list.</b></summary>
 Original List with duplicate elements:
 12->12->13->14->15->15->16->17->17
 After removing duplicates from the said list:
@@ -5998,7 +5998,7 @@ class LinkedList {
 }
 ```
 
-### 136. Write a Java program to find possible distinct paths from the top-left corner to the bottom-right corner of a given grid (m x n).
+</details><details><summary><b> 136. Write a Java program to find possible distinct paths from the top-left corner to the bottom-right corner of a given grid (m x n).</b></summary>
 Note: You can move either down or right at any point in time.
 Sample Output: Unique paths from top-left corner to bottom-right corner of the said grid: 3
 ```java
@@ -6040,7 +6040,7 @@ public class Solution {
 }
 ```
 
-### 137. Write a Java program to find possible unique paths considering some obstacles, from top-left corner to bottom-right corner of a given grid (m x n).
+</details><details><summary><b> 137. Write a Java program to find possible unique paths considering some obstacles, from top-left corner to bottom-right corner of a given grid (m x n).</b></summary>
 Note: You can move either down or right at any point in time and an obstacle and empty space is marked as 1 and 0 respectively in the grid.
 Sample grid:
 int[][] obstacle_Grid ={
@@ -6091,7 +6091,7 @@ public class Solution {
 }
 ```
 
-### 138. Write a Java program to find the longest words in a dictionary.
+</details><details><summary><b> 138. Write a Java program to find the longest words in a dictionary.</b></summary>
 Example-1:
 {
 "cat",
@@ -6150,7 +6150,7 @@ public class Solution {
 }
 ```
 
-### 139. Write a Java program to get the index of the first and the last number of a subarray where the sum of numbers is zero. This is from a given array of integers.
+</details><details><summary><b> 139. Write a Java program to get the index of the first and the last number of a subarray where the sum of numbers is zero. This is from a given array of integers.</b></summary>
 Original Array : [1, 2, 3, -6, 5, 4]
 Index of the subarray of the said array where the sum of numbers is zero: [0, 3]
 ```java
@@ -6198,7 +6198,7 @@ public class Solution {
 }
 ```
 
-### 140. Write a Java program to merge all overlapping intervals from a given collection of intervals.
+</details><details><summary><b> 140. Write a Java program to merge all overlapping intervals from a given collection of intervals.</b></summary>
 Sample Output: 1 6
 8 10
 15 20
@@ -6298,7 +6298,7 @@ class IntervalComparator implements Comparator<Interval>
     }
 }
 ```
-### 141. Write a Java program to check if a given string has all distinct characters.
+</details><details><summary><b> 141. Write a Java program to check if a given string has all distinct characters.</b></summary>
 Sample Output: Original String : xyyz
 String has all unique characters: false
 ```java
@@ -6340,7 +6340,7 @@ public  class Solution {
 }
 ```
 
-### 142. Write a Java program to check if two strings are anagrams or not.
+</details><details><summary><b> 142. Write a Java program to check if two strings are anagrams or not.</b></summary>
 According to Wikipedia "An anagram is a word or phrase formed by rearranging the letters of a different word or phrase, typically using all the original letters exactly once. For example, the word anagram can be rearranged into nag a ram, or the word binary into brainy."
 Sample Output: String-1 : wxyz
 String-2 : zyxw
@@ -6402,7 +6402,7 @@ public  class Solution {
 }
 ```
 
-### 143. Write a Java program to merge the two sorted linked lists.
+</details><details><summary><b> 143. Write a Java program to merge the two sorted linked lists.</b></summary>
 Sample Output:
 Merge Two Sorted ListsT:
 1 2 3 7 9 13 40
@@ -6479,7 +6479,7 @@ class ListNode {
 }
 ```
 
-### 144. Write a Java program to remove all occurrences of a specified value in a given array of integers. Return the updated array length.
+</details><details><summary><b> 144. Write a Java program to remove all occurrences of a specified value in a given array of integers. Return the updated array length.</b></summary>
 Sample Output:
 Original array: [1, 4, 6, 7, 6, 2]
 The length of the new array is: 4
@@ -6527,7 +6527,7 @@ public class Solution {
     }
 }
 ```
-### 145. Write a Java program to remove the nth element from the end of a given list.
+</details><details><summary><b> 145. Write a Java program to remove the nth element from the end of a given list.</b></summary>
 Sample Output:
 Original node:
 1 2 3 4 5
@@ -6608,7 +6608,7 @@ class ListNode {
 }
 ```
 
-### 146. Write a Java program to convert an array of sorted items into a binary search tree. Maintain the minimal height of the tree.
+</details><details><summary><b> 146. Write a Java program to convert an array of sorted items into a binary search tree. Maintain the minimal height of the tree.</b></summary>
 Sample Output:
 2
 1
@@ -6681,7 +6681,7 @@ class TreeNode {
 }
 ```
 
-### 147. Write a Java program to find the number of bits required to flip to convert two given integers.
+</details><details><summary><b> 147. Write a Java program to find the number of bits required to flip to convert two given integers.</b></summary>
 Sample Output:
 2
 ```java
@@ -6705,7 +6705,7 @@ public class Solution {
 }
 ```
 
-### 148. Write a Java program to find the index of the first unique character in a given string. Assume that there is at least one unique character in the string.
+</details><details><summary><b> 148. Write a Java program to find the index of the first unique character in a given string. Assume that there is at least one unique character in the string.</b></summary>
 Sample Output:
 Original String: wresource
 First unique character of the above: 0
@@ -6740,7 +6740,7 @@ public class Solution {
 }
 ```
 
-### 149. Write a Java program to check if a given string is a permutation of another given string.
+</details><details><summary><b> 149. Write a Java program to check if a given string is a permutation of another given string.</b></summary>
 Sample Output:
 Original strings: xxyz yxzx
 true
@@ -6779,7 +6779,7 @@ public class Solution {
 }
 ```
 
-### 150. Write a Java program to test if a binary tree is a subtree of another binary tree.
+</details><details><summary><b> 150. Write a Java program to test if a binary tree is a subtree of another binary tree.</b></summary>
 Sample Output:
 Original strings: xxyz yxzx
 true
@@ -6843,3 +6843,4 @@ class TreeNode {
     }
 }
 ```
+</details>
