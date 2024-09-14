@@ -2077,6 +2077,7 @@ The sum of the digits is: 7
 
 
 </details><details><summary><b> 34. Write a Java program to compute hexagon area.</b></summary>
+	
 ```java
 import java.util.Scanner;
 
@@ -2322,6 +2323,7 @@ Reverse string: xof nworb kciuq ehT
 
 
 </details><details><summary><b> 38. Write a Java program to count letters, spaces, numbers and other characters in an input string.</b></summary>
+	
 ```java
 import java.util.Scanner;
 
@@ -3439,7 +3441,9 @@ Sum of the first 100 prime numbers: 24133
 
 
 </details><details><summary><b> 67. Write a Java program to insert a word in the middle of another string.</b></summary>
+	
 Insert "Tutorial" in the middle of "Python 3.0", so the result will be Python Tutorial 3.0.
+
 ```java
 import java.lang.*;
 
@@ -4835,7 +4839,9 @@ Given num = 64, return true. Given num = 6, return false.
 
 
 </details><details><summary><b> 111. Write a Java program to add two numbers without arithmetic operators.</b></summary>
+	
 Given x = 10 and y = 12; result = 22
+
 ```java
 import java.util.Scanner;
 
@@ -4889,6 +4895,7 @@ public class Example112 {
 ```
 
 </details><details><summary><b> 113. Write a Java program to merge two given sorted arrays of integers and create another sorted array.</b></summary>
+	
 array1 = [1,2,3,4]
 array2 = [2,5,7, 8]
 result = [1,2,2,3,4,5,7,8]
@@ -4995,9 +5002,11 @@ public class Example114 {
 }
 ```
 </details><details><summary><b> 115. Write a Java program to check if a positive number is a palindrome or not.</b></summary>
+	
 Input a positive integer: 151
 Is 151 is a palindrome number?
 true
+
 ```java
 import java.util.*;
 
@@ -5065,9 +5074,12 @@ public class Exercise116 {
     }
 }
 ```
+
 </details><details><summary><b> 117. Write a Java program to compute the square root of a given number.</b></summary>
+
 Input a positive integer: 25
 Square root of 25 is: 5
+
 ```java
 import java.util.*;
 
@@ -5341,6 +5353,7 @@ class LinkedList {
 ```
 
 </details><details><summary><b> 122. Write a Java program to find a contiguous subarray with the largest sum from a given array of integers.</b></summary>
+
 Note: In computer science, the maximum subarray problem is the task of finding the contiguous subarray within a one-dimensional array of numbers which has the largest sum. For example, for the sequence of values −2, 1, −3, 4, −1, 2, 1, −5, 4; the contiguous subarray with the largest sum is 4, −1, 2, 1, with sum 6. The subarray should contain one integer at least. 
 
 The subarray should contain one integer at least.
@@ -5434,6 +5447,7 @@ public class Main {
 ```
 
 </details><details><summary><b> 124. Write a Java program to find the index of a value in a sorted array. If the value does not find return the index where it would be if it were inserted in order.</b></summary>
+
 Example:
 [1, 2, 4, 5, 6] 5(target) -> 3(index)
 [1, 2, 4, 5, 6] 0(target) -> 0(index)
@@ -5488,6 +5502,7 @@ public class Main {
 ```
 
 </details><details><summary><b> 125. Write a Java program to get the preorder traversal of the values of the nodes in a binary tree.</b></summary>
+	
 Example:
     10
    / \
@@ -5562,6 +5577,7 @@ class BinaryTree
 ```
 
 </details><details><summary><b> 126. Write a Java program to get the in-order traversal of its nodes' values in a binary tree.</b></summary>
+	
     10
    / \
   20   30
@@ -5708,6 +5724,7 @@ class BinaryTree
 }
 ```
 </details><details><summary><b> 128. Write a Java program to calculate the median of a non-sorted array of integers.</b></summary>
+	
 Original array: [10, 2, 38, 22, 38, 23]
 Median of the said array of integers: 30
 Original array: [10, 2, 38, 23, 38, 23, 21]
@@ -5793,6 +5810,7 @@ public class Main {
 ```
 
 </details><details><summary><b> 130. Write a Java program to find the maximum depth of a given binary tree.</b></summary>
+	
 Sample Output: The Maximum depth of the binary tree is: 3
 
 ```java
@@ -5874,6 +5892,7 @@ class Solution {
 }
 ```
 </details><details><summary><b> 132. Write a Java program to find the updated length of a given sorted array where duplicate elements appear at most twice.</b></summary>
+	
 Original array: [1, 1, 2, 3, 3, 3, 4, 5, 6, 7, 7, 7, 7]
 The length of the original array is: 13
 After removing duplicates, the new length of the array is: 10
@@ -5912,6 +5931,7 @@ class Solution {
 }
 ```
 </details><details><summary><b> 133. Write a Java program to find a path from top left to bottom in the right direction which minimizes the sum of all numbers along its path.</b></summary>
+	
 Note: Move either down or right at any point in time.
 Sample Output: Sum of all numbers along its path: 13
 ```java
@@ -5956,6 +5976,7 @@ public class Solution {
 ```
 
 </details><details><summary><b> 134. Write a Java program to find distinct ways to climb to the top (n steps to reach the top) of stairs. Each time you climb, you can climb 1 or 2 steps.</b></summary>
+	
 Example: n = 5
 a) 1+1+1+1+1 = 5 b) 1+1+1+2 = 5 c) 1+2+2 = 5 d) 2+2+1 = 5 e) 2+1+1+1 = 5 f) 2+1+2 = 5 g) 1+2+1+1 = 5 h) 1+1+2+1 = 5
 Sample Output: Distinct ways can you climb to the top: 8
@@ -5985,6 +6006,7 @@ class Solution {
 ```
 
 </details><details><summary><b> 135. Write a Java program to remove duplicates from a sorted linked list.</b></summary>
+	
 Original List with duplicate elements:
 12->12->13->14->15->15->16->17->17
 After removing duplicates from the said list:
@@ -6070,6 +6092,7 @@ class LinkedList {
 ```
 
 </details><details><summary><b> 136. Write a Java program to find possible distinct paths from the top-left corner to the bottom-right corner of a given grid (m x n).</b></summary>
+	
 Note: You can move either down or right at any point in time.
 Sample Output: Unique paths from top-left corner to bottom-right corner of the said grid: 3
 ```java
@@ -6112,6 +6135,7 @@ public class Solution {
 ```
 
 </details><details><summary><b> 137. Write a Java program to find possible unique paths considering some obstacles, from top-left corner to bottom-right corner of a given grid (m x n).</b></summary>
+	
 Note: You can move either down or right at any point in time and an obstacle and empty space is marked as 1 and 0 respectively in the grid.
 Sample grid:
 int[][] obstacle_Grid ={
@@ -6163,6 +6187,7 @@ public class Solution {
 ```
 
 </details><details><summary><b> 138. Write a Java program to find the longest words in a dictionary.</b></summary>
+	
 Example-1:
 {
 "cat",
@@ -6373,6 +6398,7 @@ class IntervalComparator implements Comparator<Interval>
 }
 ```
 </details><details><summary><b> 141. Write a Java program to check if a given string has all distinct characters.</b></summary>
+	
 Sample Output: Original String : xyyz
 String has all unique characters: false
 ```java
@@ -6479,6 +6505,7 @@ public  class Solution {
 ```
 
 </details><details><summary><b> 143. Write a Java program to merge the two sorted linked lists.</b></summary>
+	
 Sample Output:
 Merge Two Sorted ListsT:
 1 2 3 7 9 13 40
@@ -6607,6 +6634,7 @@ public class Solution {
 }
 ```
 </details><details><summary><b> 145. Write a Java program to remove the nth element from the end of a given list.</b></summary>
+	
 Sample Output:
 Original node:
 1 2 3 4 5
@@ -6764,6 +6792,7 @@ class TreeNode {
 ```
 
 </details><details><summary><b> 147. Write a Java program to find the number of bits required to flip to convert two given integers.</b></summary>
+	
 Sample Output:
 2
 ```java
@@ -6826,9 +6855,11 @@ public class Solution {
 ```
 
 </details><details><summary><b> 149. Write a Java program to check if a given string is a permutation of another given string.</b></summary>
+
 Sample Output:
 Original strings: xxyz yxzx
 true
+	
 ```java
 import java.util.*;
 
