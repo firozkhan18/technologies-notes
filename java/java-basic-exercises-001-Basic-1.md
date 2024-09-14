@@ -3493,6 +3493,7 @@ Sample Output:
 
 
 </details><details><summary><b> 69. Write a Java program to extract the first half of a even string.</b></summary>
+	
 ```java
 import java.lang.*;
 
