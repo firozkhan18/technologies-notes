@@ -1038,6 +1038,35 @@ This implementation ensures that the function handles various edge cases and adh
 
 <details>
 <summary><b>9. Palindrome Number</b></summary>
+Given an integer x, return true if x is a 
+palindrome
+, and false otherwise.
+
+ 
+
+Example 1:
+
+Input: x = 121
+Output: true
+Explanation: 121 reads as 121 from left to right and from right to left.
+Example 2:
+
+Input: x = -121
+Output: false
+Explanation: From left to right, it reads -121. From right to left, it becomes 121-. Therefore it is not a palindrome.
+Example 3:
+
+Input: x = 10
+Output: false
+Explanation: Reads 01 from right to left. Therefore it is not a palindrome.
+ 
+
+Constraints:
+
+-231 <= x <= 231 - 1
+ 
+
+Follow up: Could you solve it without converting the integer to a string?
 
 ```java
  public static boolean isPalindrome(int s) {
@@ -1059,7 +1088,89 @@ This implementation ensures that the function handles various edge cases and adh
   return false;
  }
 ```
+To determine if an integer is a palindrome without converting it to a string, you can use a mathematical approach. Here's a detailed explanation and the solution:
 
+### Approach
+
+1. **Negative Numbers and Zeroes:**
+   - A negative number cannot be a palindrome because it has a minus sign at the end which won't match its reversed form.
+   - Zero is a special case, but it is a palindrome.
+
+2. **Reversing Half of the Number:**
+   - To check if a number is a palindrome, you don't need to reverse the entire number. Instead, reverse only half of it and compare it with the other half.
+   - This approach avoids the overflow issue and works efficiently.
+
+### Algorithm
+
+1. **Handle Negative Cases:**
+   - Return `false` immediately if the number is negative.
+   
+2. **Reverse Half of the Number:**
+   - Initialize a variable to store the reversed half of the number.
+   - Extract digits from the end of the number and build the reversed number.
+
+3. **Comparison:**
+   - Compare the reversed half with the remaining part of the number.
+   - For even-length numbers, the reversed half should be equal to the remaining part.
+   - For odd-length numbers, the reversed half should be equal to the remaining part divided by 10 (to account for the middle digit).
+
+### Java Code Implementation
+
+Here's how you can implement this approach in Java:
+
+```java
+public class Solution {
+    public boolean isPalindrome(int x) {
+        // Negative numbers are not palindromes
+        if (x < 0) return false;
+        
+        // Single-digit numbers are palindromes
+        if (x >= 0 && x < 10) return true;
+        
+        // Edge case for numbers ending with 0 (but not 0 itself)
+        if (x % 10 == 0 && x != 0) return false;
+        
+        int original = x;
+        int reversed = 0;
+        
+        // Reverse half of the number
+        while (x > reversed) {
+            reversed = reversed * 10 + x % 10;
+            x /= 10;
+        }
+        
+        // Compare reversed half with the other half
+        // For odd length numbers, reversed/10 will remove the middle digit
+        return x == reversed || x == reversed / 10;
+    }
+}
+```
+
+### Explanation
+
+1. **Negative Numbers Check:**
+   - If `x` is negative, it cannot be a palindrome. So, return `false`.
+
+2. **Single Digit Check:**
+   - Single-digit numbers (0-9) are palindromes by definition. Return `true`.
+
+3. **Edge Case for Numbers Ending with 0:**
+   - Numbers ending in 0 (except 0 itself) cannot be palindromes because they would have to start with 0 in the reversed version.
+
+4. **Reverse the Number:**
+   - Extract digits from the end of `x` and build `reversed`.
+   - Continue this until `reversed` is greater than or equal to `x`.
+
+5. **Comparison:**
+   - If the length of the number is even, `reversed` should be equal to `x`.
+   - If the length is odd, removing the middle digit by integer division of `reversed` by 10 should match `x`.
+
+### Complexity
+
+- **Time Complexity:** O(log(n)), where `n` is the value of the integer. This is because the number of digits in `x` determines the number of operations.
+- **Space Complexity:** O(1), as only a few variables are used regardless of the size of `x`.
+
+This approach efficiently checks if an integer is a palindrome without converting it to a string, handling all edge cases appropriately.
 
 </details>
 
