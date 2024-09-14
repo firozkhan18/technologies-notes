@@ -2,7 +2,7 @@
 
 Greetings everyone! Today, we’re exploring common interview questions concerning the Java Singleton design pattern, providing clear explanations alongside straightforward examples. These resources are specifically designed to aid individuals preparing for interviews. Whether you’re navigating technical interviews or seeking to enhance your understanding, this series aims to be a valuable asset in your journey toward success.
 
-## What is singleton class?
+## 1. What is singleton class?
 The Singleton design pattern, classified under Creational Design Patterns, ensures that only one instance of a class exists within the JVM and offers a singular access point for any other code to interact with it.
 
 ## 2. Where can we apply or use the singleton concept in real time?
