@@ -500,6 +500,27 @@ public static int[] searchRange(int[] nums, int target) {
 
 <details>
 <summary><b>66. Plus One</b></summary>
+
+```java
+public static int[] plusOne(int[] digits) {
+
+  for (int i = digits.length - 1; i >= 0; i--) {
+
+   if (digits[i] < 9) {
+    digits[i]++;
+    return digits;
+   }
+
+   digits[i] = 0;
+
+  }
+
+  int num[] = new int[digits.length + 1];
+  num[0] = 1;
+  return num;
+
+ }
+```
 </details>
 
 <details>
@@ -516,6 +537,25 @@ public static int[] searchRange(int[] nums, int target) {
 
 <details>
 <summary><b>70. Climbing Stairs</b></summary>
+
+```java
+public static int climbStairs(int n) {
+
+  if (n <= 3) {
+   return n;
+  }
+  int a = 3, b = 2;
+  for (int i = 0; i < n - 3; i++) {
+
+   a = a + b;
+   b = a - b;
+
+  }
+
+  return a;
+
+ }
+```
 </details>
 
 <details>
@@ -736,6 +776,30 @@ public static int[] searchRange(int[] nums, int target) {
 
 <details>
 <summary><b>125. Valid Palindrome</b></summary>
+
+```java
+public static boolean isPalindrome(String s) {
+
+  s = s.toLowerCase().replaceAll("[^a-zA-Z0-9]", "");
+
+  int i = 0;
+  int j = s.length() - 1;
+
+  while (i < j) {
+
+   if (s.charAt(i) != s.charAt(j)) {
+    return false;
+   }
+
+   i++;
+   j--;
+
+  }
+
+  return true;
+
+ }
+```
 </details>
 
 <details>
@@ -780,6 +844,20 @@ public static int[] searchRange(int[] nums, int target) {
 
 <details>
 <summary><b>136. Single Number</b></summary>
+
+```java
+public static int singleNumber(int[] nums) {
+  int digit = 0;
+  for (int i = 0; i < nums.length; i++) {
+
+   digit = digit ^ nums[i];
+
+  }
+
+  return digit;
+
+ }
+```
 </details>
 
 <details>
@@ -840,6 +918,22 @@ public static int[] searchRange(int[] nums, int target) {
 
 <details>
 <summary><b>151. Reverse Words in a String</b></summary>
+
+```java
+ public static String reverse(String s) {
+
+  String words[] = s.split(" +");
+  StringBuilder sb = new StringBuilder();
+
+  for (int i = words.length-1; i >= 0; i--) {
+
+   sb.append(words[i]);
+   sb.append(" ");
+  }
+
+  return sb.toString().trim();
+ }
+```
 </details>
 
 <details>
@@ -1056,6 +1150,35 @@ public static int[] searchRange(int[] nums, int target) {
 
 <details>
 <summary><b>205. Isomorphic Strings</b></summary>
+
+```java
+ public static boolean isIsomorphic(String s, String t) {
+
+  Map<Character, Character> sMap = new HashMap<>();
+  Map<Character, Character> tMap = new HashMap<>();
+
+  for (int i = 0; i < s.length(); i++) {
+   if (sMap.containsKey(s.charAt(i))) {
+    if (sMap.get(s.charAt(i)) != t.charAt(i)) {
+     return false;
+    }
+    continue;
+   }
+
+   if (tMap.containsKey(t.charAt(i))) {
+    if (tMap.get(t.charAt(i)) != s.charAt(i)) {
+     return false;
+    }
+    continue;
+   }
+
+   sMap.put(s.charAt(i), t.charAt(i));
+   tMap.put(t.charAt(i), s.charAt(i));
+  }
+  return true;
+
+ }
+```
 </details>
 
 <details>
@@ -1104,6 +1227,26 @@ public static int[] searchRange(int[] nums, int target) {
 
 <details>
 <summary><b>217. Contains Duplicate</b></summary>
+
+```java
+public static boolean containsDuplicate(int[] nums) {
+
+  Map<Integer, Integer> map = new HashMap<>();
+
+  for (int i = 0; i < nums.length; i++) {
+
+   if (map.containsKey(nums[i])) {
+    return true;
+   } else {
+    map.put(nums[i], i);
+   }
+
+  }
+
+  return false;
+
+ }
+```
 </details>
 
 <details>
@@ -1112,6 +1255,22 @@ public static int[] searchRange(int[] nums, int target) {
 
 <details>
 <summary><b>219. Contains Duplicate II</b></summary>
+
+```java
+public static boolean containsNearbyDuplicate(int[] nums, int k) {
+
+  Map<Integer, Integer> hashMap = new HashMap<>();
+
+  for (int i = 0; i < nums.length; i++) {
+   int integer = nums[i];
+   if (hashMap.containsKey(integer) && i - hashMap.get(integer) <= k)
+    return true;
+   hashMap.put(integer, i);
+  }
+
+  return false;
+ }
+```
 </details>
 
 <details>
@@ -1160,6 +1319,28 @@ public static int[] searchRange(int[] nums, int target) {
 
 <details>
 <summary><b>231. Power of Two</b></summary>
+
+```java
+public static boolean isPowerOfTwo(int n) {
+
+  if (n == 0) {
+   return false;
+  }
+
+  while (n != 1) {
+
+   if (n % 2 != 0) {
+    return false;
+   } else {
+    n = n / 2;
+   }
+
+  }
+
+  return true;
+
+ }
+```
 </details>
 
 <details>
