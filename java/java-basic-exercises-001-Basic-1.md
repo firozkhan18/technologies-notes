@@ -128,9 +128,8 @@ Test Data:
 Expected Output :
 110
 
-
-
 </details><details><summary><b> 3. Write a Java program to divide two numbers and print them on the screen.</b></summary>
+	
 ```java
 public class Exercise3 {
     public static void main(String[] args) {
@@ -142,6 +141,7 @@ public class Exercise3 {
     }
 }
 ```
+
 ```java
 import java.util.Scanner;
 public class Main {
@@ -174,6 +174,7 @@ Expected Output :
 
 
 </details><details><summary><b> 4. Write a Java program to print the results of the following operations.</b></summary>
+	
 ```java
 public class Exercise4 {
     public static void main(String[] args) {
@@ -223,6 +224,7 @@ Expected Output :
 13
 
 </details><details><summary><b> 5. Write a Java program that takes two numbers as input and displays the product of two numbers.</b></summary>
+	
 ```java
 import java.util.Scanner; 
 public class Exercise5 { 
