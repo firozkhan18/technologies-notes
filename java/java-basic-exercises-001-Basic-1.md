@@ -2119,8 +2119,6 @@ Input the length of a side of the hexagon: 6
 Expected Output
 
 The area of the hexagon is: 93.53074360871938
-
-
 </details>
 
 <details><summary><b> 35. Write a Java program to compute the area of a polygon.</b></summary>
@@ -2189,8 +2187,9 @@ Expected Output
 
 The area is: 130.82084798405722
 
+</details>
 
-</details><details><summary><b> 36. Write a Java program to compute the distance between two points on the earth's surface.</b></summary>
+<details><summary><b> 36. Write a Java program to compute the distance between two points on the earth's surface.</b></summary>
 
 Distance between the two points [ (x1,y1) & (x2,y2)]
 d = radius * arccos(sin(x1) * sin(x2) + cos(x1) * cos(x2) * cos(y1 - y2))
@@ -2396,8 +2395,10 @@ space: 9
 number: 10                                               
 other: 6
 
+</details>
 
-</details><details><summary><b> 39. Write a Java program to create and display a unique three-digit number using 1, 2, 3, 4. Also count how many three-digit numbers are there.</b></summary>
+<details>
+<summary><b> 39. Write a Java program to create and display a unique three-digit number using 1, 2, 3, 4. Also count how many three-digit numbers are there.</b></summary>
 
 ```java
 import java.util.Scanner;
@@ -3461,7 +3462,10 @@ Sample Output:
 Python Tutorial 3.0
 
 
-</details><details><summary><b> 68. Write a Java program to create another string of 4 copies of the last 3 characters of the original string. The original string length must be 3 and above.</b></summary>
+</details>
+<details>
+<summary>
+<b> 68. Write a Java program to create another string of 4 copies of the last 3 characters of the original string. The original string length must be 3 and above.</b></summary>
 
 ```java
 import java.lang.*;
@@ -4857,9 +4861,10 @@ public class Example111 {
     }
 }
 ```
+</details>
 
+<details><summary><b> 112. Write a Java program to compute the number of trailing zeros in a factorial.</b></summary>
 
-</details><details><summary><b> 112. Write a Java program to compute the number of trailing zeros in a factorial.</b></summary>
 7! = 5040, therefore the output should be 1
 
 ```java
@@ -5034,7 +5039,9 @@ public class test {
 }
 ```
 
-</details><details><summary><b> 116. Write a Java program that iterates integers from 1 to 100. For multiples of three print "Fizz" instead of the number and print "Buzz" for five. When the number is divided by three and five, print "fizz buzz".</b></summary>
+</details>
+<details>
+<summary><b> 116. Write a Java program that iterates integers from 1 to 100. For multiples of three print "Fizz" instead of the number and print "Buzz" for five. When the number is divided by three and five, print "fizz buzz".</b></summary>
 
 ```java
 import java.util.*;
@@ -5105,7 +5112,9 @@ public class Exercise117 {
 }
 ```
 
-</details><details><summary><b> 118. Write a Java program to get the first occurrence (Position starts from 0.) of a string within a given string.</b></summary>
+</details>
+<details>
+<summary><b> 118. Write a Java program to get the first occurrence (Position starts from 0.) of a string within a given string.</b></summary>
 
 ```java
 import java.util.Scanner;
@@ -5625,7 +5634,9 @@ class BinaryTree
 }
 ```
 
-</details><details><summary><b> 127. Write a Java program to get the Postorder traversal of its nodes' values in a binary tree.</b></summary>
+</details>
+<details><summary><b> 127. Write a Java program to get the Postorder traversal of its nodes' values in a binary tree.</b></summary>
+
     10
    / \
   20   30
@@ -6211,6 +6222,7 @@ public class Solution {
 ```
 
 </details><details><summary><b> 139. Write a Java program to get the index of the first and the last number of a subarray where the sum of numbers is zero. This is from a given array of integers.</b></summary>
+	
 Original Array : [1, 2, 3, -6, 5, 4]
 Index of the subarray of the said array where the sum of numbers is zero: [0, 3]
 ```java
@@ -6258,7 +6270,9 @@ public class Solution {
 }
 ```
 
-</details><details><summary><b> 140. Write a Java program to merge all overlapping intervals from a given collection of intervals.</b></summary>
+</details>
+<details><summary><b> 140. Write a Java program to merge all overlapping intervals from a given collection of intervals.</b></summary>
+
 Sample Output: 1 6
 8 10
 15 20
@@ -6400,7 +6414,9 @@ public  class Solution {
 }
 ```
 
-</details><details><summary><b> 142. Write a Java program to check if two strings are anagrams or not.</b></summary>
+</details>
+<details><summary><b> 142. Write a Java program to check if two strings are anagrams or not.</b></summary>
+
 According to Wikipedia "An anagram is a word or phrase formed by rearranging the letters of a different word or phrase, typically using all the original letters exactly once. For example, the word anagram can be rearranged into nag a ram, or the word binary into brainy."
 Sample Output: String-1 : wxyz
 String-2 : zyxw
@@ -6539,7 +6555,10 @@ class ListNode {
 }
 ```
 
-</details><details><summary><b> 144. Write a Java program to remove all occurrences of a specified value in a given array of integers. Return the updated array length.</b></summary>
+</details>
+<details>
+<summary><b> 144. Write a Java program to remove all occurrences of a specified value in a given array of integers. Return the updated array length.</b></summary>
+
 Sample Output:
 Original array: [1, 4, 6, 7, 6, 2]
 The length of the new array is: 4
@@ -6668,7 +6687,10 @@ class ListNode {
 }
 ```
 
-</details><details><summary><b> 146. Write a Java program to convert an array of sorted items into a binary search tree. Maintain the minimal height of the tree.</b></summary>
+</details>
+<details>
+<summary><b> 146. Write a Java program to convert an array of sorted items into a binary search tree. Maintain the minimal height of the tree.</b></summary>
+
 Sample Output:
 2
 1
@@ -6765,7 +6787,10 @@ public class Solution {
 }
 ```
 
-</details><details><summary><b> 148. Write a Java program to find the index of the first unique character in a given string. Assume that there is at least one unique character in the string.</b></summary>
+</details>
+<details>
+<summary><b> 148. Write a Java program to find the index of the first unique character in a given string. Assume that there is at least one unique character in the string.</b></summary>
+
 Sample Output:
 Original String: wresource
 First unique character of the above: 0
@@ -6840,6 +6865,7 @@ public class Solution {
 ```
 
 </details><details><summary><b> 150. Write a Java program to test if a binary tree is a subtree of another binary tree.</b></summary>
+
 Sample Output:
 Original strings: xxyz yxzx
 true
