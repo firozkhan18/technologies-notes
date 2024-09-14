@@ -1647,3 +1647,339 @@ public class InterpolationSearch {
 - **Stream-Based Search**: Utilizes Java Streams for functional programming.
 
 These search algorithms cover a range of scenarios from simple to advanced, and the choice of algorithm can depend on the specifics of your data and use case.
+
+Here’s a detailed overview and sample code for common searching and sorting algorithms. This will cover the major algorithms, including Linear Search, Binary Search, Bubble Sort, Selection Sort, Insertion Sort, Merge Sort, Quick Sort, Jump Search, and Interpolation Search.
+
+### Searching Algorithms
+
+#### 1. Linear Search
+
+**Concept**: Checks each element in the array until the target element is found.
+
+**Time Complexity**: \(O(n)\)
+
+**Java Code**:
+```java
+public class LinearSearch {
+    public static void main(String[] args) {
+        int[] array = {5, 3, 7, 1, 9};
+        int target = 7;
+        int index = linearSearch(array, target);
+        System.out.println("Element found at index: " + index);
+    }
+
+    public static int linearSearch(int[] array, int target) {
+        for (int i = 0; i < array.length; i++) {
+            if (array[i] == target) {
+                return i;
+            }
+        }
+        return -1; // Element not found
+    }
+}
+```
+
+#### 2. Binary Search
+
+**Concept**: Efficiently searches a sorted array by repeatedly dividing the search interval in half.
+
+**Time Complexity**: \(O(\log n)\)
+
+**Java Code**:
+```java
+public class BinarySearch {
+    public static void main(String[] args) {
+        int[] array = {1, 3, 5, 7, 9};
+        int target = 7;
+        int index = binarySearch(array, target);
+        System.out.println("Element found at index: " + index);
+    }
+
+    public static int binarySearch(int[] array, int target) {
+        int left = 0;
+        int right = array.length - 1;
+
+        while (left <= right) {
+            int mid = left + (right - left) / 2;
+            if (array[mid] == target) {
+                return mid;
+            }
+            if (array[mid] < target) {
+                left = mid + 1;
+            } else {
+                right = mid - 1;
+            }
+        }
+        return -1; // Element not found
+    }
+}
+```
+
+#### 3. Jump Search
+
+**Concept**: Jumps ahead by a fixed number of steps and performs a linear search within the block.
+
+**Time Complexity**: \(O(\sqrt{n})\)
+
+**Java Code**:
+```java
+public class JumpSearch {
+    public static void main(String[] args) {
+        int[] array = {1, 3, 5, 7, 9};
+        int target = 7;
+        int index = jumpSearch(array, target);
+        System.out.println("Element found at index: " + index);
+    }
+
+    public static int jumpSearch(int[] array, int target) {
+        int n = array.length;
+        int step = (int) Math.sqrt(n);
+        int prev = 0;
+
+        while (array[Math.min(step, n) - 1] < target) {
+            prev = step;
+            step += (int) Math.sqrt(n);
+            if (prev >= n) return -1;
+        }
+
+        for (int i = prev; i < Math.min(step, n); i++) {
+            if (array[i] == target) return i;
+        }
+
+        return -1; // Element not found
+    }
+}
+```
+
+#### 4. Interpolation Search
+
+**Concept**: Estimates the position of the target element based on the value of the target and the values of the endpoints.
+
+**Time Complexity**: \(O(\log \log n)\) in best case, \(O(n)\) in worst case
+
+**Java Code**:
+```java
+public class InterpolationSearch {
+    public static void main(String[] args) {
+        int[] array = {1, 3, 5, 7, 9};
+        int target = 7;
+        int index = interpolationSearch(array, target);
+        System.out.println("Element found at index: " + index);
+    }
+
+    public static int interpolationSearch(int[] array, int target) {
+        int low = 0;
+        int high = array.length - 1;
+
+        while (low <= high && target >= array[low] && target <= array[high]) {
+            if (low == high) {
+                if (array[low] == target) return low;
+                return -1;
+            }
+
+            int pos = low + ((target - array[low]) * (high - low) / (array[high] - array[low]));
+
+            if (array[pos] == target) return pos;
+            if (array[pos] < target) low = pos + 1;
+            else high = pos - 1;
+        }
+
+        return -1; // Element not found
+    }
+}
+```
+
+### Sorting Algorithms
+
+#### 1. Bubble Sort
+
+**Concept**: Repeatedly steps through the list, compares adjacent elements, and swaps them if necessary.
+
+**Time Complexity**: \(O(n^2)\)
+
+**Java Code**:
+```java
+public class BubbleSort {
+    public static void main(String[] args) {
+        int[] array = {5, 3, 7, 1, 9};
+        bubbleSort(array);
+        System.out.println("Sorted array: " + Arrays.toString(array));
+    }
+
+    public static void bubbleSort(int[] array) {
+        int n = array.length;
+        for (int i = 0; i < n - 1; i++) {
+            for (int j = 0; j < n - i - 1; j++) {
+                if (array[j] > array[j + 1]) {
+                    // Swap array[j] and array[j+1]
+                    int temp = array[j];
+                    array[j] = array[j + 1];
+                    array[j + 1] = temp;
+                }
+            }
+        }
+    }
+}
+```
+
+#### 2. Selection Sort
+
+**Concept**: Selects the smallest element from the unsorted portion and swaps it with the first unsorted element.
+
+**Time Complexity**: \(O(n^2)\)
+
+**Java Code**:
+```java
+public class SelectionSort {
+    public static void main(String[] args) {
+        int[] array = {5, 3, 7, 1, 9};
+        selectionSort(array);
+        System.out.println("Sorted array: " + Arrays.toString(array));
+    }
+
+    public static void selectionSort(int[] array) {
+        int n = array.length;
+        for (int i = 0; i < n - 1; i++) {
+            int minIndex = i;
+            for (int j = i + 1; j < n; j++) {
+                if (array[j] < array[minIndex]) {
+                    minIndex = j;
+                }
+            }
+            // Swap the found minimum element with the first element
+            int temp = array[minIndex];
+            array[minIndex] = array[i];
+            array[i] = temp;
+        }
+    }
+}
+```
+
+#### 3. Insertion Sort
+
+**Concept**: Builds the final sorted array one item at a time by inserting each new item into its correct position.
+
+**Time Complexity**: \(O(n^2)\) in the worst case, \(O(n)\) in the best case
+
+**Java Code**:
+```java
+public class InsertionSort {
+    public static void main(String[] args) {
+        int[] array = {5, 3, 7, 1, 9};
+        insertionSort(array);
+        System.out.println("Sorted array: " + Arrays.toString(array));
+    }
+
+    public static void insertionSort(int[] array) {
+        int n = array.length;
+        for (int i = 1; i < n; i++) {
+            int key = array[i];
+            int j = i - 1;
+            while (j >= 0 && array[j] > key) {
+                array[j + 1] = array[j];
+                j--;
+            }
+            array[j + 1] = key;
+        }
+    }
+}
+```
+
+#### 4. Merge Sort
+
+**Concept**: Divides the array into halves, recursively sorts each half, and then merges the sorted halves.
+
+**Time Complexity**: \(O(n \log n)\)
+
+**Java Code**:
+```java
+public class MergeSort {
+    public static void main(String[] args) {
+        int[] array = {5, 3, 7, 1, 9};
+        mergeSort(array, 0, array.length - 1);
+        System.out.println("Sorted array: " + Arrays.toString(array));
+    }
+
+    public static void mergeSort(int[] array, int left, int right) {
+        if (left < right) {
+            int mid = (left + right) / 2;
+            mergeSort(array, left, mid);
+            mergeSort(array, mid + 1, right);
+            merge(array, left, mid, right);
+        }
+    }
+
+    private static void merge(int[] array, int left, int mid, int right) {
+        int n1 = mid - left + 1;
+        int n2 = right - mid;
+        int[] L = new int[n1];
+        int[] R = new int[n2];
+
+        System.arraycopy(array, left, L, 0, n1);
+        System.arraycopy(array, mid + 1, R, 0, n2);
+
+        int i = 0, j = 0;
+        int k = left;
+        while (i < n1 && j < n2) {
+            if (L[i] <= R[j]) {
+                array[k++] = L[i++];
+            } else {
+               
+
+ array[k++] = R[j++];
+            }
+        }
+
+        while (i < n1) {
+            array[k++] = L[i++];
+        }
+        while (j < n2) {
+            array[k++] = R[j++];
+        }
+    }
+}
+```
+
+#### 5. Quick Sort
+
+**Concept**: Selects a pivot element, partitions the array around the pivot, and recursively sorts the subarrays.
+
+**Time Complexity**: \(O(n \log n)\) on average, \(O(n^2)\) in the worst case
+
+**Java Code**:
+```java
+public class QuickSort {
+    public static void main(String[] args) {
+        int[] array = {5, 3, 7, 1, 9};
+        quickSort(array, 0, array.length - 1);
+        System.out.println("Sorted array: " + Arrays.toString(array));
+    }
+
+    public static void quickSort(int[] array, int low, int high) {
+        if (low < high) {
+            int pi = partition(array, low, high);
+            quickSort(array, low, pi - 1);
+            quickSort(array, pi + 1, high);
+        }
+    }
+
+    private static int partition(int[] array, int low, int high) {
+        int pivot = array[high];
+        int i = low - 1;
+        for (int j = low; j < high; j++) {
+            if (array[j] <= pivot) {
+                i++;
+                int temp = array[i];
+                array[i] = array[j];
+                array[j] = temp;
+            }
+        }
+        int temp = array[i + 1];
+        array[i + 1] = array[high];
+        array[high] = temp;
+        return i + 1;
+    }
+}
+```
+
+These examples provide a basic implementation of the mentioned algorithms. They illustrate how to implement and use these algorithms for searching and sorting tasks. Each algorithm has its own use cases, and the choice of algorithm depends on the specific requirements of your application, such as the size of the data, whether the data is sorted, and the need for stability.
