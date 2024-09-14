@@ -42,11 +42,251 @@ public static int[] twoSum(int[] nums, int target) {
 
 <details>
 <summary><b>2. Add Two Numbers</b></summary>
+
+You are given two non-empty linked lists representing two non-negative integers. The digits are stored in reverse order, and each of their nodes contains a single digit. Add the two numbers and return the sum as a linked list.
+
+You may assume the two numbers do not contain any leading zero, except the number 0 itself.
+
+ 
+
+Example 1:
+
+
+Input: l1 = [2,4,3], l2 = [5,6,4]
+Output: [7,0,8]
+Explanation: 342 + 465 = 807.
+Example 2:
+
+Input: l1 = [0], l2 = [0]
+Output: [0]
+Example 3:
+
+Input: l1 = [9,9,9,9,9,9,9], l2 = [9,9,9,9]
+Output: [8,9,9,9,0,0,0,1]
+ 
+
+Constraints:
+
+The number of nodes in each linked list is in the range [1, 100].
+0 <= Node.val <= 9
+It is guaranteed that the list represents a number that does not have leading zeros.
+
+To solve the problem of adding two numbers represented by linked lists, where each list represents a non-negative integer in reverse order, follow these steps:
+
+### Problem Breakdown
+
+1. **Understand the Input:**
+   - Each linked list represents a number where digits are stored in reverse order.
+   - For example, `[2, 4, 3]` represents the number `342`.
+
+2. **Desired Output:**
+   - A linked list representing the sum of the two numbers, also in reverse order.
+
+3. **Example Analysis:**
+   - **Example 1:**
+     - `l1 = [2, 4, 3]` (342)
+     - `l2 = [5, 6, 4]` (465)
+     - Sum: `342 + 465 = 807`
+     - Result: `[7, 0, 8]` (807 in reverse)
+
+### Approach
+
+1. **Initialize a Dummy Node:**
+   - Use a dummy node to simplify list operations. The result list will start from `dummy_head.next`.
+
+2. **Use Two Pointers:**
+   - Traverse through both linked lists simultaneously, summing corresponding digits and handling carry.
+
+3. **Handle Carry:**
+   - Maintain a carry variable to account for values greater than 9.
+
+4. **Handle Different Lengths:**
+   - If one list is longer, continue processing the remaining nodes, adding carry if needed.
+
+5. **Finish Up:**
+   - After traversing both lists, if there's any carry left, add a new node with this carry value.
+
+### Implementation in Java
+
+Here's the Java code for adding two numbers represented by linked lists:
+
+```java
+public class ListNode {
+    int val;
+    ListNode next;
+    ListNode() {}
+    ListNode(int val) { this.val = val; }
+    ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+}
+
+public class Solution {
+    public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
+        // Dummy node to serve as the starting point of the result list
+        ListNode dummyHead = new ListNode(0);
+        ListNode p = l1, q = l2, curr = dummyHead;
+        int carry = 0;
+        
+        while (p != null || q != null) {
+            // Get the values from the nodes or 0 if the node is null
+            int x = (p != null) ? p.val : 0;
+            int y = (q != null) ? q.val : 0;
+            
+            // Calculate the sum of the two digits and carry
+            int sum = x + y + carry;
+            carry = sum / 10; // Update carry for next iteration
+            curr.next = new ListNode(sum % 10); // Create a new node with the current digit
+            curr = curr.next; // Move to the next node
+            
+            // Move to the next nodes in the lists if available
+            if (p != null) p = p.next;
+            if (q != null) q = q.next;
+        }
+        
+        // If there is any carry left after processing all nodes, add a new node
+        if (carry > 0) {
+            curr.next = new ListNode(carry);
+        }
+        
+        return dummyHead.next; // Return the next node after the dummy head
+    }
+}
+```
+
+### Explanation of the Code
+
+1. **Initialize Nodes:**
+   - `dummyHead` is a placeholder to simplify list operations.
+   - `p` and `q` are pointers to traverse `l1` and `l2`.
+
+2. **Traverse Lists:**
+   - Use a `while` loop to process nodes from both lists until both are fully traversed.
+
+3. **Sum and Carry:**
+   - Calculate the sum and update the carry for the next digit.
+
+4. **Handle Remaining Carry:**
+   - After the loop, check if there's any carry left to be added to the result.
+
+5. **Return Result:**
+   - Return `dummyHead.next` to skip the dummy node and get the actual result list.
+
+This approach ensures that the addition operation handles different lengths of linked lists and correctly manages carries, providing the sum in the correct format.
 </details>
 
 <details>
 <summary><b>3. Longest Substring Without Repeating Characters</b></summary>
+Given a string s, find the length of the longest 
+substring
+ without repeating characters.
 
+ 
+
+Example 1:
+
+Input: s = "abcabcbb"
+Output: 3
+Explanation: The answer is "abc", with the length of 3.
+Example 2:
+
+Input: s = "bbbbb"
+Output: 1
+Explanation: The answer is "b", with the length of 1.
+Example 3:
+
+Input: s = "pwwkew"
+Output: 3
+Explanation: The answer is "wke", with the length of 3.
+Notice that the answer must be a substring, "pwke" is a subsequence and not a substring.
+ 
+
+Constraints:
+
+0 <= s.length <= 5 * 104
+s consists of English letters, digits, symbols and spaces.
+
+To find the length of the longest substring without repeating characters in a given string, you can use the **Sliding Window Technique** combined with a **HashSet**. This approach efficiently manages the window of characters to ensure that all characters within the window are unique.
+
+Here’s a step-by-step breakdown of the approach:
+
+### Approach
+
+1. **Initialize Two Pointers and a HashSet:**
+   - Use two pointers, `left` and `right`, to represent the current window of characters.
+   - Use a `HashSet` to track the characters within the window.
+
+2. **Expand the Window:**
+   - Move the `right` pointer to expand the window and add characters to the `HashSet`.
+
+3. **Handle Repeated Characters:**
+   - If a character is already in the `HashSet`, move the `left` pointer to shrink the window until the character is removed from the `HashSet`.
+
+4. **Update Maximum Length:**
+   - Continuously update the maximum length of the substring without repeating characters as you expand and shrink the window.
+
+5. **Edge Case Handling:**
+   - Handle edge cases such as an empty string by returning 0 or the length of the string directly.
+
+### Implementation in Java
+
+Here’s how you can implement this approach in Java:
+
+```java
+import java.util.HashSet;
+
+public class Solution {
+    public int lengthOfLongestSubstring(String s) {
+        // HashSet to store unique characters in the current window
+        HashSet<Character> set = new HashSet<>();
+        int left = 0; // Left pointer of the sliding window
+        int maxLength = 0; // To keep track of the maximum length
+        
+        // Iterate with the right pointer to expand the window
+        for (int right = 0; right < s.length(); right++) {
+            char currentChar = s.charAt(right);
+            
+            // If the character is already in the set, shrink the window from the left
+            while (set.contains(currentChar)) {
+                set.remove(s.charAt(left));
+                left++;
+            }
+            
+            // Add the current character to the set
+            set.add(currentChar);
+            
+            // Update the maximum length found so far
+            maxLength = Math.max(maxLength, right - left + 1);
+        }
+        
+        return maxLength;
+    }
+}
+```
+
+### Explanation of the Code
+
+1. **Initialization:**
+   - `HashSet<Character> set` keeps track of characters in the current window.
+   - `left` pointer starts at 0 and represents the start of the current window.
+   - `maxLength` tracks the length of the longest substring without repeating characters.
+
+2. **Iterating with `right` Pointer:**
+   - The `right` pointer expands the window by iterating through the string.
+   - For each character at `right`, check if it’s in the `HashSet`.
+   - If it is, remove characters from the `left` end until the duplicate character is removed from the `HashSet`.
+
+3. **Updating the Set and Length:**
+   - Add the current character to the `HashSet`.
+   - Update `maxLength` with the length of the current window (`right - left + 1`).
+
+4. **Return Result:**
+   - Return `maxLength` after the loop completes.
+
+### Time Complexity
+
+- **Time Complexity:** O(n), where `n` is the length of the string. Each character is added and removed from the `HashSet` at most once.
+- **Space Complexity:** O(min(n, m)), where `m` is the size of the character set. The space complexity is determined by the size of the `HashSet`, which can be up to the number of unique characters in the input string.
+
+This approach ensures that you efficiently find the longest substring without repeating characters in linear time.
   ```java
    public static int lengthOfLongestSubstring(String s) {
 
@@ -76,6 +316,32 @@ public static int[] twoSum(int[] nums, int target) {
 
 <details>
 <summary><b>4. Median of Two Sorted Arrays</b></summary>
+Given two sorted arrays nums1 and nums2 of size m and n respectively, return the median of the two sorted arrays.
+
+The overall run time complexity should be O(log (m+n)).
+
+ 
+
+Example 1:
+
+Input: nums1 = [1,3], nums2 = [2]
+Output: 2.00000
+Explanation: merged array = [1,2,3] and median is 2.
+Example 2:
+
+Input: nums1 = [1,2], nums2 = [3,4]
+Output: 2.50000
+Explanation: merged array = [1,2,3,4] and median is (2 + 3) / 2 = 2.5.
+ 
+
+Constraints:
+
+nums1.length == m
+nums2.length == n
+0 <= m <= 1000
+0 <= n <= 1000
+1 <= m + n <= 2000
+-106 <= nums1[i], nums2[i] <= 106
 
 ```java
 public static double findMedianSortedArrays(int[] nums1, int[] nums2) {
@@ -124,14 +390,352 @@ public static double findMedianSortedArrays(int[] nums1, int[] nums2) {
 
  }
 ```
+
+To find the median of two sorted arrays with an overall time complexity of O(log(m + n)), you need to use a more advanced algorithm than simply merging the arrays and finding the median. The ideal approach is to use a binary search algorithm to partition the arrays efficiently.
+
+### Approach
+
+The optimal approach involves using binary search to partition the two arrays such that the combined partition on the left side has the same number of elements as the partition on the right side, or one more element if the total number of elements is odd.
+
+Here's a step-by-step explanation:
+
+1. **Ensure the First Array is the Smaller One:**
+   - Swap the arrays if necessary so that `nums1` is always the smaller array. This simplifies the problem because we only need to perform binary search on the smaller array.
+
+2. **Binary Search Setup:**
+   - Perform binary search on the smaller array `nums1`.
+   - Define pointers `low` and `high` for binary search on `nums1`.
+
+3. **Partitioning:**
+   - Partition `nums1` at `i` and `nums2` at `j` such that the left side of the partitions contains `(i + j)` elements and the right side contains `(m - i + n - j)` elements.
+   - Ensure the partitions satisfy the condition: 
+     - `nums1[i - 1] <= nums2[j]`
+     - `nums2[j - 1] <= nums1[i]`
+
+4. **Calculate Median:**
+   - Once the correct partitions are found, calculate the median based on the elements at the boundaries of the partitions.
+
+### Implementation in Java
+
+Here is how you can implement this approach in Java:
+
+```java
+public class Solution {
+    public double findMedianSortedArrays(int[] nums1, int[] nums2) {
+        int m = nums1.length;
+        int n = nums2.length;
+
+        // Ensure nums1 is the smaller array
+        if (m > n) {
+            int[] temp = nums1;
+            nums1 = nums2;
+            nums2 = temp;
+            m = nums1.length;
+            n = nums2.length;
+        }
+
+        int low = 0;
+        int high = m;
+
+        while (low <= high) {
+            int i = (low + high) / 2;
+            int j = (m + n + 1) / 2 - i;
+
+            // Boundaries for nums1 and nums2
+            int nums1LeftMax = (i == 0) ? Integer.MIN_VALUE : nums1[i - 1];
+            int nums1RightMin = (i == m) ? Integer.MAX_VALUE : nums1[i];
+            int nums2LeftMax = (j == 0) ? Integer.MIN_VALUE : nums2[j - 1];
+            int nums2RightMin = (j == n) ? Integer.MAX_VALUE : nums2[j];
+
+            // Check if the partitions are correct
+            if (nums1LeftMax <= nums2RightMin && nums2LeftMax <= nums1RightMin) {
+                if ((m + n) % 2 == 0) {
+                    // Even length combined array
+                    return (Math.max(nums1LeftMax, nums2LeftMax) + Math.min(nums1RightMin, nums2RightMin)) / 2.0;
+                } else {
+                    // Odd length combined array
+                    return Math.max(nums1LeftMax, nums2LeftMax);
+                }
+            } else if (nums1LeftMax > nums2RightMin) {
+                // Need to move i to the left
+                high = i - 1;
+            } else {
+                // Need to move i to the right
+                low = i + 1;
+            }
+        }
+
+        throw new IllegalArgumentException("Input arrays are not sorted.");
+    }
+}
+```
+
+### Explanation
+
+1. **Binary Search on Smaller Array:**
+   - By always ensuring `nums1` is the smaller array, the binary search is performed on the smaller array, reducing complexity.
+
+2. **Partitioning:**
+   - `i` is the partition index for `nums1`.
+   - `j` is computed to balance the partition size between the two arrays such that the left half contains the same number of elements as the right half or one more if the total count is odd.
+
+3. **Edge Cases:**
+   - Handle boundaries when `i` or `j` is at the start or end of the arrays using `Integer.MIN_VALUE` and `Integer.MAX_VALUE`.
+
+4. **Median Calculation:**
+   - If the total length is even, the median is the average of the two middle values.
+   - If the total length is odd, the median is the maximum of the left partitions.
+
+### Complexity Analysis
+
+- **Time Complexity:** O(log(min(m, n))), where `m` and `n` are the lengths of the two arrays. This is because binary search is performed on the smaller array.
+- **Space Complexity:** O(1), as only a few variables are used for computation, and no extra space is required.
+
+This method is efficient and well-suited for large arrays, handling the median finding in logarithmic time with respect to the size of the smaller array.
 </details>
 
 <details>
 <summary><b>5. Longest Palindromic Substring</b></summary>
+Given a string s, return the longest 
+palindromic
+ 
+substring
+ in s.
+
+ 
+
+Example 1:
+
+Input: s = "babad"
+Output: "bab"
+Explanation: "aba" is also a valid answer.
+Example 2:
+
+Input: s = "cbbd"
+Output: "bb"
+ 
+
+Constraints:
+
+1 <= s.length <= 1000
+s consist of only digits and English letters.
+
+To find the longest palindromic substring in a given string `s`, you can use several approaches. Given the constraint that the length of `s` can be up to 1000, a time-efficient approach is important. Below are three common methods to solve this problem, with the recommended approach being the **Expand Around Center** method due to its simplicity and efficiency for the given constraint.
+
+### Methods to Solve the Problem
+
+1. **Expand Around Center**
+2. **Dynamic Programming**
+3. **Manacher's Algorithm**
+
+### 1. Expand Around Center
+
+This approach is both time-efficient and easy to implement. The idea is to consider each character and each pair of adjacent characters as the center of potential palindromes and expand around them to find the longest palindromic substring.
+
+#### Algorithm
+
+1. **Initialize Variables:**
+   - `start` and `end` to keep track of the start and end indices of the longest palindrome found.
+
+2. **Expand Around Center:**
+   - For each index in the string, consider it as the center and expand outward to find the longest palindrome centered at that index.
+   - Do this for both single characters and pairs of characters to account for odd and even length palindromes.
+
+3. **Update the Result:**
+   - Update `start` and `end` whenever a longer palindrome is found.
+
+#### Implementation in Java
+
+Here's the Java code implementing the Expand Around Center approach:
+
+```java
+public class Solution {
+    public String longestPalindrome(String s) {
+        if (s == null || s.length() < 1) {
+            return "";
+        }
+        
+        int start = 0;
+        int end = 0;
+        
+        for (int i = 0; i < s.length(); i++) {
+            int len1 = expandAroundCenter(s, i, i);   // Odd length palindromes
+            int len2 = expandAroundCenter(s, i, i + 1); // Even length palindromes
+            int len = Math.max(len1, len2);
+            
+            if (len > (end - start)) {
+                start = i - (len - 1) / 2;
+                end = i + len / 2;
+            }
+        }
+        
+        return s.substring(start, end + 1);
+    }
+    
+    private int expandAroundCenter(String s, int left, int right) {
+        while (left >= 0 && right < s.length() && s.charAt(left) == s.charAt(right)) {
+            left--;
+            right++;
+        }
+        return right - left - 1;
+    }
+}
+```
+
+### Explanation
+
+1. **Expand Around Center Function:**
+   - Given `left` and `right` indices, expand outward as long as the characters at these indices are the same.
+   - Return the length of the palindrome found.
+
+2. **Main Function:**
+   - Iterate over each character in the string and use it (or the pair of characters starting at it) as the center to find the longest palindrome.
+   - Update the `start` and `end` indices based on the length of the longest palindrome found.
+
+### 2. Dynamic Programming
+
+The Dynamic Programming approach involves creating a 2D table where `dp[i][j]` is `true` if the substring from index `i` to `j` is a palindrome. This method has a time complexity of O(n^2) and space complexity of O(n^2), which may be less efficient than the Expand Around Center approach for large strings.
+
+### 3. Manacher's Algorithm
+
+Manacher's Algorithm is a linear time complexity algorithm specifically designed for finding the longest palindromic substring. It is more complex to implement but achieves O(n) time complexity.
+
+### Conclusion
+
+For most practical purposes, especially given the constraints of up to 1000 characters, the **Expand Around Center** method strikes a good balance between simplicity and efficiency. It provides a straightforward O(n^2) time complexity solution with a space complexity of O(1), making it suitable for this problem size.
 </details>
 
 <details>
 <summary><b>6. Zigzag Conversion</b></summary>
+
+  The string "PAYPALISHIRING" is written in a zigzag pattern on a given number of rows like this: (you may want to display this pattern in a fixed font for better legibility)
+
+P   A   H   N
+A P L S I I G
+Y   I   R
+And then read line by line: "PAHNAPLSIIGYIR"
+
+Write the code that will take a string and make this conversion given a number of rows:
+
+string convert(string s, int numRows);
+ 
+
+Example 1:
+
+Input: s = "PAYPALISHIRING", numRows = 3
+Output: "PAHNAPLSIIGYIR"
+Example 2:
+
+Input: s = "PAYPALISHIRING", numRows = 4
+Output: "PINALSIGYAHRPI"
+Explanation:
+P     I    N
+A   L S  I G
+Y A   H R
+P     I
+Example 3:
+
+Input: s = "A", numRows = 1
+Output: "A"
+ 
+
+Constraints:
+
+1 <= s.length <= 1000
+s consists of English letters (lower-case and upper-case), ',' and '.'.
+1 <= numRows <= 1000
+
+To solve the problem of converting a string into a zigzag pattern and then reading it line by line, we need to simulate the zigzag traversal and then reconstruct the final string from the rows.
+
+Here's a step-by-step approach and the corresponding code:
+
+### Approach
+
+1. **Handle Special Cases:**
+   - If `numRows` is 1 or greater than or equal to the length of the string, the zigzag pattern is effectively a single row or the same as the original string.
+
+2. **Create Row Containers:**
+   - Use a list of strings (one for each row) to simulate the rows of the zigzag pattern.
+
+3. **Traverse the String in Zigzag Pattern:**
+   - Use a variable to keep track of the current row.
+   - Use a boolean flag to determine the direction of movement (down or up).
+
+4. **Fill Row Containers:**
+   - Append characters to the appropriate row based on the current direction of movement.
+
+5. **Combine Rows:**
+   - Concatenate all rows to get the final string in zigzag order.
+
+### Implementation in Java
+
+Here’s how you can implement this approach in Java:
+
+```java
+import java.util.ArrayList;
+import java.util.List;
+
+public class Solution {
+    public String convert(String s, int numRows) {
+        // Edge cases
+        if (numRows == 1 || numRows >= s.length()) {
+            return s;
+        }
+
+        // Create a list to hold strings for each row
+        List<StringBuilder> rows = new ArrayList<>();
+        for (int i = 0; i < Math.min(numRows, s.length()); i++) {
+            rows.add(new StringBuilder());
+        }
+
+        // Initialize variables
+        int currentRow = 0;
+        boolean goingDown = false;
+
+        // Traverse the string and fill the rows
+        for (char c : s.toCharArray()) {
+            rows.get(currentRow).append(c);
+            // Change direction if we are at the top or bottom row
+            if (currentRow == 0 || currentRow == numRows - 1) {
+                goingDown = !goingDown;
+            }
+            // Move up or down
+            currentRow += goingDown ? 1 : -1;
+        }
+
+        // Combine all rows into one string
+        StringBuilder result = new StringBuilder();
+        for (StringBuilder row : rows) {
+            result.append(row);
+        }
+
+        return result.toString();
+    }
+}
+```
+
+### Explanation
+
+1. **Special Cases Handling:**
+   - If `numRows` is 1, the zigzag pattern is simply the original string.
+   - If `numRows` is greater than or equal to the length of the string, each character would be in its row, so the result is also the original string.
+
+2. **Row Containers:**
+   - Use a `List<StringBuilder>` to store each row. The number of rows is `Math.min(numRows, s.length())` to avoid creating more rows than necessary.
+
+3. **Zigzag Traversal:**
+   - Iterate through each character of the string. Add the character to the appropriate row based on the current direction.
+   - Change direction at the topmost and bottommost rows.
+
+4. **Combine Rows:**
+   - After filling all rows, concatenate them to form the final string.
+
+### Time Complexity
+
+- **Time Complexity:** O(n), where `n` is the length of the string. Each character is processed once.
+- **Space Complexity:** O(n), as we use additional space for the row containers.
+
+This approach efficiently handles the conversion and ensures that the zigzag pattern is accurately simulated and reconstructed.
 </details>
 
 <details><summary><b>7. Reverse Integer</b></summary>
