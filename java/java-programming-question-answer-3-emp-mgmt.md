@@ -206,13 +206,13 @@ System.out.println(IntStream.range(0, 5).sum());
 ```
 10
 
-//Solving Real Time Queries Using Java 8 Features -Employee Management System
+### Solving Real Time Queries Using Java 8 Features -Employee Management System
 
-//Let’s try to solve some of the real time queries faced in the Employee Management System using Java 8 features.
+Let’s try to solve some of the real time queries faced in the Employee Management System using Java 8 features.
 
-//We will be using following Employee class and employeeList as example while solving the queries.
+We will be using following Employee class and employeeList as example while solving the queries.
 
-///1) Employee Class :
+### 1) Employee Class :
 
 ```java
 
@@ -293,7 +293,7 @@ class Employee
 
 ```
 
-//2) List Of Employees : employeeList
+### 2) List Of Employees : employeeList
 
 ```java
 
@@ -319,9 +319,9 @@ employeeList.add(new Employee(277, "Anuj Chettiar", 31, "Male", "Product Develop
 
 ```
 
-//3) Real Time Queries On employeeList
-//Solving Real Time Queries Using Java 8 Features - Employee Management System
-//Query 3.1 : How many male and female employees are there in the organization?
+## 3) Real Time Queries On employeeList
+Solving Real Time Queries Using Java 8 Features - Employee Management System
+### Query 3.1 : How many male and female employees are there in the organization?
 
 For queries such as above where you need to group the input elements, use the Collectors.groupingBy() method. In this query, we use Collectors.groupingBy() method which takes two arguments. We pass Employee::getGender as first argument which groups the input elements based on gender and Collectors.counting() as second argument which counts the number of entries in each group.
 
@@ -340,9 +340,9 @@ Output :
 
 ```
 
-//Query 3.2 : Print the name of all departments in the organization?
+### Query 3.2 : Print the name of all departments in the organization?
 
-//Use distinct() method after calling map(Employee::getDepartment) on the stream. It will return unique departments.
+Use distinct() method after calling map(Employee::getDepartment) on the stream. It will return unique departments.
 
 ```java
 
@@ -363,9 +363,9 @@ Account And Finance
 
 ```
 
-//Query 3.3 : What is the average age of male and female employees?
+### Query 3.3 : What is the average age of male and female employees?
 
-//Use same method as query 3.1 but pass Collectors.averagingInt(Employee::getAge) as the second argument to Collectors.groupingBy().
+Use same method as query 3.1 but pass Collectors.averagingInt(Employee::getAge) as the second argument to Collectors.groupingBy().
 
 ```java
 
@@ -379,9 +379,9 @@ Output :
 
 ```
 
-//Query 3.4 : Get the details of highest paid employee in the organization?
+### Query 3.4 : Get the details of highest paid employee in the organization?
 
-//Use Collectors.maxBy() method which returns maximum element wrapped in an Optional object based on supplied Comparator.
+Use Collectors.maxBy() method which returns maximum element wrapped in an Optional object based on supplied Comparator.
 
 ```java
 
@@ -423,9 +423,9 @@ Year Of Joining : 2012
 Salary : 35700.0
 ```
 
-//Query 3.5 : Get the names of all employees who have joined after 2015?
+### Query 3.5 : Get the names of all employees who have joined after 2015?
 
-//For such queries which require filtering of input elements, use Stream.filter() method which filters input elements according to supplied Predicate.
+For such queries which require filtering of input elements, use Stream.filter() method which filters input elements according to supplied Predicate.
 
 ```java
 
@@ -445,9 +445,9 @@ Ali Baig
 
 ```
 
-//Query 3.6 : Count the number of employees in each department?
+### Query 3.6 : Count the number of employees in each department?
 
-//This query is same as query 3.1 but here we are grouping the elements by department.
+This query is same as query 3.1 but here we are grouping the elements by department.
 
 ```java
 
@@ -472,9 +472,9 @@ HR : 2
 Account And Finance : 2
 ```
 
-//Query 3.7 : What is the average salary of each department?
+### Query 3.7 : What is the average salary of each department?
 
-//Use the same method as in the above query 3.6, but here pass Collectors.averagingDouble(Employee::getSalary) as second argument to Collectors.groupingBy() method.
+Use the same method as in the above query 3.6, but here pass Collectors.averagingDouble(Employee::getSalary) as second argument to Collectors.groupingBy() method.
 
 ```java
 
@@ -500,9 +500,9 @@ HR : 23850.0
 Account And Finance : 24150.0
 ```
 
-//Query 3.8 : Get the details of youngest male employee in the product development department?
+### Query 3.8 : Get the details of youngest male employee in the product development department?
 
-//For this query, use Stream.filter() method to filter male employees in product development department and to find youngest among them, use Stream.min() method.
+For this query, use Stream.filter() method to filter male employees in product development department and to find youngest among them, use Stream.min() method.
 
 ```java
 
@@ -540,9 +540,9 @@ Year Of Joinging : 2016
 Salary : 28200.0
 ```
 
-//Query 3.9 : Who has the most working experience in the organization?
+### Query 3.9 : Who has the most working experience in the organization?
 
-//For this query, sort employeeList by yearOfJoining in natural order and first employee will have most working experience in the organization. To solve this query, we will be using sorted() and findFirst() methods of Stream.
+For this query, sort employeeList by yearOfJoining in natural order and first employee will have most working experience in the organization. To solve this query, we will be using sorted() and findFirst() methods of Stream.
 
 ```java
 
@@ -584,9 +584,9 @@ Year Of Joinging : 2010
 Salary : 27000.0
 ```
 
-//Query 3.10 : How many male and female employees are there in the sales and marketing team?
+### Query 3.10 : How many male and female employees are there in the sales and marketing team?
 
-//This query is same as query 3.1, but here use filter() method to filter sales and marketing employees.
+This query is same as query 3.1, but here use filter() method to filter sales and marketing employees.
 
 ```java
 
@@ -604,9 +604,9 @@ Output :
 
 ```
 
-//Query 3.11 : What is the average salary of male and female employees?
+### Query 3.11 : What is the average salary of male and female employees?
 
-//This query is same as query 3.3 where you have found average age of male and female employees. Here, we will be finding average salary of male and female employees.
+This query is same as query 3.3 where you have found average age of male and female employees. Here, we will be finding average salary of male and female employees.
 
 ```java
 
@@ -621,9 +621,9 @@ Output :
 {Male=21300.090909090908, Female=20850.0}
 
 ```
-//Query 3.12 : List down the names of all employees in each department?
+### Query 3.12 : List down the names of all employees in each department?
 
-//For this query, we will be using Collectors.groupingBy() method by passing Employee::getDepartment as an argument.
+For this query, we will be using Collectors.groupingBy() method by passing Employee::getDepartment as an argument.
 
 ```java
 
@@ -689,9 +689,9 @@ Jyothi Reddy
 
 ```
 
-//Query 3.13 : What is the average salary and total salary of the whole organization?
+### Query 3.13 : What is the average salary and total salary of the whole organization?
 
-//For this query, we use Collectors.summarizingDouble() on Employee::getSalary which will return statistics of the employee salary like max, min, average and total.
+For this query, we use Collectors.summarizingDouble() on Employee::getSalary which will return statistics of the employee salary like max, min, average and total.
 
 ```java
 
@@ -712,9 +712,9 @@ Total Salary = 359401.0
 
 ```
 
-//Query 3.14 : Separate the employees who are younger or equal to 25 years from those employees who are older than 25 years.
+### Query 3.14 : Separate the employees who are younger or equal to 25 years from those employees who are older than 25 years.
 
-//For this query, we will be using Collectors.partitioningBy() method which separates input elements based on supplied Predicate.
+For this query, we will be using Collectors.partitioningBy() method which separates input elements based on supplied Predicate.
 
 ```java
 
@@ -774,7 +774,7 @@ Sanvi Pandey
 Anuj Chettiar
 
 ```
-//Query 3.15 : Who is the oldest employee in the organization? What is his age and which department he belongs to?
+### Query 3.15 : Who is the oldest employee in the organization? What is his age and which department he belongs to?
 
 ```java
 
