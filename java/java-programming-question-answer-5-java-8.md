@@ -1053,3 +1053,58 @@ public class Example {
 ### Summary
 
 The `List.of(E... elements)` method is a convenient and efficient way to create immutable lists in Java 9 and later. It ensures immutability and disallows `null` values, providing a straightforward API for list creation.
+
+Your Java code snippet correctly demonstrates how to use the `List.of()` method to create an immutable list and handle its immutability. Here’s a quick overview of what each part does:
+
+### Code Breakdown
+
+```java
+import java.util.List;
+import static java.util.List.of;
+
+public class Example {
+    public static void main(String[] args) {
+        // Creating an immutable list using List.of()
+        List<Integer> list = of(1, 2, 3);
+        
+        // Printing the list elements
+        list.forEach(System.out::println); // Output: 1 2 3
+        
+        // Attempting to modify the list will result in UnsupportedOperationException
+        // list.add(4); // Throws UnsupportedOperationException
+        // list.remove(1); // Throws UnsupportedOperationException
+    }
+}
+```
+
+### Explanation
+
+1. **Imports and Static Import**:
+   - `import java.util.List;`: Imports the `List` interface.
+   - `import static java.util.List.of;`: Allows you to use the `of` method directly without qualifying it with `List.`.
+
+2. **Creating the Immutable List**:
+   - `List<Integer> list = of(1, 2, 3);`: Creates an immutable list with the elements `1`, `2`, and `3`. This is done using the `List.of()` method from Java 9 and later.
+
+3. **Printing the List Elements**:
+   - `list.forEach(System.out::println);`: Iterates over the elements of the list and prints each one. The output will be:
+     ```
+     1
+     2
+     3
+     ```
+
+4. **Attempting to Modify the List**:
+   - The comments indicate that modifying the list (e.g., `list.add(4);` or `list.remove(1);`) will throw an `UnsupportedOperationException`. This is because the list created by `List.of()` is immutable.
+
+### Additional Notes
+
+- **Immutability**: The `List.of()` method returns an immutable list. This means:
+  - You cannot add, remove, or update elements in this list.
+  - Any attempt to modify the list will result in an `UnsupportedOperationException`.
+
+- **Null Values**: If you attempt to create a list with `null` values, like `List.of(1, null, 3)`, a `NullPointerException` will be thrown.
+
+- **Usage Context**: This method is ideal when you need to create a simple, fixed-size, immutable list, such as when defining constants or parameters that should not change.
+
+Your example code is well-written and correctly demonstrates how to use `List.of()` in a Java 9+ environment. If you have any further questions or need more examples, feel free to ask!
