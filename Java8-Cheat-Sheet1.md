@@ -561,9 +561,7 @@ Sure! Here's a comprehensive overview of concurrency utilities in Java, focusing
 
 **Description:** A synchronization aid that allows a set of threads to all wait for each other to reach a common barrier point.
 
-| **Method**                   
-
- | **Description**                                                                 | **Example**                                                                                             |
+| **Method**               | **Description**                                                                 | **Example**    |
 |-------------------------------|---------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------|
 | `int await() throws InterruptedException, BrokenBarrierException` | Causes the current thread to wait until all parties have invoked await on this barrier. | `CyclicBarrier barrier = new CyclicBarrier(3); barrier.await(); // waits until 3 threads have called await` |
 | `int getParties()`            | Returns the number of parties currently required to trip this barrier.           | `CyclicBarrier barrier = new CyclicBarrier(3); int parties = barrier.getParties(); // returns 3`      |
