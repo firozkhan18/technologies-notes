@@ -476,3 +476,99 @@ Certainly! Here’s a detailed summary of some of the most commonly used interfa
 ### **Summary**
 
 This table provides an overview of the primary interfaces and classes in the Java Collection Framework, including `Collection`, `List`, `Set`, `Queue`, and `Map`. Each method is described along with an example to illustrate its use. This should help in understanding the functionality and usage of these core collection classes and interfaces.
+
+Sure! Here's a comprehensive overview of concurrency utilities in Java, focusing on concurrent collections and key classes from the `java.util.concurrent` package.
+
+### **Concurrent Utilities in Java**
+
+#### **1. ConcurrentHashMap**
+
+**Description:** A thread-safe map implementation that allows concurrent read and write operations. It is part of the `java.util.concurrent` package.
+
+| **Method**                      | **Description**                                                                 | **Example**                                                                                             |
+|---------------------------------|---------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------|
+| `V get(Object key)`              | Returns the value associated with the specified key.                            | `ConcurrentHashMap<String, Integer> map = new ConcurrentHashMap<>(); map.put("a", 1); Integer value = map.get("a"); // returns 1` |
+| `V put(K key, V value)`          | Associates the specified value with the specified key in the map.                | `ConcurrentHashMap<String, Integer> map = new ConcurrentHashMap<>(); map.put("a", 1); // map contains {a=1}` |
+| `V remove(Object key)`           | Removes the mapping for a key from the map if present.                          | `ConcurrentHashMap<String, Integer> map = new ConcurrentHashMap<>(Map.of("a", 1)); map.remove("a"); // map is empty` |
+| `boolean containsKey(Object key)`| Returns `true` if the map contains a mapping for the specified key.              | `ConcurrentHashMap<String, Integer> map = new ConcurrentHashMap<>(Map.of("a", 1)); boolean contains = map.containsKey("a"); // returns true` |
+| `boolean containsValue(Object value)` | Returns `true` if the map maps one or more keys to the specified value.      | `ConcurrentHashMap<String, Integer> map = new ConcurrentHashMap<>(Map.of("a", 1)); boolean contains = map.containsValue(1); // returns true` |
+| `Set<K> keySet()`               | Returns a `Set` view of the keys contained in the map.                            | `ConcurrentHashMap<String, Integer> map = new ConcurrentHashMap<>(Map.of("a", 1)); Set<String> keys = map.keySet(); // keys contains ["a"]` |
+| `Collection<V> values()`        | Returns a `Collection` view of the values contained in the map.                  | `ConcurrentHashMap<String, Integer> map = new ConcurrentHashMap<>(Map.of("a", 1)); Collection<Integer> values = map.values(); // values contains [1]` |
+| `Set<Map.Entry<K, V>> entrySet()`| Returns a `Set` view of the mappings contained in the map.                       | `ConcurrentHashMap<String, Integer> map = new ConcurrentHashMap<>(Map.of("a", 1)); Set<Map.Entry<String, Integer>> entries = map.entrySet(); // entries contains [{a=1}]` |
+
+#### **2. ConcurrentLinkedQueue**
+
+**Description:** A thread-safe queue based on a linked-node structure, part of the `java.util.concurrent` package.
+
+| **Method**                     | **Description**                                                                  | **Example**                                                                                             |
+|--------------------------------|----------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------|
+| `boolean offer(E e)`           | Inserts the specified element into the queue if possible.                        | `ConcurrentLinkedQueue<String> queue = new ConcurrentLinkedQueue<>(); queue.offer("a"); // queue contains ["a"]` |
+| `E poll()`                     | Retrieves and removes the head of the queue, or returns `null` if the queue is empty. | `ConcurrentLinkedQueue<String> queue = new ConcurrentLinkedQueue<>(Arrays.asList("a", "b")); String head = queue.poll(); // head is "a", queue contains ["b"]` |
+| `E peek()`                     | Retrieves, but does not remove, the head of the queue, or returns `null` if the queue is empty. | `ConcurrentLinkedQueue<String> queue = new ConcurrentLinkedQueue<>(Arrays.asList("a", "b")); String head = queue.peek(); // head is "a", queue contains ["a", "b"]` |
+
+#### **3. CopyOnWriteArrayList**
+
+**Description:** A thread-safe variant of `ArrayList` that is optimized for cases where traversals are more frequent than mutations.
+
+| **Method**                     | **Description**                                                                    | **Example**                                                                                             |
+|--------------------------------|------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------|
+| `boolean add(E e)`             | Appends the specified element to the end of the list.                              | `CopyOnWriteArrayList<String> list = new CopyOnWriteArrayList<>(); list.add("a"); // list contains ["a"]` |
+| `E get(int index)`             | Returns the element at the specified position in the list.                         | `CopyOnWriteArrayList<String> list = new CopyOnWriteArrayList<>(Arrays.asList("a", "b", "c")); String element = list.get(1); // returns "b"` |
+| `boolean remove(Object o)`     | Removes the first occurrence of the specified element from the list.               | `CopyOnWriteArrayList<String> list = new CopyOnWriteArrayList<>(Arrays.asList("a", "b")); list.remove("a"); // list contains ["b"]` |
+| `int size()`                   | Returns the number of elements in the list.                                        | `CopyOnWriteArrayList<String> list = new CopyOnWriteArrayList<>(Arrays.asList("a", "b", "c")); int size = list.size(); // returns 3` |
+
+#### **4. BlockingQueue Interface**
+
+**Description:** An interface for thread-safe queues that support operations that wait for the queue to become non-empty when retrieving an element and wait for space to become available in the queue when storing an element.
+
+| **Method**                      | **Description**                                                                 | **Example**                                                                                             |
+|---------------------------------|---------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------|
+| `boolean offer(E e)`            | Inserts the specified element into the queue if possible.                        | `BlockingQueue<String> queue = new LinkedBlockingQueue<>(); queue.offer("a"); // queue contains ["a"]` |
+| `E poll()`                      | Retrieves and removes the head of the queue, or returns `null` if the queue is empty. | `BlockingQueue<String> queue = new LinkedBlockingQueue<>(Arrays.asList("a", "b")); String head = queue.poll(); // head is "a", queue contains ["b"]` |
+| `E take()`                      | Retrieves and removes the head of the queue, waiting if necessary until an element becomes available. | `BlockingQueue<String> queue = new LinkedBlockingQueue<>(); String head = queue.take(); // waits until an element is available` |
+
+#### **5. ExecutorService Interface**
+
+**Description:** An interface that provides methods for managing and controlling a pool of threads.
+
+| **Method**                       | **Description**                                                                 | **Example**                                                                                             |
+|----------------------------------|---------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------|
+| `void shutdown()`                | Initiates an orderly shutdown in which previously submitted tasks are executed, but no new tasks will be accepted. | `ExecutorService executor = Executors.newFixedThreadPool(2); executor.shutdown();`                     |
+| `List<Runnable> shutdownNow()`   | Attempts to stop all actively executing tasks, halts the processing of waiting tasks, and returns a list of the tasks that were waiting to be executed. | `ExecutorService executor = Executors.newFixedThreadPool(2); List<Runnable> waitingTasks = executor.shutdownNow();` |
+| `Future<T> submit(Callable<T> task)` | Submits a callable task for execution and returns a Future representing the pending results of the task. | `ExecutorService executor = Executors.newFixedThreadPool(2); Future<Integer> future = executor.submit(() -> 1 + 1);` |
+
+#### **6. Semaphore**
+
+**Description:** A counting semaphore for controlling access to a resource by multiple threads.
+
+| **Method**                      | **Description**                                                                   | **Example**                                                                                             |
+|---------------------------------|-----------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------|
+| `int availablePermits()`        | Returns the number of available permits.                                          | `Semaphore semaphore = new Semaphore(3); int available = semaphore.availablePermits(); // returns 3` |
+| `void acquire() throws InterruptedException` | Acquires a permit, blocking if necessary until one is available.                | `Semaphore semaphore = new Semaphore(1); semaphore.acquire(); // acquires one permit`                  |
+| `void release()`                | Releases a permit, increasing the number of available permits.                    | `Semaphore semaphore = new Semaphore(1); semaphore.release(); // releases one permit`                   |
+
+#### **7. CountDownLatch**
+
+**Description:** A synchronization aid that allows one or more threads to wait until a set of operations being performed in other threads completes.
+
+| **Method**                     | **Description**                                                                   | **Example**                                                                                             |
+|--------------------------------|-----------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------|
+| `void await() throws InterruptedException` | Causes the current thread to wait until the latch has counted down to zero.     | `CountDownLatch latch = new CountDownLatch(3); latch.await(); // waits until latch count is 0`        |
+| `void countDown()`             | Decrements the count of the latch, releasing all waiting threads if the count reaches zero. | `CountDownLatch latch = new CountDownLatch(3); latch.countDown(); // decreases the latch count`         |
+| `long getCount()`              | Returns the current count.                                                        | `CountDownLatch latch = new CountDownLatch(3); long count = latch.getCount(); // returns 3`            |
+
+#### **8. CyclicBarrier**
+
+**Description:** A synchronization aid that allows a set of threads to all wait for each other to reach a common barrier point.
+
+| **Method**                   
+
+ | **Description**                                                                 | **Example**                                                                                             |
+|-------------------------------|---------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------|
+| `int await() throws InterruptedException, BrokenBarrierException` | Causes the current thread to wait until all parties have invoked await on this barrier. | `CyclicBarrier barrier = new CyclicBarrier(3); barrier.await(); // waits until 3 threads have called await` |
+| `int getParties()`            | Returns the number of parties currently required to trip this barrier.           | `CyclicBarrier barrier = new CyclicBarrier(3); int parties = barrier.getParties(); // returns 3`      |
+| `boolean isBroken()`          | Returns `true` if the barrier is in a broken state.                             | `CyclicBarrier barrier = new CyclicBarrier(3); boolean broken = barrier.isBroken(); // returns false` |
+
+### **Summary**
+
+This table outlines various classes and interfaces in the `java.util.concurrent` package, which provide essential concurrency utilities for Java applications. These include thread-safe collections like `ConcurrentHashMap` and `ConcurrentLinkedQueue`, synchronization aids such as `Semaphore`, `CountDownLatch`, and `CyclicBarrier`, and other tools for managing concurrent tasks like `ExecutorService`. Each method is described with an example to illustrate its usage in concurrent programming scenarios.
