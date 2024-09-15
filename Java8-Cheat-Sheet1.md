@@ -389,9 +389,7 @@ Sure! Here's a detailed overview of the Java Collection Framework, including key
 | **Method**                     | **Description**                                                                        | **Example**                                                                                              |
 |--------------------------------|----------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------|
 | `HashMap<K, V>()`               | Constructs an empty HashMap with the default initial capacity and load factor.         | `Map<String, Integer> map = new HashMap<>();`                                                             |
-| `HashMap<K, V>(Map<? extends K, ? extends V> m)` | Constructs a HashMap with the same mappings as the specified map.                   | `Map<String, Integer> map = new HashMap<>(Map.of("a", 1, "b",
-
- 2));`                                     |
+| `HashMap<K, V>(Map<? extends K, ? extends V> m)` | Constructs a HashMap with the same mappings as the specified map.                   | `Map<String, Integer> map = new HashMap<>(Map.of("a", 1, "b", 2));`                                     |
 | `boolean containsKey(Object key)` | Returns `true` if the map contains a mapping for the specified key.                 | `Map<String, Integer> map = new HashMap<>(Map.of("a", 1)); boolean contains = map.containsKey("a"); // returns true` |
 | `boolean containsValue(Object value)` | Returns `true` if the map maps one or more keys to the specified value.            | `Map<String, Integer> map = new HashMap<>(Map.of("a", 1)); boolean contains = map.containsValue(1); // returns true` |
 
