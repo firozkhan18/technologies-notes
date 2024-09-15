@@ -1108,3 +1108,157 @@ public class Example {
 - **Usage Context**: This method is ideal when you need to create a simple, fixed-size, immutable list, such as when defining constants or parameters that should not change.
 
 Your example code is well-written and correctly demonstrates how to use `List.of()` in a Java 9+ environment. If you have any further questions or need more examples, feel free to ask!
+
+Here’s a detailed comparison of `Stream.of()`, `IntStream.of()`, `List.of()`, and `Arrays.asList()` methods, including how they behave with `String` and `Character` arrays:
+
+### `Stream.of()`, `IntStream.of()`, `List.of()`, and `Arrays.asList()`
+
+1. **`Stream.of(1, 2, 3)`**
+   - **Purpose**: Creates a `Stream` of integers.
+   - **Usage**: Useful for performing functional-style operations (e.g., filtering, mapping) on sequences of elements.
+   - **Characteristics**:
+     - **Stream**: Represents a sequence of elements that can be processed in parallel or sequentially.
+     - **Operations**: Supports stream operations such as `map`, `filter`, `reduce`, etc.
+     - **Immutability**: Streams are not immutable; they do not modify the underlying data but create new results based on operations.
+
+   ```java
+   import java.util.stream.Stream;
+
+   public class Example {
+       public static void main(String[] args) {
+           Stream<Integer> stream = Stream.of(1, 2, 3);
+           stream.forEach(System.out::println); // Output: 1 2 3
+       }
+   }
+   ```
+
+2. **`IntStream.of(1, 2, 3)`**
+   - **Purpose**: Creates an `IntStream` of primitive `int` values.
+   - **Usage**: For numeric operations without boxing overhead.
+   - **Characteristics**:
+     - **IntStream**: A specialized stream for primitive `int` values.
+     - **Operations**: Supports operations similar to `Stream`, but optimized for primitive types.
+     - **Performance**: More efficient for numeric operations due to avoiding boxing/unboxing.
+
+   ```java
+   import java.util.stream.IntStream;
+
+   public class Example {
+       public static void main(String[] args) {
+           IntStream intStream = IntStream.of(1, 2, 3);
+           intStream.forEach(System.out::println); // Output: 1 2 3
+       }
+   }
+   ```
+
+3. **`List.of(1, 2, 3)`**
+   - **Purpose**: Creates an immutable `List` containing the specified elements.
+   - **Usage**: Ideal for creating fixed-size, immutable lists.
+   - **Characteristics**:
+     - **List**: Represents a collection of elements that can be accessed by index.
+     - **Immutability**: The list cannot be modified after creation (e.g., no add/remove operations).
+     - **Null Handling**: Does not accept `null` values.
+
+   ```java
+   import java.util.List;
+
+   public class Example {
+       public static void main(String[] args) {
+           List<Integer> list = List.of(1, 2, 3);
+           list.forEach(System.out::println); // Output: 1 2 3
+       }
+   }
+   ```
+
+4. **`Arrays.asList(1, 2, 3)`**
+   - **Purpose**: Creates a fixed-size `List` backed by an array.
+   - **Usage**: Converts arrays to lists or creates lists from varargs.
+   - **Characteristics**:
+     - **List**: Backed by the original array; modifications to the list affect the array and vice versa.
+     - **Fixed-size**: You cannot change the size of the list (e.g., no add/remove operations), but you can modify the elements.
+     - **Null Handling**: Accepts `null` values.
+
+   ```java
+   import java.util.Arrays;
+   import java.util.List;
+
+   public class Example {
+       public static void main(String[] args) {
+           List<Integer> list = Arrays.asList(1, 2, 3);
+           list.forEach(System.out::println); // Output: 1 2 3
+       }
+   }
+   ```
+
+### Handling `String` and `Character` Arrays
+
+1. **`Stream.of("a", "b", "c")`**
+   - **Purpose**: Creates a `Stream` of `String` values.
+   - **Usage**: For functional-style operations on sequences of `String` elements.
+
+   ```java
+   import java.util.stream.Stream;
+
+   public class Example {
+       public static void main(String[] args) {
+           Stream<String> stream = Stream.of("a", "b", "c");
+           stream.forEach(System.out::println); // Output: a b c
+       }
+   }
+   ```
+
+2. **`IntStream.of('a', 'b', 'c')`**
+   - **Purpose**: Creates an `IntStream` of ASCII values (converted from `char` to `int`).
+   - **Usage**: For numeric operations on character codes.
+   - **Characteristics**: Characters are automatically converted to their integer ASCII values.
+
+   ```java
+   import java.util.stream.IntStream;
+
+   public class Example {
+       public static void main(String[] args) {
+           IntStream intStream = IntStream.of('a', 'b', 'c');
+           intStream.forEach(c -> System.out.println((char) c)); // Output: a b c
+       }
+   }
+   ```
+
+3. **`List.of("a", "b", "c")`**
+   - **Purpose**: Creates an immutable `List` of `String` elements.
+   - **Usage**: Creates an immutable list with `String` elements.
+
+   ```java
+   import java.util.List;
+
+   public class Example {
+       public static void main(String[] args) {
+           List<String> list = List.of("a", "b", "c");
+           list.forEach(System.out::println); // Output: a b c
+       }
+   }
+   ```
+
+4. **`Arrays.asList("a", "b", "c")`**
+   - **Purpose**: Creates a fixed-size `List` backed by an array of `String` elements.
+   - **Usage**: Converts a `String` array to a list or creates a list from varargs.
+
+   ```java
+   import java.util.Arrays;
+   import java.util.List;
+
+   public class Example {
+       public static void main(String[] args) {
+           List<String> list = Arrays.asList("a", "b", "c");
+           list.forEach(System.out::println); // Output: a b c
+       }
+   }
+   ```
+
+### Summary
+
+- **Stream.of()**: Creates a `Stream` for functional operations.
+- **IntStream.of()**: Creates an `IntStream` for primitive `int` values, suitable for numeric operations.
+- **List.of()**: Creates an immutable `List`.
+- **Arrays.asList()**: Creates a fixed-size `List` backed by an array.
+
+For `String` and `Character` arrays, the usage of these methods is similar, but be mindful of how `IntStream` interprets `char` values (as integer ASCII values).
