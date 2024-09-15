@@ -241,9 +241,7 @@ Certainly! Here's a detailed table for `Comparator` and `Collectors` interfaces,
 | `static <T> Collector<T, ?, IntSummaryStatistics> summarizingInt(ToIntFunction<? super T> mapper)` | Returns a `Collector` that summarizes the elements of the stream using a `ToIntFunction`.                | `IntSummaryStatistics stats = Stream.of("a", "bb", "ccc").collect(Collectors.summarizingInt(String::length)); // returns IntSummaryStatistics{count=3, sum=6, min=1, average=2.0, max=3}` |
 | `static <T> Collector<T, ?, LongSummaryStatistics> summarizingLong(ToLongFunction<? super T> mapper)` | Returns a `Collector` that summarizes the elements of the stream using a `ToLongFunction`.               | `LongSummaryStatistics stats = Stream.of("a", "bb", "ccc").collect(Collectors.summarizingLong(String::length)); // returns LongSummaryStatistics{count=3, sum=6, min=1, average=2, max=3}` |
 | `static Collector<CharSequence, ?, String> mapping(Function<? super T, ? extends R> mapper, Collector<? super R, A, D> downstream)` | Returns a `Collector` that applies a mapping function and then collects the results using another collector. | `List<String> result = Stream.of("a", "bb", "ccc").collect(Collectors.mapping(String::toUpperCase, Collectors.toList())); // returns [A, BB, CCC]` |
-| `static <T> Collector<T, ?, Map<K
-
-, List<T>>> toMap(Function<? super T, ? extends K> keyMapper, Function<? super T, ? extends V> valueMapper)` | Returns a `Collector` that accumulates elements into a `Map` using provided key and value mappers.       | `Map<Integer, String> map = Stream.of("apple", "banana", "cherry").collect(Collectors.toMap(String::length, Function.identity())); // returns {5=apple, 6=banana, 6=cherry}` |
+| `static <T> Collector<T, ?, Map<K, List<T>>> toMap(Function<? super T, ? extends K> keyMapper, Function<? super T, ? extends V> valueMapper)` | Returns a `Collector` that accumulates elements into a `Map` using provided key and value mappers.       | `Map<Integer, String> map = Stream.of("apple", "banana", "cherry").collect(Collectors.toMap(String::length, Function.identity())); // returns {5=apple, 6=banana, 6=cherry}` |
 
 ### **Summary**
 
