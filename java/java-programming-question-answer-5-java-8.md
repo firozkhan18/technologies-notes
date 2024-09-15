@@ -765,8 +765,6 @@ public class Sample {
         System.out.println(evenAddOddSeparation);
     }
 }
-```
-```java
 
 public static void findMissingNumber() {
     	
