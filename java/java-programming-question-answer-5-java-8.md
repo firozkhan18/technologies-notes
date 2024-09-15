@@ -775,9 +775,8 @@ public class Sample {
 
         System.out.println(evenAddOddSeparation);
     }
-}
 
-public static void findMissingNumber() {
+   public static void findMissingNumber() {
     	
     	int[] arr = {1, 2, 4, 5, 6}; // Example array with one number missing
     	
@@ -792,7 +791,7 @@ public static void findMissingNumber() {
         System.out.println("Missing numbers: " + (expectedSum - actualSum));
     }
     
-    public static void findMissingNumberXor() {
+   public static void findMissingNumberXor() {
     	
     	int[] arr = {1, 2, 4, 5, 6}; // Example array with one number missing
     	 
@@ -810,7 +809,7 @@ public static void findMissingNumber() {
         System.out.println("Missing numbers: " + (xorAll ^ xorArr));
     }
     
-    public static void findMissingNumberSet() {
+   public static void findMissingNumberSet() {
     	
     	int[] arr = {1, 2, 4, 5, 6}; // Example array with one number missing
     	
@@ -829,7 +828,7 @@ public static void findMissingNumber() {
         System.out.println("Missing numbers: " + numSet.iterator().next());
     }
     
-    private static void findMissingNumberFromArrayUsingIntStream() {
+   private static void findMissingNumberFromArrayUsingIntStream() {
     	
     	int[] arry= { 1, 3, 5, 7, 9, 6, 8, 10 };
 
@@ -853,7 +852,7 @@ public static void findMissingNumber() {
 		System.out.println("Missing numbers: " + missingNumbers);		
 	}
 
-    public static void findMissingNumberStream() {
+   public static void findMissingNumberStream() {
     	
     	int[] arr = {1, 2, 4, 5, 6}; // Example array with one number missing
     	  
@@ -864,7 +863,7 @@ public static void findMissingNumber() {
         System.out.println("Missing numbers: " + (expectedSum - actualSum));
     }
     
-    public static void findMissingNumberXorStream() {
+   public static void findMissingNumberXorStream() {
     	
     	int[] arr = {1, 2, 4, 5, 6}; // Example array with one number missing
     	  
@@ -875,7 +874,7 @@ public static void findMissingNumber() {
         System.out.println("Missing numbers: " + (xorAll ^ xorArr));
     }
     
-    public static void findMissingNumberSetStream() {
+   public static void findMissingNumberSetStream() {
     	
     	int[] arr = {1, 2, 4, 5, 6}; // Example array with one number missing
     	
@@ -888,5 +887,5 @@ public static void findMissingNumber() {
         
         System.out.println("Missing numbers: " + numSet.iterator().next());
     }
-
+}
 ```
