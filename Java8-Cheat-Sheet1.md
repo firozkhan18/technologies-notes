@@ -466,9 +466,7 @@ Certainly! Here’s a detailed summary of some of the most commonly used interfa
 
 | **Method**                       | **Description**                                                                                         | **Example**                                                                                         |
 |----------------------------------|---------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------|
-| `V get(Object key)`              | Returns the value associated with the specified key.
-
-                                                    | `Map<String, Integer> map = new HashMap<>(); map.put("a", 1); Integer value = map.get("a"); // returns 1` |
+| `V get(Object key)`              | Returns the value associated with the specified key.                                                    | `Map<String, Integer> map = new HashMap<>(); map.put("a", 1); Integer value = map.get("a"); // returns 1` |
 | `V put(K key, V value)`          | Associates the specified value with the specified key in the map.                                       | `Map<String, Integer> map = new HashMap<>(); map.put("a", 1); // map contains {a=1}`                |
 | `V remove(Object key)`           | Removes the mapping for a key from the map if present.                                                  | `Map<String, Integer> map = new HashMap<>(Map.of("a", 1, "b", 2)); map.remove("a"); // map contains {b=2}` |
 | `boolean containsKey(Object key)` | Returns `true` if the map contains a mapping for the specified key.                                    | `Map<String, Integer> map = new HashMap<>(Map.of("a", 1)); boolean contains = map.containsKey("a"); // returns true` |
