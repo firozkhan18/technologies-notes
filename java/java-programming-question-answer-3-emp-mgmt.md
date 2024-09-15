@@ -1126,38 +1126,32 @@ public class EmployeeMgmt {
 		System.out.println("Another Approach ==================================");
 
 		// Partitioning employees by age
-		employeeList.stream().collect(Collectors.partitioningBy(e -> e.getAge() > 25)).forEach((isOlder, employees) -> { // Printing
-																															// partitioned
-																															// and
-																															// sorted
-																															// employee
-																															// lists
+		employeeList.stream().collect(Collectors.partitioningBy(e -> e.getAge() > 25)).forEach((isOlder, employees) -> {
+                // Printing partitioned and sorted employee lists
 			System.out.println("----------------------------");
-
 			if (isOlder) {
 				System.out.println("Employees older than 25 years:");
 			} else {
 				System.out.println("Employees 25 years old or younger:");
 			}
-
 			System.out.println("----------------------------");
 
 			// Sorting employees by name
 			employees.stream().sorted((e1, e2) -> e1.getName().compareToIgnoreCase(e2.getName()))
 					.forEach(e -> System.out.println(e.getName()));
 
-//	            employees.stream()
-//		            .sorted(Comparator.comparing(EmployeeNew::getName)) // Optional sorting by name
-//					.forEach(e -> System.out.println(e.getName()));
-		});
+	               //employees.stream()
+		       //     .sorted(Comparator.comparing(EmployeeNew::getName)) // Optional sorting by name
+		       //		.forEach(e -> System.out.println(e.getName()));
+		       });
 
 		// Query 15 : Who is the oldest employee in the organization? What is his age
 		// and which department he belongs to?
 
-//         Optional<EmployeeNew> oldestEmployeeWrapper = employeeList.stream()
-//        		 .max(Comparator.comparingInt(EmployeeNew::getAge));
-//                  
-//         EmployeeNew oldestEmployee = oldestEmployeeWrapper.get();      
+                //Optional<EmployeeNew> oldestEmployeeWrapper = employeeList.stream()
+          	//	 .max(Comparator.comparingInt(EmployeeNew::getAge));
+                //    
+                //EmployeeNew oldestEmployee = oldestEmployeeWrapper.get();
 
 		EmployeeNew oldestEmployee = employeeList.stream().max(Comparator.comparingInt(EmployeeNew::getAge)).get();
 
