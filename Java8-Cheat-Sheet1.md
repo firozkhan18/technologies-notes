@@ -246,3 +246,237 @@ Certainly! Here's a detailed table for `Comparator` and `Collectors` interfaces,
 ### **Summary**
 
 This table provides a comprehensive overview of the `Comparator` and `Collectors` interfaces in Java. `Comparator` is used for comparing objects, while `Collectors` is used to aggregate data from streams into various types of collections or other forms of summary statistics. Each method comes with a brief description and an example to illustrate its usage.
+
+
+Sure! Here's a detailed overview of the Java Collection Framework, including key interfaces and classes, along with their primary methods and examples.
+
+### **Collection Framework Overview**
+
+#### **1. Collection Interface**
+
+**Description:** The root interface of the Java Collection Framework. It is the parent of other collection interfaces such as `List`, `Set`, and `Queue`.
+
+| **Method**                     | **Description**                                                              | **Example**                                                                                      |
+|--------------------------------|------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------|
+| `int size()`                   | Returns the number of elements in the collection.                              | `Collection<String> coll = Arrays.asList("a", "b", "c"); int size = coll.size(); // returns 3` |
+| `boolean isEmpty()`            | Returns `true` if the collection is empty.                                     | `Collection<String> coll = Arrays.asList(); boolean empty = coll.isEmpty(); // returns true`    |
+| `boolean contains(Object o)`   | Returns `true` if the collection contains the specified element.                | `Collection<String> coll = Arrays.asList("a", "b", "c"); boolean contains = coll.contains("b"); // returns true` |
+| `Iterator<E> iterator()`       | Returns an iterator over the elements in the collection.                        | `Collection<String> coll = Arrays.asList("a", "b", "c"); Iterator<String> it = coll.iterator(); while (it.hasNext()) { System.out.println(it.next()); }` |
+| `Object[] toArray()`           | Returns an array containing all the elements in the collection.                 | `Collection<String> coll = Arrays.asList("a", "b", "c"); String[] arr = coll.toArray(new String[0]); // returns ["a", "b", "c"]` |
+| `boolean add(E e)`             | Adds the specified element to the collection.                                    | `Collection<String> coll = new ArrayList<>(); coll.add("a"); // coll contains ["a"]`            |
+| `boolean remove(Object o)`     | Removes the specified element from the collection if it is present.             | `Collection<String> coll = new ArrayList<>(Arrays.asList("a", "b")); coll.remove("a"); // coll contains ["b"]` |
+| `boolean containsAll(Collection<?> c)` | Returns `true` if the collection contains all elements of the specified collection. | `Collection<String> coll1 = Arrays.asList("a", "b", "c"); Collection<String> coll2 = Arrays.asList("b", "c"); boolean containsAll = coll1.containsAll(coll2); // returns true` |
+| `boolean addAll(Collection<? extends E> c)` | Adds all elements from the specified collection to the collection.             | `Collection<String> coll1 = new ArrayList<>(Arrays.asList("a", "b")); Collection<String> coll2 = Arrays.asList("c", "d"); coll1.addAll(coll2); // coll1 contains ["a", "b", "c", "d"]` |
+| `boolean removeAll(Collection<?> c)` | Removes from the collection all elements that are in the specified collection.   | `Collection<String> coll1 = new ArrayList<>(Arrays.asList("a", "b", "c")); Collection<String> coll2 = Arrays.asList("b", "c"); coll1.removeAll(coll2); // coll1 contains ["a"]` |
+| `boolean retainAll(Collection<?> c)` | Retains only the elements in the collection that are contained in the specified collection. | `Collection<String> coll1 = new ArrayList<>(Arrays.asList("a", "b", "c")); Collection<String> coll2 = Arrays.asList("b", "c"); coll1.retainAll(coll2); // coll1 contains ["b", "c"]` |
+| `void clear()`                 | Removes all elements from the collection.                                         | `Collection<String> coll = new ArrayList<>(Arrays.asList("a", "b", "c")); coll.clear(); // coll is empty` |
+
+#### **2. List Interface** (extends Collection)
+
+**Description:** An ordered collection that allows duplicate elements. It maintains the order in which elements are inserted.
+
+| **Method**                    | **Description**                                                                 | **Example**                                                                                               |
+|-------------------------------|---------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------|
+| `E get(int index)`            | Returns the element at the specified position in the list.                        | `List<String> list = Arrays.asList("a", "b", "c"); String element = list.get(1); // returns "b"`         |
+| `E set(int index, E element)` | Replaces the element at the specified position with the specified element.       | `List<String> list = new ArrayList<>(Arrays.asList("a", "b", "c")); list.set(1, "z"); // list is ["a", "z", "c"]` |
+| `void add(int index, E element)` | Inserts the specified element at the specified position.                         | `List<String> list = new ArrayList<>(Arrays.asList("a", "b")); list.add(1, "c"); // list is ["a", "c", "b"]` |
+| `E remove(int index)`         | Removes the element at the specified position.                                     | `List<String> list = new ArrayList<>(Arrays.asList("a", "b", "c")); list.remove(1); // list is ["a", "c"]` |
+| `int indexOf(Object o)`       | Returns the index of the first occurrence of the specified element.               | `List<String> list = Arrays.asList("a", "b", "c"); int index = list.indexOf("b"); // returns 1`         |
+| `int lastIndexOf(Object o)`   | Returns the index of the last occurrence of the specified element.                | `List<String> list = Arrays.asList("a", "b", "c", "b"); int index = list.lastIndexOf("b"); // returns 3` |
+| `List<E> subList(int fromIndex, int toIndex)` | Returns a view of the portion of the list between `fromIndex` (inclusive) and `toIndex` (exclusive). | `List<String> list = Arrays.asList("a", "b", "c", "d"); List<String> subList = list.subList(1, 3); // subList is ["b", "c"]` |
+
+#### **3. Set Interface** (extends Collection)
+
+**Description:** A collection that does not allow duplicate elements. Sets are unordered collections.
+
+| **Method**                    | **Description**                                                                 | **Example**                                                                                               |
+|-------------------------------|---------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------|
+| `boolean add(E e)`            | Adds the specified element to the set if it is not already present.              | `Set<String> set = new HashSet<>(); set.add("a"); // set contains ["a"]`                                |
+| `boolean remove(Object o)`    | Removes the specified element from the set if it is present.                      | `Set<String> set = new HashSet<>(Arrays.asList("a", "b")); set.remove("a"); // set contains ["b"]`        |
+| `boolean contains(Object o)`  | Returns `true` if the set contains the specified element.                         | `Set<String> set = new HashSet<>(Arrays.asList("a", "b")); boolean contains = set.contains("b"); // returns true` |
+| `Set<E> union(Set<? extends E> other)` | Creates a new set that is the union of this set and the specified set.       | `Set<String> set1 = new HashSet<>(Arrays.asList("a", "b")); Set<String> set2 = new HashSet<>(Arrays.asList("b", "c")); Set<String> union = new HashSet<>(set1); union.addAll(set2); // union contains ["a", "b", "c"]` |
+| `Set<E> intersection(Set<? extends E> other)` | Creates a new set that is the intersection of this set and the specified set. | `Set<String> set1 = new HashSet<>(Arrays.asList("a", "b")); Set<String> set2 = new HashSet<>(Arrays.asList("b", "c")); Set<String> intersection = new HashSet<>(set1); intersection.retainAll(set2); // intersection contains ["b"]` |
+
+#### **4. Queue Interface** (extends Collection)
+
+**Description:** A collection used to hold elements prior to processing. It typically represents a first-in-first-out (FIFO) data structure.
+
+| **Method**                     | **Description**                                                                      | **Example**                                                                                             |
+|--------------------------------|--------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------|
+| `boolean offer(E e)`           | Inserts the specified element into the queue if possible.                            | `Queue<String> queue = new LinkedList<>(); queue.offer("a"); // queue contains ["a"]`                  |
+| `E poll()`                     | Retrieves and removes the head of the queue, or returns `null` if the queue is empty. | `Queue<String> queue = new LinkedList<>(Arrays.asList("a", "b")); String head = queue.poll(); // head is "a", queue contains ["b"]` |
+| `E peek()`                     | Retrieves, but does not remove, the head of the queue, or returns `null` if the queue is empty. | `Queue<String> queue = new LinkedList<>(Arrays.asList("a", "b")); String head = queue.peek(); // head is "a", queue contains ["a", "b"]` |
+| `E remove()`                   | Retrieves and removes the head of the queue.                                          | `Queue<String> queue = new LinkedList<>(Arrays
+
+.asList("a", "b")); String head = queue.remove(); // head is "a", queue contains ["b"]` |
+
+#### **5. Map Interface**
+
+**Description:** An object that maps keys to values. It does not extend the `Collection` interface.
+
+| **Method**                      | **Description**                                                                                       | **Example**                                                                                             |
+|---------------------------------|-------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------|
+| `V get(Object key)`             | Returns the value associated with the specified key.                                                | `Map<String, Integer> map = new HashMap<>(); map.put("a", 1); Integer value = map.get("a"); // returns 1` |
+| `V put(K key, V value)`         | Associates the specified value with the specified key in the map.                                    | `Map<String, Integer> map = new HashMap<>(); map.put("a", 1); // map contains {a=1}`                    |
+| `V remove(Object key)`          | Removes the mapping for a key from the map if present.                                               | `Map<String, Integer> map = new HashMap<>(Map.of("a", 1, "b", 2)); map.remove("a"); // map contains {b=2}` |
+| `boolean containsKey(Object key)`| Returns `true` if the map contains a mapping for the specified key.                                 | `Map<String, Integer> map = new HashMap<>(Map.of("a", 1)); boolean contains = map.containsKey("a"); // returns true` |
+| `boolean containsValue(Object value)`| Returns `true` if the map maps one or more keys to the specified value.                           | `Map<String, Integer> map = new HashMap<>(Map.of("a", 1)); boolean contains = map.containsValue(1); // returns true` |
+| `Set<K> keySet()`               | Returns a `Set` view of the keys contained in the map.                                                | `Map<String, Integer> map = new HashMap<>(Map.of("a", 1)); Set<String> keys = map.keySet(); // keys contains ["a"]` |
+| `Collection<V> values()`        | Returns a `Collection` view of the values contained in the map.                                      | `Map<String, Integer> map = new HashMap<>(Map.of("a", 1, "b", 2)); Collection<Integer> values = map.values(); // values contains [1, 2]` |
+| `Set<Map.Entry<K, V>> entrySet()`| Returns a `Set` view of the mappings contained in the map.                                           | `Map<String, Integer> map = new HashMap<>(Map.of("a", 1, "b", 2)); Set<Map.Entry<String, Integer>> entries = map.entrySet(); // entries contains [{a=1}, {b=2}]` |
+
+### **Collection Framework Classes**
+
+#### **1. ArrayList**
+
+**Description:** A resizable-array implementation of the `List` interface.
+
+| **Method**               | **Description**                                                               | **Example**                                                                                              |
+|--------------------------|-------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------|
+| `ArrayList<E>()`         | Constructs an empty list with an initial capacity of 10.                        | `List<String> list = new ArrayList<>();`                                                                 |
+| `ArrayList<E>(Collection<? extends E> c)` | Constructs a list containing the elements of the specified collection.    | `List<String> list = new ArrayList<>(Arrays.asList("a", "b", "c"));`                                      |
+| `boolean add(E e)`       | Appends the specified element to the end of the list.                           | `List<String> list = new ArrayList<>(); list.add("a"); // list contains ["a"]`                           |
+| `E get(int index)`       | Returns the element at the specified position.                                 | `List<String> list = Arrays.asList("a", "b", "c"); String element = list.get(1); // returns "b"`        |
+
+#### **2. HashSet**
+
+**Description:** A collection that does not allow duplicate elements and is backed by a hash table.
+
+| **Method**               | **Description**                                                               | **Example**                                                                                             |
+|--------------------------|-------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------|
+| `HashSet<E>()`           | Constructs an empty set with an initial capacity of 16 and load factor of 0.75. | `Set<String> set = new HashSet<>();`                                                                    |
+| `HashSet<E>(Collection<? extends E> c)` | Constructs a set containing the elements of the specified collection. | `Set<String> set = new HashSet<>(Arrays.asList("a", "b", "c"));`                                        |
+| `boolean add(E e)`       | Adds the specified element to the set if it is not already present.             | `Set<String> set = new HashSet<>(); set.add("a"); // set contains ["a"]`                               |
+| `boolean contains(Object o)` | Returns `true` if the set contains the specified element.                      | `Set<String> set = new HashSet<>(Arrays.asList("a", "b")); boolean contains = set.contains("b"); // returns true` |
+
+#### **3. LinkedList**
+
+**Description:** A doubly-linked list implementation of the `List` and `Deque` interfaces.
+
+| **Method**               | **Description**                                                               | **Example**                                                                                              |
+|--------------------------|-------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------|
+| `LinkedList<E>()`        | Constructs an empty list.                                                        | `LinkedList<String> list = new LinkedList<>();`                                                           |
+| `LinkedList<E>(Collection<? extends E> c)` | Constructs a list containing the elements of the specified collection.    | `LinkedList<String> list = new LinkedList<>(Arrays.asList("a", "b", "c"));`                             |
+| `boolean add(E e)`       | Appends the specified element to the end of the list.                           | `LinkedList<String> list = new LinkedList<>(); list.add("a"); // list contains ["a"]`                   |
+| `E remove()`             | Removes and returns the first element of the list.                              | `LinkedList<String> list = new LinkedList<>(Arrays.asList("a", "b")); String element = list.remove(); // returns "a", list contains ["b"]` |
+
+#### **4. TreeSet**
+
+**Description:** A NavigableSet that uses a Red-Black tree to store elements in a sorted order.
+
+| **Method**               | **Description**                                                                | **Example**                                                                                             |
+|--------------------------|--------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------|
+| `TreeSet<E>()`           | Constructs an empty set that is sorted in natural order or by a specified comparator. | `Set<String> set = new TreeSet<>();`                                                                      |
+| `TreeSet<E>(Collection<? extends E> c)` | Constructs a set containing the elements of the specified collection.    | `Set<String> set = new TreeSet<>(Arrays.asList("c", "b", "a")); // set contains ["a", "b", "c"]`         |
+| `boolean add(E e)`       | Adds the specified element to the set if it is not already present.            | `Set<String> set = new TreeSet<>(); set.add("a"); // set contains ["a"]`                               |
+| `E first()`              | Returns the first (lowest) element currently in the set.                        | `Set<String> set = new TreeSet<>(Arrays.asList("c", "b", "a")); String first = set.first(); // returns "a"` |
+
+#### **5. LinkedHashMap**
+
+**Description:** A hash table and linked list implementation of the `Map` interface, with predictable iteration order.
+
+| **Method**                     | **Description**                                                                        | **Example**                                                                                              |
+|--------------------------------|----------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------|
+| `LinkedHashMap<K, V>()`         | Constructs an empty LinkedHashMap with the specified initial capacity and load factor. | `Map<String, Integer> map = new LinkedHashMap<>();`                                                        |
+| `LinkedHashMap<K, V>(Map<? extends K, ? extends V> m)` | Constructs a LinkedHashMap with the same mappings as the specified map.             | `Map<String, Integer> map = new LinkedHashMap<>(Map.of("a", 1, "b", 2));`                               |
+| `boolean containsKey(Object key)` | Returns `true` if the map contains a mapping for the specified key.                 | `Map<String, Integer> map = new LinkedHashMap<>(Map.of("a", 1)); boolean contains = map.containsKey("a"); // returns true` |
+| `boolean containsValue(Object value)` | Returns `true` if the map maps one or more keys to the specified value.            | `Map<String, Integer> map = new LinkedHashMap<>(Map.of("a", 1)); boolean contains = map.containsValue(1); // returns true` |
+
+#### **6. HashMap**
+
+**Description:** A hash table-based implementation of the `Map` interface that allows `null` values and keys.
+
+| **Method**                     | **Description**                                                                        | **Example**                                                                                              |
+|--------------------------------|----------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------|
+| `HashMap<K, V>()`               | Constructs an empty HashMap with the default initial capacity and load factor.         | `Map<String, Integer> map = new HashMap<>();`                                                             |
+| `HashMap<K, V>(Map<? extends K, ? extends V> m)` | Constructs a HashMap with the same mappings as the specified map.                   | `Map<String, Integer> map = new HashMap<>(Map.of("a", 1, "b",
+
+ 2));`                                     |
+| `boolean containsKey(Object key)` | Returns `true` if the map contains a mapping for the specified key.                 | `Map<String, Integer> map = new HashMap<>(Map.of("a", 1)); boolean contains = map.containsKey("a"); // returns true` |
+| `boolean containsValue(Object value)` | Returns `true` if the map maps one or more keys to the specified value.            | `Map<String, Integer> map = new HashMap<>(Map.of("a", 1)); boolean contains = map.containsValue(1); // returns true` |
+
+#### **7. TreeMap**
+
+**Description:** A Red-Black tree-based implementation of the `NavigableMap` interface, which provides a sorted map.
+
+| **Method**                     | **Description**                                                                        | **Example**                                                                                              |
+|--------------------------------|----------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------|
+| `TreeMap<K, V>()`               | Constructs an empty TreeMap with natural ordering of keys or using a specified comparator. | `Map<String, Integer> map = new TreeMap<>();`                                                            |
+| `TreeMap<K, V>(Map<? extends K, ? extends V> m)` | Constructs a TreeMap with the same mappings as the specified map.                   | `Map<String, Integer> map = new TreeMap<>(Map.of("c", 3, "a", 1, "b", 2));`                             |
+| `K firstKey()`                 | Returns the first (lowest) key currently in the map.                                    | `Map<String, Integer> map = new TreeMap<>(Map.of("c", 3, "a", 1)); String firstKey = map.firstKey(); // returns "a"` |
+| `K lastKey()`                  | Returns the last (highest) key currently in the map.                                   | `Map<String, Integer> map = new TreeMap<>(Map.of("a", 1, "c", 3)); String lastKey = map.lastKey(); // returns "c"` |
+
+### **Summary**
+
+This table provides an overview of the primary interfaces and classes in the Java Collection Framework, including `Collection`, `List`, `Set`, `Queue`, and `Map`, as well as concrete implementations like `ArrayList`, `HashSet`, `LinkedList`, `TreeSet`, `LinkedHashMap`, `HashMap`, and `TreeMap`. Each method is described along with an example to illustrate its use. This should help in understanding the functionality and usage of these core collection classes and interfaces.
+
+Certainly! Here’s a detailed summary of some of the most commonly used interfaces and classes in the Java Collection Framework, including their key methods and examples.
+
+### **Collection Framework Interfaces and Classes**
+
+#### **Collection Interface**
+
+| **Method**                 | **Description**                                                                                     | **Example**                                                                                           |
+|----------------------------|-----------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------|
+| `int size()`               | Returns the number of elements in the collection.                                                   | `Collection<String> collection = Arrays.asList("a", "b", "c"); int size = collection.size(); // returns 3` |
+| `boolean isEmpty()`        | Returns `true` if the collection is empty.                                                           | `Collection<String> collection = Arrays.asList(); boolean empty = collection.isEmpty(); // returns true` |
+| `boolean contains(Object o)` | Returns `true` if the collection contains the specified element.                                   | `Collection<String> collection = Arrays.asList("a", "b", "c"); boolean contains = collection.contains("b"); // returns true` |
+| `Iterator<E> iterator()`   | Returns an iterator over the elements in the collection.                                           | `Collection<String> collection = Arrays.asList("a", "b", "c"); Iterator<String> iterator = collection.iterator(); while (iterator.hasNext()) { System.out.println(iterator.next()); }` |
+| `Object[] toArray()`       | Returns an array containing all of the elements in the collection.                                | `Collection<String> collection = Arrays.asList("a", "b", "c"); String[] array = collection.toArray(new String[0]); // returns ["a", "b", "c"]` |
+| `boolean add(E e)`         | Adds the specified element to the collection.                                                        | `Collection<String> collection = new ArrayList<>(); collection.add("a"); // collection contains ["a"]` |
+| `boolean remove(Object o)` | Removes the specified element from the collection.                                                  | `Collection<String> collection = new ArrayList<>(Arrays.asList("a", "b")); collection.remove("a"); // collection contains ["b"]` |
+| `boolean containsAll(Collection<?> c)` | Returns `true` if the collection contains all of the elements in the specified collection.         | `Collection<String> collection1 = Arrays.asList("a", "b", "c"); Collection<String> collection2 = Arrays.asList("b", "c"); boolean containsAll = collection1.containsAll(collection2); // returns true` |
+| `boolean addAll(Collection<? extends E> c)` | Adds all of the elements in the specified collection to the collection.                            | `Collection<String> collection1 = new ArrayList<>(Arrays.asList("a", "b")); Collection<String> collection2 = Arrays.asList("c", "d"); collection1.addAll(collection2); // collection1 contains ["a", "b", "c", "d"]` |
+| `boolean removeAll(Collection<?> c)` | Removes from the collection all of its elements that are contained in the specified collection.    | `Collection<String> collection1 = new ArrayList<>(Arrays.asList("a", "b", "c")); Collection<String> collection2 = Arrays.asList("b", "c"); collection1.removeAll(collection2); // collection1 contains ["a"]` |
+| `boolean retainAll(Collection<?> c)` | Retains only the elements in the collection that are contained in the specified collection.        | `Collection<String> collection1 = new ArrayList<>(Arrays.asList("a", "b", "c")); Collection<String> collection2 = Arrays.asList("b", "c"); collection1.retainAll(collection2); // collection1 contains ["b", "c"]` |
+| `void clear()`             | Removes all elements from the collection.                                                           | `Collection<String> collection = new ArrayList<>(Arrays.asList("a", "b", "c")); collection.clear(); // collection is empty` |
+
+#### **List Interface** (extends Collection)
+
+| **Method**                  | **Description**                                                                                       | **Example**                                                                                  |
+|-----------------------------|-------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------|
+| `E get(int index)`          | Returns the element at the specified position in the list.                                             | `List<String> list = Arrays.asList("a", "b", "c"); String element = list.get(1); // returns "b"` |
+| `E set(int index, E element)` | Replaces the element at the specified position in the list with the specified element.                | `List<String> list = new ArrayList<>(Arrays.asList("a", "b", "c")); list.set(1, "z"); // list is ["a", "z", "c"]` |
+| `void add(int index, E element)` | Inserts the specified element at the specified position in the list.                                 | `List<String> list = new ArrayList<>(Arrays.asList("a", "b")); list.add(1, "c"); // list is ["a", "c", "b"]` |
+| `E remove(int index)`       | Removes the element at the specified position in the list.                                             | `List<String> list = new ArrayList<>(Arrays.asList("a", "b", "c")); list.remove(1); // list is ["a", "c"]` |
+| `int indexOf(Object o)`     | Returns the index of the first occurrence of the specified element in the list.                        | `List<String> list = Arrays.asList("a", "b", "c"); int index = list.indexOf("b"); // returns 1` |
+| `int lastIndexOf(Object o)` | Returns the index of the last occurrence of the specified element in the list.                         | `List<String> list = Arrays.asList("a", "b", "c", "b"); int index = list.lastIndexOf("b"); // returns 3` |
+| `List<E> subList(int fromIndex, int toIndex)` | Returns a view of the portion of the list between `fromIndex`, inclusive, and `toIndex`, exclusive. | `List<String> list = Arrays.asList("a", "b", "c", "d"); List<String> subList = list.subList(1, 3); // subList is ["b", "c"]` |
+
+#### **Set Interface** (extends Collection)
+
+| **Method**                  | **Description**                                                                                         | **Example**                                                                               |
+|-----------------------------|---------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------|
+| `boolean add(E e)`          | Adds the specified element to the set if it is not already present.                                     | `Set<String> set = new HashSet<>(); set.add("a"); // set contains ["a"]`                  |
+| `boolean remove(Object o)`  | Removes the specified element from the set if it is present.                                            | `Set<String> set = new HashSet<>(Arrays.asList("a", "b")); set.remove("a"); // set contains ["b"]` |
+| `boolean contains(Object o)`| Returns `true` if the set contains the specified element.                                               | `Set<String> set = new HashSet<>(Arrays.asList("a", "b")); boolean contains = set.contains("b"); // returns true` |
+| `Set<E> union(Set<? extends E> other)` | Creates a new set that is the union of this set and the specified set.                              | `Set<String> set1 = new HashSet<>(Arrays.asList("a", "b")); Set<String> set2 = new HashSet<>(Arrays.asList("b", "c")); Set<String> union = new HashSet<>(set1); union.addAll(set2); // union contains ["a", "b", "c"]` |
+| `Set<E> intersection(Set<? extends E> other)` | Creates a new set that is the intersection of this set and the specified set.                        | `Set<String> set1 = new HashSet<>(Arrays.asList("a", "b")); Set<String> set2 = new HashSet<>(Arrays.asList("b", "c")); Set<String> intersection = new HashSet<>(set1); intersection.retainAll(set2); // intersection contains ["b"]` |
+
+#### **Queue Interface** (extends Collection)
+
+| **Method**                   | **Description**                                                                                   | **Example**                                                                                     |
+|------------------------------|---------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------|
+| `boolean offer(E e)`         | Inserts the specified element into the queue if possible.                                        | `Queue<String> queue = new LinkedList<>(); queue.offer("a"); // queue contains ["a"]`         |
+| `E poll()`                   | Retrieves and removes the head of the queue, or returns `null` if the queue is empty.             | `Queue<String> queue = new LinkedList<>(Arrays.asList("a", "b")); String head = queue.poll(); // head is "a", queue contains ["b"]` |
+| `E peek()`                   | Retrieves, but does not remove, the head of the queue, or returns `null` if the queue is empty.   | `Queue<String> queue = new LinkedList<>(Arrays.asList("a", "b")); String head = queue.peek(); // head is "a", queue contains ["a", "b"]` |
+| `E remove()`                 | Retrieves and removes the head of the queue.                                                      | `Queue<String> queue = new LinkedList<>(Arrays.asList("a", "b")); String head = queue.remove(); // head is "a", queue contains ["b"]` |
+
+#### **Map Interface**
+
+| **Method**                       | **Description**                                                                                         | **Example**                                                                                         |
+|----------------------------------|---------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------|
+| `V get(Object key)`              | Returns the value associated with the specified key.
+
+                                                    | `Map<String, Integer> map = new HashMap<>(); map.put("a", 1); Integer value = map.get("a"); // returns 1` |
+| `V put(K key, V value)`          | Associates the specified value with the specified key in the map.                                       | `Map<String, Integer> map = new HashMap<>(); map.put("a", 1); // map contains {a=1}`                |
+| `V remove(Object key)`           | Removes the mapping for a key from the map if present.                                                  | `Map<String, Integer> map = new HashMap<>(Map.of("a", 1, "b", 2)); map.remove("a"); // map contains {b=2}` |
+| `boolean containsKey(Object key)` | Returns `true` if the map contains a mapping for the specified key.                                    | `Map<String, Integer> map = new HashMap<>(Map.of("a", 1)); boolean contains = map.containsKey("a"); // returns true` |
+| `boolean containsValue(Object value)` | Returns `true` if the map maps one or more keys to the specified value.                               | `Map<String, Integer> map = new HashMap<>(Map.of("a", 1)); boolean contains = map.containsValue(1); // returns true` |
+| `Set<K> keySet()`                | Returns a `Set` view of the keys contained in the map.                                                  | `Map<String, Integer> map = new HashMap<>(Map.of("a", 1)); Set<String> keys = map.keySet(); // keys contains ["a"]` |
+| `Collection<V> values()`         | Returns a `Collection` view of the values contained in the map.                                        | `Map<String, Integer> map = new HashMap<>(Map.of("a", 1, "b", 2)); Collection<Integer> values = map.values(); // values contains [1, 2]` |
+| `Set<Map.Entry<K, V>> entrySet()`| Returns a `Set` view of the mappings contained in the map.                                             | `Map<String, Integer> map = new HashMap<>(Map.of("a", 1, "b", 2)); Set<Map.Entry<String, Integer>> entries = map.entrySet(); // entries contains [{a=1}, {b=2}]` |
+
+### **Summary**
+
+This table provides an overview of the primary interfaces and classes in the Java Collection Framework, including `Collection`, `List`, `Set`, `Queue`, and `Map`. Each method is described along with an example to illustrate its use. This should help in understanding the functionality and usage of these core collection classes and interfaces.
