@@ -381,6 +381,31 @@ public class Sample {
          * Write a Java 8 program to calculate the age of a person in years given their birthday.
          */
         calculatePersonAgeInYear();
+
+        /**
+         * Find the missing number from an array
+         *
+         * Write a Java 8 program to find find the missing number from an array.
+         */
+        findMissingNumberFromArrayUsingIntStream();
+       
+        //### Method 1: Sum Formula
+
+        //This method calculates the expected sum of numbers from `1` to `n` and subtracts the sum of the array elements to find the missing number.
+
+        findMissingNumber();        
+       
+        //### Method 2: XOR Approach
+
+        //This method uses XOR operations to find the missing number. The idea is to XOR all numbers from `1` to `n` and XOR all elements in the array. The result is the missing number.
+
+        findMissingNumberXor();        
+
+        //### Method 3: Set-Based Approach
+
+        //This method uses a `HashSet` to find the missing number by tracking the numbers.
+
+        findMissingNumberSet();
     }
 
     private static void calculatePersonAgeInYear() {
@@ -740,4 +765,82 @@ public class Sample {
         System.out.println(evenAddOddSeparation);
     }
 }
+```
+```java
+
+public static void findMissingNumber() {
+    	
+    	int[] arr = {1, 2, 4, 5, 6}; // Example array with one number missing
+    	
+        int n = arr.length + 1; // As one number is missing
+        int expectedSum = n * (n + 1) / 2;
+        int actualSum = 0;
+
+        for (int num : arr) {
+            actualSum += num;
+        }
+        
+        System.out.println("Missing numbers: " + (expectedSum - actualSum));
+    }
+    
+    public static void findMissingNumberXor() {
+    	
+    	int[] arr = {1, 2, 4, 5, 6}; // Example array with one number missing
+    	 
+        int n = arr.length + 1; // As one number is missing
+        int xorAll = 0;
+        int xorArr = 0;
+
+        for (int i = 1; i <= n; i++) {
+            xorAll ^= i;
+        }
+
+        for (int num : arr) {
+            xorArr ^= num;
+        }
+        System.out.println("Missing numbers: " + (xorAll ^ xorArr));
+    }
+    
+    public static void findMissingNumberSet() {
+    	
+    	int[] arr = {1, 2, 4, 5, 6}; // Example array with one number missing
+    	
+        int n = arr.length + 1; // As one number is missing
+        HashSet<Integer> numSet = new HashSet<>();
+
+        for (int i = 1; i <= n; i++) {
+            numSet.add(i);
+        }
+
+        for (int num : arr) {
+            numSet.remove(num);
+        }
+
+       // The remaining number in the set
+        System.out.println("Missing numbers: " + numSet.iterator().next());
+    }
+    
+    private static void findMissingNumberFromArrayUsingIntStream() {
+    	
+    	int[] arry= { 1, 3, 5, 7, 9, 6, 8, 10 };
+
+		// Find the min and max values in the array
+		// int min1 = Arrays.stream(arry2).min().orElseThrow(NoSuchElementException::new);
+		// System.out.println("min1 numbers: " + min1);
+		// int max1 = Arrays.stream(arry2).max().orElseThrow(NoSuchElementException::new);
+		// System.out.println("max1 numbers: " + max1);
+
+		// Convert array to a Set for uniqueness and lookup
+		Set<Integer> numbersSet = Arrays.stream(arry).boxed().collect(Collectors.toSet());
+
+		// Generate numbers from min to max (inclusive) and find missing numbers
+		List<Integer> missingNumbers = IntStream.rangeClosed(
+						Arrays.stream(arry).min().getAsInt(), 
+						Arrays.stream(arry).max().getAsInt()) // Generate numbers from min to max
+				.boxed() // Convert to Stream<Integer>
+				.filter(num -> !numbersSet.contains(num)) // Check if number is missing
+				.collect(Collectors.toList()); // Collect into a List
+
+		System.out.println("Missing numbers: " + missingNumbers);		
+	}
 ```
