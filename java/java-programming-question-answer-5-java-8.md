@@ -853,7 +853,7 @@ public static void findMissingNumber() {
 		System.out.println("Missing numbers: " + missingNumbers);		
 	}
 
-public static void findMissingNumberStream() {
+    public static void findMissingNumberStream() {
     	
     	int[] arr = {1, 2, 4, 5, 6}; // Example array with one number missing
     	  
