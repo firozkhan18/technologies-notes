@@ -889,3 +889,167 @@ public class Sample {
     }
 }
 ```
+Here’s a detailed comparison of the methods you mentioned in Java for creating streams and lists:
+
+### 1. `Stream.of(1, 2, 3)`
+
+- **Purpose**: Creates a `Stream` of integers.
+- **Usage**: Useful for performing functional operations on sequences of elements.
+- **Characteristics**:
+  - **Stream**: Represents a sequence of elements that can be processed in parallel or sequentially.
+  - **Operations**: Supports various stream operations like `map`, `filter`, `reduce`, etc.
+  - **Immutable**: Streams do not modify the original data source but produce new results based on the operations.
+
+```java
+import java.util.stream.Stream;
+
+public class Example {
+    public static void main(String[] args) {
+        Stream<Integer> stream = Stream.of(1, 2, 3);
+        stream.forEach(System.out::println); // Output: 1 2 3
+    }
+}
+```
+
+### 2. `IntStream.of(1, 2, 3)`
+
+- **Purpose**: Creates an `IntStream` of integers.
+- **Usage**: Similar to `Stream.of`, but specifically for primitive `int` values.
+- **Characteristics**:
+  - **IntStream**: A specialized stream for primitive `int` values, which avoids boxing overhead.
+  - **Operations**: Supports similar operations as `Stream`, but for `int` values.
+  - **Performance**: More efficient for numeric operations as it avoids boxing.
+
+```java
+import java.util.stream.IntStream;
+
+public class Example {
+    public static void main(String[] args) {
+        IntStream intStream = IntStream.of(1, 2, 3);
+        intStream.forEach(System.out::println); // Output: 1 2 3
+    }
+}
+```
+
+### 3. `List.of(1, 2, 3)`
+
+- **Purpose**: Creates an unmodifiable `List` of integers.
+- **Usage**: Ideal for creating immutable lists in Java 9 and above.
+- **Characteristics**:
+  - **List**: Represents a collection of elements that can be accessed by index.
+  - **Immutable**: The list cannot be modified after creation (no add/remove operations).
+  - **Null Handling**: Does not accept `null` values.
+
+```java
+import java.util.List;
+
+public class Example {
+    public static void main(String[] args) {
+        List<Integer> list = List.of(1, 2, 3);
+        list.forEach(System.out::println); // Output: 1 2 3
+    }
+}
+```
+
+### 4. `Arrays.asList(1, 2, 3)`
+
+- **Purpose**: Creates a fixed-size `List` backed by an array.
+- **Usage**: Useful for creating lists from arrays or varargs.
+- **Characteristics**:
+  - **List**: Represents a collection of elements backed by an array.
+  - **Fixed-size**: The list size cannot be changed (no add/remove operations), but elements can be modified.
+  - **Null Handling**: Accepts `null` values.
+
+```java
+import java.util.Arrays;
+import java.util.List;
+
+public class Example {
+    public static void main(String[] args) {
+        List<Integer> list = Arrays.asList(1, 2, 3);
+        list.forEach(System.out::println); // Output: 1 2 3
+    }
+}
+```
+
+### 5. `of(1, 2, 3)`
+
+- **Purpose**: This is ambiguous without context. It might refer to custom utility methods or a specific library method.
+- **Usage**: Could be used to create lists or other collections depending on the implementation.
+- **Characteristics**: Depends on the specific implementation of the `of` method.
+
+### Summary
+
+- **Stream.of(1, 2, 3)**: Creates a `Stream` for functional-style operations.
+- **IntStream.of(1, 2, 3)**: Creates an `IntStream` for primitive `int` values, more efficient for numeric operations.
+- **List.of(1, 2, 3)**: Creates an immutable `List` of integers.
+- **Arrays.asList(1, 2, 3)**: Creates a fixed-size `List` backed by an array.
+
+Choose the method based on what you need: whether you need a `Stream` for processing sequences of elements, an `IntStream` for numeric operations, an immutable `List`, or a fixed-size list backed by an array.
+
+In Java 9 and later, the `List.of(E... elements)` method is used to create immutable lists. When you use `List.of(1, 2, 3)`, you are invoking this static method from the `java.util.List` interface. Here’s a deeper look at `List.of()` and what it does:
+
+### `List.of(E... elements)`
+
+- **Purpose**: Creates an unmodifiable list containing the specified elements.
+- **Usage**: This method is part of the `java.util.List` interface and was introduced in Java 9 to simplify the creation of immutable lists.
+- **Characteristics**:
+  - **Immutability**: The list created is immutable. Once created, you cannot add, remove, or modify elements in the list.
+  - **Null Handling**: This method does not allow `null` elements. If any of the provided elements is `null`, it will throw a `NullPointerException`.
+  - **Performance**: The implementation is optimized for small lists. For example, it uses different internal representations for lists with a few elements.
+
+### Example Usage
+
+Here’s how you can use `List.of()`:
+
+```java
+import java.util.List;
+
+public class Example {
+    public static void main(String[] args) {
+        // Creating an immutable list using List.of()
+        List<Integer> list = List.of(1, 2, 3);
+        
+        // Printing the list elements
+        list.forEach(System.out::println); // Output: 1 2 3
+        
+        // Attempting to modify the list will result in UnsupportedOperationException
+        // list.add(4); // Throws UnsupportedOperationException
+        // list.remove(1); // Throws UnsupportedOperationException
+    }
+}
+```
+
+Similarily you can use `of()` by using `import static java.util.List.of`:
+
+```java
+import java.util.List;
+import static java.util.List.of;
+
+public class Example {
+    public static void main(String[] args) {
+        // Creating an immutable list using List.of()
+        List<Integer> list = of(1, 2, 3);
+        
+        // Printing the list elements
+        list.forEach(System.out::println); // Output: 1 2 3
+        
+        // Attempting to modify the list will result in UnsupportedOperationException
+        // list.add(4); // Throws UnsupportedOperationException
+        // list.remove(1); // Throws UnsupportedOperationException
+    }
+}
+```
+### Key Points
+
+1. **Immutability**: The list returned by `List.of()` is immutable. You cannot change its contents. Any attempt to modify the list will result in an `UnsupportedOperationException`.
+
+2. **Null Elements**: The method does not accept `null` values. If you pass `null` as one of the elements, it will throw a `NullPointerException`.
+
+3. **Efficiency**: For a small number of elements, `List.of()` is efficient and uses an internal representation that avoids the overhead of a typical `ArrayList` or `LinkedList`.
+
+4. **API Usage**: This method is particularly useful for creating simple immutable lists in a concise way without needing to use `Arrays.asList()` or other methods.
+
+### Summary
+
+The `List.of(E... elements)` method is a convenient and efficient way to create immutable lists in Java 9 and later. It ensures immutability and disallows `null` values, providing a straightforward API for list creation.
