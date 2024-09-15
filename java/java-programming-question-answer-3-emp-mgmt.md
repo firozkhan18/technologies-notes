@@ -875,8 +875,8 @@ public class EmployeeMgmt {
 		// Use Collectors.maxBy() method which returns maximum element wrapped in an
 		// Optional object based on supplied Comparator.
 
-//		Optional<EmployeeNew> highestPaidEmployeeWrapper= employeeList.stream()
-//				.collect(Collectors.maxBy(Comparator.comparingDouble(EmployeeNew::getSalary)));
+		//Optional<EmployeeNew> highestPaidEmployeeWrapper= employeeList.stream()
+		//		.collect(Collectors.maxBy(Comparator.comparingDouble(EmployeeNew::getSalary)));
 
 		// EmployeeNew highestPaidEmployee = highestPaidEmployeeWrapper.get();
 
