@@ -10229,8 +10229,8 @@ class EmployeeNew {
 		// Use Collectors.maxBy() method which returns maximum element wrapped in an
 		// Optional object based on supplied Comparator.
 
-//		Optional<EmployeeNew> highestPaidEmployeeWrapper= employeeList.stream()
-//				.collect(Collectors.maxBy(Comparator.comparingDouble(EmployeeNew::getSalary)));
+		// Optional<EmployeeNew> highestPaidEmployeeWrapper= employeeList.stream()
+		// .collect(Collectors.maxBy(Comparator.comparingDouble(EmployeeNew::getSalary)));
 
 		// EmployeeNew highestPaidEmployee = highestPaidEmployeeWrapper.get();
 
@@ -10478,14 +10478,9 @@ class EmployeeNew {
 
 		// Another Approach
 		System.out.println("Another Approach ==================================");
-
 		// Partitioning employees by age
-		employeeList.stream().collect(Collectors.partitioningBy(e -> e.getAge() > 25)).forEach((isOlder, employees) -> { // Printing
-																															// partitioned
-																															// and
-																															// sorted
-																															// employee
-																															// lists
+		employeeList.stream().collect(Collectors.partitioningBy(e -> e.getAge() > 25)).forEach((isOlder, employees) -> {
+			// Printing partitioned and sorted employee lists
 			System.out.println("----------------------------");
 
 			if (isOlder) {
@@ -10500,67 +10495,66 @@ class EmployeeNew {
 			employees.stream().sorted((e1, e2) -> e1.getName().compareToIgnoreCase(e2.getName()))
 					.forEach(e -> System.out.println(e.getName()));
 
-//	            employees.stream()
-//		            .sorted(Comparator.comparing(EmployeeNew::getName)) // Optional sorting by name
-//					.forEach(e -> System.out.println(e.getName()));
+			//employees.stream()
+			//.sorted(Comparator.comparing(EmployeeNew::getName)) // Optional sorting by name
+			//.forEach(e -> System.out.println(e.getName()));
 		});
 
 		// Query 15 : Who is the oldest employee in the organization? What is his age
 		// and which department he belongs to?
-
-//         Optional<EmployeeNew> oldestEmployeeWrapper = employeeList.stream()
-//        		 .max(Comparator.comparingInt(EmployeeNew::getAge));
-//                  
-//         EmployeeNew oldestEmployee = oldestEmployeeWrapper.get();      
-
+	
+		// Optional<EmployeeNew> oldestEmployeeWrapper = employeeList.stream()
+		// .max(Comparator.comparingInt(EmployeeNew::getAge));
+		//                  
+		// EmployeeNew oldestEmployee = oldestEmployeeWrapper.get();      
+	
 		EmployeeNew oldestEmployee = employeeList.stream().max(Comparator.comparingInt(EmployeeNew::getAge)).get();
-
+	
 		System.out.println("Name : " + oldestEmployee.getName());
 		System.out.println("Age : " + oldestEmployee.getAge());
 		System.out.println("Department : " + oldestEmployee.getDepartment());
 		
 		int i = 15623;
+	
+	        // Compute the sum of digits
+	        int sumOfDigits = String.valueOf(i)
+	            .chars() // Stream of characters
+	            .filter(Character::isDigit) // Filter out any non-digit characters
+	            .map(Character::getNumericValue) // Convert characters to their numeric values
+	            .sum(); // Sum the numeric values
+	
+	        System.out.println(sumOfDigits);        
+	
+	        // Convert integer to string, then map to an array of digits
+	        int[] digitsArray = String.valueOf(i)
+	            .chars() // Stream of character codes
+	            .map(Character::getNumericValue) // Convert characters to numeric values
+	            .toArray(); // Collect to an array
+	
+	        // Sum the elements of the array
+	        int sumOfDigits1 = Arrays.stream(digitsArray).sum();
+	
+	        System.out.println("Sum of digits: " + sumOfDigits1);
+	        
+	        //How do you find the most repeated element in an array?
+	        List<String> listOfStrings = Arrays.asList("Pen", "Eraser", "Note Book", "Pen", "Pencil", "Pen", "Note Book", "Pencil");
+	        
+	        Map<String, Long> elementCountMap = listOfStrings.stream()
+	        .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+	         
+	        Entry<String, Long> mostFrequentElement = elementCountMap.entrySet().stream()
+	        .max(Map.Entry.comparingByValue()).get();
+	         
+	        System.out.println("Most Frequent Element : "+mostFrequentElement.getKey());         
+	        System.out.println("Count : "+mostFrequentElement.getValue());
+	        
+	      //How do you find the second highest salary of employee?
+	        Optional<Double> secondHighestSalary =  employeeList.stream()
+								.map(EmployeeNew::getSalary)
+								.sorted(Comparator.reverseOrder())
+								.skip(1)
+								.findFirst();
+	
+	        secondHighestSalary.ifPresent(System.out::println);
 
-        // Compute the sum of digits
-        int sumOfDigits = String.valueOf(i)
-            .chars() // Stream of characters
-            .filter(Character::isDigit) // Filter out any non-digit characters
-            .map(Character::getNumericValue) // Convert characters to their numeric values
-            .sum(); // Sum the numeric values
-
-        System.out.println(sumOfDigits);
-        
-
-        // Convert integer to string, then map to an array of digits
-        int[] digitsArray = String.valueOf(i)
-            .chars() // Stream of character codes
-            .map(Character::getNumericValue) // Convert characters to numeric values
-            .toArray(); // Collect to an array
-
-        // Sum the elements of the array
-        int sumOfDigits1 = Arrays.stream(digitsArray).sum();
-
-        System.out.println("Sum of digits: " + sumOfDigits1);
-        
-        //How do you find the most repeated element in an array?
-        List<String> listOfStrings = Arrays.asList("Pen", "Eraser", "Note Book", "Pen", "Pencil", "Pen", "Note Book", "Pencil");
-        
-        Map<String, Long> elementCountMap = listOfStrings.stream()
-        .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
-         
-        Entry<String, Long> mostFrequentElement = elementCountMap.entrySet().stream()
-        .max(Map.Entry.comparingByValue()).get();
-         
-        System.out.println("Most Frequent Element : "+mostFrequentElement.getKey());         
-        System.out.println("Count : "+mostFrequentElement.getValue());
-        
-      //How do you find the second highest salary of employee?
-        Optional<Double> secondHighestSalary =  employeeList.stream()
-											        .map(EmployeeNew::getSalary)
-											        .sorted(Comparator.reverseOrder())
-											        .skip(1)
-											        .findFirst();
-
-        secondHighestSalary.ifPresent(System.out::println);
-	}
 ```
