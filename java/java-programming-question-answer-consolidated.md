@@ -140,7 +140,27 @@ public class Factorial {
 
 <details><summary><b>5. Implement a stack in Java</b></summary>
 
+**Java 7: Using while loop**
+
+```java
+import java.util.Stack;
+
+public class StackExample {
+    public static void main(String[] args) {
+        Stack<Integer> stack = new Stack<>();
+        stack.push(1);
+        stack.push(2);
+        stack.push(3);
+
+        while (!stack.isEmpty()) {
+            System.out.println(stack.pop());
+        }
+    }
+}
+```
+
 **Java 7:**
+
 ```java
 import java.util.ArrayList;
 
@@ -241,6 +261,21 @@ public class Palindrome {
         String reversed = new StringBuilder(str).reverse().toString();
         boolean isPalindrome = str.equals(reversed);
         System.out.println("Is Palindrome: " + isPalindrome);
+    }
+}
+```
+**Java 7: 2nd Approach**
+
+```java
+public class PalindromeCheck {
+    public static void main(String[] args) {
+        String str = "madam";
+        String reverse = new StringBuilder(str).reverse().toString();
+        if (str.equals(reverse)) {
+            System.out.println(str + " is a palindrome.");
+        } else {
+            System.out.println(str + " is not a palindrome.");
+        }
     }
 }
 ```
@@ -6444,6 +6479,18 @@ public class LargestElement {
 ```
 
 **Java 8:**
+
+**Using Stream Aproach 1**
+
+```java
+int[] array = {1, 2, 3, 4, 5};
+
+int max = Arrays.stream(array).max().getAsInt();
+
+System.out.println("Largest element in the array: " + max);
+```
+**Using Stream Aproach 2**
+
 ```java
 import java.util.Arrays;
 
