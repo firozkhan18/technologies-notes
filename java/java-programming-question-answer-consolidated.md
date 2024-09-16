@@ -10189,7 +10189,7 @@ secondHighestSalary.ifPresentOrElse(
 
 </details>
 
-**Complete Code Snippet**
+### **Complete Code Snippet**
 
 ```java
 
