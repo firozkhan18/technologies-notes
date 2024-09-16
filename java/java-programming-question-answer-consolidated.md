@@ -9926,9 +9926,11 @@ Set<Entry<String, Long>> entrySet = employeeCountByDepartment.entrySet();
 for (Entry<String, Long> entry : entrySet) {
     System.out.println(entry.getKey() + " : " + entry.getValue());
 }
+```
+**Another Approach**
 
-// Another Approach
-System.out.println("Another Approach ==================================");
+```java
+
 employeeList.stream()
     .collect(Collectors.groupingBy(EmployeeNew::getDepartment, Collectors.counting()))
     .forEach((department, count) -> System.out.println(department + " : " + count));
@@ -9948,9 +9950,10 @@ Set<Entry<String, Double>> entrySet1 = avgSalaryOfDepartments.entrySet();
 for (Entry<String, Double> entry : entrySet1) {
     System.out.println(entry.getKey() + " : " + entry.getValue());
 }
+```
+**Another Approach**
 
-// Another Approach
-System.out.println("Another Approach ==================================");
+```java
 employeeList.stream()
     .collect(Collectors.groupingBy(EmployeeNew::getDepartment, Collectors.averagingDouble(EmployeeNew::getSalary)))
     .forEach((department, avgSalary) -> System.out.println(department + " : " + avgSalary));
@@ -9975,9 +9978,10 @@ System.out.println("Name : " + youngestMaleEmployeeInProductDevelopment.getName(
 System.out.println("Age : " + youngestMaleEmployeeInProductDevelopment.getAge());
 System.out.println("Year Of Joining : " + youngestMaleEmployeeInProductDevelopment.getYearOfJoining());
 System.out.println("Salary : " + youngestMaleEmployeeInProductDevelopment.getSalary());
+```
+**Another Approach**
 
-// Another Approach
-System.out.println("Another Approach ==================================");
+```java
 EmployeeNew youngestMaleEmployeeInProductDevelopment1 = employeeList.stream()
     .filter(e -> e.getGender().equals("Male") && e.getDepartment().equals("Product Development"))
     .min(Comparator.comparingInt(EmployeeNew::getAge)).get();
@@ -10061,9 +10065,10 @@ for (Entry<String, List<EmployeeNew>> entry : entrySet2) {
         System.out.println(e.getName());
     }
 }
+```
+**Another Approach**
 
-// Another Approach
-System.out.println("Another Approach ==================================");
+```java
 employeeList.stream()
     .collect(Collectors.groupingBy(EmployeeNew::getDepartment))
     .forEach((department, employees) -> {
@@ -10088,9 +10093,10 @@ DoubleSummaryStatistics employeeSalaryStatistics = employeeList.stream()
 
 System.out.println("Average Salary = " + employeeSalaryStatistics.getAverage());
 System.out.println("Total Salary = " + employeeSalaryStatistics.getSum());
+```
+**Another Approach**
 
-// Another Approach
-System.out.println("Another Approach ==================================");
+```java
 DoubleSummaryStatistics employeeSalaryStatistics1 = employeeList.stream()
     .mapToDouble(EmployeeNew::getSalary)
     .summaryStatistics();
