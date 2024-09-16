@@ -5797,9 +5797,7 @@ public class MaxNonOverlappingIntervals {
 ```
 </details>
 
-<details><summary
-
-><b>94. Implement a segment tree</b></summary>
+<details><summary><b>94. Implement a segment tree</b></summary>
 
 **Java 7:**
 ```java
