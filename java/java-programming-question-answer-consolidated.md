@@ -11013,6 +11013,5 @@ secondHighestScore.ifPresentOrElse(
     () -> System.out.println("No second highest score found")
 );
 ```
-
 </details>
-```
+
