@@ -88,6 +88,7 @@ Hide/Show table of contents
 * [java-programming-question-answer-3-emp-mgmt](java/java-programming-question-answer-3-emp-mgmt.md)
 * [java-programming-question-answer-4-java-8](java/java-programming-question-answer-4-java-8.md)
 * [java-programming-question-answer-5-java-8](java/java-programming-question-answer-5-java-8.md)
+* [java-programming-question-answer-consolidated](java/java-programming-question-answer-consolidated.md)
 
 </details>
 
