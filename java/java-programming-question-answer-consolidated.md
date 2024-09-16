@@ -10189,6 +10189,8 @@ secondHighestSalary.ifPresentOrElse(
 
 </details>
 
+**Complete Code Snippet**
+
 ```java
 
 		// Query 1 : How many male and female employees are there in the organization?
