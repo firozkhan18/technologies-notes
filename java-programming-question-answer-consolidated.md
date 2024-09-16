@@ -2993,9 +2993,7 @@ public class DFS {
 ```
 </details>
 
-<details><summary><b>65
-
-. Find Kth Largest Element in an Array</b></summary>
+<details><summary><b>65. Find Kth Largest Element in an Array</b></summary>
 
 **Java 7:**
 ```java
