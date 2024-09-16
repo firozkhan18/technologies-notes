@@ -10122,6 +10122,7 @@ secondHighestSalary.ifPresentOrElse(
 ```
 
 </details>
+
 ```java
 
 }
