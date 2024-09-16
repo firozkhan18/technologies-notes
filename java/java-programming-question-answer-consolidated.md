@@ -397,9 +397,7 @@ public class SecondLargest {
         int largest = Integer.MIN_VALUE;
         int secondLargest = Integer.MIN_VALUE;
 
-        for (int
-
- num : array) {
+        for (int num : array) {
             if (num > largest) {
                 secondLargest = largest;
                 largest = num;
@@ -412,7 +410,42 @@ public class SecondLargest {
 }
 ```
 
+```java
+public class SecondLargestElement {
+    public static void main(String[] args) {
+        int[] arr = {1, 5, 3, 7, 2};
+        int firstLargest = arr[0];
+        int secondLargest = arr[0];
+
+        for(int i = 1; i < arr.length; i++) {
+            if(arr[i] > firstLargest) {
+                secondLargest = firstLargest;
+                firstLargest = arr[i];
+            } else if(arr[i] > secondLargest && arr[i] != firstLargest) {
+                secondLargest = arr[i];
+            }
+        }
+
+        System.out.println("Second largest element in the array: " + secondLargest);
+    }
+}
+```
+
 **Java 8:**
+
+```java
+import java.util.Arrays;
+
+public class SecondLargestElement {
+    public static void main(String[] args) {
+        int[] array = {3, 8, 1, 6, 2};
+        Arrays.sort(array);
+        System.out.println("Second largest element in the array: " + array[array.length - 2]);
+    }
+}
+```
+**Java 8: Using Stream**
+
 ```java
 import java.util.Arrays;
 
@@ -428,6 +461,20 @@ public class SecondLargest {
         System.out.println("Second Largest: " + secondLargest);
     }
 }
+```
+
+```java
+int[] array = {1, 3, 4, 2, 5};
+
+int secondLargest = Arrays.stream(array)
+        .boxed()
+        .sorted(Collections.reverseOrder())
+        .distinct()
+        .skip(1)
+        .findFirst()
+        .get();
+
+System.out.println("Second largest element in the array: " + secondLargest);
 ```
 </details>
 
