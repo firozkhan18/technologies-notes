@@ -2203,3 +2203,1190 @@ public class ArmstrongNumber {
 </details>
 
 These examples showcase how you can write similar functionality in Java 7 and Java 8. Java 8's features such as streams, lambdas, and enhanced collections methods can make code more concise and expressive.
+
+
+Here is the Markdown file with the answers to each question provided in both Java 7 and Java 8 formats (using lambda and stream API where applicable). You can copy this into a Markdown (.md) file for documentation.
+
+```markdown
+# Coding Questions and Answers
+
+<details>
+<summary><b>Find the sum of all elements in an array</b></summary>
+
+**Java 7:**
+```java
+public class SumOfArray {
+    public static void main(String[] args) {
+        int[] array = {1, 2, 3, 4, 5};
+        int sum = 0;
+        for (int num : array) {
+            sum += num;
+        }
+        System.out.println("Sum: " + sum);
+    }
+}
+```
+
+**Java 8:**
+```java
+import java.util.Arrays;
+
+public class SumOfArray {
+    public static void main(String[] args) {
+        int[] array = {1, 2, 3, 4, 5};
+        int sum = Arrays.stream(array).sum();
+        System.out.println("Sum: " + sum);
+    }
+}
+```
+</details>
+
+<details>
+<summary><b>Check if a given number is prime or not</b></summary>
+
+**Java 7:**
+```java
+public class PrimeNumber {
+    public static void main(String[] args) {
+        int number = 29;
+        boolean isPrime = number > 1;
+        for (int i = 2; i <= Math.sqrt(number); i++) {
+            if (number % i == 0) {
+                isPrime = false;
+                break;
+            }
+        }
+        System.out.println("Is Prime: " + isPrime);
+    }
+}
+```
+
+**Java 8:**
+```java
+import java.util.stream.IntStream;
+
+public class PrimeNumber {
+    public static void main(String[] args) {
+        int number = 29;
+        boolean isPrime = number > 1 && IntStream.rangeClosed(2, (int) Math.sqrt(number))
+                                                  .noneMatch(i -> number % i == 0);
+        System.out.println("Is Prime: " + isPrime);
+    }
+}
+```
+</details>
+
+<details>
+<summary><b>Reverse a string</b></summary>
+
+**Java 7:**
+```java
+public class ReverseString {
+    public static void main(String[] args) {
+        String str = "hello";
+        String reversed = "";
+        for (int i = str.length() - 1; i >= 0; i--) {
+            reversed += str.charAt(i);
+        }
+        System.out.println("Reversed String: " + reversed);
+    }
+}
+```
+
+**Java 8:**
+```java
+public class ReverseString {
+    public static void main(String[] args) {
+        String str = "hello";
+        String reversed = new StringBuilder(str).reverse().toString();
+        System.out.println("Reversed String: " + reversed);
+    }
+}
+```
+</details>
+
+<details>
+<summary><b>Find the factorial of a number</b></summary>
+
+**Java 7:**
+```java
+public class Factorial {
+    public static void main(String[] args) {
+        int number = 5;
+        int result = 1;
+        for (int i = 1; i <= number; i++) {
+            result *= i;
+        }
+        System.out.println("Factorial: " + result);
+    }
+}
+```
+
+**Java 8:**
+```java
+public class Factorial {
+    public static void main(String[] args) {
+        int number = 5;
+        int result = IntStream.rangeClosed(1, number)
+                             .reduce(1, (a, b) -> a * b);
+        System.out.println("Factorial: " + result);
+    }
+}
+```
+</details>
+
+<details>
+<summary><b>Implement a stack in Java</b></summary>
+
+**Java 7:**
+```java
+import java.util.LinkedList;
+
+public class Stack<T> {
+    private LinkedList<T> list = new LinkedList<>();
+
+    public void push(T value) {
+        list.addFirst(value);
+    }
+
+    public T pop() {
+        return list.removeFirst();
+    }
+
+    public T peek() {
+        return list.getFirst();
+    }
+
+    public boolean isEmpty() {
+        return list.isEmpty();
+    }
+
+    public static void main(String[] args) {
+        Stack<Integer> stack = new Stack<>();
+        stack.push(1);
+        stack.push(2);
+        System.out.println("Top: " + stack.peek());
+        System.out.println("Pop: " + stack.pop());
+    }
+}
+```
+
+**Java 8:**
+```java
+import java.util.LinkedList;
+
+public class Stack<T> {
+    private LinkedList<T> list = new LinkedList<>();
+
+    public void push(T value) {
+        list.addFirst(value);
+    }
+
+    public T pop() {
+        return list.removeFirst();
+    }
+
+    public T peek() {
+        return list.getFirst();
+    }
+
+    public boolean isEmpty() {
+        return list.isEmpty();
+    }
+
+    public static void main(String[] args) {
+        Stack<Integer> stack = new Stack<>();
+        stack.push(1);
+        stack.push(2);
+        System.out.println("Top: " + stack.peek());
+        System.out.println("Pop: " + stack.pop());
+    }
+}
+```
+</details>
+
+<details>
+<summary><b>Sort an array in ascending order</b></summary>
+
+**Java 7:**
+```java
+import java.util.Arrays;
+
+public class SortArray {
+    public static void main(String[] args) {
+        int[] array = {5, 3, 8, 1, 2};
+        Arrays.sort(array);
+        System.out.println("Sorted Array: " + Arrays.toString(array));
+    }
+}
+```
+
+**Java 8:**
+```java
+import java.util.Arrays;
+
+public class SortArray {
+    public static void main(String[] args) {
+        int[] array = {5, 3, 8, 1, 2};
+        int[] sortedArray = Arrays.stream(array).sorted().toArray();
+        System.out.println("Sorted Array: " + Arrays.toString(sortedArray));
+    }
+}
+```
+</details>
+
+<details>
+<summary><b>Check if a string is a palindrome</b></summary>
+
+**Java 7:**
+```java
+public class Palindrome {
+    public static void main(String[] args) {
+        String str = "racecar";
+        String reversed = new StringBuilder(str).reverse().toString();
+        boolean isPalindrome = str.equals(reversed);
+        System.out.println("Is Palindrome: " + isPalindrome);
+    }
+}
+```
+
+**Java 8:**
+```java
+public class Palindrome {
+    public static void main(String[] args) {
+        String str = "racecar";
+        boolean isPalindrome = str.equals(new StringBuilder(str).reverse().toString());
+        System.out.println("Is Palindrome: " + isPalindrome);
+    }
+}
+```
+</details>
+
+<details>
+<summary><b>Implement a queue in Java</b></summary>
+
+**Java 7:**
+```java
+import java.util.LinkedList;
+
+public class Queue<T> {
+    private LinkedList<T> list = new LinkedList<>();
+
+    public void enqueue(T value) {
+        list.addLast(value);
+    }
+
+    public T dequeue() {
+        return list.removeFirst();
+    }
+
+    public boolean isEmpty() {
+        return list.isEmpty();
+    }
+
+    public static void main(String[] args) {
+        Queue<Integer> queue = new Queue<>();
+        queue.enqueue(1);
+        queue.enqueue(2);
+        System.out.println("Dequeue: " + queue.dequeue());
+    }
+}
+```
+
+**Java 8:**
+```java
+import java.util.LinkedList;
+
+public class Queue<T> {
+    private LinkedList<T> list = new LinkedList<>();
+
+    public void enqueue(T value) {
+        list.addLast(value);
+    }
+
+    public T dequeue() {
+        return list.removeFirst();
+    }
+
+    public boolean isEmpty() {
+        return list.isEmpty();
+    }
+
+    public static void main(String[] args) {
+        Queue<Integer> queue = new Queue<>();
+        queue.enqueue(1);
+        queue.enqueue(2);
+        System.out.println("Dequeue: " + queue.dequeue());
+    }
+}
+```
+</details>
+
+<details>
+<summary><b>Count the number of vowels in a string</b></summary>
+
+**Java 7:**
+```java
+public class CountVowels {
+    public static void main(String[] args) {
+        String str = "hello world";
+        int count = 0;
+        for (char c : str.toCharArray()) {
+            if ("aeiouAEIOU".indexOf(c) != -1) {
+                count++;
+            }
+        }
+        System.out.println("Number of vowels: " + count);
+    }
+}
+```
+
+**Java 8:**
+```java
+public class CountVowels {
+    public static void main(String[] args) {
+        String str = "hello world";
+        long count = str.chars()
+                        .mapToObj(c -> (char) c)
+                        .filter(c -> "aeiouAEIOU".indexOf(c) != -1)
+                        .count();
+        System.out.println("Number of vowels: " + count);
+    }
+}
+```
+</details>
+
+<details>
+<summary><b>Find the second largest element in an array</b></summary>
+
+**Java 7:**
+```java
+public class SecondLargest {
+    public static void main(String[] args) {
+        int[] array = {10, 5, 20, 8, 15};
+        int largest = Integer.MIN_VALUE;
+        int secondLargest = Integer.MIN_VALUE;
+        for
+
+ (int num : array) {
+            if (num > largest) {
+                secondLargest = largest;
+                largest = num;
+            } else if (num > secondLargest && num < largest) {
+                secondLargest = num;
+            }
+        }
+        System.out.println("Second Largest: " + secondLargest);
+    }
+}
+```
+
+**Java 8:**
+```java
+import java.util.Arrays;
+import java.util.OptionalInt;
+
+public class SecondLargest {
+    public static void main(String[] args) {
+        int[] array = {10, 5, 20, 8, 15};
+        OptionalInt secondLargest = Arrays.stream(array)
+                                          .distinct()
+                                          .sorted()
+                                          .skip(array.length - 2)
+                                          .findFirst();
+        System.out.println("Second Largest: " + secondLargest.orElseThrow());
+    }
+}
+```
+</details>
+
+<details>
+<summary><b>Check if two strings are anagrams of each other</b></summary>
+
+**Java 7:**
+```java
+import java.util.Arrays;
+
+public class Anagrams {
+    public static void main(String[] args) {
+        String str1 = "listen";
+        String str2 = "silent";
+        boolean isAnagram = str1.length() == str2.length() && 
+                            Arrays.equals(
+                                str1.chars().sorted().toArray(),
+                                str2.chars().sorted().toArray());
+        System.out.println("Is Anagram: " + isAnagram);
+    }
+}
+```
+
+**Java 8:**
+```java
+import java.util.Arrays;
+
+public class Anagrams {
+    public static void main(String[] args) {
+        String str1 = "listen";
+        String str2 = "silent";
+        boolean isAnagram = str1.length() == str2.length() &&
+                            Arrays.equals(
+                                str1.chars().sorted().toArray(),
+                                str2.chars().sorted().toArray());
+        System.out.println("Is Anagram: " + isAnagram);
+    }
+}
+```
+</details>
+
+<details>
+<summary><b>Find the Fibonacci series up to a given number</b></summary>
+
+**Java 7:**
+```java
+public class FibonacciSeries {
+    public static void main(String[] args) {
+        int n = 10;
+        int a = 0, b = 1;
+        System.out.print("Fibonacci Series: ");
+        while (a <= n) {
+            System.out.print(a + " ");
+            int next = a + b;
+            a = b;
+            b = next;
+        }
+    }
+}
+```
+
+**Java 8:**
+```java
+import java.util.stream.Stream;
+
+public class FibonacciSeries {
+    public static void main(String[] args) {
+        int n = 10;
+        Stream.iterate(new int[]{0, 1}, f -> new int[]{f[1], f[0] + f[1]})
+              .limit(n)
+              .map(f -> f[0])
+              .filter(f -> f <= n)
+              .forEach(f -> System.out.print(f + " "));
+    }
+}
+```
+</details>
+
+<details>
+<summary><b>Find the number of words in a string</b></summary>
+
+**Java 7:**
+```java
+public class WordCount {
+    public static void main(String[] args) {
+        String str = "Hello world from Java";
+        String[] words = str.split("\\s+");
+        System.out.println("Number of words: " + words.length);
+    }
+}
+```
+
+**Java 8:**
+```java
+public class WordCount {
+    public static void main(String[] args) {
+        String str = "Hello world from Java";
+        long count = str.split("\\s+").length;
+        System.out.println("Number of words: " + count);
+    }
+}
+```
+</details>
+
+<details>
+<summary><b>Find the sum of digits of a number</b></summary>
+
+**Java 7:**
+```java
+public class SumOfDigits {
+    public static void main(String[] args) {
+        int number = 1234;
+        int sum = 0;
+        while (number > 0) {
+            sum += number % 10;
+            number /= 10;
+        }
+        System.out.println("Sum of digits: " + sum);
+    }
+}
+```
+
+**Java 8:**
+```java
+public class SumOfDigits {
+    public static void main(String[] args) {
+        int number = 1234;
+        int sum = Integer.toString(number)
+                         .chars()
+                         .map(c -> c - '0')
+                         .sum();
+        System.out.println("Sum of digits: " + sum);
+    }
+}
+```
+</details>
+
+<details>
+<summary><b>Concatenate two strings</b></summary>
+
+**Java 7:**
+```java
+public class ConcatenateStrings {
+    public static void main(String[] args) {
+        String str1 = "Hello";
+        String str2 = "World";
+        String concatenated = str1 + " " + str2;
+        System.out.println("Concatenated String: " + concatenated);
+    }
+}
+```
+
+**Java 8:**
+```java
+public class ConcatenateStrings {
+    public static void main(String[] args) {
+        String str1 = "Hello";
+        String str2 = "World";
+        String concatenated = String.join(" ", str1, str2);
+        System.out.println("Concatenated String: " + concatenated);
+    }
+}
+```
+</details>
+
+<details>
+<summary><b>Find the index of a given element in an array</b></summary>
+
+**Java 7:**
+```java
+public class IndexOfElement {
+    public static void main(String[] args) {
+        int[] array = {1, 2, 3, 4, 5};
+        int element = 3;
+        int index = -1;
+        for (int i = 0; i < array.length; i++) {
+            if (array[i] == element) {
+                index = i;
+                break;
+            }
+        }
+        System.out.println("Index: " + index);
+    }
+}
+```
+
+**Java 8:**
+```java
+import java.util.Arrays;
+
+public class IndexOfElement {
+    public static void main(String[] args) {
+        int[] array = {1, 2, 3, 4, 5};
+        int element = 3;
+        int index = IntStream.range(0, array.length)
+                            .filter(i -> array[i] == element)
+                            .findFirst()
+                            .orElse(-1);
+        System.out.println("Index: " + index);
+    }
+}
+```
+</details>
+
+<details>
+<summary><b>Find the GCD of two numbers</b></summary>
+
+**Java 7:**
+```java
+public class GCD {
+    public static void main(String[] args) {
+        int a = 56, b = 98;
+        while (b != 0) {
+            int temp = b;
+            b = a % b;
+            a = temp;
+        }
+        System.out.println("GCD: " + a);
+    }
+}
+```
+
+**Java 8:**
+```java
+public class GCD {
+    public static void main(String[] args) {
+        int a = 56, b = 98;
+        int gcd = IntStream.rangeClosed(1, Math.min(a, b))
+                           .filter(i -> a % i == 0 && b % i == 0)
+                           .reduce(0, (x, y) -> y);
+        System.out.println("GCD: " + gcd);
+    }
+}
+```
+</details>
+
+<details>
+<summary><b>Find the intersection of two arrays</b></summary>
+
+**Java 7:**
+```java
+import java.util.HashSet;
+import java.util.Set;
+
+public class IntersectionOfArrays {
+    public static void main(String[] args) {
+        int[] array1 = {1, 2, 3, 4, 5};
+        int[] array2 = {4, 5, 6, 7};
+        Set<Integer> set1 = new HashSet<>();
+        for (int num : array1) {
+            set1.add(num);
+        }
+        Set<Integer> intersection = new HashSet<>();
+        for (int num : array2) {
+            if (set1.contains(num)) {
+                intersection.add(num);
+            }
+        }
+        System.out.println("Intersection: " + intersection);
+    }
+}
+```
+
+**Java 8:**
+```java
+import java.util.Arrays;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+public class IntersectionOfArrays {
+    public static void main(String[] args) {
+        int[] array1 = {1, 2, 3, 4, 5};
+        int[] array2 = {4, 5, 6, 7};
+        Set<Integer> intersection = Arrays.stream(array1)
+                                          .boxed()
+                                          .filter(num -> Arrays.stream(array2).anyMatch(num::equals))
+                                          .collect(Collectors.toSet());
+        System.out.println("Intersection: " + intersection);
+    }
+}
+```
+</details>
+
+<details>
+<summary><b>Find the power of a number using recursion</b></summary>
+
+**Java 7:**
+```java
+public class Power {
+    public static int power(int base, int exponent) {
+        if (exponent == 0) {
+            return 1;
+        }
+        return base * power(base, exponent - 1);
+    }
+
+    public static void main(String[] args) {
+        int base = 2, exponent = 3;
+        System.out.println("Power: " + power(base, exponent));
+    }
+}
+```
+
+**Java
+
+ 8:**
+```java
+public class Power {
+    public static void main(String[] args) {
+        int base = 2, exponent = 3;
+        int result = (int) Math.pow(base, exponent);
+        System.out.println("Power: " + result);
+    }
+}
+```
+</details>
+
+<details>
+<summary><b>Remove duplicate elements from an array</b></summary>
+
+**Java 7:**
+```java
+import java.util.HashSet;
+
+public class RemoveDuplicates {
+    public static void main(String[] args) {
+        int[] array = {1, 2, 2, 3, 4, 4, 5};
+        HashSet<Integer> set = new HashSet<>();
+        for (int num : array) {
+            set.add(num);
+        }
+        System.out.println("Array without duplicates: " + set);
+    }
+}
+```
+
+**Java 8:**
+```java
+import java.util.Arrays;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+public class RemoveDuplicates {
+    public static void main(String[] args) {
+        int[] array = {1, 2, 2, 3, 4, 4, 5};
+        Set<Integer> set = Arrays.stream(array)
+                                 .boxed()
+                                 .collect(Collectors.toSet());
+        System.out.println("Array without duplicates: " + set);
+    }
+}
+```
+</details>
+
+<details>
+<summary><b>Convert a decimal number to binary</b></summary>
+
+**Java 7:**
+```java
+public class DecimalToBinary {
+    public static void main(String[] args) {
+        int number = 10;
+        StringBuilder binary = new StringBuilder();
+        while (number > 0) {
+            binary.insert(0, number % 2);
+            number /= 2;
+        }
+        System.out.println("Binary: " + binary);
+    }
+}
+```
+
+**Java 8:**
+```java
+public class DecimalToBinary {
+    public static void main(String[] args) {
+        int number = 10;
+        String binary = Integer.toBinaryString(number);
+        System.out.println("Binary: " + binary);
+    }
+}
+```
+</details>
+
+<details>
+<summary><b>Check if a given string is a valid palindrome or not</b></summary>
+
+**Java 7:**
+```java
+public class ValidPalindrome {
+    public static void main(String[] args) {
+        String str = "A man, a plan, a canal, Panama";
+        String cleaned = str.replaceAll("[^a-zA-Z0-9]", "").toLowerCase();
+        String reversed = new StringBuilder(cleaned).reverse().toString();
+        boolean isPalindrome = cleaned.equals(reversed);
+        System.out.println("Is Valid Palindrome: " + isPalindrome);
+    }
+}
+```
+
+**Java 8:**
+```java
+public class ValidPalindrome {
+    public static void main(String[] args) {
+        String str = "A man, a plan, a canal, Panama";
+        String cleaned = str.replaceAll("[^a-zA-Z0-9]", "").toLowerCase();
+        boolean isPalindrome = cleaned.equals(new StringBuilder(cleaned).reverse().toString());
+        System.out.println("Is Valid Palindrome: " + isPalindrome);
+    }
+}
+```
+</details>
+
+<details>
+<summary><b>Find the frequency of each element in an array</b></summary>
+
+**Java 7:**
+```java
+import java.util.HashMap;
+import java.util.Map;
+
+public class FrequencyOfElements {
+    public static void main(String[] args) {
+        int[] array = {1, 2, 2, 3, 3, 3, 4};
+        Map<Integer, Integer> frequencyMap = new HashMap<>();
+        for (int num : array) {
+            frequencyMap.put(num, frequencyMap.getOrDefault(num, 0) + 1);
+        }
+        System.out.println("Frequencies: " + frequencyMap);
+    }
+}
+```
+
+**Java 8:**
+```java
+import java.util.Arrays;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
+public class FrequencyOfElements {
+    public static void main(String[] args) {
+        int[] array = {1, 2, 2, 3, 3, 3, 4};
+        Map<Integer, Long> frequencyMap = Arrays.stream(array)
+                                                .boxed()
+                                                .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+        System.out.println("Frequencies: " + frequencyMap);
+    }
+}
+```
+</details>
+
+<details>
+<summary><b>Binary to Decimal Conversion Program</b></summary>
+
+**Java 7:**
+```java
+public class BinaryToDecimal {
+    public static void main(String[] args) {
+        String binary = "1010";
+        int decimal = Integer.parseInt(binary, 2);
+        System.out.println("Decimal: " + decimal);
+    }
+}
+```
+
+**Java 8:**
+```java
+public class BinaryToDecimal {
+    public static void main(String[] args) {
+        String binary = "1010";
+        int decimal = Integer.parseInt(binary, 2);
+        System.out.println("Decimal: " + decimal);
+    }
+}
+```
+</details>
+
+<details>
+<summary><b>Factorial using Recursion Program</b></summary>
+
+**Java 7:**
+```java
+public class FactorialRecursion {
+    public static int factorial(int n) {
+        if (n == 0) return 1;
+        return n * factorial(n - 1);
+    }
+
+    public static void main(String[] args) {
+        int number = 5;
+        System.out.println("Factorial: " + factorial(number));
+    }
+}
+```
+
+**Java 8:**
+```java
+public class FactorialRecursion {
+    public static void main(String[] args) {
+        int number = 5;
+        int result = factorial(number);
+        System.out.println("Factorial: " + result);
+    }
+
+    public static int factorial(int n) {
+        if (n == 0) return 1;
+        return n * factorial(n - 1);
+    }
+}
+```
+</details>
+
+<details>
+<summary><b>Perfect Number Program</b></summary>
+
+**Java 7:**
+```java
+public class PerfectNumber {
+    public static void main(String[] args) {
+        int number = 28;
+        int sum = 0;
+        for (int i = 1; i <= number / 2; i++) {
+            if (number % i == 0) {
+                sum += i;
+            }
+        }
+        boolean isPerfect = sum == number;
+        System.out.println("Is Perfect Number: " + isPerfect);
+    }
+}
+```
+
+**Java 8:**
+```java
+public class PerfectNumber {
+    public static void main(String[] args) {
+        int number = 28;
+        int sum = IntStream.rangeClosed(1, number / 2)
+                          .filter(i -> number % i == 0)
+                          .sum();
+        boolean isPerfect = sum == number;
+        System.out.println("Is Perfect Number: " + isPerfect);
+    }
+}
+```
+</details>
+
+<details>
+<summary><b>Common Elements in Arrays Program</b></summary>
+
+**Java 7:**
+```java
+import java.util.HashSet;
+import java.util.Set;
+
+public class CommonElements {
+    public static void main(String[] args) {
+        int[] array1 = {1, 2, 3, 4};
+        int[] array2 = {3, 4, 5, 6};
+        Set<Integer> set1 = new HashSet<>();
+        for (int num : array1) {
+            set1.add(num);
+        }
+        Set<Integer> common = new HashSet<>();
+        for (int num : array2) {
+            if (set1.contains(num)) {
+                common.add(num);
+            }
+        }
+        System.out.println("Common Elements: " + common);
+    }
+}
+```
+
+**Java 8:**
+```java
+import java.util.Arrays;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+public class CommonElements {
+    public static void main(String[] args) {
+        int[] array1 = {1, 2, 3, 4};
+        int[] array2 = {3, 4, 5, 6};
+        Set<Integer> common = Arrays.stream(array1)
+                                    .boxed()
+                                    .filter(num -> Arrays.stream(array2).anyMatch(num::equals))
+                                    .collect(Collectors.toSet());
+        System.out.println("Common Elements: " + common);
+    }
+}
+```
+</details>
+
+<details>
+<summary><b>Reverse of a Number Program</b></summary>
+
+**Java 7:**
+```java
+public class ReverseNumber {
+    public static void main(String[] args) {
+        int number = 1234;
+        int reversed = 0;
+        while (number != 0) {
+            reversed = reversed * 10 + number % 10;
+            number /= 10;
+        }
+        System.out.println("Reversed Number: " + reversed);
+    }
+}
+```
+
+**Java 8:**
+```java
+public class ReverseNumber {
+    public static void main(String[] args) {
+        int number = 1234;
+        int reversed = Integer.parseInt(new StringBuilder(String.valueOf(number)).reverse().toString());
+        System.out.println("Reversed Number: " + reversed);
+    }
+}
+```
+</details>
+
+<details>
+<summary><b>Check if a given number is an Armstrong number</b></summary>
+
+**Java 7:**
+```java
+public class ArmstrongNumber {
+    public static void main(String[] args)
+
+ {
+        int number = 153;
+        int original = number;
+        int sum = 0;
+        while (number > 0) {
+            int digit = number % 10;
+            sum += Math.pow(digit, 3);
+            number /= 10;
+        }
+        boolean isArmstrong = sum == original;
+        System.out.println("Is Armstrong Number: " + isArmstrong);
+    }
+}
+```
+
+**Java 8:**
+```java
+public class ArmstrongNumber {
+    public static void main(String[] args) {
+        int number = 153;
+        int sum = String.valueOf(number)
+                        .chars()
+                        .map(c -> (int) Math.pow(c - '0', 3))
+                        .sum();
+        boolean isArmstrong = sum == number;
+        System.out.println("Is Armstrong Number: " + isArmstrong);
+    }
+}
+```
+</details>
+
+<details>
+<summary><b>Print all prime numbers up to a given limit</b></summary>
+
+**Java 7:**
+```java
+public class PrimeNumbers {
+    public static void main(String[] args) {
+        int limit = 30;
+        for (int num = 2; num <= limit; num++) {
+            boolean isPrime = true;
+            for (int i = 2; i <= Math.sqrt(num); i++) {
+                if (num % i == 0) {
+                    isPrime = false;
+                    break;
+                }
+            }
+            if (isPrime) {
+                System.out.print(num + " ");
+            }
+        }
+    }
+}
+```
+
+**Java 8:**
+```java
+import java.util.stream.IntStream;
+
+public class PrimeNumbers {
+    public static void main(String[] args) {
+        int limit = 30;
+        IntStream.rangeClosed(2, limit)
+                 .filter(num -> IntStream.rangeClosed(2, (int) Math.sqrt(num))
+                                         .allMatch(i -> num % i != 0))
+                 .forEach(System.out::print);
+    }
+}
+```
+</details>
+
+<details>
+<summary><b>Find the Missing Number in an Array</b></summary>
+
+**Java 7:**
+```java
+public class MissingNumber {
+    public static void main(String[] args) {
+        int[] array = {1, 2, 4, 5, 6};
+        int n = 6; // The size of the array including the missing number
+        int total = n * (n + 1) / 2;
+        int sum = 0;
+        for (int num : array) {
+            sum += num;
+        }
+        int missingNumber = total - sum;
+        System.out.println("Missing Number: " + missingNumber);
+    }
+}
+```
+
+**Java 8:**
+```java
+public class MissingNumber {
+    public static void main(String[] args) {
+        int[] array = {1, 2, 4, 5, 6};
+        int n = 6; // The size of the array including the missing number
+        int total = n * (n + 1) / 2;
+        int sum = Arrays.stream(array).sum();
+        int missingNumber = total - sum;
+        System.out.println("Missing Number: " + missingNumber);
+    }
+}
+```
+</details>
+
+<details>
+<summary><b>Count Vowels and Consonants in a String</b></summary>
+
+**Java 7:**
+```java
+public class CountVowelsConsonants {
+    public static void main(String[] args) {
+        String str = "Hello World";
+        int vowels = 0, consonants = 0;
+        for (char ch : str.toCharArray()) {
+            if (Character.isLetter(ch)) {
+                switch (Character.toLowerCase(ch)) {
+                    case 'a':
+                    case 'e':
+                    case 'i':
+                    case 'o':
+                    case 'u':
+                        vowels++;
+                        break;
+                    default:
+                        consonants++;
+                        break;
+                }
+            }
+        }
+        System.out.println("Vowels: " + vowels);
+        System.out.println("Consonants: " + consonants);
+    }
+}
+```
+
+**Java 8:**
+```java
+import java.util.stream.Collectors;
+
+public class CountVowelsConsonants {
+    public static void main(String[] args) {
+        String str = "Hello World";
+        long vowels = str.chars()
+                         .mapToObj(c -> (char) c)
+                         .filter(c -> "aeiou".indexOf(Character.toLowerCase(c)) != -1)
+                         .count();
+        long consonants = str.chars()
+                             .mapToObj(c -> (char) c)
+                             .filter(c -> Character.isLetter(c) && "aeiou".indexOf(Character.toLowerCase(c)) == -1)
+                             .count();
+        System.out.println("Vowels: " + vowels);
+        System.out.println("Consonants: " + consonants);
+    }
+}
+```
+</details>
+
+Feel free to explore or ask more about these snippets or any other Java-related queries you have!
