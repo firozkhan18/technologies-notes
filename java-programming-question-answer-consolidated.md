@@ -1,144 +1,4 @@
-Here is the consolidated list of questions with duplicates and slightly different phrasings removed:
-
-1. **Find the sum of all elements in an array**
-2. **Check if a given number is prime or not**
-3. **Reverse a string**
-4. **Find the factorial of a number**
-5. **Implement a stack in Java**
-6. **Sort an array in ascending order**
-7. **Check if a string is a palindrome**
-8. **Implement a queue in Java**
-9. **Count the number of vowels in a string**
-10. **Find the second largest element in an array**
-11. **Check if two strings are anagrams of each other**
-12. **Find the Fibonacci series up to a given number**
-13. **Find the number of words in a string**
-14. **Find the sum of digits of a number**
-15. **Concatenate two strings**
-16. **Find the index of a given element in an array**
-17. **Find the GCD of two numbers**
-18. **Find the intersection of two arrays**
-19. **Find the power of a number using recursion**
-20. **Remove duplicate elements from an array**
-21. **Convert a decimal number to binary**
-22. **Check if a given string is a valid palindrome or not**
-23. **Find the frequency of each element in an array**
-24. **Binary to Decimal Conversion Program**
-25. **Factorial using Recursion Program**
-26. **Perfect Number Program**
-27. **Common Elements in Arrays Program**
-28. **Reverse of a Number Program**
-29. **Check if a given number is an Armstrong number**
-30. **Find the missing number in a given array of integers**
-31. **Implement a binary search algorithm**
-32. **Find the least common multiple (LCM) of two numbers**
-33. **Check if a string is a valid email address**
-34. **Find the length of the longest consecutive sequence of a given array**
-35. **Find the roots of a quadratic equation**
-36. **Find the area of a circle**
-37. **Find the product of two matrices**
-38. **Find the median of an array**
-39. **Binary Search Algorithm Program**
-40. **Remove Element from Array Program**
-41. **Sum of Series Program**
-42. **Count Occurrences of Character in a String Program**
-43. **Count Words in a Sentence Program**
-44. **Bubble Sort Program**
-45. **Decimal to Binary Conversion Program**
-46. **Implement a linked list**
-47. **Find the transpose of a matrix**
-48. **Find the average of an array**
-49. **Find the sum of odd numbers in an array**
-50. **Implement a selection Sort algorithm**
-51. **Find the maximum and minimum element in an array**
-52. **Implement a Merge Sort algorithm**
-53. **Count the number of prime numbers in a given range**
-54. **Convert a decimal number to hexadecimal**
-55. **Implement a quick Sort algorithm**
-56. **Find the sum of prime numbers up to a given number**
-57. **Generate a random number between a given range**
-58. **Implement a binary tree**
-59. **Find the longest common prefix in an array of strings**
-60. **Find the number of trailing zeroes in a factorial**
-61. **Heap Sort algorithm Implementation**
-62. **Longest palindrome substring in a string**
-63. **Sum of all even numbers in an array**
-64. **Depth-First Search Algorithm**
-65. **Find Kth Largest Element in an Array**
-66. **Number of Ways to Climb Stairs**
-67. **Breadth-First Search Algorithm**
-68. **Find Missing Element in Arithmetic Progression**
-69. **Dijkstra's Algorithm**
-70. **Maximum Path Sum in Binary Tree**
-71. **Implement a Bellman-Ford algorithm**
-72. **Find the intersection of two linked lists**
-73. **Find the longest increasing subsequence in an array**
-74. **Implement a topological Sort algorithm**
-75. **Find the number of connected components in a graph**
-76. **Find the maximum profit by buying and selling stocks**
-77. **Implement Prim's algorithm**
-78. **Find the longest common subsequence in two strings**
-79. **Implement Kruskal's algorithm**
-80. **Find the minimum spanning tree of a graph**
-81. **Implementing a trie data structure in Java**
-82. **Finding the longest palindrome subsequence in a string in Java**
-83. **Implement a hash table**
-84. **Implement a stack using queues**
-85. **Find the maximum sum subarray using Kadane's algorithm**
-86. **Find the maximum subarray sum in an array**
-87. **Implement an AVL tree**
-88. **Find the shortest path in a maze**
-89. **Implement a disjoint-set data structure**
-90. **Find the longest repeating subsequence in a string**
-91. **Implement a priority queue**
-92. **Find the longest common substring in two strings**
-93. **Find the maximum number of non-overlapping intervals**
-94. **Implement a segment tree**
-95. **Find the maximum area of a histogram**
-96. **Implement Floyd-Warshall algorithm**
-97. **Find the longest word in a dictionary that can be formed from a set of letters**
-98. **Check if a binary tree is balanced**
-99. **Implement a hashmap from scratch**
-100. **Find the maximum flow in a graph using Ford-Fulkerson algorithm**
-101. **Find the largest element in an array**
-102. **Find the smallest element in an array**
-103. **Find the second smallest element in an array**
-104. **Check if an array is sorted in ascending order**
-105. **Check if an array is sorted in descending order**
-106. **Separate odd and even numbers in a list of integers**
-107. **Remove duplicate elements from a list using Java 8 streams**
-108. **Find frequency of each character in a string using Java 8 streams**
-109. **Find frequency of each element in an array or a list**
-110. **Sort a given list of decimals in reverse order**
-111. **Join a list of strings with '[' as prefix, ']' as suffix, and ',' as delimiter**
-112. **Print the numbers from a given list of integers that are multiples of a given number**
-113. **Find maximum and minimum of a list of integers**
-114. **Merge two unsorted arrays into a single sorted array using Java 8 streams**
-115. **Get three maximum numbers and three minimum numbers from a given list of integers**
-116. **Check if two strings are anagrams or not using Java 8 streams**
-117. **Find sum of all digits of a number in Java 8**
-118. **Find second largest number in an integer array**
-119. **Sort a list of strings according to the increasing order of their length**
-120. **Find the sum and average of all elements in an integer array**
-121. **Find common elements between two arrays**
-122. **Reverse each word of a string using Java 8 streams**
-123. **Find the sum of the first natural numbers using streams**
-124. **Print the first even numbers**
-125. **Find the most repeated element in an array**
-126. **Check if a given string is a palindrome using the stream API and lambda expressions**
-127. **Find strings in a list that start with a number**
-128. **Extract duplicate elements from an array**
-129. **Print duplicate characters in a string**
-130. **Find first repeated character in a string**
-131. **Find first non-repeated character in a string**
-132. **Generate the Fibonacci series**
-133. **Print the first odd numbers**
-134. **Get the last element of an array**
-135. **Calculate the age of a person in years given their birthday**
-
-
 Here's a Java 7 and Java 8 implementations for the given problems. Each section includes code for both Java 7 and Java 8.
-
 
 # Java Coding Examples (Java 7 and Java 8)
 
@@ -8106,6 +7966,972 @@ public class CalculateAge {
     public static void main(String[] args) {
         LocalDate birthDate = LocalDate.of(1990, 9, 15);
         System.out.println("Age: " + calculateAge(birthDate));
+    }
+}
+```
+</details>
+<details><summary><b>136. Find the number of trailing zeroes in a factorial</b></summary>
+
+**Java 7:**
+```java
+public class TrailingZeroes {
+    public static int countTrailingZeroes(int n) {
+        int count = 0;
+        while (n >= 5) {
+            n /= 5;
+            count += n;
+        }
+        return count;
+    }
+
+    public static void main(String[] args) {
+        int number = 100;
+        System.out.println("Number of trailing zeroes in " + number + "! : " + countTrailingZeroes(number));
+    }
+}
+```
+
+**Java 8:**
+```java
+public class TrailingZeroes {
+    public static int countTrailingZeroes(int n) {
+        return (int) java.util.stream.IntStream.iterate(n, i -> i >= 5, i -> i / 5)
+                                               .mapToInt(i -> i)
+                                               .sum();
+    }
+
+    public static void main(String[] args) {
+        int number = 100;
+        System.out.println("Number of trailing zeroes in " + number + "! : " + countTrailingZeroes(number));
+    }
+}
+```
+</details>
+
+<details><summary><b>137. Find the longest increasing subsequence in an array</b></summary>
+
+**Java 7:**
+```java
+import java.util.ArrayList;
+import java.util.List;
+
+public class LongestIncreasingSubsequence {
+    public static List<Integer> findLIS(int[] nums) {
+        if (nums.length == 0) return new ArrayList<>();
+
+        List<Integer> lis = new ArrayList<>();
+        int[] dp = new int[nums.length];
+        for (int i = 0; i < nums.length; i++) {
+            dp[i] = 1;
+            for (int j = 0; j < i; j++) {
+                if (nums[i] > nums[j] && dp[i] < dp[j] + 1) {
+                    dp[i] = dp[j] + 1;
+                }
+            }
+        }
+        int maxLength = 0, index = -1;
+        for (int i = 0; i < dp.length; i++) {
+            if (dp[i] > maxLength) {
+                maxLength = dp[i];
+                index = i;
+            }
+        }
+
+        List<Integer> sequence = new ArrayList<>();
+        for (int i = index; i >= 0; i--) {
+            if (dp[i] == maxLength) {
+                sequence.add(0, nums[i]);
+                maxLength--;
+            }
+        }
+        return sequence;
+    }
+
+    public static void main(String[] args) {
+        int[] nums = {10, 9, 2, 5, 3, 7, 101, 18};
+        System.out.println("Longest Increasing Subsequence: " + findLIS(nums));
+    }
+}
+```
+
+**Java 8:**
+```java
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.IntStream;
+
+public class LongestIncreasingSubsequence {
+    public static List<Integer> findLIS(int[] nums) {
+        int[] dp = new int[nums.length];
+        IntStream.range(0, nums.length).forEach(i -> dp[i] = 1);
+        IntStream.range(0, nums.length).forEach(i ->
+            IntStream.range(0, i).filter(j -> nums[i] > nums[j])
+                     .forEach(j -> dp[i] = Math.max(dp[i], dp[j] + 1))
+        );
+
+        int maxLength = IntStream.of(dp).max().orElse(0);
+        List<Integer> sequence = new ArrayList<>();
+        for (int i = dp.length - 1; i >= 0 && maxLength > 0; i--) {
+            if (dp[i] == maxLength) {
+                sequence.add(0, nums[i]);
+                maxLength--;
+            }
+        }
+        return sequence;
+    }
+
+    public static void main(String[] args) {
+        int[] nums = {10, 9, 2, 5, 3, 7, 101, 18};
+        System.out.println("Longest Increasing Subsequence: " + findLIS(nums));
+    }
+}
+```
+</details>
+
+<details><summary><b>138. Implement a topological Sort algorithm</b></summary>
+
+**Java 7:**
+```java
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
+
+public class TopologicalSort {
+    public static List<Integer> topologicalSort(int[][] graph, int numNodes) {
+        List<Integer> result = new ArrayList<>();
+        int[] inDegree = new int[numNodes];
+        for (int[] edges : graph) {
+            for (int edge : edges) {
+                inDegree[edge]++;
+            }
+        }
+
+        Queue<Integer> queue = new LinkedList<>();
+        for (int i = 0; i < numNodes; i++) {
+            if (inDegree[i] == 0) {
+                queue.add(i);
+            }
+        }
+
+        while (!queue.isEmpty()) {
+            int node = queue.poll();
+            result.add(node);
+            for (int edge : graph[node]) {
+                if (--inDegree[edge] == 0) {
+                    queue.add(edge);
+                }
+            }
+        }
+
+        if (result.size() != numNodes) {
+            throw new RuntimeException("Graph has at least one cycle");
+        }
+
+        return result;
+    }
+
+    public static void main(String[] args) {
+        int[][] graph = {
+            {1, 2},
+            {3},
+            {3},
+            {}
+        };
+        System.out.println("Topological Sort: " + topologicalSort(graph, 4));
+    }
+}
+```
+
+**Java 8:**
+```java
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
+import java.util.stream.IntStream;
+
+public class TopologicalSort {
+    public static List<Integer> topologicalSort(int[][] graph, int numNodes) {
+        List<Integer> result = new ArrayList<>();
+        int[] inDegree = new int[numNodes];
+        IntStream.range(0, graph.length)
+                 .forEach(i -> Arrays.stream(graph[i])
+                                      .forEach(edge -> inDegree[edge]++));
+
+        Queue<Integer> queue = new LinkedList<>();
+        IntStream.range(0, numNodes)
+                 .filter(i -> inDegree[i] == 0)
+                 .forEach(queue::add);
+
+        while (!queue.isEmpty()) {
+            int node = queue.poll();
+            result.add(node);
+            Arrays.stream(graph[node])
+                  .forEach(edge -> {
+                      if (--inDegree[edge] == 0) {
+                          queue.add(edge);
+                      }
+                  });
+        }
+
+        if (result.size() != numNodes) {
+            throw new RuntimeException("Graph has at least one cycle");
+        }
+
+        return result;
+    }
+
+    public static void main(String[] args) {
+        int[][] graph = {
+            {1, 2},
+            {3},
+            {3},
+            {}
+        };
+        System.out.println("Topological Sort: " + topologicalSort(graph, 4));
+    }
+}
+```
+</details>
+
+<details><summary><b>139. Check if a given number is an Armstrong number</b></summary>
+
+**Java 7:**
+```java
+public class ArmstrongNumber {
+    public static boolean isArmstrong(int num) {
+        int originalNum = num, sum = 0;
+        int digits = String.valueOf(num).length();
+        while (num > 0) {
+            int digit = num % 10;
+            sum += Math.pow(digit, digits);
+            num /= 10;
+        }
+        return sum == originalNum;
+    }
+
+    public static void main(String[] args) {
+        int number = 153;
+        System.out.println(number + " is an Armstrong number: " + isArmstrong(number));
+    }
+}
+```
+
+**Java 8:**
+```java
+public class ArmstrongNumber {
+    public static boolean isArmstrong(int num) {
+        int digits = (int) Math.log10(num) + 1;
+        int sum = String.valueOf(num).chars()
+                                  .map(c -> (int) Math.pow(c - '0', digits))
+                                  .sum();
+        return sum == num;
+    }
+
+    public static void main(String[] args) {
+        int number = 153;
+        System.out.println(number + " is an Armstrong number: " + isArmstrong(number));
+    }
+}
+```
+</details>
+
+<details><summary><b>140. Find the missing number in a given array of integers</b></summary>
+
+**Java 7:**
+```java
+import java.util.Arrays;
+
+public class MissingNumber {
+    public static int findMissingNumber(int[] nums) {
+        int n = nums.length + 1;
+        int sum = n * (n - 1) / 2;
+        for (int num : nums) {
+            sum -= num;
+        }
+        return sum;
+    }
+
+    public static void main(String[] args) {
+        int[] nums = {0, 1, 3};
+        System.out.println("Missing number: " + findMissingNumber(nums));
+    }
+}
+```
+
+**Java 8:**
+```java
+import java.util.Arrays;
+
+public class MissingNumber {
+    public static int findMissingNumber(int[] nums) {
+        int n = nums.length + 1;
+        int sum = IntStream.range(0, n).sum();
+        sum -= Arrays
+
+.stream(nums).sum();
+        return sum;
+    }
+
+    public static void main(String[] args) {
+        int[] nums = {0, 1, 3};
+        System.out.println("Missing number: " + findMissingNumber(nums));
+    }
+}
+```
+</details>
+
+<details><summary><b>141. Find the longest repeating subsequence in a string</b></summary>
+
+**Java 7:**
+```java
+public class LongestRepeatingSubsequence {
+    public static int findLRS(String str) {
+        int n = str.length();
+        int[][] dp = new int[n + 1][n + 1];
+        
+        for (int i = 1; i <= n; i++) {
+            for (int j = 1; j <= n; j++) {
+                if (str.charAt(i - 1) == str.charAt(j - 1) && i != j) {
+                    dp[i][j] = dp[i - 1][j - 1] + 1;
+                } else {
+                    dp[i][j] = Math.max(dp[i - 1][j], dp[i][j - 1]);
+                }
+            }
+        }
+        
+        return dp[n][n];
+    }
+
+    public static void main(String[] args) {
+        String str = "AABEBCDD";
+        System.out.println("Longest Repeating Subsequence Length: " + findLRS(str));
+    }
+}
+```
+
+**Java 8:**
+```java
+import java.util.stream.IntStream;
+
+public class LongestRepeatingSubsequence {
+    public static int findLRS(String str) {
+        int n = str.length();
+        int[][] dp = new int[n + 1][n + 1];
+        
+        IntStream.range(1, n + 1).forEach(i ->
+            IntStream.range(1, n + 1).forEach(j -> {
+                if (str.charAt(i - 1) == str.charAt(j - 1) && i != j) {
+                    dp[i][j] = dp[i - 1][j - 1] + 1;
+                } else {
+                    dp[i][j] = Math.max(dp[i - 1][j], dp[i][j - 1]);
+                }
+            })
+        );
+        
+        return dp[n][n];
+    }
+
+    public static void main(String[] args) {
+        String str = "AABEBCDD";
+        System.out.println("Longest Repeating Subsequence Length: " + findLRS(str));
+    }
+}
+```
+</details>
+
+<details><summary><b>142. Reverse each word of a string using Java 8 streams</b></summary>
+
+**Java 7:**
+```java
+public class ReverseEachWord {
+    public static String reverseEachWord(String str) {
+        String[] words = str.split(" ");
+        StringBuilder result = new StringBuilder();
+        for (String word : words) {
+            StringBuilder reversed = new StringBuilder(word).reverse();
+            result.append(reversed).append(" ");
+        }
+        return result.toString().trim();
+    }
+
+    public static void main(String[] args) {
+        String str = "Hello World";
+        System.out.println("Reversed words: " + reverseEachWord(str));
+    }
+}
+```
+
+**Java 8:**
+```java
+import java.util.Arrays;
+import java.util.stream.Collectors;
+
+public class ReverseEachWord {
+    public static String reverseEachWord(String str) {
+        return Arrays.stream(str.split(" "))
+                     .map(word -> new StringBuilder(word).reverse().toString())
+                     .collect(Collectors.joining(" "));
+    }
+
+    public static void main(String[] args) {
+        String str = "Hello World";
+        System.out.println("Reversed words: " + reverseEachWord(str));
+    }
+}
+```
+</details>
+
+<details><summary><b>143. Find the sum of the first natural numbers using streams</b></summary>
+
+**Java 7:**
+```java
+public class SumOfFirstNaturalNumbers {
+    public static int sumOfFirstNNumbers(int n) {
+        int sum = 0;
+        for (int i = 1; i <= n; i++) {
+            sum += i;
+        }
+        return sum;
+    }
+
+    public static void main(String[] args) {
+        int n = 10;
+        System.out.println("Sum of first " + n + " natural numbers: " + sumOfFirstNNumbers(n));
+    }
+}
+```
+
+**Java 8:**
+```java
+import java.util.stream.IntStream;
+
+public class SumOfFirstNaturalNumbers {
+    public static int sumOfFirstNNumbers(int n) {
+        return IntStream.rangeClosed(1, n).sum();
+    }
+
+    public static void main(String[] args) {
+        int n = 10;
+        System.out.println("Sum of first " + n + " natural numbers: " + sumOfFirstNNumbers(n));
+    }
+}
+```
+</details>
+
+<details><summary><b>144. Print the first even numbers</b></summary>
+
+**Java 7:**
+```java
+public class FirstEvenNumbers {
+    public static void printFirstEvenNumbers(int n) {
+        int count = 0;
+        int num = 2;
+        while (count < n) {
+            System.out.println(num);
+            num += 2;
+            count++;
+        }
+    }
+
+    public static void main(String[] args) {
+        int n = 10;
+        System.out.println("First " + n + " even numbers:");
+        printFirstEvenNumbers(n);
+    }
+}
+```
+
+**Java 8:**
+```java
+import java.util.stream.IntStream;
+
+public class FirstEvenNumbers {
+    public static void printFirstEvenNumbers(int n) {
+        IntStream.iterate(2, i -> i + 2)
+                 .limit(n)
+                 .forEach(System.out::println);
+    }
+
+    public static void main(String[] args) {
+        int n = 10;
+        System.out.println("First " + n + " even numbers:");
+        printFirstEvenNumbers(n);
+    }
+}
+```
+</details>
+
+<details><summary><b>145. Find the most repeated element in an array</b></summary>
+
+**Java 7:**
+```java
+import java.util.HashMap;
+import java.util.Map;
+
+public class MostRepeatedElement {
+    public static int findMostRepeated(int[] arr) {
+        Map<Integer, Integer> frequencyMap = new HashMap<>();
+        for (int num : arr) {
+            frequencyMap.put(num, frequencyMap.getOrDefault(num, 0) + 1);
+        }
+        return frequencyMap.entrySet()
+                           .stream()
+                           .max(Map.Entry.comparingByValue())
+                           .map(Map.Entry::getKey)
+                           .orElseThrow(() -> new RuntimeException("Array is empty"));
+    }
+
+    public static void main(String[] args) {
+        int[] arr = {1, 2, 2, 3, 3, 3, 4, 4, 4, 4};
+        System.out.println("Most repeated element: " + findMostRepeated(arr));
+    }
+}
+```
+
+**Java 8:**
+```java
+import java.util.Arrays;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
+public class MostRepeatedElement {
+    public static int findMostRepeated(int[] arr) {
+        return Arrays.stream(arr)
+                     .boxed()
+                     .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()))
+                     .entrySet()
+                     .stream()
+                     .max(Map.Entry.comparingByValue())
+                     .map(Map.Entry::getKey)
+                     .orElseThrow(() -> new RuntimeException("Array is empty"));
+    }
+
+    public static void main(String[] args) {
+        int[] arr = {1, 2, 2, 3, 3, 3, 4, 4, 4, 4};
+        System.out.println("Most repeated element: " + findMostRepeated(arr));
+    }
+}
+```
+</details>
+
+<details><summary><b>146. Check if a given string is a palindrome using the stream API and lambda expressions</b></summary>
+
+**Java 7:**
+```java
+public class PalindromeChecker {
+    public static boolean isPalindrome(String str) {
+        String reversed = new StringBuilder(str).reverse().toString();
+        return str.equals(reversed);
+    }
+
+    public static void main(String[] args) {
+        String str = "radar";
+        System.out.println(str + " is a palindrome: " + isPalindrome(str));
+    }
+}
+```
+
+**Java 8:**
+```java
+public class PalindromeChecker {
+    public static boolean isPalindrome(String str) {
+        String reversed = new StringBuilder(str).reverse().toString();
+        return str.equals(reversed);
+    }
+
+    public static void main(String[] args) {
+        String str = "radar";
+        System.out.println(str + " is a palindrome: " + isPalindrome(str));
+    }
+}
+```
+</details>
+
+<details><summary><b>147. Find strings in a list that start with a number</b></summary>
+
+**Java 7:**
+```java
+import java.util.ArrayList;
+import java.util.List;
+
+public class StringsStartingWithNumber {
+    public static List<String> findStringsStartingWithNumber(List<String> strings) {
+        List<String> result = new ArrayList<>();
+        for (String str : strings) {
+            if (Character.isDigit(str.charAt(0))) {
+                result.add(str);
+            }
+        }
+        return result;
+    }
+
+    public static void main(String[] args) {
+        List<String> strings = List.of("1apple", "banana", "2oranges", "cherry");
+        System.out.println("Strings
+
+ starting with a number: " + findStringsStartingWithNumber(strings));
+    }
+}
+```
+
+**Java 8:**
+```java
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
+public class StringsStartingWithNumber {
+    public static List<String> findStringsStartingWithNumber(List<String> strings) {
+        return strings.stream()
+                      .filter(str -> Character.isDigit(str.charAt(0)))
+                      .collect(Collectors.toList());
+    }
+
+    public static void main(String[] args) {
+        List<String> strings = Arrays.asList("1apple", "banana", "2oranges", "cherry");
+        System.out.println("Strings starting with a number: " + findStringsStartingWithNumber(strings));
+    }
+}
+```
+</details>
+
+<details><summary><b>148. Extract duplicate elements from an array</b></summary>
+
+**Java 7:**
+```java
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+public class DuplicateElements {
+    public static List<Integer> findDuplicates(int[] arr) {
+        Set<Integer> seen = new HashSet<>();
+        Set<Integer> duplicates = new HashSet<>();
+        for (int num : arr) {
+            if (!seen.add(num)) {
+                duplicates.add(num);
+            }
+        }
+        return new ArrayList<>(duplicates);
+    }
+
+    public static void main(String[] args) {
+        int[] arr = {1, 2, 2, 3, 3, 4};
+        System.out.println("Duplicate elements: " + findDuplicates(arr));
+    }
+}
+```
+
+**Java 8:**
+```java
+import java.util.Arrays;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+public class DuplicateElements {
+    public static List<Integer> findDuplicates(int[] arr) {
+        Set<Integer> duplicates = Arrays.stream(arr)
+                                        .boxed()
+                                        .collect(Collectors.groupingBy(e -> e, Collectors.counting()))
+                                        .entrySet()
+                                        .stream()
+                                        .filter(entry -> entry.getValue() > 1)
+                                        .map(entry -> entry.getKey())
+                                        .collect(Collectors.toSet());
+        return Arrays.stream(arr)
+                     .boxed()
+                     .filter(duplicates::contains)
+                     .distinct()
+                     .collect(Collectors.toList());
+    }
+
+    public static void main(String[] args) {
+        int[] arr = {1, 2, 2, 3, 3, 4};
+        System.out.println("Duplicate elements: " + findDuplicates(arr));
+    }
+}
+```
+</details>
+
+<details><summary><b>149. Print duplicate characters in a string</b></summary>
+
+**Java 7:**
+```java
+import java.util.HashMap;
+import java.util.Map;
+
+public class DuplicateCharacters {
+    public static void printDuplicates(String str) {
+        Map<Character, Integer> charCount = new HashMap<>();
+        for (char c : str.toCharArray()) {
+            charCount.put(c, charCount.getOrDefault(c, 0) + 1);
+        }
+        for (Map.Entry<Character, Integer> entry : charCount.entrySet()) {
+            if (entry.getValue() > 1) {
+                System.out.println("Duplicate character: " + entry.getKey() + " Count: " + entry.getValue());
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        String str = "programming";
+        System.out.println("Duplicate characters in the string:");
+        printDuplicates(str);
+    }
+}
+```
+
+**Java 8:**
+```java
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
+public class DuplicateCharacters {
+    public static void printDuplicates(String str) {
+        Map<Character, Long> charCount = str.chars()
+                                            .mapToObj(c -> (char) c)
+                                            .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+
+        charCount.entrySet()
+                 .stream()
+                 .filter(entry -> entry.getValue() > 1)
+                 .forEach(entry -> System.out.println("Duplicate character: " + entry.getKey() + " Count: " + entry.getValue()));
+    }
+
+    public static void main(String[] args) {
+        String str = "programming";
+        System.out.println("Duplicate characters in the string:");
+        printDuplicates(str);
+    }
+}
+```
+</details>
+
+<details><summary><b>150. Find first repeated character in a string</b></summary>
+
+**Java 7:**
+```java
+import java.util.HashSet;
+import java.util.Set;
+
+public class FirstRepeatedCharacter {
+    public static Character findFirstRepeatedCharacter(String str) {
+        Set<Character> seen = new HashSet<>();
+        for (char c : str.toCharArray()) {
+            if (!seen.add(c)) {
+                return c;
+            }
+        }
+        return null;
+    }
+
+    public static void main(String[] args) {
+        String str = "programming";
+        System.out.println("First repeated character: " + findFirstRepeatedCharacter(str));
+    }
+}
+```
+
+**Java 8:**
+```java
+import java.util.LinkedHashSet;
+import java.util.Set;
+
+public class FirstRepeatedCharacter {
+    public static Character findFirstRepeatedCharacter(String str) {
+        Set<Character> seen = new LinkedHashSet<>();
+        return str.chars()
+                  .mapToObj(c -> (char) c)
+                  .filter(c -> !seen.add(c))
+                  .findFirst()
+                  .orElse(null);
+    }
+
+    public static void main(String[] args) {
+        String str = "programming";
+        System.out.println("First repeated character: " + findFirstRepeatedCharacter(str));
+    }
+}
+```
+</details>
+<details><summary><b>151. Find the longest increasing subsequence in an array</b></summary>
+
+**Java 7:**
+```java
+import java.util.Arrays;
+
+public class LongestIncreasingSubsequence {
+
+    public static int findLIS(int[] arr) {
+        int n = arr.length;
+        int[] lis = new int[n];
+        Arrays.fill(lis, 1);
+        
+        for (int i = 1; i < n; i++) {
+            for (int j = 0; j < i; j++) {
+                if (arr[i] > arr[j] && lis[i] < lis[j] + 1) {
+                    lis[i] = lis[j] + 1;
+                }
+            }
+        }
+        
+        return Arrays.stream(lis).max().getAsInt();
+    }
+
+    public static void main(String[] args) {
+        int[] arr = {10, 22, 9, 33, 21, 50, 41, 60, 80};
+        System.out.println("Length of Longest Increasing Subsequence: " + findLIS(arr));
+    }
+}
+```
+
+**Java 8:**
+```java
+import java.util.Arrays;
+import java.util.stream.IntStream;
+
+public class LongestIncreasingSubsequence {
+
+    public static int findLIS(int[] arr) {
+        int n = arr.length;
+        int[] lis = new int[n];
+        Arrays.fill(lis, 1);
+        
+        IntStream.range(1, n).forEach(i -> 
+            IntStream.range(0, i).forEach(j -> {
+                if (arr[i] > arr[j] && lis[i] < lis[j] + 1) {
+                    lis[i] = lis[j] + 1;
+                }
+            })
+        );
+        
+        return Arrays.stream(lis).max().getAsInt();
+    }
+
+    public static void main(String[] args) {
+        int[] arr = {10, 22, 9, 33, 21, 50, 41, 60, 80};
+        System.out.println("Length of Longest Increasing Subsequence: " + findLIS(arr));
+    }
+}
+```
+</details>
+
+<details><summary><b>152. Implement a topological Sort algorithm</b></summary>
+
+**Java 7:**
+```java
+import java.util.*;
+
+public class TopologicalSort {
+    private final int vertices;
+    private final LinkedList<Integer>[] adjacencyList;
+
+    public TopologicalSort(int vertices) {
+        this.vertices = vertices;
+        adjacencyList = new LinkedList[vertices];
+        for (int i = 0; i < vertices; i++) {
+            adjacencyList[i] = new LinkedList<>();
+        }
+    }
+
+    public void addEdge(int source, int destination) {
+        adjacencyList[source].add(destination);
+    }
+
+    public void topologicalSortUtil(int v, boolean[] visited, Stack<Integer> stack) {
+        visited[v] = true;
+        Integer[] neighbors = adjacencyList[v].toArray(new Integer[0]);
+        for (Integer neighbor : neighbors) {
+            if (!visited[neighbor]) {
+                topologicalSortUtil(neighbor, visited, stack);
+            }
+        }
+        stack.push(v);
+    }
+
+    public void topologicalSort() {
+        Stack<Integer> stack = new Stack<>();
+        boolean[] visited = new boolean[vertices];
+        for (int i = 0; i < vertices; i++) {
+            if (!visited[i]) {
+                topologicalSortUtil(i, visited, stack);
+            }
+        }
+        while (!stack.isEmpty()) {
+            System.out.print(stack.pop() + " ");
+        }
+    }
+
+    public static void main(String[] args) {
+        TopologicalSort graph = new TopologicalSort(6);
+        graph.addEdge(5, 2);
+        graph.addEdge(5, 0);
+        graph.addEdge(4, 0);
+        graph.addEdge(4, 1);
+        graph.addEdge(2, 3);
+        graph.addEdge(3, 1);
+        
+        System.out.println("Topological Sort of the given graph:");
+        graph.topologicalSort();
+    }
+}
+```
+
+**Java 8:**
+```java
+import java.util.*;
+import java.util.stream.IntStream;
+
+public class TopologicalSort {
+    private final int vertices;
+    private final List<Integer>[] adjacencyList;
+
+    public TopologicalSort(int vertices) {
+        this.vertices = vertices;
+        adjacencyList = new ArrayList[vertices];
+        IntStream.range(0, vertices).forEach(i -> adjacencyList[i] = new ArrayList<>());
+    }
+
+    public void addEdge(int source, int destination) {
+        adjacencyList[source].add(destination);
+    }
+
+    public void topologicalSortUtil(int v, boolean[] visited, Deque<Integer> stack) {
+        visited[v] = true;
+        adjacencyList[v].forEach(neighbor -> {
+            if (!visited[neighbor]) {
+                topologicalSortUtil(neighbor, visited, stack);
+            }
+        });
+        stack.push(v);
+    }
+
+    public void topologicalSort() {
+        Deque<Integer> stack = new ArrayDeque<>();
+        boolean[] visited = new boolean[vertices];
+        IntStream.range(0, vertices).filter(i -> !visited[i])
+                 .forEach(i -> topologicalSortUtil(i, visited, stack));
+        stack.forEach(System.out::print);
+    }
+
+    public static void main(String[] args) {
+        TopologicalSort graph = new TopologicalSort(6);
+        graph.addEdge(5, 2);
+        graph.addEdge(5, 0);
+        graph.addEdge(4, 0);
+        graph.addEdge(4, 1);
+        graph.addEdge(2, 3);
+        graph.addEdge(3, 1);
+        
+        System.out.println("Topological Sort of the given graph:");
+        graph.topologicalSort();
     }
 }
 ```
