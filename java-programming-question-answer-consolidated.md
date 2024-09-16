@@ -139,7 +139,6 @@ Here is the consolidated list of questions with duplicates and slightly differen
 
 Certainly! Here is the list of questions with answers formatted as requested for a Markdown file. I'll include both Java 7 and Java 8 (using lambda and Stream API) solutions where applicable.
 
-```markdown
 # Coding Questions and Answers
 
 <details>
@@ -1187,7 +1186,7 @@ public class ArmstrongNumber {
 
 Here is the completed list with all the provided questions, answers in both Java 7 and Java 8, including Java 8 answers using Lambda and Stream API.
 
-```markdown
+
 # Coding Questions and Solutions
 
 <details>
