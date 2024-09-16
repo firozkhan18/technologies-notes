@@ -2810,6 +2810,188 @@ public class Employee {
   }
 }
 ```
+**DENSE_RANK()** is a window function in SQL that assigns ranks to rows within a partition of a result set. Unlike `RANK()`, which may produce gaps in rank values when there are ties, `DENSE_RANK()` does not leave gaps. This function is useful for ranking items when you want a consecutive ranking without gaps.
+
+Here are some common interview questions related to `DENSE_RANK()` along with examples:
+
+### **1. Basic Understanding**
+
+**Q1: What does the `DENSE_RANK()` function do in SQL?**
+
+**Answer:**
+The `DENSE_RANK()` function assigns ranks to rows within a partition of a result set, with no gaps in the ranking values. It provides a ranking based on the order of a specified column or columns, and if there are ties, it assigns the same rank to the tied rows but does not skip rank numbers for subsequent rows.
+
+**Example:**
+
+Given the following table of `employees`:
+
+| emp_id | emp_name | salary |
+|--------|----------|--------|
+| 1      | Alice    | 5000   |
+| 2      | Bob      | 6000   |
+| 3      | Charlie  | 6000   |
+| 4      | David    | 4000   |
+| 5      | Eve      | 3000   |
+
+**SQL Query:**
+```sql
+SELECT emp_name, salary,
+       DENSE_RANK() OVER (ORDER BY salary DESC) AS rank
+FROM employees;
+```
+
+**Result:**
+
+| emp_name | salary | rank |
+|----------|--------|------|
+| Bob      | 6000   | 1    |
+| Charlie  | 6000   | 1    |
+| Alice    | 5000   | 2    |
+| David    | 4000   | 3    |
+| Eve      | 3000   | 4    |
+
+### **2. Partitioning Data**
+
+**Q2: How can you use `DENSE_RANK()` with partitioning?**
+
+**Answer:**
+`DENSE_RANK()` can be used with the `PARTITION BY` clause to rank rows within partitions of the result set.
+
+**Example:**
+
+Suppose we have a table `sales` with regions and sales figures:
+
+| region | salesperson | sales |
+|--------|-------------|-------|
+| East   | Alice       | 5000  |
+| East   | Bob         | 6000  |
+| West   | Charlie     | 7000  |
+| West   | David       | 6000  |
+
+**SQL Query:**
+```sql
+SELECT region, salesperson, sales,
+       DENSE_RANK() OVER (PARTITION BY region ORDER BY sales DESC) AS rank
+FROM sales;
+```
+
+**Result:**
+
+| region | salesperson | sales | rank |
+|--------|-------------|-------|------|
+| East   | Bob         | 6000  | 1    |
+| East   | Alice       | 5000  | 2    |
+| West   | Charlie     | 7000  | 1    |
+| West   | David       | 6000  | 2    |
+
+### **3. Handling Ties**
+
+**Q3: How does `DENSE_RANK()` handle ties in the data?**
+
+**Answer:**
+`DENSE_RANK()` assigns the same rank to tied rows and continues with the next rank without skipping any numbers.
+
+**Example:**
+
+Consider a table `students` with their scores:
+
+| student_id | student_name | score |
+|------------|--------------|-------|
+| 1          | John         | 85    |
+| 2          | Jane         | 90    |
+| 3          | Alice        | 90    |
+| 4          | Bob          | 80    |
+
+**SQL Query:**
+```sql
+SELECT student_name, score,
+       DENSE_RANK() OVER (ORDER BY score DESC) AS rank
+FROM students;
+```
+
+**Result:**
+
+| student_name | score | rank |
+|--------------|-------|------|
+| Jane         | 90    | 1    |
+| Alice        | 90    | 1    |
+| John         | 85    | 2    |
+| Bob          | 80    | 3    |
+
+### **4. Using DENSE_RANK() for Ranking Products**
+
+**Q4: How can `DENSE_RANK()` be used to rank products by sales within each category?**
+
+**Answer:**
+You can use `DENSE_RANK()` to rank products based on their sales figures within each category using partitioning.
+
+**Example:**
+
+Suppose we have a table `products` with categories and sales:
+
+| category | product_name | sales |
+|----------|--------------|-------|
+| Electronics | TV         | 5000  |
+| Electronics | Radio      | 3000  |
+| Clothing     | Shirt      | 2000  |
+| Clothing     | Jacket     | 2500  |
+
+**SQL Query:**
+```sql
+SELECT category, product_name, sales,
+       DENSE_RANK() OVER (PARTITION BY category ORDER BY sales DESC) AS rank
+FROM products;
+```
+
+**Result:**
+
+| category    | product_name | sales | rank |
+|-------------|--------------|-------|------|
+| Electronics | TV           | 5000  | 1    |
+| Electronics | Radio        | 3000  | 2    |
+| Clothing    | Jacket       | 2500  | 1    |
+| Clothing    | Shirt        | 2000  | 2    |
+
+### **5. Calculating Top N Items**
+
+**Q5: How can you use `DENSE_RANK()` to select the top N items in a category?**
+
+**Answer:**
+You can use `DENSE_RANK()` in a subquery to filter and select the top N items.
+
+**Example:**
+
+To get the top 2 products by sales in each category:
+
+**SQL Query:**
+```sql
+WITH RankedProducts AS (
+    SELECT category, product_name, sales,
+           DENSE_RANK() OVER (PARTITION BY category ORDER BY sales DESC) AS rank
+    FROM products
+)
+SELECT category, product_name, sales
+FROM RankedProducts
+WHERE rank <= 2;
+```
+
+**Result:**
+
+| category    | product_name | sales |
+|-------------|--------------|-------|
+| Electronics | TV           | 5000  |
+| Electronics | Radio        | 3000  |
+| Clothing    | Jacket       | 2500  |
+| Clothing    | Shirt        | 2000  |
+
+### **Summary**
+
+- **`DENSE_RANK()`** provides a ranking with no gaps in rank values.
+- It can be used with `PARTITION BY` to rank data within specific partitions.
+- Handles ties by assigning the same rank to tied rows and continues without gaps.
+- Useful for generating rank-based reports and filtering top N results.
+
+Understanding `DENSE_RANK()` and its usage can help you handle various ranking and reporting requirements effectively in SQL.
 
 ### SQL Queries
 
