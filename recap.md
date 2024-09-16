@@ -3263,3 +3263,363 @@ public class ArrayConcatenation {
 - **Java String Array**: Concatenate strings using `reduce()`.
 
 Feel free to ask if you need further clarification or additional examples!
+
+
+The SQL query you provided uses the `LEAD()` window function to get the salary of the next employee in the list based on the order of salaries. Let’s break down the query to understand how it works:
+
+### Query Explanation
+
+```sql
+SELECT emp_name, emp_salary,
+       LEAD(emp_salary) OVER (ORDER BY emp_salary DESC) AS next_salary
+FROM Emp;
+```
+
+#### Components of the Query
+
+1. **`SELECT emp_name, emp_salary,`**
+   - Selects the `emp_name` and `emp_salary` columns from the `Emp` table.
+
+2. **`LEAD(emp_salary) OVER (ORDER BY emp_salary DESC) AS next_salary`**
+   - `LEAD(emp_salary)` is a window function that returns the value of `emp_salary` from the subsequent row in the result set based on the specified ordering.
+   - `OVER (ORDER BY emp_salary DESC)` specifies the window for the `LEAD()` function, meaning it looks at the next row in the order defined by `ORDER BY emp_salary DESC`.
+
+3. **`FROM Emp`**
+   - Indicates the table from which to retrieve the data.
+
+### How `LEAD()` Works
+
+- **`LEAD(column_name)`**: Retrieves the value of a column from the next row in the result set. By default, if there is no subsequent row, it returns `NULL`.
+- **`ORDER BY emp_salary DESC`**: Defines the order in which rows are processed. In this case, rows are ordered by `emp_salary` in descending order, meaning the highest salary comes first.
+
+### Detailed Example
+
+Given the sample data:
+
+| emp_id | emp_name | emp_salary | dept_id |
+|--------|----------|------------|---------|
+| 1      | Alice    | 5000       | 1       |
+| 2      | Bob      | 7000       | 1       |
+| 3      | Charlie  | 7000       | 2       |
+| 4      | David    | 6000       | 2       |
+| 5      | Eve      | 5500       | 3       |
+| 6      | Frank    | 4500       | 3       |
+
+When you execute the query:
+
+```sql
+SELECT emp_name, emp_salary,
+       LEAD(emp_salary) OVER (ORDER BY emp_salary DESC) AS next_salary
+FROM Emp;
+```
+
+#### Result:
+
+| emp_name | emp_salary | next_salary |
+|----------|------------|-------------|
+| Bob      | 7000       | 7000        |
+| Charlie  | 7000       | 6000        |
+| David    | 6000       | 5500        |
+| Eve      | 5500       | 4500        |
+| Alice    | 5000       | NULL        |
+| Frank    | 4500       | NULL        |
+
+### Explanation of Results
+
+- **Bob**: The highest salary is `7000`. The `LEAD()` function looks at the next row in the descending order of salaries. The next salary is `7000` (Charlie), as they are tied.
+- **Charlie**: The next salary is `6000` (David).
+- **David**: The next salary is `5500` (Eve).
+- **Eve**: The next salary is `4500` (Frank).
+- **Alice**: Since Alice has the lowest salary among the listed employees, the `LEAD()` function returns `NULL` as there is no subsequent row.
+- **Frank**: Similarly, Frank has no next row, so `NULL` is returned.
+
+### Summary
+
+- The `LEAD()` function is useful for comparing a value with the next row’s value based on a specific ordering.
+- If the `ORDER BY` clause specifies descending order, `LEAD()` provides the next lower salary for each employee.
+- If there is no next row (i.e., the last row), `LEAD()` returns `NULL`.
+
+This function is particularly handy in scenarios where you need to compare a value with its subsequent values in a dataset, such as in time series data or ordered lists.
+
+Certainly! Here’s a comprehensive list of SQL interview questions with examples, covering various aspects like basic queries, joins, subqueries, ranking functions, and more.
+
+### 1. Basic SQL Queries
+
+**1.1 Select All Columns**
+
+- **Question:** How do you select all columns from a table named `employees`?
+  
+  **Example:**
+  ```sql
+  SELECT * FROM employees;
+  ```
+
+**1.2 Select Specific Columns**
+
+- **Question:** How do you select `first_name` and `last_name` from the `employees` table?
+  
+  **Example:**
+  ```sql
+  SELECT first_name, last_name FROM employees;
+  ```
+
+### 2. Filtering Data
+
+**2.1 Simple WHERE Clause**
+
+- **Question:** How do you find employees with a salary greater than $50,000?
+  
+  **Example:**
+  ```sql
+  SELECT * FROM employees
+  WHERE salary > 50000;
+  ```
+
+**2.2 WHERE with Multiple Conditions**
+
+- **Question:** How do you find employees in the 'IT' department with a salary greater than $60,000?
+  
+  **Example:**
+  ```sql
+  SELECT * FROM employees
+  WHERE department = 'IT' AND salary > 60000;
+  ```
+
+### 3. Aggregation Functions
+
+**3.1 Using `COUNT()`**
+
+- **Question:** How do you count the number of employees in each department?
+  
+  **Example:**
+  ```sql
+  SELECT department, COUNT(*) AS num_employees
+  FROM employees
+  GROUP BY department;
+  ```
+
+**3.2 Using `AVG()`**
+
+- **Question:** How do you find the average salary of all employees?
+  
+  **Example:**
+  ```sql
+  SELECT AVG(salary) AS average_salary
+  FROM employees;
+  ```
+
+### 4. Joins
+
+**4.1 Inner Join**
+
+- **Question:** How do you perform an inner join between `employees` and `departments` on `department_id`?
+  
+  **Example:**
+  ```sql
+  SELECT e.first_name, d.department_name
+  FROM employees e
+  INNER JOIN departments d ON e.department_id = d.department_id;
+  ```
+
+**4.2 Left Join**
+
+- **Question:** How do you get all employees and their departments, including those without a department?
+  
+  **Example:**
+  ```sql
+  SELECT e.first_name, d.department_name
+  FROM employees e
+  LEFT JOIN departments d ON e.department_id = d.department_id;
+  ```
+
+**4.3 Right Join**
+
+- **Question:** How do you get all departments and the employees in them, including departments with no employees?
+  
+  **Example:**
+  ```sql
+  SELECT d.department_name, e.first_name
+  FROM departments d
+  RIGHT JOIN employees e ON d.department_id = e.department_id;
+  ```
+
+**4.4 Full Join**
+
+- **Question:** How do you get all employees and departments, including those without a matching counterpart in the other table?
+  
+  **Example:**
+  ```sql
+  SELECT e.first_name, d.department_name
+  FROM employees e
+  FULL OUTER JOIN departments d ON e.department_id = d.department_id;
+  ```
+
+### 5. Subqueries
+
+**5.1 Simple Subquery**
+
+- **Question:** How do you find employees who have a salary greater than the average salary of all employees?
+  
+  **Example:**
+  ```sql
+  SELECT * FROM employees
+  WHERE salary > (SELECT AVG(salary) FROM employees);
+  ```
+
+**5.2 Correlated Subquery**
+
+- **Question:** How do you find employees who earn more than the highest salary in the 'IT' department?
+  
+  **Example:**
+  ```sql
+  SELECT * FROM employees e1
+  WHERE salary > (SELECT MAX(salary) FROM employees e2 WHERE e2.department = 'IT');
+  ```
+
+### 6. Ranking Functions
+
+**6.1 Using `ROW_NUMBER()`**
+
+- **Question:** How do you rank employees by salary within their department?
+  
+  **Example:**
+  ```sql
+  SELECT first_name, salary, department,
+         ROW_NUMBER() OVER (PARTITION BY department ORDER BY salary DESC) AS rank
+  FROM employees;
+  ```
+
+**6.2 Using `DENSE_RANK()`**
+
+- **Question:** How do you assign a rank to employees based on their salary, with no gaps in ranking values?
+  
+  **Example:**
+  ```sql
+  SELECT first_name, salary,
+         DENSE_RANK() OVER (ORDER BY salary DESC) AS dense_rank
+  FROM employees;
+  ```
+
+**6.3 Using `RANK()`**
+
+- **Question:** How do you assign a rank to employees by their salary, allowing for gaps in rank values when there are ties?
+  
+  **Example:**
+  ```sql
+  SELECT first_name, salary,
+         RANK() OVER (ORDER BY salary DESC) AS rank
+  FROM employees;
+  ```
+
+### 7. Window Functions
+
+**7.1 Using `LEAD()`**
+
+- **Question:** How do you get the salary of the next employee in the list?
+  
+  **Example:**
+  ```sql
+  SELECT first_name, salary,
+         LEAD(salary) OVER (ORDER BY salary DESC) AS next_salary
+  FROM employees;
+  ```
+
+**7.2 Using `LAG()`**
+
+- **Question:** How do you get the salary of the previous employee in the list?
+  
+  **Example:**
+  ```sql
+  SELECT first_name, salary,
+         LAG(salary) OVER (ORDER BY salary DESC) AS previous_salary
+  FROM employees;
+  ```
+
+### 8. Common Table Expressions (CTEs)
+
+**8.1 Basic CTE**
+
+- **Question:** How do you use a CTE to find employees with salaries greater than $60,000?
+  
+  **Example:**
+  ```sql
+  WITH HighEarners AS (
+      SELECT * FROM employees
+      WHERE salary > 60000
+  )
+  SELECT * FROM HighEarners;
+  ```
+
+**8.2 Recursive CTE**
+
+- **Question:** How do you use a recursive CTE to find all employees reporting to a manager with a specific `manager_id`?
+  
+  **Example:**
+  ```sql
+  WITH RECURSIVE EmployeeHierarchy AS (
+      SELECT employee_id, manager_id, first_name
+      FROM employees
+      WHERE manager_id = 1 -- starting point
+      UNION ALL
+      SELECT e.employee_id, e.manager_id, e.first_name
+      FROM employees e
+      INNER JOIN EmployeeHierarchy eh ON e.manager_id = eh.employee_id
+  )
+  SELECT * FROM EmployeeHierarchy;
+  ```
+
+### 9. Example Queries Based on Sample Data
+
+**9.1 Find Top 2 Salaries in Each Department**
+
+- **Question:** How do you find the top 2 salaries within each department?
+  
+  **Example:**
+  ```sql
+  WITH RankedEmployees AS (
+      SELECT e.emp_name, d.dept_name, e.emp_salary,
+             DENSE_RANK() OVER (PARTITION BY d.dept_name ORDER BY e.emp_salary DESC) AS rank
+      FROM Emp e
+      LEFT JOIN Dept d ON e.dept_id = d.dept_id
+  )
+  SELECT emp_name, dept_name, emp_salary
+  FROM RankedEmployees
+  WHERE rank <= 2;
+  ```
+
+**9.2 Find Highest Salary in Each Department**
+
+- **Question:** How do you find the highest salary in each department?
+  
+  **Example:**
+  ```sql
+  WITH RankedEmployees AS (
+      SELECT e.emp_name, d.dept_name, e.emp_salary,
+             DENSE_RANK() OVER (PARTITION BY d.dept_name ORDER BY e.emp_salary DESC) AS rank
+      FROM Emp e
+      LEFT JOIN Dept d ON e.dept_id = d.dept_id
+  )
+  SELECT emp_name, dept_name, emp_salary
+  FROM RankedEmployees
+  WHERE rank = 1;
+  ```
+
+**9.3 Find Employees with Salary Above the Average Salary of Their Department**
+
+- **Question:** How do you find employees with a salary above the average salary of their department?
+  
+  **Example:**
+  ```sql
+  WITH DepartmentAvg AS (
+      SELECT dept_id, AVG(emp_salary) AS avg_salary
+      FROM Emp
+      GROUP BY dept_id
+  )
+  SELECT e.emp_name, d.dept_name, e.emp_salary
+  FROM Emp e
+  JOIN Dept d ON e.dept_id = d.dept_id
+  JOIN DepartmentAvg da ON e.dept_id = da.dept_id
+  WHERE e.emp_salary > da.avg_salary;
+  ```
+
+These examples cover a wide range of SQL concepts and should help you prepare for SQL-related interview questions. If you have specific topics or queries you'd like to explore further, let me know!
