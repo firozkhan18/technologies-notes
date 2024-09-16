@@ -2993,6 +2993,219 @@ WHERE rank <= 2;
 
 Understanding `DENSE_RANK()` and its usage can help you handle various ranking and reporting requirements effectively in SQL.
 
+Here’s a detailed explanation and corrections to the SQL queries using `DENSE_RANK()` to ensure they work as intended:
+
+### **1. Using `DENSE_RANK()` to Rank Employees and Join with Departments**
+
+**Query:**
+```sql
+SELECT e.emp_name, d.dept_name, DENSE_RANK() OVER (ORDER BY e.emp_salary) as rank
+FROM Emp e
+LEFT JOIN Dept d ON e.dept_id = d.dept_id;
+```
+
+**Explanation:**
+- **Purpose**: This query ranks employees based on their salary and includes their department names.
+- **DENSE_RANK()**: Assigns ranks based on `e.emp_salary` in ascending order. The lowest salary gets rank 1, the next distinct salary gets rank 2, and so on.
+- **LEFT JOIN**: Ensures that even if an employee does not belong to any department (i.e., `dept_id` is `NULL`), the employee's details are still included in the results with a `NULL` department name.
+
+**Important Note**: The query assumes that the `Emp` table has columns `emp_name`, `emp_salary`, and `dept_id`, and the `Dept` table has `dept_id` and `dept_name`.
+
+### **2. Ordering with `DENSE_RANK()`**
+
+**Query:**
+```sql
+WITH RankedEmployees AS (
+    SELECT e.emp_name, d.dept_name, DENSE_RANK() OVER (ORDER BY e.emp_salary DESC) as rank
+    FROM Emp e
+    LEFT JOIN Dept d ON e.dept_id = d.dept_id
+)
+SELECT emp_name, dept_name
+FROM RankedEmployees
+ORDER BY rank;
+```
+
+**Explanation:**
+- **Common Table Expression (CTE)**: The `WITH` clause defines a CTE named `RankedEmployees` where `DENSE_RANK()` is calculated based on employee salaries in descending order (highest salary gets rank 1).
+- **Ordering in the CTE**: `DENSE_RANK()` is calculated in the CTE, but the `ORDER BY` clause in the final `SELECT` query is used to order the results by the calculated rank.
+
+**Details:**
+- **Descending Order**: The `ORDER BY e.emp_salary DESC` within `DENSE_RANK()` assigns rank 1 to the highest salary.
+- **Final Ordering**: The outer query orders the result set by the `rank` assigned in the CTE.
+
+**Corrected Queries**:
+
+1. **Rank Employees and Join with Departments**:
+   ```sql
+   SELECT e.emp_name, d.dept_name, DENSE_RANK() OVER (ORDER BY e.emp_salary DESC) AS rank
+   FROM Emp e
+   LEFT JOIN Dept d ON e.dept_id = d.dept_id;
+   ```
+
+2. **Order Results by Rank**:
+   ```sql
+   WITH RankedEmployees AS (
+       SELECT e.emp_name, d.dept_name, DENSE_RANK() OVER (ORDER BY e.emp_salary DESC) AS rank
+       FROM Emp e
+       LEFT JOIN Dept d ON e.dept_id = d.dept_id
+   )
+   SELECT emp_name, dept_name
+   FROM RankedEmployees
+   ORDER BY rank;
+   ```
+
+### **Additional Examples of `DENSE_RANK()` Usage**
+
+**Example 1: Rank Employees Within Each Department**
+
+**Query:**
+```sql
+SELECT e.emp_name, d.dept_name, e.emp_salary,
+       DENSE_RANK() OVER (PARTITION BY d.dept_name ORDER BY e.emp_salary DESC) AS rank
+FROM Emp e
+LEFT JOIN Dept d ON e.dept_id = d.dept_id;
+```
+
+**Explanation:**
+- **PARTITION BY**: Divides the result set into partitions based on `dept_name`. Ranks are reset within each department.
+- **ORDER BY**: Ranks employees within each department by salary in descending order.
+
+**Example 2: Top N Employees Per Department**
+
+**Query:**
+```sql
+WITH RankedEmployees AS (
+    SELECT e.emp_name, d.dept_name, e.emp_salary,
+           DENSE_RANK() OVER (PARTITION BY d.dept_name ORDER BY e.emp_salary DESC) AS rank
+    FROM Emp e
+    LEFT JOIN Dept d ON e.dept_id = d.dept_id
+)
+SELECT emp_name, dept_name, emp_salary
+FROM RankedEmployees
+WHERE rank <= 3;
+```
+
+**Explanation:**
+- **CTE**: Ranks employees within each department.
+- **Final Query**: Filters to return only the top 3 employees per department.
+
+### **Conclusion**
+
+- **DENSE_RANK()**: Useful for ranking items without gaps.
+- **CTE and Final Query**: Calculations and filtering are done in two stages—first to compute ranks, then to select and order results.
+
+Understanding and applying `DENSE_RANK()` helps in creating precise and efficient ranking-based queries in SQL.
+
+To demonstrate the use of `DENSE_RANK()` with the `Emp` and `Dept` tables, let’s start by creating sample tables and inserting data into them. After that, I'll provide a query that uses `DENSE_RANK()` to rank employees based on their salaries and join the results with their respective departments.
+
+### **1. Sample Table Definitions and Data**
+
+**Create `Dept` Table:**
+```sql
+CREATE TABLE Dept (
+    dept_id INT PRIMARY KEY,
+    dept_name VARCHAR(50)
+);
+```
+
+**Insert Sample Data into `Dept`:**
+```sql
+INSERT INTO Dept (dept_id, dept_name) VALUES
+(1, 'Sales'),
+(2, 'Engineering'),
+(3, 'Marketing');
+```
+
+**Create `Emp` Table:**
+```sql
+CREATE TABLE Emp (
+    emp_id INT PRIMARY KEY,
+    emp_name VARCHAR(50),
+    emp_salary DECIMAL(10, 2),
+    dept_id INT,
+    FOREIGN KEY (dept_id) REFERENCES Dept(dept_id)
+);
+```
+
+**Insert Sample Data into `Emp`:**
+```sql
+INSERT INTO Emp (emp_id, emp_name, emp_salary, dept_id) VALUES
+(1, 'Alice', 5000, 1),
+(2, 'Bob', 7000, 1),
+(3, 'Charlie', 7000, 2),
+(4, 'David', 6000, 2),
+(5, 'Eve', 5500, 3),
+(6, 'Frank', 4500, 3);
+```
+
+### **2. SQL Query Using `DENSE_RANK()`**
+
+The following query ranks employees based on their salaries within each department and joins the results with the department names.
+
+**Query:**
+```sql
+SELECT e.emp_name, d.dept_name, e.emp_salary,
+       DENSE_RANK() OVER (PARTITION BY d.dept_name ORDER BY e.emp_salary DESC) AS rank
+FROM Emp e
+LEFT JOIN Dept d ON e.dept_id = d.dept_id;
+```
+
+**Explanation:**
+- **`PARTITION BY d.dept_name`**: Resets the rank for each department.
+- **`ORDER BY e.emp_salary DESC`**: Ranks employees by salary within each department in descending order.
+
+### **3. Example Result**
+
+Given the sample data, the output of the query would be:
+
+| emp_name | dept_name   | emp_salary | rank |
+|----------|-------------|------------|------|
+| Bob      | Sales       | 7000       | 1    |
+| Alice    | Sales       | 5000       | 2    |
+| Charlie  | Engineering | 7000       | 1    |
+| David    | Engineering | 6000       | 2    |
+| Eve      | Marketing   | 5500       | 1    |
+| Frank    | Marketing   | 4500       | 2    |
+
+### **4. Additional Example Queries**
+
+**Query to Find Top 2 Salaries in Each Department:**
+
+```sql
+WITH RankedEmployees AS (
+    SELECT e.emp_name, d.dept_name, e.emp_salary,
+           DENSE_RANK() OVER (PARTITION BY d.dept_name ORDER BY e.emp_salary DESC) AS rank
+    FROM Emp e
+    LEFT JOIN Dept d ON e.dept_id = d.dept_id
+)
+SELECT emp_name, dept_name, emp_salary
+FROM RankedEmployees
+WHERE rank <= 2;
+```
+
+**Explanation:**
+- This query ranks employees within each department and selects only the top 2 employees based on their salary.
+
+**Query to Find Highest Salary in Each Department:**
+
+```sql
+WITH RankedEmployees AS (
+    SELECT e.emp_name, d.dept_name, e.emp_salary,
+           DENSE_RANK() OVER (PARTITION BY d.dept_name ORDER BY e.emp_salary DESC) AS rank
+    FROM Emp e
+    LEFT JOIN Dept d ON e.dept_id = d.dept_id
+)
+SELECT emp_name, dept_name, emp_salary
+FROM RankedEmployees
+WHERE rank = 1;
+```
+
+**Explanation:**
+- This query selects employees with the highest salary in each department.
+
+### **Conclusion**
+
+Using `DENSE_RANK()` allows you to effectively rank items without gaps and is particularly useful for generating rank-based reports and analyses. The queries provided illustrate how to apply this function in various scenarios, from simple ranking to more complex filtering of top-ranked records.
 ### SQL Queries
 
 #### Using `DENSE_RANK()`
