@@ -2799,9 +2799,10 @@ public class Employee {
         new Employee("Charlie", 90000)
     );
 
+    //How do you find the second highest salary of employee?
     Optional<Double> secondHighestSalary = employees.stream()
         .map(Employee::getSalary)
-        .sorted(Comparator.naturalOrder())
+        .sorted(Comparator.reverseOrder())
         .skip(1)
         .findFirst();
 
