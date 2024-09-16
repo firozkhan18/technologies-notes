@@ -1,4 +1,4 @@
-# Here's a Java 7 and Java 8 implementations for the given problems. Each section includes code for both Java 7 and Java 8.
+# Java 7 and Java 8 implementations for the given problems. Each section includes code for both Java 7 and Java 8.
 
 ## Java Coding Examples (Java 7 and Java 8)
 
