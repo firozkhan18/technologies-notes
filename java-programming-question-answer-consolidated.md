@@ -1,6 +1,6 @@
-Here's a Java 7 and Java 8 implementations for the given problems. Each section includes code for both Java 7 and Java 8.
+# Here's a Java 7 and Java 8 implementations for the given problems. Each section includes code for both Java 7 and Java 8.
 
-# Java Coding Examples (Java 7 and Java 8)
+## Java Coding Examples (Java 7 and Java 8)
 
 <details><summary><b>1. Find the sum of all elements in an array</b></summary>
 
