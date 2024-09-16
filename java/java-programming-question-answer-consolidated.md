@@ -10567,3 +10567,452 @@ secondHighestSalary.ifPresentOrElse(
 	        secondHighestSalary.ifPresent(System.out::println);
 
 ```
+##  **Coding interviews focusing on Student Management** 
+
+### Student Class
+
+```java
+import java.util.Objects;
+
+public class Student {
+    private int id;
+    private String name;
+    private int age;
+    private String gender;
+    private String studentClass;
+    private double score;
+    private int yearOfJoining;
+
+    // Constructor
+    public Student(int id, String name, int age, String gender, String studentClass, double score, int yearOfJoining) {
+        this.id = id;
+        this.name = name;
+        this.age = age;
+        this.gender = gender;
+        this.studentClass = studentClass;
+        this.score = score;
+        this.yearOfJoining = yearOfJoining;
+    }
+
+    // Getters and Setters
+    public int getId() { return id; }
+    public void setId(int id) { this.id = id; }
+
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
+
+    public int getAge() { return age; }
+    public void setAge(int age) { this.age = age; }
+
+    public String getGender() { return gender; }
+    public void setGender(String gender) { this.gender = gender; }
+
+    public String getStudentClass() { return studentClass; }
+    public void setStudentClass(String studentClass) { this.studentClass = studentClass; }
+
+    public double getScore() { return score; }
+    public void setScore(double score) { this.score = score; }
+
+    public int getYearOfJoining() { return yearOfJoining; }
+    public void setYearOfJoining(int yearOfJoining) { this.yearOfJoining = yearOfJoining; }
+
+    @Override
+    public String toString() {
+        return "Student{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", age=" + age +
+                ", gender='" + gender + '\'' +
+                ", studentClass='" + studentClass + '\'' +
+                ", score=" + score +
+                ", yearOfJoining=" + yearOfJoining +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Student student = (Student) o;
+        return id == student.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+}
+```
+
+### Sample Student List
+
+```java
+import java.util.ArrayList;
+import java.util.List;
+
+public class StudentDemo {
+    public static void main(String[] args) {
+        List<Student> studentList = new ArrayList<>();
+
+        studentList.add(new Student(1, "Alice", 17, "Female", "12th", 88.5, 2018));
+        studentList.add(new Student(2, "Bob", 16, "Male", "11th", 76.0, 2019));
+        studentList.add(new Student(3, "Charlie", 17, "Male", "12th", 92.3, 2018));
+        studentList.add(new Student(4, "Diana", 15, "Female", "10th", 84.5, 2020));
+        studentList.add(new Student(5, "Ethan", 16, "Male", "11th", 79.4, 2019));
+        studentList.add(new Student(6, "Fiona", 17, "Female", "12th", 85.0, 2018));
+        studentList.add(new Student(7, "George", 14, "Male", "9th", 91.2, 2021));
+        studentList.add(new Student(8, "Hannah", 15, "Female", "10th", 82.3, 2020));
+        studentList.add(new Student(9, "Ian", 16, "Male", "11th", 89.5, 2019));
+        studentList.add(new Student(10, "Julia", 17, "Female", "12th", 90.0, 2018));
+
+        // Example usage of studentList with queries
+        // You can perform operations here to test the queries
+    }
+}
+```
+
+### How to Use
+
+1. **Include the `Student` class**: Save the `Student` class code in a file named `Student.java`.
+
+2. **Include the `StudentDemo` class**: Save the `StudentDemo` class code in a file named `StudentDemo.java`.
+
+3. **Compile and run**: Compile both classes and run `StudentDemo` to test the queries with the sample data.
+
+# Student Management Queries
+
+<details>
+<summary><b>1. How many male and female students are there in the school?</b></summary>
+
+```java
+Map<String, Long> noOfMaleAndFemaleStudents = studentList.stream()
+    .collect(Collectors.groupingBy(Student::getGender, Collectors.counting()));
+
+System.out.println(noOfMaleAndFemaleStudents);
+```
+
+</details>
+
+<details>
+<summary><b>2. Print the name of all classes in the school?</b></summary>
+
+```java
+studentList.stream()
+    .map(Student::getStudentClass)
+    .distinct()
+    .forEach(System.out::println);
+```
+
+</details>
+
+<details>
+<summary><b>3. What is the average age of male and female students?</b></summary>
+
+```java
+Map<String, Double> avgAgeOfMaleAndFemaleStudents = studentList.stream()
+    .collect(Collectors.groupingBy(Student::getGender, Collectors.averagingInt(Student::getAge)));
+
+System.out.println(avgAgeOfMaleAndFemaleStudents);
+```
+
+</details>
+
+<details>
+<summary><b>4. Get the details of the highest-scoring student in the school?</b></summary>
+
+```java
+Student highestScoringStudent = studentList.stream()
+    .collect(Collectors.maxBy(Comparator.comparingDouble(Student::getScore))).get();
+
+System.out.println("Details Of Highest Scoring Student : ");
+System.out.println("==================================");
+System.out.println("ID : " + highestScoringStudent.getId());
+System.out.println("Name : " + highestScoringStudent.getName());
+System.out.println("Age : " + highestScoringStudent.getAge());
+System.out.println("Gender : " + highestScoringStudent.getGender());
+System.out.println("Class : " + highestScoringStudent.getStudentClass());
+System.out.println("Score : " + highestScoringStudent.getScore());
+```
+
+</details>
+
+<details>
+<summary><b>5. Get the names of all students who joined after 2015?</b></summary>
+
+```java
+studentList.stream()
+    .filter(s -> s.getYearOfJoining() > 2015)
+    .map(Student::getName)
+    .forEach(System.out::println);
+```
+
+</details>
+
+<details>
+<summary><b>6. Count the number of students in each class?</b></summary>
+
+```java
+Map<String, Long> studentCountByClass = studentList.stream()
+    .collect(Collectors.groupingBy(Student::getStudentClass, Collectors.counting()));
+
+Set<Entry<String, Long>> entrySet = studentCountByClass.entrySet();
+
+for (Entry<String, Long> entry : entrySet) {
+    System.out.println(entry.getKey() + " : " + entry.getValue());
+}
+
+// Another Approach
+System.out.println("Another Approach ==================================");
+studentList.stream()
+    .collect(Collectors.groupingBy(Student::getStudentClass, Collectors.counting()))
+    .forEach((studentClass, count) -> System.out.println(studentClass + " : " + count));
+```
+
+</details>
+
+<details>
+<summary><b>7. What is the average score of each class?</b></summary>
+
+```java
+Map<String, Double> avgScoreOfClasses = studentList.stream()
+    .collect(Collectors.groupingBy(Student::getStudentClass, Collectors.averagingDouble(Student::getScore)));
+
+Set<Entry<String, Double>> entrySet1 = avgScoreOfClasses.entrySet();
+
+for (Entry<String, Double> entry : entrySet1) {
+    System.out.println(entry.getKey() + " : " + entry.getValue());
+}
+
+// Another Approach
+System.out.println("Another Approach ==================================");
+studentList.stream()
+    .collect(Collectors.groupingBy(Student::getStudentClass, Collectors.averagingDouble(Student::getScore)))
+    .forEach((studentClass, avgScore) -> System.out.println(studentClass + " : " + avgScore));
+```
+
+</details>
+
+<details>
+<summary><b>8. Get the details of the youngest male student in the 10th grade?</b></summary>
+
+```java
+Optional<Student> youngestMaleStudentIn10thGradeWrapper = studentList.stream()
+    .filter(s -> s.getGender().equals("Male") && s.getStudentClass().equals("10th"))
+    .min(Comparator.comparingInt(Student::getAge));
+
+Student youngestMaleStudentIn10thGrade = youngestMaleStudentIn10thGradeWrapper.get();
+
+System.out.println("Details Of Youngest Male Student In 10th Grade");
+System.out.println("----------------------------------------------");
+System.out.println("ID : " + youngestMaleStudentIn10thGrade.getId());
+System.out.println("Name : " + youngestMaleStudentIn10thGrade.getName());
+System.out.println("Age : " + youngestMaleStudentIn10thGrade.getAge());
+System.out.println("Year Of Joining : " + youngestMaleStudentIn10thGrade.getYearOfJoining());
+System.out.println("Score : " + youngestMaleStudentIn10thGrade.getScore());
+
+// Another Approach
+System.out.println("Another Approach ==================================");
+Student youngestMaleStudentIn10thGrade1 = studentList.stream()
+    .filter(s -> s.getGender().equals("Male") && s.getStudentClass().equals("10th"))
+    .min(Comparator.comparingInt(Student::getAge)).get();
+
+System.out.println("Details Of Youngest Male Student In 10th Grade");
+System.out.println("----------------------------------------------");
+System.out.println("ID : " + youngestMaleStudentIn10thGrade1.getId());
+System.out.println("Name : " + youngestMaleStudentIn10thGrade1.getName());
+System.out.println("Age : " + youngestMaleStudentIn10thGrade1.getAge());
+System.out.println("Year Of Joining : " + youngestMaleStudentIn10thGrade1.getYearOfJoining());
+System.out.println("Score : " + youngestMaleStudentIn10thGrade1.getScore());
+```
+
+</details>
+
+<details>
+<summary><b>9. Who has the most years of study in the school?</b></summary>
+
+```java
+Optional<Student> mostExperiencedStudentWrapper = studentList.stream()
+    .sorted(Comparator.comparingInt(Student::getYearOfJoining))
+    .findFirst();
+
+Student mostExperiencedStudent = mostExperiencedStudentWrapper.get();
+
+System.out.println("Most Experienced Student Details :");
+System.out.println("------------------------------");
+System.out.println("ID : " + mostExperiencedStudent.getId());
+System.out.println("Name : " + mostExperiencedStudent.getName());
+System.out.println("Age : " + mostExperiencedStudent.getAge());
+System.out.println("Gender : " + mostExperiencedStudent.getGender());
+System.out.println("Class : " + mostExperiencedStudent.getStudentClass());
+System.out.println("Year Of Joining : " + mostExperiencedStudent.getYearOfJoining());
+System.out.println("Score : " + mostExperiencedStudent.getScore());
+```
+
+</details>
+
+<details>
+<summary><b>10. How many male and female students are there in the 12th grade?</b></summary>
+
+```java
+Map<String, Long> countMaleFemaleStudentsIn12thGrade = studentList.stream()
+    .filter(s -> s.getStudentClass().equals("12th"))
+    .collect(Collectors.groupingBy(Student::getGender, Collectors.counting()));
+
+System.out.println(countMaleFemaleStudentsIn12thGrade);
+```
+
+</details>
+
+<details>
+<summary><b>11. What is the average score of male and female students?</b></summary>
+
+```java
+Map<String, Double> avgScoreOfMaleAndFemaleStudents = studentList.stream()
+    .collect(Collectors.groupingBy(Student::getGender, Collectors.averagingDouble(Student::getScore)));
+
+System.out.println(avgScoreOfMaleAndFemaleStudents);
+```
+
+</details>
+
+<details>
+<summary><b>12. List down the names of all students in each class?</b></summary>
+
+```java
+Map<String, List<Student>> studentListByClass = studentList.stream()
+    .collect(Collectors.groupingBy(Student::getStudentClass));
+
+Set<Entry<String, List<Student>>> entrySet2 = studentListByClass.entrySet();
+
+for (Entry<String, List<Student>> entry : entrySet2) {
+    System.out.println("--------------------------------------");
+    System.out.println("Students In " + entry.getKey() + " : ");
+    System.out.println("--------------------------------------");
+
+    List<Student> list = entry.getValue();
+
+    for (Student s : list) {
+        System.out.println(s.getName());
+    }
+}
+
+// Another Approach
+System.out.println("Another Approach ==================================");
+studentList.stream()
+    .collect(Collectors.groupingBy(Student::getStudentClass))
+    .forEach((studentClass, students) -> {
+        System.out.println("======================================");
+        System.out.println("Students in " + studentClass + ":");
+        System.out.println("======================================");
+
+        students.stream()
+            .sorted(Comparator.comparing(Student::getName)) // Optional sorting by name
+            .forEach(s -> System.out.println(s.getName()));
+    });
+```
+
+</details>
+
+<details>
+<summary><b>13. What is the average score and total score of the whole school?</b></summary>
+
+```java
+DoubleSummaryStatistics studentScoreStatistics = studentList.stream()
+    .collect(Collectors.summarizingDouble(Student::getScore));
+
+System.out.println("Average Score = " + studentScoreStatistics.getAverage());
+System.out.println("Total Score = " + studentScoreStatistics.getSum());
+
+// Another Approach
+System.out.println("Another Approach ==================================");
+DoubleSummaryStatistics studentScoreStatistics1 = studentList.stream()
+    .mapToDouble(Student::getScore)
+    .summaryStatistics();
+
+System.out.println("Max Score: " + studentScoreStatistics1.getMax());
+System.out.println("Min Score: " + studentScoreStatistics1.getMin());
+System.out.println("Average Score: " +
+
+ studentScoreStatistics1.getAverage());
+System.out.println("Total Score: " + studentScoreStatistics1.getSum());
+```
+
+</details>
+
+<details>
+<summary><b>14. List down students who scored above 80?</b></summary>
+
+```java
+studentList.stream()
+    .filter(s -> s.getScore() > 80)
+    .map(Student::getName)
+    .forEach(System.out::println);
+```
+
+</details>
+
+<details>
+<summary><b>15. Get the names of the top 3 highest-scoring students?</b></summary>
+
+```java
+studentList.stream()
+    .sorted(Comparator.comparingDouble(Student::getScore).reversed())
+    .limit(3)
+    .map(Student::getName)
+    .forEach(System.out::println);
+```
+
+</details>
+
+<details>
+<summary><b>16. List all students who joined in the year 2018?</b></summary>
+
+```java
+studentList.stream()
+    .filter(s -> s.getYearOfJoining() == 2018)
+    .map(Student::getName)
+    .forEach(System.out::println);
+```
+
+</details>
+
+<details>
+<summary><b>17. Find the most repeated name among students?</b></summary>
+
+```java
+List<String> studentNames = studentList.stream()
+    .map(Student::getName)
+    .collect(Collectors.toList());
+
+Map<String, Long> nameFrequencyMap = studentNames.stream()
+    .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+
+Entry<String, Long> mostFrequentName = nameFrequencyMap.entrySet().stream()
+    .max(Map.Entry.comparingByValue()).get();
+
+System.out.println("Most Frequent Name: " + mostFrequentName.getKey());
+System.out.println("Count: " + mostFrequentName.getValue());
+```
+
+</details>
+
+<details>
+<summary><b>18. Find the second highest score in the class?</b></summary>
+
+```java
+OptionalDouble secondHighestScore = studentList.stream()
+    .map(Student::getScore)
+    .sorted(Comparator.reverseOrder())
+    .distinct()
+    .skip(1)
+    .mapToDouble(Double::doubleValue)
+    .findFirst();
+
+secondHighestScore.ifPresentOrElse(
+    score -> System.out.println("Second highest score: " + score),
+    () -> System.out.println("No second highest score found")
+);
+```
+
+</details>
+```
