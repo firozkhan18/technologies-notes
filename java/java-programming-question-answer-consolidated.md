@@ -9059,3 +9059,1160 @@ public class TopologicalSort {
 ```
 </details>
 
+##  **Coding interviews focusing on employee management**
+
+You might encounter problems related to organizing, retrieving, and processing employee data. Below are some common coding interview questions in this domain, along with Java 7 and Java 8 solutions for each:
+
+### 1. **Find the employee with the highest salary**
+
+<details><summary><b>Find the employee with the highest salary</b></summary>
+
+**Java 7:**
+```java
+import java.util.*;
+
+class Employee {
+    String name;
+    int salary;
+
+    public Employee(String name, int salary) {
+        this.name = name;
+        this.salary = salary;
+    }
+
+    public int getSalary() {
+        return salary;
+    }
+
+    @Override
+    public String toString() {
+        return "Employee{name='" + name + "', salary=" + salary + '}';
+    }
+}
+
+public class HighestSalary {
+    public static void main(String[] args) {
+        List<Employee> employees = Arrays.asList(
+            new Employee("Alice", 70000),
+            new Employee("Bob", 80000),
+            new Employee("Charlie", 60000)
+        );
+
+        Employee highestPaid = null;
+        for (Employee emp : employees) {
+            if (highestPaid == null || emp.getSalary() > highestPaid.getSalary()) {
+                highestPaid = emp;
+            }
+        }
+
+        System.out.println("Highest Paid Employee: " + highestPaid);
+    }
+}
+```
+
+**Java 8:**
+```java
+import java.util.*;
+import java.util.stream.Collectors;
+
+class Employee {
+    String name;
+    int salary;
+
+    public Employee(String name, int salary) {
+        this.name = name;
+        this.salary = salary;
+    }
+
+    public int getSalary() {
+        return salary;
+    }
+
+    @Override
+    public String toString() {
+        return "Employee{name='" + name + "', salary=" + salary + '}';
+    }
+}
+
+public class HighestSalary {
+    public static void main(String[] args) {
+        List<Employee> employees = Arrays.asList(
+            new Employee("Alice", 70000),
+            new Employee("Bob", 80000),
+            new Employee("Charlie", 60000)
+        );
+
+        Employee highestPaid = employees.stream()
+            .max(Comparator.comparingInt(Employee::getSalary))
+            .orElse(null);
+
+        System.out.println("Highest Paid Employee: " + highestPaid);
+    }
+}
+```
+</details>
+
+### 2. **Find employees with salaries above a given threshold**
+
+<details><summary><b>Find employees with salaries above a given threshold</b></summary>
+
+**Java 7:**
+```java
+import java.util.*;
+
+class Employee {
+    String name;
+    int salary;
+
+    public Employee(String name, int salary) {
+        this.name = name;
+        this.salary = salary;
+    }
+
+    public int getSalary() {
+        return salary;
+    }
+
+    @Override
+    public String toString() {
+        return "Employee{name='" + name + "', salary=" + salary + '}';
+    }
+}
+
+public class EmployeesAboveThreshold {
+    public static void main(String[] args) {
+        List<Employee> employees = Arrays.asList(
+            new Employee("Alice", 70000),
+            new Employee("Bob", 80000),
+            new Employee("Charlie", 60000)
+        );
+        int threshold = 65000;
+
+        List<Employee> result = new ArrayList<>();
+        for (Employee emp : employees) {
+            if (emp.getSalary() > threshold) {
+                result.add(emp);
+            }
+        }
+
+        System.out.println("Employees with salary above " + threshold + ": " + result);
+    }
+}
+```
+
+**Java 8:**
+```java
+import java.util.*;
+import java.util.stream.Collectors;
+
+class Employee {
+    String name;
+    int salary;
+
+    public Employee(String name, int salary) {
+        this.name = name;
+        this.salary = salary;
+    }
+
+    public int getSalary() {
+        return salary;
+    }
+
+    @Override
+    public String toString() {
+        return "Employee{name='" + name + "', salary=" + salary + '}';
+    }
+}
+
+public class EmployeesAboveThreshold {
+    public static void main(String[] args) {
+        List<Employee> employees = Arrays.asList(
+            new Employee("Alice", 70000),
+            new Employee("Bob", 80000),
+            new Employee("Charlie", 60000)
+        );
+        int threshold = 65000;
+
+        List<Employee> result = employees.stream()
+            .filter(emp -> emp.getSalary() > threshold)
+            .collect(Collectors.toList());
+
+        System.out.println("Employees with salary above " + threshold + ": " + result);
+    }
+}
+```
+</details>
+
+### 3. **Calculate the average salary of employees**
+
+<details><summary><b>Calculate the average salary of employees</b></summary>
+
+**Java 7:**
+```java
+import java.util.*;
+
+class Employee {
+    String name;
+    int salary;
+
+    public Employee(String name, int salary) {
+        this.name = name;
+        this.salary = salary;
+    }
+
+    public int getSalary() {
+        return salary;
+    }
+
+    @Override
+    public String toString() {
+        return "Employee{name='" + name + "', salary=" + salary + '}';
+    }
+}
+
+public class AverageSalary {
+    public static void main(String[] args) {
+        List<Employee> employees = Arrays.asList(
+            new Employee("Alice", 70000),
+            new Employee("Bob", 80000),
+            new Employee("Charlie", 60000)
+        );
+
+        int totalSalary = 0;
+        for (Employee emp : employees) {
+            totalSalary += emp.getSalary();
+        }
+        double averageSalary = (double) totalSalary / employees.size();
+
+        System.out.println("Average Salary: " + averageSalary);
+    }
+}
+```
+
+**Java 8:**
+```java
+import java.util.*;
+import java.util.stream.Collectors;
+
+class Employee {
+    String name;
+    int salary;
+
+    public Employee(String name, int salary) {
+        this.name = name;
+        this.salary = salary;
+    }
+
+    public int getSalary() {
+        return salary;
+    }
+
+    @Override
+    public String toString() {
+        return "Employee{name='" + name + "', salary=" + salary + '}';
+    }
+}
+
+public class AverageSalary {
+    public static void main(String[] args) {
+        List<Employee> employees = Arrays.asList(
+            new Employee("Alice", 70000),
+            new Employee("Bob", 80000),
+            new Employee("Charlie", 60000)
+        );
+
+        double averageSalary = employees.stream()
+            .mapToInt(Employee::getSalary)
+            .average()
+            .orElse(0);
+
+        System.out.println("Average Salary: " + averageSalary);
+    }
+}
+```
+</details>
+
+### 4. **Group employees by their salary ranges**
+
+<details><summary><b>Group employees by their salary ranges</b></summary>
+
+**Java 7:**
+```java
+import java.util.*;
+
+class Employee {
+    String name;
+    int salary;
+
+    public Employee(String name, int salary) {
+        this.name = name;
+        this.salary = salary;
+    }
+
+    public int getSalary() {
+        return salary;
+    }
+
+    @Override
+    public String toString() {
+        return "Employee{name='" + name + "', salary=" + salary + '}';
+    }
+}
+
+public class GroupBySalaryRange {
+    public static void main(String[] args) {
+        List<Employee> employees = Arrays.asList(
+            new Employee("Alice", 70000),
+            new Employee("Bob", 80000),
+            new Employee("Charlie", 60000),
+            new Employee("David", 50000),
+            new Employee("Eve", 90000)
+        );
+
+        Map<String, List<Employee>> salaryGroups = new HashMap<>();
+        for (Employee emp : employees) {
+            String range = getSalaryRange(emp.getSalary());
+            if (!salaryGroups.containsKey(range)) {
+                salaryGroups.put(range, new ArrayList<>());
+            }
+            salaryGroups.get(range).add(emp);
+        }
+
+        salaryGroups.forEach((range, empList) -> {
+            System.out.println("Salary Range " + range + ": " + empList);
+        });
+    }
+
+    private static String getSalaryRange(int salary) {
+        if (salary < 60000) return "Below 60K";
+        else if (salary < 70000) return "60K-70K";
+        else if (salary < 80000) return "70K-80K";
+        else return "80K and above";
+    }
+}
+```
+
+**Java 8:**
+```java
+import java.util.*;
+import java.util.stream.Collectors;
+
+class Employee {
+    String name;
+    int salary;
+
+    public Employee(String name, int salary) {
+        this.name = name;
+        this.salary = salary;
+    }
+
+    public int getSalary() {
+        return salary;
+    }
+
+    @Override
+    public String toString() {
+        return "Employee{name='" + name + "', salary=" + salary + '}';
+    }
+}
+
+public class GroupBySalaryRange {
+    public static void main(String[] args) {
+        List<Employee> employees = Arrays.asList(
+            new Employee("Alice", 70000),
+            new Employee("Bob", 80000),
+            new Employee("Charlie", 60000),
+            new Employee("David", 50000),
+            new Employee("Eve", 90000)
+        );
+
+        Map<String, List<Employee>> salaryGroups = employees.stream()
+            .collect(Collectors.groupingBy(emp -> getSalaryRange(emp.getSalary())));
+
+        salaryGroups.forEach((range, empList) -> {
+            System.out.println("Salary Range " + range + ": " + empList);
+        });
+    }
+
+    private static String getSalaryRange(int salary) {
+        if (salary < 60000) return "
+
+Below 60K";
+        else if (salary < 70000) return "60K-70K";
+        else if (salary < 80000) return "70K-80K";
+        else return "80K and above";
+    }
+}
+```
+</details>
+
+### 5. **Find the employee with the lowest salary who has been with the company for more than a certain number of years**
+
+<details><summary><b>Find the employee with the lowest salary who has been with the company for more than a certain number of years</b></summary>
+
+**Java 7:**
+```java
+import java.util.*;
+
+class Employee {
+    String name;
+    int salary;
+    int yearsWithCompany;
+
+    public Employee(String name, int salary, int yearsWithCompany) {
+        this.name = name;
+        this.salary = salary;
+        this.yearsWithCompany = yearsWithCompany;
+    }
+
+    public int getSalary() {
+        return salary;
+    }
+
+    public int getYearsWithCompany() {
+        return yearsWithCompany;
+    }
+
+    @Override
+    public String toString() {
+        return "Employee{name='" + name + "', salary=" + salary + ", yearsWithCompany=" + yearsWithCompany + '}';
+    }
+}
+
+public class LowestSalaryWithYears {
+    public static void main(String[] args) {
+        List<Employee> employees = Arrays.asList(
+            new Employee("Alice", 70000, 5),
+            new Employee("Bob", 80000, 3),
+            new Employee("Charlie", 60000, 7),
+            new Employee("David", 50000, 2)
+        );
+        int yearsThreshold = 4;
+
+        Employee lowestPaid = null;
+        for (Employee emp : employees) {
+            if (emp.getYearsWithCompany() > yearsThreshold) {
+                if (lowestPaid == null || emp.getSalary() < lowestPaid.getSalary()) {
+                    lowestPaid = emp;
+                }
+            }
+        }
+
+        System.out.println("Lowest Paid Employee with more than " + yearsThreshold + " years: " + lowestPaid);
+    }
+}
+```
+
+**Java 8:**
+```java
+import java.util.*;
+import java.util.stream.Collectors;
+
+class Employee {
+    String name;
+    int salary;
+    int yearsWithCompany;
+
+    public Employee(String name, int salary, int yearsWithCompany) {
+        this.name = name;
+        this.salary = salary;
+        this.yearsWithCompany = yearsWithCompany;
+    }
+
+    public int getSalary() {
+        return salary;
+    }
+
+    public int getYearsWithCompany() {
+        return yearsWithCompany;
+    }
+
+    @Override
+    public String toString() {
+        return "Employee{name='" + name + "', salary=" + salary + ", yearsWithCompany=" + yearsWithCompany + '}';
+    }
+}
+
+public class LowestSalaryWithYears {
+    public static void main(String[] args) {
+        List<Employee> employees = Arrays.asList(
+            new Employee("Alice", 70000, 5),
+            new Employee("Bob", 80000, 3),
+            new Employee("Charlie", 60000, 7),
+            new Employee("David", 50000, 2)
+        );
+        int yearsThreshold = 4;
+
+        Employee lowestPaid = employees.stream()
+            .filter(emp -> emp.getYearsWithCompany() > yearsThreshold)
+            .min(Comparator.comparingInt(Employee::getSalary))
+            .orElse(null);
+
+        System.out.println("Lowest Paid Employee with more than " + yearsThreshold + " years: " + lowestPaid);
+    }
+}
+```
+</details>
+
+Your `EmployeeMgmt` class provides a comprehensive set of queries for analyzing a list of `EmployeeNew` objects. Below is a summary of what each query does, along with explanations and some refinements to improve the code.
+
+### Summary and Explanation of Queries:
+
+1. **Count of Male and Female Employees**:
+   ```java
+   Map<String, Long> noOfMaleAndFemaleEmployees = employeeList.stream()
+       .collect(Collectors.groupingBy(EmployeeNew::getGender, Collectors.counting()));
+   System.out.println(noOfMaleAndFemaleEmployees);
+   ```
+   - This groups employees by gender and counts the number of employees in each gender category.
+
+2. **Print Unique Departments**:
+   ```java
+   employeeList.stream().map(EmployeeNew::getDepartment).distinct().forEach(System.out::println);
+   ```
+   - Maps each employee to their department, removes duplicates, and prints the unique departments.
+
+3. **Average Age of Male and Female Employees**:
+   ```java
+   Map<String, Double> avgAgeOfMaleAndFemaleEmployees = employeeList.stream()
+       .collect(Collectors.groupingBy(EmployeeNew::getGender, Collectors.averagingInt(EmployeeNew::getAge)));
+   System.out.println(avgAgeOfMaleAndFemaleEmployees);
+   ```
+   - Groups employees by gender and calculates the average age for each gender.
+
+4. **Highest Paid Employee**:
+   ```java
+   EmployeeNew highestPaidEmployee = employeeList.stream()
+       .collect(Collectors.maxBy(Comparator.comparingDouble(EmployeeNew::getSalary))).get();
+   ```
+   - Finds the employee with the highest salary.
+
+5. **Employees Who Joined After 2015**:
+   ```java
+   employeeList.stream().filter(e -> e.getYearOfJoining() > 2015).map(EmployeeNew::getName)
+       .forEach(System.out::println);
+   ```
+   - Filters employees who joined after 2015 and prints their names.
+
+6. **Count of Employees in Each Department**:
+   ```java
+   Map<String, Long> employeeCountByDepartment = employeeList.stream()
+       .collect(Collectors.groupingBy(EmployeeNew::getDepartment, Collectors.counting()));
+   employeeCountByDepartment.forEach((department, count) -> System.out.println(department + " : " + count));
+   ```
+   - Groups employees by department and counts the number of employees in each department.
+
+7. **Average Salary by Department**:
+   ```java
+   Map<String, Double> avgSalaryOfDepartments = employeeList.stream()
+       .collect(Collectors.groupingBy(EmployeeNew::getDepartment, Collectors.averagingDouble(EmployeeNew::getSalary)));
+   avgSalaryOfDepartments.forEach((department, avgSalary) -> System.out.println(department + " : " + avgSalary));
+   ```
+   - Groups employees by department and calculates the average salary for each department.
+
+8. **Youngest Male Employee in Product Development**:
+   ```java
+   Optional<EmployeeNew> youngestMaleEmployeeInProductDevelopmentWrapper = employeeList.stream()
+       .filter(e -> "Male".equals(e.getGender()) && "Product Development".equals(e.getDepartment()))
+       .min(Comparator.comparingInt(EmployeeNew::getAge));
+   EmployeeNew youngestMaleEmployeeInProductDevelopment = youngestMaleEmployeeInProductDevelopmentWrapper.get();
+   ```
+   - Filters male employees in the Product Development department and finds the youngest one.
+
+9. **Employee with Most Working Experience**:
+   ```java
+   Optional<EmployeeNew> seniorMostEmployeeWrapper = employeeList.stream()
+       .sorted(Comparator.comparingInt(EmployeeNew::getYearOfJoining)).findFirst();
+   EmployeeNew seniorMostEmployee = seniorMostEmployeeWrapper.get();
+   ```
+   - Finds the employee with the earliest year of joining, i.e., the most experienced employee.
+
+10. **Count of Male and Female Employees in Sales and Marketing**:
+    ```java
+    Map<String, Long> countMaleFemaleEmployeesInSalesMarketing = employeeList.stream()
+        .filter(e -> "Sales And Marketing".equals(e.getDepartment()))
+        .collect(Collectors.groupingBy(EmployeeNew::getGender, Collectors.counting()));
+    System.out.println(countMaleFemaleEmployeesInSalesMarketing);
+    ```
+    - Filters employees in the Sales and Marketing department and counts the number of male and female employees.
+
+11. **Average Salary of Male and Female Employees**:
+    ```java
+    Map<String, Double> avgSalaryOfMaleAndFemaleEmployees = employeeList.stream()
+        .collect(Collectors.groupingBy(EmployeeNew::getGender, Collectors.averagingDouble(EmployeeNew::getSalary)));
+    System.out.println(avgSalaryOfMaleAndFemaleEmployees);
+    ```
+    - Groups employees by gender and calculates the average salary for each gender.
+
+12. **Names of All Employees in Each Department**:
+    ```java
+    Map<String, List<EmployeeNew>> employeeListByDepartment = employeeList.stream()
+        .collect(Collectors.groupingBy(EmployeeNew::getDepartment));
+    employeeListByDepartment.forEach((department, employees) -> {
+        System.out.println("Employees in " + department + ":");
+        employees.stream().sorted(Comparator.comparing(EmployeeNew::getName))
+            .forEach(e -> System.out.println(e.getName()));
+    });
+    ```
+    - Groups employees by department and prints names of employees in each department.
+
+13. **Average and Total Salary of the Organization**:
+    ```java
+    DoubleSummaryStatistics employeeSalaryStatistics = employeeList.stream()
+        .collect(Collectors.summarizingDouble(EmployeeNew::getSalary));
+    System.out.println("Average Salary = " + employeeSalaryStatistics.getAverage());
+    System.out.println("Total Salary = " + employeeSalaryStatistics.getSum());
+    ```
+    - Provides statistics (average, total, min, max) of salaries in the organization.
+
+14. **Separate Employees by Age**:
+    ```java
+    Map<Boolean, List<EmployeeNew>> partitionEmployeesByAge = employeeList.stream()
+        .collect(Collectors.partitioningBy(e -> e.getAge() > 25));
+    partitionEmployeesByAge.forEach((isOlder, employees) -> {
+        System.out.println(isOlder ? "Employees older than 25 years:" : "Employees 25 years old or younger:");
+        employees.stream().sorted(Comparator.comparing(EmployeeNew::getName))
+            .forEach(e -> System.out.println(e.getName()));
+    });
+    ```
+    - Partitions employees into two groups: those older than 25 years and those 25 years old or younger.
+
+15. **Oldest Employee**:
+    ```java
+    EmployeeNew oldestEmployee = employeeList.stream().max(Comparator.comparingInt(EmployeeNew::getAge)).get();
+    System.out.println("Name : " + oldestEmployee.getName());
+    System.out.println("Age : " + oldestEmployee.getAge());
+    System.out.println("Department : " + oldestEmployee.getDepartment());
+    ```
+    - Finds the employee with the highest age and prints their details.
+
+### Additional Questions:
+
+- **Sum of Digits in an Integer**:
+  ```java
+  int i = 15623;
+  int sumOfDigits = String.valueOf(i)
+      .chars()
+      .filter(Character::isDigit)
+      .map(Character::getNumericValue)
+      .sum();
+  System.out.println("Sum of digits: " + sumOfDigits);
+  ```
+
+- **Most Repeated Element in a List**:
+  ```java
+  List<String> listOfStrings = Arrays.asList("Pen", "Eraser", "Note Book", "Pen", "Pencil", "Pen", "Note Book", "Pencil");
+  Map<String, Long> elementCountMap = listOfStrings.stream()
+      .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+  Entry<String, Long> mostFrequentElement = elementCountMap.entrySet().stream()
+      .max(Map.Entry.comparingByValue()).get();
+  System.out.println("Most Frequent Element: " + mostFrequentElement.getKey());
+  System.out.println("Count: " + mostFrequentElement.getValue());
+  ```
+
+- **Second Highest Salary**:
+  ```java
+  Optional<Double> secondHighestSalary = employeeList.stream()
+      .map(EmployeeNew::getSalary)
+      .sorted(Comparator.reverseOrder())
+      .distinct()
+      .skip(1)
+      .findFirst();
+  secondHighestSalary.ifPresent(System.out::println);
+  ```
+
+### Recommendations for Improvement:
+
+1. **String Comparison**: Use `equals` for string comparisons instead of `==` to ensure correct string content comparison.
+   
+   ```java
+   .filter(e -> "Male".equals(e.getGender()) && "Product Development".equals(e.getDepartment()))
+   ```
+
+2. **Handle Optional**: Always handle `Optional` to avoid `NoSuchElementException`. For example:
+   
+   ```java
+   secondHighestSalary.ifPresentOrElse(
+       salary -> System.out.println("Second highest salary: " + salary),
+       () -> System.out.println("No second highest salary found")
+   );
+   ```
+
+3. **Performance**: For large datasets, consider optimizing sorting and distinct operations to enhance performance.
+
+```java
+package com.java.program;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.DoubleSummaryStatistics;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Optional;
+import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
+public class EmployeeMgmt {
+
+	public static void main(String[] args) {
+
+		List<EmployeeNew> employeeList = new ArrayList<EmployeeNew>();
+
+		employeeList.add(new EmployeeNew(111, "Jiya Brein", 32, "Female", "HR", 2011, 25000.0));
+		employeeList.add(new EmployeeNew(122, "Paul Niksui", 25, "Male", "Sales And Marketing", 2015, 13500.0));
+		employeeList.add(new EmployeeNew(133, "Martin Theron", 29, "Male", "Infrastructure", 2012, 18000.0));
+		employeeList.add(new EmployeeNew(144, "Murali Gowda", 28, "Male", "Product Development", 2014, 32500.0));
+		employeeList.add(new EmployeeNew(155, "Nima Roy", 27, "Female", "HR", 2013, 22700.0));
+		employeeList.add(new EmployeeNew(166, "Iqbal Hussain", 43, "Male", "Security And Transport", 2016, 10500.0));
+		employeeList.add(new EmployeeNew(177, "Manu Sharma", 35, "Male", "Account And Finance", 2010, 27000.0));
+		employeeList.add(new EmployeeNew(188, "Wang Liu", 31, "Male", "Product Development", 2015, 34500.0));
+		employeeList.add(new EmployeeNew(199, "Amelia Zoe", 24, "Female", "Sales And Marketing", 2016, 11500.0));
+		employeeList.add(new EmployeeNew(200, "Jaden Dough", 38, "Male", "Security And Transport", 2015, 11000.5));
+		employeeList.add(new EmployeeNew(211, "Jasna Kaur", 27, "Female", "Infrastructure", 2014, 15700.0));
+		employeeList.add(new EmployeeNew(222, "Nitin Joshi", 25, "Male", "Product Development", 2016, 28200.0));
+		employeeList.add(new EmployeeNew(233, "Jyothi Reddy", 27, "Female", "Account And Finance", 2013, 21300.0));
+		employeeList.add(new EmployeeNew(244, "Nicolus Den", 24, "Male", "Sales And Marketing", 2017, 10700.5));
+		employeeList.add(new EmployeeNew(255, "Ali Baig", 23, "Male", "Infrastructure", 2018, 12700.0));
+		employeeList.add(new EmployeeNew(266, "Sanvi Pandey", 26, "Female", "Product Development", 2015, 28900.0));
+		employeeList.add(new EmployeeNew(277, "Anuj Chettiar", 31, "Male", "Product Development", 2012, 35700.0));
+
+		// Query 1 : How many male and female employees are there in the organization?
+
+		// For queries such as above where you need to group the input elements, use the
+		// Collectors.groupingBy() method.
+		// In this query, we use Collectors.groupingBy() method which takes two
+		// arguments.
+		// We pass Employee::getGender as first argument which groups the input elements
+		// based on gender and Collectors.counting() as second argument which counts the
+		// number of entries in each group.
+
+		Map<String, Long> noOfMaleAndFemaleEmployees = employeeList.stream()
+				.collect(Collectors.groupingBy(EmployeeNew::getGender, Collectors.counting()));
+
+		System.out.println(noOfMaleAndFemaleEmployees);
+
+		// Query 2 : Print the name of all departments in the organization?
+
+		// Use distinct() method after calling map(Employee::getDepartment) on the
+		// stream.
+		// It will return unique departments.
+
+		employeeList.stream().map(EmployeeNew::getDepartment).distinct().forEach(System.out::println);
+
+		// Query 3 : What is the average age of male and female employees?
+
+		// Use same method as query 3.1 but pass
+		// Collectors.averagingInt(Employee::getAge) as the second argument to
+		// Collectors.groupingBy().
+
+		Map<String, Double> avgAgeOfMaleAndFemaleEmployees = employeeList.stream()
+				.collect(Collectors.groupingBy(EmployeeNew::getGender, Collectors.averagingInt(EmployeeNew::getAge)));
+
+		System.out.println(avgAgeOfMaleAndFemaleEmployees);
+
+		// Query 4 : Get the details of highest paid employee in the organization?
+
+		// Use Collectors.maxBy() method which returns maximum element wrapped in an
+		// Optional object based on supplied Comparator.
+
+//		Optional<EmployeeNew> highestPaidEmployeeWrapper= employeeList.stream()
+//				.collect(Collectors.maxBy(Comparator.comparingDouble(EmployeeNew::getSalary)));
+
+		// EmployeeNew highestPaidEmployee = highestPaidEmployeeWrapper.get();
+
+		EmployeeNew highestPaidEmployee = employeeList.stream()
+				.collect(Collectors.maxBy(Comparator.comparingDouble(EmployeeNew::getSalary))).get();
+
+		System.out.println("Details Of Highest Paid Employee : ");
+
+		System.out.println("==================================");
+		System.out.println("ID : " + highestPaidEmployee.getId());
+		System.out.println("Name : " + highestPaidEmployee.getName());
+		System.out.println("Age : " + highestPaidEmployee.getAge());
+		System.out.println("Gender : " + highestPaidEmployee.getGender());
+		System.out.println("Department : " + highestPaidEmployee.getDepartment());
+		System.out.println("Year Of Joining : " + highestPaidEmployee.getYearOfJoining());
+		System.out.println("Salary : " + highestPaidEmployee.getSalary());
+
+		// Query 5 : Get the names of all employees who have joined after 2015?
+
+		// For such queries which require filtering of input elements, use
+		// Stream.filter() method which filters input elements according to supplied
+		// Predicate.
+
+		employeeList.stream().filter(e -> e.getYearOfJoining() > 2015).map(EmployeeNew::getName)
+				.forEach(System.out::println);
+
+		// Query 6 : Count the number of employees in each department?
+
+		// This query is same as query 3.1 but here we are grouping the elements by
+		// department.
+
+		Map<String, Long> employeeCountByDepartment = employeeList.stream()
+				.collect(Collectors.groupingBy(EmployeeNew::getDepartment, Collectors.counting()));
+
+		Set<Entry<String, Long>> entrySet = employeeCountByDepartment.entrySet();
+
+		for (Entry<String, Long> entry : entrySet) {
+			System.out.println(entry.getKey() + " : " + entry.getValue());
+		}
+
+		// Another Approach
+		System.out.println("Another Approach ==================================");
+		employeeList.stream().collect(Collectors.groupingBy(EmployeeNew::getDepartment, Collectors.counting()))
+				.forEach((department, count) -> System.out.println(department + " : " + count));
+
+		// Query 7 : What is the average salary of each department?
+
+		// Use the same method as in the above query 6,
+		// but here pass Collectors.averagingDouble(Employee::getSalary)
+		// as second argument to Collectors.groupingBy() method.
+
+		Map<String, Double> avgSalaryOfDepartments = employeeList.stream().collect(
+				Collectors.groupingBy(EmployeeNew::getDepartment, Collectors.averagingDouble(EmployeeNew::getSalary)));
+
+		Set<Entry<String, Double>> entrySet1 = avgSalaryOfDepartments.entrySet();
+
+		for (Entry<String, Double> entry : entrySet1) {
+			System.out.println(entry.getKey() + " : " + entry.getValue());
+		}
+
+		// Another Approach
+		System.out.println("Another Approach ==================================");
+		employeeList.stream()
+				.collect(Collectors.groupingBy(EmployeeNew::getDepartment,
+						Collectors.averagingDouble(EmployeeNew::getSalary)))
+				.forEach((department, count) -> System.out.println(department + " : " + count));
+
+		// Query 8 : Get the details of youngest male employee in the product
+		// development department?
+
+		// For this query, use Stream.filter() method to filter male employees in
+		// product development department and to find youngest among them, use
+		// Stream.min() method.
+
+		Optional<EmployeeNew> youngestMaleEmployeeInProductDevelopmentWrapper = employeeList.stream()
+				.filter(e -> e.getGender() == "Male" && e.getDepartment() == "Product Development")
+				.min(Comparator.comparingInt(EmployeeNew::getAge));
+
+		EmployeeNew youngestMaleEmployeeInProductDevelopment = youngestMaleEmployeeInProductDevelopmentWrapper.get();
+
+		System.out.println("Details Of Youngest Male Employee In Product Development");
+
+		System.out.println("----------------------------------------------");
+		System.out.println("ID : " + youngestMaleEmployeeInProductDevelopment.getId());
+		System.out.println("Name : " + youngestMaleEmployeeInProductDevelopment.getName());
+		System.out.println("Age : " + youngestMaleEmployeeInProductDevelopment.getAge());
+		System.out.println("Year Of Joinging : " + youngestMaleEmployeeInProductDevelopment.getYearOfJoining());
+		System.out.println("Salary : " + youngestMaleEmployeeInProductDevelopment.getSalary());
+
+		// Another Approach
+		System.out.println("Another Approach ==================================");
+		EmployeeNew youngestMaleEmployeeInProductDevelopment1 = employeeList.stream()
+				.filter(e -> e.getGender() == "Male" && e.getDepartment() == "Product Development")
+				.min(Comparator.comparingInt(EmployeeNew::getAge)).get();
+
+		// EmployeeNew youngestMaleEmployeeInProductDevelopment =
+		// youngestMaleEmployeeInProductDevelopmentWrapper.get();
+
+		System.out.println("Details Of Youngest Male Employee In Product Development");
+
+		System.out.println("----------------------------------------------");
+		System.out.println("ID : " + youngestMaleEmployeeInProductDevelopment1.getId());
+		System.out.println("Name : " + youngestMaleEmployeeInProductDevelopment1.getName());
+		System.out.println("Age : " + youngestMaleEmployeeInProductDevelopment1.getAge());
+		System.out.println("Year Of Joinging : " + youngestMaleEmployeeInProductDevelopment1.getYearOfJoining());
+		System.out.println("Salary : " + youngestMaleEmployeeInProductDevelopment1.getSalary());
+
+		// Query 9 : Who has the most working experience in the organization?
+
+		// For this query, sort employeeList by yearOfJoining in natural order and first
+		// employee will have most working experience in the organization.
+		// To solve this query, we will be using sorted() and findFirst() methods of
+		// Stream.
+
+		Optional<EmployeeNew> seniorMostEmployeeWrapper = employeeList.stream()
+				.sorted(Comparator.comparingInt(EmployeeNew::getYearOfJoining)).findFirst();
+
+		EmployeeNew seniorMostEmployee = seniorMostEmployeeWrapper.get();
+
+		System.out.println("Senior Most Employee Details :");
+
+		System.out.println("----------------------------");
+
+		System.out.println("ID : " + seniorMostEmployee.getId());
+		System.out.println("Name : " + seniorMostEmployee.getName());
+		System.out.println("Age : " + seniorMostEmployee.getAge());
+		System.out.println("Gender : " + seniorMostEmployee.getGender());
+		System.out.println("Age : " + seniorMostEmployee.getDepartment());
+		System.out.println("Year Of Joinging : " + seniorMostEmployee.getYearOfJoining());
+		System.out.println("Salary : " + seniorMostEmployee.getSalary());
+
+		// Query 10 : How many male and female employees are there in the sales and
+		// marketing team?
+
+		// This query is same as query 1, but here use filter() method to filter sales
+		// and marketing employees.
+
+		Map<String, Long> countMaleFemaleEmployeesInSalesMarketing = employeeList.stream()
+				.filter(e -> e.getDepartment() == "Sales And Marketing")
+				.collect(Collectors.groupingBy(EmployeeNew::getGender, Collectors.counting()));
+
+		System.out.println(countMaleFemaleEmployeesInSalesMarketing);
+
+		// Query 11 : What is the average salary of male and female employees?
+
+		// This query is same as query 3 where you have found average age of male and
+		// female employees.
+		// Here, we will be finding average salary of male and female employees.
+
+		Map<String, Double> avgSalaryOfMaleAndFemaleEmployees = employeeList.stream().collect(
+				Collectors.groupingBy(EmployeeNew::getGender, Collectors.averagingDouble(EmployeeNew::getSalary)));
+
+		System.out.println(avgSalaryOfMaleAndFemaleEmployees);
+
+		// Query 12 : List down the names of all employees in each department?
+
+		// For this query, we will be using Collectors.groupingBy() method by passing
+		// Employee::getDepartment as an argument.
+
+		Map<String, List<EmployeeNew>> employeeListByDepartment = employeeList.stream()
+				.collect(Collectors.groupingBy(EmployeeNew::getDepartment));
+
+		Set<Entry<String, List<EmployeeNew>>> entrySet2 = employeeListByDepartment.entrySet();
+
+		for (Entry<String, List<EmployeeNew>> entry : entrySet2) {
+			System.out.println("--------------------------------------");
+			System.out.println("Employees In " + entry.getKey() + " : ");
+			System.out.println("--------------------------------------");
+
+			List<EmployeeNew> list = entry.getValue();
+
+			for (EmployeeNew e : list) {
+				System.out.println(e.getName());
+			}
+		}
+
+		// Another Approach
+		System.out.println("Another Approach ==================================");
+
+		employeeList.stream().collect(Collectors.groupingBy(EmployeeNew::getDepartment))
+				.forEach((department, employees) -> {
+					System.out.println("======================================");
+					System.out.println("Employees in " + department + ":");
+					System.out.println("======================================");
+
+					employees.stream().sorted(Comparator.comparing(EmployeeNew::getName)) // Optional sorting by name
+							.forEach(e -> System.out.println(e.getName()));
+				});
+
+		// Query 13 : What is the average salary and total salary of the whole
+		// organization?
+
+		// For this query, we use Collectors.summarizingDouble() on Employee::getSalary
+		// which will return statistics of the employee salary like max, min, average
+		// and total.
+
+		DoubleSummaryStatistics employeeSalaryStatistics = employeeList.stream()
+				.collect(Collectors.summarizingDouble(EmployeeNew::getSalary));
+
+		System.out.println("Average Salary = " + employeeSalaryStatistics.getAverage());
+		System.out.println("Total Salary = " + employeeSalaryStatistics.getSum());
+
+		// Another Approach
+		System.out.println("Another Approach ==================================");
+
+		// Collecting statistics
+		DoubleSummaryStatistics employeeSalaryStatistics1 = employeeList.stream().mapToDouble(e -> e.getSalary())
+				.summaryStatistics();
+
+		// Printing statistics
+		System.out.println("Max Salary: " + employeeSalaryStatistics1.getMax());
+		System.out.println("Min Salary: " + employeeSalaryStatistics1.getMin());
+		System.out.println("Average Salary: " + employeeSalaryStatistics1.getAverage());
+		System.out.println("Total Salary: " + employeeSalaryStatistics1.getSum());
+		System.out.println("Count of Employees: " + employeeSalaryStatistics1.getCount());
+
+		// Query 14 : Separate the employees who are younger or equal to 25 years from
+		// those employees who are older than 25 years.
+
+		// For this query, we will be using Collectors.partitioningBy() method which
+		// separates input elements based on supplied Predicate.
+
+		Map<Boolean, List<EmployeeNew>> partitionEmployeesByAge = employeeList.stream()
+				.collect(Collectors.partitioningBy(e -> e.getAge() > 25));
+
+		Set<Entry<Boolean, List<EmployeeNew>>> entrySet3 = partitionEmployeesByAge.entrySet();
+
+		for (Entry<Boolean, List<EmployeeNew>> entry : entrySet3) {
+			System.out.println("----------------------------");
+
+			if (entry.getKey()) {
+				System.out.println("Employees older than 25 years :");
+			} else {
+				System.out.println("Employees younger than or equal to 25 years :");
+			}
+
+			System.out.println("----------------------------");
+
+			List<EmployeeNew> list = entry.getValue();
+
+			for (EmployeeNew e : list) {
+				System.out.println(e.getName());
+			}
+		}
+
+		// Another Approach
+		System.out.println("Another Approach ==================================");
+
+		// Partitioning employees by age
+		employeeList.stream().collect(Collectors.partitioningBy(e -> e.getAge() > 25)).forEach((isOlder, employees) -> { // Printing
+																															// partitioned
+																															// and
+																															// sorted
+																															// employee
+																															// lists
+			System.out.println("----------------------------");
+
+			if (isOlder) {
+				System.out.println("Employees older than 25 years:");
+			} else {
+				System.out.println("Employees 25 years old or younger:");
+			}
+
+			System.out.println("----------------------------");
+
+			// Sorting employees by name
+			employees.stream().sorted((e1, e2) -> e1.getName().compareToIgnoreCase(e2.getName()))
+					.forEach(e -> System.out.println(e.getName()));
+
+//	            employees.stream()
+//		            .sorted(Comparator.comparing(EmployeeNew::getName)) // Optional sorting by name
+//					.forEach(e -> System.out.println(e.getName()));
+		});
+
+		// Query 15 : Who is the oldest employee in the organization? What is his age
+		// and which department he belongs to?
+
+//         Optional<EmployeeNew> oldestEmployeeWrapper = employeeList.stream()
+//        		 .max(Comparator.comparingInt(EmployeeNew::getAge));
+//                  
+//         EmployeeNew oldestEmployee = oldestEmployeeWrapper.get();      
+
+		EmployeeNew oldestEmployee = employeeList.stream().max(Comparator.comparingInt(EmployeeNew::getAge)).get();
+
+		System.out.println("Name : " + oldestEmployee.getName());
+		System.out.println("Age : " + oldestEmployee.getAge());
+		System.out.println("Department : " + oldestEmployee.getDepartment());
+		
+		int i = 15623;
+
+        // Compute the sum of digits
+        int sumOfDigits = String.valueOf(i)
+            .chars() // Stream of characters
+            .filter(Character::isDigit) // Filter out any non-digit characters
+            .map(Character::getNumericValue) // Convert characters to their numeric values
+            .sum(); // Sum the numeric values
+
+        System.out.println(sumOfDigits);
+        
+
+        // Convert integer to string, then map to an array of digits
+        int[] digitsArray = String.valueOf(i)
+            .chars() // Stream of character codes
+            .map(Character::getNumericValue) // Convert characters to numeric values
+            .toArray(); // Collect to an array
+
+        // Sum the elements of the array
+        int sumOfDigits1 = Arrays.stream(digitsArray).sum();
+
+        System.out.println("Sum of digits: " + sumOfDigits1);
+        
+        //How do you find the most repeated element in an array?
+        List<String> listOfStrings = Arrays.asList("Pen", "Eraser", "Note Book", "Pen", "Pencil", "Pen", "Note Book", "Pencil");
+        
+        Map<String, Long> elementCountMap = listOfStrings.stream()
+        .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+         
+        Entry<String, Long> mostFrequentElement = elementCountMap.entrySet().stream()
+        .max(Map.Entry.comparingByValue()).get();
+         
+        System.out.println("Most Frequent Element : "+mostFrequentElement.getKey());         
+        System.out.println("Count : "+mostFrequentElement.getValue());
+        
+      //How do you find the second highest salary of employee?
+        Optional<Double> secondHighestSalary =  employeeList.stream()
+											        .map(EmployeeNew::getSalary)
+											        .sorted(Comparator.reverseOrder())
+											        .skip(1)
+											        .findFirst();
+
+        secondHighestSalary.ifPresent(System.out::println);
+	}
+
+}
+
+class EmployeeNew {
+	int id;
+
+	String name;
+
+	int age;
+
+	String gender;
+
+	String department;
+
+	int yearOfJoining;
+
+	double salary;
+
+	public EmployeeNew(int id, String name, int age, String gender, String department, int yearOfJoining,
+			double salary) {
+		this.id = id;
+		this.name = name;
+		this.age = age;
+		this.gender = gender;
+		this.department = department;
+		this.yearOfJoining = yearOfJoining;
+		this.salary = salary;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public int getAge() {
+		return age;
+	}
+
+	public String getGender() {
+		return gender;
+	}
+
+	public String getDepartment() {
+		return department;
+	}
+
+	public int getYearOfJoining() {
+		return yearOfJoining;
+	}
+
+	public double getSalary() {
+		return salary;
+	}
+
+	@Override
+	public String toString() {
+		return "Id : " + id + ", Name : " + name + ", age : " + age + ", Gender : " + gender + ", Department : "
+				+ department + ", Year Of Joining : " + yearOfJoining + ", Salary : " + salary;
+	}
+}
+```
