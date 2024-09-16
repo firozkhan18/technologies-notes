@@ -83,6 +83,19 @@ public class ReverseString {
     }
 }
 ```
+**Java 7: Using for loop**
+```java
+public class ReverseString {
+    public static void main(String[] args) {
+        String str = "Hello World";
+        StringBuilder reversedString = new StringBuilder();
+        for (int i = str.length() - 1; i >= 0; i--) {
+            reversedString.append(str.charAt(i));
+        }
+        System.out.println("Reversed string: " + reversedString.toString());
+    }
+}
+```
 
 **Java 8:**
 ```java
