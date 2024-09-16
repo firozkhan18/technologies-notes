@@ -3255,6 +3255,39 @@ public class ArrayConcatenation {
 }
 ```
 
+```java
+import java.util.Arrays;
+
+public class ArrayConcatenation {
+  public static void main(String[] args) {
+    String[] array = { "a", "ab", "cd", "aef" };		
+
+    //Approach 1
+		String result = Arrays.stream(array)  // Create a stream from the array
+			        .collect(Collectors.joining()).chars()  // Stream of int values representing characters
+			        .mapToObj(c -> (char) c)  // Convert int to Character
+			        .collect(Collectors.toCollection(LinkedHashSet::new))  // Collect unique characters in order
+			        .stream()  // Stream of unique characters
+			        .map(String::valueOf)  // Convert characters to strings
+			        .collect(Collectors.joining());  // Join them into a single string
+		
+		 System.out.println(result); // Output: abcdef
+		//Approach 2
+		// Concatenate all strings in the array
+		String result1 = Arrays.stream(array)
+					.reduce("", (a, b) -> a + b)
+					.chars()  // Stream of int values representing characters
+	                .mapToObj(c -> (char) c)  // Convert int to Character
+	                .collect(Collectors.toCollection(LinkedHashSet::new))  // Collect unique characters in order
+	                .stream()  // Stream of unique characters
+	                .map(String::valueOf)  // Convert characters to strings
+	                .collect(Collectors.joining());  // Join them into a single string
+
+		 System.out.println(result1); // Output: abcdef
+    }
+}
+```
+
 ### Summary
 
 - **React Components**: Correct import statements and component definitions.
