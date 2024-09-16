@@ -139,7 +139,8 @@ Here is the consolidated list of questions with duplicates and slightly differen
 
 Here's a Java 7 and Java 8 implementations for the given problems. Each section includes code for both Java 7 and Java 8.
 
-# Java Coding Examples
+
+# Java Coding Examples (Java 7 and Java 8)
 
 <details><summary><b>1. Find the sum of all elements in an array</b></summary>
 
@@ -5373,9 +5374,7 @@ public class DisjointSet {
 ```
 </details>
 
-<details><summary><
-
-b>90. Determine if a graph is bipartite</b></summary>
+<details><summary><b>90. Determine if a graph is bipartite</b></summary>
 
 **Java 7:**
 ```java
@@ -6553,9 +6552,6 @@ public class FordFulkerson {
 }
 ```
 </details>
-
-# Java Coding Examples (Java 7 and Java 8)
-
 <details><summary><b>101. Find the largest element in an array</b></summary>
 
 **Java 7:**
