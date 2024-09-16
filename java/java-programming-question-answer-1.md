@@ -137,6 +137,7 @@ public class PalindromeCheck {
 </details>
 <details>
 <summary><b> 8. Program to find the largest element in an array</b></summary>    
+    
 ```java
 public class LargestElement {
     public static void main(String[] args) {
