@@ -9777,6 +9777,10 @@ public class EmployeeMgmt {
 		employeeList.add(new EmployeeNew(255, "Ali Baig", 23, "Male", "Infrastructure", 2018, 12700.0));
 		employeeList.add(new EmployeeNew(266, "Sanvi Pandey", 26, "Female", "Product Development", 2015, 28900.0));
 		employeeList.add(new EmployeeNew(277, "Anuj Chettiar", 31, "Male", "Product Development", 2012, 35700.0));
+
+		//Apply the below code here
+ 	}
+}
 ```
 # Employee Management Queries
 
@@ -10124,8 +10128,6 @@ secondHighestSalary.ifPresentOrElse(
 </details>
 
 ```java
-
-}
 
 class EmployeeNew {
 	int id;
