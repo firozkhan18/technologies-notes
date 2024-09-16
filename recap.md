@@ -6085,21 +6085,6 @@ jobs:
 - **Service-to-Service Communication**: Secure communication between services using mutual TLS or similar mechanisms.
 
 **OAuth2 Example (Spring Security)**:
-```java
-@Configuration
-@EnableAuthorizationServer
-public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
-
-    @Autowired
-    private AuthenticationManager
-
-
-
-Certainly! Here's the continuation and completion of the OAuth2 example along with other security measures, and a summary of all concepts covered.
-
-### **5. Security (Continued)**
-
-**OAuth2 Example (Spring Security)**:
 
 **OAuth2 Configuration**:
 ```java
