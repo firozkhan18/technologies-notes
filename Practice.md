@@ -724,3 +724,146 @@ Employee1{id=102, fullName='B Z', age=33}
 Employee1{id=104, fullName='D Z', age=34}
 Employee1{id=105, fullName='A Z', age=35}
 ```
+
+```java
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
+
+public class ArraySortReverse {
+
+	public static void main(String[] args) {
+
+		// Array Integers
+
+		Integer[] ints = new Integer[5];
+		ints[0] = 20;
+		ints[1] = 50;
+		ints[2] = 40;
+		ints[3] = 10;
+		ints[4] = 30;
+
+		System.out.println("Integer array before sort - " + Arrays.toString(ints));
+		
+		Arrays.sort(ints, Collections.reverseOrder());
+
+		System.out.println("Integer array after sort - " + Arrays.toString(ints));
+
+               // Array Int Primitive
+
+		int[] ints1 = new int[5];
+		ints1[0] = 20;
+		ints1[1] = 50;
+		ints1[2] = 40;
+		ints1[3] = 10;
+		ints1[4] = 30;
+		
+		List<Integer> stream= IntStream.of(ints1).boxed()
+				.distinct()
+				.sorted(Comparator.reverseOrder())
+				.collect(Collectors.toList());
+		
+		System.out.println("Integer array after sort - " + stream.toString());
+		Stream<Integer> stream1= IntStream.of(ints1).boxed()
+				.distinct()
+				.sorted(Comparator.reverseOrder());
+		
+		stream1.forEach(e->System.out.println(e));
+
+		//String Array
+
+		String[] stringArray = new String[5];
+		stringArray[0] = "G";
+		stringArray[1] = "Z";
+		stringArray[2] = "A";
+		stringArray[3] = "N";
+		stringArray[4] = "I";
+
+		System.out.println("String array before sort - " + Arrays.toString(stringArray));
+		Arrays.sort(stringArray, Collections.reverseOrder());
+
+		System.out.println("String array after sort - " + Arrays.toString(stringArray));
+		
+		String[] stringArray1 = {"G","Z","A","N","I"};
+		
+		System.out.println("String array before sort - " + Arrays.toString(stringArray1));
+		Arrays.sort(stringArray1, Collections.reverseOrder());
+
+		System.out.println("String array after sort - " + Arrays.toString(stringArray1));
+
+		//Array Of Custom Object
+		Employee[] empArray = new Employee[5];
+		empArray[0] = new Employee(500, "A", "2000");
+		empArray[1] = new Employee(300, "B", "2001");
+		empArray[2] = new Employee(200, "C", "2002");
+		empArray[3] = new Employee(400, "D", "2003");
+		empArray[4] = new Employee(100, "E", "2004");
+
+		System.out.println("Employee array before sort ");
+		for (Employee e : empArray) {
+			System.out.println(e);
+		}
+		Arrays.sort(empArray, Collections.reverseOrder());
+
+		System.out.println("\n" + "Employee array after sort");
+		for (Employee e : empArray) {
+			System.out.println(e);
+		}
+	}
+}
+
+class Employee implements Comparable<Employee> {
+
+	private int id;
+	private String name;
+	private String dateOfJoin;
+
+	public Employee(int id, String name, String dateOfJoin) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.dateOfJoin = dateOfJoin;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getDateOfJoin() {
+		return dateOfJoin;
+	}
+
+	public void setDateOfJoin(String dateOfJoin) {
+		this.dateOfJoin = dateOfJoin;
+	}
+
+	@Override
+	public String toString() {
+		return "Employee [id=" + id + ", name=" + name + ", dateOfJoin=" + dateOfJoin + "]";
+	}
+
+	@Override
+	public int compareTo(Employee o) {
+		// TODO Auto-generated method stub
+		return Integer.valueOf(this.getId()).compareTo(o.getId());
+	}
+
+}
+```
