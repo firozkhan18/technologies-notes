@@ -69,14 +69,37 @@ Sure! Let's explore various ways to create and initialize arrays and collections
 
 3. **Using `Arrays.asList()`**:
    ```java
-   List<String> stringList = Arrays.asList("a", "b", "c", "d");
+   List<String> listOfString = Arrays.asList("a", "b", "c", "d");
    String[] stringArray = stringList.toArray(new String[0]);
    ```
 
 4. **Using `Stream.of()`**:
    ```java
-   String[] stringArray = Stream.of("a", "b", "c", "d")
+   String[] streamLstOfString = Stream.of("a", "b", "c", "d")
                                  .toArray(String[]::new);
+   Or
+
+   Stream<String> streamLstOfString = Stream.of("a", "b", "c", "d");
+   ```
+1. **Direct Initialization**:
+
+    ```java
+   char[] charArray= {'a', 'b', 'c', 'd'};
+    ```
+3. **Using `new` Keyword**:
+
+    ```java
+   char[] charArray1= new char[]{'a', 'b', 'c', 'd'};
+    ```
+5. **Using `Arrays.asList()`**:
+
+   ```java
+   List<Character> listOfCharacter = Arrays.asList('a', 'b', 'c', 'd');
+   ```      
+7. **Using `Stream.of()`**:
+
+    ```java
+   Stream<Character> streamListOfCharacter = Stream.of('a', 'b', 'c', 'd');
    ```
 
 ### Collections
