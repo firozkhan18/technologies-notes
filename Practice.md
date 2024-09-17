@@ -611,6 +611,57 @@ Both approaches are valid, and the choice depends on whether you want to define 
 
 ```java
 
+public class Employee implements Comparable<Employee> {
+    private int id;
+    public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public String getFullName() {
+		return fullName;
+	}
+
+	public void setFullName(String fullName) {
+		this.fullName = fullName;
+	}
+
+	public int getAge() {
+		return age;
+	}
+
+	public void setAge(int age) {
+		this.age = age;
+	}
+
+	private String fullName;
+    private int age;
+
+    public Employee1(int id, String fullName, int age) {
+        this.id = id;
+        this.fullName = fullName;
+        this.age = age;
+    }
+
+    @Override
+    public String toString() {
+        return "Employee1{id=" + id + ", fullName='" + fullName + "', age=" + age + "}";
+    }
+
+    @Override
+    public int compareTo(Employee1 other) {
+        // Define the natural ordering based on age
+        return Integer.compare(this.age, other.age);
+    }
+
+    // Getters and setters (if needed)
+}
+```
+```java
+
 import java.util.Arrays;
 import java.util.Comparator;//Using Comparator
 
@@ -619,11 +670,11 @@ public class ArraysSortComparatorExample {
     public static void main(String[] args) {
         Employee1[] empArray = new Employee1[5];
 
-        empArray[0] = new Employee1(100, "Malik Mona", 30);
-        empArray[1] = new Employee1(105, "A Z", 35);
-        empArray[2] = new Employee1(102, "B Z", 33);
-        empArray[3] = new Employee1(103, "C Z", 31);
-        empArray[4] = new Employee1(104, "D Z", 34);
+        empArray[0] = new Employee(100, "Malik Mona", 30);
+        empArray[1] = new Employee(105, "A Z", 35);
+        empArray[2] = new Employee(102, "B Z", 33);
+        empArray[3] = new Employee(103, "C Z", 31);
+        empArray[4] = new Employee(104, "D Z", 34);
 
         System.out.println("emp array before sort - ");
         Arrays.stream(empArray).forEach(emp -> System.out.println(emp));
@@ -640,7 +691,7 @@ public class ArraysSortComparatorExample {
         Arrays.sort(empArray, Comparator.comparingInt(emp -> emp.getAge()));
         
         // Sort by age using Comparator and getter method -2
-        // Arrays.sort(empArray, Comparator.comparingInt(Employee1::getAge));
+        // Arrays.sort(empArray, Comparator.comparingInt(Employee::getAge));
 
         System.out.println("emp array after sort - ");
         Arrays.stream(empArray).forEach(emp -> System.out.println(emp));
