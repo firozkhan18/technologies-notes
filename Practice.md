@@ -194,6 +194,715 @@ Since `int` is a primitive type, you cannot use it directly in collections like 
 ### Summary
 
 You have various methods for initializing and working with arrays and collections in Java, whether using primitive types like `int`, wrapper types like `Integer`, or objects like `String`. For each type, you can use direct initialization, utility methods from `Arrays` and `Collections`, and streams for more flexible and functional-style operations.
+
+Certainly! Converting between `int`, `char`, `String`, and `Integer` arrays in Java using streams involves several common operations. Below, I'll show you how to perform these conversions with examples.
+
+### 1. **Converting `int` to `Integer` Array**
+
+To convert an `int` array to an `Integer` array using streams:
+
+```java
+import java.util.Arrays;
+import java.util.stream.Collectors;
+
+public class IntToIntegerConversion {
+    public static void main(String[] args) {
+        int[] intArray = {1, 2, 3, 4};
+
+        // Convert int[] to Integer[]
+        Integer[] integerArray = Arrays.stream(intArray)
+                                       .boxed()  // Convert int to Integer
+                                       .toArray(Integer[]::new);
+
+        System.out.println(Arrays.toString(integerArray));
+    }
+}
+```
+
+### 2. **Converting `Integer` to `int` Array**
+
+To convert an `Integer` array to an `int` array:
+
+```java
+import java.util.Arrays;
+
+public class IntegerToIntConversion {
+    public static void main(String[] args) {
+        Integer[] integerArray = {1, 2, 3, 4};
+
+        // Convert Integer[] to int[]
+        int[] intArray = Arrays.stream(integerArray)
+                               .mapToInt(Integer::intValue)  // Convert Integer to int
+                               .toArray();
+
+        System.out.println(Arrays.toString(intArray));
+    }
+}
+```
+
+### 3. **Converting `char` to `String` Array**
+
+To convert a `char` array to a `String` array:
+
+```java
+import java.util.Arrays;
+import java.util.stream.Collectors;
+
+public class CharToStringConversion {
+    public static void main(String[] args) {
+        char[] charArray = {'a', 'b', 'c', 'd'};
+
+        // Convert char[] to String[]
+        String[] stringArray = new String(charArray.length);
+        for (int i = 0; i < charArray.length; i++) {
+            stringArray[i] = String.valueOf(charArray[i]);
+        }
+
+        System.out.println(Arrays.toString(stringArray));
+    }
+}
+```
+
+### 4. **Converting `String` to `char` Array**
+
+To convert a `String` array to a `char` array:
+
+```java
+import java.util.Arrays;
+
+public class StringToCharConversion {
+    public static void main(String[] args) {
+        String[] stringArray = {"a", "b", "c", "d"};
+
+        // Convert String[] to char[]
+        char[] charArray = Arrays.stream(stringArray)
+                                 .collect(Collectors.joining())  // Concatenate all strings
+                                 .toCharArray();  // Convert to char array
+
+        System.out.println(Arrays.toString(charArray));
+    }
+}
+```
+
+### 5. **Converting `String` to `Integer` Array**
+
+To convert a `String` array to an `Integer` array:
+
+```java
+import java.util.Arrays;
+
+public class StringToIntegerConversion {
+    public static void main(String[] args) {
+        String[] stringArray = {"1", "2", "3", "4"};
+
+        // Convert String[] to Integer[]
+        Integer[] integerArray = Arrays.stream(stringArray)
+                                       .map(Integer::parseInt)  // Convert String to Integer
+                                       .toArray(Integer[]::new);
+
+        System.out.println(Arrays.toString(integerArray));
+    }
+}
+```
+
+### 6. **Converting `Integer` to `String` Array**
+
+To convert an `Integer` array to a `String` array:
+
+```java
+import java.util.Arrays;
+
+public class IntegerToStringConversion {
+    public static void main(String[] args) {
+        Integer[] integerArray = {1, 2, 3, 4};
+
+        // Convert Integer[] to String[]
+        String[] stringArray = Arrays.stream(integerArray)
+                                     .map(String::valueOf)  // Convert Integer to String
+                                     .toArray(String[]::new);
+
+        System.out.println(Arrays.toString(stringArray));
+    }
+}
+```
+
+### Summary
+
+In summary:
+
+- **`int[]` to `Integer[]`**: Use `boxed()` to convert primitive `int` to `Integer`.
+- **`Integer[]` to `int[]`**: Use `mapToInt(Integer::intValue)` to extract primitive values.
+- **`char[]` to `String[]`**: Convert each `char` to `String` individually.
+- **`String[]` to `char[]`**: Concatenate all `String` elements and then convert to `char[]`.
+- **`String[]` to `Integer[]`**: Parse each `String` to `Integer`.
+- **`Integer[]` to `String[]`**: Convert each `Integer` to `String`.
+
+These methods leverage Java streams to perform conversions efficiently and concisely.
+
+Converting an `int` to different number systems (binary, octal, and hexadecimal) in Java can be done easily using built-in methods from the `Integer` class. Here's how you can perform these conversions:
+
+### 1. **Binary Conversion**
+
+To convert an `int` to a binary string:
+
+```java
+public class IntToBinary {
+    public static void main(String[] args) {
+        int number = 42;
+        
+        // Convert int to binary string
+        String binaryString = Integer.toBinaryString(number);
+        
+        System.out.println("Binary representation of " + number + ": " + binaryString);
+    }
+}
+```
+
+**Output:**
+
+```
+Binary representation of 42: 101010
+```
+
+### 2. **Octal Conversion**
+
+To convert an `int` to an octal string:
+
+```java
+public class IntToOctal {
+    public static void main(String[] args) {
+        int number = 42;
+        
+        // Convert int to octal string
+        String octalString = Integer.toOctalString(number);
+        
+        System.out.println("Octal representation of " + number + ": " + octalString);
+    }
+}
+```
+
+**Output:**
+
+```
+Octal representation of 42: 52
+```
+
+### 3. **Hexadecimal Conversion**
+
+To convert an `int` to a hexadecimal string:
+
+```java
+public class IntToHexadecimal {
+    public static void main(String[] args) {
+        int number = 42;
+        
+        // Convert int to hexadecimal string
+        String hexString = Integer.toHexString(number);
+        
+        System.out.println("Hexadecimal representation of " + number + ": " + hexString);
+    }
+}
+```
+
+**Output:**
+
+```
+Hexadecimal representation of 42: 2a
+```
+
+### **Summary of Methods**
+
+- **Binary**: `Integer.toBinaryString(int)`
+- **Octal**: `Integer.toOctalString(int)`
+- **Hexadecimal**: `Integer.toHexString(int)`
+
+### **Additional Formatting Options**
+
+If you want to include leading zeros or format the output in a specific way, you can use `String.format()`. For example:
+
+```java
+public class IntToFormattedConversions {
+    public static void main(String[] args) {
+        int number = 42;
+
+        // Binary with leading zeros to ensure 8-bit representation
+        String binaryString = String.format("%8s", Integer.toBinaryString(number)).replace(' ', '0');
+        
+        // Octal with leading zeros to ensure 4-digit representation
+        String octalString = String.format("%4s", Integer.toOctalString(number)).replace(' ', '0');
+        
+        // Hexadecimal with leading zeros to ensure 2-digit representation
+        String hexString = String.format("%2s", Integer.toHexString(number)).toUpperCase().replace(' ', '0');
+        
+        System.out.println("Binary representation: " + binaryString);
+        System.out.println("Octal representation: " + octalString);
+        System.out.println("Hexadecimal representation: " + hexString);
+    }
+}
+```
+
+**Output:**
+
+```
+Binary representation: 00101010
+Octal representation: 0052
+Hexadecimal representation: 2A
+```
+
+In this example:
+- `%8s` ensures an 8-bit binary representation.
+- `%4s` ensures a 4-digit octal representation.
+- `%2s` ensures a 2-digit hexadecimal representation.
+
+You can adjust the format specifiers as needed for different representations and padding requirements.
+
+Certainly! You can manually convert an `int` to its binary, octal, and hexadecimal representations without using Java's predefined methods. Here’s how you can achieve these conversions using custom logic:
+
+### 1. **Binary Conversion**
+
+To convert an `int` to a binary string manually, you can repeatedly divide the number by 2 and track the remainders:
+
+```java
+public class IntToBinaryManual {
+    public static void main(String[] args) {
+        int number = 42;
+        String binaryString = intToBinary(number);
+        System.out.println("Binary representation of " + number + ": " + binaryString);
+    }
+
+    public static String intToBinary(int number) {
+        if (number == 0) return "0";
+        StringBuilder binary = new StringBuilder();
+        while (number > 0) {
+            binary.insert(0, number % 2);
+            number /= 2;
+        }
+        return binary.toString();
+    }
+}
+```
+
+### 2. **Octal Conversion**
+
+To convert an `int` to an octal string manually, you can repeatedly divide the number by 8 and track the remainders:
+
+```java
+public class IntToOctalManual {
+    public static void main(String[] args) {
+        int number = 42;
+        String octalString = intToOctal(number);
+        System.out.println("Octal representation of " + number + ": " + octalString);
+    }
+
+    public static String intToOctal(int number) {
+        if (number == 0) return "0";
+        StringBuilder octal = new StringBuilder();
+        while (number > 0) {
+            octal.insert(0, number % 8);
+            number /= 8;
+        }
+        return octal.toString();
+    }
+}
+```
+
+### 3. **Hexadecimal Conversion**
+
+To convert an `int` to a hexadecimal string manually, you can repeatedly divide the number by 16 and use an array of hex digits for conversion:
+
+```java
+public class IntToHexadecimalManual {
+    public static void main(String[] args) {
+        int number = 42;
+        String hexString = intToHexadecimal(number);
+        System.out.println("Hexadecimal representation of " + number + ": " + hexString);
+    }
+
+    public static String intToHexadecimal(int number) {
+        if (number == 0) return "0";
+        char[] hexDigits = "0123456789ABCDEF".toCharArray();
+        StringBuilder hex = new StringBuilder();
+        while (number > 0) {
+            hex.insert(0, hexDigits[number % 16]);
+            number /= 16;
+        }
+        return hex.toString();
+    }
+}
+```
+
+### **Summary of Manual Conversion Methods**
+
+- **Binary**: Divide by 2, collect remainders.
+- **Octal**: Divide by 8, collect remainders.
+- **Hexadecimal**: Divide by 16, collect remainders, use hex digit mapping.
+
+These methods construct the desired representation by building the result from the least significant to the most significant digit. They manually handle the conversion process and can be adapted to include additional features, such as leading zeros or specific formatting if needed.
+
+Certainly! Here are a few additional types of conversions and formatting you might find useful, extending beyond simple numerical bases:
+
+### 1. **Conversion Between Primitive Types**
+
+#### **`double` to `int`**
+
+```java
+public class DoubleToInt {
+    public static void main(String[] args) {
+        double doubleValue = 45.67;
+        int intValue = (int) doubleValue; // Truncates the decimal part
+        System.out.println("Double to int: " + intValue);
+    }
+}
+```
+
+#### **`int` to `float`**
+
+```java
+public class IntToFloat {
+    public static void main(String[] args) {
+        int intValue = 42;
+        float floatValue = (float) intValue; // Simple casting
+        System.out.println("Int to float: " + floatValue);
+    }
+}
+```
+
+### 2. **String to Date/Time**
+
+Using `java.time` classes to convert `String` to `LocalDate` or `LocalDateTime`:
+
+#### **String to LocalDate**
+
+```java
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
+public class StringToLocalDate {
+    public static void main(String[] args) {
+        String dateString = "2024-09-17";
+        LocalDate date = LocalDate.parse(dateString, DateTimeFormatter.ISO_LOCAL_DATE);
+        System.out.println("String to LocalDate: " + date);
+    }
+}
+```
+
+#### **String to LocalDateTime**
+
+```java
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
+public class StringToLocalDateTime {
+    public static void main(String[] args) {
+        String dateTimeString = "2024-09-17T10:15:30";
+        LocalDateTime dateTime = LocalDateTime.parse(dateTimeString, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+        System.out.println("String to LocalDateTime: " + dateTime);
+    }
+}
+```
+
+### 3. **Date/Time to String**
+
+Converting `LocalDate` or `LocalDateTime` to a formatted `String`:
+
+#### **LocalDate to String**
+
+```java
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
+public class LocalDateToString {
+    public static void main(String[] args) {
+        LocalDate date = LocalDate.now();
+        String formattedDate = date.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+        System.out.println("LocalDate to String: " + formattedDate);
+    }
+}
+```
+
+#### **LocalDateTime to String**
+
+```java
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
+public class LocalDateTimeToString {
+    public static void main(String[] args) {
+        LocalDateTime dateTime = LocalDateTime.now();
+        String formattedDateTime = dateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        System.out.println("LocalDateTime to String: " + formattedDateTime);
+    }
+}
+```
+
+### 4. **Object to JSON**
+
+Using libraries like Jackson to convert an object to JSON:
+
+#### **Object to JSON**
+
+```java
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+public class ObjectToJson {
+    public static void main(String[] args) throws Exception {
+        Person person = new Person("John", 30);
+        ObjectMapper objectMapper = new ObjectMapper();
+        String jsonString = objectMapper.writeValueAsString(person);
+        System.out.println("Object to JSON: " + jsonString);
+    }
+
+    static class Person {
+        private String name;
+        private int age;
+
+        // Constructors, getters, setters
+        public Person() {}
+        public Person(String name, int age) {
+            this.name = name;
+            this.age = age;
+        }
+        public String getName() { return name; }
+        public void setName(String name) { this.name = name; }
+        public int getAge() { return age; }
+        public void setAge(int age) { this.age = age; }
+    }
+}
+```
+
+### 5. **JSON to Object**
+
+Using libraries like Jackson to convert JSON to an object:
+
+#### **JSON to Object**
+
+```java
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+public class JsonToObject {
+    public static void main(String[] args) throws Exception {
+        String jsonString = "{\"name\":\"John\",\"age\":30}";
+        ObjectMapper objectMapper = new ObjectMapper();
+        Person person = objectMapper.readValue(jsonString, Person.class);
+        System.out.println("JSON to Object: " + person.getName() + ", " + person.getAge());
+    }
+
+    static class Person {
+        private String name;
+        private int age;
+
+        // Constructors, getters, setters
+        public Person() {}
+        public Person(String name, int age) {
+            this.name = name;
+            this.age = age;
+        }
+        public String getName() { return name; }
+        public void setName(String name) { this.name = name; }
+        public int getAge() { return age; }
+        public void setAge(int age) { this.age = age; }
+    }
+}
+```
+
+### 6. **Conversion Between Byte Arrays and Strings**
+
+#### **String to Byte Array**
+
+```java
+public class StringToByteArray {
+    public static void main(String[] args) {
+        String text = "Hello, World!";
+        byte[] byteArray = text.getBytes();
+        System.out.println("String to Byte Array: " + java.util.Arrays.toString(byteArray));
+    }
+}
+```
+
+#### **Byte Array to String**
+
+```java
+public class ByteArrayToString {
+    public static void main(String[] args) {
+        byte[] byteArray = {72, 101, 108, 108, 111};
+        String text = new String(byteArray);
+        System.out.println("Byte Array to String: " + text);
+    }
+}
+```
+
+### 7. **Base64 Encoding and Decoding**
+
+#### **String to Base64**
+
+```java
+import java.util.Base64;
+
+public class StringToBase64 {
+    public static void main(String[] args) {
+        String text = "Hello, World!";
+        String base64Encoded = Base64.getEncoder().encodeToString(text.getBytes());
+        System.out.println("String to Base64: " + base64Encoded);
+    }
+}
+```
+
+#### **Base64 to String**
+
+```java
+import java.util.Base64;
+
+public class Base64ToString {
+    public static void main(String[] args) {
+        String base64Encoded = "SGVsbG8sIFdvcmxkIQ==";
+        byte[] decodedBytes = Base64.getDecoder().decode(base64Encoded);
+        String text = new String(decodedBytes);
+        System.out.println("Base64 to String: " + text);
+    }
+}
+```
+
+### Summary
+
+These examples cover various types of conversions and formatting options:
+
+- **Primitive Types**: `double` to `int`, `int` to `float`
+- **Date/Time**: `String` to `LocalDate`, `LocalDate` to `String`, etc.
+- **Object to/from JSON**: Using Jackson library
+- **Byte Arrays**: `String` to byte array and vice versa
+- **Base64 Encoding/Decoding**: For encoding and decoding Base64 strings
+
+These conversions can help with many data processing and formatting tasks in Java.
+
+Certainly! Apart from binary, octal, and hexadecimal, there are other numeral systems and formats you might find useful. Here are a few additional formats and conversions you can perform manually:
+
+### 1. **Custom Base Conversion**
+
+If you need to convert an `int` to a number in a custom base (e.g., base 5 or base 12), you can adapt the basic method used for binary, octal, and hexadecimal conversions:
+
+#### Custom Base Conversion Method
+
+```java
+public class IntToCustomBase {
+    public static void main(String[] args) {
+        int number = 123;
+        int base = 7; // For example, base 7
+        
+        String customBaseString = intToCustomBase(number, base);
+        System.out.println("Number " + number + " in base " + base + ": " + customBaseString);
+    }
+
+    public static String intToCustomBase(int number, int base) {
+        if (number == 0) return "0";
+        
+        // Characters to represent values beyond 9
+        char[] digits = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ".toCharArray();
+        StringBuilder result = new StringBuilder();
+        
+        while (number > 0) {
+            result.insert(0, digits[number % base]);
+            number /= base;
+        }
+        
+        return result.toString();
+    }
+}
+```
+
+### 2. **Roman Numerals**
+
+Converting an `int` to Roman numerals can be done using a predefined mapping of integer values to Roman numeral symbols:
+
+```java
+public class IntToRoman {
+    public static void main(String[] args) {
+        int number = 1994;
+        String romanNumeral = intToRoman(number);
+        System.out.println("Roman numeral of " + number + ": " + romanNumeral);
+    }
+
+    public static String intToRoman(int number) {
+        String[] thousands = {"", "M", "MM", "MMM"};
+        String[] hundreds = {"", "C", "CC", "CCC", "CD", "D", "DC", "DCC", "DCCC", "CM"};
+        String[] tens = {"", "X", "XX", "XXX", "XL", "L", "LX", "LXX", "LXXX", "XC"};
+        String[] ones = {"", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX"};
+        
+        String roman = thousands[number / 1000] +
+                       hundreds[(number % 1000) / 100] +
+                       tens[(number % 100) / 10] +
+                       ones[number % 10];
+        
+        return roman;
+    }
+}
+```
+
+### 3. **Scientific Notation**
+
+Converting an `int` to scientific notation involves representing the number as a product of a coefficient and a power of 10:
+
+```java
+public class IntToScientificNotation {
+    public static void main(String[] args) {
+        int number = 123456;
+        String scientificNotation = intToScientificNotation(number);
+        System.out.println("Scientific notation of " + number + ": " + scientificNotation);
+    }
+
+    public static String intToScientificNotation(int number) {
+        if (number == 0) return "0E0";
+        
+        int exponent = (int) Math.floor(Math.log10(number));
+        double coefficient = number / Math.pow(10, exponent);
+        
+        return String.format("%.2fE%d", coefficient, exponent);
+    }
+}
+```
+
+### 4. **Percentages**
+
+Converting an `int` to a percentage string is useful for displaying relative values:
+
+```java
+public class IntToPercentage {
+    public static void main(String[] args) {
+        int number = 45;
+        String percentage = intToPercentage(number);
+        System.out.println("Percentage representation of " + number + ": " + percentage);
+    }
+
+    public static String intToPercentage(int number) {
+        return number + "%";
+    }
+}
+```
+
+### 5. **Time Format (HH:MM:SS)**
+
+Converting an `int` representing seconds to a time format (hours, minutes, seconds):
+
+```java
+public class IntToTimeFormat {
+    public static void main(String[] args) {
+        int seconds = 3661; // Example value
+        String timeFormat = intToTimeFormat(seconds);
+        System.out.println("Time format of " + seconds + " seconds: " + timeFormat);
+    }
+
+    public static String intToTimeFormat(int seconds) {
+        int hours = seconds / 3600;
+        int minutes = (seconds % 3600) / 60;
+        int secs = seconds % 60;
+        
+        return String.format("%02d:%02d:%02d", hours, minutes, secs);
+    }
+}
+```
+
+### Summary
+
+These are just a few examples of how you can convert an `int` to various formats beyond the usual binary, octal, and hexadecimal representations. Each conversion requires its own approach and can be tailored to fit different needs and numeral systems.
 ### Add to in Array
 
 ```java
