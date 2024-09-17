@@ -613,6 +613,8 @@ Both approaches are valid, and the choice depends on whether you want to define 
 
 public class Employee implements Comparable<Employee> {
     private int id;
+    private String fullName;
+    private int age;
     public int getId() {
 		return id;
 	}
@@ -635,26 +637,23 @@ public class Employee implements Comparable<Employee> {
 
 	public void setAge(int age) {
 		this.age = age;
-	}
+	}	
 
-	private String fullName;
-    private int age;
-
-    public Employee1(int id, String fullName, int age) {
-        this.id = id;
-        this.fullName = fullName;
-        this.age = age;
+    public Employee(int id, String fullName, int age) {
+	this.id = id;
+	this.fullName = fullName;
+	this.age = age;
     }
 
     @Override
     public String toString() {
-        return "Employee1{id=" + id + ", fullName='" + fullName + "', age=" + age + "}";
+	return "Employee{id=" + id + ", fullName='" + fullName + "', age=" + age + "}";
     }
 
     @Override
     public int compareTo(Employee1 other) {
-        // Define the natural ordering based on age
-        return Integer.compare(this.age, other.age);
+	// Define the natural ordering based on age
+	return Integer.compare(this.age, other.age);
     }
 
     // Getters and setters (if needed)
