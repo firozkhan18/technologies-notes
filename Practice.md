@@ -422,3 +422,88 @@ Acccessing array values by index - true
 Default values of array7 are [false, false, false, false, false]
 New Default values of array7 are [true, true, true, true, true]
 ```
+
+### Array Sort
+
+The `ClassCastException` you're encountering occurs because the `Employee` class does not implement the `Comparable` interface, and you’re trying to use a sorting method that requires the objects to be comparable. Here's a detailed explanation of why this happens and how to resolve it:
+
+### Understanding the Error
+
+The `ClassCastException` indicates that the sorting method you’re using expects objects to be comparable, but your `Employee` class does not implement `Comparable`.
+
+- **`java.lang.Comparable`**: This interface is used to define a natural ordering for objects of a class. If a class implements `Comparable`, it must override the `compareTo` method to provide a way to compare instances of the class.
+- **`Arrays.sort()`**: When you use `Arrays.sort()` without providing a comparator, it relies on the objects being `Comparable`. Since `Employee` does not implement `Comparable`, this method cannot determine how to sort the `Employee` objects.
+
+### Solution
+
+There are two main ways to resolve this issue:
+
+1. **Implement the `Comparable` Interface in `Employee` Class**:
+   Implement the `Comparable<Employee>` interface in your `Employee` class and override the `compareTo` method to define the natural ordering of `Employee` objects.
+
+   ```java
+   public class Employee implements Comparable<Employee> {
+       private int id;
+       private String fullName;
+       private int age;
+
+       // Constructor, getters, setters
+
+       @Override
+       public int compareTo(Employee other) {
+           // Define the natural ordering; for example, by age
+           return Integer.compare(this.age, other.age);
+       }
+
+       @Override
+       public String toString() {
+           return "Employee{id=" + id + ", fullName='" + fullName + "', age=" + age + "}";
+       }
+   }
+   ```
+
+   Then you can sort the array of `Employee` objects using `Arrays.sort()` without a custom comparator:
+
+   ```java
+   Employee[] empArray = {
+       new Employee(100, "Malik Mona", 30),
+       new Employee(105, "A Z", 35),
+       new Employee(102, "B Z", 33),
+       new Employee(103, "C Z", 31),
+       new Employee(104, "D Z", 34)
+   };
+
+   System.out.println("Before sort: " + Arrays.toString(empArray));
+
+   Arrays.sort(empArray);
+
+   System.out.println("After sort: " + Arrays.toString(empArray));
+   ```
+
+2. **Provide a Comparator**:
+   If you do not want to modify the `Employee` class or need custom sorting that doesn't fit into the natural ordering, you can use a `Comparator` instead. This is useful for one-off sorts or different sorting criteria.
+
+   ```java
+   Employee[] empArray = {
+       new Employee(100, "Malik Mona", 30),
+       new Employee(105, "A Z", 35),
+       new Employee(102, "B Z", 33),
+       new Employee(103, "C Z", 31),
+       new Employee(104, "D Z", 34)
+   };
+
+   System.out.println("Before sort: " + Arrays.toString(empArray));
+
+   Arrays.sort(empArray, Comparator.comparingInt(Employee::getAge));
+
+   System.out.println("After sort: " + Arrays.toString(empArray));
+   ```
+
+   In this example, `Comparator.comparingInt(Employee::getAge)` creates a comparator that sorts employees by age.
+
+### Summary
+
+- **Implementing `Comparable`**: Modify the `Employee` class to implement `Comparable<Employee>` if you want a natural ordering for sorting.
+- **Using `Comparator`**: Use `Comparator` if you need custom sorting criteria without modifying the `Employee` class.
+
+Both approaches are valid, and the choice depends on whether you want to define a natural order for `Employee` objects or need specific sorting logic.
