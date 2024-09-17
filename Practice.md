@@ -425,6 +425,107 @@ New Default values of array7 are [true, true, true, true, true]
 
 ### Array Sort
 
+```java
+
+package com.javaprogramto.models;
+
+public class Employee {
+
+    private int id;
+    private String fullName;
+    private int age;
+
+    public Employee(int id, String fullName, int age) {
+        this.id = id;
+        this.fullName = fullName;
+        this.age = age;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getFullName() {
+        return fullName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    @Override
+    public String toString() {
+        return "Employee{" +
+                "id=" + id +
+                ", fullName='" + fullName + '\'' +
+                ", age=" + age +
+                '}';
+    }
+}
+```
+```java
+package com.javaprogramto.arrays.comparator;
+
+import java.util.Arrays;
+
+import com.Employee;
+
+public class ArraysSortComparatorExample {
+
+	public static void main(String[] args) {
+
+		Employee[] empArray = new Employee[5];
+
+		empArray[0] = new Employee(100, "Malik Mona", 30);
+		empArray[1] = new Employee(105, "A Z", 35);
+		empArray[2] = new Employee(102, "B Z", 33);
+		empArray[3] = new Employee(103, "C Z", 31);
+		empArray[4] = new Employee(104, "D Z", 34);
+
+		System.out.println("emp array before sort - ");
+		Arrays.stream(empArray).forEach(emp -> System.out.println(emp));
+
+		Arrays.sort(empArray);
+
+		System.out.println("emp array after sort - ");
+		Arrays.stream(empArray).forEach(emp -> System.out.println(emp));
+
+	}
+
+}
+```
+Output:
+
+```
+emp array before sort - 
+Employee{id=100, fullName='Malik Mona', age=30}
+Employee{id=105, fullName='A Z', age=35}
+Employee{id=102, fullName='B Z', age=33}
+Employee{id=103, fullName='C Z', age=31}
+Employee{id=104, fullName='D Z', age=34}
+Exception in thread "main" java.lang.ClassCastException: class com.javaprogramto.models.Employee cannot be cast to class java.lang.Comparable (com.javaprogramto.models.Employee is in unnamed module of loader 'app'; java.lang.Comparable is in module java.base of loader 'bootstrap')
+	at java.base/java.util.ComparableTimSort.countRunAndMakeAscending(ComparableTimSort.java:320)
+	at java.base/java.util.ComparableTimSort.sort(ComparableTimSort.java:188)
+	at java.base/java.util.Arrays.sort(Arrays.java:1041)
+	at com.javaprogramto.arrays.comparator.ArraysSortComparatorExample.main(ArraysSortComparatorExample.java:22)
+
+```
+//Implementing Comparable: The Employee class must implement Comparable<Employee>, and you override the compareTo method to provide the logic for comparing Employee objects. In this example, the natural ordering is based on the age field.
+//
+//Using Comparator: Instead of modifying the Employee class, you can define a Comparator to sort Employee objects based on specific fields. In the example provided, we used Comparator.comparingInt to sort by the age field.
+```
 The `ClassCastException` you're encountering occurs because the `Employee` class does not implement the `Comparable` interface, and you’re trying to use a sorting method that requires the objects to be comparable. Here's a detailed explanation of why this happens and how to resolve it:
 
 ### Understanding the Error
@@ -507,3 +608,69 @@ There are two main ways to resolve this issue:
 - **Using `Comparator`**: Use `Comparator` if you need custom sorting criteria without modifying the `Employee` class.
 
 Both approaches are valid, and the choice depends on whether you want to define a natural order for `Employee` objects or need specific sorting logic.
+
+```java
+
+import java.util.Arrays;
+import java.util.Comparator;//Using Comparator
+
+public class ArraysSortComparatorExample {
+
+    public static void main(String[] args) {
+        Employee1[] empArray = new Employee1[5];
+
+        empArray[0] = new Employee1(100, "Malik Mona", 30);
+        empArray[1] = new Employee1(105, "A Z", 35);
+        empArray[2] = new Employee1(102, "B Z", 33);
+        empArray[3] = new Employee1(103, "C Z", 31);
+        empArray[4] = new Employee1(104, "D Z", 34);
+
+        System.out.println("emp array before sort - ");
+        Arrays.stream(empArray).forEach(emp -> System.out.println(emp));
+
+        Arrays.sort(empArray);
+
+        System.out.println("emp array after sort - ");
+        Arrays.stream(empArray).forEach(emp -> System.out.println(emp));
+        
+        System.out.println("emp array before sort - ");
+        Arrays.stream(empArray).forEach(emp -> System.out.println(emp));
+
+        // Sort by age using Comparator -1
+        Arrays.sort(empArray, Comparator.comparingInt(emp -> emp.getAge()));
+        
+        // Sort by age using Comparator and getter method -2
+        // Arrays.sort(empArray, Comparator.comparingInt(Employee1::getAge));
+
+        System.out.println("emp array after sort - ");
+        Arrays.stream(empArray).forEach(emp -> System.out.println(emp));
+    }
+}
+```
+Output:
+```
+emp array before sort - 
+Employee1{id=100, fullName='Malik Mona', age=30}
+Employee1{id=105, fullName='A Z', age=35}
+Employee1{id=102, fullName='B Z', age=33}
+Employee1{id=103, fullName='C Z', age=31}
+Employee1{id=104, fullName='D Z', age=34}
+emp array after sort - 
+Employee1{id=100, fullName='Malik Mona', age=30}
+Employee1{id=103, fullName='C Z', age=31}
+Employee1{id=102, fullName='B Z', age=33}
+Employee1{id=104, fullName='D Z', age=34}
+Employee1{id=105, fullName='A Z', age=35}
+emp array before sort - 
+Employee1{id=100, fullName='Malik Mona', age=30}
+Employee1{id=103, fullName='C Z', age=31}
+Employee1{id=102, fullName='B Z', age=33}
+Employee1{id=104, fullName='D Z', age=34}
+Employee1{id=105, fullName='A Z', age=35}
+emp array after sort - 
+Employee1{id=100, fullName='Malik Mona', age=30}
+Employee1{id=103, fullName='C Z', age=31}
+Employee1{id=102, fullName='B Z', age=33}
+Employee1{id=104, fullName='D Z', age=34}
+Employee1{id=105, fullName='A Z', age=35}
+```
