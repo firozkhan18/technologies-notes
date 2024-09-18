@@ -11215,3 +11215,273 @@ public class ArrayConcatenation {
     }
 }
 ```
+```java
+package com.javaprogramto.threads.java8;
+
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+
+public class ThreadPrinter {	
+
+	public static void main(String[] args) {
+		Thread evenThread = new Thread(new EvenPrinter());
+		Thread oddThread = new Thread(new OddPrinter());
+
+		evenThread.start();
+		oddThread.start();
+
+		// Thread creation using java 8 lambda using runnable
+		Thread evenNumberThread = new Thread(() -> {
+
+			// this logic is implementation of run() method to print only even numbers
+			for (int i = 0; i < 20; i++) {
+				if (i % 2 == 0) {
+					System.out.println("Even Number Thread : " + i);
+					try {
+						Thread.sleep(1000);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		});
+
+		// starting the thread
+		evenNumberThread.start();
+
+		Thread oddNumberThread = new Thread(() -> {
+			// Printing the odd numbers from main thread.
+			for (int i = 0; i < 20; i++) {
+				if (i % 2 == 1) {
+					System.out.println("Odd Number Thread : " + i);
+					try {
+						Thread.sleep(1000);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		});
+
+		oddNumberThread.start();
+
+		// Optionally, wait for both threads to finish before exiting the main method
+		try {
+			evenNumberThread.join();
+			oddNumberThread.join();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+
+		// ============================================================================
+
+		// Similarly, Runnable implementation for printing even numbers
+		Runnable evenNumberTask = () -> {
+			for (int i = 0; i < 20; i++) {
+				if (i % 2 == 0) {
+					System.out.println("Even Number Thread : " + i);
+					try {
+						Thread.sleep(1000); // Sleep for 1 second
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		};
+
+		// Runnable implementation for printing odd numbers
+		Runnable oddNumberTask = () -> {
+			for (int i = 0; i < 20; i++) {
+				if (i % 2 == 1) {
+					System.out.println("Odd Number Thread : " + i);
+					try {
+						Thread.sleep(1000); // Sleep for 1 second
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		};
+
+		// Creating threads with Runnable tasks
+		Thread evenNumberThreadRun = new Thread(evenNumberTask);
+		Thread oddNumberThreadRun = new Thread(oddNumberTask);
+
+		// Starting the threads
+		evenNumberThreadRun.start();
+		oddNumberThreadRun.start();
+
+		// Optionally, wait for both threads to finish before exiting the main method
+		try {
+			evenNumberThreadRun.join();
+			oddNumberThreadRun.join();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+
+		// ============================================================================
+		// Similarly, Anonymous Runnable Thread
+
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				for (int i = 0; i <= 10; i++) {
+					System.out.println("Executing " + i + " thread name - " + Thread.currentThread().getName());
+				}
+			}
+		}).start();
+
+		for (int i = 0; i <= 10; i++) {
+			System.out.println("Executing " + i + " thread name - " + Thread.currentThread().getName());
+		}
+
+		// ============================================================================
+		// Similarly, Anonymous Thread
+
+		new Thread() {
+
+			public void run() {
+
+				for (int i = 0; i <= 10; i++) {
+					System.out.println("Executing " + i + " thread name - " + Thread.currentThread().getName());
+				}
+
+			}
+
+		}.start();
+
+		for (int i = 0; i <= 10; i++) {
+			System.out.println("Executing " + i + " thread name - " + Thread.currentThread().getName());
+		}
+		// Thread Serialization
+
+		Thread thread1 = new Thread(new Task(1));
+		Thread thread2 = new Thread(new Task(2));
+		Thread thread3 = new Thread(new Task(3));
+
+		thread1.start();
+		thread2.start();
+		thread3.start();
+		
+		// Thread Synchronization
+
+		Thread evenThread1 = new Thread(new EvenPrinter1());
+		Thread oddThread1 = new Thread(new OddPrinter1());
+
+		evenThread1.start();
+		oddThread1.start();
+
+	}
+
+	static class EvenPrinter implements Runnable {
+		@Override
+		public void run() {
+			for (int i = 0; i < 10; i++) {
+				if (i % 2 == 0) {
+					System.out.println("Even Number Thread : " + i);
+					try {
+						Thread.sleep(1000);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		}
+	}
+
+	static class OddPrinter implements Runnable {
+		@Override
+		public void run() {
+			for (int i = 0; i < 10; i++) {
+				if (i % 2 != 0) {
+					System.out.println("Odd Number Thread : " + i);
+					try {
+						Thread.sleep(1000);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		}
+	}
+	
+	private static final Lock lock = new ReentrantLock();
+	private static final Condition condition = lock.newCondition();
+	private static int step = 1;
+
+	static class Task implements Runnable {
+		private final int taskNumber;
+
+		Task(int taskNumber) {
+			this.taskNumber = taskNumber;
+		}
+
+		@Override
+		public void run() {
+			lock.lock();
+			try {
+				while (step != taskNumber) {
+					condition.await(); // Wait for the right step
+				}
+				System.out.println("Task " + taskNumber + " is running");
+				Thread.sleep(1000); // Simulate work
+				System.out.println("Task " + taskNumber + " is done");
+				step++; // Move to the next step
+				condition.signalAll(); // Notify all waiting threads
+			} catch (InterruptedException e) {
+				Thread.currentThread().interrupt();
+				System.out.println("Task " + taskNumber + " interrupted");
+			} finally {
+				lock.unlock();
+			}
+		}
+	}
+
+	private static final int MAX = 20; // Define the maximum number to print
+	private static int number = 1; // Start from 1
+	private static final Object lock1 = new Object(); // Lock object for synchronization
+
+	static class EvenPrinter1 implements Runnable {
+		@Override
+		public void run() {
+			while (number <= MAX) {
+				synchronized (lock1) {
+					if (number % 2 == 0) {
+						System.out.println("Even: " + number);
+						number++;
+						lock1.notify(); // Notify the other thread
+					} else {
+						try {
+							lock1.wait(); // Wait for the odd thread to notify
+						} catch (InterruptedException e) {
+							Thread.currentThread().interrupt();
+						}
+					}
+				}
+			}
+		}
+	}
+
+	static class OddPrinter1 implements Runnable {
+		@Override
+		public void run() {
+			while (number <= MAX) {
+				synchronized (lock1) {
+					if (number % 2 != 0) {
+						System.out.println("Odd: " + number);
+						number++;
+						lock1.notify(); // Notify the other thread
+					} else {
+						try {
+							lock1.wait(); // Wait for the even thread to notify
+						} catch (InterruptedException e) {
+							Thread.currentThread().interrupt();
+						}
+					}
+				}
+			}
+		}
+	}
+}
+```
