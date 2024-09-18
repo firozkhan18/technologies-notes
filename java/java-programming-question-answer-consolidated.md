@@ -11215,6 +11215,7 @@ public class ArrayConcatenation {
     }
 }
 ```
+## Java Coding Thread Examples (Java 7 and Java 8)
 ```java
 package com.javaprogramto.threads.java8;
 
