@@ -9224,3 +9224,182 @@ public class MultipleResourcesExample {
 ### Summary
 
 The try-with-resources statement is a powerful feature in Java that enhances resource management by ensuring that all resources are closed automatically. This leads to cleaner code, reduced boilerplate, and minimized risk of resource leaks. If you have further questions or need more examples, feel free to ask!
+
+Certainly! Here are some common JavaScript coding interview questions along with detailed answers and explanations:
+
+### 1. Reverse a String
+
+**Question**: Write a function that takes a string as input and returns the string reversed.
+
+**Answer**:
+```javascript
+function reverseString(str) {
+    return str.split('').reverse().join('');
+}
+
+// Example usage:
+console.log(reverseString("hello")); // Output: "olleh"
+```
+
+**Explanation**:
+- `split('')` converts the string into an array of characters.
+- `reverse()` reverses the array.
+- `join('')` combines the array back into a string.
+
+---
+
+### 2. Check for Palindrome
+
+**Question**: Write a function that checks if a given string is a palindrome (reads the same forwards and backwards).
+
+**Answer**:
+```javascript
+function isPalindrome(str) {
+    const cleanedStr = str.replace(/[^a-z0-9]/gi, '').toLowerCase();
+    return cleanedStr === cleanedStr.split('').reverse().join('');
+}
+
+// Example usage:
+console.log(isPalindrome("A man, a plan, a canal: Panama")); // Output: true
+```
+
+**Explanation**:
+- `replace(/[^a-z0-9]/gi, '')` removes non-alphanumeric characters and ignores case.
+- The cleaned string is then checked against its reversed version.
+
+---
+
+### 3. FizzBuzz
+
+**Question**: Write a function that prints numbers from 1 to n. But for multiples of three print "Fizz" instead of the number and for the multiples of five print "Buzz". For numbers which are multiples of both three and five print "FizzBuzz".
+
+**Answer**:
+```javascript
+function fizzBuzz(n) {
+    for (let i = 1; i <= n; i++) {
+        if (i % 3 === 0 && i % 5 === 0) {
+            console.log("FizzBuzz");
+        } else if (i % 3 === 0) {
+            console.log("Fizz");
+        } else if (i % 5 === 0) {
+            console.log("Buzz");
+        } else {
+            console.log(i);
+        }
+    }
+}
+
+// Example usage:
+fizzBuzz(15);
+```
+
+**Explanation**:
+- The function uses a loop to iterate from 1 to n and applies conditional checks to print the appropriate string or number.
+
+---
+
+### 4. Find the Largest Number in an Array
+
+**Question**: Write a function that returns the largest number in a given array.
+
+**Answer**:
+```javascript
+function findLargestNumber(arr) {
+    return Math.max(...arr);
+}
+
+// Example usage:
+console.log(findLargestNumber([1, 2, 3, 4, 5])); // Output: 5
+```
+
+**Explanation**:
+- The `Math.max()` function returns the largest of zero or more numbers.
+- The spread operator `...` allows the array to be passed as individual arguments.
+
+---
+
+### 5. Merge Two Sorted Arrays
+
+**Question**: Write a function that merges two sorted arrays into one sorted array.
+
+**Answer**:
+```javascript
+function mergeSortedArrays(arr1, arr2) {
+    let merged = [];
+    let i = 0, j = 0;
+
+    while (i < arr1.length && j < arr2.length) {
+        if (arr1[i] < arr2[j]) {
+            merged.push(arr1[i]);
+            i++;
+        } else {
+            merged.push(arr2[j]);
+            j++;
+        }
+    }
+
+    // Add remaining elements from arr1 or arr2
+    while (i < arr1.length) merged.push(arr1[i++]);
+    while (j < arr2.length) merged.push(arr2[j++]);
+
+    return merged;
+}
+
+// Example usage:
+console.log(mergeSortedArrays([1, 3, 5], [2, 4, 6])); // Output: [1, 2, 3, 4, 5, 6]
+```
+
+**Explanation**:
+- The function uses two pointers to iterate through both arrays and push the smaller element to the merged array.
+- Remaining elements are appended after one array is fully traversed.
+
+---
+
+### 6. Remove Duplicates from an Array
+
+**Question**: Write a function to remove duplicates from an array.
+
+**Answer**:
+```javascript
+function removeDuplicates(arr) {
+    return [...new Set(arr)];
+}
+
+// Example usage:
+console.log(removeDuplicates([1, 2, 2, 3, 4, 4])); // Output: [1, 2, 3, 4]
+```
+
+**Explanation**:
+- A `Set` is used to store unique values. The spread operator converts it back into an array.
+
+---
+
+### 7. Debounce Function
+
+**Question**: Write a debounce function that delays the execution of a function until after a specified time period has elapsed since the last time it was invoked.
+
+**Answer**:
+```javascript
+function debounce(func, delay) {
+    let timeout;
+    return function(...args) {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => func.apply(this, args), delay);
+    };
+}
+
+// Example usage:
+const log = debounce(() => console.log("Executed!"), 2000);
+log();
+log(); // Only the last call will execute after 2 seconds
+```
+
+**Explanation**:
+- The `debounce` function creates a closure to hold a timer.
+- `clearTimeout` prevents the previous timer from executing if the function is called again within the delay.
+
+---
+
+### Conclusion
+
+These examples cover a range of fundamental JavaScript concepts, such as string manipulation, array operations, and asynchronous programming patterns. Being familiar with these types of questions can help you perform well in coding interviews. If you need more questions or specific topics, feel free to ask!
