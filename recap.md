@@ -7455,3 +7455,308 @@ Here's a basic example of how you might use snapshot testing with Jest and React
 ### Summary
 
 Snapshot testing with Jest allows you to capture and compare the rendered output of React components. This helps ensure that your components do not change unexpectedly and that your UI remains consistent. It’s a powerful tool for maintaining and verifying the visual integrity of your components as your application evolves.
+
+Certainly! You can implement the same logic using different constructs or by breaking it down into separate methods for clarity. Here’s an alternative using a traditional for loop instead of `forEach`, while keeping the `HashSet` for tracking seen numbers:
+
+### Using a For Loop
+
+```java
+import java.util.HashSet;
+
+public class ArraySumUsingForLoop {
+    public static void main(String[] args) {
+        int[] array = {10, 21, 5, 14, 20};
+        int targetSum = 25;
+        HashSet<Integer> seen = new HashSet<>();
+
+        for (int number : array) {
+            int complement = targetSum - number;
+            if (seen.contains(complement)) {
+                System.out.println("Pair found: " + number + " + " + complement);
+            }
+            seen.add(number);
+        }
+    }
+}
+```
+
+### Encapsulating Logic in a Method
+
+If you want to keep the logic clean and reusable, you could encapsulate the logic in a separate method:
+
+```java
+import java.util.HashSet;
+
+public class ArraySumEncapsulated {
+    public static void main(String[] args) {
+        int[] array = {10, 21, 5, 14, 20};
+        int targetSum = 25;
+        findPairsWithSum(array, targetSum);
+    }
+
+    private static void findPairsWithSum(int[] array, int targetSum) {
+        HashSet<Integer> seen = new HashSet<>();
+
+        for (int number : array) {
+            int complement = targetSum - number;
+            if (seen.contains(complement)) {
+                System.out.println("Pair found: " + number + " + " + complement);
+            }
+            seen.add(number);
+        }
+    }
+}
+```
+
+### Using a List Instead of Set for Storage
+
+You could also use a `List` to keep track of seen numbers, although this would not be as efficient as using a `HashSet` for lookups:
+
+```java
+import java.util.ArrayList;
+import java.util.List;
+
+public class ArraySumUsingList {
+    public static void main(String[] args) {
+        int[] array = {10, 21, 5, 14, 20};
+        int targetSum = 25;
+        List<Integer> seen = new ArrayList<>();
+
+        for (int number : array) {
+            int complement = targetSum - number;
+            if (seen.contains(complement)) {
+                System.out.println("Pair found: " + number + " + " + complement);
+            }
+            seen.add(number);
+        }
+    }
+}
+```
+
+### Summary
+
+These implementations provide different styles while keeping the core logic intact. The use of `HashSet` remains the most efficient for this problem due to its average O(1) time complexity for lookups. Let me know if you’d like to explore more variations!
+To improve the performance of the pair-finding logic when dealing with large datasets, you can optimize both the data structure and the algorithmic approach. Here are some suggestions:
+
+### 1. Use a HashSet for Fast Lookups
+You’re already using a `HashSet`, which provides average O(1) time complexity for lookups and insertions. This is optimal for this type of problem.
+
+### 2. Avoid Unnecessary Operations
+Instead of using `Optional`, you can stick to straightforward checks. This reduces overhead and improves readability.
+
+### 3. Parallel Processing
+For very large datasets, consider using parallel streams, which can leverage multiple cores for processing.
+
+### 4. Early Exit Strategy
+If you just need to find one pair, you can exit early once you find it.
+
+### Example of Optimized Code
+
+Here’s how you could implement these optimizations:
+
+```java
+import java.util.HashSet;
+
+public class OptimizedArraySum {
+    public static void main(String[] args) {
+        int[] array7 = {10, 21, 5, 15, 20, /* large dataset here */};
+        int targetSum = 25;
+        findPairsWithSum(array7, targetSum);
+    }
+
+    private static void findPairsWithSum(int[] array, int targetSum) {
+        HashSet<Integer> seen = new HashSet<>();
+
+        for (int number : array) {
+            int complement = targetSum - number;
+
+            // Direct check without Optional
+            if (seen.contains(complement)) {
+                System.out.println("Pair found: " + number + " + " + complement);
+                return; // Exit early if only one pair is needed
+            }
+            seen.add(number);
+        }
+    }
+}
+```
+
+### Parallel Processing Example
+
+If the dataset is very large and you want to take advantage of multiple cores, consider using parallel streams:
+
+```java
+import java.util.HashSet;
+import java.util.stream.IntStream;
+
+public class ParallelArraySum {
+    public static void main(String[] args) {
+        int[] array7 = {10, 21, 5, 15, 20, /* large dataset here */};
+        int targetSum = 25;
+        findPairsWithSum(array7, targetSum);
+    }
+
+    private static void findPairsWithSum(int[] array, int targetSum) {
+        HashSet<Integer> seen = new HashSet<>();
+
+        IntStream.of(array)
+                 .parallel() // Enable parallel processing
+                 .forEach(number -> {
+                     int complement = targetSum - number;
+                     synchronized (seen) { // Ensure thread safety
+                         if (seen.contains(complement)) {
+                             System.out.println("Pair found: " + number + " + " + complement);
+                         }
+                         seen.add(number);
+                     }
+                 });
+    }
+}
+```
+
+### Summary
+
+- **Use HashSet**: You are already using a good data structure for this problem.
+- **Simplify Logic**: Avoid unnecessary overhead by using straightforward conditionals.
+- **Parallel Processing**: Use parallel streams for larger datasets.
+- **Early Exit**: Exit the loop early if you only need one pair.
+
+These changes will help you handle larger datasets more efficiently! Let me know if you have any more questions or need further assistance!
+
+Yes, implementing an early exit can significantly improve performance, especially if you only need to find one pair that sums to the target. Once you find the first valid pair, you can exit the loop immediately, reducing unnecessary iterations.
+
+### Example of Early Exit
+
+Here's how you can implement this:
+
+```java
+import java.util.HashSet;
+
+public class EarlyExitArraySum {
+    public static void main(String[] args) {
+        int[] array7 = {10, 21, 5, 15, 20, /* large dataset here */};
+        int targetSum = 25;
+        findFirstPairWithSum(array7, targetSum);
+    }
+
+    private static void findFirstPairWithSum(int[] array, int targetSum) {
+        HashSet<Integer> seen = new HashSet<>();
+
+        for (int number : array) {
+            int complement = targetSum - number;
+
+            // Check if the complement exists in the seen set
+            if (seen.contains(complement)) {
+                System.out.println("Pair found: " + number + " + " + complement);
+                return; // Early exit after finding the first pair
+            }
+
+            // Add the current number to the seen set
+            seen.add(number);
+        }
+
+        // Optional: If no pair is found
+        System.out.println("No pair found that adds up to " + targetSum);
+    }
+}
+```
+
+### Explanation
+
+1. **Loop Through the Array**: Iterate through each number in the array.
+2. **Calculate Complement**: For each number, calculate its complement (the value needed to reach the target sum).
+3. **Check for Complement**: Check if this complement is already in the `seen` set.
+4. **Early Exit**: If the complement is found, print the pair and immediately return from the method, stopping any further iterations.
+5. **Add Current Number**: If the complement isn’t found, add the current number to the `seen` set.
+
+### Benefits
+
+- **Reduced Complexity**: The loop can terminate early, leading to potentially fewer iterations, especially in large datasets where a valid pair may be found early.
+- **Improved Performance**: This can lead to a noticeable performance improvement when looking for pairs in larger arrays.
+
+This approach is particularly useful when you only need to find the first occurrence of a valid pair. If you need to find all pairs, then you would remove the early exit logic and continue iterating through the entire dataset.
+
+In Java, streams can be processed sequentially or in parallel. Understanding the difference between these two modes can help you choose the right approach for your use case.
+
+### Sequential Processing
+
+In sequential processing, the elements of the stream are processed one after another. This is the default behavior of Java streams. It uses a single thread to process the data.
+
+#### Example of Sequential Processing
+
+```java
+import java.util.Arrays;
+
+public class SequentialStreamExample {
+    public static void main(String[] args) {
+        int[] array = {10, 21, 5, 15, 20};
+        int targetSum = 25;
+
+        Arrays.stream(array)
+              .forEach(number -> {
+                  int complement = targetSum - number;
+                  // Process each number one by one
+                  System.out.println("Processing: " + number);
+                  // Here you can add logic for pairs, etc.
+              });
+    }
+}
+```
+
+### Parallel Processing
+
+In parallel processing, the stream's operations are executed in multiple threads, taking advantage of multicore processors. This can lead to performance improvements, especially when processing large datasets, because tasks can be divided among available threads.
+
+#### Example of Parallel Processing
+
+```java
+import java.util.Arrays;
+
+public class ParallelStreamExample {
+    public static void main(String[] args) {
+        int[] array = {10, 21, 5, 15, 20};
+        int targetSum = 25;
+
+        Arrays.stream(array)
+              .parallel() // Enable parallel processing
+              .forEach(number -> {
+                  int complement = targetSum - number;
+                  // Process each number potentially in different threads
+                  System.out.println("Processing: " + number + " (Thread: " + Thread.currentThread().getName() + ")");
+                  // Here you can add logic for pairs, etc.
+              });
+    }
+}
+```
+
+### Key Differences
+
+1. **Threading**:
+   - **Sequential**: Runs in a single thread.
+   - **Parallel**: Utilizes multiple threads for processing.
+
+2. **Performance**:
+   - **Sequential**: Suitable for smaller datasets or simpler computations.
+   - **Parallel**: Can offer performance benefits for larger datasets but has overhead from managing multiple threads.
+
+3. **Order of Execution**:
+   - **Sequential**: Maintains the order of processing.
+   - **Parallel**: The order may not be guaranteed, meaning results may appear in any order.
+
+### Use Cases
+
+- **Use Sequential Streams** when:
+  - The dataset is small.
+  - Order of operations matters.
+  - The overhead of thread management is greater than the performance gain.
+
+- **Use Parallel Streams** when:
+  - The dataset is large.
+  - Operations are independent and can be processed in any order.
+  - You want to take advantage of multicore processors for performance improvement.
+
+### Considerations
+
+- When using parallel streams, be cautious with shared mutable state (like collections), as it can lead to concurrency issues. In the example with `HashSet`, you need to synchronize access to ensure thread safety.
+  
+- Always benchmark your application, as parallel processing can sometimes lead to slower performance due to the overhead of managing threads, especially for smaller datasets.
