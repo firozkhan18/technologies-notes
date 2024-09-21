@@ -10552,3 +10552,571 @@ export default App;
 ### Conclusion
 
 These examples and questions cover fundamental concepts in React. Familiarity with these topics will help you demonstrate your understanding of React during interviews. If you have more specific topics or additional questions, feel free to ask!
+
+Here are some common React interview questions, along with coding examples that demonstrate key concepts.
+
+### 1. What is the Virtual DOM?
+
+**Question**: Explain the Virtual DOM and its benefits.
+
+**Answer**: The Virtual DOM is a lightweight representation of the actual DOM in memory. React creates a Virtual DOM to optimize rendering by comparing it with the previous version and only updating the parts of the actual DOM that have changed. This minimizes direct manipulation of the DOM, leading to better performance.
+
+### 2. How to manage state in a functional component?
+
+**Question**: Demonstrate how to manage state using the `useState` Hook.
+
+**Example**:
+```javascript
+import React, { useState } from 'react';
+
+const Counter = () => {
+    const [count, setCount] = useState(0);
+
+    const increment = () => setCount(count + 1);
+    const decrement = () => setCount(count - 1);
+
+    return (
+        <div>
+            <h1>Count: {count}</h1>
+            <button onClick={increment}>Increment</button>
+            <button onClick={decrement}>Decrement</button>
+        </div>
+    );
+};
+
+export default Counter;
+```
+
+### 3. Explain the component lifecycle methods.
+
+**Question**: What are lifecycle methods in React, and can you demonstrate them using a class component?
+
+**Example**:
+```javascript
+import React, { Component } from 'react';
+
+class Timer extends Component {
+    state = { seconds: 0 };
+
+    componentDidMount() {
+        this.interval = setInterval(() => {
+            this.setState(prevState => ({ seconds: prevState.seconds + 1 }));
+        }, 1000);
+    }
+
+    componentWillUnmount() {
+        clearInterval(this.interval);
+    }
+
+    render() {
+        return <h1>Seconds: {this.state.seconds}</h1>;
+    }
+}
+
+export default Timer;
+```
+
+### 4. How to handle forms in React?
+
+**Question**: Show how to handle a controlled form input in React.
+
+**Example**:
+```javascript
+import React, { useState } from 'react';
+
+const FormExample = () => {
+    const [name, setName] = useState('');
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        alert(`Submitted name: ${name}`);
+    };
+
+    return (
+        <form onSubmit={handleSubmit}>
+            <input 
+                type="text" 
+                value={name} 
+                onChange={(e) => setName(e.target.value)} 
+                placeholder="Enter your name" 
+            />
+            <button type="submit">Submit</button>
+        </form>
+    );
+};
+
+export default FormExample;
+```
+
+### 5. What is the Context API?
+
+**Question**: Explain the Context API and demonstrate its usage.
+
+**Example**:
+```javascript
+import React, { createContext, useContext, useState } from 'react';
+
+// Create a Context
+const ThemeContext = createContext();
+
+const ThemeProvider = ({ children }) => {
+    const [theme, setTheme] = useState('light');
+
+    return (
+        <ThemeContext.Provider value={{ theme, setTheme }}>
+            {children}
+        </ThemeContext.Provider>
+    );
+};
+
+const ThemedComponent = () => {
+    const { theme, setTheme } = useContext(ThemeContext);
+    
+    return (
+        <div style={{ background: theme === 'light' ? '#fff' : '#333', color: theme === 'light' ? '#000' : '#fff' }}>
+            <h1>Current Theme: {theme}</h1>
+            <button onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}>Toggle Theme</button>
+        </div>
+    );
+};
+
+const App = () => (
+    <ThemeProvider>
+        <ThemedComponent />
+    </ThemeProvider>
+);
+
+export default App;
+```
+
+### 6. Explain Higher-Order Components (HOCs).
+
+**Question**: What are Higher-Order Components, and provide an example.
+
+**Answer**: A Higher-Order Component is a function that takes a component and returns a new component. HOCs are used to share common functionality across components.
+
+**Example**:
+```javascript
+import React from 'react';
+
+const withLogging = (WrappedComponent) => {
+    return class extends React.Component {
+        componentDidMount() {
+            console.log(`Component ${WrappedComponent.name} mounted.`);
+        }
+
+        render() {
+            return <WrappedComponent {...this.props} />;
+        }
+    };
+};
+
+const MyComponent = () => <h1>Hello, World!</h1>;
+
+const EnhancedComponent = withLogging(MyComponent);
+
+export default EnhancedComponent;
+```
+
+### 7. What are Hooks?
+
+**Question**: What are Hooks in React, and can you demonstrate a custom Hook?
+
+**Answer**: Hooks are functions that let you use state and other React features in functional components. Custom Hooks allow you to extract component logic into reusable functions.
+
+**Example**:
+```javascript
+import { useState, useEffect } from 'react';
+
+const useFetch = (url) => {
+    const [data, setData] = useState(null);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const response = await fetch(url);
+            const result = await response.json();
+            setData(result);
+            setLoading(false);
+        };
+        fetchData();
+    }, [url]);
+
+    return { data, loading };
+};
+
+const DataComponent = () => {
+    const { data, loading } = useFetch('https://api.example.com/data');
+
+    if (loading) return <h1>Loading...</h1>;
+
+    return (
+        <ul>
+            {data.map(item => (
+                <li key={item.id}>{item.name}</li>
+            ))}
+        </ul>
+    );
+};
+
+export default DataComponent;
+```
+
+### Conclusion
+
+These questions and examples cover essential concepts in React, including state management, component lifecycles, form handling, the Context API, and Hooks. Familiarizing yourself with these topics will help you confidently tackle React interviews. If you have specific areas you want to explore further, let me know!
+
+Here are some common React interview questions, along with coding examples that demonstrate key concepts.
+
+### 1. What is the Virtual DOM?
+
+**Question**: Explain the Virtual DOM and its benefits.
+
+**Answer**: The Virtual DOM is a lightweight representation of the actual DOM in memory. React creates a Virtual DOM to optimize rendering by comparing it with the previous version and only updating the parts of the actual DOM that have changed. This minimizes direct manipulation of the DOM, leading to better performance.
+
+### 2. How to manage state in a functional component?
+
+**Question**: Demonstrate how to manage state using the `useState` Hook.
+
+**Example**:
+```javascript
+import React, { useState } from 'react';
+
+const Counter = () => {
+    const [count, setCount] = useState(0);
+
+    const increment = () => setCount(count + 1);
+    const decrement = () => setCount(count - 1);
+
+    return (
+        <div>
+            <h1>Count: {count}</h1>
+            <button onClick={increment}>Increment</button>
+            <button onClick={decrement}>Decrement</button>
+        </div>
+    );
+};
+
+export default Counter;
+```
+
+### 3. Explain the component lifecycle methods.
+
+**Question**: What are lifecycle methods in React, and can you demonstrate them using a class component?
+
+**Example**:
+```javascript
+import React, { Component } from 'react';
+
+class Timer extends Component {
+    state = { seconds: 0 };
+
+    componentDidMount() {
+        this.interval = setInterval(() => {
+            this.setState(prevState => ({ seconds: prevState.seconds + 1 }));
+        }, 1000);
+    }
+
+    componentWillUnmount() {
+        clearInterval(this.interval);
+    }
+
+    render() {
+        return <h1>Seconds: {this.state.seconds}</h1>;
+    }
+}
+
+export default Timer;
+```
+
+### 4. How to handle forms in React?
+
+**Question**: Show how to handle a controlled form input in React.
+
+**Example**:
+```javascript
+import React, { useState } from 'react';
+
+const FormExample = () => {
+    const [name, setName] = useState('');
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        alert(`Submitted name: ${name}`);
+    };
+
+    return (
+        <form onSubmit={handleSubmit}>
+            <input 
+                type="text" 
+                value={name} 
+                onChange={(e) => setName(e.target.value)} 
+                placeholder="Enter your name" 
+            />
+            <button type="submit">Submit</button>
+        </form>
+    );
+};
+
+export default FormExample;
+```
+
+### 5. What is the Context API?
+
+**Question**: Explain the Context API and demonstrate its usage.
+
+**Example**:
+```javascript
+import React, { createContext, useContext, useState } from 'react';
+
+// Create a Context
+const ThemeContext = createContext();
+
+const ThemeProvider = ({ children }) => {
+    const [theme, setTheme] = useState('light');
+
+    return (
+        <ThemeContext.Provider value={{ theme, setTheme }}>
+            {children}
+        </ThemeContext.Provider>
+    );
+};
+
+const ThemedComponent = () => {
+    const { theme, setTheme } = useContext(ThemeContext);
+    
+    return (
+        <div style={{ background: theme === 'light' ? '#fff' : '#333', color: theme === 'light' ? '#000' : '#fff' }}>
+            <h1>Current Theme: {theme}</h1>
+            <button onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}>Toggle Theme</button>
+        </div>
+    );
+};
+
+const App = () => (
+    <ThemeProvider>
+        <ThemedComponent />
+    </ThemeProvider>
+);
+
+export default App;
+```
+
+### 6. Explain Higher-Order Components (HOCs).
+
+**Question**: What are Higher-Order Components, and provide an example.
+
+**Answer**: A Higher-Order Component is a function that takes a component and returns a new component. HOCs are used to share common functionality across components.
+
+**Example**:
+```javascript
+import React from 'react';
+
+const withLogging = (WrappedComponent) => {
+    return class extends React.Component {
+        componentDidMount() {
+            console.log(`Component ${WrappedComponent.name} mounted.`);
+        }
+
+        render() {
+            return <WrappedComponent {...this.props} />;
+        }
+    };
+};
+
+const MyComponent = () => <h1>Hello, World!</h1>;
+
+const EnhancedComponent = withLogging(MyComponent);
+
+export default EnhancedComponent;
+```
+
+### 7. What are Hooks?
+
+**Question**: What are Hooks in React, and can you demonstrate a custom Hook?
+
+**Answer**: Hooks are functions that let you use state and other React features in functional components. Custom Hooks allow you to extract component logic into reusable functions.
+
+**Example**:
+```javascript
+import { useState, useEffect } from 'react';
+
+const useFetch = (url) => {
+    const [data, setData] = useState(null);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const response = await fetch(url);
+            const result = await response.json();
+            setData(result);
+            setLoading(false);
+        };
+        fetchData();
+    }, [url]);
+
+    return { data, loading };
+};
+
+const DataComponent = () => {
+    const { data, loading } = useFetch('https://api.example.com/data');
+
+    if (loading) return <h1>Loading...</h1>;
+
+    return (
+        <ul>
+            {data.map(item => (
+                <li key={item.id}>{item.name}</li>
+            ))}
+        </ul>
+    );
+};
+
+export default DataComponent;
+```
+
+### Conclusion
+
+These questions and examples cover essential concepts in React, including state management, component lifecycles, form handling, the Context API, and Hooks. Familiarizing yourself with these topics will help you confidently tackle React interviews. If you have specific areas you want to explore further, let me know!
+
+Here’s a complete example of a React application that demonstrates both functional components (using hooks) and class components. The app will include a simple counter functionality and a component that fetches and displays data from an API.
+
+### Full React App Code
+
+**1. Create a React app structure**
+
+Assuming you have already created a React app using Create React App, your folder structure might look like this:
+
+```
+/my-app
+  ├── /src
+      ├── App.js
+      ├── Counter.js
+      ├── DataFetcher.js
+      └── index.js
+```
+
+**2. `index.js`** (Entry point)
+
+```javascript
+import React from 'react';
+import ReactDOM from 'react-dom';
+import App from './App';
+import './index.css';
+
+ReactDOM.render(<App />, document.getElementById('root'));
+```
+
+**3. `App.js`** (Main application component)
+
+```javascript
+import React from 'react';
+import Counter from './Counter';
+import DataFetcher from './DataFetcher';
+
+const App = () => {
+    return (
+        <div>
+            <h1>React App with Class and Functional Components</h1>
+            <Counter />
+            <DataFetcher />
+        </div>
+    );
+};
+
+export default App;
+```
+
+**4. `Counter.js`** (Functional component using hooks)
+
+```javascript
+import React, { useState } from 'react';
+
+const Counter = () => {
+    const [count, setCount] = useState(0);
+
+    const increment = () => setCount(count + 1);
+    const decrement = () => setCount(count - 1);
+
+    return (
+        <div>
+            <h2>Counter: {count}</h2>
+            <button onClick={increment}>Increment</button>
+            <button onClick={decrement}>Decrement</button>
+        </div>
+    );
+};
+
+export default Counter;
+```
+
+**5. `DataFetcher.js`** (Class component for fetching data)
+
+```javascript
+import React, { Component } from 'react';
+
+class DataFetcher extends Component {
+    state = {
+        data: [],
+        loading: true,
+    };
+
+    componentDidMount() {
+        this.fetchData();
+    }
+
+    fetchData = async () => {
+        try {
+            const response = await fetch('https://jsonplaceholder.typicode.com/users');
+            const data = await response.json();
+            this.setState({ data, loading: false });
+        } catch (error) {
+            console.error('Error fetching data:', error);
+            this.setState({ loading: false });
+        }
+    };
+
+    render() {
+        const { data, loading } = this.state;
+
+        if (loading) {
+            return <h2>Loading...</h2>;
+        }
+
+        return (
+            <div>
+                <h2>User List</h2>
+                <ul>
+                    {data.map(user => (
+                        <li key={user.id}>{user.name}</li>
+                    ))}
+                </ul>
+            </div>
+        );
+    }
+}
+
+export default DataFetcher;
+```
+
+### Summary of Components
+
+- **App Component**: The main application component that renders the `Counter` and `DataFetcher` components.
+- **Counter Component**: A functional component that uses the `useState` hook to manage its state for counting. It provides buttons to increment and decrement the count.
+- **DataFetcher Component**: A class component that fetches user data from an API and displays it. It handles loading states and displays a list of users once the data is fetched.
+
+### Running the App
+
+1. Make sure you have Node.js installed.
+2. Create a new React app if you haven't already:
+   ```bash
+   npx create-react-app my-app
+   cd my-app
+   ```
+3. Replace the contents of the `src` folder with the provided code.
+4. Run the app:
+   ```bash
+   npm start
+   ```
+
+This will start your React application, and you should see the counter and the user list being fetched and displayed. If you have any specific features or additional concepts you'd like to see implemented, let me know!
