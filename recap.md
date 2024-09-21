@@ -8531,3 +8531,159 @@ spec:
 ### Summary
 
 You now have a complete setup for a Spring Boot application using Kafka and MongoDB, all running on Kubernetes and Docker. This configuration allows your application to handle messages in an event-driven manner, storing the results in MongoDB. Adjust the configurations based on your environment and specific needs. If you have further questions or need additional details, feel free to ask!
+
+Creating a complete process for GitHub Actions and using `git cherry-pick` involves setting up a GitHub Action workflow for automating tasks like CI/CD and using `git cherry-pick` to apply specific commits from one branch to another. Below is a step-by-step guide for both.
+
+### Part 1: Setting Up GitHub Actions
+
+1. **Create a GitHub Repository**:
+   - If you haven't already, create a new repository on GitHub.
+
+2. **Set Up Your Project**:
+   - Clone your repository locally and set up your project.
+
+3. **Create a Workflow Directory**:
+   - In your repository, create a directory for GitHub Actions workflows:
+     ```
+     .github/workflows/
+     ```
+
+4. **Create a Workflow File**:
+   - Inside the `.github/workflows` directory, create a YAML file (e.g., `ci.yml`):
+   
+```yaml
+name: CI/CD Workflow
+
+on:
+  push:
+    branches:
+      - main
+      - feature/**  # Listen for push events on the main and feature branches
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v2
+    
+    - name: Set up JDK 11
+      uses: actions/setup-java@v2
+      with:
+        java-version: '11'
+        
+    - name: Build with Maven
+      run: mvn clean install
+
+    - name: Run Tests
+      run: mvn test
+```
+
+### Explanation of the Workflow
+
+- **name**: The name of your workflow.
+- **on**: Specifies the events that trigger the workflow (e.g., `push` and `pull_request`).
+- **jobs**: Defines a job called `build`.
+- **steps**: A list of steps in the job:
+  - **Checkout Code**: Checks out your repository code.
+  - **Set up JDK**: Sets up the Java Development Kit.
+  - **Build with Maven**: Runs Maven commands to build the project.
+  - **Run Tests**: Executes tests.
+
+### Part 2: Using `git cherry-pick`
+
+`git cherry-pick` is used to apply the changes introduced by specific commits from one branch to another.
+
+#### Basic Steps to Cherry-Pick Commits
+
+1. **Identify the Commit**:
+   - Use the command below to list commits and find the commit hash you want to cherry-pick:
+     ```bash
+     git log
+     ```
+
+2. **Checkout the Target Branch**:
+   - Switch to the branch where you want to apply the commit:
+     ```bash
+     git checkout target-branch
+     ```
+
+3. **Cherry-Pick the Commit**:
+   - Use the following command to cherry-pick the desired commit:
+     ```bash
+     git cherry-pick <commit-hash>
+     ```
+
+4. **Handle Conflicts (if any)**:
+   - If there are conflicts, resolve them:
+     - Edit the files to resolve conflicts.
+     - After resolving, add the files:
+       ```bash
+       git add <file>
+       ```
+     - Complete the cherry-pick:
+       ```bash
+       git cherry-pick --continue
+       ```
+
+5. **Push Changes**:
+   - After successfully cherry-picking the commit, push the changes to the remote repository:
+     ```bash
+     git push origin target-branch
+     ```
+
+### Part 3: Automating Cherry-Pick with GitHub Actions (Optional)
+
+You can create a custom GitHub Action to automate cherry-picking. Below is an example of how you might set it up.
+
+#### Create a Custom GitHub Action for Cherry-Picking
+
+1. **Create a new Action**:
+   - In your `.github/actions/cherry-pick` directory, create an `action.yml` file.
+
+```yaml
+name: Cherry-Pick Action
+
+description: Cherry-pick a commit
+
+inputs:
+  commit_hash:
+    description: 'Commit hash to cherry-pick'
+    required: true
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Checkout Code
+      uses: actions/checkout@v2
+
+    - name: Cherry-Pick Commit
+      run: |
+        git cherry-pick ${{ inputs.commit_hash }}
+```
+
+2. **Call Your Custom Action in the Workflow**:
+
+Add the custom action to your workflow file:
+
+```yaml
+jobs:
+  cherry-pick:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v2
+
+    - name: Cherry-Pick Commit
+      uses: ./.github/actions/cherry-pick
+      with:
+        commit_hash: <your-commit-hash>
+```
+
+### Summary
+
+You now have a complete process for setting up GitHub Actions to automate your CI/CD pipeline and using `git cherry-pick` to apply specific commits between branches. Adjust the steps as needed for your specific use case. If you have further questions or need additional details, feel free to ask!
