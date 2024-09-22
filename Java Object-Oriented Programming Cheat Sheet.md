@@ -41,7 +41,6 @@ graph TD
     style J fill:#fcf,stroke:#333,stroke-width:2px;
     style K fill:#dfd,stroke:#333,stroke-width:2px;
 ```
-
 ### Java Object-Oriented Programming Cheat Sheet
 
 Java is an Object-Oriented language as it is modeled and organized around objects rather than actions; and data rather than logic. It simplifies software development and maintenance by providing some very intriguing features. Object-Oriented Programming in Java aims to implement real-world entities such as objects, classes, abstraction, inheritance, polymorphism, and many more.
