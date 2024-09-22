@@ -1,5 +1,7 @@
 Sure! Here’s a concise Java Object-Oriented Programming (OOP) cheat sheet:
 
+```mermaid
+
 graph TD
     A[Developer] -->|Code| B[Microservice 1]
     A -->|Code| C[Microservice 2]
@@ -38,6 +40,7 @@ graph TD
     style E fill:#ccf,stroke:#333,stroke-width:2px;
     style J fill:#fcf,stroke:#333,stroke-width:2px;
     style K fill:#dfd,stroke:#333,stroke-width:2px;
+```
 
 ### Java Object-Oriented Programming Cheat Sheet
 
