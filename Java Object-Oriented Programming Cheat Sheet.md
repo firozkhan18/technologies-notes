@@ -3259,7 +3259,84 @@ graph TD
 
 This diagram and explanation provide a comprehensive overview of how microservices can be deployed using Docker and Kubernetes, highlighting the interaction between various components.
 
-Let me know if you need further modifications or explanations!
+Here's a similar diagram for a microservices architecture incorporating PostgreSQL, Oracle, Redis, API Gateway, Eureka for service discovery, and a combination of Saga orchestration and choreography patterns, along with Kubernetes deployment commands.
+
+```mermaid
+graph TD
+    A[Developer] -->|Code| B[User Service]
+    A -->|Code| C[Order Service]
+    A -->|Code| D[Inventory Service]
+    A -->|Code| E[PostgreSQL]
+    A -->|Code| F[Oracle]
+    A -->|Code| G[Redis]
+    A -->|Code| H[API Gateway]
+
+    B -->|Dockerfile| I[Docker Image User Service]
+    C -->|Dockerfile| J[Docker Image Order Service]
+    D -->|Dockerfile| K[Docker Image Inventory Service]
+    E -->|Official PostgreSQL Image| L[Docker Image PostgreSQL]
+    F -->|Official Oracle Image| M[Docker Image Oracle]
+    G -->|Official Redis Image| N[Docker Image Redis]
+    H -->|Dockerfile| O[Docker Image API Gateway]
+
+    I -->|Build| P[Docker Registry]
+    J -->|Build| P
+    K -->|Build| P
+    L -->|Pull| P
+    M -->|Pull| P
+    N -->|Pull| P
+    O -->|Build| P
+
+    P -->|Push| Q[Kubernetes Cluster]
+    Q -->|Deploy| R[Pod User Service]
+    Q -->|Deploy| S[Pod Order Service]
+    Q -->|Deploy| T[Pod Inventory Service]
+    Q -->|Deploy| U[Pod PostgreSQL]
+    Q -->|Deploy| V[Pod Oracle]
+    Q -->|Deploy| W[Pod Redis]
+    Q -->|Deploy| X[Pod API Gateway]
+
+    R -->|Service User| Y[Service User]
+    S -->|Service Order| Z[Service Order]
+    T -->|Service Inventory| AA[Service Inventory]
+    U -->|Service PostgreSQL| AB[Service PostgreSQL]
+    V -->|Service Oracle| AC[Service Oracle]
+    W -->|Service Redis| AD[Service Redis]
+    X -->|Service API| AE[Service API]
+
+    Y -->|LoadBalancer| AF[External Access to User Service]
+    Z -->|LoadBalancer| AG[External Access to Order Service]
+    AA -->|LoadBalancer| AH[External Access to Inventory Service]
+
+    style A fill:#f9f,stroke:#333,stroke-width:2px;
+    style B fill:#ccf,stroke:#333,stroke-width:2px;
+    style C fill:#ccf,stroke:#333,stroke-width:2px;
+    style D fill:#ccf,stroke:#333,stroke-width:2px;
+    style E fill:#ccf,stroke:#333,stroke-width:2px;
+    style F fill:#ccf,stroke:#333,stroke-width:2px;
+    style G fill:#ccf,stroke:#333,stroke-width:2px;
+    style H fill:#ccf,stroke:#333,stroke-width:2px;
+    style P fill:#fcf,stroke:#333,stroke-width:2px;
+    style Q fill:#dfd,stroke:#333,stroke-width:2px;
+```
+
+### Kubernetes Deployment Commands
+```bash
+kubectl apply -f mongodb-deployment.yaml
+kubectl apply -f user-service-deployment.yaml
+kubectl apply -f order-service-deployment.yaml
+kubectl apply -f inventory-service-deployment.yaml
+kubectl apply -f mongodb-service.yaml
+kubectl apply -f user-service-service.yaml
+kubectl apply -f order-service-service.yaml
+kubectl apply -f inventory-service-service.yaml
+kubectl apply -f postgres-deployment.yaml
+kubectl apply -f oracle-deployment.yaml
+kubectl apply -f redis-deployment.yaml
+kubectl apply -f api-gateway-deployment.yaml
+```
+
+This setup shows a microservices architecture with service discovery, database services, caching, an API gateway, and deployment configurations for Kubernetes. Let me know if you need any adjustments!
 
 What is Spring Boot?
 Spring Boot is a Java based spring framework, it provides Rapid application development features like auto-configuration, embedded servers, package structures.
