@@ -19,9 +19,9 @@ graph TD
     I -->|Pull| J
 
     J -->|Push| K[Kubernetes Cluster]
-    K -->|Deploy| L[Pod 1 (Microservice 1)]
-    K -->|Deploy| M[Pod 2 (Microservice 2)]
-    K -->|Deploy| N[Pod 3 (Microservice 3)]
+    K -->|Deploy| L[Pod 1 Microservice 1]
+    K -->|Deploy| M[Pod 2 Microservice 2]
+    K -->|Deploy| N[Pod 3 Microservice 3]
     K -->|Deploy| O[Pod MongoDB]
 
     L -->|Service 1| P[Service 1]
