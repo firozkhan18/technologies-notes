@@ -3258,6 +3258,56 @@ graph TD
 - **Access Microservices**: Use the LoadBalancer IP or Ingress to access the microservices.
 
 This diagram and explanation provide a comprehensive overview of how microservices can be deployed using Docker and Kubernetes, highlighting the interaction between various components.
+
+It looks like you're experiencing an issue with the Mermaid diagram syntax. Let's correct the Mermaid code for the Docker and Kubernetes Deployment Process Diagram. Here's the revised version:
+
+```mermaid
+graph TD
+    A[Developer] -->|Code| B[Microservice 1]
+    A -->|Code| C[Microservice 2]
+    A -->|Code| D[Microservice 3]
+    A -->|Code| E[MongoDB]
+
+    B -->|Dockerfile| F[Docker Image 1]
+    C -->|Dockerfile| G[Docker Image 2]
+    D -->|Dockerfile| H[Docker Image 3]
+    E -->|Official MongoDB Image| I[Docker Image MongoDB]
+
+    F -->|Build| J[Docker Registry]
+    G -->|Build| J
+    H -->|Build| J
+    I -->|Pull| J
+
+    J -->|Push| K[Kubernetes Cluster]
+    K -->|Deploy| L[Pod 1 (Microservice 1)]
+    K -->|Deploy| M[Pod 2 (Microservice 2)]
+    K -->|Deploy| N[Pod 3 (Microservice 3)]
+    K -->|Deploy| O[Pod MongoDB]
+
+    L -->|Service 1| P[Service 1]
+    M -->|Service 2| Q[Service 2]
+    N -->|Service 3| R[Service 3]
+    O -->|Service MongoDB| S[Service MongoDB]
+
+    P -->|LoadBalancer| T[External Access to Microservice 1]
+    Q -->|LoadBalancer| U[External Access to Microservice 2]
+    R -->|LoadBalancer| V[External Access to Microservice 3]
+
+    style A fill:#f9f,stroke:#333,stroke-width:2px;
+    style B fill:#ccf,stroke:#333,stroke-width:2px;
+    style C fill:#ccf,stroke:#333,stroke-width:2px;
+    style D fill:#ccf,stroke:#333,stroke-width:2px;
+    style E fill:#ccf,stroke:#333,stroke-width:2px;
+    style J fill:#fcf,stroke:#333,stroke-width:2px;
+    style K fill:#dfd,stroke:#333,stroke-width:2px;
+```
+
+### Notes:
+- Ensure you have the proper Mermaid support in your environment (like Markdown editors or online Mermaid live editors).
+- If you're still facing issues, check for any extraneous characters or formatting inconsistencies in your Mermaid code.
+
+Let me know if you need further modifications or explanations!
+
 What is Spring Boot?
 Spring Boot is a Java based spring framework, it provides Rapid application development features like auto-configuration, embedded servers, package structures.
 
