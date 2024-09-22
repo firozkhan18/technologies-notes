@@ -3,6 +3,74 @@ https://blog.devops.dev/building-an-end-to-end-ci-cd-pipeline-with-jenkins-7ef22
 
 ![Desktop Screenshot](images/cicd-1.PNG)
 
+Here’s a complete flow and architecture diagram using Mermaid syntax for setting up an end-to-end Jenkins pipeline for a Java application utilizing SonarQube, Argo CD, Helm, and Kubernetes.
+
+### Mermaid Diagram
+
+```mermaid
+graph TD;
+    A[Git Repository] -->|1. Source Code| B[Jenkins Server]
+    B -->|2. Checkout| C[Checkout Source Code]
+    C -->|3. Build| D[Build Java Application]
+    D -->|4. Run Unit Tests| E[Unit Tests with JUnit & Mockito]
+    E -->|5. Analyze Code Quality| F[SonarQube Analysis]
+    F -->|6. Package Application| G[Package JAR File]
+    G -->|7. Deploy to Test Environment| H[Deploy with Helm]
+    H -->|8. Run User Acceptance Tests| I[User Acceptance Tests]
+    I -->|9. Promote to Production| J[Argo CD Promotion]
+    
+    subgraph Plugins
+        direction TB
+        B -->|Install| K[Git Plugin]
+        B -->|Install| L[Maven Integration Plugin]
+        B -->|Install| M[Pipeline Plugin]
+        B -->|Install| N[Kubernetes Continuous Deploy Plugin]
+        B -->|Install| O[SonarQube Plugin]
+        B -->|Install| P[JUnit Plugin]
+        B -->|Install| Q[Mockito Plugin]
+    end
+    
+    subgraph ArgoCD
+        direction TB
+        R[Argo CD] -->|1. Install on K8s| S[Setup Argo CD]
+        S -->|2. Git Repo for Helm| T[Git Repo for Argo CD]
+        T -->|3. Create Helm Chart| U[Helm Chart for Java App]
+        U -->|4. Add to Git Repo| V[Track Helm Charts]
+    end
+
+    B -->|6. Add API Token| W[Argo CD Integration]
+    W -->|Update Pipeline| X[Update Jenkins Pipeline]
+    
+    B -->|7. Trigger Pipeline| Y[Run Jenkins Pipeline]
+    Y -->|Monitor Stages| Z[Monitor Pipeline]
+```
+
+### Explanation of the Flow
+
+1. **Source Code**: The Java application code is stored in a Git repository.
+2. **Jenkins Server**: Jenkins serves as the CI/CD server that orchestrates the pipeline.
+3. **Checkout Source Code**: Jenkins checks out the source code from the Git repository.
+4. **Build Java Application**: The application is built using Maven.
+5. **Run Unit Tests**: Unit tests are executed using JUnit and Mockito.
+6. **Analyze Code Quality**: SonarQube analyzes the code for quality issues.
+7. **Package JAR File**: The application is packaged into a JAR file.
+8. **Deploy to Test Environment**: The application is deployed to a test environment using Helm.
+9. **Run User Acceptance Tests**: User acceptance tests are executed on the deployed application.
+10. **Promote to Production**: If successful, the application is promoted to production using Argo CD.
+
+### Additional Components
+
+- **Plugins**: Various Jenkins plugins are installed to facilitate tasks like Git operations, Maven builds, testing, and deployments.
+- **Argo CD**: Set up on a Kubernetes cluster to manage deployments. It monitors a Git repository for Helm charts and Kubernetes manifests.
+
+### Running the Pipeline
+
+- **Triggering and Monitoring**: The Jenkins pipeline is triggered manually or through webhooks, allowing for continuous integration and deployment.
+
+### Conclusion
+
+This diagram and explanation provide a comprehensive overview of the CI/CD pipeline setup for a Java application using Jenkins, SonarQube, Argo CD, Helm, and Kubernetes. If you have any specific questions or need further details, feel free to ask!
+
 Introduction
 Continuous Integration and Continuous Delivery (CI/CD) are crucial in modern software development, facilitating automated code integration and reliable application delivery.
 
