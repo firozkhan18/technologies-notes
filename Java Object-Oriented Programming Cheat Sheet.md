@@ -3957,7 +3957,7 @@ Open Jenkins Dashboard: Log in to your Jenkins interface.
 Navigate to “Manage Jenkins > Plugins”.
 Install Plugins: Look for the “docker pipeline” and “sonarqube scanner” plugins install them and restart Jenkins if required.
 
-![Desktop Screenshot](images/cicd-9.PNG
+![Desktop Screenshot](images/cicd-9.PNG)
 
 ![Desktop Screenshot](images/cicd-10.PNG)
 
