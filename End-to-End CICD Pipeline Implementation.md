@@ -1,4 +1,4 @@
-
+https://blog.devops.dev/building-an-end-to-end-ci-cd-pipeline-with-jenkins-7ef2205d7988
 # End-to-End CI/CD Pipeline Implementation
 
 ![Desktop Screenshot](images/cicd-1.PNG)
