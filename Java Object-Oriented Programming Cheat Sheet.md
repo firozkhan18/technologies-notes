@@ -3766,7 +3766,7 @@ This brings us to the end of our blog on Exception Handling in Java. I hope you 
 
 # End-to-End CI/CD Pipeline Implementation
 
-![Alt text](images/cicd-1.png)
+![Desktop Screenshot](images/cicd-1.png)
 
 Introduction
 Continuous Integration and Continuous Delivery (CI/CD) are crucial in modern software development, facilitating automated code integration and reliable application delivery.
@@ -3809,7 +3809,7 @@ Execute the following command, replacing <URL> with your repository's URL:
 
 git clone <URL>
 
-![Alt text](images/cicd-2.png)
+![Desktop Screenshot](images/cicd-2.png)
 
 Create an EC2 Instance
 Note that this step can also be automated using Terraform, but for the sake of simplicity, we will do it manually here.
@@ -3856,7 +3856,7 @@ Specify the size of the root volume (default is usually fine for testing purpose
 Review your instance setup. Check the AMI details, instance type, security groups, and key pairs.
 Click on “Launch” to proceed.
 
-![Alt text](images/cicd-3.png)
+![Desktop Screenshot](images/cicd-3.png)
 
 Access Your Instance
 Once the instance is launched, it will take a few minutes to initialize.
@@ -3872,7 +3872,7 @@ Enter the IP address or hostname of the server and specify username.
 Click on “Advanced SSH settings” tick the “Use private key” box and select the private key pair you used in your instance.
 Click “OK” to connect.
 
-![Alt text](images/cicd-4.png)
+![Desktop Screenshot](images/cicd-4.png)
 
 Setting up Jenkins
 Install Java:
@@ -3927,21 +3927,21 @@ Unlock Jenkins by using the initial admin password found at:
 
 sudo cat /var/lib/jenkins/secrets/initialAdminPassword
 
-![Alt text](images/cicd-5.png)
+![Desktop Screenshot](images/cicd-5.png)
 
 Install Suggested Plugins:
 
 Once Jenkins is unlocked, you will be presented with the option to install suggested plugins or to select specific plugins manually.
 Click Install suggested plugins to automatically install a standard set of plugins, which is recommended for most users.
 
-![Alt text](images/cicd-6.png)
+![Desktop Screenshot](images/cicd-6.png)
 
 Create Your Admin User:
 
 After plugin installation, you will be prompted to create an admin user for Jenkins.
 Fill out the form with the username, password, full name, and email address. Click “Save and Continue”.
 
-![Alt text](images/cicd-7.png)
+![Desktop Screenshot](images/cicd-7.png)
 
 Jenkins Ready:
 
@@ -3949,7 +3949,7 @@ Jenkins will ask you to configure the URL for your Jenkins instance.
 The default URL (based on your server’s IP and port) will be filled in.
 Click “Start using Jenkins” to complete the setup and be taken to the Jenkins dashboard.
 
-![Alt text](images/cicd-8.png)
+![Desktop Screenshot](images/cicd-8.png)
 
 Install Necessary Plugins:
 
@@ -3957,15 +3957,15 @@ Open Jenkins Dashboard: Log in to your Jenkins interface.
 Navigate to “Manage Jenkins > Plugins”.
 Install Plugins: Look for the “docker pipeline” and “sonarqube scanner” plugins install them and restart Jenkins if required.
 
-![Alt text](images/cicd-9.png
+![Desktop Screenshot](images/cicd-9.png
 
-![Alt text](images/cicd-10.png)
+![Desktop Screenshot](images/cicd-10.png)
 
 Compile Job
 From the Jenkins main dashboard, click on “New Item”.
 Name your pipeline and select ‘Pipeline’ as the type of project, then click ‘OK’.
 
-![Alt text](images/cicd-11.png)
+![Desktop Screenshot](images/cicd-11.png)
 
 Configure Your Pipeline:
 
@@ -3979,9 +3979,9 @@ Add credentials if your repository is private.
 Specify the branch to build from, typically */main or */master.
 If your Jenkinsfile is located in a subdirectory or named differently, specify the path (default is Jenkinsfile).
 
-![Alt text](images/cicd-12.png)
+![Desktop Screenshot](images/cicd-12.png)
 
-![Alt text](images/cicd-13.png)
+![Desktop Screenshot](images/cicd-13.png)
 
 Restart Jenkins:
 
@@ -3989,7 +3989,7 @@ Restart Jenkins to apply configuration changes or updates effectively.
 To do so, navigate to the Jenkins “dashboard” and click on ‘Manage Jenkins’ in the sidebar.
 From there, select “Reload Configuration from Disk’” or “Restart Safely”.
 
-![Alt text](images/cicd-14.png)
+![Desktop Screenshot](images/cicd-14.png)
 
 Set up Sonarqube Server
 Installing SonarQube as a Docker container is a popular option that simplifies the setup process and makes it easier to manage and scale.
@@ -4048,7 +4048,7 @@ Username: admin
 Password: admin
 However, it’s recommended to change these default credentials after the initial setup for security reasons.
 
-![Alt text](images/cicd-15.png)
+![Desktop Screenshot](images/cicd-15.png)
 
 Integrate with Jenkins:
 
@@ -4058,9 +4058,9 @@ Go to “My Account” > “Security” Click on “Generate Token”
 Provide a name for the token and click “Generate”.
 Copy the generated token.
 
-![Alt text](images/cicd-16.png)
+![Desktop Screenshot](images/cicd-16.png)
 
-![Alt text](images/cicd-17.png)
+![Desktop Screenshot](images/cicd-17.png)
 
 Add SonarQube Token as Credential in Jenkins:
 
@@ -4071,9 +4071,9 @@ Paste the SonarQube authentication token into the “Secret” field.
 Optionally, provide an ID and a description of the credential.
 Click “Create” to save the credential.
 
-![Alt text](images/cicd-18.png)
+![Desktop Screenshot](images/cicd-18.png)
 
-![Alt text](images/cicd-19.png)
+![Desktop Screenshot](images/cicd-19.png)
 
 Configure Jenkins SonarQube Scanner:
 
@@ -4085,7 +4085,7 @@ Ensure that all required credentials are properly configured for your CI/CD pipe
 
 This includes credentials for SonarQube authentication, Docker Hub access, and Git repository authentication.
 
-![Alt text](images/cicd-20.png)
+![Desktop Screenshot](images/cicd-20.png)
 
 Jenkinsfile
 A Jenkinsfile is a text file that defines the configuration of a Jenkins pipeline. It is written in Groovy, a scripting language for the Java platform.
@@ -4187,11 +4187,11 @@ Click on the job to view detailed logs and status updates as each stage of the p
 If there are any issues during pipeline execution, review the Jenkinsfile and job configuration for errors.
 Check the console output and logs for more information on any failures.
 
-![Alt text](images/cicd-21.png)
+![Desktop Screenshot](images/cicd-21.png)
 
 SonarQube will contain the report of the pipeline execution.
 
-![Alt text](images/cicd-22.png)
+![Desktop Screenshot](images/cicd-22.png)
 
 Set Up ArgoCD
 ArgoCD manages the continuous deployment segment of CI/CD pipelines, automating deployments to Kubernetes.
@@ -4226,9 +4226,9 @@ This Operator will be installed in the “operators” namespace and will be usa
 $ kubectl get csv -n operators
 
 
-![Alt text](images/cicd-23.png)
+![Desktop Screenshot](images/cicd-23.png)
 
-![Alt text](images/cicd-24.png)
+![Desktop Screenshot](images/cicd-24.png)
 
 Set Up ArgoCD Controller
 Navigate to OperatorHub.io.
@@ -4236,9 +4236,9 @@ In the “Argo CD” Operator scroll down to “Operator Documentation”.
 Click on “Usage” and then “Basics”.
 Copy the YAML configuration provided. This YAML is used to deploy Argo CD in your Kubernetes cluster.
 
-![Alt text](images/cicd-25.png)
+![Desktop Screenshot](images/cicd-25.png)
 
-![Alt text](images/cicd-26.png)
+![Desktop Screenshot](images/cicd-26.png)
 
 Create a new file named vim argocd-basic.yml with the following content to define your Argo CD instance:
 apiVersion: argoproj.io/v1alpha1
@@ -4251,7 +4251,7 @@ spec: {}
 Apply the Configuration.
 kubectl apply -f argocd-basic.yml
 
-![Alt text](images/cicd-27.png)
+![Desktop Screenshot](images/cicd-27.png)
 
 Set Up ArgoCD UI
 To access the Argo CD server UI via the browser, you need to change the service type from ‘ClusterIP’ to ‘NodePort’.
@@ -4259,11 +4259,11 @@ kubectl get svc
 Minikube can generate a URL that provides direct access to the Argo CD server through a browser.
 minikube service argocd-server --url
 
-![Alt text](images/cicd-28.png)
+![Desktop Screenshot](images/cicd-28.png)
 
 Copy the URL displayed from the previous command into your browser to access the Argo CD UI.
 
-![Alt text](images/cicd-29.png)
+![Desktop Screenshot](images/cicd-29.png)
 
 The default username is ‘admin’. To get the admin password, you need to extract it from Kubernetes secrets:
 kubectl get secret
@@ -4273,7 +4273,7 @@ K8s secrets are base 64 encrypted so to decode it use this command.
 echo <encoded password here>= | base64 -d
 Use the username ‘admin’ and the password retrieved in the previous step to log into the Argo CD UI.
 
-![Alt text](images/cicd-30.png)
+![Desktop Screenshot](images/cicd-30.png)
 
 Deployment with Argo CD
 In the Argo CD UI, click on “Create Application”.
@@ -4295,9 +4295,9 @@ Namespace: Specify the Kubernetes namespace where the application will be deploy
 After providing all the necessary information, click on “Create”.
 Argo CD will automatically create the application on your Kubernetes cluster based on the provided configuration.
 
-![Alt text](images/cicd-31.png)
+![Desktop Screenshot](images/cicd-31.png)
 
-![Alt text](images/cicd-32.png)
+![Desktop Screenshot](images/cicd-32.png)
 
 Conclusion
 This project has effectively demonstrated how integrating GitHub, Maven, SonarQube, Docker, Jenkins, Argo CD, Helm, and Kubernetes into a CI/CD pipeline can enhance software development efficiency and reliability.
