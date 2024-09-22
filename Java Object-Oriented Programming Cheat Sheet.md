@@ -3338,6 +3338,81 @@ kubectl apply -f api-gateway-deployment.yaml
 
 This setup shows a microservices architecture with service discovery, database services, caching, an API gateway, and deployment configurations for Kubernetes. Let me know if you need any adjustments!
 
+Here's a representation of microservice architecture diagrams for **Saga Orchestration**, **Saga Choreography**, and **Event-Driven** patterns.
+
+### 1. Saga Orchestration
+In this architecture, a central orchestrator directs the flow of the saga across different microservices.
+
+```mermaid
+graph TD
+    A[Orchestrator] -->|Start Saga| B[User Service]
+    A -->|Start Saga| C[Order Service]
+    A -->|Start Saga| D[Inventory Service]
+
+    B -->|Confirm User| E[Order Service]
+    C -->|Reserve Order| F[Inventory Service]
+    D -->|Complete Order| G[Payment Service]
+
+    E -->|Notify Orchestrator| A
+    F -->|Notify Orchestrator| A
+    G -->|Notify Orchestrator| A
+
+    style A fill:#f9f,stroke:#333,stroke-width:2px;
+    style B fill:#ccf,stroke:#333,stroke-width:2px;
+    style C fill:#ccf,stroke:#333,stroke-width:2px;
+    style D fill:#ccf,stroke:#333,stroke-width:2px;
+    style E fill:#ccf,stroke:#333,stroke-width:2px;
+    style F fill:#ccf,stroke:#333,stroke-width:2px;
+    style G fill:#ccf,stroke:#333,stroke-width:2px;
+```
+
+### 2. Saga Choreography
+In this architecture, each service knows what to do next and communicates directly with other services.
+
+```mermaid
+graph TD
+    A[User Service] -->|User Created| B[Order Service]
+    B -->|Order Created| C[Inventory Service]
+    C -->|Inventory Reserved| D[Payment Service]
+
+    D -->|Payment Confirmed| E[User Service]
+    E -->|Notify User| A
+
+    style A fill:#ccf,stroke:#333,stroke-width:2px;
+    style B fill:#ccf,stroke:#333,stroke-width:2px;
+    style C fill:#ccf,stroke:#333,stroke-width:2px;
+    style D fill:#ccf,stroke:#333,stroke-width:2px;
+    style E fill:#ccf,stroke:#333,stroke-width:2px;
+```
+
+### 3. Event-Driven Architecture
+In this architecture, services publish and subscribe to events. 
+
+```mermaid
+graph TD
+    A[User Service] -->|User Created Event| B[Event Bus]
+    B -->|Notify| C[Order Service]
+    B -->|Notify| D[Inventory Service]
+    B -->|Notify| E[Payment Service]
+
+    C -->|Order Created Event| B
+    D -->|Inventory Reserved Event| B
+    E -->|Payment Confirmed Event| B
+
+    style A fill:#ccf,stroke:#333,stroke-width:2px;
+    style B fill:#fcf,stroke:#333,stroke-width:2px;
+    style C fill:#ccf,stroke:#333,stroke-width:2px;
+    style D fill:#ccf,stroke:#333,stroke-width:2px;
+    style E fill:#ccf,stroke:#333,stroke-width:2px;
+```
+
+### Summary
+- **Saga Orchestration:** Centralized control by an orchestrator.
+- **Saga Choreography:** Each service manages its own state and communicates with others directly.
+- **Event-Driven Architecture:** Services communicate through events using an event bus.
+
+Let me know if you need further details or modifications!
+
 What is Spring Boot?
 Spring Boot is a Java based spring framework, it provides Rapid application development features like auto-configuration, embedded servers, package structures.
 
