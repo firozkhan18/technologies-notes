@@ -1346,7 +1346,8 @@ Last update on December 01 2023 05:35:11 (UTC/GMT +8 hours)
  MongoDB Query Exercises and Solution : Movie collection - 28 Exercises
 
 Sample document of 'movies' collection:
-```json
+
+```javascript
   {
     _id: ObjectId("573a1390f29313caabcd42e8"),
 plot: 'A group of bandits stage a brazen train hold-up, only to find a determined posse hot on their heels.',
