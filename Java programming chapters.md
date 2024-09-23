@@ -1780,37 +1780,6 @@ A POJO (Plain Old Java Object) class is a simple Java object that follows certai
 
 By following these conventions, you ensure that your POJO classes are straightforward, maintainable, and compatible with various Java frameworks and libraries.
 <details>
-
-### Conclusion
-
-<details> <summary>Details</summary>
-
-In this course, we’ve covered essential Java concepts, including:
-
-- **Basic Syntax and Structure**: Understanding variables, data types, and control flow.
-- **Object-Oriented Programming**: Delving into classes, objects, inheritance, and polymorphism.
-- **Core Libraries**: Exploring Java’s extensive libraries for tasks like collections, file I/O, and networking.
-- **Error Handling**: Learning about exceptions and best practices for robust applications.
-- **Java Development Tools**: Introduction to IDEs, build tools, and version control.
-
-#### Resources for Further Learning
-
-To continue your Java education, consider the following:
-
-- **Books**:
-  - *Effective Java* by Joshua Bloch
-  - *Java: The Complete Reference* by Herbert Schildt
-
-- **Online Courses**:
-  - Coursera's Java Programming and Software Engineering Fundamentals
-  - Udemy's Java Masterclass
-
-- **Websites**:
-  - [Oracle's Java Documentation](https://docs.oracle.com/javase/8/docs/)
-  - [GeeksforGeeks](https://www.geeksforgeeks.org/java/)
-
-- [Back to Top](#table-of-contents)
-</details>
 <details><summary>Java String Handling</summary>
 
 ### 1. What is String in Java?
@@ -2397,4 +2366,35 @@ Output:
 
 Ans: Yes, it is possible to get a character array from string in Java. String class provides toCharArray() method, which converts this string to a new character array. This method returns a copy of its internal char array, whose length is the length of this string.
 
+</details>
+
+### Conclusion
+
+<details> <summary>Details</summary>
+
+In this course, we’ve covered essential Java concepts, including:
+
+- **Basic Syntax and Structure**: Understanding variables, data types, and control flow.
+- **Object-Oriented Programming**: Delving into classes, objects, inheritance, and polymorphism.
+- **Core Libraries**: Exploring Java’s extensive libraries for tasks like collections, file I/O, and networking.
+- **Error Handling**: Learning about exceptions and best practices for robust applications.
+- **Java Development Tools**: Introduction to IDEs, build tools, and version control.
+
+#### Resources for Further Learning
+
+To continue your Java education, consider the following:
+
+- **Books**:
+  - *Effective Java* by Joshua Bloch
+  - *Java: The Complete Reference* by Herbert Schildt
+
+- **Online Courses**:
+  - Coursera's Java Programming and Software Engineering Fundamentals
+  - Udemy's Java Masterclass
+
+- **Websites**:
+  - [Oracle's Java Documentation](https://docs.oracle.com/javase/8/docs/)
+  - [GeeksforGeeks](https://www.geeksforgeeks.org/java/)
+
+- [Back to Top](#table-of-contents)
 </details>
