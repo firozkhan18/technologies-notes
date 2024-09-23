@@ -125,7 +125,7 @@ Java Programming Chapters
 
 These features make Java a versatile and widely-used programming language for various applications, from web development to enterprise solutions.
 
-- [Back to Top](#table-of-contents)
+**[⬆ Back to Top](#table-of-contents)**
 </details>
 
 ### 2. Setting Up the Environment
@@ -177,7 +177,7 @@ These features make Java a versatile and widely-used programming language for va
 
 - **Resources for Further Learning**: Many IDEs come with integrated tutorials or documentation to help you get started. Check the official documentation for specific guidance and tips.
 
-- [Back to Top](#table-of-contents)
+**[⬆ Back to Top](#table-of-contents)**
 </details>
 
 ### 3. Basic Syntax
@@ -272,7 +272,7 @@ These features make Java a versatile and widely-used programming language for va
   double result = (double) a / b; // Casting 'a' to double for accurate division
   ```
 
-- [Back to Top](#table-of-contents)
+**[⬆ Back to Top](#table-of-contents)**
 </details>
 
 ### 4. Control Flow Statements
@@ -389,7 +389,7 @@ These features make Java a versatile and widely-used programming language for va
   }
   ```
 
-- [Back to Top](#table-of-contents)
+**[⬆ Back to Top](#table-of-contents)**
 </details>
 
 ### 5. Object-Oriented Programming
@@ -535,7 +535,7 @@ These features make Java a versatile and widely-used programming language for va
 
 - **Destructor**: Java has garbage collection, so destructors are not explicitly defined, but you can use a finalize method for cleanup before an object is garbage collected (less commonly used).
 
-- [Back to Top](#table-of-contents)
+**[⬆ Back to Top](#table-of-contents)**
 </details>
 
 ### 6. Exception Handling
@@ -623,7 +623,7 @@ These features make Java a versatile and widely-used programming language for va
 - **Log Exceptions**: Consider logging exceptions to troubleshoot issues more effectively.
 - **Don’t Use Exceptions for Flow Control**: Exceptions should represent error conditions, not control flow logic.
 
-- [Back to Top](#table-of-contents)
+**[⬆ Back to Top](#table-of-contents)**
 </details>
 
 ### 7. Java Collections Framework
@@ -723,7 +723,7 @@ These features make Java a versatile and widely-used programming language for va
 #### Summary
 - The Java Collections Framework offers powerful and flexible data structures for managing collections of objects. Understanding how to use lists, sets, and maps effectively can significantly enhance your programming efficiency.
 
-- [Back to Top](#table-of-contents)
+**[⬆ Back to Top](#table-of-contents)**
 </details>
 
 ### 8. Java Streams and Lambda Expressions
@@ -797,7 +797,7 @@ These features make Java a versatile and widely-used programming language for va
 #### Summary
 - Java Streams and Lambda expressions simplify data processing and enhance code readability by allowing a functional approach to programming. They make it easier to work with collections and perform complex data manipulations with minimal boilerplate code.
 
-- [Back to Top](#table-of-contents)
+**[⬆ Back to Top](#table-of-contents)**
 </details>
 
 ### 9. Multithreading and Concurrency
@@ -893,7 +893,7 @@ These features make Java a versatile and widely-used programming language for va
 #### Summary
 - Multithreading and concurrency are crucial for building efficient and responsive Java applications. Understanding how to create threads, manage their lifecycle, and ensure safe access to shared resources is essential for developing robust multithreaded programs.
 
-- [Back to Top](#table-of-contents)
+**[⬆ Back to Top](#table-of-contents)**
 </details>
 
 ### 10. File Handling and I/O
@@ -1048,7 +1048,7 @@ These features make Java a versatile and widely-used programming language for va
 #### Summary
 - File handling in Java is straightforward with the provided I/O classes, allowing efficient reading and writing of data. Serialization and deserialization are powerful features that enable object persistence and communication in distributed systems.
 
-- [Back to Top](#table-of-contents)
+**[⬆ Back to Top](#table-of-contents)**
 </details>
 
 ### 11. Java GUI Programming
@@ -1140,7 +1140,7 @@ These features make Java a versatile and widely-used programming language for va
 #### Summary
 - Java provides robust frameworks for GUI development with Swing and JavaFX, allowing developers to create interactive applications. Understanding how to build a simple GUI, manage layouts, and handle events is fundamental for Java desktop application development.
 
-- [Back to Top](#table-of-contents)
+**[⬆ Back to Top](#table-of-contents)**
 </details>
 
 ### 12. Networking in Java
@@ -1274,7 +1274,7 @@ These features make Java a versatile and widely-used programming language for va
 #### Summary
 - Java provides powerful networking capabilities that make it easy to build client-server applications and interact with web services. Understanding sockets and HTTP connections is essential for developing networked applications in Java.
 
-- [Back to Top](#table-of-contents)
+**[⬆ Back to Top](#table-of-contents)**
 </details>
 
 ### 13. Java Database Connectivity (JDBC)
@@ -1380,7 +1380,7 @@ public class JdbcQueryExample {
 #### Summary
 - JDBC is a powerful API that provides the means for Java applications to interact with various databases. By understanding how to establish connections and execute SQL queries using Statement and PreparedStatement, developers can build robust database-driven applications.
 
-- [Back to Top](#table-of-contents)
+**[⬆ Back to Top](#table-of-contents)**
 </details>
 
 ### 14. Unit Testing in Java
@@ -1444,7 +1444,7 @@ public class CalculatorTest {
 #### Summary
 - Unit testing is essential for maintaining code quality and ensuring that software behaves as expected. The JUnit framework simplifies the process of writing and executing tests, making it an invaluable tool for Java developers.
 
-- [Back to Top](#table-of-contents)
+**[⬆ Back to Top](#table-of-contents)**
 </details>
 
 ### 15. Best Practices and Design Patterns
@@ -1563,7 +1563,7 @@ public class CalculatorTest {
 #### Summary
 - Following coding best practices leads to cleaner, more maintainable code, while understanding design patterns helps solve common software design problems effectively. Implementing these patterns promotes code reuse and flexibility.
 
-- [Back to Top](#table-of-contents)
+**[⬆ Back to Top](#table-of-contents)**
 </details>
 
 ### 16. Advanced Java Concepts
@@ -1628,7 +1628,7 @@ public class CalculatorTest {
 #### Summary
 - Advanced Java concepts like reflection, annotations, and the Stream API provide developers with powerful tools to create flexible and maintainable applications. Java modules enhance organization and encapsulation, paving the way for more robust software architectures.
 
-- [Back to Top](#table-of-contents)
+**[⬆ Back to Top](#table-of-contents)**
 </details>
 
 ### Miscellaneous
@@ -2673,5 +2673,5 @@ To continue your Java education, consider the following:
   - [Oracle's Java Documentation](https://docs.oracle.com/javase/8/docs/)
   - [GeeksforGeeks](https://www.geeksforgeeks.org/java/)
 
-- [Back to Top](#table-of-contents)
+**[⬆ Back to Top](#table-of-contents)**
 </details>
