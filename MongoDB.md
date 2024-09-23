@@ -961,14 +961,14 @@ db.restaurants.aggregate([
 ```
 </details>
 
-```javascript
 MongoDB Exercises: listingsAndReviews collection
 Last update on May 29 2023 20:36:23 (UTC/GMT +8 hours)
 
- MongoDB Query Exercises and Solution : listingsAndReviews collection - 50 Exercises
+MongoDB Query Exercises and Solution : listingsAndReviews collection - 50 Exercises
 
 Sample document of 'listingsAndReviews' collection:
 
+```javascript
   {
     _id: '10059872',
     listing_url: 'https://www.airbnb.com/rooms/10059872',
