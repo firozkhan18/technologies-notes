@@ -182,7 +182,6 @@ These features make Java a versatile and widely-used programming language for va
 
 ### 3. Basic Syntax
 
-### 3. Basic Syntax
 <details> 
 <summary>Details</summary>
 
@@ -278,7 +277,6 @@ These features make Java a versatile and widely-used programming language for va
 
 ### 4. Control Flow Statements
 
-### 4. Control Flow Statements
 <details> 
 <summary>Details</summary>
 
@@ -396,7 +394,6 @@ These features make Java a versatile and widely-used programming language for va
 
 ### 5. Object-Oriented Programming
 
-### 5. Object-Oriented Programming
 <details> 
 <summary>Details</summary>
 
@@ -543,7 +540,6 @@ These features make Java a versatile and widely-used programming language for va
 
 ### 6. Exception Handling
 
-### 6. Exception Handling
 <details> 
 <summary>Details</summary>
 
@@ -632,7 +628,6 @@ These features make Java a versatile and widely-used programming language for va
 
 ### 7. Java Collections Framework
 
-### 7. Java Collections Framework
 <details> 
 <summary>Details</summary>
 
@@ -733,7 +728,6 @@ These features make Java a versatile and widely-used programming language for va
 
 ### 8. Java Streams and Lambda Expressions
 
-### 8. Java Streams and Lambda Expressions
 <details> 
 <summary>Details</summary>
 
@@ -808,7 +802,6 @@ These features make Java a versatile and widely-used programming language for va
 
 ### 9. Multithreading and Concurrency
 
-### 9. Multithreading and Concurrency
 <details> 
 <summary>Details</summary>
 
@@ -905,7 +898,6 @@ These features make Java a versatile and widely-used programming language for va
 
 ### 10. File Handling and I/O
 
-### 10. File Handling and I/O
 <details> 
 <summary>Details</summary>
 
@@ -1061,7 +1053,6 @@ These features make Java a versatile and widely-used programming language for va
 
 ### 11. Java GUI Programming
 
-### 11. Java GUI Programming
 <details> 
 <summary>Details</summary>
 
@@ -1154,7 +1145,6 @@ These features make Java a versatile and widely-used programming language for va
 
 ### 12. Networking in Java
 
-### 12. Networking in Java
 <details> 
 <summary>Details</summary>
 
@@ -1289,7 +1279,6 @@ These features make Java a versatile and widely-used programming language for va
 
 ### 13. Java Database Connectivity (JDBC)
 
-### 13. Java Database Connectivity (JDBC)
 <details> 
 <summary>Details</summary>
 
@@ -1395,7 +1384,7 @@ public class JdbcQueryExample {
 </details>
 
 ### 14. Unit Testing in Java
-### 14. Unit Testing in Java
+
 <details> 
 <summary>Details</summary>
 
@@ -1460,7 +1449,6 @@ public class CalculatorTest {
 
 ### 15. Best Practices and Design Patterns
 
-### 15. Best Practices and Design Patterns
 <details> 
 <summary>Details</summary>
 
@@ -1580,7 +1568,6 @@ public class CalculatorTest {
 
 ### 16. Advanced Java Concepts
 
-### 16. Advanced Java Concepts
 <details> 
 <summary>Details</summary>
 
