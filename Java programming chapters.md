@@ -1632,9 +1632,32 @@ public class CalculatorTest {
 </details>
 
 ### Conclusion
+
 <details> <summary>Details</summary>
-- **Recap of key concepts learned**: Summarizing the major topics covered in the course.
-- **Resources for further learning**: Recommendations for books, online courses, and websites for continued Java education.
-  
+
+In this course, we’ve covered essential Java concepts, including:
+
+- **Basic Syntax and Structure**: Understanding variables, data types, and control flow.
+- **Object-Oriented Programming**: Delving into classes, objects, inheritance, and polymorphism.
+- **Core Libraries**: Exploring Java’s extensive libraries for tasks like collections, file I/O, and networking.
+- **Error Handling**: Learning about exceptions and best practices for robust applications.
+- **Java Development Tools**: Introduction to IDEs, build tools, and version control.
+
+#### Resources for Further Learning
+
+To continue your Java education, consider the following:
+
+- **Books**:
+  - *Effective Java* by Joshua Bloch
+  - *Java: The Complete Reference* by Herbert Schildt
+
+- **Online Courses**:
+  - Coursera's Java Programming and Software Engineering Fundamentals
+  - Udemy's Java Masterclass
+
+- **Websites**:
+  - [Oracle's Java Documentation](https://docs.oracle.com/javase/8/docs/)
+  - [GeeksforGeeks](https://www.geeksforgeeks.org/java/)
+
 - [Back to Top](#table-of-contents)
 </details>
