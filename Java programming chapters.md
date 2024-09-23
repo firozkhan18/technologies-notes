@@ -1779,7 +1779,7 @@ A POJO (Plain Old Java Object) class is a simple Java object that follows certai
 7. **Immutability** is optional but can be preferred for certain use cases.
 
 By following these conventions, you ensure that your POJO classes are straightforward, maintainable, and compatible with various Java frameworks and libraries.
-<details>
+</details>
 <details><summary>Java String Handling</summary>
 
 ### 1. What is String in Java?
