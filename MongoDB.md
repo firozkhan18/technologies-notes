@@ -960,6 +960,139 @@ db.restaurants.aggregate([
 ])
 ```
 </details>
+
+```javascript
+MongoDB Exercises: listingsAndReviews collection
+Last update on May 29 2023 20:36:23 (UTC/GMT +8 hours)
+
+ MongoDB Query Exercises and Solution : listingsAndReviews collection - 50 Exercises
+
+Sample document of 'listingsAndReviews' collection:
+
+  {
+    _id: '10059872',
+    listing_url: 'https://www.airbnb.com/rooms/10059872',
+    name: 'Soho Cozy, Spacious and Convenient',
+    summary: 'Clean, fully furnish, Spacious 1 bedroom flat just off the escalator in Mid Levels. 2 minutes From Soho Bar and Restaurants. Located in a quiet alley 1 minute from Sun Yat Sen',
+    space: '',
+    description: 'Clean, fully furnish, Spacious 1 bedroom flat just off the escalator in Mid Levels. 2 minutes From Soho Bar and Restaurants. Located in a quiet alley 1 minute from Sun Yat Sen',
+    neighborhood_overview: '',
+    notes: '',
+    transit: '',
+    access: '',
+    interaction: '',
+    house_rules: '',
+    property_type: 'Apartment',
+    room_type: 'Entire home/apt',
+    bed_type: 'Real Bed',
+    minimum_nights: '4',
+    maximum_nights: '20',
+    cancellation_policy: 'flexible',
+    last_scraped: ISODate("2019-03-11T04:00:00.000Z"),
+    calendar_last_scraped: ISODate("2019-03-11T04:00:00.000Z"),
+    first_review: ISODate("2015-12-19T05:00:00.000Z"),
+    last_review: ISODate("2018-03-27T04:00:00.000Z"),
+    accommodates: 3,
+    bedrooms: 1,
+    beds: 2,
+    number_of_reviews: 3,
+    bathrooms: Decimal128("1.0"),
+    amenities: [
+      'Air conditioning',
+      'Kitchen',
+      'Smoking allowed',
+      'Doorman',
+      'Elevator',
+      'Heating',
+      'Family/kid friendly',
+      'Essentials',
+      '24-hour check-in',
+      'translation missing: en.hosting_amenity_50'
+    ],
+    price: Decimal128("699.00"),
+    weekly_price: Decimal128("5000.00"),
+    extra_people: Decimal128("0.00"),
+    guests_included: Decimal128("1"),
+    images: {
+      thumbnail_url: '',
+      medium_url: '',
+      picture_url: 'https://a0.muscache.com/im/pictures/4533a1dc-6fd8-4167-938d-391c6eebbc19.jpg?aki_policy=large',
+      xl_picture_url: ''
+    },
+    host: {
+      host_id: '51624384',
+      host_url: 'https://www.airbnb.com/users/show/51624384',
+      host_name: 'Giovanni',
+      host_location: 'Hong Kong, Hong Kong',
+      host_about: '',
+      host_thumbnail_url: 'https://a0.muscache.com/im/pictures/264b82a7-756f-4da8-b607-dc9759e2a10f.jpg?aki_policy=profile_small',
+      host_picture_url: 'https://a0.muscache.com/im/pictures/264b82a7-756f-4da8-b607-dc9759e2a10f.jpg?aki_policy=profile_x_medium',
+      host_neighbourhood: 'Soho',
+      host_is_superhost: false,
+      host_has_profile_pic: true,
+      host_identity_verified: false,
+      host_listings_count: 1,
+      host_total_listings_count: 1,
+      host_verifications: [ 'email', 'phone', 'reviews', 'jumio', 'government_id' ]
+    },
+    address: {
+      street: 'Hong Kong, Hong Kong Island, Hong Kong',
+      suburb: 'Central & Western District',
+      government_area: 'Central & Western',
+      market: 'Hong Kong',
+      country: 'Hong Kong',
+      country_code: 'HK',
+      location: {
+        type: 'Point',
+        coordinates: [ 114.15027, 22.28158 ],
+        is_location_exact: true
+      }
+    },
+    availability: {
+      availability_30: 0,
+      availability_60: 0,
+      availability_90: 0,
+      availability_365: 0
+    },
+    review_scores: {
+      review_scores_accuracy: 10,
+      review_scores_cleanliness: 10,
+      review_scores_checkin: 10,
+      review_scores_communication: 10,
+      review_scores_location: 10,
+      review_scores_value: 8,
+      review_scores_rating: 100
+    },
+    reviews: [
+      {
+        _id: '56904633',
+        date: ISODate("2015-12-19T05:00:00.000Z"),
+        listing_id: '10059872',
+        reviewer_id: '5302612',
+        reviewer_name: 'Octavio',
+        comments: 'The host canceled this reservation 11 days before arrival. This is an automated posting.'
+      },
+      {
+        _id: '223175530',
+        date: ISODate("2018-01-01T05:00:00.000Z"),
+        listing_id: '10059872',
+        reviewer_id: '48436743',
+        reviewer_name: 'Ross',
+        comments: 'Giovanni was very helpful and responsive to my questions. This is a great apartment that is very convenient for exploring Hong Kong.'
+      },
+      {
+        _id: '247251577',
+        date: ISODate("2018-03-27T04:00:00.000Z"),
+        listing_id: '10059872',
+        reviewer_id: '111288273',
+        reviewer_name: 'Christian',
+        comments: 'The host canceled this reservation 8 days before arrival. This is an automated posting.'
+      }
+    ]
+  },
+```
+
+You may download the compressed file and uncompress it to find the collection used in our exercises. The collection comprises of 2000 documents.
 <details><summary><b>1. Find the price per night of the first record in the listingsAndReviews collection.</b></summary> 
  
 ```javascript 
