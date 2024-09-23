@@ -2604,45 +2604,45 @@ The class field which is not used in the equals() method should not be used in h
 The best way to use a user-defined key class is by making it immutable. It helps in caching the hashCode() value for better performance. Also if the class is made immutable it will ensure that the hashCode() and equals() are not changing in the future.
 Differences — Java Collections Interview Questions
 31. Differentiate between Collection and Collections.
-![Desktop Screeshot](images/collection-11.PNG)
+![Desktop Screeshot](images/collection-10.PNG)
 32. Differentiate between an Array and an ArrayList.
-![Desktop Screeshot](images/collection-12.PNG)
+![Desktop Screeshot](images/collection-11.PNG)
 33. Differentiate between Iterable and Iterator.
-![Desktop Screeshot](images/collection-13.PNG)
+![Desktop Screeshot](images/collection-12.PNG)
 34. Differentiate between ArrayList and LinkedList.
-![Desktop Screeshot](images/collection-14.PNG)
+![Desktop Screeshot](images/collection-13.PNG)
 35. Differentiate between Comparable and Comparator.
-![Desktop Screeshot](images/collection-15.PNG)
+![Desktop Screeshot](images/collection-14.PNG)
 36. Differentiate between List and Set.
-![Desktop Screeshot](images/collection-16.PNG)
+![Desktop Screeshot](images/collection-15.PNG)
 37. Differentiate between Set and Map.
-![Desktop Screeshot](images/collection-17.PNG)
+![Desktop Screeshot](images/collection-16.PNG)
 38. Differentiate between List and Map.
-![Desktop Screeshot](images/collection-18.PNG)
+![Desktop Screeshot](images/collection-17.PNG)
 39. Differentiate between Queue and Stack.
-![Desktop Screeshot](images/collection-19.PNG)
+![Desktop Screeshot](images/collection-18.PNG)
 40. Differentiate between PriorityQueue and TreeSet.
-![Desktop Screeshot](images/collection-20.PNG)
+![Desktop Screeshot](images/collection-19.PNG)
 41. Differentiate between the Singly Linked List and Doubly Linked List.
-![Desktop Screeshot](images/collection-21.PNG)
+![Desktop Screeshot](images/collection-20.PNG)
 42. Differentiate between Iterator and Enumeration.
-![Desktop Screeshot](images/collection-22.PNG)
+![Desktop Screeshot](images/collection-21.PNG)
 43. Differentiate between HashMap and HashTable.
-![Desktop Screeshot](images/collection-23.PNG)
+![Desktop Screeshot](images/collection-22.PNG)
 44. Differentiate between HashSet and HashMap.
-![Desktop Screeshot](images/collection-24.PNG)
+![Desktop Screeshot](images/collection-23.PNG)
 45. Differentiate between Iterator and ListIterator.
-![Desktop Screeshot](images/collection-25.PNG)
+![Desktop Screeshot](images/collection-24.PNG)
 46. Differentiate between HashSet and TreeSet.
-![Desktop Screeshot](images/collection-26.PNG)
+![Desktop Screeshot](images/collection-25.PNG)
 47. Differentiate between Queue and Deque.
-![Desktop Screeshot](images/collection-27.PNG)
+![Desktop Screeshot](images/collection-26.PNG)
 48. Differentiate between HashMap and TreeMap.
-![Desktop Screeshot](images/collection-281.PNG)
+![Desktop Screeshot](images/collection-27.PNG)
 49. Differentiate between ArrayList and Vector.
-![Desktop Screeshot](images/collection-29.PNG)
+![Desktop Screeshot](images/collection-28.PNG)
 50. Differentiate between failfast and failsafe.
-![Desktop Screeshot](images/collection-30.PNG)
+![Desktop Screeshot](images/collection-29.PNG)
 </details>
 
 ### Conclusion
