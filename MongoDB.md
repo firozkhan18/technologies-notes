@@ -1346,7 +1346,7 @@ Last update on December 01 2023 05:35:11 (UTC/GMT +8 hours)
  MongoDB Query Exercises and Solution : Movie collection - 28 Exercises
 
 Sample document of 'movies' collection:
-
+```json
   {
     _id: ObjectId("573a1390f29313caabcd42e8"),
 plot: 'A group of bandits stage a brazen train hold-up, only to find a determined posse hot on their heels.',
@@ -1378,7 +1378,8 @@ critic: { rating: 7.6, numReviews: 6, meter: 100 },
 rotten: 0,
 lastUpdated: ISODate("2015-08-08T19:16:10.000Z")
     }
-.....
+```
+
 You may download the compressed file and uncompress it to find the collection used in our exercises. The collection comprises of 2000 documents.
 
 <details><summary><b>1. Find all movies with full information from the 'movies' collection that released in the year 1893.</b></summary>
