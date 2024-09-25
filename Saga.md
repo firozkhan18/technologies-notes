@@ -807,3 +807,23 @@ public class EmployeeServiceClient {
 ### Conclusion
 
 This setup provides a solid foundation for building a microservices architecture with Spring Boot. You can scale and customize each service based on your requirements. If you need further clarification or assistance with specific parts, feel free to ask!
+
+```mermaid
+
+graph TD;
+    A[Eureka Service] -->|registers| B[Department Service]
+    A -->|registers| C[Employee Service]
+    A -->|registers| D[API Gateway]
+    D -->|calls| B
+    D -->|calls| C
+    B -->|uses| E[Config Server]
+    C -->|uses| E
+    D -->|uses| F[Hystrix Dashboard]
+    B -->|traced by| G[Zipkin]
+    C -->|traced by| G
+    D -->|traced by| G
+    B -->|produces to| H[Kafka Topic]
+    C -->|consumes from| H
+    B -->|caches data in| I[Redis]
+    C -->|caches data in| I
+```
