@@ -1,3 +1,14 @@
+```maemaid
+
+graph TD;
+    A[Eureka Service] -->|registers| B[Department Service]
+    A -->|registers| C[Employee Service]
+    A -->|registers| D[API Gateway]
+    D -->|calls| B
+    D -->|calls| C
+    B -->|uses| E[Config Server]
+    C -->|uses| E
+```
 Saga design pattern is a way to manage data consistency across microservices in distributed transaction scenarios.  Saga is a sequence of transactions that updates each service and publishes a message or event to trigger the next transaction step. If a step fails, the saga executes compensating transactions that counteract the preceding transaction.
 
 The term saga refers to Long Lived Transactions (LLT) and abbreviated as Segregated Access of Global Atomicity.
