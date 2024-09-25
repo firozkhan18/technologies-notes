@@ -1,4 +1,4 @@
-```maemaid
+```mermaid
 
 graph TD;
     A[Eureka Service] -->|registers| B[Department Service]
