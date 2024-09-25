@@ -8,6 +8,9 @@ graph TD;
     D -->|calls| C
     B -->|uses| E[Config Server]
     C -->|uses| E
+```
+
+```mermaid
 
 graph TD;
     A[Orchestartor] -->|Saga| B[User Service]
