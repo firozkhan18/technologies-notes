@@ -936,3 +936,17 @@ sequenceDiagram
    - Similar to choreography, but emphasizes the production and consumption of events to enable loose coupling and asynchronous communication.
 
 These diagrams provide a clear view of how to implement saga patterns and event-driven architectures in your microservices environment. Let me know if you need any adjustments!
+
+
+https://www.youtube.com/watch?v=361bfIvXMBI
+https://www.youtube.com/watch?v=BnknNTN8icw
+https://www.youtube.com/watch?v=sthMcMrspCM
+
+https://www.youtube.com/watch?v=cBZocjojbJo
+https://www.youtube.com/watch?v=cBZocjojbJo
+
+https://www.youtube.com/watch?v=0Mzft2Kcev0
+https://www.youtube.com/watch?v=snZtITKxUBM
+https://www.youtube.com/watch?v=VAmntTPebKE
+
+https://www.youtube.com/watch?v=pUFGOngzJig
