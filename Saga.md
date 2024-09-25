@@ -497,8 +497,46 @@ To implement these patterns in Spring Boot, consider the following steps:
 
 This overview provides a foundational understanding of implementing Saga orchestration, choreography, and event-driven architectures in Spring Boot microservices. You can adjust these patterns based on your specific requirements and system design. If you need more detailed code examples or further assistance, feel free to ask!
 
-```mermaid
+Creating a comprehensive microservices architecture using Spring Boot with API Gateway, Eureka, Config Server, Docker, Kubernetes, Zipkin, Sleuth, Actuator, Hystrix Dashboard, and WebClient for service interaction involves a few steps. Below is a structured outline, including Mermaid diagrams and example code.
 
+### Project Structure
+
+```
+microservice/
+|-- department-service/
+|   |-- src/main/java/com/example/department/
+|   |-- src/main/resources/application.yml
+|   |-- Dockerfile
+|   |-- pom.xml
+|-- employee-service/
+|   |-- src/main/java/com/example/employee/
+|   |-- src/main/resources/application.yml
+|   |-- Dockerfile
+|   |-- pom.xml
+|-- eureka-service/
+|   |-- src/main/java/com/example/eureka/
+|   |-- src/main/resources/application.yml
+|   |-- Dockerfile
+|   |-- pom.xml
+|-- api-gateway/
+|   |-- src/main/java/com/example/gateway/
+|   |-- src/main/resources/application.yml
+|   |-- Dockerfile
+|   |-- pom.xml
+|-- config-server/
+|   |-- src/main/java/com/example/config/
+|   |-- src/main/resources/application.yml
+|   |-- Dockerfile
+|   |-- pom.xml
+|-- docker-compose.yml
+|-- k8s/
+|   |-- deployment.yaml
+|   |-- service.yaml
+```
+
+### 1. Mermaid Diagram
+
+```mermaid
 graph TD;
     A[Eureka Service] -->|registers| B[Department Service]
     A -->|registers| C[Employee Service]
@@ -512,3 +550,260 @@ graph TD;
     C -->|traced by| G
     D -->|traced by| G
 ```
+
+### 2. Service Code Examples
+
+#### 2.1. Eureka Service (`eureka-service/src/main/resources/application.yml`)
+
+```yaml
+server:
+  port: 8761
+spring:
+  application:
+    name: eureka-server
+  eureka:
+    client:
+      registerWithEureka: false
+      fetchRegistry: false
+```
+
+#### 2.2. Config Server (`config-server/src/main/resources/application.yml`)
+
+```yaml
+server:
+  port: 8888
+spring:
+  application:
+    name: config-server
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://github.com/your-repo/config-repo
+```
+
+#### 2.3. Department Service (`department-service/src/main/resources/application.yml`)
+
+```yaml
+server:
+  port: 8081
+spring:
+  application:
+    name: department-service
+  cloud:
+    discovery:
+      client:
+        service-url:
+          defaultZone: http://eureka:8761/eureka/
+  zipkin:
+    base-url: http://zipkin:9411
+  sleuth:
+    sampling:
+      percentage: 1.0
+```
+
+#### 2.4. Employee Service (`employee-service/src/main/resources/application.yml`)
+
+```yaml
+server:
+  port: 8082
+spring:
+  application:
+    name: employee-service
+  cloud:
+    discovery:
+      client:
+        service-url:
+          defaultZone: http://eureka:8761/eureka/
+  zipkin:
+    base-url: http://zipkin:9411
+  sleuth:
+    sampling:
+      percentage: 1.0
+```
+
+#### 2.5. API Gateway (`api-gateway/src/main/resources/application.yml`)
+
+```yaml
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      routes:
+        - id: department
+          uri: lb://department-service
+          predicates:
+            - Path=/department/**
+        - id: employee
+          uri: lb://employee-service
+          predicates:
+            - Path=/employee/**
+```
+
+### 3. Dockerfiles
+
+#### 3.1. Example Dockerfile for Each Service
+
+```dockerfile
+# Dockerfile
+FROM openjdk:11-jre-slim
+VOLUME /tmp
+COPY target/*.jar app.jar
+ENTRYPOINT ["java","-jar","/app.jar"]
+```
+
+### 4. Docker Compose
+
+#### `docker-compose.yml`
+
+```yaml
+version: '3.8'
+
+services:
+  eureka:
+    build: ./eureka-service
+    ports:
+      - "8761:8761"
+    networks:
+      - microservice-network
+
+  config:
+    build: ./config-server
+    ports:
+      - "8888:8888"
+    networks:
+      - microservice-network
+
+  department:
+    build: ./department-service
+    ports:
+      - "8081:8081"
+    networks:
+      - microservice-network
+    depends_on:
+      - eureka
+
+  employee:
+    build: ./employee-service
+    ports:
+      - "8082:8082"
+    networks:
+      - microservice-network
+    depends_on:
+      - eureka
+
+  gateway:
+    build: ./api-gateway
+    ports:
+      - "8080:8080"
+    networks:
+      - microservice-network
+    depends_on:
+      - eureka
+
+networks:
+  microservice-network:
+    driver: bridge
+```
+
+### 5. Kubernetes Configuration
+
+#### `k8s/deployment.yaml`
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: department-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: department-service
+  template:
+    metadata:
+      labels:
+        app: department-service
+    spec:
+      containers:
+      - name: department-service
+        image: your-docker-repo/department-service:latest
+        ports:
+        - containerPort: 8081
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: department-service
+spec:
+  ports:
+  - port: 8081
+  selector:
+    app: department-service
+```
+
+### 6. Tracing with Zipkin and Sleuth
+
+Add the following dependencies to your `pom.xml` for Zipkin and Sleuth in the department and employee services:
+
+```xml
+<dependency>
+    <groupId>org.springframework.cloud</groupId>
+    <artifactId>spring-cloud-starter-sleuth</artifactId>
+</dependency>
+<dependency>
+    <groupId>org.springframework.cloud</groupId>
+    <artifactId>spring-cloud-starter-zipkin</artifactId>
+</dependency>
+```
+
+### 7. Hystrix Dashboard
+
+Add the Hystrix dependency to your services:
+
+```xml
+<dependency>
+    <groupId>org.springframework.cloud</groupId>
+    <artifactId>spring-cloud-starter-netflix-hystrix</artifactId>
+</dependency>
+```
+
+#### Configuration in `application.yml`
+
+```yaml
+hystrix:
+  command:
+    default:
+      circuitBreaker:
+        enabled: true
+```
+
+### 8. WebClient Example
+
+In your service, you can use `WebClient` to call other services:
+
+```java
+import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.WebClient;
+
+@Service
+public class EmployeeServiceClient {
+    private final WebClient webClient;
+
+    public EmployeeServiceClient(WebClient.Builder webClientBuilder) {
+        this.webClient = webClientBuilder.baseUrl("http://employee-service").build();
+    }
+
+    public Mono<Employee> getEmployee(String id) {
+        return webClient.get()
+                .uri("/employees/{id}", id)
+                .retrieve()
+                .bodyToMono(Employee.class);
+    }
+}
+```
+
+### Conclusion
+
+This setup provides a solid foundation for building a microservices architecture with Spring Boot. You can scale and customize each service based on your requirements. If you need further clarification or assistance with specific parts, feel free to ask!
