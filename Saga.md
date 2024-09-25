@@ -827,3 +827,47 @@ graph TD;
     B -->|caches data in| I[Redis]
     C -->|caches data in| I
 ```
+
+Here's a sequence diagram in Mermaid syntax based on your architecture:
+
+```mermaid
+
+sequenceDiagram
+    participant A as Eureka Service
+    participant B as Department Service
+    participant C as Employee Service
+    participant D as API Gateway
+    participant E as Config Server
+    participant F as Hystrix Dashboard
+    participant G as Zipkin
+    participant H as Kafka Topic
+    participant I as Redis Cache
+
+    A->>B: register
+    A->>C: register
+    A->>D: register
+    
+    D->>B: call
+    D->>C: call
+    
+    B->>E: use config
+    C->>E: use config
+    
+    D->>F: use dashboard
+    
+    B->>G: trace
+    C->>G: trace
+    D->>G: trace
+    
+    B->>H: produce message
+    C->>H: consume message
+    
+    B->>I: cache data
+    C->>I: cache data
+```
+
+### Explanation
+- **Participants**: Each service and component is represented as a participant.
+- **Arrows**: The arrows indicate the direction of interactions, such as registration, service calls, and data caching.
+
+This sequence diagram illustrates the interactions between the various components in your microservices architecture. You can further customize the messages or add more details as needed!
