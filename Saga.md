@@ -871,3 +871,68 @@ sequenceDiagram
 - **Arrows**: The arrows indicate the direction of interactions, such as registration, service calls, and data caching.
 
 This sequence diagram illustrates the interactions between the various components in your microservices architecture. You can further customize the messages or add more details as needed!
+
+Here are the sequence diagrams for **Saga Orchestration**, **Saga Choreography**, and **Event-Driven** based on your architecture:
+
+### 1. Saga Orchestration
+
+In Saga Orchestration, a central coordinator (or orchestrator) manages the entire transaction process across different services.
+
+```mermaid
+sequenceDiagram
+    participant O as Orchestrator
+    participant B as Department Service
+    participant C as Employee Service
+    participant D as API Gateway
+    participant H as Kafka Topic
+
+    O->>D: Start transaction
+    D->>B: Call Department Service
+    B->>H: Produce message (create department)
+    H->>C: Consume message (create department)
+    C->>O: Confirm department creation
+    O->>D: Confirm transaction
+```
+
+### 2. Saga Choreography
+
+In Saga Choreography, each service knows what to do when an event occurs. There is no central coordinator; services communicate via events.
+
+```mermaid
+sequenceDiagram
+    participant B as Department Service
+    participant C as Employee Service
+    participant H as Kafka Topic
+
+    B->>H: Produce message (department created)
+    H->>C: Consume message (department created)
+    C->>B: Acknowledge receipt
+```
+
+### 3. Event-Driven
+
+In an event-driven architecture, services produce and consume events, facilitating asynchronous communication and decoupling.
+
+```mermaid
+sequenceDiagram
+    participant B as Department Service
+    participant C as Employee Service
+    participant H as Kafka Topic
+
+    B->>H: Produce event (new department created)
+    H->>C: Notify event (new department created)
+    C->>B: Acknowledge event
+```
+
+### Explanation
+
+1. **Saga Orchestration**:
+   - A central orchestrator manages the entire flow and ensures all services complete successfully.
+
+2. **Saga Choreography**:
+   - Each service reacts to events. For example, when the Department Service produces a "department created" event, the Employee Service listens for it and takes action.
+
+3. **Event-Driven**:
+   - Similar to choreography, but emphasizes the production and consumption of events to enable loose coupling and asynchronous communication.
+
+These diagrams provide a clear view of how to implement saga patterns and event-driven architectures in your microservices environment. Let me know if you need any adjustments!
