@@ -118,3 +118,290 @@ The 2PC could be alternative to SAGA pattern. The Two-Phase Commit protocol (2PC
 ** Advantages of this Design Pattern **
 1. Best way to handle distributed transactions across the microservices.
 2.  Makes transaction management in a loosely coupled, message-driven.
+
+```mermaid
+
+microservice/
+|-- department-service/
+|   |-- src/main/java/com/example/orders/
+|   |-- src/main/resources/application.yml
+|   |-- Dockerfile
+|   |-- pom.xml
+|-- employee-service/
+|   |-- src/main/java/com/example/payments/
+|   |-- src/main/resources/application.yml
+|   |-- Dockerfile
+|   |-- pom.xml
+|-- eureka-service/
+|   |-- src/main/java/com/example/inventory/
+|   |-- src/main/resources/application.yml
+|   |-- Dockerfile
+|   |-- pom.xml
+|-- api-gateway/
+|   |-- src/main/java/com/example/gateway/
+|   |-- src/main/resources/application.yml
+|   |-- Dockerfile
+|   |-- pom.xml
+|-- config-server/
+|   |-- src/main/java/com/example/config/
+|   |-- src/main/resources/application.yml
+|   |-- Dockerfile
+|   |-- pom.xml
+|-- docker-compose.yml
+|-- k8s/
+|   |-- deployment.yaml
+|   |-- service.yaml
+
+```
+
+```mermaid
+graph TD
+    A[Client] --> B[API Gateway]
+    B --> C[Service A]
+    B --> D[Service B]
+    B --> E[Service C]
+
+    B --> |Routing| F[API Gateway Details]
+    B --> |Load Balancing| F
+    B --> |Authentication| F
+    B --> |Aggregation| F
+
+    C --> G[Database A]
+    D --> H[Database B]
+    E --> I[Database C]
+
+    subgraph API_Gateway_Details
+        F
+    end
+
+    subgraph Microservices
+        C
+        D
+        E
+    end
+
+    subgraph Databases
+        G
+        H
+        I
+    end
+
+    classDef client fill:#f9f,stroke:#333,stroke-width:2px;
+    classDef apiGateway fill:#ccf,stroke:#333,stroke-width:2px;
+    classDef microservice fill:#cfc,stroke:#333,stroke-width:2px;
+    classDef database fill:#fcf,stroke:#333,stroke-width:2px;
+
+    class A client;
+    class B apiGateway;
+    class C,D,E microservice;
+    class G,H,I database;
+```
+
+#### **Description of Diagram:**
+
+1. **Client**: Initiates requests to the API Gateway.
+2. **API Gateway**: Receives requests from the client and routes them to the appropriate microservices based on the request path and method. It may also handle authentication, rate limiting, caching, and aggregation of responses from multiple services.
+3. **Microservices (Service A, B, C)**: Perform specific business functions and interact with their respective databases. Each microservice is responsible for its own logic and data management.
+4. **Databases**: Store data specific to each microservice. Each microservice can have its own database schema or even use different database technologies as needed.
+
+### **Additional Considerations:**
+
+- **Service Registry**: A tool like Eureka or Consul that helps the API Gateway locate and communicate with microservice instances.
+- **Authentication Service**: Can be integrated with the API Gateway for centralized authentication or can be a separate microservice.
+- **Logging & Monitoring**: Tools like ELK Stack (Elasticsearch, Logstash, Kibana) or Prometheus/Grafana for logging and monitoring.
+
+
+### **Diagram**
+
+Here’s a simple Mermaid diagram illustrating a SAGA pattern with orchestration:
+
+```mermaid
+sequenceDiagram
+    participant Client
+    participant ServiceA
+    participant ServiceB
+    participant ServiceC
+    participant Orchestrator
+
+    Client->>Orchestrator: Start SAGA
+    Orchestrator->>ServiceA: Execute Operation A
+    ServiceA-->>Orchestrator: A Completed
+    Orchestrator->>ServiceB: Execute Operation B
+    ServiceB-->>Orchestrator: B Completed
+    Orchestrator->>ServiceC: Execute Operation C
+    ServiceC-->>Orchestrator: C Completed
+
+    alt Failure in Service B
+        Orchestrator->>ServiceA: Compensate Operation A
+        ServiceA-->>Orchestrator: A Compensation Completed
+        Orchestrator->>ServiceB: Compensate Operation B
+        ServiceB-->>Orchestrator: B Compensation Completed
+    end
+
+    Orchestrator-->>Client: SAGA Completed/Failed
+```
+
+In this diagram:
+- **Client** starts the SAGA via the **Orchestrator**.
+- The **Orchestrator** invokes operations in **ServiceA**, **ServiceB**, and **ServiceC**.
+- If an operation fails, compensating operations are triggered to maintain consistency.
+
+### **1. SAGA Choreography**
+
+In **Choreography**, each service involved in the SAGA knows about the next service and is responsible for calling it. There is no central coordinator; each service informs the next service in the process.
+
+```mermaid
+sequenceDiagram
+    participant Client
+    participant ServiceA
+    participant ServiceB
+    participant ServiceC
+
+    Client->>ServiceA: Start SAGA
+    ServiceA->>ServiceB: Execute Operation B
+    ServiceB->>ServiceC: Execute Operation C
+
+    alt Failure in Service B
+        ServiceB->>ServiceA: Compensate Operation A
+        ServiceA->>Client: Notify Failure
+    end
+
+    ServiceC->>Client: Notify Success
+```
+
+**Explanation**:
+- **Client** starts the SAGA by calling **ServiceA**.
+- **ServiceA** then calls **ServiceB**, and **ServiceB** calls **ServiceC**.
+- If a failure occurs in **ServiceB**, it triggers compensations in **ServiceA**.
+- **ServiceC** sends a success notification back to the **Client** if all operations succeed.
+
+### **2. SAGA Orchestration**
+
+In **Orchestration**, a central coordinator (the orchestrator) manages the SAGA process, invoking each service in the correct order and handling compensations if necessary.
+
+```mermaid
+sequenceDiagram
+    participant Client
+    participant Orchestrator
+    participant ServiceA
+    participant ServiceB
+    participant ServiceC
+
+    Client->>Orchestrator: Start SAGA
+    Orchestrator->>ServiceA: Execute Operation A
+    ServiceA-->>Orchestrator: A Completed
+    Orchestrator->>ServiceB: Execute Operation B
+    ServiceB-->>Orchestrator: B Completed
+    Orchestrator->>ServiceC: Execute Operation C
+    ServiceC-->>Orchestrator: C Completed
+
+    alt Failure in ServiceB
+        Orchestrator->>ServiceA: Compensate Operation A
+        ServiceA-->>Orchestrator: A Compensation Completed
+        Orchestrator->>ServiceB: Compensate Operation B
+        ServiceB-->>Orchestrator: B Compensation Completed
+    end
+
+    Orchestrator-->>Client: SAGA Completed/Failed
+```
+
+**Explanation**:
+- **Client** starts the SAGA through the **Orchestrator**.
+- The **Orchestrator** invokes **ServiceA**, **ServiceB**, and **ServiceC** in sequence.
+- If a failure occurs in **ServiceB**, the **Orchestrator** handles compensations by calling **ServiceA** and **ServiceB** to undo changes.
+- The **Orchestrator** then sends a success or failure notification back to the **Client**.
+
+### **1. SAGA Choreography Flow Diagram**
+
+In the **Choreography** approach, each service communicates directly with the next service and manages its own state and compensations.
+
+```mermaid
+graph TD
+    Client --> ServiceA
+    ServiceA --> ServiceB
+    ServiceB --> ServiceC
+
+    subgraph ServiceA
+        A_Start[Start Operation A] --> A_Success[Operation A Completed]
+        A_Fail[Operation A Failed] --> A_Compensate[Compensate Operation A]
+    end
+
+    subgraph ServiceB
+        B_Start[Start Operation B] --> B_Success[Operation B Completed]
+        B_Fail[Operation B Failed] --> B_Compensate[Compensate Operation B]
+    end
+
+    subgraph ServiceC
+        C_Start[Start Operation C] --> C_Success[Operation C Completed]
+        C_Fail[Operation C Failed] --> C_Compensate[Compensate Operation C]
+    end
+
+    ServiceA -->|Success| ServiceB
+    ServiceB -->|Success| ServiceC
+    ServiceB -->|Fail| ServiceA
+    ServiceC -->|Success| Client
+    ServiceC -->|Fail| ServiceB
+```
+
+**Explanation**:
+- The **Client** starts the SAGA by calling **ServiceA**.
+- **ServiceA** performs its operation and, upon success, calls **ServiceB**.
+- **ServiceB** performs its operation and, upon success, calls **ServiceC**.
+- If any service fails, it triggers compensations in the previous services in the sequence.
+- If **ServiceC** succeeds, it notifies the **Client** of the successful completion.
+
+### **2. SAGA Orchestration Flow Diagram**
+
+In the **Orchestration** approach, a central **Orchestrator** manages the sequence of service calls and compensations.
+
+```mermaid
+graph TD
+    Client --> Orchestrator
+    Orchestrator --> ServiceA
+    Orchestrator --> ServiceB
+    Orchestrator --> ServiceC
+
+    subgraph Orchestrator
+        O_Start[Start SAGA] --> O_OperationA[Execute Operation A]
+        O_OperationA --> O_OperationB[Execute Operation B]
+        O_OperationB --> O_OperationC[Execute Operation C]
+        O_OperationC --> O_Complete[SAGA Completed]
+        O_Fail[Operation Failed] --> O_CompensateA[Compensate Operation A]
+        O_CompensateA --> O_CompensateB[Compensate Operation B]
+        O_CompensateB --> O_Complete
+    end
+
+    subgraph ServiceA
+        A_Start[Start Operation A] --> A_Success[Operation A Completed]
+        A_Fail[Operation A Failed]
+    end
+
+    subgraph ServiceB
+        B_Start[Start Operation B] --> B_Success[Operation B Completed]
+        B_Fail[Operation B Failed]
+    end
+
+    subgraph ServiceC
+        C_Start[Start Operation C] --> C_Success[Operation C Completed]
+        C_Fail[Operation C Failed]
+    end
+
+    Orchestrator -->|Invoke| ServiceA
+    Orchestrator -->|Invoke| ServiceB
+    Orchestrator -->|Invoke| ServiceC
+
+    ServiceA -->|Success| Orchestrator
+    ServiceB -->|Success| Orchestrator
+    ServiceC -->|Success| Orchestrator
+
+    ServiceA -->|Fail| Orchestrator
+    ServiceB -->|Fail| Orchestrator
+    ServiceC -->|Fail| Orchestrator
+```
+
+**Explanation**:
+- The **Client** starts the SAGA via the **Orchestrator**.
+- The **Orchestrator** manages the sequence of service calls to **ServiceA**, **ServiceB**, and **ServiceC**.
+- If any service fails, the **Orchestrator** triggers compensations in the previous services.
+- **ServiceA**, **ServiceB**, and **ServiceC** report their status back to the **Orchestrator**.
+- The **Orchestrator** completes the SAGA and informs the **Client** of the result.
