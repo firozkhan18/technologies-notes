@@ -8,6 +8,25 @@ graph TD;
     D -->|calls| C
     B -->|uses| E[Config Server]
     C -->|uses| E
+
+graph TD;
+    A[Orchestartor] -->|Saga| B[User Service]
+    A -->|Start Saga| C[Order Service]
+    A -->|Start Saga| D[Inventory Service]
+    B -->|Confirm Order| E[Order Service]
+    C -->|Reverse Order| F[Inventory Service]
+    D -->|Complete Order| G[Payment Service]
+    E -->|Notify Orchestartor| A
+    F -->|Notify Orchestartor| A
+    G -->|Notify Orchestartor| A
+
+style A fill:#cef, stroke:#333, stroke-width:2px;
+style B fill:#cef, stroke:#333, stroke-width:2px;
+style C fill:#cef, stroke:#333, stroke-width:2px;
+style D fill:#cef, stroke:#333, stroke-width:2px;
+style E fill:#cef, stroke:#333, stroke-width:2px;
+style F fill:#cef, stroke:#333, stroke-width:2px;
+style G fill:#cef, stroke:#333, stroke-width:2px;
 ```
 Saga design pattern is a way to manage data consistency across microservices in distributed transaction scenarios.  Saga is a sequence of transactions that updates each service and publishes a message or event to trigger the next transaction step. If a step fails, the saga executes compensating transactions that counteract the preceding transaction.
 
