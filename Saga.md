@@ -119,8 +119,6 @@ The 2PC could be alternative to SAGA pattern. The Two-Phase Commit protocol (2PC
 1. Best way to handle distributed transactions across the microservices.
 2.  Makes transaction management in a loosely coupled, message-driven.
 
-```mermaid
-
 microservice/
 |-- department-service/
 |   |-- src/main/java/com/example/orders/
@@ -151,8 +149,6 @@ microservice/
 |-- k8s/
 |   |-- deployment.yaml
 |   |-- service.yaml
-
-```
 
 ```mermaid
 graph TD
