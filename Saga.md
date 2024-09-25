@@ -496,3 +496,19 @@ To implement these patterns in Spring Boot, consider the following steps:
 ### Conclusion
 
 This overview provides a foundational understanding of implementing Saga orchestration, choreography, and event-driven architectures in Spring Boot microservices. You can adjust these patterns based on your specific requirements and system design. If you need more detailed code examples or further assistance, feel free to ask!
+
+```mermaid
+
+graph TD;
+    A[Eureka Service] -->|registers| B[Department Service]
+    A -->|registers| C[Employee Service]
+    A -->|registers| D[API Gateway]
+    D -->|calls| B
+    D -->|calls| C
+    B -->|uses| E[Config Server]
+    C -->|uses| E
+    D -->|uses| F[Hystrix Dashboard]
+    B -->|traced by| G[Zipkin]
+    C -->|traced by| G
+    D -->|traced by| G
+```
