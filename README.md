@@ -109,6 +109,394 @@ Hide/Show table of contents
 - [Composition](#composition)
 - [Association](#association)
 - [Aggregation](#aggregation)
+
+
+### Java Object-Oriented Programming Cheat Sheet
+
+Java is an Object-Oriented language as it is modeled and organized around objects rather than actions; and data rather than logic. It simplifies software development and maintenance by providing some very intriguing features. Object-Oriented Programming in Java aims to implement real-world entities such as objects, classes, abstraction, inheritance, polymorphism, and many more.
+
+#### Classes & Objects
+- **Class**: A class in Java is a blueprint which includes all your data. A class contains fields (variables) and methods to describe the behavior of an object.
+
+  ```java
+  class Test {
+      // member variables  // class body
+      // methods
+  }
+  ```
+
+- **Object**: An object is a major element in a class which has a state and behavior. It is an instance of a class which can access your data. The ‘new’ keyword is used to create the object.
+  An instance of a class created using the `new` keyword.
+  
+  ```java
+  //Declaring and Initializing an object
+  Test t = new Test();
+  ```
+
+#### Constructors
+
+A constructor is a block of code that initializes a newly created object. It is similar to a method in Java but doesn’t have any return type and its name is the same as the class name. There are 3 types of constructors:
+
+- Default Constructor (No-Argument Constructor)
+- Parameterized Constructor
+
+- **Default Constructor**: This constructor is created by default by the java compiler at the time of class creation if no other constructor is declared in the class. Sometimes its also called no-argument constructor as it doesn’t contain any parameters.
+
+No parameters, created by the compiler if none are defined.
+
+  ```java
+  class Test {
+      public Test() { }
+  }
+  ```
+- **Parameterized Constructor**: This constructor is called parameterized as it contains one or more parameters. It is used to provide different values to the distinct objects at the time of their creation.
+
+Accepts parameters to initialize objects.
+
+  ```java
+  public class Test {
+      int appId; 
+      String appName;  
+      Test(int id, String name) {
+          this.appId = id;
+          this.appName = name; 
+      }
+  }
+  ```
+  ```
+  public class Test {
+   int appId; 
+   String appName;  
+   //parameterized constructor with two parameters
+   Test(int id, String name) {
+      this.appId = id;
+      this.appName = name; 
+  } 
+  void info() {
+   System.out.println("Id: "+appId+" Name: "+appName);
+  }
+  public static void main(String args[]){ 
+   Test obj1 = new Test(11001,"Facebook"); 
+   Test obj2 = new Test(23003,"Instagram"); 
+   obj1.info(); 
+   obj2.info(); 
+   }
+  }
+```
+
+#### Modifiers
+
+- **Access Modifiers**: Java access modifiers specify the scope of accessibility of a data member, method, constructor or class.
+                        Control visibility (e.g., `public`, `private`, `protected`).
+- **Non-Access Modifiers**: The non-access modifiers in Java, do not change the accessibility of variables and methods rather they provide special properties.
+                            These modifiers can alter the behavior of elements as well.
+                            Provide additional properties (e.g., `static`, `final`, `abstract`).
+
+#### Inheritance
+
+Inheritance is the property of a child/derived/subclass which allows it to inherit the properties(data members) and functionalities(methods) from its parent/base/superclass.
+
+All objects have the Object class as their top parent.
+Methods can be overridden but attributes can not.
+To call a parent class constructor, super() is used.
+Java supports 5 types of inheritance:
+
+- **Types**:
+  - **Single**: One parent. A class inherits the properties of a single parent class.
+  - **Multi-Level**: Chain of classes. In multi-level inheritance, one class has more than one parent class but at different levels of inheritance
+  - **Hierarchical**: One parent, multiple children. In hierarchical inheritance, one parent can have one or more child/sub/derived classes.
+  - **Hybrid**: Combination of types. Hybrid Inheritance is the combination of more than one type of inheritance in a single program, for example, you can combine a multilevel inheritance with a hierarchical inheritance.
+  - **Multiple**: Not supported directly (use interfaces). Multiple inheritance is not supported in Java as it leads to the diamond problem. The diamond problem is an ambiguity where the compiler doesn’t know which superclass method to execute in case the superclasses has a method with the same name.
+ 
+```java
+class A { }
+class B extends A { }
+class C extends B { }  // Multi-level
+```
+** But multiple inheritance in Java can be achieved using interfaces.
+
+#### Polymorphism
+
+Polymorphism is the ability of a variable, function or an object to take multiple forms. It allows you to define one interface or method and have multiple implementations. There are two types of polymorphism in Java.
+
+- **Compile-Time**: Achieved via method overloading. Also called static binding, as the type of the object is determined at the compile time by the compiler itself.
+
+  Example: Method Overloading
+  
+  ```java
+  class Calculator {
+      static int add(int a, int b) { return a + b; }
+      static double add(double a, double b) { return a + b; }
+  }
+  ```
+
+  ```java
+  class Calculator {
+    static int add(int a, int b){
+      return a+b;
+    }
+    static double add( double a, double b){
+      return a+b;
+    }
+    public static void main(String args[]){
+      System.out.println(Calculator.add(123,17));
+      System.out.println(Calculator.add(18.3,1.9));
+    }
+  }
+```
+- **Runtime**: Achieved via method overriding. Also called dynamic binding as the overridden method is resolved at runtime rather than compile-time. In this, a reference variable is used to call an overridden method of a superclass at run time. Example: Method Overriding.
+
+  ```java
+  class Mobile {
+      void sms() { System.out.println("Mobile class"); }
+  }
+  class OnePlus extends Mobile {
+      void sms() { System.out.println("OnePlus class"); }
+  }
+  ```
+  ```java
+    public class Mobile{
+      void sms(){
+        System.out.println("Mobile class");
+      }
+    }
+    //Extending the Mobile class
+    public class OnePlus extends Mobile{
+      //Overriding sms() of Mobile class
+      void sms(){
+      System.out.println(" OnePlus class");
+    }
+    public static void main(String[] args)
+    {
+      OnePlus smsObj= new OnePlus();
+      smsObj.sms();
+    }
+  }
+ ```
+
+#### Abstraction
+- **Abstract Class**: Can have abstract and non-abstract methods.
+
+- Ways To Achieve Abstraction
+Abstraction is the process of hiding the details and showing only the necessary things to the user. You can achieve abstraction in two ways in Java:
+
+Using Abstract Class (0–100%)
+Using Interface (100%)
+
+  ```java
+  public abstract class MyAbstractClass {
+      public abstract void abstractMethod();
+  }
+  ```
+**Abstract Class** is a class which is declared with an abstract keyword and cannot be instantiated. Few pointers to create an abstract class:
+
+- It can contain abstract and non-abstract methods.
+- It can contain constructors and static methods as well.
+- It can contain final methods which force the subclass not to change the body of the method.
+
+- **Interface**: Contains abstract methods; classes implement interfaces.
+
+An interface in java is a blueprint of a class that contains static constants and abstract methods. It represents the IS-A relation. You need to implement an interface to use its methods or constants.
+  
+  ```java
+  public interface Bike {
+      void start();
+  }
+  ```
+
+  ```java
+
+  //Creating an Interface
+  public interface Bike { public void start(); }
+  //Creating classes to implement Bike interface
+  class Honda implements Bike{
+    public void start() { System.out.println("Honda Bike"); }
+  }
+  class Apache implements Bike{
+    public void start() { System.out.println("Apache Bike"); }
+  }
+  class Rider{
+    public static void main(String args[]){ 
+      Bike b1=new Honda(); 
+      b1.start();
+      Bike b2=new Apache();
+      b2.start(); 
+    }
+  }
+  ```
+
+#### Encapsulation
+- **Encapsulation**: Bundles data and methods. Encapsulation is a process of binding your data and code together as a single unit using getter and setter methods.
+  - Use `private` fields and public getter/setter methods.
+
+You need to perform two steps to achieve encapsulation:
+
+Declare the variables of a class as private.
+Provide public setter and getter methods to modify and view the values of the variables.
+
+  ```java
+  public class Artist {
+      private String name;
+      public String getName() { return name; }
+      public void setName(String name) { this.name = name; }
+  }
+  ```
+
+  ```java
+  public class Artist {
+    private String name;
+    //getter method
+    public String getName() { return name; }
+    //setter method
+    public void setName(String name) { this.name = name; }
+  }
+  public class Show{
+    public static void main(String[] args){
+    //creating instance of the encapsulated class
+    Artist s=new Artist(); 
+    //setting value in the name member 
+    s.setName("V"); 
+    //getting value of the name member 
+    System.out.println(s.getName()); 
+    }
+}
+  ```
+
+#### Association, Aggregation, and Composition
+
+- **Association**: Relationship between classes (e.g., one-to-one, one-to-many).
+  
+**Association** is the relation between two different classes that is established via their objects. Association can be in many forms:
+
+- One-to-One
+- One-to-Many
+- Many-to-One
+- Many-to-Many.
+
+- **Aggregation**: A "has-a" relationship; both entities can exist independently.
+
+**Aggregation** is a special form of Association which represents the Has-A relationship. It is an uni-directional Association where both the entries can survive individually.
+
+- **Composition**: A strong "part-of" relationship; the part cannot exist without the whole.
+
+**Composition** is a more restrictive form of aggregation that makes two entities highly dependent on each other. It represents the part-of relationship where the composed object cannot exist without the other entity.
+
+### Key Concepts
+- **Inheritance** allows reusability and the creation of hierarchical relationships.
+- **Polymorphism** enables flexibility and dynamic method resolution.
+- **Abstraction** simplifies code by hiding complexity.
+- **Encapsulation** protects data and maintains integrity.
+
+  Here are the answers and explanations for each code snippet you've provided:
+
+1. **Output:**
+   ```java
+   String s1 = "Hello";
+   String s2 = "Hello";
+   System.out.println(s1 == s2);
+   ```
+   **Answer:** a) true  
+   **Explanation:** Both `s1` and `s2` reference the same object in the String pool.
+
+2. **Output:**
+   ```java
+   int x = 10;
+   if (x == 10) {
+       int y = 20;
+       System.out.println(y);
+   }
+   System.out.println(y);
+   ```
+   **Answer:** b) 20, error  
+   **Explanation:** `y` is declared within the `if` block and cannot be accessed outside of it.
+
+3. **Output:**
+   ```java
+   int x = 5;
+   System.out.println(x++ + ++x);
+   ```
+   **Answer:** c) 12  
+   **Explanation:** The calculation is `5 (x++) + 7 (++x)` = 12.
+
+4. **Output:**
+   ```java
+   int[] arr = {1, 2, 3};
+   for (int i = 0; i < arr.length; i++) {
+       System.out.print(arr[i] + " ");
+       arr[i] = 0;
+   }
+   System.out.println();
+   for (int i : arr) {
+       System.out.print(i + " ");
+   }
+   ```
+   **Answer:** a) 1 2 3, 0 0 0  
+   **Explanation:** The first loop prints original values before changing them to 0, while the second loop prints the modified array.
+
+5. **Output:**
+   ```java
+   int x = 10;
+   switch (x) {
+       case 10:
+           System.out.println("x is 10");
+           break;
+       case 20:
+           System.out.println("x is 20");
+           break;
+       default:
+           System.out.println("x is neither 10 nor 20");
+           break;
+   }
+   ```
+   **Answer:** a) x is 10  
+   **Explanation:** The value of `x` matches the first case.
+
+6. **Output:**
+   ```java
+   int x = 5;
+   int y = ++x + x++ + --x - x--;
+   System.out.println(y);
+   ```
+   **Answer:** b) 10  
+   **Explanation:** The operations evaluate to `6 (incremented) + 6 (post-incremented) + 5 (decremented) - 5 (post-decremented) = 10`.
+
+7. **Output:**
+   ```java
+   int x = 3;
+   int y = 4;
+   System.out.println("x + y = " + x + y);
+   ```
+   **Answer:** b) x + y = 34  
+   **Explanation:** The expression concatenates strings and integers, resulting in "x + y = 3" followed by "4", yielding "x + y = 34".
+
+8. **Output:**
+   ```java
+   int[] arr = {1, 2, 3, 4, 5};
+   System.out.println(arr[5]);
+   ```
+   **Answer:** c) An ArrayIndexOutOfBoundsException is thrown  
+   **Explanation:** Valid indices are 0-4; accessing index 5 is out of bounds.
+
+9. **Output:**
+   ```java
+   String s1 = "hello";
+   String s2 = new String("hello");
+   System.out.println(s1 == s2);
+   ```
+   **Answer:** b) false  
+   **Explanation:** `s1` and `s2` are different objects, so `==` compares references and returns false.
+
+10. **Output:**
+    ```java
+    for(int i=0; i<5; i++) {
+        if(i==3) {
+            continue;
+        }
+        System.out.print(i + " ");
+    }
+    ```
+    **Answer:** b) 0 1 2 4  
+    **Explanation:** The `continue` statement skips the iteration when `i` is 3, so 3 is not printed.
 </details>
 <details>
 <summary><b>1.2 Java Keywords</b></summary>
@@ -2035,9 +2423,6 @@ To be able to use the class in our code we need to import it:
 import static java.util.stream.Collectors.*;
 Stream.collect() performs a mutable reduction operation on the elements of the stream.
 
-ADVERTISEMENT
-
-
 A mutable reduction operation collects input elements into a mutable container, such as a Collection, as it processes the elements of the stream.
 
 Guide to Collectors.toMap()
@@ -2082,8 +2467,6 @@ For the keyMapper, we'd supply a function corresponding to the method that retur
 
 Map<String, Double> nameToAvgGrade = students.stream()
                 .collect(Collectors.toMap(Student::getName, Student::getAvgGrade));
-ADVERTISEMENT
-
 
 Note that Student::getName is just a Method Reference - a shorthand representation of the lambda expression student -> student.getName().
 
@@ -2116,11 +2499,6 @@ Even though this particular overload is the easiest to use it falls short on one
 
 Exception in thread "main" java.lang.IllegalStateException: Duplicate key John (attempted merging values 7.38 and 8.93)
 
-Free eBook: Git Essentials
-Check out our hands-on, practical guide to learning Git, with best-practices, industry-accepted standards, and included cheat sheet. Stop Googling Git commands and actually learn it!
-
-
-Download the eBook  
 The key is - the method tried merging these two values, and assigning the merged value to the unique key - "John" and failed. We may decide to supply a Merge Function that defines how this merge should be done if duplicate keys exist.
 
 If you want to get rid of duplicate keys, you can always just add a distinct() operation to the Stream before collecting it:
@@ -2156,7 +2534,6 @@ Map<String, Double> nameToAvgGrade  = students.stream()
                   (a, b) ->
                     { throw new IllegalStateException("Duplicate key");})
         );
-ADVERTISEMENT
 
 This will throw an exception when the code is run:
 
@@ -2193,9 +2570,7 @@ The mapSupplier function specifies the particular implementation of Map we want 
 
 This is usually perfectly fine, which is also why it's the default implementation. However, sometimes, the characteristics of a HashMap might not suit you. For instance, if you wanted to keep the original order of the elements from a stream or sort them through intermediate stream operations, a HashMap wouldn't preserve that order and bin the objects based on their hashes. Then - you might choose to use a LinkedHashMap to preserve the order instead.
 
-ADVERTISEMENT
-
-To supply a Supplier, you have to also supply a Merge Function:
+o supply a Supplier, you have to also supply a Merge Function:
 
 
 Map<String, Double> nameToAvgGrade  = students.stream()
@@ -2227,9 +2602,7 @@ Let's make a Stream of Strings with some duplicate values. These values are chec
 Stream<String> stream = Stream.of("john", "doe", "doe", "tom", "john");
 Now, let's make a Set to store the filtered items. We'll use the filter() method to filter out duplicate values and return them:
 
-ADVERTISEMENT
-
-Set<String> items = new HashSet<>();
+et<String> items = new HashSet<>();
 
 stream.filter(n -> !items.add(n))
         .collect(Collectors.toSet())
@@ -2256,7 +2629,7 @@ We haven't removed any elements, just counted their occurrences and stored them 
 Collectors.groupingBy(Function.identity(), Collectors.counting()) with Collectors.toList()
 The Collectors.groupingBy() method is used for grouping elements, based on some property, and returning them as a Map instance.
 
-ADVERTISEMENT
+
 
 In our case, the method receives two parameters - Function.identity(), that always returns its input arguments and Collectors.counting(), that counts the elements passed in the stream.
 
@@ -2291,11 +2664,6 @@ list.stream()
         .collect(Collectors.toSet())
         .forEach(System.out::println);
 
-Free eBook: Git Essentials
-Check out our hands-on, practical guide to learning Git, with best-practices, industry-accepted standards, and included cheat sheet. Stop Googling Git commands and actually learn it!
-
-
-Download the eBook  
 Here, we can either collect to a Set or to a List. If we collect to a list, it'll have all duplicate elements, so some may repeat. If we collect to a set, it'll have unique duplicate elements.
 
 This results in:
@@ -2321,7 +2689,7 @@ for (String distinctElement : distinctElementList) {
 Now, let's print out the results:
 
 list.forEach(System.out::print)
-ADVERTISEMENT
+
 These are the duplicate elements, with their respective occurrences:
 
 ABCAC
@@ -2367,7 +2735,7 @@ The optional class serves the purpose of representing whether a value is present
 
 Creation Methods: These methods are in charge of creating Optional objects according to the use case.
 Instance Methods: These methods operate on an existing Optional object, determining whether the value is present or not, retrieving the wrapper object, manipulating it, and finally returning the updated Optional object.
-ADVERTISEMENT
+
 map() and flatMap() can both be used with the Optional class, and because they were frequently used to wrap and unwrap nested optionals - they were added methods in the class itself as well.
 
 The signature of the map() function in Optional is:
@@ -2396,7 +2764,7 @@ We end up with:
 Optional[STACK ABUSE]
 flatMap() doesn't re-wrap the result in another Optional, so we're left with the original one. This same behavior can be used to unwrap optionals.
 
-ADVERTISEMENT
+
 Since simple examples like the one we've covered just now don't perfectly convey when this mechanism really makes or breaks a feature - let's create a small environment in which it does. The following example depicts a Research Management System, which well, keeps track of researchers in an institute.
 
 Given a mock service that fetches a researcher based on some researcherId - we're not guaranteed to have a result back, so each Researcher is wrapped as an optional. Additionally, their StudyArea might not be present for some reason (such as an area not being assigned yet if a researcher is new to the institute), so it's an optional value as well.
@@ -2439,11 +2807,7 @@ Optional<StudyArea> studyAreaOptional = optionalResearcher
         .flatMap(res -> Researcher.getResearchersStudyArea(res.getId()))
         .filter(studyArea -> studyArea.getTopic().equalsIgnoreCase("Machine Learning"));
 
-Free eBook: Git Essentials
-Check out our hands-on, practical guide to learning Git, with best-practices, industry-accepted standards, and included cheat sheet. Stop Googling Git commands and actually learn it!
 
-
-Download the eBook  
 Flow chart of Researcher data being transformed with the flatMap and filter functions
 This way - all three lines we've used to display information about the researcher work as intended!
 
@@ -2477,7 +2841,7 @@ List<String> websiteNamesList = Stream.of("Stack", "Abuse")
             .collect(Collectors.toList());
 
 System.out.println(websiteNamesList);
-ADVERTISEMENT
+
 This results in:
 
 [STACK, ABUSE]
@@ -2550,7 +2914,7 @@ public class ResearchService {
         return Arrays.asList(researcher1, researcher2);
     }
 }
-ADVERTISEMENT
+
 If we run the code snippet, even though there's only one list in the map - the entire map was flattened to a list of researchers, filtered out with a filter and the one researcher left is:
 
 Reham Muzzamil
@@ -2591,7 +2955,7 @@ Let's take a look at how easy it is to create instances of Optional and wrap obj
 
 We'll be using our custom class for this, the Spaceship class:
 
-ADVERTISEMENT
+
 public class Spaceship {
     private Engine engine;
     private String pilot;
@@ -2637,7 +3001,7 @@ Optional<Spaceship> optionalFalcon = Optional.ofNullable(falcon);
 empty()
 And finally, instead of wrapping an existing reference variable (null or non-null), we can create a null value in the context of an Optional. It's kind of like an empty container which returns an empty instance of Optional:
 
-ADVERTISEMENT
+
 Optional<Spaceship> emptyFalcon = Optional.empty();
 Checking for Values
 After creating Optionals and packing information in them, it's only natural that we'd want to access them.
@@ -2693,12 +3057,6 @@ Suppose now that we want to access the velocity monitor object and obtain the cu
 
 Obtaining the velocity might look something like this:
 
-
-Free eBook: Git Essentials
-Check out our hands-on, practical guide to learning Git, with best-practices, industry-accepted standards, and included cheat sheet. Stop Googling Git commands and actually learn it!
-
-
-Download the eBook  
 if (falcon != null) {
     Engine engine = falcon.getEngine();
     if (engine != null) {
@@ -2743,7 +3101,7 @@ Furthermore, having an Optional attribute instead of a regular object reflects t
 Example Explanation
 In this section, we'll take a bit of time to explain the previous example with flatMaps and maps. If you understand it without further explanation, please feel free to skip this section.
 
-ADVERTISEMENT
+
 The first method call is performed on falcon which is of type Optional<Spaceship>. Calling the getEngine method returns an object of type Optional<Engine>. Combining these two types, the type of the returned object becomes Optional<Optional<Engine>>.
 
 Since we would like to view this object as an Engine container and perform further calls on it, we need some kind of mechanism to "peel off" the outer Optional layer.
@@ -2782,7 +3140,7 @@ If maybeFalcon doesn't contain a value, both methods will return a new Spaceship
 
 In the first case, the new Spaceship object will not be returned but it will be created. This will happen regardless of whether or not the value exists. In the second case, the new Spaceship will be created only if maybeFalcon doesn't contain a value.
 
-ADVERTISEMENT
+
 It's similar to how do-while does the task regardless of the while loop, at least once.
 
 This might seem like a negligible difference but it becomes pretty important if creating spaceships is a demanding operation. In the first case, we're always creating a new object - even if it will never be used.
@@ -2842,7 +3200,7 @@ Stream.collect() performs a mutable reduction operation on the elements of the s
 
 A mutable reduction operation collects input elements into a mutable container, such as a Collection, as it processes the elements of the stream.
 
-ADVERTISEMENT
+
 
 Parallel computing (parallelism) refers to the process of dividing a problem into two or more subproblems, solving those problems simultaneously, in parallel, with each subproblem being computed on a separate thread, and then combining all of the solutions to the subproblems in one uniform result.
 
@@ -2892,7 +3250,7 @@ public static <T,K> Collector<T,?,ConcurrentMap<K,List<T>>>
     groupingByConcurrent(Function<? super T,? extends K> classifier)
 This method returns a Collector that groups the input elements of type T according to the classification function. The classification function maps elements to a key of type K. The collector itself produces a ConcurrentMap<K, List<T>> whose keys represent the values we get by applying the classification function on the input, and whose corresponding values are Lists containing the input elements which map to the associated key.
 
-ADVERTISEMENT
+
 
 This Collector is both concurrent and unordered. Being unordered, the collection operation doesn't preserve the order of the input by it's encounter. Being concurrent, the result container supports functions being called concurrently with the same result container from multiple threads.
 
@@ -2954,11 +3312,6 @@ With just two authors, running this piece of code results in:
 Total time for sequential process: 12ms
 Total time for parallel process: 26ms
 
-Free eBook: Git Essentials
-Check out our hands-on, practical guide to learning Git, with best-practices, industry-accepted standards, and included cheat sheet. Stop Googling Git commands and actually learn it!
-
-
-Download the eBook  
 While both processes took a really small amount of time to execute, considering the creation and grouping of 100k objects - the parallel process took significantly longer.
 
 If we were to expand our list with a few more authors:
@@ -3006,7 +3359,7 @@ public static <T,K,A,D> Collector<T,?,ConcurrentMap<K,D>>
                          Collector<? super T,A,D> downstream)
 This method returns a Collector that groups the input elements of type T according to the classification function, afterwards applying a reduction operation on the values associated with a given key using the specified downstream Collector.
 
-ADVERTISEMENT
+
 
 The reduction operation "reduces" the data we've collected by applying an operation that's useful in a specific situation.
 
@@ -3049,7 +3402,7 @@ The third and last overload of this method takes three arguments. The first and 
 
 The supplier method provides the specific ConcurrentMap implementation we want to use to contain our end result. We have two known classes that implement this interface - ConcurrentHashMap and ConcurrentSkipListMap:
 
-ADVERTISEMENT
+
 
 public static <T,K,A,D,M extends ConcurrentMap<K,D>> Collector<T,?,M> 
     groupingByConcurrent(Function<? super T,? extends K> classifier,
@@ -3087,7 +3440,7 @@ The mathematical operation of finding an arithmetic mean is one we use fairly fr
 
 We'll be doing exactly that in this guide - we'll take a look at how to get a mean/average value for different numerical types within Java through built-in methods within the Collectors class.
 
-ADVERTISEMENT
+
 
 Note: It's worth noting that you can average the elements themselves, if they're numerical, or reduce them to a numerical representation and then average the reductions, if they aren't.
 
@@ -3121,7 +3474,7 @@ public static <T> Collector<T,?,Double> averagingLong(ToLongFunction<? super T> 
 
 Note: The generic T in the method signatures represents the type of the input elements we're working with.
 
-ADVERTISEMENT
+
 The ToIntFunction, ToDoubleFunction and ToLongFunction from java.util.function enable us to perform conversions (reductions) from object types to their primitive int, double or long fields. Let's define a Student class that we can reduce to a numerical field:
 
 public class Student {
@@ -3154,12 +3507,6 @@ Double average = numbers.stream().collect(Collectors.averagingInt(Integer::intVa
 System.out.println(average);
 We apply the .stream() method to create a stream of Integer objects, after which we use the previously discussed .collect() method to collect the stream with the averagingInt() collector.
 
-
-Free eBook: Git Essentials
-Check out our hands-on, practical guide to learning Git, with best-practices, industry-accepted standards, and included cheat sheet. Stop Googling Git commands and actually learn it!
-
-
-Download the eBook  
 Since the values are already integers, get the intValue through a method reference, effectively performing a 1-to-1 mapping as our ToIntFunction, as there's no conversion required:
 
 3.0
@@ -3179,7 +3526,7 @@ The Collectors.averagingDouble() differs a tiny bit from averagingInt() given th
 
 If any value is NaN or the sum at any point is NaN - the mean will also be NaN. Additionally, the double format can be represented with all consecutive integers in the range from -253 to 253.
 
-ADVERTISEMENT
+
 Let's calculate the average value of a list of doubles:
 
 List<Double> numbers = Arrays.asList(3.0, 8.0, 4.0, 11.0);
@@ -3200,7 +3547,7 @@ The last of the averaging methods is Collectors.averagingLong(). This method as 
 
 As with the previous two, we can easily average a list of long values:
 
-ADVERTISEMENT
+
 List<Long> numbers = Arrays.asList(10L, 15L, 1L, 3L, 7L);
 Double average = numbers.stream().collect(Collectors.averagingDouble(Long::longValue));
 System.out.println(average);
@@ -3238,7 +3585,7 @@ In general, any Stream can be filtered via the filter() method, and a given pred
 Stream<T> filter(Predicate<? super T> predicate)
 Each element in the stream is run against the predicate, and is added to the output stream if the predicate returns true. You can supply a Predicate instance:
 
-ADVERTISEMENT
+
 Predicate<String> contains = s -> s.contains("_deprecated");
 List<String> results = stream.filter(contains).collect(Collectors.toList());
 Or, simplify it by providing a Lambda Expression:
@@ -3261,7 +3608,7 @@ filter() is an intermediate operation, and is meant to be chained with other int
 
 Note: Even when chaining many lambda expressions, you might not run into readability issues, with proper line breaks.
 
-ADVERTISEMENT
+
 In the following examples, we'll be working with this list of books:
 
 Book book1 = new Book("001", "Our Mathematical Universe", "Max Tegmark", 432, 2014);
@@ -3304,11 +3651,6 @@ Commonly, we'd like to filter collections by more than one criteria. This can be
                     .filter(b -> b.getName().length() > 10)
                     .collect(Collectors.toList());
 
-Free eBook: Git Essentials
-Check out our hands-on, practical guide to learning Git, with best-practices, industry-accepted standards, and included cheat sheet. Stop Googling Git commands and actually learn it!
-
-
-Download the eBook  
 When utilizing multiple criteria - the lambda calls can get somewhat lengthy. At this point, extracting them as standalone predicates might offer more clarity. Though, which approach is faster?
 
 Single Filter with Complex Condition or Multiple Filters?
@@ -3339,7 +3681,7 @@ Operations on streams can be either intermediate or terminal:
 
 Intermediate operations on streams return a stream. This is why we can chain multiple intermediate operations without using semicolons. Intermediate operations include the following methods:
 
-ADVERTISEMENT
+
 map(op) - Returns a new stream in which the provided op function is applied to each of the elements in the original stream
 filter(cond) - Returns a new stream which only contains the elements from the original stream that satisfy the condition cond, specified by a predicate
 sorted() - Returns the original stream, but with the elements being sorted
@@ -3367,7 +3709,7 @@ Since map() returns a Stream again, we've used the forEach() method to print eac
 
 Running this code results in:
 
-ADVERTISEMENT
+
 Number 1 as a java.lang.String
 Number 2 as a java.lang.String
 Number 3 as a java.lang.String
@@ -3419,11 +3761,6 @@ public class Point {
 Then, say we want to scale a certain shape by a factor of 2, this means we have to take all the points we have, and double both their X and Y values. This can be done by mapping the original values to their scaled counterparts.
 
 
-Free eBook: Git Essentials
-Check out our hands-on, practical guide to learning Git, with best-practices, industry-accepted standards, and included cheat sheet. Stop Googling Git commands and actually learn it!
-
-
-Download the eBook  
 Then, since we'd like to use the new coordinates, we'll collect this data into a new list of scaled points:
 
 List<Point> originalPoints = Arrays.asList(new Point(1, 2),
@@ -3475,7 +3812,7 @@ This function accepts a String and returns an IntStream - as indicated by the ty
 
 Note: You can represent char values using int values. Thus, when you create a stream of primitive char values, the primitive stream version of int values (IntStream) is preferable.
 
-ADVERTISEMENT
+
 
 Now, we can take this stream and convert the integer values into Character objects. To convert a primitive value to an object - we use the mapToObj() method:
 
@@ -3532,7 +3869,7 @@ The lambda-bodied Function we've used earlier:
 Function<IntStream, Stream<Character>> charF = s -> s.mapToObj(val -> (char) val);
 Is equivalent to:
 
-ADVERTISEMENT
+
 Function charF = new Function<IntStream, Stream<Character>>(){
     @Override
     public Stream<Character> apply(IntStream s){
@@ -3621,11 +3958,6 @@ public class PascalsTriangle {
 Now, let's generate a 10-row triangle and print the contents:
 
 
-Free eBook: Git Essentials
-Check out our hands-on, practical guide to learning Git, with best-practices, industry-accepted standards, and included cheat sheet. Stop Googling Git commands and actually learn it!
-
-
-Download the eBook  
 PascalsTriangle pt = new PascalsTriangle(10);
 List<List<Integer>> vals = pt.generate();
 vals.stream().forEach(System.out::println);
@@ -3691,7 +4023,7 @@ Say, you have a stream of numbers:
 Stream<Integer> numbers = Stream.of(1, 2, 3, 4, 5, 6);
 And you want to expand that stream in such a way that every number is duplicated. This is, surprisingly enough, dead simple:
 
-ADVERTISEMENT
+
 Stream<Integer> duplicatedNumbers = numbers.flatMap(val -> Stream.of(val, val));
 duplicatedNumbers.forEach(System.out::print);
 Here, we flat-mapped the Streams created by each element in the numbers stream, in such a way to contain (val, val). That's it! When we run this code, it results in:
@@ -3800,7 +4132,7 @@ public String getAlbumCoverDesigner(){
 }
 Yet, code-wise, you are bound to encounter errors if the said Musician has not even released an Album in the first place - a NullPointerException.
 
-ADVERTISEMENT
+
 Naturally, you can mark these as Optional as they are, in fact optional fields:
 
 public class Musician {
