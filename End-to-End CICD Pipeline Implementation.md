@@ -1,8 +1,3 @@
-https://blog.devops.dev/building-an-end-to-end-ci-cd-pipeline-with-jenkins-7ef2205d7988
-# End-to-End CI/CD Pipeline Implementation
-
-![Desktop Screenshot](images/cicd-1.PNG)
-
 Here’s a complete flow and architecture diagram using Mermaid syntax for setting up an end-to-end Jenkins pipeline for a Java application utilizing SonarQube, Argo CD, Helm, and Kubernetes.
 
 It seems like you encountered an error related to unsupported Markdown syntax. Let's break it down into clear sections without relying on unsupported formatting.
@@ -228,17 +223,22 @@ graph TD;
 
 This diagram and explanation provide a comprehensive overview of the CI/CD pipeline setup for a Java application using Jenkins, SonarQube, Argo CD, Helm, and Kubernetes. If you have any specific questions or need further details, feel free to ask!
 
-Introduction
+
+# End-to-End CI/CD Pipeline Implementation
+
+![Desktop Screenshot](images/cicd-1.PNG)
+
+## 1. Introduction
 Continuous Integration and Continuous Delivery (CI/CD) are crucial in modern software development, facilitating automated code integration and reliable application delivery.
 
 Jenkins, known for its flexibility and extensive plugin options, is a leading tool for creating CI/CD pipelines.
 
 This blog post will guide you through the complete setup of a CI/CD pipeline using Jenkins. We will cover everything from configuring Jenkins and integrating it with version control systems to orchestrating builds, tests, and deployments. We aim to enhance your software delivery process.
 
-Tools and Technologies Used
+### Tools and Technologies Used
 We will be utilizing a variety of technologies and tools in this guide, including:
 
-GitHub for version control
+### GitHub for version control
 Maven for project management and builds
 SonarQube for code quality analysis
 Docker for containerization
@@ -247,20 +247,20 @@ ArgoCD and Helm for Kubernetes deployment management
 Kubernetes for orchestrating containers
 Feel free to connect with me on LinkedIn to discuss this post, or ask any questions.
 
-Setting up Git
+### Setting up Git
 To establish a foundation for your Jenkins pipeline with a Java application, you’ll start by configuring Git:
 
-Create a Private Git Repository:
+### Create a Private Git Repository:
 Visit your preferred Git hosting platform (e.g., GitHub, GitLab).
 Log in to your account or sign up if you do not have one.
 Create a new repository. Make sure to set its visibility to private to protect your code.
-2. Generate a Personal Access Token:
+## 2. Generate a Personal Access Token:
 
 Navigate to your account settings, often found under your profile or in the dropdown menu.
 Look for a section labeled “Developer settings” or “Personal access tokens.”
 Generate a new token and assign the necessary permissions, such as ‘repo’ to access repositories.
 Copy and save this token securely; you will need it later to configure access within your Jenkins pipeline.
-3. Clone the Repository Locally:
+## 3. Clone the Repository Locally:
 
 Find the Source Code here.
 Open Git Bash or your terminal.
@@ -271,54 +271,54 @@ git clone <URL>
 
 ![Desktop Screenshot](images/cicd-2.PNG)
 
-Create an EC2 Instance
+### Create an EC2 Instance
 Note that this step can also be automated using Terraform, but for the sake of simplicity, we will do it manually here.
 
-Sign in to the AWS Management Console:
+### 1. Sign in to the AWS Management Console:
 Access the AWS Management Console
 Log in using your AWS account credentials. If you do not have an account, you will need to create one.
-2. Navigate to the EC2 Dashboard:
+### 2. Navigate to the EC2 Dashboard:
 
 Once logged in, find the “Services” menu at the top of the console.
 Click on “EC2” under the “Compute” section to go to the EC2 Dashboard.
-3. Launch Instance:
+### 3. Launch Instance:
 
 Click on the “Launch Instances” button. This will start the process of creating a new EC2 instance.
-4. Add Tags:
+### 4. Add Tags:
 
 Add tags and names to your instance for better organization and management.
-5. Choose an Amazon Machine Image (AMI):
+### 5. Choose an Amazon Machine Image (AMI):
 
 You’ll be presented with a list of AMIs, which are pre-configured server templates. These can include different operating systems and setups.
 Choose an AMI that suits your requirements. For beginners, an Amazon Linux AMI or a basic Ubuntu Server might be the easiest option.
-6. Choose an Instance Type:
+### 6. Choose an Instance Type:
 
 Select the instance type that fits your requirements.
 The default option (usually a t2.micro instance) is suitable for testing and small workloads and is eligible for the free tier.
 I selected the t2.large instance, which offers 2 vCPUs and 8 GiB of memory, suitable for handling moderate workloads.
 Please note that utilizing this instance type will incur charges, so it's important to review the current pricing details on AWS to manage your budget effectively.
-7. Create a Key Pair:
+### 7. Create a Key Pair:
 
 Create a key pair or use an existing one. This key pair is crucial for SSH access to your instance.
 Download the private key file (.pem file) and keep it secure. You cannot download it again after it is created.
-8. Configure Instance Details:
+### 8. Configure Instance Details:
 
 Optionally, configure instance details such as network settings, subnets, IAM role, etc. You can leave these settings as default for now.
-9. Configure Security Group:
+### 9. Configure Security Group:
 
 A security group acts as a virtual firewall that controls the traffic allowed to and from your instance.
 You can either create a new security group or select an existing one. Make sure to open inbound ports like SSH (port 22), Custom TCP (8080), and Custom TCP (9000).
-10. Add Storage:
+### 10. Add Storage:
 
 Specify the size of the root volume (default is usually fine for testing purposes).
-11. Review and Launch:
+### 11. Review and Launch:
 
 Review your instance setup. Check the AMI details, instance type, security groups, and key pairs.
 Click on “Launch” to proceed.
 
 ![Desktop Screenshot](images/cicd-3.PNG)
 
-Access Your Instance
+### Access Your Instance
 Once the instance is launched, it will take a few minutes to initialize.
 
 You can then connect to your instance using SSH with the downloaded .pem file.
@@ -334,7 +334,7 @@ Click “OK” to connect.
 
 ![Desktop Screenshot](images/cicd-4.PNG)
 
-Setting up Jenkins
+### Setting up Jenkins
 Install Java:
 
 Before you can run Jenkins, it’s essential to have Java installed on the server. Jenkins is compatible with both OpenJDK and Oracle Java, though it generally performs best with OpenJDK.
@@ -373,13 +373,13 @@ Make the file executable using the following command:
 chmod +x install_jenkins.sh 
 Now that your script is executable, you can run it to install Jenkins:
 ./install_jenkins.sh
-Adjust Firewall Settings:
+### Adjust Firewall Settings:
 
 To ensure that you can access Jenkins via a web browser, it’s crucial to configure your firewall settings properly.
 
 Jenkins runs on port 8080 by default. Hence, ensure your security group settings allow inbound traffic on this port.
 
-Accessing Jenkins UI:
+### Accessing Jenkins UI:
 
 To access the Jenkins UI, open a web browser and type in the IP address of your instance followed by:8080 (e.g., http://192.168.1.2:8080). Replace 192.168.1.2 with the actual IP address of your server.
 
@@ -389,21 +389,21 @@ sudo cat /var/lib/jenkins/secrets/initialAdminPassword
 
 ![Desktop Screenshot](images/cicd-5.PNG)
 
-Install Suggested Plugins:
+### Install Suggested Plugins:
 
 Once Jenkins is unlocked, you will be presented with the option to install suggested plugins or to select specific plugins manually.
 Click Install suggested plugins to automatically install a standard set of plugins, which is recommended for most users.
 
 ![Desktop Screenshot](images/cicd-6.PNG)
 
-Create Your Admin User:
+### Create Your Admin User:
 
 After plugin installation, you will be prompted to create an admin user for Jenkins.
 Fill out the form with the username, password, full name, and email address. Click “Save and Continue”.
 
 ![Desktop Screenshot](images/cicd-7.PNG)
 
-Jenkins Ready:
+### Jenkins Ready:
 
 Jenkins will ask you to configure the URL for your Jenkins instance.
 The default URL (based on your server’s IP and port) will be filled in.
@@ -411,7 +411,7 @@ Click “Start using Jenkins” to complete the setup and be taken to the Jenkin
 
 ![Desktop Screenshot](images/cicd-8.PNG)
 
-Install Necessary Plugins:
+### Install Necessary Plugins:
 
 Open Jenkins Dashboard: Log in to your Jenkins interface.
 Navigate to “Manage Jenkins > Plugins”.
@@ -419,13 +419,13 @@ Install Plugins: Look for the “docker pipeline” and “sonarqube scanner” 
 
 ![Desktop Screenshot](images/cicd-9.PNG)
 
-Compile Job
+### Compile Job
 From the Jenkins main dashboard, click on “New Item”.
 Name your pipeline and select ‘Pipeline’ as the type of project, then click ‘OK’.
 
 ![Desktop Screenshot](images/cicd-10.PNG)
 
-Configure Your Pipeline:
+### Configure Your Pipeline:
 
 Click on the created job and scroll down to the “Pipeline” section in the configuration screen.
 Choose “Pipeline script” or “Pipeline script from SCM”.
@@ -441,7 +441,7 @@ If your Jenkinsfile is located in a subdirectory or named differently, specify t
 
 ![Desktop Screenshot](images/cicd-12.PNG)
 
-Restart Jenkins:
+### Restart Jenkins:
 
 Restart Jenkins to apply configuration changes or updates effectively.
 To do so, navigate to the Jenkins “dashboard” and click on ‘Manage Jenkins’ in the sidebar.
@@ -449,12 +449,12 @@ From there, select “Reload Configuration from Disk’” or “Restart Safely�
 
 ![Desktop Screenshot](images/cicd-13.PNG)
 
-Set up Sonarqube Server
+### Set up Sonarqube Server
 Installing SonarQube as a Docker container is a popular option that simplifies the setup process and makes it easier to manage and scale.
 
 Prerequisites: Ensure Docker is installed on your server. If not, you can download and install Docker from the official Docker website.
 
-Docker Installation:
+### Docker Installation:
 
 Create a script file using ‘vim’ or any other editor of your choice.
 vim install_docker.sh
@@ -490,7 +490,7 @@ Make the file executable using the following command:
 chmod +x install_docker.sh
 Now that your script is executable, you can run it to install Docker:
 ./install_docker.sh
-Install Sonarqube:
+### Install Sonarqube:
 
 Pull the official SonarQube Docker image from Docker Hub:
 docker pull sonarqube
@@ -508,7 +508,7 @@ However, it’s recommended to change these default credentials after the initia
 
 ![Desktop Screenshot](images/cicd-14.PNG)
 
-Integrate with Jenkins:
+### Integrate with Jenkins:
 
 Install the SonarQube Scanner for the Jenkins plugin.
 Log in to your SonarQube dashboard.
@@ -520,7 +520,7 @@ Copy the generated token.
 
 ![Desktop Screenshot](images/cicd-16.PNG)
 
-Add SonarQube Token as Credential in Jenkins:
+### Add SonarQube Token as Credential in Jenkins:
 
 In Jenkins, go to “Manage Jenkins” >“Credentials” > “System” > “Global credentials” (or navigate to your project’s credentials).
 Click “Add Credentials”.
@@ -533,7 +533,7 @@ Click “Create” to save the credential.
 
 ![Desktop Screenshot](images/cicd-18.PNG)
 
-Configure Jenkins SonarQube Scanner:
+### Configure Jenkins SonarQube Scanner:
 
 In your Jenkins job configuration, find the section for SonarQube analysis or whatever you have named it.
 Provide the SonarQube server URL (e.g.,http://<your_instance_ip>:9000, replacing <your_instance_ip> with your server's IP address).
@@ -545,14 +545,14 @@ This includes credentials for SonarQube authentication, Docker Hub access, and G
 
 ![Desktop Screenshot](images/cicd-19.PNG)
 
-Jenkinsfile
+### Jenkinsfile
 A Jenkinsfile is a text file that defines the configuration of a Jenkins pipeline. It is written in Groovy, a scripting language for the Java platform.
 
 The Jenkinsfile specifies the steps, stages, and actions that Jenkins should execute when running a pipeline job.
 
 Some parts of the Jenkins file will require you to replace them with your credentials and details so be on the look out for this.
 
-Pipeline Stages:
+### Pipeline Stages:
 
 Stage1: Checkout the source code from Git.
 
@@ -651,12 +651,12 @@ SonarQube will contain the report of the pipeline execution.
 
 ![Desktop Screenshot](images/cicd-21.PNG)
 
-Set Up ArgoCD
+### Set Up ArgoCD
 ArgoCD manages the continuous deployment segment of CI/CD pipelines, automating deployments to Kubernetes.
 
 You can either have local deployment using Minikube or Cloud Deployment using Amazon EKS.
 
-Prerequisites:
+### Prerequisites:
 
 Ensure VirtualBox or Hyper-V is installed on your Windows machine for virtualization, as required by Minikube.
 Install Minikube:
@@ -664,7 +664,7 @@ Install Minikube:
 Download and install Minikube following the instructions specific to your OS from the Minikube official documentation.
 Start your local Kubernetes cluster.
 minikube start
-Install Kubectl:
+### Install Kubectl:
 
 Download the latest version of kubectl from the official Kubernetes release page.
 Add kubectl to your PATH to run it from anywhere in your command prompt.
@@ -673,7 +673,7 @@ You can install Argo CD on Kubernetes using the Argo CD Operator which automates
 
 Go to the official Operator Hub page at OperatorHub.io.
 Use the search bar on the Operator Hub website to search for “Argo CD” and click “Install”.
-Run the Commands the following commands:
+### Run the Commands the following commands:
 #Install Operator Lifecycle Manager (OLM), a tool to help manage the Operators running on your cluster.
 
 $ curl -sL https://github.com/operator-framework/operator-lifecycle-manager/releases/download/v0.27.0/install.sh | bash -s v0.27.0
@@ -688,7 +688,7 @@ $ kubectl get csv -n operators
 
 ![Desktop Screenshot](images/cicd-23.PNG)
 
-Set Up ArgoCD Controller
+### Set Up ArgoCD Controller
 Navigate to OperatorHub.io.
 In the “Argo CD” Operator scroll down to “Operator Documentation”.
 Click on “Usage” and then “Basics”.
@@ -711,7 +711,7 @@ kubectl apply -f argocd-basic.yml
 
 ![Desktop Screenshot](images/cicd-26.PNG)
 
-Set Up ArgoCD UI
+### Set Up ArgoCD UI
 To access the Argo CD server UI via the browser, you need to change the service type from ‘ClusterIP’ to ‘NodePort’.
 kubectl get svc
 Minikube can generate a URL that provides direct access to the Argo CD server through a browser.
@@ -733,7 +733,7 @@ Use the username ‘admin’ and the password retrieved in the previous step to 
 
 ![Desktop Screenshot](images/cicd-29.PNG)
 
-Deployment with Argo CD
+### Deployment with Argo CD
 In the Argo CD UI, click on “Create Application”.
 Fill in the required information for the application:
 Application Name: Enter a descriptive name for your application.
@@ -757,13 +757,13 @@ Argo CD will automatically create the application on your Kubernetes cluster bas
 
 ![Desktop Screenshot](images/cicd-31.PNG)
 
-Conclusion
+### Conclusion
 This project has effectively demonstrated how integrating GitHub, Maven, SonarQube, Docker, Jenkins, Argo CD, Helm, and Kubernetes into a CI/CD pipeline can enhance software development efficiency and reliability.
 
 We’ve streamlined our processes, enabling faster delivery and improved software quality.
 
 Moving forward, we will continue refining our pipeline and exploring new tools to enhance automation.
 
-Acknowledgment
+### Acknowledgment
 
 This project was significantly inspired by Abhishek Veeramalla, known for his excellent DevOps content. His content provided a solid foundation for my enhancement. Check out his content here.
