@@ -1,3 +1,5 @@
+<details><summary><b>Java Exception Handling</b></summary>
+</details>
 <details><summary><b>Java Garbage Collection & Memory Management</b></summary>
 
  ### Memory Management in Java
