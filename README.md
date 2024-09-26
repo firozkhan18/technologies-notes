@@ -1758,8 +1758,7 @@ Data Transformation : From Stream<T> to Stream<R> | Data Transformation : From S
 Use this method when the mapper function is producing a single value for each input value. | Use this method when the mapper function is producing multiple values for each input value. 
 
 </details>
-<details>
-<summary>👇<b>3.1 What Is Lambda</b></summary>
+<details><summary>👇<b>3.1 What Is Lambda</b></summary>
 
 
 </details>
