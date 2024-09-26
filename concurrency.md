@@ -443,75 +443,187 @@ What are some of the improvements in Concurrency API in Java 8?
 
 ### Java Multithreading Interview Questions and Answers
 
-What is the difference between Process and Thread?
-A process is a self contained execution environment and it can be seen as a program or application whereas Thread is a single task of execution within the process. Java runtime environment runs as a single process which contains different classes and programs as processes. Thread can be called lightweight process. Thread requires less resources to create and exists in the process, thread shares the process resources.
+# Difference between Process and Thread
 
-What are the benefits of multi-threaded programming?
-In Multi-Threaded programming, multiple threads are executing concurrently that improves the performance because CPU is not idle incase some thread is waiting to get some resources. Multiple threads share the heap memory, so it’s good to create multiple threads to execute some task rather than creating multiple processes. For example, Servlets are better in performance than CGI because Servlet support multi-threading but CGI doesn’t.
+A **process** is a self-contained execution environment and can be seen as a program or application. A **thread**, on the other hand, is a single task of execution within a process. The Java runtime environment runs as a single process which contains different classes and programs. A thread can be called a lightweight process, requiring fewer resources to create and existing within the process, sharing the process's resources.
 
-What is difference between user Thread and daemon Thread?
-When we create a Thread in java program, it’s known as user thread. A daemon thread runs in background and doesn’t prevent JVM from terminating. When there are no user threads running, JVM shutdown the program and quits. A child thread created from daemon thread is also a daemon thread.
+---
 
-How can we create a Thread in Java?
-There are two ways to create Thread in Java - first by implementing Runnable interface and then creating a Thread object from it and second is to extend the Thread Class. Read this post to learn more about creating threads in java.
+# Benefits of Multi-Threaded Programming
 
-What are different states in lifecycle of Thread?
-When we create a Thread in java program, its state is New. Then we start the thread that change it's state to Runnable. Thread Scheduler is responsible to allocate CPU to threads in Runnable thread pool and change their state to Running. Other Thread states are Waiting, Blocked and Dead. Read this post to learn more about [life cycle of thread](/community/tutorials/thread-life-cycle-in-java-thread-states-in-java).
-Can we call run() method of a Thread class?
-Yes, we can call run() method of a Thread class but then it will behave like a normal method. To actually execute it in a Thread, we need to start it using **Thread.start()** method.
-How can we pause the execution of a Thread for specific time?
-We can use Thread class sleep() method to pause the execution of Thread for certain time. Note that this will not stop the processing of thread for specific time, once the thread awake from sleep, it's state gets changed to runnable and based on thread scheduling, it gets executed.
-What do you understand about Thread Priority?
-Every thread has a priority, usually higher priority thread gets precedence in execution but it depends on Thread Scheduler implementation that is OS dependent. We can specify the priority of thread but it doesn't guarantee that higher priority thread will get executed before lower priority thread. Thread priority is an _int_ whose value varies from 1 to 10 where 1 is the lowest priority thread and 10 is the highest priority thread.
-What is Thread Scheduler and Time Slicing?
-Thread Scheduler is the Operating System service that allocates the CPU time to the available runnable threads. Once we create and start a thread, it's execution depends on the implementation of Thread Scheduler. Time Slicing is the process to divide the available CPU time to the available runnable threads. Allocation of CPU time to threads can be based on thread priority or the thread waiting for longer time will get more priority in getting CPU time. Thread scheduling can't be controlled by java, so it's always better to control it from application itself.
-What is context-switching in multi-threading?
-Context Switching is the process of storing and restoring of CPU state so that Thread execution can be resumed from the same point at a later point of time. Context Switching is the essential feature for multitasking operating system and support for multi-threaded environment.
-How can we make sure main() is the last thread to finish in Java Program?
-We can use Thread join() method to make sure all the threads created by the program is dead before finishing the main function. Here is an article about [Thread join method](https://www.digitalocean.com/community/tutorials/java-thread-join-example).
-How does thread communicate with each other?
-When threads share resources, communication between Threads is important to coordinate their efforts. Object class wait(), notify() and notifyAll() methods allows threads to communicate about the lock status of a resource. Check this post to learn more about [thread wait, notify and notifyAll](https://www.digitalocean.com/community/tutorials/java-thread-wait-notify-and-notifyall-example).
-Why thread communication methods wait(), notify() and notifyAll() are in Object class?
-In Java every Object has a monitor and wait, notify methods are used to wait for the Object monitor or to notify other threads that Object monitor is free now. There is no monitor on threads in java and synchronization can be used with any Object, that's why it's part of Object class so that every class in java has these essential methods for inter thread communication.
-Why wait(), notify() and notifyAll() methods have to be called from synchronized method or block?
-When a Thread calls wait() on any Object, it must have the monitor on the Object that it will leave and goes in wait state until any other thread call notify() on this Object. Similarly when a thread calls notify() on any Object, it leaves the monitor on the Object and other waiting threads can get the monitor on the Object. Since all these methods require Thread to have the Object monitor, that can be achieved only by synchronization, they need to be called from synchronized method or block.
-Why Thread sleep() and yield() methods are static?
-Thread sleep() and yield() methods work on the currently executing thread. So there is no point in invoking these methods on some other threads that are in wait state. That’s why these methods are made static so that when this method is called statically, it works on the current executing thread and avoid confusion to the programmers who might think that they can invoke these methods on some non-running threads.
-How can we achieve thread safety in Java?
-There are several ways to achieve thread safety in java - synchronization, atomic concurrent classes, implementing concurrent Lock interface, using volatile keyword, using immutable classes and Thread safe classes. Learn more at [thread safety tutorial](https://www.digitalocean.com/)community/tutorials/thread-safety-in-java).
-What is volatile keyword in Java
-When we use volatile keyword with a variable, all the threads read it's value directly from the memory and don't cache it. This makes sure that the value read is the same as in the memory.
-Which is more preferred - Synchronized method or Synchronized block?
-Synchronized block is more preferred way because it doesn't lock the Object, synchronized methods lock the Object and if there are multiple synchronization blocks in the class, even though they are not related, it will stop them from execution and put them in wait state to get the lock on Object.
-How to create daemon thread in Java?
-Thread class setDaemon(true) can be used to create daemon thread in java. We need to call this method before calling start() method else it will throw IllegalThreadStateException.
-What is ThreadLocal?
-Java ThreadLocal is used to create thread-local variables. We know that all threads of an Object share it’s variables, so if the variable is not thread safe, we can use synchronization but if we want to avoid synchronization, we can use ThreadLocal variables. Every thread has its own ThreadLocal variable and they can use it gets () and set() methods to get the default value or change it’s value local to Thread. ThreadLocal instances are typically private static fields in classes that wish to associate the state with a thread. Check this post for small example program showing [ThreadLocal Example](https://www.digitalocean.com/community/tutorials/java-threadlocal-example).
-What is Thread Group? Why it’s advised not to use it?
-ThreadGroup is a class which was intended to provide information about a thread group. ThreadGroup API is weak and it doesn't have any functionality that is not provided by Thread. It has two main features - to get the list of active threads in a thread group and to set the uncaught exception handler for the thread. But Java 1.5 has added _setUncaughtExceptionHandler(UncaughtExceptionHandler eh)_ method using which we can add uncaught exception handler to the thread. So ThreadGroup is obsolete and hence not advised to use anymore.
+In multi-threaded programming, multiple threads execute concurrently, improving performance by keeping the CPU active, even when some threads are waiting for resources. Multiple threads share heap memory, making it more efficient to create threads for tasks rather than processes. For example, servlets perform better than CGI because servlets support multi-threading, while CGI does not.
 
-```
-t1.setUncaughtExceptionHandler(new UncaughtExceptionHandler(){
+---
 
-@Override
-public void uncaughtException(Thread t, Throwable e) {
-    System.out.println("exception occured:"+e.getMessage());
-}
-            
+# Difference between User Thread and Daemon Thread
+
+A **user thread** is created in a Java program and is a normal thread that runs in the foreground. A **daemon thread** runs in the background and does not prevent the JVM from terminating. When no user threads are running, the JVM shuts down the program. Any child thread created from a daemon thread is also a daemon thread.
+
+---
+
+# Creating a Thread in Java
+
+There are two ways to create a thread in Java:
+1. Implementing the `Runnable` interface and then creating a `Thread` object from it.
+2. Extending the `Thread` class. 
+
+Read more about creating threads in Java.
+
+---
+
+# States in the Lifecycle of a Thread
+
+When a thread is created in Java, its state is **New**. When started, it changes to **Runnable**. The Thread Scheduler allocates CPU time to threads in the Runnable pool, changing their state to **Running**. Other states include **Waiting**, **Blocked**, and **Dead**. 
+
+---
+
+# Calling the run() Method
+
+Yes, we can call the `run()` method of a `Thread` class, but it will behave like a normal method. To actually execute it in a thread, we need to start it using the `Thread.start()` method.
+
+---
+
+# Pausing Execution of a Thread
+
+We can use the `Thread.sleep()` method to pause the execution of a thread for a specific time. This does not stop processing; once the thread wakes from sleep, its state changes to runnable based on thread scheduling.
+
+---
+
+# Thread Priority
+
+Every thread has a priority. Usually, higher priority threads get precedence in execution, but this depends on the thread scheduler implementation, which is OS-dependent. Thread priority is an `int` ranging from 1 (lowest) to 10 (highest).
+
+---
+
+# Thread Scheduler and Time Slicing
+
+The **Thread Scheduler** is an OS service that allocates CPU time to runnable threads. Time slicing divides available CPU time among runnable threads. Allocation can depend on thread priority or how long a thread has been waiting. Thread scheduling can't be controlled by Java, so it's better to manage it from the application level.
+
+---
+
+# Context Switching in Multi-Threading
+
+**Context Switching** is the process of storing and restoring CPU state to allow thread execution to resume from the same point later. It's essential for multitasking operating systems and supports multi-threaded environments.
+
+---
+
+# Ensuring main() is the Last Thread to Finish
+
+We can use the `Thread.join()` method to ensure all threads created by the program finish before the main function completes. 
+
+---
+
+# Thread Communication
+
+Threads that share resources must communicate to coordinate efforts. The `wait()`, `notify()`, and `notifyAll()` methods of the Object class allow threads to communicate about the lock status of resources.
+
+---
+
+# Why Communication Methods are in Object Class
+
+In Java, every object has a monitor. The `wait()` and `notify()` methods are used to wait for or notify other threads about the object monitor's availability. Since synchronization can be applied to any object, these methods are part of the Object class.
+
+---
+
+# Calling wait(), notify(), and notifyAll() from Synchronized Methods
+
+When a thread calls `wait()` on an object, it must hold the monitor on that object. It will enter a wait state until another thread calls `notify()` on the same object. These methods need to be called from synchronized methods or blocks to ensure the thread holds the object monitor.
+
+---
+
+# Why sleep() and yield() are Static
+
+`Thread.sleep()` and `Thread.yield()` are static because they work on the currently executing thread. Invoking these methods on non-running threads would be meaningless, hence their static nature avoids confusion.
+
+---
+
+# Achieving Thread Safety in Java
+
+There are several ways to achieve thread safety in Java:
+- Synchronization
+- Atomic concurrent classes
+- Implementing the concurrent Lock interface
+- Using the `volatile` keyword
+- Using immutable classes
+- Using thread-safe classes
+
+Learn more at [Thread Safety Tutorial](community/tutorials/thread-safety-in-java).
+
+---
+
+# Volatile Keyword in Java
+
+Using the `volatile` keyword with a variable ensures that all threads read its value directly from memory, preventing caching. This guarantees that the value read is the same as in memory.
+
+---
+
+# Synchronized Method vs. Synchronized Block
+
+Synchronized blocks are preferred because they don't lock the entire object. Synchronized methods lock the entire object, potentially causing unrelated synchronization blocks to wait for access.
+
+---
+
+# Creating a Daemon Thread in Java
+
+You can create a daemon thread in Java using the `Thread.setDaemon(true)` method. This method must be called before the `start()` method; otherwise, it throws an `IllegalThreadStateException`.
+
+---
+
+# What is ThreadLocal?
+
+Java's `ThreadLocal` is used to create thread-local variables, allowing each thread to have its own instance of a variable. This avoids synchronization issues while allowing threads to use `get()` and `set()` methods for their values. ThreadLocal instances are typically private static fields in classes that wish to associate state with a thread.
+
+---
+
+# Thread Group and Its Obsolescence
+
+**ThreadGroup** is a class intended to provide information about a group of threads. However, it has limited functionality and is considered obsolete. Java 1.5 introduced `setUncaughtExceptionHandler(UncaughtExceptionHandler eh)`, making it unnecessary to use ThreadGroup.
+
+```java
+t1.setUncaughtExceptionHandler(new UncaughtExceptionHandler() {
+    @Override
+    public void uncaughtException(Thread t, Throwable e) {
+        System.out.println("Exception occurred: " + e.getMessage());
+    }
 });
 ```
-What is Java Thread Dump, How can we get Java Thread dump of a Program?
-A thread dump is a list of all the threads active in the JVM, thread dumps are very helpful in analyzing bottlenecks in the application and analyzing deadlock situations. There are many ways using which we can generate Thread dump - Using Profiler, Kill -3 command, jstack tool, etc. I prefer jstack tool to generate thread dump of a program because it's easy to use and comes with JDK installation. Since it's a terminal-based tool, we can create a script to generate thread dump at regular intervals to analyze it later on. Read this post to know more about [generating thread dump in java](https://www.digitalocean.com/community/tutorials/java-thread-dump-visualvm-jstack-kill-3-jcmd).
-What is Deadlock? How to analyze and avoid deadlock situation?
-Deadlock is a programming situation where two or more threads are blocked forever, this situation arises with at least two threads and two or more resources. To analyze a deadlock, we need to look at the java thread dump of the application, we need to look out for the threads with state as BLOCKED and then the resources it’s waiting to lock, every resource has a unique ID using which we can find which thread is already holding the lock on the object. Avoid Nested Locks, Lock Only What is Required and Avoid waiting indefinitely are common ways to avoid deadlock situation, read this post to learn how to [analyze deadlock in java](https://www.digitalocean.com/community/tutorials/deadlock-in-java-example) with a sample program.
-What is Java Timer Class? How to schedule a task to run after the specified interval?
-java.util.Timer is a utility class that can be used to schedule a thread to be executed at a certain time in future. Java Timer class can be used to schedule a task to be run one-time or to be run at regular intervals. java.util.TimerTask is an **[abstract class](https://www.digitalocean.com/community/tutorials/abstract-class-in-java "Abstract Class in Java with Example")** that implements Runnable interface and we need to extend this class to create our own TimerTask that can be scheduled using java Timer class. Check this post for [java Timer example](/community/tutorials/java-timer-timertask-example).
-What is Thread Pool? How can we create Thread Pool in Java?
-A thread pool manages the pool of worker threads, it contains a queue that keeps tasks waiting to get executed. A thread pool manages the collection of Runnable threads and worker threads execute Runnable from the queue. java.util.concurrent.Executors provide implementation of java.util.concurrent.Executor interface to create the thread pool in java. [Thread Pool Example](https://www.digitalocean.com/community/tutorials/threadpoolexecutor-java-thread-pool-example-executorservice) program shows how to create and use Thread Pool in java. Or read [ScheduledThreadPoolExecutor Example](https://www.digitalocean.com/community/tutorials/java-scheduler-scheduledexecutorservice-scheduledthreadpoolexecutor-example) to know how to schedule tasks after certain delay.
-What will happen if we don’t override Thread class run() method?
-Thread class run() method code is as shown below.
 
-```
+# What is Java Thread Dump?
+
+A **thread dump** is a snapshot of all active threads in the JVM. It is helpful for analyzing bottlenecks and deadlock situations in an application. There are several ways to generate a thread dump, including using profilers, the `kill -3` command, and the `jstack` tool. The `jstack` tool is preferred for its ease of use and availability with the JDK installation. As a terminal-based tool, you can create scripts to generate thread dumps at regular intervals for later analysis. 
+
+---
+
+# What is Deadlock?
+
+**Deadlock** is a programming situation where two or more threads are permanently blocked, often due to waiting for each other to release resources. To analyze deadlocks, examine the Java thread dump for threads in the **BLOCKED** state and identify the resources they are trying to lock. Each resource has a unique ID, allowing you to find which thread is holding the lock. Common strategies to avoid deadlocks include:
+- Avoiding nested locks
+- Locking only what is necessary
+- Preventing indefinite waiting
+
+Read more about analyzing deadlocks in Java with sample programs.
+
+---
+
+# What is the Java Timer Class?
+
+The `java.util.Timer` class is a utility that allows you to schedule a task to run at a specific time in the future. It can be used for one-time tasks or recurring tasks at regular intervals. The `java.util.TimerTask` is an abstract class that implements the `Runnable` interface; you need to extend this class to create your own timer tasks that can be scheduled using the Timer class. Check this post for a Java Timer example.
+
+---
+
+# What is a Thread Pool?
+
+A **thread pool** manages a collection of worker threads and contains a queue for tasks waiting to be executed. It efficiently manages runnable threads, allowing worker threads to execute tasks from the queue. The `java.util.concurrent.Executors` class provides implementations of the `java.util.concurrent.Executor` interface to create thread pools in Java. 
+
+You can find an example program demonstrating how to create and use a thread pool in Java, or read about `ScheduledThreadPoolExecutor` for scheduling tasks after a certain delay.
+
+---
+
+# What Happens if We Don’t Override the run() Method?
+
+If you do not override the `run()` method in the `Thread` class, the default implementation will do nothing. The default code is:
+
+```java
 public void run() {
     if (target != null) {
         target.run();
@@ -519,341 +631,248 @@ public void run() {
 }
 ```
 
-Above target set in the init() method of Thread class and if we create an instance of Thread class as `new TestThread()`, it's set to null. So nothing will happen if we don't override the run() method. Below is a simple example demonstrating this.
+When creating an instance of `Thread` as `new TestThread()`, the target remains `null`, leading to no action being taken. Here’s a simple example:
 
-```
+```java
 public class TestThread extends Thread {
+    // Not overriding Thread.run() method
 
-	//not overriding Thread.run() method
-	
-	//main method, can be in other class too
-	public static void main(String args[]){
-		Thread t = new TestThread();
-		System.out.println("Before starting thread");
-		t.start();
-		System.out.println("After starting thread");
-	}
+    public static void main(String args[]) {
+        Thread t = new TestThread();
+        System.out.println("Before starting thread");
+        t.start();
+        System.out.println("After starting thread");
+    }
 }
 ```
 
-It will print only below output and terminate.
-
+This will output:
 ```
 Before starting thread
 After starting thread
 ```
-Java Concurrency Interview Questions and Answers
-What is atomic operation? What are atomic classes in Java Concurrency API?
-Atomic operations are performed in a single unit of task without interference from other operations. Atomic operations are necessity in multi-threaded environment to avoid data inconsistency. int++ is not an atomic operation. So by the time one thread read its value and increment it by one, another thread has read the older value leading to the wrong result. To solve this issue, we will have to make sure that increment operation on count is atomic, we can do that using Synchronization but Java 5 java.util.concurrent.atomic provides wrapper classes for int and long that can be used to achieve this atomically without the usage of Synchronization. Go to this article to learn more about atomic concurrent classes.
 
-What is Lock interface in Java Concurrency API? What are its benefits over synchronization?
-Lock interface provides more extensive locking operations than can be obtained using synchronized methods and statements. They allow more flexible structuring, may have quite different properties and may support multiple associated Condition objects. The advantages of a lock are
+---
 
-it’s possible to make them fair
-it’s possible to make a thread responsive to interruption while waiting on a Lock object.
-it’s possible to try to acquire the lock, but return immediately or after a timeout if the lock can’t be acquired
-it’s possible to acquire and release locks in different scopes, and in different orders
-Read more at Java Lock Example.
+# What is Atomic Operation?
 
-What is Executors Framework?
-In Java 5, Executor framework was introduced with the java.util.concurrent.Executor interface. The Executor framework is a framework for standardizing invocation, scheduling, execution, and control of asynchronous tasks according to a set of execution policies. Creating a lot many threads with no bounds to the maximum threshold can cause the application to run out of heap memory. So, creating a ThreadPool is a better solution as a finite number of threads can be pooled and reused. Executors framework facilitate the process of creating Thread pools in java. Check out this post to learn with example code to create thread pool using Executors framework.
+**Atomic operations** are executed as a single unit of work without interference from other operations, ensuring data consistency in a multi-threaded environment. For example, `int++` is not atomic; if one thread reads its value and increments it while another thread reads the same value, it can lead to inconsistencies. To achieve atomicity, Java provides atomic classes in the `java.util.concurrent.atomic` package, allowing operations like incrementing an integer without synchronization.
 
-What is BlockingQueue? How can we implement Producer-Consumer problem using Blocking Queue?
-java.util.concurrent.BlockingQueue is a Queue that supports operations that wait for the queue to become non-empty when retrieving and removing an element, and wait for space to become available in the queue when adding an element. BlockingQueue doesn’t accept null values and throw NullPointerException if you try to store null value in the queue. BlockingQueue implementations are thread-safe. All queuing methods are atomic in nature and use internal locks or other forms of concurrency control. BlockingQueue interface is part of the Java collections framework and it’s primarily used for implementing the producer-consumer problem. Check this post for producer-consumer problem implementation using BlockingQueue.
+---
 
-What is Callable and Future?
-Java 5 introduced java.util.concurrent.Callable interface in concurrency package that is similar to Runnable interface but it can return any Object and able to throw Exception. The Callable interface uses Generics to define the return type of Object. Executors class provide useful methods to execute Callable in a thread pool. Since callable tasks run in parallel, we have to wait for the returned Object. Callable tasks return java.util.concurrent.Future object. Using Future we can find out the status of the Callable task and get the returned Object. It provides the get() method that can wait for the Callable to finish and then return the result. Check this post for [Callable Future Example](/community/tutorials/java-callable-future-example).
-What is FutureTask Class?
-FutureTask is the base implementation class of Future interface and we can use it with Executors for asynchronous processing. Most of the time we don't need to use FutureTask class but it comes real handy if we want to override some of the methods of Future interface and want to keep most of the base implementation. We can just extend this class and override the methods according to our requirements. Check out **[Java FutureTask Example](https://www.digitalocean.com/community/tutorials/java-futuretask-example-program "Java FutureTask Example Program")** post to learn how to use it and what are different methods it has.
-What are Concurrent Collection Classes?
-Java Collection classes are fail-fast which means that if the Collection will be changed while some thread is traversing over it using iterator, the iterator.next() will throw ConcurrentModificationException. Concurrent Collection classes support full concurrency of retrievals and adjustable expected concurrency for updates. Major classes are ConcurrentHashMap, CopyOnWriteArrayList and CopyOnWriteArraySet, check this post to learn [how to avoid ConcurrentModificationException when using iterator](https://www.digitalocean.com/community/tutorials/java-util-concurrentmodificationexception).
-What is Executors Class?
-Executors class provide utility methods for Executor, ExecutorService, ScheduledExecutorService, ThreadFactory, and Callable classes. Executors class can be used to easily create Thread Pool in java, also this is the only class supporting execution of Callable implementations.
-What are some of the improvements in Concurrency API in Java 8?
-Some important concurrent API enhancements are:
+# What is the Lock Interface in Java Concurrency API?
 
--   ConcurrentHashMap compute(), forEach(), forEachEntry(), forEachKey(), forEachValue(), merge(), reduce() and search() methods.
--   CompletableFuture that may be explicitly completed (setting its value and status).
--   Executors newWorkStealingPool() method to create a work-stealing thread pool using all available processors as its target parallelism level.
+The **Lock interface** provides more advanced locking operations than synchronized methods and statements. It allows for more flexible structuring and may support multiple associated condition objects. Benefits of using locks include:
+- Fairness: Locks can be made fair.
+- Responsiveness: Threads can be interrupted while waiting on a lock.
+- Try-acquire: You can try to acquire a lock and return immediately or after a timeout.
+- Scoped locks: Locks can be acquired and released in different scopes and orders.
 
-**Recommended Read**: [Java 8 Features](https://www.digitalocean.com/community/tutorials/java-8-features-with-examples "Java 8 Features for Developers – lambdas, Functional interface, Stream and Time API")
-That’s all for Java Thread and Concurrency interview questions, I have been adding more to this list. So bookmark the post for future reference.
+Read more at the Java Lock Example.
 
-Java 8 was released on 18th March 2014. That’s a long time ago but still many projects are running on Java 8. It’s because it was a major release with a lot of new features. Let’s look at all the exciting and major features of Java 8 with example code.
+---
 
-Quick Overview of Java 8 Features
-Some of the important Java 8 features are;
+# What is the Executors Framework?
 
-forEach() method in Iterable interface
-default and static methods in Interfaces
-Functional Interfaces and Lambda Expressions
-Java Stream API for Bulk Data Operations on Collections
-Java Time API
-Collection API improvements
-Concurrency API improvements
-Java IO improvements
-Let’s have a brief look on these Java 8 features. I will provide some code snippets for better understanding the features in a simple way.
+Introduced in Java 5, the **Executor framework** standardizes the invocation, scheduling, execution, and control of asynchronous tasks via the `java.util.concurrent.Executor` interface. Creating an excessive number of threads without limits can lead to memory issues. A thread pool, created using the Executors framework, allows a finite number of threads to be pooled and reused efficiently. Check out this post for example code on creating a thread pool using the Executors framework.
 
-1. forEach() method in Iterable interface
-Whenever we need to traverse through a Collection, we need to create an Iterator whose whole purpose is to iterate over, and then we have business logic in a loop for each of the elements in the Collection. We might get ConcurrentModificationException if the iterator is not used properly.
+# What is BlockingQueue?
 
-Java 8 has introduced forEach method in java.lang.Iterable interface so that while writing code we focus on business logic. The forEach method takes java.util.function.Consumer object as an argument, so it helps in having our business logic at a separate location that we can reuse. Let’s see forEach usage with a simple example.
+`java.util.concurrent.BlockingQueue` is a specialized Queue that supports operations that wait for the queue to become non-empty when retrieving elements and wait for space to become available when adding elements. It does not accept `null` values and will throw a `NullPointerException` if you attempt to store `null`. The implementations of `BlockingQueue` are thread-safe, ensuring that all queuing methods are atomic in nature, using internal locks or other forms of concurrency control. This interface is particularly useful for implementing the producer-consumer problem. Check out this post for an implementation example.
 
-package com.journaldev.java8.foreach;
+---
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.function.Consumer;
-import java.lang.Integer;
+# How to Implement the Producer-Consumer Problem Using BlockingQueue
 
-public class Java8ForEachExample {
+In the producer-consumer problem, we have two types of threads: producers that generate data and consumers that process the data. The `BlockingQueue` serves as a shared buffer between them. Here’s a basic example:
 
- public static void main(String[] args) {
-  
-  //creating sample Collection
-  List<Integer> myList = new ArrayList<Integer>();
-  for(int i=0; i<10; i++) myList.add(i);
-  
-  //traversing using Iterator
-  Iterator<Integer> it = myList.iterator();
-  while(it.hasNext()){
-   Integer i = it.next();
-   System.out.println("Iterator Value::"+i);
-  }
-  
-  //traversing through forEach method of Iterable with anonymous class
-  myList.forEach(new Consumer<Integer>() {
+```java
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
 
-   public void accept(Integer t) {
-    System.out.println("forEach anonymous class Value::"+t);
-   }
+class Producer implements Runnable {
+    private final BlockingQueue<Integer> queue;
 
-  });
-  
-  //traversing with Consumer interface implementation
-  MyConsumer action = new MyConsumer();
-  myList.forEach(action);
-  
- }
+    public Producer(BlockingQueue<Integer> queue) {
+        this.queue = queue;
+    }
 
-}
-
-//Consumer implementation that can be reused
-class MyConsumer implements Consumer<Integer>{
-
- public void accept(Integer t) {
-  System.out.println("Consumer impl Value::"+t);
- }
-}
-The number of lines might increase but forEach method helps in having the logic for iteration and business logic at separate place resulting in higher separation of concern and cleaner code.
-
-2. default and static methods in Interfaces
-If you read forEach method details carefully, you will notice that it’s defined in Iterable interface but we know that interfaces can’t have a method body. From Java 8, interfaces are enhanced to have a method with implementation. We can use default and static keyword to create interfaces with method implementation. forEach method implementation in Iterable interface is:
-
-default void forEach(Consumer<? super T> action) {
-    Objects.requireNonNull(action);
-    for (T t : this) {
-        action.accept(t);
+    @Override
+    public void run() {
+        try {
+            for (int i = 0; i < 10; i++) {
+                System.out.println("Producing: " + i);
+                queue.put(i); // Wait if the queue is full
+            }
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
     }
 }
-We know that Java doesn’t provide multiple inheritance in Classes because it leads to Diamond Problem. So how it will be handled with interfaces now since interfaces are now similar to abstract classes?
 
-The solution is that compiler will throw an exception in this scenario and we will have to provide implementation logic in the class implementing the interfaces.
+class Consumer implements Runnable {
+    private final BlockingQueue<Integer> queue;
 
-package com.journaldev.java8.defaultmethod;
+    public Consumer(BlockingQueue<Integer> queue) {
+        this.queue = queue;
+    }
 
-@FunctionalInterface
-public interface Interface1 {
-
- void method1(String str);
- 
- default void log(String str){
-  System.out.println("I1 logging::"+str);
- }
- 
- static void print(String str){
-  System.out.println("Printing "+str);
- }
- 
- //trying to override Object method gives compile-time error as
- //"A default method cannot override a method from java.lang.Object"
- 
-// default String toString(){
-//  return "i1";
-// }
- 
+    @Override
+    public void run() {
+        try {
+            while (true) {
+                Integer value = queue.take(); // Wait if the queue is empty
+                System.out.println("Consuming: " + value);
+            }
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+    }
 }
-package com.journaldev.java8.defaultmethod;
 
-@FunctionalInterface
-public interface Interface2 {
+public class ProducerConsumerExample {
+    public static void main(String[] args) {
+        BlockingQueue<Integer> queue = new ArrayBlockingQueue<>(5);
+        Thread producerThread = new Thread(new Producer(queue));
+        Thread consumerThread = new Thread(new Consumer(queue));
 
- void method2();
- 
- default void log(String str){
-  System.out.println("I2 logging::"+str);
- }
-
+        producerThread.start();
+        consumerThread.start();
+    }
 }
-Notice that both the interfaces have a common method log() with implementation logic.
+```
 
-package com.journaldev.java8.defaultmethod;
+---
 
-public class MyClass implements Interface1, Interface2 {
+# What is Callable and Future?
 
- @Override
- public void method2() {
- }
+Introduced in Java 5, the `java.util.concurrent.Callable` interface is similar to `Runnable`, but it can return a result and throw exceptions. The `Callable` interface uses Generics to define the return type. The `Executors` class provides methods to execute `Callable` tasks in a thread pool. 
 
- @Override
- public void method1(String str) {
- }
+When a `Callable` task is executed, it returns a `Future` object, which represents the result of the computation. You can use `Future` to check the status of the task and retrieve the result using the `get()` method, which will block until the computation is complete.
 
- //MyClass won't compile without having it's own log() implementation
- @Override
- public void log(String str){
-  System.out.println("MyClass logging::"+str);
-  Interface1.print("abc");
- }
- 
-}
-As you can see that Interface1 has static method implementation that is used in MyClass.log() method implementation. Java 8 uses default and static methods heavily in Collection API and default methods are added so that our code remains backward compatible.
+Check this post for a detailed example of `Callable` and `Future`.
 
-If any class in the hierarchy has a method with the same signature, then default methods become irrelevant. The Object is the base class, so if we have equals(), hashCode() default methods in the interface, it will become irrelevant. That’s why for better clarity, interfaces are not allowed to have Object default methods.
+---
 
-For complete details of interface changes in Java 8, please read Java 8 interface changes.
+# What is FutureTask Class?
 
-3. Functional Interfaces and Lambda Expressions
-If you notice the above interface code, you will notice @FunctionalInterface annotation. Functional interfaces are a new concept introduced in Java 8. An interface with exactly one abstract method becomes a Functional Interface. We don’t need to use @FunctionalInterface annotation to mark an interface as a Functional Interface.
+`FutureTask` is a concrete implementation of the `Future` interface and can be used with `Executors` for asynchronous processing. While most of the time you may not need to use `FutureTask` directly, it is handy when you want to override methods of the `Future` interface while keeping most of the base functionality. You can extend this class and customize its methods according to your needs. Check out the Java FutureTask Example for details.
 
-@FunctionalInterface annotation is a facility to avoid the accidental addition of abstract methods in the functional interfaces. You can think of it like @Override annotation and it’s best practice to use it. java.lang.Runnable with a single abstract method run() is a great example of a functional interface.
+---
 
-One of the major benefits of the functional interface is the possibility to use lambda expressions to instantiate them. We can instantiate an interface with an anonymous class but the code looks bulky.
+# What are Concurrent Collection Classes?
 
-Runnable r = new Runnable(){
-   @Override
-   public void run() {
-    System.out.println("My Runnable");
-   }};
-Since functional interfaces have only one method, lambda expressions can easily provide the method implementation. We just need to provide method arguments and business logic. For example, we can write above implementation using lambda expression as:
+Java's standard collection classes are fail-fast, meaning if a collection is modified while an iterator is being used, a `ConcurrentModificationException` will be thrown. In contrast, **Concurrent Collection classes** support full concurrency for retrievals and adjustable expected concurrency for updates. Some major concurrent collections include:
+- `ConcurrentHashMap`
+- `CopyOnWriteArrayList`
+- `CopyOnWriteArraySet`
 
-Runnable r1 = () -> {
-   System.out.println("My Runnable");
-  };
-If you have single statement in method implementation, we don’t need curly braces also. For example above Interface1 anonymous class can be instantiated using lambda as follows:
+Learn more about avoiding `ConcurrentModificationException` when using iterators in this post.
 
-Interface1 i1 = (s) -> System.out.println(s);
-  
-i1.method1("abc");
-So lambda expressions are a means to create anonymous classes of functional interfaces easily. There are no runtime benefits of using lambda expressions, so I will use it cautiously because I don’t mind writing a few extra lines of code.
+---
 
-A new package java.util.function has been added with bunch of functional interfaces to provide target types for lambda expressions and method references. Lambda expressions are a huge topic, I will write a separate article on that in the future.
+# What is Executors Class?
 
-You can read complete tutorial at Java 8 Lambda Expressions Tutorial.
+The `Executors` class provides utility methods for creating and managing thread pools via the `Executor`, `ExecutorService`, and `ScheduledExecutorService` interfaces. It also supports the execution of `Callable` implementations. The `Executors` class simplifies thread pool management in Java.
 
-4. Java Stream API for Bulk Data Operations on Collections
-A new java.util.stream has been added in Java 8 to perform filter/map/reduce like operations with the collection. Stream API will allow sequential as well as parallel execution. This is one of the best features for me because I work a lot with Collections and usually with Big Data, we need to filter out them based on some conditions.
+---
 
-Collection interface has been extended with stream() and parallelStream() default methods to get the Stream for sequential and parallel execution. Let’s see their usage with a simple example.
+# Improvements in Concurrency API in Java 8
 
-package com.journaldev.java8.stream;
+Java 8 introduced several enhancements to the concurrency API, including:
+- **`ConcurrentHashMap`** improvements: New methods like `compute()`, `forEach()`, `merge()`, and more.
+- **`CompletableFuture`**: A new class that can be explicitly completed and used for asynchronous programming.
+- **Work-stealing thread pools**: The `Executors.newWorkStealingPool()` method allows you to create a work-stealing thread pool.
 
+---
+
+# Quick Overview of Java 8 Features
+
+Java 8 introduced many new features, including:
+- **forEach() method** in the `Iterable` interface.
+- **Default and static methods** in interfaces.
+- **Functional interfaces and lambda expressions** for cleaner code.
+- **Java Stream API** for bulk data operations on collections.
+- **Java Time API** for better date and time handling.
+- **Improvements in the Collections API** and **Concurrency API**.
+- **Java IO improvements**.
+
+---
+
+# Example of forEach() Method
+
+The `forEach()` method simplifies collection traversal. Here's a brief example:
+
+```java
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Stream;
+import java.util.function.Consumer;
+
+public class Java8ForEachExample {
+    public static void main(String[] args) {
+        List<Integer> myList = new ArrayList<>();
+        for (int i = 0; i < 10; i++) myList.add(i);
+
+        // Using forEach method
+        myList.forEach((Integer i) -> System.out.println("Value: " + i));
+    }
+}
+```
+
+---
+
+# Default and Static Methods in Interfaces
+
+Java 8 allows interfaces to have methods with implementations using the `default` and `static` keywords. This enhances interface flexibility while maintaining backward compatibility. Here’s an example:
+
+```java
+@FunctionalInterface
+public interface MyInterface {
+    void myMethod(String str);
+
+    default void log(String str) {
+        System.out.println("Logging: " + str);
+    }
+}
+```
+
+---
+
+# Functional Interfaces and Lambda Expressions
+
+Functional interfaces have only one abstract method and can be implemented using lambda expressions, which provide a more concise syntax compared to anonymous classes. For example:
+
+```java
+Runnable r = () -> System.out.println("My Runnable");
+```
+
+---
+
+# Java Stream API Example
+
+Java 8 introduced the Stream API for bulk operations. Here’s a simple example demonstrating filtering with streams:
+
+```java
+import java.util.ArrayList;
+import java.util.List;
 
 public class StreamExample {
+    public static void main(String[] args) {
+        List<Integer> myList = new ArrayList<>();
+        for (int i = 0; i < 100; i++) myList.add(i);
 
- public static void main(String[] args) {
-  
-  List<Integer> myList = new ArrayList<>();
-  for(int i=0; i<100; i++) myList.add(i);
-  
-  //sequential stream
-  Stream<Integer> sequentialStream = myList.stream();
-  
-  //parallel stream
-  Stream<Integer> parallelStream = myList.parallelStream();
-  
-  //using lambda with Stream API, filter example
-  Stream<Integer> highNums = parallelStream.filter(p -> p > 90);
-  //using lambda in forEach
-  highNums.forEach(p -> System.out.println("High Nums parallel="+p));
-  
-  Stream<Integer> highNumsSeq = sequentialStream.filter(p -> p > 90);
-  highNumsSeq.forEach(p -> System.out.println("High Nums sequential="+p));
-
- }
-
+        myList.stream()
+              .filter(p -> p > 90)
+              .forEach(p -> System.out.println("High Nums: " + p));
+    }
 }
-If you will run above example code, you will get output like this:
+```
 
-High Nums parallel=91
-High Nums parallel=96
-High Nums parallel=93
-High Nums parallel=98
-High Nums parallel=94
-High Nums parallel=95
-High Nums parallel=97
-High Nums parallel=92
-High Nums parallel=99
-High Nums sequential=91
-High Nums sequential=92
-High Nums sequential=93
-High Nums sequential=94
-High Nums sequential=95
-High Nums sequential=96
-High Nums sequential=97
-High Nums sequential=98
-High Nums sequential=99
-Notice that parallel processing values are not in order, so parallel processing will be very helpful while working with huge collections.
+---
 
-Covering everything about Stream API is not possible in this post, you can read everything about Stream API at Java 8 Stream API Example Tutorial.
+# Conclusion
 
-5. Java Time API
-It has always been hard to work with Date, Time, and Time Zones in java. There was no standard approach or API in java for date and time in Java. One of the nice addition in Java 8 is the java.time package that will streamline the process of working with time in java.
-
-Just by looking at Java Time API packages, I can sense that they will be very easy to use. It has some sub-packages java.time.format that provides classes to print and parse dates and times and java.time.zone provides support for time zones and their rules.
-
-The new Time API prefers enums over integer constants for months and days of the week. One of the useful classes is DateTimeFormatter for converting DateTime objects to strings. For a complete tutorial, head over to Java Date Time API Example Tutorial.
-
-6. Collection API improvements
-We have already seen forEach() method and Stream API for collections. Some new methods added in Collection API are:
-
-Iterator default method forEachRemaining(Consumer action) to perform the given action for each remaining element until all elements have been processed or the action throws an exception.
-Collection default method removeIf(Predicate filter) to remove all of the elements of this collection that satisfy the given predicate.
-Collection spliterator() method returning Spliterator instance that can be used to traverse elements sequentially or parallel.
-Map replaceAll(), compute(), merge() methods.
-Performance Improvement for HashMap class with Key Collisions
-7. Concurrency API improvements
-Some important concurrent API enhancements are:
-
-ConcurrentHashMap compute(), forEach(), forEachEntry(), forEachKey(), forEachValue(), merge(), reduce() and search() methods.
-CompletableFuture that may be explicitly completed (setting its value and status).
-Executors newWorkStealingPool() method to create a work-stealing thread pool using all available processors as its target parallelism level.
-8. Java IO improvements
-Some IO improvements known to me are:
-
-Files.list(Path dir) that returns a lazily populated Stream, the elements of which are the entries in the directory.
-Files.lines(Path path) that reads all lines from a file as a Stream.
-Files.find() that returns a Stream that is lazily populated with Path by searching for files in a file tree rooted at a given starting file.
-BufferedReader.lines() that return a Stream, the elements of which are lines read from this BufferedReader.
-Miscellaneous Java 8 Core API improvements
-Some miscellaneous API improvements that might come handy are:
-
-ThreadLocal static method withInitial(Supplier supplier) to create instances easily.
-The Comparator interface has been extended with a lot of default and static methods for natural ordering, reverse order, etc.
-min(), max() and sum() methods in Integer, Long and Double wrapper classes.
-logicalAnd(), logicalOr() and logicalXor() methods in Boolean class.
-ZipFile.stream() method to get an ordered Stream over the ZIP file entries. Entries appear in the Stream in the order they appear in the central directory of the ZIP file.
-Several utility methods in Math class.
-jjs command is added to invoke Nashorn Engine.
-jdeps command is added to analyze class files
-JDBC-ODBC Bridge has been removed.
-PermGen memory space has been removed
-
-You've highlighted several important features introduced in Java 8 that enhance the language's capabilities. Let’s go over each of these points:
+Java 8 introduced significant changes and improvements across various APIs, especially in concurrency and collections. The enhancements make it easier to write efficient, concurrent applications with cleaner and more readable code.
 
 ### 1. `ThreadLocal` with `withInitial(Supplier<T> supplier)`
 In Java 8, the `ThreadLocal` class was enhanced with the `withInitial` static method. This allows you to easily create a `ThreadLocal` variable with an initial value provided by a `Supplier`. This is particularly useful for setting default values for thread-local variables without needing to explicitly initialize them in the `get()` method.
