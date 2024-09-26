@@ -1000,7 +1000,8 @@ Differences — Java Collections Interview Questions
 50. Differentiate between failfast and failsafe.
 ![Desktop Screeshot](images/collection-29.PNG)
 
-
+**[⬆ Back to Top](#table-of-contents)**
+</details>
 <details><summary><b>Java Collection Framework</b></summary>
 	
 The Java Collection Framework is a unified architecture for representing and manipulating collections of objects. It provides various classes and interfaces to work with data in a flexible and efficient manner. Here's a detailed overview:
@@ -2599,13 +2600,7 @@ The `Comparator` interface is a powerful tool for defining custom ordering for o
 <details><summary><b>Important Features</b></summary>
 
 </details>
-
 </details>
-
-
-**[⬆ Back to Top](#table-of-contents)**
-</details>
-
 ### 8. Java Streams and Lambda Expressions
 
 <details> 
