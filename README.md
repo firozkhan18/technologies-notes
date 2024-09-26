@@ -1748,7 +1748,7 @@ public class ParallelStreamExample {
 </details>
 <details>
 <summary>👇<b>3.1 What Is Lambda</b></summary>
-</details>
+
 <details>
 <summary>👇<b>3.1 how to convert anonymous inner classes (anonymous functions) to lambda expressions in Java</b></summary>
 
@@ -2042,6 +2042,8 @@ public class FileStreamWalkExample {
 
 These methods allow you to work directly with `Stream<Path>` objects, avoiding the need to create an intermediate array of filenames.
 </details>
+</details>
+
 
 Differences between Java 8 Map() Vs flatMap() :
 
