@@ -2054,7 +2054,15 @@ public class FileStreamWalkExample {
 
 These methods allow you to work directly with `Stream<Path>` objects, avoiding the need to create an intermediate array of filenames.
 </details>
+<details><summary>👇<b>3.2 Thread & Multithreading</b></summary>
 
+ </details>
+<details><summary>👇<b>3.3 Collection Framework</b></summary>
+
+ </details>
+ <details><summary>👇<b>3.4 File I/O</b></summary>
+
+ </details>
 </details>
 <details><summary><b>Extra</b></summary>
 
