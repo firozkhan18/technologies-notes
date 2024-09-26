@@ -29755,15 +29755,15 @@ Each method has its own advantages depending on the specific requirements of the
 
 </details>
 </details>
-<details><summary><b>5. Java Exception Handling</b></summary>
+<details><summary><b>Java Exception Handling</b></summary>
 </details>
-<details><summary><b>5. Java Multithreading & Concurrency</b></summary>
+<details><summary><b>Java Multithreading & Concurrency</b></summary>
 </details>
-<details><summary><b>5. Spring Framework</b></summary>
+<details><summary><b>5. Java Collection Framework</b></summary>
 </details>
-<details><summary><b>5. Spring Framework</b></summary>
+<details><summary><b>5. Java File I/O</b></summary>
 </details>
-<details><summary><b>5. Spring Framework</b></summary>
+<details><summary><b>5. Java Garbage Collection & Memory Management</b></summary>
 </details>
 <details><summary><b>5. Spring Framework</b></summary>
  
