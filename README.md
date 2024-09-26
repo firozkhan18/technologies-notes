@@ -29755,7 +29755,6 @@ Each method has its own advantages depending on the specific requirements of the
 
 </details>
 </details>
-<details>
 <details><summary>👇<b>Java Exception</b></summary>
 
  </details>
@@ -29771,7 +29770,7 @@ Each method has its own advantages depending on the specific requirements of the
  <details><summary>👇<b>Java Garbage Collection & Memory Management</b></summary>
 
  </details>
-<summary><b>5. Spring Framework</b></summary>
+ <details><summary><b>5. Spring Framework</b></summary>
  
 ## Spring Framework
 - [Introduction](#introduction)
