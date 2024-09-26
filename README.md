@@ -2055,15 +2055,7 @@ public class FileStreamWalkExample {
 These methods allow you to work directly with `Stream<Path>` objects, avoiding the need to create an intermediate array of filenames.
 </details>
 </details>
-<details><summary>👇<b>3.2 Thread & Multithreading</b></summary>
 
- </details>
-<details><summary>👇<b>3.3 Collection Framework</b></summary>
-
- </details>
- <details><summary>👇<b>3.4 File I/O</b></summary>
-
- </details>
 <details><summary><b>Extra</b></summary>
 
 
@@ -29764,6 +29756,21 @@ Each method has its own advantages depending on the specific requirements of the
 </details>
 </details>
 <details>
+<details><summary>👇<b>Java Exception</b></summary>
+
+ </details>
+<details><summary>👇<b>Java Multithreading & Concurrency</b></summary>
+
+ </details>
+<details><summary>👇<b>Java Collection Framework</b></summary>
+
+ </details>
+ <details><summary>👇<b>Java File I/O</b></summary>
+
+ </details>
+ <details><summary>👇<b>Java Garbage Collection & Memory Management</b></summary>
+
+ </details>
 <summary><b>5. Spring Framework</b></summary>
  
 ## Spring Framework
