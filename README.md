@@ -1691,6 +1691,60 @@ List<String> result = myList.stream()
                            .peek(System.out::println)
                            .collect(Collectors.toList());
 ```
+
+In Java, you can work with streams in two ways: sequential and parallel. Here's a brief explanation followed by examples of each.
+
+### Sequential Stream
+A sequential stream processes elements one at a time in the order they appear. This is the default behavior when you create a stream from a collection.
+
+**Example: Sequential Stream**
+```java
+import java.util.Arrays;
+import java.util.List;
+
+public class SequentialStreamExample {
+    public static void main(String[] args) {
+        List<Integer> numbers = Arrays.asList(1, 2, 3, 4, 5);
+
+        // Sequential stream to calculate the sum of the list
+        int sum = numbers.stream()
+                         .mapToInt(Integer::intValue)
+                         .sum();
+
+        System.out.println("Sum (Sequential): " + sum);
+    }
+}
+```
+
+### Parallel Stream
+A parallel stream splits the source into multiple chunks and processes them concurrently using multiple threads. This can improve performance for large datasets on multi-core processors.
+
+**Example: Parallel Stream**
+```java
+import java.util.Arrays;
+import java.util.List;
+
+public class ParallelStreamExample {
+    public static void main(String[] args) {
+        List<Integer> numbers = Arrays.asList(1, 2, 3, 4, 5);
+
+        // Parallel stream to calculate the sum of the list
+        int sum = numbers.parallelStream()
+                         .mapToInt(Integer::intValue)
+                         .sum();
+
+        System.out.println("Sum (Parallel): " + sum);
+    }
+}
+```
+
+### Key Differences
+- **Performance**: Parallel streams can significantly speed up processing for large datasets but may introduce overhead for smaller datasets.
+- **Order**: Sequential streams maintain the order of elements, while parallel streams may not, depending on the operation performed.
+
+### When to Use
+- **Use Sequential Streams** when you need to maintain order or are dealing with small datasets.
+- **Use Parallel Streams** when you have a large dataset and performance is critical, but be cautious of side effects from operations that rely on order.
 </details>
 <details>
 <summary>👇<b>3.1 What Is Lambda</b></summary>
