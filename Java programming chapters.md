@@ -2324,8 +2324,9 @@ The `Comparator` interface is a powerful tool for defining custom ordering for o
 <details><summary><b>Important Features</b></summary>
 
 </details>
-<details> <summary>Java Collection Framework</summary>
-The questions in this article have been divided into the following sections:
+<details><summary><b>Java Collection Framework Interview Questions</b></summary>
+
+The questions have been divided into the following sections:
 
 Generic
 List
