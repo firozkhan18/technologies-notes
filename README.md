@@ -29757,23 +29757,7 @@ Each method has its own advantages depending on the specific requirements of the
 </details>
 
 <details><summary>👇<b>Java Exception</b></summary>
-
-</details>
-
-<details><summary>👇<b>Java Multithreading & Concurrency</b></summary>
-
-</details>
-
-<details><summary>👇<b>Java Collection Framework</b></summary>
-
-</details>
-
-<details><summary>👇<b>Java File I/O</b></summary>
-
-</details>
-
-<details><summary>👇<b>Java Garbage Collection & Memory Management</b></summary>
-
+a
 </details>
  
 <details><summary><b>5. Spring Framework</b></summary>
