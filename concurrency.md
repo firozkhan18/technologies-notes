@@ -6,6 +6,130 @@ The Diamond Problem is a specific issue in object-oriented programming, especial
 ### Race Condition
 A race condition occurs when multiple threads access shared data concurrently, and the outcome depends on the sequence or timing of their execution. To mitigate race conditions, you can use synchronization techniques, such as locks, semaphores, or more advanced constructs like atomic variables.
 
+Certainly! Let’s dive deeper into the **Diamond Problem** and **Race Condition**.
+
+### Diamond Problem
+
+The **Diamond Problem** arises in object-oriented programming languages that support multiple inheritance. It occurs when a class inherits from two classes that both inherit from a common superclass. This can lead to ambiguity regarding which method from the common superclass should be invoked.
+
+#### Example:
+
+Consider the following class hierarchy:
+
+```
+     A
+    / \
+   B   C
+    \ /
+     D
+```
+
+Here:
+- Class `A` is the common superclass.
+- Classes `B` and `C` extend `A`.
+- Class `D` extends both `B` and `C`.
+
+If both `B` and `C` override a method from `A`, when you call that method on an instance of `D`, the compiler may not know which implementation to use: `B`'s or `C`'s. This ambiguity can lead to inconsistencies and bugs.
+
+#### Java’s Solution:
+
+Java addresses the Diamond Problem by not allowing multiple inheritance of classes. You can implement multiple interfaces, but if there are conflicting method signatures in interfaces, you must override the method in the implementing class.
+
+```java
+interface A {
+    void method();
+}
+
+interface B extends A {
+    default void method() {
+        System.out.println("B's method");
+    }
+}
+
+interface C extends A {
+    default void method() {
+        System.out.println("C's method");
+    }
+}
+
+class D implements B, C {
+    @Override
+    public void method() {
+        // Explicitly specify which method to call
+        B.super.method(); // Calls B's method
+        C.super.method(); // Calls C's method
+    }
+}
+```
+
+### Race Condition
+
+A **Race Condition** occurs when two or more threads access shared data concurrently and at least one thread modifies that data. The outcome of the operations depends on the timing of the threads' execution, which can lead to unpredictable behavior and bugs.
+
+#### Example:
+
+Imagine a simple bank account scenario:
+
+```java
+class BankAccount {
+    private int balance = 1000;
+
+    public void withdraw(int amount) {
+        if (balance >= amount) {
+            balance -= amount;
+        }
+    }
+
+    public int getBalance() {
+        return balance;
+    }
+}
+```
+
+If two threads attempt to withdraw money simultaneously, they may read the same balance before either has updated it, resulting in an incorrect balance:
+
+```java
+// Thread 1: withdraw 700
+// Thread 2: withdraw 800
+```
+
+Both threads might read the balance as 1000 and proceed to subtract their respective amounts, resulting in an incorrect final balance.
+
+#### Avoiding Race Conditions:
+
+1. **Synchronization**: Use synchronized methods or blocks to ensure that only one thread can access a critical section of code at a time.
+
+```java
+public synchronized void withdraw(int amount) {
+    if (balance >= amount) {
+        balance -= amount;
+    }
+}
+```
+
+2. **Locks**: Use `ReentrantLock` for more control over thread synchronization.
+
+3. **Atomic Variables**: Use classes from the `java.util.concurrent.atomic` package for operations that should be atomic.
+
+```java
+AtomicInteger balance = new AtomicInteger(1000);
+
+public void withdraw(int amount) {
+    int currentBalance;
+    do {
+        currentBalance = balance.get();
+        if (currentBalance < amount) return; // not enough funds
+    } while (!balance.compareAndSet(currentBalance, currentBalance - amount));
+}
+```
+
+### Summary
+
+- **Diamond Problem**: Arises from multiple inheritance and can cause ambiguity in method resolution. Java avoids this by allowing multiple interface inheritance but requiring explicit method resolution.
+  
+- **Race Condition**: Happens when multiple threads access shared data concurrently, leading to unpredictable outcomes. It can be avoided through synchronization, locks, and atomic operations.
+
+If you have further questions or need examples related to these topics, feel free to ask!
 ### Fail-Safe vs. Fail-Fast
 - **Fail-Fast**: This mechanism detects concurrent modification of a collection while it is being iterated over. If you modify the collection during iteration, it will throw a `ConcurrentModificationException`. This is common in classes like `ArrayList`.
   
