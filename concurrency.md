@@ -108,6 +108,121 @@ public synchronized void withdraw(int amount) {
 ```
 
 2. **Locks**: Use `ReentrantLock` for more control over thread synchronization.
+### ReentrantLock in Java
+
+`ReentrantLock` is a part of the `java.util.concurrent.locks` package and provides a powerful mechanism for synchronization in multithreaded programming. It is an implementation of the `Lock` interface and is an alternative to using synchronized methods or blocks.
+
+#### Key Features of ReentrantLock
+
+1. **Reentrancy**: As the name suggests, a reentrant lock allows the same thread to acquire the lock multiple times without causing a deadlock. This is particularly useful when a thread needs to call a synchronized method from within another synchronized method.
+
+2. **Fairness**: `ReentrantLock` can be created with a fairness policy. If fairness is set to `true`, the lock grants access to the longest-waiting thread. If fairness is set to `false` (the default), the access order is not guaranteed.
+
+3. **Locking Mechanism**: It provides more extensive locking capabilities than synchronized blocks, including methods to try to acquire the lock, and to interrupt a thread that is waiting for a lock.
+
+4. **Condition Variables**: It allows the use of condition variables (via the `Condition` interface) to enable more complex thread interaction compared to the traditional wait/notify mechanism.
+
+#### Basic Usage
+
+Here’s how you can use `ReentrantLock` in your code:
+
+```java
+import java.util.concurrent.locks.ReentrantLock;
+
+public class Counter {
+    private int count = 0;
+    private final ReentrantLock lock = new ReentrantLock();
+
+    public void increment() {
+        lock.lock(); // Acquire the lock
+        try {
+            count++; // Critical section
+        } finally {
+            lock.unlock(); // Ensure that the lock is always released
+        }
+    }
+
+    public int getCount() {
+        return count;
+    }
+}
+```
+
+#### Fairness Example
+
+You can create a `ReentrantLock` with a fairness policy as follows:
+
+```java
+ReentrantLock fairLock = new ReentrantLock(true); // Fairness set to true
+```
+
+#### Advanced Features
+
+1. **Try-Lock**: You can attempt to acquire the lock without blocking:
+
+```java
+if (lock.tryLock()) {
+    try {
+        // Perform operations
+    } finally {
+        lock.unlock();
+    }
+} else {
+    // Handle the case where the lock is not available
+}
+```
+
+2. **Lock with Timeout**: You can specify a timeout for acquiring the lock:
+
+```java
+if (lock.tryLock(1000, TimeUnit.MILLISECONDS)) {
+    try {
+        // Perform operations
+    } finally {
+        lock.unlock();
+    }
+} else {
+    // Handle the case where the lock was not acquired within the timeout
+}
+```
+
+3. **Condition Variables**: To use condition variables with `ReentrantLock`, you create a `Condition` object:
+
+```java
+Condition condition = lock.newCondition();
+
+lock.lock();
+try {
+    // Wait for a condition
+    condition.await(); // Releases the lock and waits
+} finally {
+    lock.unlock();
+}
+
+// Signaling a condition
+lock.lock();
+try {
+    // Notify waiting threads
+    condition.signalAll();
+} finally {
+    lock.unlock();
+}
+```
+
+### Advantages of ReentrantLock
+
+- **Better Control**: Offers more control over locking mechanisms compared to synchronized blocks.
+- **Performance**: In some cases, it may provide better performance, especially under high contention.
+- **Condition Variables**: Enables complex thread interactions through condition variables.
+
+### Disadvantages
+
+- **Complexity**: It can lead to more complex code, particularly if not used carefully, increasing the chance of deadlocks if locks are not properly managed.
+- **Manual Unlocking**: You must remember to unlock the lock in a `finally` block to avoid deadlocks.
+
+### Conclusion
+
+`ReentrantLock` is a flexible and powerful tool for managing synchronization in Java. It provides additional capabilities over synchronized blocks and methods, allowing for better control and performance in concurrent applications. However, it should be used judiciously, with careful attention to locking mechanisms to avoid potential pitfalls such as deadlocks.
 
 3. **Atomic Variables**: Use classes from the `java.util.concurrent.atomic` package for operations that should be atomic.
 
