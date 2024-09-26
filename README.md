@@ -1745,6 +1745,18 @@ public class ParallelStreamExample {
 ### When to Use
 - **Use Sequential Streams** when you need to maintain order or are dealing with small datasets.
 - **Use Parallel Streams** when you have a large dataset and performance is critical, but be cautious of side effects from operations that rely on order.
+
+### Differences between Java 8 Map() Vs flatMap() :
+
+map() | flatMap() | 
+--- | --- |  
+It processes stream of values. | It processes stream of stream of values. 
+It does only mapping. | It performs mapping as well as flattening.
+It’s mapper function produces single value for each input value. | It’s mapper function produces multiple values for each input value. 
+It is a One-To-One mapping. | It is a One-To-Many mapping. 
+Data Transformation : From Stream<T> to Stream<R> | Data Transformation : From Stream<Stream<T> to Stream<R> 
+Use this method when the mapper function is producing a single value for each input value. | Use this method when the mapper function is producing multiple values for each input value. 
+
 </details>
 <details>
 <summary>👇<b>3.1 What Is Lambda</b></summary>
@@ -2042,21 +2054,8 @@ public class FileStreamWalkExample {
 
 These methods allow you to work directly with `Stream<Path>` objects, avoiding the need to create an intermediate array of filenames.
 </details>
+
 </details>
-
-
-Differences between Java 8 Map() Vs flatMap() :
-
-map() | flatMap() | 
---- | --- |  
-It processes stream of values. | It processes stream of stream of values. 
-It does only mapping. | It performs mapping as well as flattening.
-It’s mapper function produces single value for each input value. | It’s mapper function produces multiple values for each input value. 
-It is a One-To-One mapping. | It is a One-To-Many mapping. 
-Data Transformation : From Stream<T> to Stream<R> | Data Transformation : From Stream<Stream<T> to Stream<R> 
-Use this method when the mapper function is producing a single value for each input value. | Use this method when the mapper function is producing multiple values for each input value. 
-
-
 <details><summary><b>Extra</b></summary>
 
 
