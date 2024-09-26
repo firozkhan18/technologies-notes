@@ -2601,6 +2601,7 @@ The `Comparator` interface is a powerful tool for defining custom ordering for o
 
 </details>
 </details>
+
 ### 8. Java Streams and Lambda Expressions
 
 <details> 
