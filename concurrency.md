@@ -29,7 +29,58 @@ The `Executor` framework in Java provides a higher-level replacement for managin
 ### Concurrency
 Concurrency in Java involves managing multiple threads to execute tasks simultaneously. Properly using synchronized blocks, locks, and concurrent collections can help ensure that shared resources are accessed safely and efficiently.
 
-If you have specific scenarios or examples you’d like to explore further, feel free to ask!
+In Java, both `yield()` and `join()` are methods related to thread management, but they serve different purposes. Here’s a breakdown of each:
+
+### `Thread.yield()`
+
+- **Purpose**: The `yield()` method is a static method that hints to the thread scheduler that the current thread is willing to yield its current use of the CPU. This can allow other threads of the same or higher priority to execute.
+  
+- **Behavior**: 
+  - When a thread calls `yield()`, it suggests that the scheduler can pause the current thread and allow other threads to run. However, it’s important to note that this is just a hint; the scheduler can ignore it.
+  - After yielding, the thread can return to the runnable state, and it might not run immediately again.
+  
+- **Usage**: It’s typically used in situations where a thread can afford to wait, and there are other threads that should have the opportunity to execute.
+
+```java
+public void run() {
+    // Some processing
+    Thread.yield(); // Hint to the scheduler to yield CPU
+    // Continue processing
+}
+```
+
+### `Thread.join()`
+
+- **Purpose**: The `join()` method is used to make one thread wait for another thread to complete its execution. This is useful when you want to ensure that a thread has finished before proceeding.
+
+- **Behavior**:
+  - When a thread calls `join()` on another thread, it will block until the thread on which `join()` was called has finished executing.
+  - If you call `join()` on a thread that has already completed, it returns immediately.
+
+- **Usage**: This is commonly used in scenarios where you need to wait for a thread to complete its task before continuing execution in the main thread or another thread.
+
+```java
+Thread thread1 = new Thread(() -> {
+    // Task to be executed
+});
+
+thread1.start();
+
+try {
+    thread1.join(); // Wait for thread1 to finish
+} catch (InterruptedException e) {
+    e.printStackTrace();
+}
+
+// Continue after thread1 has completed
+```
+
+### Summary
+
+- **`yield()`**: Suggests the thread to give up the CPU for other threads (non-blocking).
+- **`join()`**: Blocks the calling thread until the specified thread finishes its execution (blocking).
+
+If you have more specific scenarios or questions regarding these methods, feel free to ask!
 
 
 ### Java Multithreading Interview Questions
