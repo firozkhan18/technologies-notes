@@ -54,6 +54,8 @@ Hide/Show table of contents
 |3 | [**Java Thread & Concurrency**](Java-Thread-Concurrency.md)|
 |4 | [**Java File I/O**](FileIOcompleteReference.md)|
 |5 | [**End-to-End CICD Pipeline Implementation**](End-to-End-CICD-Pipeline-Implementation.md)|
+|6 | [**Java Basic Differences & Comparisions**](java-basic-differences-and-comparisions.md)|
+
 
 
 ## Java Programing Exercises
