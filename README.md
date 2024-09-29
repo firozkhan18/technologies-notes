@@ -11,10 +11,12 @@ Hide/Show table of contents
     
 | No. | Cheat Sheets |
 |---- | ---------|
-|1 | [**Cheat-Sheet-Docker**](Cheat-Sheet-Docker.md)|
-|2 | [**Cheat-Sheet-Kafka**](Cheat-Sheet-Kafka.md)|
-|3 | [**Cheat-Sheet-Kubernetes**](Cheat-Sheet-Kubernetes.md)|
-|4 | [**Cheat-Sheet-Linux**](Cheat-Sheet-Linux.md)|
+|1 | [**Cheat-Sheet-Docker**](cheat-sheet/Cheat-Sheet-Docker.md)|
+|2 | [**Cheat-Sheet-Kafka**](cheat-sheet/Cheat-Sheet-Kafka.md)|
+|3 | [**Cheat-Sheet-Kubernetes**](cheat-sheet/Cheat-Sheet-Kubernetes.md)|
+|4 | [**Cheat-Sheet-Linux**](cheat-sheet/Cheat-Sheet-Linux.md)|
+|5 | [**Cheat-Sheet-Java8**](cheat-sheet/Cheat-Sheet-Java8.md)|
+|6 | [**Cheat-Sheet-MongoDB**](cheat-sheet/Cheat-Sheet-MongoDB.md)|
 
 </details>
 
@@ -29,12 +31,11 @@ Hide/Show table of contents
  
 | No. | Topics |
 |---- | ---------|
-|1 | [**Q&A-JavaScript**](FAQ-JavaScript.md)|
-|2 | [**Q&A-Angular**](FAQ-Angular.md)|
-|3 | [**Q&A-React**](FAQ-React.md)|
-|5 | [**Q&A-React-Advanced**](FAQ-React-Advanced.md)|
-|6 | [**Q&A-React**](Q&A-React.md)|
-
+|1 | [**Q&A-JavaScript**](conceptsI/FAQ-JavaScript.md)|
+|2 | [**Q&A-Angular**](conceptsI/FAQ-Angular.md)|
+|3 | [**Q&A-React**](conceptsI/FAQ-React.md)|
+|5 | [**Q&A-React-Advanced**](conceptsI/FAQ-React-Advanced.md)|
+|6 | [**Q&A-React**](conceptsI/Q&A-React.md)|
 </details>
 
 ## Interview Questions & Answers - Java & J2EE Technologies
