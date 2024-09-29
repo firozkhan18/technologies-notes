@@ -50,6 +50,8 @@ Hide/Show table of contents
 | No. | Topics |
 |---- | ---------|
 |1 | [**Q&A-Design-Patterns**](FAQ-Design-Patterns.md)|
+|1 | [**Java Collection Framework**](Java-Collection-Framework.md)|
+|1 | [**Java Thread & Concurrency**](Java-Thread-Concurrency.md)|
 
 ## Java Programing Exercises
 * [java-basic-exercises-001-Basic-1](exercisesI/java-basic-exercises-001-Basic-1.md)
