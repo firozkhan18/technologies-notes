@@ -299,7 +299,7 @@ With the introduction of static methods to interface, such utility classes will 
 
 Sure! Here's the complete markdown document, ensuring all sections are included:
 
-```markdown
+
 # Interface Vs Abstract Class After Java 8
 
 With the introduction of concrete methods (default and static methods) to interfaces from Java 8, the gap between interface and abstract class has been reduced significantly. Now both can have concrete methods as well as abstract methods. But, still there exist some minute differences between them. In this article, we will try to list down the differences between interface and abstract class after Java 8.
