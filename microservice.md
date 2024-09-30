@@ -454,3 +454,135 @@ In Spring Boot, you typically implement the Saga Orchestrator pattern using a co
 
 Orchestrator service: The central service that coordinates all the steps.
 Individual services: Each microservice handles its own task (flight booking, hotel…
+
+
+Sure! Here's a representation of the Choreography pattern for the same vacation booking scenario, along with a brief Spring Boot code example.
+
+### Choreography Pattern Diagram
+
+In the Choreography pattern, each service communicates directly with others and handles its own compensation logic.
+
+```mermaid
+graph TD
+    A[Service A - Book Flight] -->|Success| B[Service B - Reserve Hotel]
+    A -->|Failure| C[Service A - Cancel Flight]
+    B -->|Success| D[Service C - Rent Car]
+    B -->|Failure| E[Service B - Cancel Hotel]
+    D -->|Success| F[End]
+    D -->|Failure| G[Service C - Return Car]
+
+    %% Compensating Actions
+    C --> H[End]
+    E --> C
+    G --> H
+```
+
+### Explanation
+
+1. **Service A - Book Flight**: Initiates the booking.
+   - If successful, it triggers Service B to reserve the hotel.
+   - If it fails, it handles its own compensation by canceling the flight.
+   
+2. **Service B - Reserve Hotel**: Handles hotel reservations.
+   - On success, it calls Service C to rent a car.
+   - On failure, it triggers its own compensation to cancel the hotel.
+
+3. **Service C - Rent Car**: Rents the car if previous steps are successful.
+   - If this fails, it handles its own compensation by returning the car.
+
+### Spring Boot Implementation
+
+Here's a simplified version of the implementation in Spring Boot for each service:
+
+#### 1. **Service A - Book Flight**
+
+```java
+@RestController
+@RequestMapping("/flight")
+public class FlightService {
+
+    @PostMapping("/book")
+    public ResponseEntity<String> bookFlight() {
+        // Logic to book flight
+        boolean success = // ... booking logic;
+
+        if (!success) {
+            // Trigger cancellation
+            cancelFlight();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Flight booking failed");
+        }
+
+        // Notify next service (via REST call or message broker)
+        restTemplate.postForEntity("http://hotel-service/reserve", flightDetails, String.class);
+        return ResponseEntity.ok("Flight booked successfully");
+    }
+
+    public void cancelFlight() {
+        // Logic to cancel the flight
+    }
+}
+```
+
+#### 2. **Service B - Reserve Hotel**
+
+```java
+@RestController
+@RequestMapping("/hotel")
+public class HotelService {
+
+    @PostMapping("/reserve")
+    public ResponseEntity<String> reserveHotel(@RequestBody FlightDetails flightDetails) {
+        // Logic to reserve hotel
+        boolean success = // ... reservation logic;
+
+        if (!success) {
+            // Trigger compensation
+            cancelHotel();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Hotel reservation failed");
+        }
+
+        // Notify next service
+        restTemplate.postForEntity("http://car-service/rent", hotelDetails, String.class);
+        return ResponseEntity.ok("Hotel reserved successfully");
+    }
+
+    public void cancelHotel() {
+        // Logic to cancel the hotel reservation
+    }
+}
+```
+
+#### 3. **Service C - Rent Car**
+
+```java
+@RestController
+@RequestMapping("/car")
+public class CarService {
+
+    @PostMapping("/rent")
+    public ResponseEntity<String> rentCar(@RequestBody HotelDetails hotelDetails) {
+        // Logic to rent a car
+        boolean success = // ... rental logic;
+
+        if (!success) {
+            // Handle failure
+            returnCar();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Car rental failed");
+        }
+
+        return ResponseEntity.ok("Car rented successfully");
+    }
+
+    public void returnCar() {
+        // Logic to return the car
+    }
+}
+```
+
+### Key Points
+
+- Each service is responsible for its own transactions and compensation.
+- Services communicate directly with each other, either through REST APIs or a messaging system.
+- Failure handling and compensating actions are implemented within each service.
+
+This pattern allows for greater flexibility and autonomy of each service, but it requires careful management of state and communication to ensure consistency across the system.
