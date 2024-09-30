@@ -402,6 +402,41 @@ graph TD
 
 By following this structure, you ensure that all services remain consistent and that no operations are left in an inconsistent state.
 
+Here’s a Mermaid diagram that outlines the Saga Orchestrator pattern for booking a vacation, including the booking of a flight, reserving a hotel, and renting a car, with appropriate rollback actions in case of failures.
+
+```mermaid
+graph TD
+    A[Orchestrator] -->|Step 1: Book Flight| B[Service A - Book Flight]
+    B -->|Success| C[Service B - Reserve Hotel]
+    B -->|Failure| D[Compensate A - Cancel Flight]
+    C -->|Success| E[Service C - Rent Car]
+    C -->|Failure| F[Compensate B - Cancel Hotel]
+    E -->|Success| G[End]
+    E -->|Failure| H[Compensate C - Return Car]
+
+    %% Compensating Actions
+    D --> I[End]
+    F --> D1[Compensate A - Cancel Flight]
+    D1 --> I
+    H --> I
+```
+
+### Steps Explained:
+
+1. **Orchestrator**: The central service coordinating the entire process.
+2. **Service A - Book Flight**: The orchestrator first attempts to book the flight.
+   - If successful, it proceeds to the next step.
+   - If it fails, it triggers compensation to cancel the flight (though there might not be a need to compensate if it never succeeded).
+3. **Service B - Reserve Hotel**: After a successful flight booking, the orchestrator books the hotel.
+   - If this step fails, it triggers compensation to cancel the flight booking.
+4. **Service C - Rent Car**: If both the flight and hotel bookings are successful, the car is rented.
+   - If this fails, it compensates by returning the car.
+5. **Compensation Actions**: Ensure that any failures lead to appropriate rollbacks:
+   - Cancel the flight if the hotel booking fails.
+   - Return the car if renting fails.
+
+This structured approach ensures that all steps are properly sequenced, and any failures are handled gracefully to maintain consistency across services.
+
 Imagine you’re booking a vacation, which involves multiple steps: booking a flight, reserving a hotel, and renting a car. If the flight booking fails, the entire process should be aborted and rolled back.
 
 In an Orchestrator-based Saga:
