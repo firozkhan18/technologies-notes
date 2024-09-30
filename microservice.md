@@ -170,3 +170,210 @@ app.listen(3000, () => console.log('Orchestrator running on port 3000'));
 ### Conclusion
 
 The orchestrator-based saga pattern allows for managing complex transactions across multiple microservices while ensuring reliability through compensating actions. This example provides a basic overview, and you can expand it with more advanced features like event sourcing, retries, and logging for production use.
+
+Sure! Let’s create a **Mermaid diagram** for the orchestrator-based Saga pattern, followed by a **Spring Boot** implementation for the same scenario.
+
+### Mermaid Diagram
+
+Here’s a Mermaid diagram to represent the orchestrator-based Saga pattern:
+
+```mermaid
+graph TD
+    A[Orchestrator] -->|Step 1: Start Order| B[Service A (Reserve Item)]
+    B -->|Success| C[Service B (Charge Payment)]
+    B -->|Failure| D[Compensate A (Release Item)]
+    C -->|Success| E[Service C (Notify User)]
+    C -->|Failure| F[Compensate B (Refund Payment)]
+    E -->|Success| G[End]
+    E -->|Failure| H[Compensate C (Notify User of Failure)]
+    D --> I[End]
+    F --> I
+    H --> I
+```
+
+### Spring Boot Implementation
+
+#### Step 1: Create Services
+
+You will create three services (Order Service, Payment Service, Notification Service) and one Orchestrator service. 
+
+##### 1. Order Service
+
+```java
+// OrderServiceApplication.java
+package com.example.orderservice;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.web.bind.annotation.*;
+
+@SpringBootApplication
+@RestController
+@RequestMapping("/order")
+public class OrderServiceApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(OrderServiceApplication.class, args);
+    }
+
+    @PostMapping("/reserve")
+    public String reserve() {
+        // Logic to reserve an item
+        System.out.println("Item reserved.");
+        return "Item reserved.";
+    }
+
+    @PostMapping("/compensate")
+    public String compensate() {
+        // Logic to release the item
+        System.out.println("Item reservation released.");
+        return "Item reservation released.";
+    }
+}
+```
+
+##### 2. Payment Service
+
+```java
+// PaymentServiceApplication.java
+package com.example.paymentservice;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.web.bind.annotation.*;
+
+@SpringBootApplication
+@RestController
+@RequestMapping("/payment")
+public class PaymentServiceApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(PaymentServiceApplication.class, args);
+    }
+
+    @PostMapping("/charge")
+    public String charge() {
+        // Logic to charge payment
+        System.out.println("Payment charged.");
+        return "Payment charged.";
+    }
+
+    @PostMapping("/refund")
+    public String refund() {
+        // Logic to refund payment
+        System.out.println("Payment refunded.");
+        return "Payment refunded.";
+    }
+}
+```
+
+##### 3. Notification Service
+
+```java
+// NotificationServiceApplication.java
+package com.example.notificationservice;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.web.bind.annotation.*;
+
+@SpringBootApplication
+@RestController
+@RequestMapping("/notification")
+public class NotificationServiceApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(NotificationServiceApplication.class, args);
+    }
+
+    @PostMapping("/notify")
+    public String notifyUser() {
+        // Logic to notify user
+        System.out.println("User notified.");
+        return "User notified.";
+    }
+
+    @PostMapping("/notify-failure")
+    public String notifyFailure() {
+        // Logic to notify user of failure
+        System.out.println("User notified of failure.");
+        return "User notified of failure.";
+    }
+}
+```
+
+##### 4. Orchestrator Service
+
+```java
+// OrchestratorApplication.java
+package com.example.orchestrator;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
+
+@SpringBootApplication
+@RestController
+@RequestMapping("/saga")
+public class OrchestratorApplication {
+
+    private final RestTemplate restTemplate = new RestTemplate();
+
+    public static void main(String[] args) {
+        SpringApplication.run(OrchestratorApplication.class, args);
+    }
+
+    @PostMapping("/start")
+    public String startSaga() {
+        try {
+            String orderResponse = restTemplate.postForObject("http://localhost:8081/order/reserve", null, String.class);
+            String paymentResponse = restTemplate.postForObject("http://localhost:8082/payment/charge", null, String.class);
+            String notifyResponse = restTemplate.postForObject("http://localhost:8083/notification/notify", null, String.class);
+            return "Saga completed successfully.";
+        } catch (Exception e) {
+            // Compensation logic
+            restTemplate.postForObject("http://localhost:8081/order/compensate", null, String.class);
+            restTemplate.postForObject("http://localhost:8082/payment/refund", null, String.class);
+            restTemplate.postForObject("http://localhost:8083/notification/notify-failure", null, String.class);
+            return "Saga failed, compensating.";
+        }
+    }
+}
+```
+
+### Running the Services
+
+1. **Create a Maven project for each service** using Spring Initializr with dependencies for Spring Web.
+2. **Run each service** on different ports:
+   - Order Service: Port `8081`
+   - Payment Service: Port `8082`
+   - Notification Service: Port `8083`
+   - Orchestrator Service: Port `8080`
+
+3. **To initiate the saga**, send a POST request to the orchestrator:
+   ```bash
+   curl -X POST http://localhost:8080/saga/start
+   ```
+
+### Conclusion
+
+This Spring Boot implementation follows the orchestrator-based Saga pattern, allowing you to manage distributed transactions reliably. You can expand this by adding more features like logging, error handling, and retries for robustness in production systems.
+
+Imagine you’re booking a vacation, which involves multiple steps: booking a flight, reserving a hotel, and renting a car. If the flight booking fails, the entire process should be aborted and rolled back.
+
+In an Orchestrator-based Saga:
+
+The orchestrator (a central coordinator) manages the flow.
+The orchestrator first tries to book the flight.
+If successful, it proceeds to book the hotel.
+If the hotel booking fails, it triggers compensating transactions (e.g., cancel the flight booking).
+It acts as a “traffic controller,” ensuring that the entire transaction either completes or rolls back as needed.
+This way, even though each step is handled by a different service, the orchestrator ensures the steps follow a proper sequence, and failures trigger appropriate actions.
+
+
+Implementation
+In Spring Boot, you typically implement the Saga Orchestrator pattern using a combination of:
+
+Orchestrator service: The central service that coordinates all the steps.
+Individual services: Each microservice handles its own task (flight booking, hotel…
