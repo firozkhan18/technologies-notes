@@ -1246,7 +1246,25 @@ spring:
           filters:
             - RequestRateLimiter=2,4 # 2 requests per second with a burst of 4
 ```
+In the context of rate limiting, the **burst** refers to the ability to handle a temporary spike in requests that exceeds the regular limit. 
 
+### Explanation
+
+- **Rate Limit**: The limit set on the number of requests that can be processed in a specified time period. In your example, the limit is **2 requests per second**.
+- **Burst Capacity**: The additional requests that can be allowed in a short period beyond the specified rate limit, in this case, **4 requests**. This means that if the service is under load, it can handle a sudden influx of up to 4 additional requests quickly before enforcing the rate limit.
+
+### Example
+
+Given the rate limit of **2 requests per second** with a burst of **4**:
+- **Normal Operation**: The service will handle **2 requests per second** continuously.
+- **Burst Handling**: If there’s a sudden surge (like a spike in traffic), the service can allow up to **4 extra requests** in addition to the normal rate. 
+
+So, if the normal limit is exceeded:
+- **At second 1**: 2 requests are allowed.
+- **At second 2**: 2 more requests are allowed.
+- **At second 3**: If a sudden surge comes in and 4 additional requests arrive, the service can handle these extra requests up to the burst limit.
+
+After the burst limit is reached, any further requests would be rejected or queued until the rate limit resets. This mechanism helps to smooth out traffic spikes while still protecting the service from being overwhelmed.
 ### Conclusion
 
 By implementing these strategies, you can effectively manage memory and enhance the performance of your microservices. Each aspect contributes to a more resilient and efficient architecture, capable of handling high loads and ensuring system stability.
