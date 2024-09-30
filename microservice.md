@@ -178,6 +178,7 @@ Sure! Let’s create a **Mermaid diagram** for the orchestrator-based Saga patte
 Here’s a Mermaid diagram to represent the orchestrator-based Saga pattern:
 
 ```mermaid
+
 graph TD
     A[Orchestrator] -->|Step 1: Start Order| B[Service A (Reserve Item)]
     B -->|Success| C[Service B (Charge Payment)]
