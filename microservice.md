@@ -180,13 +180,13 @@ Here’s a Mermaid diagram to represent the orchestrator-based Saga pattern:
 ```mermaid
 
 graph TD
-    A[Orchestrator] -->|Step 1: Start Order| B[Service A (Reserve Item)]
-    B -->|Success| C[Service B (Charge Payment)]
-    B -->|Failure| D[Compensate A (Release Item)]
-    C -->|Success| E[Service C (Notify User)]
-    C -->|Failure| F[Compensate B (Refund Payment)]
+    A[Orchestrator] -->|Step 1: Start Order| B[Service A - Reserve Item]
+    B -->|Success| C[Service B - Charge Payment]
+    B -->|Failure| D[Compensate A - Release Item]
+    C -->|Success| E[Service C - Notify User]
+    C -->|Failure| F[Compensate B - Refund Payment]
     E -->|Success| G[End]
-    E -->|Failure| H[Compensate C (Notify User of Failure)]
+    E -->|Failure| H[Compensate C - Notify User of Failure]
     D --> I[End]
     F --> I
     H --> I
