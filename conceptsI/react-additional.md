@@ -182,7 +182,56 @@ In React, there are primarily two types of components: **Class Components** and 
     }
   }
   ```
+### What is Shallow Prop?
 
+In React, "shallow prop" isn't a standard term, but it often refers to a shallow comparison of props or state. This concept is crucial for performance optimization, particularly in preventing unnecessary re-renders of components.
+
+### Shallow Comparison
+
+A **shallow comparison** checks whether the top-level properties of two objects are equal, without diving into their nested properties. This type of comparison is useful in scenarios where you want to determine if a component should re-render based on changes in its props or state.
+
+### When to Use Shallow Comparison
+
+1. **Pure Components**: React provides a `PureComponent` that performs a shallow comparison of props and state. If the shallow comparison determines that nothing has changed, React will skip the re-render.
+
+2. **React.memo**: For function components, you can use `React.memo`, which also performs a shallow comparison of props by default.
+
+### Example
+
+Here's a simple example using `React.memo`:
+
+```jsx
+import React from 'react';
+
+// A functional component that only re-renders if its props change
+const MyComponent = React.memo(({ data }) => {
+  console.log("Component re-rendered");
+  return <div>{data}</div>;
+});
+
+const App = () => {
+  const [count, setCount] = React.useState(0);
+  const [text, setText] = React.useState("Hello");
+
+  return (
+    <div>
+      <MyComponent data={text} />
+      <button onClick={() => setCount(count + 1)}>Increment Count</button>
+    </div>
+  );
+};
+
+export default App;
+```
+
+### Explanation
+
+- In the example above, `MyComponent` will only re-render when the `data` prop changes. If you click the button to increment `count`, `MyComponent` won't re-render because `text` hasn't changed.
+- This behavior is thanks to the shallow comparison of the `data` prop by `React.memo`.
+
+### Conclusion
+
+While "shallow prop" isn't a formal term, understanding shallow comparisons is essential for optimizing component rendering in React. By using techniques like `PureComponent` or `React.memo`, you can improve performance by preventing unnecessary updates.
 ### 4. Higher-Order Components (HOCs)
 
 - **Definition**: HOCs are functions that take a component and return a new component, often used for code reuse, logic abstraction, or adding additional props.
