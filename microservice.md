@@ -361,6 +361,47 @@ public class OrchestratorApplication {
 
 This Spring Boot implementation follows the orchestrator-based Saga pattern, allowing you to manage distributed transactions reliably. You can expand this by adding more features like logging, error handling, and retries for robustness in production systems.
 
+To prevent transactions in Service A and Service C if Service B fails, you can implement a compensation pattern along with a robust orchestration mechanism. Here’s how you can structure it:
+
+1. **Transactional State Management**: Each service should maintain a transaction state. For instance, Service A should only finalize the reservation if it knows Service B has succeeded.
+
+2. **Sagas Pattern**: Utilize the Sagas pattern, which manages distributed transactions. In this case, you would initiate a saga that includes compensation actions for each service in case of failure.
+
+Here’s how you can modify your flow:
+
+```mermaid
+
+graph TD
+    A[Orchestrator] -->|Step 1: Start Order| B[Service A - Reserve Item]
+    B -->|Success| C[Service B - Charge Payment]
+    B -->|Failure| D[Compensate A - Release Item]
+    C -->|Success| E[Service C - Notify User]
+    C -->|Failure| F[Compensate B - Refund Payment]
+    E -->|Success| G[End]
+    E -->|Failure| H[Compensate C - Notify User of Failure]
+    D --> I[End]
+    F --> I
+    H --> I
+
+    %% New flow for Service A and C upon Service B failure
+    C -->|Failure| D1[Compensate A - Release Item]
+    D1 --> D
+    D1 -->|Compensation Success| D2[Compensate C - Notify User of Failure]
+    D2 --> I
+```
+
+### Steps Explained:
+
+1. **Service A - Reserve Item**: Once it reserves the item, it waits for Service B's response before finalizing.
+  
+2. **Service B - Charge Payment**: If Service B fails, trigger compensation for Service A to release the reserved item.
+
+3. **Service C - Notify User**: This should only execute if Service B is successful. If Service B fails, Service C should not be notified.
+
+4. **Compensation Actions**: If Service B fails, you compensate Service A first. If compensation is successful, then you can handle notifying the user about the failure of the transaction.
+
+By following this structure, you ensure that all services remain consistent and that no operations are left in an inconsistent state.
+
 Imagine you’re booking a vacation, which involves multiple steps: booking a flight, reserving a hotel, and renting a car. If the flight booking fails, the entire process should be aborted and rolled back.
 
 In an Orchestrator-based Saga:
