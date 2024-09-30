@@ -848,6 +848,70 @@ In React, events are named using camelCase, and you pass a function as the event
 ### 13. What are synthetic events in React?
 Synthetic events are a cross-browser wrapper around native events in React. They normalize the behavior of events to ensure consistent handling across different browsers.
 
+### Synthetic Events in React
+
+Synthetic events are React's way of normalizing browser events to provide a consistent interface across different browsers. They are wrappers around the native DOM events and follow the same API as the browser's native events, but they work consistently across all browsers.
+
+When you handle an event in React, it is wrapped in a SyntheticEvent, which has the same properties and methods as the native event. This makes it easier to work with events without worrying about browser inconsistencies.
+
+### Key Features of Synthetic Events:
+1. **Normalization**: They ensure that the event properties behave consistently across all browsers.
+2. **Pooling**: Synthetic events are pooled for performance reasons. This means that the event object will be reused, and properties will be nullified after the event handler is invoked, requiring you to access the properties within the event handler.
+
+### Example Code
+
+Here's a simple example demonstrating how to use Synthetic Events in a React component:
+
+```jsx
+import React, { useState } from 'react';
+
+const SyntheticEventExample = () => {
+  const [inputValue, setInputValue] = useState('');
+
+  const handleChange = (event) => {
+    // Accessing the value from the SyntheticEvent
+    setInputValue(event.target.value);
+  };
+
+  const handleSubmit = (event) => {
+    // Preventing the default form submission
+    event.preventDefault();
+    alert(`Submitted value: ${inputValue}`);
+  };
+
+  return (
+    <div>
+      <form onSubmit={handleSubmit}>
+        <input 
+          type="text" 
+          value={inputValue} 
+          onChange={handleChange} 
+          placeholder="Type something..." 
+        />
+        <button type="submit">Submit</button>
+      </form>
+    </div>
+  );
+};
+
+export default SyntheticEventExample;
+```
+
+### Explanation of the Code
+
+1. **Event Handling**: In the example above, we have two event handlers: `handleChange` and `handleSubmit`.
+   - **`handleChange`**: This is called whenever the input value changes. The `event` parameter is a SyntheticEvent, which provides a normalized way to access `event.target.value`.
+   - **`handleSubmit`**: This is called when the form is submitted. The default form submission behavior is prevented using `event.preventDefault()`, ensuring that the page doesn't reload.
+
+2. **Form and Input**: The input field and the submit button are set up to call their respective handlers, demonstrating how SyntheticEvents manage user interactions.
+
+### Benefits of Using Synthetic Events
+
+- **Cross-Browser Compatibility**: You don’t have to worry about inconsistencies in how different browsers handle events.
+- **Consistent API**: You can expect the same properties and methods from SyntheticEvents, making it easier to write cross-browser code.
+
+In conclusion, Synthetic events in React provide a simplified and consistent way to handle events, making your code cleaner and more reliable across different browsers.
+
 ### 14. What are inline conditional expressions?
 Inline conditional expressions are used in JSX to conditionally render elements. This is often done using the ternary operator or logical AND (`&&`) operator.
 
