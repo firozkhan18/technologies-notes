@@ -161,3 +161,233 @@ If a user tries to change URL properties using the network tab in the browser, y
 Overall, it's important to implement a combination of front-end and back-end security measures to secure user requests in your Angular and Spring Boot application.
 
 
+Creating a complete Spring Boot and Angular application that embodies the 12 rules of microservices as defined by Sam Newman is a large undertaking. Below is an outline and a simplified example that touches on these principles, but please note that providing a full codebase would be too extensive for this format. However, I can guide you through a basic structure and essential code snippets.
+
+### Project Structure
+
+1. **Backend (Spring Boot)**
+   - **Models**: Define your domain models.
+   - **Controllers**: Handle incoming requests.
+   - **Services**: Business logic layer.
+   - **Repositories**: Data access layer.
+   - **Configuration**: Set up security, monitoring, etc.
+
+2. **Frontend (Angular)**
+   - **Components**: UI elements.
+   - **Services**: HTTP requests to the backend.
+   - **Routing**: Navigation between views.
+
+### Example Code
+
+#### Backend: Spring Boot
+
+**1. pom.xml (Dependencies)**
+
+```xml
+<dependencies>
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-web</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-data-jpa</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-security</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-actuator</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-logging</artifactId>
+    </dependency>
+</dependencies>
+```
+
+**2. Domain Model**
+
+```java
+@Entity
+public class Product {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private String name;
+    private Double price;
+
+    // Getters and Setters
+}
+```
+
+**3. Repository**
+
+```java
+public interface ProductRepository extends JpaRepository<Product, Long> {
+}
+```
+
+**4. Service**
+
+```java
+@Service
+public class ProductService {
+    @Autowired
+    private ProductRepository repository;
+
+    public List<Product> getAllProducts() {
+        return repository.findAll();
+    }
+
+    public Product addProduct(Product product) {
+        return repository.save(product);
+    }
+}
+```
+
+**5. Controller**
+
+```java
+@RestController
+@RequestMapping("/api/products")
+public class ProductController {
+    @Autowired
+    private ProductService productService;
+
+    @GetMapping
+    public List<Product> getProducts() {
+        return productService.getAllProducts();
+    }
+
+    @PostMapping
+    public Product createProduct(@RequestBody Product product) {
+        return productService.addProduct(product);
+    }
+}
+```
+
+**6. Security Configuration**
+
+```java
+@Configuration
+@EnableWebSecurity
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http.csrf().disable()
+            .authorizeRequests()
+            .anyRequest().permitAll();
+    }
+}
+```
+
+**7. Monitoring Configuration (Actuator)**
+
+```properties
+management.endpoints.web.exposure.include=*
+management.endpoint.health.show-details=always
+```
+
+#### Frontend: Angular
+
+**1. Angular Service**
+
+```typescript
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { Product } from './product.model';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class ProductService {
+  private apiUrl = 'http://localhost:8080/api/products';
+
+  constructor(private http: HttpClient) { }
+
+  getProducts(): Observable<Product[]> {
+    return this.http.get<Product[]>(this.apiUrl);
+  }
+
+  addProduct(product: Product): Observable<Product> {
+    return this.http.post<Product>(this.apiUrl, product);
+  }
+}
+```
+
+**2. Angular Component**
+
+```typescript
+import { Component, OnInit } from '@angular/core';
+import { ProductService } from './product.service';
+import { Product } from './product.model';
+
+@Component({
+  selector: 'app-product-list',
+  templateUrl: './product-list.component.html'
+})
+export class ProductListComponent implements OnInit {
+  products: Product[] = [];
+
+  constructor(private productService: ProductService) {}
+
+  ngOnInit() {
+    this.productService.getProducts().subscribe(data => {
+      this.products = data;
+    });
+  }
+}
+```
+
+**3. Product Model**
+
+```typescript
+export interface Product {
+  id: number;
+  name: string;
+  price: number;
+}
+```
+
+**4. Angular Routing**
+
+```typescript
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
+import { ProductListComponent } from './product-list/product-list.component';
+
+const routes: Routes = [
+  { path: 'products', component: ProductListComponent },
+  { path: '', redirectTo: '/products', pathMatch: 'full' }
+];
+
+@NgModule({
+  imports: [RouterModule.forRoot(routes)],
+  exports: [RouterModule]
+})
+export class AppRoutingModule { }
+```
+
+### Implementation of Principles
+
+1. **Model around business domain concepts**: Use domain models like `Product`.
+2. **Design for failure**: Use circuit breakers (e.g., Hystrix) in a real scenario.
+3. **Decentralize all the things**: Separate services (like product and order services).
+4. **Embrace shared-nothing architecture**: Each service has its own database.
+5. **Automate everything**: CI/CD pipelines for deployment.
+6. **Enable easy and confident changes**: Feature flags.
+7. **Architecture evolves over time**: Microservices can evolve independently.
+8. **Build a culture of automation**: Automated tests and deployment.
+9. **Design for operability**: Use Spring Boot Actuator.
+10. **Monitor everything**: Integrate with tools like Prometheus or Grafana.
+11. **Log everything**: Use centralized logging (e.g., ELK stack).
+12. **Secure everything**: Implement security with Spring Security.
+
+### Conclusion
+
+This example provides a basic framework that embodies the principles of microservices. For a full implementation, consider using Docker for containerization, Kubernetes for orchestration, and additional monitoring and logging frameworks. Always follow best practices for security, testing, and code quality.
+
