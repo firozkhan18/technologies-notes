@@ -8331,7 +8331,8 @@ Higher-Order Components (HOCs) are functions that take a component and return a 
 - **Purpose**: To abstract and reuse logic that can be shared across multiple components.
 
 - **Example**:
-  ```jsx
+
+
   const withLogging = (WrappedComponent) => {
     return class extends React.Component {
       componentDidMount() {
@@ -8343,12 +8344,8 @@ Higher-Order Components (HOCs) are functions that take a component and return a 
       }
     };
   };
-
-  const MyComponent = (props
-
-) => <div>{props.message}</div>;
+  const MyComponent = (props) => <div>{props.message}</div>;
   const MyComponentWithLogging = withLogging(MyComponent);
-  ```
 
 These questions and answers cover a range of advanced React topics that are relevant for experienced developers. Preparing with these examples will help you demonstrate a deep understanding of React’s capabilities and best practices in your interview.
 
