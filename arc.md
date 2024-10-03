@@ -45,7 +45,7 @@ graph TD
 ```mermaid
 
 graph TD
-    A[Frontend - Angular)] -->|HTTP Requests| B[API Gateway - Spring Cloud Gateway]
+    A[Frontend - Angular] -->|HTTP Requests| B[API Gateway - Spring Cloud Gateway]
     B -->|Service Discovery| C[Discovery Service - Eureka]
     C -->|REST API| D[Microservices]
     
