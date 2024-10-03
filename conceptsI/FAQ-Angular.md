@@ -6095,3 +6095,149 @@ export class AppModule { }
 This setup provides a basic authentication mechanism using JWT in a Spring Boot backend and Angular frontend. Remember to handle error responses and implement additional security measures like input validation, secure password storage, and CSRF protection as needed.
 
 This is a simplified example, so be sure to adapt it to your application's requirements and security needs.
+
+Cross-Site Scripting (XSS) attacks occur when an attacker is able to inject malicious scripts into content that is viewed by other users. In Angular, while the framework provides built-in protections against XSS attacks, vulnerabilities can still arise, especially in certain scenarios. Here’s how XSS attacks could be executed in an Angular application, even with valid user input:
+
+### 1. **Injection of Malicious Scripts via User Input**
+
+If an Angular application accepts user-generated content and renders it without proper sanitization, an attacker could inject scripts. For example, if a user can submit comments that are displayed without being properly escaped or sanitized, an attacker could submit:
+
+```javascript
+<script>alert('XSS Attack!');</script>
+```
+
+### 2. **Using `innerHTML` without Sanitization**
+
+Angular provides a `DomSanitizer` service that helps to sanitize HTML. If developers use `innerHTML` to bind user input directly, it can lead to vulnerabilities.
+
+```javascript
+import { Component } from '@angular/core';
+import { DomSanitizer } from '@angular/platform-browser';
+
+@Component({
+  selector: 'app-example',
+  template: '<div [innerHTML]="trustedHtml"></div>'
+})
+export class ExampleComponent {
+  trustedHtml: any;
+
+  constructor(private sanitizer: DomSanitizer) {
+    this.trustedHtml = this.sanitizer.bypassSecurityTrustHtml('<script>alert("XSS Attack!");</script>');
+  }
+}
+```
+
+In this case, the `bypassSecurityTrustHtml` method circumvents Angular’s security mechanisms, making it possible for the injected script to execute.
+
+### 3. **Stored XSS via Backend**
+
+If the backend allows storing of user input (e.g., comments, messages) without proper validation or escaping, an attacker could store a malicious script. When this content is fetched and rendered in the Angular application, it could lead to XSS.
+
+For example, if a user submits the following comment:
+
+```javascript
+<script>alert('Stored XSS!');</script>
+```
+
+And if the Angular application later renders this comment without sanitization, the script will execute.
+
+### 4. **Malicious Redirects and Links**
+
+An attacker could craft links that lead to a malicious site. If the application doesn’t validate URLs properly, a user could be redirected to a harmful site that executes scripts.
+
+```html
+<a href="javascript:alert('XSS!')">Click Me!</a>
+```
+
+### 5. **Third-Party Libraries**
+
+Using third-party libraries that do not sanitize input properly can also introduce vulnerabilities. If these libraries manipulate the DOM directly, they might execute unsanitized user input as JavaScript.
+
+### 6. **Browser Extensions**
+
+Sometimes, XSS can be exploited through browser extensions that inject scripts into the pages. If a valid user is using a malicious extension, it can manipulate the Angular application and cause an XSS attack without any direct exploitation of the Angular code.
+
+### **Mitigation Strategies**
+
+To prevent XSS attacks in Angular applications:
+
+1. **Always Use Angular's Built-in Sanitization**: Avoid using `bypassSecurityTrustHtml` unless absolutely necessary, and ensure you sanitize any user input.
+
+2. **Validate and Sanitize Input on the Server**: Always validate and sanitize inputs server-side before storing or rendering them.
+
+3. **Use Safe Methods for Binding**: Prefer using Angular's safe methods for binding data, such as `[textContent]` instead of `[innerHTML]`.
+
+4. **Implement Content Security Policy (CSP)**: A strong CSP can help mitigate the impact of XSS attacks by restricting where scripts can be loaded from.
+
+5. **Educate Users**: Inform users about the risks of using malicious browser extensions that could compromise their data.
+
+By following these best practices and understanding how XSS can be exploited, you can significantly reduce the risk of XSS attacks in your Angular application.
+
+Updating the URL in the network tab and executing it involves manipulating the URL in a web application, often done for testing or simulating requests. However, it's important to note that you should only do this in environments where you have permission, like during development or testing.
+
+Here's a general approach using the browser's developer tools:
+
+### Steps to Update the URL in the Network Tab
+
+1. **Open Developer Tools**:
+   - Right-click on the page and select "Inspect" or press `F12`.
+   - Navigate to the "Network" tab.
+
+2. **Make an Initial Request**:
+   - Load or refresh the page to capture initial network requests.
+
+3. **Find the Request**:
+   - Look for the request you want to modify. You can filter by type (XHR, Fetch, etc.) if needed.
+
+4. **Copy the Request**:
+   - Right-click on the desired request and select "Copy" > "Copy as cURL" (this captures the request in a format you can use).
+
+5. **Use cURL to Modify the Request**:
+   - Open a terminal or command prompt and paste the copied cURL command.
+   - Modify the URL or parameters in the command as needed.
+
+6. **Execute the Modified Request**:
+   - Run the modified cURL command to execute it. This sends the request with the updated URL.
+
+### Example of Modifying a Request
+
+Here’s an example of how you might copy and modify a request:
+
+1. **Original cURL Command**:
+   ```bash
+   curl 'https://example.com/api/data' -H 'Authorization: Bearer token' --compressed
+   ```
+
+2. **Modify the URL**:
+   Change the URL to whatever you want to test:
+   ```bash
+   curl 'https://example.com/api/updated-data' -H 'Authorization: Bearer token' --compressed
+   ```
+
+3. **Execute the Modified Command**:
+   Run the modified command in your terminal.
+
+### Using JavaScript in the Console
+
+You can also use JavaScript directly in the browser console to update the URL and execute a request:
+
+```javascript
+fetch('https://example.com/api/updated-data', {
+    method: 'GET', // or 'POST', etc.
+    headers: {
+        'Authorization': 'Bearer token',
+        'Content-Type': 'application/json'
+    }
+})
+.then(response => response.json())
+.then(data => console.log(data))
+.catch(error => console.error('Error:', error));
+```
+
+### Important Notes
+
+- **CORS**: If you're trying to access a different domain, be aware of Cross-Origin Resource Sharing (CORS) restrictions that might prevent you from making requests.
+- **Security**: Only modify URLs and execute requests in environments you control or have permission to test. Unauthorized access or modification of URLs can lead to security issues and is often illegal.
+- **Network Requests**: Using tools like Postman can make it easier to modify and test network requests without needing to go through the browser's dev tools.
+
+Always ensure that you are following best practices and legal guidelines when manipulating network requests.
