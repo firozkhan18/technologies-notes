@@ -5773,3 +5773,78 @@ export class AppRoutingModule { }
 **[⬆ Back to Top](#table-of-contents)**
      
 </details>
+
+<details><summary><b>One way to inform another component that an employee detail has been deleted by another component in Angular is by using a shared service to facilitate communication between components.</b></summary>
+
+Here's a step-by-step guide on how to accomplish this:
+
+1. Create a shared service that will be responsible for handling communication between components. This service should contain an observable property that other components can subscribe to:
+
+```typescript
+import { Injectable } from '@angular/core';
+import { Subject } from 'rxjs';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class EmployeeService {
+  private employeeDeletedSource = new Subject<number>();
+  employeeDeleted$ = this.employeeDeletedSource.asObservable();
+
+  deleteEmployee(employeeId: number) {
+    this.employeeDeletedSource.next(employeeId);
+  }
+}
+```
+
+2. Inject the shared service into the component where the employee detail is being deleted (e.g. EmployeeDetailComponent), and call the deleteEmployee() method when deleting an employee:
+
+```typescript
+import { Component } from '@angular/core';
+import { EmployeeService } from '../employee.service';
+
+@Component({
+  selector: 'app-employee-detail',
+  templateUrl: './employee-detail.component.html',
+  styleUrls: ['./employee-detail.component.css']
+})
+export class EmployeeDetailComponent {
+  constructor(private employeeService: EmployeeService) {}
+
+  deleteEmployee(employeeId: number) {
+    // Delete employee logic
+
+    this.employeeService.deleteEmployee(employeeId);
+  }
+}
+```
+
+3. Subscribe to the employeeDeleted$ observable in the component that needs to be informed about the deletion (e.g. EmployeeListComponent), and handle the event accordingly:
+
+```typescript
+import { Component, OnInit } from '@angular/core';
+import { EmployeeService } from '../employee.service';
+
+@Component({
+  selector: 'app-employee-list',
+  templateUrl: './employee-list.component.html',
+  styleUrls: ['./employee-list.component.css']
+})
+export class EmployeeListComponent implements OnInit {
+  constructor(private employeeService: EmployeeService) {}
+
+  ngOnInit() {
+    this.employeeService.employeeDeleted$.subscribe(employeeId => {
+      // Handle employee deletion event
+    });
+  }
+}
+```
+
+By following these steps, you can ensure that when an employee detail is deleted by one component, another component will be informed about the deletion through the shared service.
+
+**[⬆ Back to Top](#table-of-contents)**
+
+
+</details>
+
