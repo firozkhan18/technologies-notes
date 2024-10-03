@@ -98,4 +98,66 @@ Hide/Show table of contents
 * [java-programming-question-answer-consolidated](exercisesII/java-programming-question-answer-consolidated.md)
 
 </details>
+Here is an example of security configurations in Angular:
+
+1. To implement security in Angular, you can use Angular Route Guards to protect routes based on user authentication and authorization.
+
+2. Create a service to authenticate users using JWT tokens or OAuth.
+
+3. Implement guards such as CanActivate, CanActivateChild, CanDeactivate, and Resolve to control access to specific routes.
+
+4. Use HTTP Interceptors to add authorization headers or handle token expiration.
+
+5. Implement user roles and permissions to restrict access to certain features or data.
+
+6. Store sensitive data securely using Angular’s Secure Storage API or encrypting data before sending it over HTTP requests.
+
+7. Always validate user input on the client-side and server-side to prevent XSS and CSRF attacks.
+
+8. Use Content Security Policy (CSP) to prevent malicious scripts from running in your Angular application.
+
+9. Implement Cross-Origin Resource Sharing (CORS) to restrict access to your API from unauthorized domains.
+
+10. Keep Angular dependencies and packages updated to prevent security vulnerabilities.
+
+11. Enable HTTPS to encrypt data transmitted between the client and server.
+
+12. Regularly perform security audits and code reviews to identify and fix security issues in your Angular application.
+
+The 12 rules of microservices, as defined by Sam Newman in his book "Building Microservices," are:
+
+1. Model around business domain concepts
+2. Design for failure
+3. Decentralize all the things
+4. Embrace shared-nothing architecture
+5. Automate everything
+6. Enable easy and confident changes
+7. Architecture evolves over time
+8. Build a culture of automation
+9. Design for operability
+10. Monitor everything
+11. Log everything
+12. Secure everything
+
+These rules guide the development and deployment of microservices architectures, emphasizing principles such as scalability, resilience, and agility.
+
+
+One way to secure user requests in an Angular and Spring Boot application is by implementing authentication and authorization mechanisms.
+
+Here are a few steps you can take to secure user requests:
+
+1. Implement JWT (JSON Web Token) authentication: You can use JWT to securely authenticate users in your application. When a user logs in, they will receive a JWT token which needs to be passed with each request to authorize the user.
+
+2. Use Spring Security to secure the backend: Spring Security provides authentication and authorization features to secure your Spring Boot application. You can define roles and permissions for users and restrict access to certain endpoints based on these roles.
+
+3. Use HTTPS to encrypt data: Ensure that your application is using HTTPS to encrypt communication between the client and the server. This will prevent data from being intercepted and tampered with.
+
+4. Secure your API endpoints: Make sure to use proper authentication and authorization mechanisms to secure your API endpoints. You can use Spring Security to add security configurations to specific endpoints.
+
+5. Handle server-side validation: Always validate user input on the server-side to prevent any unauthorized access or data manipulation.
+
+If a user tries to change URL properties using the network tab in the browser, your backend should still be able to validate the request and deny access if the user is not authorized to access the resource. Make sure to implement proper error handling and validation checks in your backend to prevent any unauthorized access.
+
+Overall, it's important to implement a combination of front-end and back-end security measures to secure user requests in your Angular and Spring Boot application.
+
 
