@@ -6831,3 +6831,143 @@ export default TransactionComponent;
 - Proper error handling is implemented to ensure the application responds gracefully to invalid requests.
 
 By implementing these security measures, you help protect your application from unauthorized transactions and maintain the integrity of user accounts.
+
+
+When securing a banking application, especially its transaction module, various types of attacks must be considered. Here’s an overview of potential attacks and mitigation strategies:
+
+### Types of Attacks
+
+1. **Cross-Site Scripting (XSS)**:
+   - **Description**: Injecting malicious scripts into web pages viewed by other users.
+   - **Mitigation**: Sanitize user inputs, use Content Security Policy (CSP), and avoid direct DOM manipulation.
+
+2. **Cross-Site Request Forgery (CSRF)**:
+   - **Description**: Forcing an authenticated user to perform unwanted actions on their account.
+   - **Mitigation**: Use CSRF tokens, SameSite cookie attributes, and validate the origin of requests.
+
+3. **SQL Injection**:
+   - **Description**: Inserting malicious SQL queries via user inputs to manipulate the database.
+   - **Mitigation**: Use parameterized queries and ORM frameworks, and validate inputs.
+
+4. **Session Hijacking**:
+   - **Description**: Exploiting a valid computer session to gain unauthorized access.
+   - **Mitigation**: Use HTTPS, secure cookies, and implement session timeouts.
+
+5. **Man-in-the-Middle (MitM)**:
+   - **Description**: Intercepting communication between users and the server.
+   - **Mitigation**: Use SSL/TLS to encrypt data in transit.
+
+6. **Phishing**:
+   - **Description**: Deceiving users into providing sensitive information through fake websites.
+   - **Mitigation**: Educate users about phishing, implement two-factor authentication (2FA), and monitor for phishing attempts.
+
+7. **Brute Force Attacks**:
+   - **Description**: Attempting to gain access by trying numerous password combinations.
+   - **Mitigation**: Implement account lockout mechanisms, rate limiting, and CAPTCHA.
+
+8. **Denial of Service (DoS) / Distributed Denial of Service (DDoS)**:
+   - **Description**: Overloading the application with traffic to render it unavailable.
+   - **Mitigation**: Use traffic filtering, load balancers, and DDoS protection services.
+
+9. **Credential Stuffing**:
+   - **Description**: Using stolen username/password pairs to gain unauthorized access.
+   - **Mitigation**: Monitor for unusual login patterns, enforce password policies, and use 2FA.
+
+10. **Account Takeover**:
+    - **Description**: Gaining access to a user's account through various means (e.g., social engineering).
+    - **Mitigation**: Implement strong authentication and transaction verification methods.
+
+11. **Insider Threats**:
+    - **Description**: Authorized users abusing their access to steal data or funds.
+    - **Mitigation**: Implement strict access controls, monitoring, and auditing.
+
+12. **Replay Attacks**:
+    - **Description**: Capturing valid data transmissions and retransmitting them.
+    - **Mitigation**: Use nonces or timestamps to ensure requests are unique.
+
+### Possibilities of Attack
+
+1. **Weak Authentication Mechanisms**: Poor password policies or lack of multi-factor authentication can lead to unauthorized access.
+
+2. **Insecure Data Storage**: Sensitive data not properly encrypted can be exposed in case of data breaches.
+
+3. **Vulnerable APIs**: Exposed APIs without proper authentication and validation can be exploited.
+
+4. **Poor Input Validation**: Lack of validation can lead to injection attacks.
+
+5. **Exposed Sensitive Information**: Unsecured data transmission (e.g., over HTTP instead of HTTPS) can lead to data theft.
+
+6. **Outdated Software**: Using unpatched libraries or frameworks can expose known vulnerabilities.
+
+7. **Social Engineering**: Users being tricked into divulging sensitive information can lead to account compromise.
+
+### Summary
+
+In total, the number of attack vectors can be extensive, but the most critical ones for a banking application typically include XSS, CSRF, SQL injection, session hijacking, MitM attacks, phishing, brute force attacks, DDoS, and credential stuffing. Continuous security assessment and robust security measures are essential to protect the application and its users effectively.
+
+Handling XSS (Cross-Site Scripting) and CSRF (Cross-Site Request Forgery) attacks in Angular requires implementing best practices in your application code as well as understanding how these attacks work. Below are strategies for mitigating these vulnerabilities and how to observe related activities in the browser's network tab.
+
+### Handling XSS in Angular
+
+1. **Sanitize User Input**: Angular automatically sanitizes user input, but if you are using third-party libraries or handling HTML directly, use Angular’s built-in sanitization services.
+   ```typescript
+   import { DomSanitizer } from '@angular/platform-browser';
+
+   constructor(private sanitizer: DomSanitizer) {}
+
+   getSafeHtml(html: string) {
+       return this.sanitizer.bypassSecurityTrustHtml(html);
+   }
+   ```
+
+2. **Use Angular's Template Syntax**: Always use Angular's template syntax (e.g., `{{}}` for interpolation) rather than directly manipulating the DOM, which can expose you to XSS.
+
+3. **Avoid `innerHTML`**: Never use `innerHTML` to set user-generated content. If you must insert HTML, sanitize it properly.
+
+4. **Content Security Policy (CSP)**: Implement a CSP in your HTTP headers to restrict sources of scripts and resources, helping to prevent XSS.
+
+### Handling CSRF in Angular
+
+1. **Use SameSite Cookies**: Set your cookies with the `SameSite` attribute to prevent them from being sent in cross-origin requests.
+   ```http
+   Set-Cookie: sessionId=abc123; SameSite=Strict
+   ```
+
+2. **CSRF Tokens**: Implement CSRF tokens. When the user initiates a session, generate a token and include it in your forms or API requests. Ensure that your backend validates this token.
+   - On the client side, include the CSRF token in your requests.
+   - Example using Angular's HttpClient:
+   ```typescript
+   import { HttpClient, HttpHeaders } from '@angular/common/http';
+
+   const headers = new HttpHeaders({
+       'X-CSRF-Token': csrfToken, // Pass the CSRF token in headers
+   });
+
+   this.http.post('/api/endpoint', data, { headers }).subscribe(response => {
+       console.log(response);
+   });
+   ```
+
+3. **Validate Token on Server**: Ensure that your backend checks the CSRF token for each state-changing request (e.g., POST, PUT, DELETE).
+
+### Observing Attacks in the Browser Network Tab
+
+1. **Open Developer Tools**: Right-click on your webpage and select "Inspect" or press `F12`.
+
+2. **Network Tab**: Click on the "Network" tab to observe all network requests.
+
+3. **Filter Requests**: You can filter requests by type (XHR, JS, etc.) to see specific interactions.
+
+4. **Check Request Headers**: Click on individual requests to view their headers. Look for:
+   - CSRF tokens (check if they're included and correct).
+   - Content Security Policy headers.
+
+5. **Check for Suspicious Activity**: 
+   - Look for requests that do not have expected tokens or headers.
+   - Monitor for unexpected responses (e.g., 4xx or 5xx statuses).
+
+6. **Console Tab**: Monitor the console for any error messages related to CSP violations or JavaScript errors, which can indicate XSS vulnerabilities.
+
+### Summary
+
+By implementing proper sanitization, using CSRF tokens, and monitoring network requests, you can significantly reduce the risk of XSS and CSRF attacks in your Angular application. Regularly review security practices and stay updated with the latest security advisories to protect your application effectively.
