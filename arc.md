@@ -931,3 +931,57 @@ flowchart TD
 
 ### Usage
 You can use this Mermaid code in any Mermaid-compatible tool or Markdown editor to visualize your microservice architecture.
+Here’s a Mermaid flow diagram representing the architecture you described. You can use this code in a Mermaid live editor or any supported Markdown environment to visualize the diagram.
+
+```mermaid
+graph TD
+    A[User Interface] -->|Mobile| B[API Gateway]
+    A -->|Desktop Browser| B
+
+    B --> C[Service Discovery]
+    B --> D[Load Balancer]
+
+    D --> E[Service Layer]
+    E -->|Service A| F[Service A]
+    E -->|Service B| G[Service B]
+    E -->|Service C| H[Service C]
+
+    C --> I[Admin Access]
+    C --> J[Authorization Server]
+    
+    F --> K[Distributed Cache]
+    G --> K
+    H --> K
+
+    K --> L[Distributed Layer]
+    
+    L --> M[Replication]
+    L --> N[Queue Management Interface]
+    L --> O[Distributed Messaging]
+
+    P[Logs] -->|Logstash| Q[Elasticsearch]
+    Q --> R[Kibana]
+    R --> S[Logs Visualization]
+
+    T[Metrics] -->|Prometheus| U[Grafana]
+    U --> V[Metric Visualization]
+
+    classDef interface fill:#f9f,stroke:#333,stroke-width:2px;
+    class A interface;
+```
+
+### Explanation of Components
+- **User Interface**: Entry points for mobile and desktop users.
+- **API Gateway**: Handles requests from the UI and routes them accordingly.
+- **Service Discovery**: Helps the API Gateway locate services dynamically.
+- **Load Balancer**: Distributes incoming traffic among services.
+- **Service Layer**: Contains multiple services (A, B, C) that handle business logic.
+- **Admin Access & Authorization Server**: Manage administrative functions and user permissions.
+- **Distributed Cache**: Improves performance by caching frequently accessed data.
+- **Distributed Layer**: Coordinates distributed service operations.
+- **Replication**: Ensures data redundancy and availability.
+- **Queue Management Interface**: Manages message queues for asynchronous processing.
+- **Distributed Messaging**: Facilitates communication between services.
+- **Logs & Metrics**: Collect and visualize logs and performance metrics.
+
+Feel free to modify or expand upon this as needed!
