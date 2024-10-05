@@ -874,3 +874,60 @@ flowchart TD
 
 ### Usage
 You can use this Mermaid code in any Mermaid-compatible environment (like Markdown editors or documentation tools) to visualize the architecture of your microservice application.
+
+Here's a detailed flow diagram in Mermaid syntax representing the architecture you specified:
+
+```mermaid
+flowchart TD
+    A[User Interface] -->|HTTP Requests| B[API Gateway]
+    B -->|Service Discovery| C[Service Layer]
+    B -->|Admin Access| D[Authorization Server]
+    C --> E[Load Balancer]
+    E --> F[Distributed Cache]
+    E --> G[Distributed Layer]
+    E --> H[Replication]
+    E --> I[Distributed Messaging Queue]
+    I --> J[Management Interface]
+
+    subgraph Logging
+        K[Logs] --> L[Logstash]
+        L --> M[Elasticsearch]
+        M --> N[Kibana]
+        N --> O[Logs Visualization]
+    end
+
+    subgraph Metrics
+        P[Metrics] --> Q[Prometheus]
+        Q --> R[Grafana]
+        R --> S[Metrics Visualization]
+    end
+
+    J --> K
+    J --> P
+```
+
+### Explanation of Components:
+- **User Interface**: Represents clients accessing the application via mobile or desktop browsers.
+- **API Gateway**: Acts as the single entry point for all clients, handling routing and load balancing.
+- **Service Discovery**: Facilitates the dynamic discovery of services within the microservice architecture.
+- **Service Layer**: Contains the business logic of the application.
+- **Admin Access**: Refers to the functionalities available for administrative users.
+- **Authorization Server**: Manages user authentication and authorization for admin access.
+- **Load Balancer**: Distributes incoming requests across multiple instances of services.
+- **Distributed Cache**: Stores frequently accessed data to improve performance.
+- **Distributed Layer**: Represents various microservices interacting with each other.
+- **Replication**: Ensures data consistency and availability across distributed services.
+- **Distributed Messaging Queue**: Facilitates asynchronous communication between services.
+- **Management Interface**: Provides an interface for managing and monitoring the system.
+
+### Logging and Metrics
+- **Logs**: Represents the log data collected from various services.
+- **Logstash**: Processes logs for storage.
+- **Elasticsearch**: Stores logs for searching and indexing.
+- **Kibana**: Provides visualization of logs.
+- **Metrics**: Represents the performance metrics collected from services.
+- **Prometheus**: Collects and stores metrics data.
+- **Grafana**: Visualizes metrics for monitoring purposes.
+
+### Usage
+You can use this Mermaid code in any Mermaid-compatible tool or Markdown editor to visualize your microservice architecture.
