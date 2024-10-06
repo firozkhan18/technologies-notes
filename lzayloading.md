@@ -105,3 +105,117 @@ public class User {
 - **Use Cases**: Choose lazy loading for large collections that are rarely accessed, and eager loading for small collections that are frequently used together with the parent entity.
 
 By carefully considering your application’s data access patterns, you can choose the appropriate fetching strategy to optimize performance and resource usage.
+
+Sure! Below are examples of Hibernate entity classes demonstrating both lazy loading and eager loading.
+
+### Example Code for Lazy Loading
+
+```java
+import javax.persistence.*;
+import java.util.Set;
+
+@Entity
+public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String name;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+    private Set<Order> orders;
+
+    // Getters and Setters
+}
+
+@Entity
+public class Order {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String product;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    // Getters and Setters
+}
+```
+
+### Example Code for Eager Loading
+
+```java
+import javax.persistence.*;
+import java.util.Set;
+
+@Entity
+public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String name;
+
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "user")
+    private Set<Order> orders;
+
+    // Getters and Setters
+}
+
+@Entity
+public class Order {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String product;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    // Getters and Setters
+}
+```
+
+### Example Usage
+
+Here's how you might use these entities in a service class to demonstrate the differences:
+
+```java
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+
+public class UserService {
+    public void fetchUserLazy(Long userId) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            Transaction tx = session.beginTransaction();
+            User user = session.get(User.class, userId);
+            // Orders are not loaded yet (lazy)
+            System.out.println("User name: " + user.getName());
+            // Orders are fetched only when accessed
+            System.out.println("Number of orders: " + user.getOrders().size());
+            tx.commit();
+        }
+    }
+
+    public void fetchUserEager(Long userId) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            Transaction tx = session.beginTransaction();
+            User user = session.get(User.class, userId);
+            // Orders are already loaded (eager)
+            System.out.println("User name: " + user.getName());
+            System.out.println("Number of orders: " + user.getOrders().size());
+            tx.commit();
+        }
+    }
+}
+```
+
+### Summary
+- In the lazy loading example, the orders are fetched only when you explicitly call `user.getOrders()`.
+- In the eager loading example, the orders are retrieved immediately with the user, so accessing them does not trigger additional queries.
+
+This way, you can see the behavior of both strategies in practice!
