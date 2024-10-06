@@ -219,3 +219,124 @@ public class UserService {
 - In the eager loading example, the orders are retrieved immediately with the user, so accessing them does not trigger additional queries.
 
 This way, you can see the behavior of both strategies in practice!
+
+In Hibernate, both eager and lazy loading strategies can be used to fetch both parent and child entities, but they differ in how and when the data is retrieved from the database. Here's a more detailed look at each strategy with example code demonstrating fetching both parent and child entities.
+
+### Eager Loading
+
+With eager loading, both the parent and child entities are fetched in a single query when the parent is loaded. This can be useful when you know you'll need the child entities right away.
+
+**Example Code: Eager Loading**
+
+```java
+import javax.persistence.*;
+import java.util.Set;
+
+@Entity
+public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String name;
+
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "user")
+    private Set<Order> orders;
+
+    // Getters and Setters
+}
+
+@Entity
+public class Order {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String product;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    // Getters and Setters
+}
+```
+
+**Usage Example:**
+
+```java
+public void fetchUserWithOrdersEager(Long userId) {
+    try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+        Transaction tx = session.beginTransaction();
+        User user = session.get(User.class, userId);
+        System.out.println("User name: " + user.getName());
+        System.out.println("Number of orders: " + user.getOrders().size());
+        tx.commit();
+    }
+}
+```
+
+### Lazy Loading
+
+With lazy loading, the parent entity is loaded initially, and the child entities are only fetched when accessed. This is beneficial for performance when you do not always need the child entities.
+
+**Example Code: Lazy Loading**
+
+```java
+import javax.persistence.*;
+import java.util.Set;
+
+@Entity
+public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String name;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+    private Set<Order> orders;
+
+    // Getters and Setters
+}
+
+@Entity
+public class Order {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String product;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    // Getters and Setters
+}
+```
+
+**Usage Example:**
+
+```java
+public void fetchUserWithOrdersLazy(Long userId) {
+    try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+        Transaction tx = session.beginTransaction();
+        User user = session.get(User.class, userId);
+        System.out.println("User name: " + user.getName());
+        // Orders are not fetched until accessed
+        System.out.println("Number of orders: " + user.getOrders().size());
+        tx.commit();
+    }
+}
+```
+
+### Summary of Differences
+- **Eager Loading**: Fetches both parent and child entities in one go. This is useful when you always need the associated data.
+- **Lazy Loading**: Only fetches the parent entity initially. Child entities are fetched on-demand when accessed. This can save resources when the child entities are not always needed.
+
+### Considerations
+- **Performance**: Eager loading may lead to larger datasets being fetched than necessary, potentially affecting performance. Lazy loading can lead to multiple queries, which can cause the "N+1 select" problem if not managed properly.
+- **Use Cases**: Choose eager loading when you know the associated data will always be needed. Opt for lazy loading when the associated data is optional or large. 
+
+By balancing these strategies according to your application's needs, you can optimize performance and resource usage effectively.
