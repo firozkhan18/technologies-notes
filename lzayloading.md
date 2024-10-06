@@ -68,3 +68,40 @@ private Set<ChildEntity> children;
 - **Hibernate**: Delays loading of associated entities until accessed.
 
 Lazy loading helps optimize application performance by reducing initial load times and resource usage across these technologies.
+
+
+In Hibernate, lazy loading and eager loading are two strategies for fetching associated entities from the database.
+
+### Lazy Loading
+- **Definition**: This strategy loads associated entities only when they are explicitly accessed in the code.
+- **Usage**: It helps improve performance by reducing the initial load time and memory usage, especially when dealing with large datasets.
+- **Implementation**: You can configure lazy loading in Hibernate using the `@OneToMany`, `@ManyToOne`, `@ManyToMany`, and `@OneToOne` annotations with the `fetch` attribute set to `FetchType.LAZY`.
+
+**Example**:
+```java
+@Entity
+public class User {
+    @OneToMany(fetch = FetchType.LAZY)
+    private Set<Order> orders;
+}
+```
+
+### Eager Loading
+- **Definition**: This strategy loads associated entities at the same time as the parent entity, even if they are not immediately needed.
+- **Usage**: It ensures that all required data is available when the parent entity is retrieved, which can be useful for avoiding multiple database calls.
+- **Implementation**: You can configure eager loading similarly using the `fetch` attribute set to `FetchType.EAGER`.
+
+**Example**:
+```java
+@Entity
+public class User {
+    @OneToMany(fetch = FetchType.EAGER)
+    private Set<Order> orders;
+}
+```
+
+### Considerations
+- **Performance**: Lazy loading can lead to "N+1 select" problems if not managed carefully, causing multiple queries to be executed when accessing collections. Eager loading may retrieve more data than necessary, leading to inefficiency.
+- **Use Cases**: Choose lazy loading for large collections that are rarely accessed, and eager loading for small collections that are frequently used together with the parent entity.
+
+By carefully considering your application’s data access patterns, you can choose the appropriate fetching strategy to optimize performance and resource usage.
