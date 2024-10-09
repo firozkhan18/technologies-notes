@@ -4840,3 +4840,144 @@ public class Main {
 ### Conclusion
 
 Immutability is a powerful concept in programming that enhances safety and simplicity. By following the guidelines to create immutable classes, you can ensure that your objects remain consistent and thread-safe. If you have further questions or need more examples, feel free to ask!
+
+### Scope in Spring Boot
+
+In Spring, the scope of a bean defines its lifecycle and visibility in the application context. Spring supports several scopes for beans, with the most common being:
+
+1. **Singleton**: A single instance per Spring IoC container (default).
+2. **Prototype**: A new instance each time the bean is requested.
+3. **Request**: A new instance for each HTTP request (only in a web application context).
+4. **Session**: A new instance for each HTTP session (only in a web application context).
+5. **Global Session**: A new instance for each global HTTP session (rarely used).
+
+### How It Works
+
+- **Singleton**: When the application starts, Spring creates the bean and holds it in memory. All requests for that bean return the same instance.
+- **Prototype**: Each time the bean is requested, Spring creates a new instance and returns it.
+- **Request and Session**: These scopes are only applicable in web applications. Spring creates and manages the lifecycle based on HTTP requests and sessions.
+
+### Configuring Bean Scopes in Spring Boot
+
+You can configure bean scopes using annotations or XML configuration. Here’s how to do it using annotations.
+
+#### Example Code
+
+1. **Singleton Scope (default)**:
+
+```java
+import org.springframework.stereotype.Component;
+
+@Component
+public class SingletonBean {
+    public SingletonBean() {
+        System.out.println("SingletonBean instance created");
+    }
+
+    public void displayMessage() {
+        System.out.println("Hello from SingletonBean");
+    }
+}
+```
+
+2. **Prototype Scope**:
+
+```java
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
+@Component
+@Scope("prototype")
+public class PrototypeBean {
+    public PrototypeBean() {
+        System.out.println("PrototypeBean instance created");
+    }
+
+    public void displayMessage() {
+        System.out.println("Hello from PrototypeBean");
+    }
+}
+```
+
+3. **Request Scope**:
+
+```java
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
+import javax.servlet.http.HttpServletRequest;
+
+@Component
+@Scope("request")
+public class RequestScopedBean {
+    public RequestScopedBean() {
+        System.out.println("RequestScopedBean instance created");
+    }
+
+    public void displayMessage() {
+        System.out.println("Hello from RequestScopedBean");
+    }
+}
+```
+
+4. **Session Scope**:
+
+```java
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
+@Component
+@Scope("session")
+public class SessionScopedBean {
+    public SessionScopedBean() {
+        System.out.println("SessionScopedBean instance created");
+    }
+
+    public void displayMessage() {
+        System.out.println("Hello from SessionScopedBean");
+    }
+}
+```
+
+### Main Application Class
+
+Here’s how you can use these beans in your Spring Boot application:
+
+```java
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Bean;
+
+@SpringBootApplication
+public class ScopeExampleApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(ScopeExampleApplication.class, args);
+    }
+
+    @Bean
+    CommandLineRunner run(ApplicationContext context) {
+        return args -> {
+            // Singleton
+            SingletonBean singletonBean1 = context.getBean(SingletonBean.class);
+            SingletonBean singletonBean2 = context.getBean(SingletonBean.class);
+            singletonBean1.displayMessage();
+            System.out.println("Are both singleton beans same? " + (singletonBean1 == singletonBean2));
+
+            // Prototype
+            PrototypeBean prototypeBean1 = context.getBean(PrototypeBean.class);
+            PrototypeBean prototypeBean2 = context.getBean(PrototypeBean.class);
+            prototypeBean1.displayMessage();
+            System.out.println("Are both prototype beans same? " + (prototypeBean1 == prototypeBean2));
+
+            // Request and Session scoped beans can be tested in a web context
+        };
+    }
+}
+```
+
+### Conclusion
+
+Spring Boot provides flexible bean scope management that allows you to control the lifecycle of your beans effectively. By using the appropriate scopes, you can optimize resource usage and manage state as required by your application. If you have any questions or need further details, feel free to ask!
