@@ -5982,3 +5982,223 @@ When unknown or unauthorized users hit your service multiple times, it can lead 
 ### Conclusion
 
 By using the Circuit Breaker and Retry patterns, you can enhance the resilience of your application against transient failures and external service outages. Simultaneously, implementing security measures like rate limiting, authentication, and monitoring will help protect your services from abuse by unknown users. If you have further questions or need code examples, feel free to ask!
+
+Blacklisting IP addresses is a common method for preventing unwanted traffic from specific users or locations. Here are various ways to implement IP blacklisting in a Spring Boot application:
+
+### 1. **Using Spring Security**
+
+If you are using Spring Security, you can create a filter to check the incoming requests against a blacklist of IP addresses.
+
+#### Step-by-Step Implementation:
+
+1. **Create an IP Blacklist Filter**:
+
+```java
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
+import org.springframework.web.filter.OncePerRequestFilter;
+
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
+
+public class IpBlacklistFilter extends OncePerRequestFilter {
+
+    private Set<String> blacklistedIps = new HashSet<>();
+
+    public IpBlacklistFilter() {
+        // Add blacklisted IPs
+        blacklistedIps.add("192.168.1.100");
+        blacklistedIps.add("203.0.113.5");
+    }
+
+    @Override
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+            throws ServletException, IOException {
+        String clientIp = request.getRemoteAddr();
+
+        if (blacklistedIps.contains(clientIp)) {
+            response.sendError(HttpServletResponse.SC_FORBIDDEN, "Access denied");
+            return;
+        }
+
+        filterChain.doFilter(request, response);
+    }
+}
+```
+
+2. **Register the Filter**:
+
+In your Spring Security configuration, register the filter.
+
+```java
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+
+@Configuration
+@EnableWebSecurity
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http.addFilterBefore(ipBlacklistFilter(), SimpleUrlAuthenticationSuccessHandler.class)
+            .authorizeRequests()
+            .anyRequest().authenticated();
+    }
+
+    @Bean
+    public IpBlacklistFilter ipBlacklistFilter() {
+        return new IpBlacklistFilter();
+    }
+}
+```
+
+### 2. **Using a Custom Controller Advice**
+
+If you prefer a more centralized approach, you can create a `@ControllerAdvice` to intercept requests.
+
+```java
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+
+import javax.servlet.http.HttpServletRequest;
+
+@ControllerAdvice
+public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
+
+    @ExceptionHandler(AccessDeniedException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public void handleAccessDenied(HttpServletRequest request) {
+        // Log the attempt and respond with a forbidden status
+    }
+}
+```
+
+### 3. **Using API Gateway**
+
+If your application is part of a microservices architecture, you can implement IP blacklisting at the API gateway level (e.g., using Spring Cloud Gateway, Kong, or NGINX).
+
+#### Example with Spring Cloud Gateway:
+
+```yaml
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: block_ip_route
+          uri: http://your-service-url
+          filters:
+            - name: RequestRateLimiter
+              args:
+                redis-rate-limiter.replenishRate: 10
+                redis-rate-limiter.burstCapacity: 20
+```
+
+### 4. **Blocking at Web Server Level**
+
+If you're using a web server like Nginx or Apache, you can block IP addresses directly in their configuration files.
+
+#### Nginx Example:
+
+```nginx
+http {
+    deny 192.168.1.100;
+    deny 203.0.113.5;
+    allow all;
+}
+```
+
+### Conclusion
+
+Implementing IP blacklisting can significantly enhance the security of your application. You can achieve this in various ways, including application-level filters, API gateways, or directly in your web server configuration. Choose the method that best fits your architecture and security needs. If you have any further questions or need more detailed examples, feel free to ask!
+
+Certainly! The **DENSE_RANK()** function is often used in SQL to assign a rank to rows within a partition of a result set. Unlike **RANK()**, which can skip ranks if there are ties, **DENSE_RANK()** assigns consecutive ranks. This can be useful in scenarios involving employees and departments.
+
+### Scenario
+
+Suppose you have two tables: `Employees` and `Departments`.
+
+#### Employees Table
+
+| EmployeeID | Name     | Salary | DepartmentID |
+|------------|----------|--------|--------------|
+| 1          | Alice    | 60000  | 1            |
+| 2          | Bob      | 50000  | 1            |
+| 3          | Charlie  | 70000  | 2            |
+| 4          | David    | 50000  | 2            |
+| 5          | Eva      | 80000  | 2            |
+| 6          | Frank    | 90000  | 3            |
+
+#### Departments Table
+
+| DepartmentID | DepartmentName |
+|--------------|-----------------|
+| 1            | HR              |
+| 2            | IT              |
+| 3            | Finance         |
+
+### Example Query: DENSE_RANK to Rank Employees by Salary within Departments
+
+You can use **DENSE_RANK()** to assign ranks to employees based on their salary within each department.
+
+```sql
+SELECT 
+    e.EmployeeID,
+    e.Name,
+    e.Salary,
+    d.DepartmentName,
+    DENSE_RANK() OVER (PARTITION BY e.DepartmentID ORDER BY e.Salary DESC) AS SalaryRank
+FROM 
+    Employees e
+JOIN 
+    Departments d ON e.DepartmentID = d.DepartmentID
+ORDER BY 
+    d.DepartmentName, SalaryRank;
+```
+
+### Result
+
+| EmployeeID | Name    | Salary | DepartmentName | SalaryRank |
+|------------|---------|--------|-----------------|------------|
+| 1          | Alice   | 60000  | HR              | 1          |
+| 2          | Bob     | 50000  | HR              | 2          |
+| 3          | Charlie | 70000  | IT              | 1          |
+| 5          | Eva     | 80000  | IT              | 2          |
+| 4          | David   | 50000  | IT              | 3          |
+| 6          | Frank   | 90000  | Finance         | 1          |
+
+### Explanation
+
+- **PARTITION BY**: This clause divides the result set into partitions (in this case, by `DepartmentID`). The rank is calculated within each partition.
+- **ORDER BY**: This clause specifies how to rank the rows (in this case, by `Salary` in descending order).
+- **DENSE_RANK()**: Assigns ranks without gaps. For example, if two employees in the IT department have the same salary, they will receive the same rank, and the next distinct salary will get the next consecutive rank.
+
+### Questions Related to Employees and Departments
+
+1. **Find the top 3 highest-paid employees in each department.**
+   - You can modify the above query to filter the top 3 employees by adding a `WHERE` clause or using a CTE (Common Table Expression).
+
+2. **List employees who are tied for the highest salary in their department.**
+   - You can filter the result of the `DENSE_RANK()` query to show only employees with a rank of 1.
+
+3. **Count how many employees fall into each salary rank within each department.**
+   - You can group the results by `SalaryRank` to achieve this.
+
+4. **Identify departments with no employees.**
+   - Use a LEFT JOIN between `Departments` and `Employees` and filter for NULL values in the `Employees` table.
+
+5. **List the average salary of employees by department, along with the department name.**
+   - This can be done using the `AVG()` function in a `GROUP BY` query.
+
+### Conclusion
+
+Using **DENSE_RANK()** allows you to analyze employee salaries in a structured way. You can derive insights related to compensation, performance, and departmental distributions effectively. If you have more specific questions or need further clarification, feel free to ask!
