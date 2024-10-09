@@ -4981,3 +4981,384 @@ public class ScopeExampleApplication {
 ### Conclusion
 
 Spring Boot provides flexible bean scope management that allows you to control the lifecycle of your beans effectively. By using the appropriate scopes, you can optimize resource usage and manage state as required by your application. If you have any questions or need further details, feel free to ask!
+
+### SQL vs. NoSQL: Key Differences
+
+**SQL (Structured Query Language)** and **NoSQL (Not Only SQL)** are two different paradigms for managing and querying data. Here’s a comparison of the two:
+
+| Feature                     | SQL                                    | NoSQL                                 |
+|-----------------------------|----------------------------------------|---------------------------------------|
+| **Data Model**              | Relational (tables, rows, columns)    | Non-relational (key-value, document, graph, column-family) |
+| **Schema**                  | Fixed schema (predefined structure)   | Dynamic schema (flexible, schema-less) |
+| **Query Language**          | Uses SQL for queries                   | Various query languages (e.g., MongoDB uses its own query language) |
+| **Transactions**            | Supports ACID transactions             | Generally supports BASE (Basically Available, Soft state, Eventually consistent) |
+| **Scalability**             | Vertical scaling (adding more power to a single server) | Horizontal scaling (adding more servers) |
+| **Data Integrity**          | Strong data integrity with constraints | Eventual consistency, may sacrifice some integrity for performance |
+| **Use Cases**               | Complex queries, structured data (e.g., banking, inventory) | Large volumes of unstructured data, real-time web apps, big data (e.g., social networks, IoT) |
+| **Examples**                | MySQL, PostgreSQL, Oracle, SQL Server | MongoDB, Cassandra, Redis, Couchbase |
+
+### Detailed Explanation
+
+1. **Data Model**:
+   - **SQL**: Data is organized in tables with rows and columns. Relationships are established through foreign keys.
+   - **NoSQL**: Data can be stored in various formats such as documents (e.g., JSON), key-value pairs, wide-column stores, or graphs.
+
+2. **Schema**:
+   - **SQL**: Requires a fixed schema defined before data can be inserted. Changes to the schema can be complex and require downtime.
+   - **NoSQL**: Often schema-less or supports dynamic schemas, allowing you to store data without a predefined structure.
+
+3. **Query Language**:
+   - **SQL**: Uses a standard language (SQL) for querying. Supports complex queries involving joins, subqueries, and aggregations.
+   - **NoSQL**: Uses various query languages tailored to the data model. May lack support for complex queries.
+
+4. **Transactions**:
+   - **SQL**: Strong support for ACID (Atomicity, Consistency, Isolation, Durability) transactions, ensuring reliable processing of transactions.
+   - **NoSQL**: Focuses on BASE properties, allowing for more flexible transactions but with potential eventual consistency.
+
+5. **Scalability**:
+   - **SQL**: Primarily scales vertically, meaning you need to enhance the existing hardware to improve performance.
+   - **NoSQL**: Designed for horizontal scaling, allowing you to add more servers to handle increased loads efficiently.
+
+6. **Data Integrity**:
+   - **SQL**: Enforces data integrity through constraints and relationships, ensuring that the data remains accurate and reliable.
+   - **NoSQL**: May compromise on data integrity for availability and performance, leading to eventual consistency.
+
+7. **Use Cases**:
+   - **SQL**: Best suited for applications requiring complex queries and transactions, such as financial systems and ERP.
+   - **NoSQL**: Ideal for handling large volumes of unstructured or semi-structured data, such as social media, big data analytics, and real-time web applications.
+
+### Conclusion
+
+The choice between SQL and NoSQL depends on the specific needs of your application, including data structure, scalability, and consistency requirements. SQL databases are robust for transactional applications, while NoSQL databases excel in handling large amounts of unstructured data and scalability.
+
+If you have any further questions or need more specific examples, feel free to ask!
+
+Design patterns are typical solutions to common problems in software design. They are divided into three main categories: Creational, Structural, and Behavioral patterns. Here’s a detailed explanation of each category, along with coding examples in Java.
+
+### Creational Design Patterns
+
+Creational patterns deal with object creation mechanisms. They simplify the process of creating objects while hiding the creation logic.
+
+#### 1. Singleton Pattern
+
+**Intent**: Ensure a class has only one instance and provide a global point of access to it.
+
+**Example**:
+
+```java
+public class Singleton {
+    private static Singleton instance;
+
+    private Singleton() {}
+
+    public static Singleton getInstance() {
+        if (instance == null) {
+            instance = new Singleton();
+        }
+        return instance;
+    }
+}
+```
+
+#### 2. Factory Method Pattern
+
+**Intent**: Define an interface for creating an object but let subclasses alter the type of objects that will be created.
+
+**Example**:
+
+```java
+interface Shape {
+    void draw();
+}
+
+class Circle implements Shape {
+    public void draw() {
+        System.out.println("Drawing a Circle");
+    }
+}
+
+class Rectangle implements Shape {
+    public void draw() {
+        System.out.println("Drawing a Rectangle");
+    }
+}
+
+abstract class ShapeFactory {
+    abstract Shape createShape();
+}
+
+class CircleFactory extends ShapeFactory {
+    Shape createShape() {
+        return new Circle();
+    }
+}
+
+class RectangleFactory extends ShapeFactory {
+    Shape createShape() {
+        return new Rectangle();
+    }
+}
+```
+
+#### 3. Abstract Factory Pattern
+
+**Intent**: Provide an interface for creating families of related or dependent objects without specifying their concrete classes.
+
+**Example**:
+
+```java
+interface Color {
+    void fill();
+}
+
+class Red implements Color {
+    public void fill() {
+        System.out.println("Filling with Red color");
+    }
+}
+
+class Blue implements Color {
+    public void fill() {
+        System.out.println("Filling with Blue color");
+    }
+}
+
+interface ShapeFactory {
+    Shape createShape();
+    Color createColor();
+}
+
+class ShapeColorFactory implements ShapeFactory {
+    public Shape createShape() {
+        return new Circle();
+    }
+
+    public Color createColor() {
+        return new Red();
+    }
+}
+```
+
+### Structural Design Patterns
+
+Structural patterns focus on how classes and objects are composed to form larger structures.
+
+#### 1. Adapter Pattern
+
+**Intent**: Allow incompatible interfaces to work together.
+
+**Example**:
+
+```java
+interface Voltage {
+    int getVoltage();
+}
+
+class AC220 implements Voltage {
+    public int getVoltage() {
+        return 220;
+    }
+}
+
+class Adapter implements Voltage {
+    private Voltage voltage;
+
+    public Adapter(Voltage voltage) {
+        this.voltage = voltage;
+    }
+
+    public int getVoltage() {
+        return voltage.getVoltage() / 2; // Convert voltage
+    }
+}
+```
+
+#### 2. Decorator Pattern
+
+**Intent**: Add new functionalities to an object dynamically.
+
+**Example**:
+
+```java
+interface Coffee {
+    double cost();
+}
+
+class SimpleCoffee implements Coffee {
+    public double cost() {
+        return 5.0;
+    }
+}
+
+class MilkDecorator implements Coffee {
+    private Coffee coffee;
+
+    public MilkDecorator(Coffee coffee) {
+        this.coffee = coffee;
+    }
+
+    public double cost() {
+        return coffee.cost() + 1.5; // Add milk cost
+    }
+}
+```
+
+#### 3. Composite Pattern
+
+**Intent**: Allow you to compose objects into tree structures to represent part-whole hierarchies.
+
+**Example**:
+
+```java
+import java.util.ArrayList;
+import java.util.List;
+
+interface Component {
+    void operation();
+}
+
+class Leaf implements Component {
+    public void operation() {
+        System.out.println("Leaf operation");
+    }
+}
+
+class Composite implements Component {
+    private List<Component> children = new ArrayList<>();
+
+    public void add(Component component) {
+        children.add(component);
+    }
+
+    public void operation() {
+        for (Component child : children) {
+            child.operation();
+        }
+    }
+}
+```
+
+### Behavioral Design Patterns
+
+Behavioral patterns focus on communication between objects.
+
+#### 1. Strategy Pattern
+
+**Intent**: Define a family of algorithms, encapsulate each one, and make them interchangeable.
+
+**Example**:
+
+```java
+interface Strategy {
+    int execute(int a, int b);
+}
+
+class AddStrategy implements Strategy {
+    public int execute(int a, int b) {
+        return a + b;
+    }
+}
+
+class SubtractStrategy implements Strategy {
+    public int execute(int a, int b) {
+        return a - b;
+    }
+}
+
+class Context {
+    private Strategy strategy;
+
+    public void setStrategy(Strategy strategy) {
+        this.strategy = strategy;
+    }
+
+    public int executeStrategy(int a, int b) {
+        return strategy.execute(a, b);
+    }
+}
+```
+
+#### 2. Observer Pattern
+
+**Intent**: Define a one-to-many dependency between objects so that when one object changes state, all its dependents are notified.
+
+**Example**:
+
+```java
+import java.util.ArrayList;
+import java.util.List;
+
+interface Observer {
+    void update(String message);
+}
+
+class ConcreteObserver implements Observer {
+    public void update(String message) {
+        System.out.println("Received update: " + message);
+    }
+}
+
+class Subject {
+    private List<Observer> observers = new ArrayList<>();
+
+    public void attach(Observer observer) {
+        observers.add(observer);
+    }
+
+    public void notifyObservers(String message) {
+        for (Observer observer : observers) {
+            observer.update(message);
+        }
+    }
+}
+```
+
+#### 3. Command Pattern
+
+**Intent**: Encapsulate a request as an object, thereby allowing for parameterization of clients with queues, requests, and operations.
+
+**Example**:
+
+```java
+interface Command {
+    void execute();
+}
+
+class Light {
+    public void turnOn() {
+        System.out.println("Light is ON");
+    }
+
+    public void turnOff() {
+        System.out.println("Light is OFF");
+    }
+}
+
+class LightOnCommand implements Command {
+    private Light light;
+
+    public LightOnCommand(Light light) {
+        this.light = light;
+    }
+
+    public void execute() {
+        light.turnOn();
+    }
+}
+
+class LightOffCommand implements Command {
+    private Light light;
+
+    public LightOffCommand(Light light) {
+        this.light = light;
+    }
+
+    public void execute() {
+        light.turnOff();
+    }
+}
+```
+
+### Conclusion
+
+Design patterns are crucial for creating scalable and maintainable software. By understanding and implementing these patterns, developers can solve common problems effectively. If you have more specific questions or need further examples, feel free to ask!
