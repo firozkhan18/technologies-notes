@@ -631,13 +631,13 @@ Sure! Here’s a detailed explanation of the complete process of deploying micro
 
 ```mermaid
 graph TD
-    A[Developer] -->|Push Code| B[Version Control (Git)]
+    A[Developer] -->|Push Code| B[Version Control -Git]
     B -->|Webhooks| C[Jenkins]
     C -->|Build and Test| D[Docker Image]
-    D -->|Push| E[Docker Registry (ECR)]
-    E -->|Trigger Deployment| F[Kubernetes (EKS)]
+    D -->|Push| E[Docker Registry - ECR]
+    E -->|Trigger Deployment| F[Kubernetes - EKS]
     F -->|Run Pods| G[Microservices]
-    G -->|Monitor| H[Monitoring Tools (CloudWatch)]
+    G -->|Monitor| H[Monitoring Tools - CloudWatch]
 ```
 
 ### Step-by-Step Process
@@ -1848,7 +1848,7 @@ public class DataSourceConfig {
 ```mermaid
 
 graph TD
-    A[Application] -->|Cache Request| B[Cache (Redis)]
+    A[Application] -->|Cache Request| B[Cache - Redis]
     B -->|Cache Hit| C[Return Cached Data]
     B -->|Cache Miss| D[Database]
     D -->|Fetch Data| C
