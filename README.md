@@ -8115,6 +8115,72 @@ class MyClass implements Cloneable {
 }
 ```
 
+Cloning in Java refers to the process of creating a duplicate of an object. It involves creating a new instance of a class and copying the values of the fields from the original object to the new object. There are two main types of cloning:
+
+### 1. Shallow Cloning
+
+Shallow cloning creates a new object but does not recursively copy the objects that the original object references. Instead, it copies the references, meaning that both the original and the cloned object will reference the same nested objects.
+
+- **How to Implement**: Use the `clone()` method from the `Object` class, which should be overridden in your class.
+- **Example**:
+
+```java
+class MyClass implements Cloneable {
+    int[] arr;
+
+    public MyClass(int[] arr) {
+        this.arr = arr;
+    }
+
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        return super.clone(); // Shallow copy
+    }
+}
+
+// Usage
+MyClass original = new MyClass(new int[]{1, 2, 3});
+MyClass cloned = (MyClass) original.clone();
+cloned.arr[0] = 10; // Changes the original as well
+```
+
+### 2. Deep Cloning
+
+Deep cloning creates a new object and also recursively copies all objects that the original object references. This means that the cloned object will have its own copies of the nested objects, ensuring that changes to the cloned object do not affect the original.
+
+- **How to Implement**: You need to manually copy the nested objects when overriding the `clone()` method.
+- **Example**:
+
+```java
+class MyClass implements Cloneable {
+    int[] arr;
+
+    public MyClass(int[] arr) {
+        this.arr = arr;
+    }
+
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        MyClass cloned = (MyClass) super.clone();
+        cloned.arr = arr.clone(); // Deep copy of the array
+        return cloned;
+    }
+}
+
+// Usage
+MyClass original = new MyClass(new int[]{1, 2, 3});
+MyClass cloned = (MyClass) original.clone();
+cloned.arr[0] = 10; // Does not change the original
+```
+
+### Summary
+
+- **Cloning**: The process of creating an exact copy of an object.
+- **Shallow Cloning**: Copies the object but shares references to nested objects.
+- **Deep Cloning**: Copies the object and also creates new copies of nested objects.
+
+Cloning is useful in various scenarios, such as when you want to maintain the original object while modifying its duplicate. If you have more specific questions about cloning or related concepts, feel free to ask!
+
 ### 5. Breaking the Singleton Pattern
 
 The singleton pattern restricts a class to a single instance. However, there are several ways to break it:
