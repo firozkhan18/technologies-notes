@@ -7349,3 +7349,126 @@ Sharding divides data into smaller, more manageable pieces, called shards, which
 ### Summary
 
 Sharding is an effective strategy for managing large datasets and high-throughput applications in MongoDB. By following these steps to set up a sharded cluster and adhering to best practices, you can ensure efficient data management, high availability, and optimal performance.
+
+
+To disable a specific service route in a Spring Boot microservice while using AWS API Gateway, you can use various strategies to prevent access to certain endpoints. Here are some approaches you can consider:
+
+### 1. **Controller Method Response**
+
+You can define the route in your controller but ensure it returns an error response without executing any business logic.
+
+#### Example:
+
+```java
+@RestController
+@RequestMapping("/items")
+public class ItemController {
+
+    @GetMapping
+    public List<Item> getItems() {
+        // Implementation
+        return new ArrayList<>();
+    }
+
+    @PostMapping
+    public Item createItem(@RequestBody Item item) {
+        // Implementation
+        return item;
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteItem(@PathVariable Long id) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                             .body("DELETE method is not allowed.");
+    }
+}
+```
+
+### 2. **Using a Filter**
+
+You can create a filter to intercept requests and block access based on specific criteria (e.g., path).
+
+#### Example:
+
+```java
+import org.springframework.stereotype.Component;
+import javax.servlet.Filter;
+import javax.servlet.FilterChain;
+import javax.servlet.FilterConfig;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+
+@Component
+public class PathBlacklistFilter implements Filter {
+
+    @Override
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+            throws IOException, ServletException {
+        HttpServletRequest httpRequest = (HttpServletRequest) request;
+        HttpServletResponse httpResponse = (HttpServletResponse) response;
+
+        String requestUri = httpRequest.getRequestURI();
+
+        // Check if the request URI is blacklisted
+        if (isBlacklisted(requestUri)) {
+            httpResponse.sendError(HttpServletResponse.SC_FORBIDDEN, "Access to this route is disabled.");
+            return;
+        }
+
+        chain.doFilter(request, response);
+    }
+
+    private boolean isBlacklisted(String uri) {
+        // Define blacklisted paths
+        return "/items/delete".equals(uri);
+    }
+
+    @Override
+    public void init(FilterConfig filterConfig) throws ServletException {}
+
+    @Override
+    public void destroy() {}
+}
+```
+
+### 3. **Using Spring Security**
+
+If your application uses Spring Security, you can configure security rules to block specific endpoints.
+
+#### Example:
+
+In your security configuration:
+
+```java
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+
+@Configuration
+@EnableWebSecurity
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http
+            .authorizeRequests()
+            .antMatchers("/items/delete").denyAll()  // Block access to the DELETE endpoint
+            .anyRequest().permitAll()                 // Allow other requests
+            .and()
+            .csrf().disable();                        // Disable CSRF if not needed
+    }
+}
+```
+
+### Summary
+
+- **Define the route but return an error response** to indicate it's disabled.
+- **Implement a filter** to check for blacklisted paths and block access.
+- **Use Spring Security** to configure security rules that deny access to specific endpoints.
+
+These approaches allow you to effectively disable specific routes in your Spring Boot microservice, ensuring that they cannot be accessed while still being defined in your code.
