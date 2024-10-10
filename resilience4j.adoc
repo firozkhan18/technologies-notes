@@ -11,18 +11,6 @@ ifdef::env-github[]
 :warning-caption: :warning:
 endif::[]
 
-image:https://github.com/resilience4j/resilience4j/actions/workflows/gradle-build.yml/badge.svg["Build Status"]
-image:https://img.shields.io/nexus/r/io.github.resilience4j/resilience4j-circuitbreaker?server=https%3A%2F%2Foss.sonatype.org["Release"]
-image:https://img.shields.io/nexus/s/io.github.resilience4j/resilience4j-circuitbreaker?server=https%3A%2F%2Foss.sonatype.org["Snapshot"]
-image:http://img.shields.io/badge/license-ASF2-blue.svg["Apache License 2", link="http://www.apache.org/licenses/LICENSE-2.0.txt"]
-
-image:https://sonarcloud.io/api/project_badges/measure?project=resilience4j_resilience4j&metric=coverage["Coverage", link="https://sonarcloud.io/dashboard?id=resilience4j_resilience4j"]
-image:https://sonarcloud.io/api/project_badges/measure?project=resilience4j_resilience4j&metric=sqale_rating["Maintainability", link="https://sonarcloud.io/dashboard?id=resilience4j_resilience4j"]
-image:https://sonarcloud.io/api/project_badges/measure?project=resilience4j_resilience4j&metric=reliability_rating["Reliability", link="https://sonarcloud.io/dashboard?id=resilience4j_resilience4j"]
-image:https://sonarcloud.io/api/project_badges/measure?project=resilience4j_resilience4j&metric=security_rating["Security", link="https://sonarcloud.io/dashboard?id=resilience4j_resilience4j"]
-image:https://sonarcloud.io/api/project_badges/measure?project=resilience4j_resilience4j&metric=vulnerabilities["Vulnerabilities", link="https://sonarcloud.io/dashboard?id=resilience4j_resilience4j"]
-image:https://sonarcloud.io/api/project_badges/measure?project=resilience4j_resilience4j&metric=bugs["Bugs", link="https://sonarcloud.io/dashboard?id=resilience4j_resilience4j"]
-
 toc::[]
 
 == Introduction
