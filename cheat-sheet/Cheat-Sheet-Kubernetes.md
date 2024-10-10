@@ -415,3 +415,363 @@ kubectl describe pod my-secure-pod
 
 These concepts greatly enhance the capabilities of Kubernetes in managing complex applications securely and efficiently. If you need further details or examples, let me know!
 
+### Kubernetes Overview
+
+**1. What is Kubernetes?**
+Kubernetes (K8s) is an open-source platform designed for automating the deployment, scaling, and management of containerized applications. It orchestrates containers, allowing developers to focus on building applications rather than managing the underlying infrastructure.
+
+**2. Why Kubernetes?**
+Kubernetes offers numerous advantages:
+- **Scalability**: Easily scale applications up or down.
+- **High Availability**: Automatically manages failover and recovery.
+- **Load Balancing**: Distributes traffic across containers.
+- **Self-Healing**: Automatically replaces failed containers.
+- **Declarative Configuration**: Define desired states and let K8s manage them.
+
+### Installation
+To install Kubernetes, you can use tools like Minikube (for local setups) or kubeadm (for production). Below is an example using Minikube:
+
+1. **Install Minikube**:
+   ```bash
+   curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+   sudo install minikube-linux-amd64 /usr/local/bin/minikube
+   ```
+
+2. **Start Minikube**:
+   ```bash
+   minikube start
+   ```
+
+### Creating Resources
+
+**1. Pods**
+A Pod is the smallest deployable unit in Kubernetes, which can hold one or more containers.
+
+**Command to create a Pod**:
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: mypod
+spec:
+  containers:
+  - name: mycontainer
+    image: myimage:latest
+```
+Create the Pod using:
+```bash
+kubectl apply -f pod.yaml
+```
+
+**2. Deployments**
+A Deployment provides declarative updates for Pods.
+
+**Command to create a Deployment**:
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mydeployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: myapp
+  template:
+    metadata:
+      labels:
+        app: myapp
+    spec:
+      containers:
+      - name: mycontainer
+        image: myimage:latest
+```
+Create the Deployment using:
+```bash
+kubectl apply -f deployment.yaml
+```
+
+**3. Services**
+Services enable communication between various parts of your application.
+
+**Command to create a Service**:
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: myservice
+spec:
+  selector:
+    app: myapp
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
+```
+Create the Service using:
+```bash
+kubectl apply -f service.yaml
+```
+
+**4. Output YAML to a file**
+To output the current resource configuration to a YAML file:
+```bash
+kubectl get deployment mydeployment -o yaml > deployment.yaml
+```
+
+### Viewing Resources
+
+**1. Nodes**
+List all nodes in the cluster:
+```bash
+kubectl get nodes
+```
+
+**2. Pods**
+List all Pods:
+```bash
+kubectl get pods
+```
+
+**3. Namespaces**
+List all namespaces:
+```bash
+kubectl get namespaces
+```
+
+**4. Deployments**
+List all Deployments:
+```bash
+kubectl get deployments
+```
+
+**5. Services**
+List all Services:
+```bash
+kubectl get services
+```
+
+**6. Events**
+View events in the cluster:
+```bash
+kubectl get events
+```
+
+**7. Roles**
+List roles in the current namespace:
+```bash
+kubectl get roles
+```
+
+**8. Secrets**
+List all secrets:
+```bash
+kubectl get secrets
+```
+
+**9. Storage**
+List persistent volumes:
+```bash
+kubectl get pv
+```
+
+### Updating Resources
+
+**1. Nodes**
+To cordon a node (mark it as unschedulable):
+```bash
+kubectl cordon <node-name>
+```
+
+**2. Pods**
+Update a Pod definition:
+```bash
+kubectl edit pod mypod
+```
+
+**3. Namespaces**
+Update a namespace:
+```bash
+kubectl edit namespace mynamespace
+```
+
+**4. Deployments**
+Update a Deployment:
+```bash
+kubectl set image deployment/mydeployment mycontainer=myimage:newtag
+```
+
+**5. Services**
+Update a Service:
+```bash
+kubectl edit service myservice
+```
+
+### Deleting Resources
+
+**1. Nodes**
+To delete a node:
+```bash
+kubectl delete node <node-name>
+```
+
+**2. Pods**
+To delete a Pod:
+```bash
+kubectl delete pod mypod
+```
+
+**3. Namespaces**
+To delete a namespace:
+```bash
+kubectl delete namespace mynamespace
+```
+
+**4. Deployments**
+To delete a Deployment:
+```bash
+kubectl delete deployment mydeployment
+```
+
+### Scaling Resources
+
+**1. Replicas**
+To scale a Deployment:
+```bash
+kubectl scale deployment mydeployment --replicas=5
+```
+
+### Interaction
+
+**1. Nodes**
+To get detailed information about a node:
+```bash
+kubectl describe node <node-name>
+```
+
+**2. Pods**
+To get logs from a Pod:
+```bash
+kubectl logs mypod
+```
+
+**3. Clusters**
+Get cluster information:
+```bash
+kubectl cluster-info
+```
+
+### Context & Configuration
+
+**Setting the Context**
+You can configure kubectl to use different clusters, users, and namespaces:
+```bash
+kubectl config use-context my-context
+```
+
+**View Configurations**
+To view current configurations:
+```bash
+kubectl config view
+```
+
+### Microservice and MongoDB Example
+
+To illustrate using a microservice with MongoDB in a Kubernetes environment:
+
+1. **Microservice Setup**: Create a simple Node.js application that connects to MongoDB.
+
+2. **Dockerize the Application**: Create a Dockerfile for your Node.js application.
+
+3. **Kubernetes Manifests**:
+   - **Deployment for MongoDB**:
+   ```yaml
+   apiVersion: apps/v1
+   kind: Deployment
+   metadata:
+     name: mongodb
+   spec:
+     replicas: 1
+     selector:
+       matchLabels:
+         app: mongodb
+     template:
+       metadata:
+         labels:
+           app: mongodb
+       spec:
+         containers:
+         - name: mongodb
+           image: mongo:latest
+           ports:
+           - containerPort: 27017
+   ```
+
+   - **Service for MongoDB**:
+   ```yaml
+   apiVersion: v1
+   kind: Service
+   metadata:
+     name: mongodb
+   spec:
+     selector:
+       app: mongodb
+     ports:
+       - port: 27017
+         targetPort: 27017
+   ```
+
+   - **Deployment for Node.js Microservice**:
+   ```yaml
+   apiVersion: apps/v1
+   kind: Deployment
+   metadata:
+     name: myapp
+   spec:
+     replicas: 2
+     selector:
+       matchLabels:
+         app: myapp
+     template:
+       metadata:
+         labels:
+           app: myapp
+       spec:
+         containers:
+         - name: myapp
+           image: my-node-app:latest
+           ports:
+           - containerPort: 3000
+           env:
+           - name: MONGODB_URI
+             value: mongodb://mongodb:27017/mydb
+   ```
+
+   - **Service for Node.js Microservice**:
+   ```yaml
+   apiVersion: v1
+   kind: Service
+   metadata:
+     name: myapp
+   spec:
+     selector:
+       app: myapp
+     ports:
+       - port: 3000
+         targetPort: 3000
+   ```
+
+4. **Apply the Configurations**:
+```bash
+kubectl apply -f mongodb-deployment.yaml
+kubectl apply -f mongodb-service.yaml
+kubectl apply -f myapp-deployment.yaml
+kubectl apply -f myapp-service.yaml
+```
+
+This setup will deploy a MongoDB instance and a Node.js microservice that connects to it, all orchestrated by Kubernetes. The services will allow the microservice to communicate with MongoDB seamlessly.
+
+### Conclusion
+
+Kubernetes provides a powerful way to manage containerized applications and services. With its rich feature set, including scaling, self-healing, and declarative configuration, it simplifies complex deployments such as microservices architecture with MongoDB.
+
