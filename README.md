@@ -6346,3 +6346,489 @@ For example, if you have three employees in a department with salaries of $100,0
 
 This allows you to easily identify salary standings within each department.
 Using **DENSE_RANK()** allows you to analyze employee salaries in a structured way. You can derive insights related to compensation, performance, and departmental distributions effectively. If you have more specific questions or need further clarification, feel free to ask!
+
+`CompletableFuture` in Java provides a wide range of methods to work with asynchronous programming. Here’s an overview of some of the key methods you can use:
+
+### Key Methods of `CompletableFuture`
+
+1. **Creation Methods:**
+   - `CompletableFuture.completedFuture(T value)`: Returns a new `CompletableFuture` that is already completed with the given value.
+   - `CompletableFuture.supplyAsync(Supplier<U> supplier)`: Returns a `CompletableFuture` that is completed asynchronously by a task running in a different thread.
+   - `CompletableFuture.runAsync(Runnable runnable)`: Returns a `CompletableFuture` that is completed asynchronously when the given Runnable is finished.
+
+2. **Combining Futures:**
+   - `thenApply(Function<? super T,? extends U> fn)`: Transforms the result of the `CompletableFuture` when it completes.
+   - `thenAccept(Consumer<? super T> action)`: Executes a given action when the `CompletableFuture` completes.
+   - `thenRun(Runnable action)`: Executes a Runnable when the `CompletableFuture` completes, ignoring its result.
+   - `thenCombine(CompletionStage<? extends U> other, BiFunction<? super T,? super U,? extends R> fn)`: Combines the results of this and another `CompletionStage`.
+   - `thenCompose(Function<? super T,? extends CompletionStage<U>> fn)`: Chains another asynchronous computation after the current one completes.
+
+3. **Error Handling:**
+   - `exceptionally(Function<Throwable, ? extends T> fn)`: Provides a way to handle exceptions that occur during the execution of the `CompletableFuture`.
+   - `handle(BiFunction<? super T, Throwable, ? extends U> fn)`: Allows you to process both the result and any exception that may have occurred.
+
+4. **Waiting for Completion:**
+   - `join()`: Waits for the computation to complete and retrieves its result, throwing an unchecked exception if it completed exceptionally.
+   - `get()`: Waits for the computation to complete and retrieves its result, throwing checked exceptions.
+   - `get(long timeout, TimeUnit unit)`: Waits for the computation to complete within the specified timeout.
+
+5. **Completion Methods:**
+   - `complete(T value)`: Manually completes the `CompletableFuture` with the given value.
+   - `completeExceptionally(Throwable ex)`: Manually completes the `CompletableFuture` with an exception.
+
+6. **Utility Methods:**
+   - `allOf(CompletableFuture<?>... cfs)`: Returns a new `CompletableFuture` that is completed when all the given `CompletableFutures` complete.
+   - `anyOf(CompletableFuture<?>... cfs)`: Returns a new `CompletableFuture` that is completed when any of the given `CompletableFutures` complete.
+
+### Example Usage
+
+Here’s a simple example demonstrating some of these methods:
+
+```java
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+
+public class CompletableFutureExample {
+    public static void main(String[] args) {
+        CompletableFuture<String> future = CompletableFuture.supplyAsync(() -> {
+            // Simulate a long-running task
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+            return "Result";
+        });
+
+        future.thenApply(result -> "Processed: " + result)
+              .thenAccept(System.out::println)
+              .exceptionally(ex -> {
+                  System.err.println("Error: " + ex.getMessage());
+                  return null;
+              });
+
+        // Wait for completion to show output
+        try {
+            future.join(); // or future.get() for checked exceptions
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+### Summary
+
+`CompletableFuture` offers a powerful way to handle asynchronous programming in Java, allowing for flexible composition, error handling, and completion control. Using these methods, you can build complex asynchronous workflows easily.
+
+In Spring Boot, you can use `CompletableFuture` for asynchronous operations to improve the performance of your application by allowing non-blocking execution. Here's a simple example of how to implement this.
+
+### Step 1: Add Dependencies
+
+Make sure you have the following dependency in your `pom.xml` if you’re using Maven:
+
+```xml
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter</artifactId>
+</dependency>
+```
+
+### Step 2: Enable Asynchronous Processing
+
+Enable asynchronous processing in your Spring Boot application by adding the `@EnableAsync` annotation to your main application class:
+
+```java
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.scheduling.annotation.EnableAsync;
+
+@SpringBootApplication
+@EnableAsync
+public class YourApplication {
+    public static void main(String[] args) {
+        SpringApplication.run(YourApplication.class, args);
+    }
+}
+```
+
+### Step 3: Create an Asynchronous Service
+
+Create a service that uses `CompletableFuture` to execute an operation asynchronously:
+
+```java
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.stereotype.Service;
+
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.TimeUnit;
+
+@Service
+public class AsyncService {
+
+    @Async
+    public CompletableFuture<String> performAsyncOperation() {
+        try {
+            // Simulate a long-running task
+            TimeUnit.SECONDS.sleep(5);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+        return CompletableFuture.completedFuture("Operation Completed");
+    }
+}
+```
+
+### Step 4: Use the Asynchronous Service in a Controller
+
+You can then use this service in a controller to trigger the asynchronous operation:
+
+```java
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.concurrent.CompletableFuture;
+
+@RestController
+public class AsyncController {
+
+    @Autowired
+    private AsyncService asyncService;
+
+    @GetMapping("/async")
+    public CompletableFuture<String> asyncEndpoint() {
+        return asyncService.performAsyncOperation();
+    }
+}
+```
+
+### Step 5: Testing the Asynchronous Endpoint
+
+You can test the asynchronous endpoint by making a GET request to `/async`. It will return a `CompletableFuture` that completes after the simulated delay. The request won’t block while waiting for the operation to complete.
+
+### Note on Error Handling
+
+When working with `CompletableFuture`, you can handle exceptions using methods like `handle`, `exceptionally`, or `whenComplete`. For example:
+
+```java
+public CompletableFuture<String> performAsyncOperation() {
+    return CompletableFuture.supplyAsync(() -> {
+        try {
+            TimeUnit.SECONDS.sleep(5);
+            return "Operation Completed";
+        } catch (InterruptedException e) {
+            throw new RuntimeException("Operation interrupted", e);
+        }
+    }).exceptionally(ex -> "Failed: " + ex.getMessage());
+}
+```
+
+### Summary
+
+Using `CompletableFuture` with Spring Boot’s `@Async` annotation allows you to easily create non-blocking asynchronous operations, improving the responsiveness of your applications. Make sure to handle exceptions appropriately to maintain robust error management in your asynchronous code.
+
+**Test-Driven Development (TDD)** is a software development approach where tests are written before the actual code. It follows a simple cycle known as **Red-Green-Refactor**:
+
+1. **Red**: Write a test for a new feature or piece of functionality. This test will fail because the functionality hasn't been implemented yet.
+2. **Green**: Write the minimum amount of code necessary to pass the test. This means implementing just enough functionality to make the test succeed.
+3. **Refactor**: Clean up the code while ensuring that the tests still pass. This step improves code quality without changing its behavior.
+
+### Benefits of TDD
+
+- **Improved Code Quality**: Encourages simple design and better organization.
+- **Fewer Bugs**: Tests catch issues early in the development process.
+- **Documentation**: Tests serve as a form of documentation for how the code is supposed to work.
+- **Confidence to Refactor**: Since tests are in place, developers can refactor code with confidence that existing functionality won't break.
+
+### Implementing TDD
+
+Here’s a step-by-step guide on how to implement TDD in a project:
+
+1. **Set Up Your Testing Framework**: Choose a testing framework suitable for your programming language. For Java, popular choices include JUnit and TestNG. In Spring Boot, JUnit is typically used.
+
+2. **Write Your First Test**: Identify a small piece of functionality you want to implement. Write a test for it.
+
+   ```java
+   import static org.junit.jupiter.api.Assertions.assertEquals;
+   import org.junit.jupiter.api.Test;
+
+   public class CalculatorTest {
+
+       @Test
+       void addTest() {
+           Calculator calculator = new Calculator();
+           assertEquals(5, calculator.add(2, 3));
+       }
+   }
+   ```
+
+3. **Run the Test**: At this point, the test should fail because the `Calculator` class and the `add` method do not exist yet.
+
+4. **Implement the Minimum Code**: Write just enough code to make the test pass.
+
+   ```java
+   public class Calculator {
+       public int add(int a, int b) {
+           return a + b;
+       }
+   }
+   ```
+
+5. **Run the Test Again**: This time, the test should pass.
+
+6. **Refactor the Code**: If necessary, clean up the code to improve its design while keeping the test passing.
+
+7. **Repeat**: Continue this cycle for the next piece of functionality. Write a failing test, implement the code, and refactor.
+
+### Example of TDD Workflow
+
+Let’s say you want to add a method to subtract two numbers.
+
+1. **Write a Test**:
+
+   ```java
+   @Test
+   void subtractTest() {
+       Calculator calculator = new Calculator();
+       assertEquals(1, calculator.subtract(3, 2));
+   }
+   ```
+
+2. **Run the Test**: It fails because the `subtract` method does not exist.
+
+3. **Implement the Method**:
+
+   ```java
+   public int subtract(int a, int b) {
+       return a - b;
+   }
+   ```
+
+4. **Run the Test Again**: The test should now pass.
+
+5. **Refactor if Necessary**.
+
+### Best Practices
+
+- **Keep Tests Small**: Focus on one piece of functionality at a time.
+- **Write Clear Tests**: Make sure your tests clearly express what they are testing.
+- **Use Mocks Where Necessary**: For dependencies, consider using mocks to isolate the code being tested.
+- **Run Tests Frequently**: Integrate tests into your build process to catch issues early.
+
+### Summary
+
+TDD is a powerful methodology that can lead to better-designed, higher-quality software. By writing tests first and following the Red-Green-Refactor cycle, developers can ensure their code meets requirements while maintaining flexibility to adapt to changes.
+
+Testing and logging are crucial aspects of microservice development to ensure reliability, maintainability, and observability. Here’s a guide on how to effectively test and log your microservice application.
+
+### Testing Microservices
+
+1. **Unit Testing**:
+   - **Purpose**: Test individual components or methods in isolation.
+   - **Frameworks**: Use frameworks like JUnit (Java), NUnit (.NET), or Jest (JavaScript).
+   - **Mocking**: Use libraries like Mockito (Java) or Moq (.NET) to mock dependencies.
+
+   **Example**:
+   ```java
+   @Test
+   public void testAdd() {
+       Calculator calculator = new Calculator();
+       assertEquals(5, calculator.add(2, 3));
+   }
+   ```
+
+2. **Integration Testing**:
+   - **Purpose**: Test the interaction between components or external services (like databases, message queues).
+   - **Frameworks**: Use Spring Test (Java) or Testcontainers for containerized integration tests.
+   - **Database**: Use in-memory databases like H2 for testing purposes.
+
+   **Example**:
+   ```java
+   @SpringBootTest
+   public class UserServiceIntegrationTest {
+       @Autowired
+       private UserService userService;
+
+       @Test
+       public void testCreateUser() {
+           User user = new User("test@example.com");
+           User createdUser = userService.createUser(user);
+           assertNotNull(createdUser.getId());
+       }
+   }
+   ```
+
+3. **End-to-End Testing**:
+   - **Purpose**: Test the entire flow of the application from the user's perspective.
+   - **Tools**: Use tools like Postman, Cypress, or Selenium for UI testing.
+   - **API Testing**: Tools like REST Assured (Java) or Supertest (Node.js) can help test RESTful APIs.
+
+   **Example**:
+   ```java
+   @Test
+   public void testUserApi() {
+       given()
+           .contentType(ContentType.JSON)
+           .body("{\"email\":\"test@example.com\"}")
+       .when()
+           .post("/api/users")
+       .then()
+           .statusCode(201);
+   }
+   ```
+
+4. **Performance Testing**:
+   - **Purpose**: Assess how the application performs under load.
+   - **Tools**: Use tools like JMeter or Gatling.
+
+### Logging Microservices
+
+1. **Choose a Logging Framework**:
+   - Use frameworks like SLF4J with Logback or Log4j for Java, or Serilog for .NET.
+
+2. **Log Levels**:
+   - Utilize different log levels (DEBUG, INFO, WARN, ERROR) to categorize messages. This helps in filtering logs based on importance.
+
+   **Example**:
+   ```java
+   private static final Logger logger = LoggerFactory.getLogger(YourService.class);
+
+   public void process() {
+       logger.info("Processing started");
+       try {
+           // Process logic
+       } catch (Exception e) {
+           logger.error("An error occurred: {}", e.getMessage());
+       }
+   }
+   ```
+
+3. **Structured Logging**:
+   - Use structured logging to log data in a format that is easy to query (e.g., JSON). This can be helpful for log analysis tools.
+
+   **Example**:
+   ```java
+   logger.info("User created", 
+                Map.of("userId", user.getId(), "email", user.getEmail()));
+   ```
+
+4. **Centralized Logging**:
+   - Consider using centralized logging solutions like ELK Stack (Elasticsearch, Logstash, Kibana) or Graylog. These tools can aggregate logs from multiple microservices, making it easier to monitor and analyze.
+
+5. **Log Correlation**:
+   - Implement correlation IDs to trace requests across microservices. Generate a unique ID for each request and log it with every log message related to that request.
+
+   **Example**:
+   ```java
+   String correlationId = UUID.randomUUID().toString();
+   logger.info("Correlation ID: {}", correlationId);
+   ```
+
+### Summary
+
+To effectively test and log your microservice applications:
+
+- **Testing**: Use a combination of unit, integration, end-to-end, and performance tests with appropriate frameworks and tools.
+- **Logging**: Implement a robust logging strategy using suitable frameworks, log levels, structured logging, and centralized logging solutions to ensure observability and easier debugging.
+
+By following these best practices, you can enhance the reliability and maintainability of your microservice architecture.
+
+The choice of testing frameworks depends on your technology stack, team expertise, and specific testing needs. Here’s an overview of popular testing frameworks across different languages and their suitability for various testing types:
+
+### Java
+
+1. **JUnit**
+   - **Type**: Unit Testing
+   - **Description**: The most widely used framework for unit testing in Java applications. It’s simple to use and integrates well with build tools like Maven and Gradle.
+   - **Feasibility**: High. It’s the standard for Java unit tests.
+
+2. **Mockito**
+   - **Type**: Mocking Framework
+   - **Description**: Works with JUnit to create mock objects for unit testing, enabling isolated tests.
+   - **Feasibility**: High. Essential for testing components that interact with dependencies.
+
+3. **Spring Test**
+   - **Type**: Integration Testing
+   - **Description**: Provides testing support for Spring applications, allowing for testing with the Spring context.
+   - **Feasibility**: High if using Spring Boot.
+
+4. **RestAssured**
+   - **Type**: API Testing
+   - **Description**: A powerful library for testing REST APIs in Java.
+   - **Feasibility**: High for RESTful services.
+
+### JavaScript
+
+1. **Jest**
+   - **Type**: Unit and Integration Testing
+   - **Description**: A popular testing framework for JavaScript applications, especially React. It’s easy to set up and includes built-in mocking.
+   - **Feasibility**: High for modern JavaScript applications.
+
+2. **Mocha**
+   - **Type**: Unit and Integration Testing
+   - **Description**: A flexible framework for running JavaScript tests in Node.js and in the browser.
+   - **Feasibility**: Moderate. Requires additional libraries for assertions and mocking.
+
+3. **Supertest**
+   - **Type**: API Testing
+   - **Description**: A library for testing HTTP servers in Node.js, often used with Express.
+   - **Feasibility**: High for Node.js applications.
+
+### .NET
+
+1. **NUnit**
+   - **Type**: Unit Testing
+   - **Description**: A popular testing framework for .NET applications that provides a range of assertions and features.
+   - **Feasibility**: High. Standard for unit tests in .NET.
+
+2. **xUnit**
+   - **Type**: Unit Testing
+   - **Description**: Another popular framework for .NET that is designed to be extensible and lightweight.
+   - **Feasibility**: High, especially in newer projects.
+
+3. **Moq**
+   - **Type**: Mocking Framework
+   - **Description**: A mocking library for .NET that works seamlessly with NUnit and xUnit.
+   - **Feasibility**: High. Essential for isolating tests.
+
+4. **FluentAssertions**
+   - **Type**: Assertion Library
+   - **Description**: Provides a more readable syntax for assertions in .NET tests.
+   - **Feasibility**: High. Enhances test readability.
+
+### Python
+
+1. **unittest**
+   - **Type**: Unit Testing
+   - **Description**: The built-in testing framework for Python, suitable for unit testing.
+   - **Feasibility**: High. Standard for Python applications.
+
+2. **pytest**
+   - **Type**: Unit and Integration Testing
+   - **Description**: A powerful framework with a simple syntax, suitable for both simple and complex tests.
+   - **Feasibility**: Very High. Highly recommended for Python projects.
+
+3. **requests-mock**
+   - **Type**: API Testing
+   - **Description**: A library to mock HTTP requests for testing APIs.
+   - **Feasibility**: High for RESTful services.
+
+### Choosing the Right Framework
+
+1. **Consider Your Tech Stack**: Choose a framework that aligns with your programming language and framework (e.g., Spring, Express, Django).
+
+2. **Team Familiarity**: If your team is already familiar with a particular framework, it can reduce the learning curve.
+
+3. **Project Requirements**: Assess your project’s needs for unit, integration, and end-to-end testing.
+
+4. **Community and Support**: Look for frameworks with strong community support, active maintenance, and good documentation.
+
+### Summary
+
+- **JUnit and Mockito** for Java.
+- **Jest** for JavaScript.
+- **NUnit or xUnit** for .NET.
+- **pytest** for Python.
+
+Each of these frameworks has high feasibility within its ecosystem, making them excellent choices for implementing testing in microservices.
