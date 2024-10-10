@@ -6199,6 +6199,132 @@ ORDER BY
 5. **List the average salary of employees by department, along with the department name.**
    - This can be done using the `AVG()` function in a `GROUP BY` query.
 
+Certainly! Let's dive into how to find the second highest salary in each department using **DENSE_RANK()**, along with answers to the related questions.
+
+### 1. **Finding the Second Highest Salary in Each Department**
+
+To find the second highest salary in each department, you can use the following SQL query:
+
+```sql
+SELECT 
+    e.EmployeeID,
+    e.Name,
+    e.Salary,
+    d.DepartmentName,
+    DENSE_RANK() OVER (PARTITION BY e.DepartmentID ORDER BY e.Salary DESC) AS SalaryRank
+FROM 
+    Employees e
+JOIN 
+    Departments d ON e.DepartmentID = d.DepartmentID
+WHERE 
+    DENSE_RANK() OVER (PARTITION BY e.DepartmentID ORDER BY e.Salary DESC) = 2
+ORDER BY 
+    d.DepartmentName;
+```
+
+### Result
+
+Assuming the given employees and departments, the result for the second highest salary would be:
+
+| EmployeeID | Name  | Salary | DepartmentName |
+|------------|-------|--------|-----------------|
+| 1          | Alice | 60000  | HR              |
+| 4          | David | 50000  | IT              |
+
+### Explanation
+
+- **DENSE_RANK()**: Assigns ranks based on salary within each department.
+- The `WHERE` clause filters the results to only include employees with a rank of 2, which corresponds to the second highest salary in their department.
+
+---
+
+### 2. **Answers to Related Questions**
+
+1. **Find the top 3 highest-paid employees in each department.**
+   ```sql
+   SELECT 
+       e.EmployeeID,
+       e.Name,
+       e.Salary,
+       d.DepartmentName,
+       DENSE_RANK() OVER (PARTITION BY e.DepartmentID ORDER BY e.Salary DESC) AS SalaryRank
+   FROM 
+       Employees e
+   JOIN 
+       Departments d ON e.DepartmentID = d.DepartmentID
+   WHERE 
+       DENSE_RANK() OVER (PARTITION BY e.DepartmentID ORDER BY e.Salary DESC) <= 3
+   ORDER BY 
+       d.DepartmentName, SalaryRank;
+   ```
+
+2. **List employees who are tied for the highest salary in their department.**
+   ```sql
+   SELECT 
+       e.EmployeeID,
+       e.Name,
+       e.Salary,
+       d.DepartmentName,
+       DENSE_RANK() OVER (PARTITION BY e.DepartmentID ORDER BY e.Salary DESC) AS SalaryRank
+   FROM 
+       Employees e
+   JOIN 
+       Departments d ON e.DepartmentID = d.DepartmentID
+   WHERE 
+       DENSE_RANK() OVER (PARTITION BY e.DepartmentID ORDER BY e.Salary DESC) = 1;
+   ```
+
+3. **Count how many employees fall into each salary rank within each department.**
+   ```sql
+   SELECT 
+       d.DepartmentName,
+       r.SalaryRank,
+       COUNT(*) AS EmployeeCount
+   FROM (
+       SELECT 
+           e.EmployeeID,
+           e.Name,
+           e.Salary,
+           e.DepartmentID,
+           DENSE_RANK() OVER (PARTITION BY e.DepartmentID ORDER BY e.Salary DESC) AS SalaryRank
+       FROM 
+           Employees e
+   ) r
+   JOIN Departments d ON r.DepartmentID = d.DepartmentID
+   GROUP BY 
+       d.DepartmentName, r.SalaryRank
+   ORDER BY 
+       d.DepartmentName, r.SalaryRank;
+   ```
+
+4. **Identify departments with no employees.**
+   ```sql
+   SELECT 
+       d.DepartmentID,
+       d.DepartmentName
+   FROM 
+       Departments d
+   LEFT JOIN 
+       Employees e ON d.DepartmentID = e.DepartmentID
+   WHERE 
+       e.EmployeeID IS NULL;
+   ```
+
+5. **List the average salary of employees by department, along with the department name.**
+   ```sql
+   SELECT 
+       d.DepartmentName,
+       AVG(e.Salary) AS AverageSalary
+   FROM 
+       Departments d
+   LEFT JOIN 
+       Employees e ON d.DepartmentID = e.DepartmentID
+   GROUP BY 
+       d.DepartmentName;
+   ```
+
 ### Conclusion
+
+These queries utilize the **DENSE_RANK()** function to efficiently rank employee salaries within departments, allowing you to extract various insights regarding employee compensation. 
 
 Using **DENSE_RANK()** allows you to analyze employee salaries in a structured way. You can derive insights related to compensation, performance, and departmental distributions effectively. If you have more specific questions or need further clarification, feel free to ask!
