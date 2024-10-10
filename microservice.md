@@ -1,3 +1,740 @@
+Core Java Interview Questions:
+
+### Semaphore and Executor in Java
+
+**Semaphore**:
+- A synchronization aid that allows controlling access to a shared resource by maintaining a set number of permits.
+- Useful in limiting the number of concurrent threads accessing a particular resource.
+
+**Example**:
+```java
+import java.util.concurrent.Semaphore;
+
+public class SemaphoreExample {
+    private static final Semaphore semaphore = new Semaphore(3); // Allow 3 concurrent access
+
+    public static void main(String[] args) {
+        for (int i = 0; i < 10; i++) {
+            new Thread(new Task(i)).start();
+        }
+    }
+
+    static class Task implements Runnable {
+        private final int id;
+
+        Task(int id) {
+            this.id = id;
+        }
+
+        public void run() {
+            try {
+                semaphore.acquire();
+                System.out.println("Task " + id + " is executing");
+                Thread.sleep(2000); // Simulate work
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } finally {
+                System.out.println("Task " + id + " is releasing");
+                semaphore.release();
+            }
+        }
+    }
+}
+```
+
+**Executor Framework**:
+- Provides a high-level API for concurrent task execution.
+- The `ExecutorService` interface allows you to manage a pool of threads.
+
+**Example**:
+```java
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+public class ExecutorExample {
+    public static void main(String[] args) {
+        ExecutorService executor = Executors.newFixedThreadPool(3);
+        
+        for (int i = 0; i < 10; i++) {
+            final int taskId = i;
+            executor.submit(() -> {
+                System.out.println("Task " + taskId + " is executing");
+                try {
+                    Thread.sleep(2000); // Simulate work
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                System.out.println("Task " + taskId + " is completed");
+            });
+        }
+        
+        executor.shutdown();
+    }
+}
+```
+
+### ConcurrentHashMap vs. HashMap
+
+**HashMap**:
+- Not synchronized; not thread-safe.
+- Can lead to data inconsistency when accessed by multiple threads concurrently.
+
+**ConcurrentHashMap**:
+- Designed for concurrent access; thread-safe.
+- Uses segmentation to allow multiple threads to read and write concurrently without locking the entire map.
+- Improved performance in multi-threaded scenarios.
+
+### Internal Representation of Map in Java
+
+**Java 8 Changes**:
+- In Java 8, the internal structure of `HashMap` was optimized.
+- When the number of elements in a bucket exceeds a certain threshold (default 8), the bucket is converted from a linked list to a balanced tree (specifically, a red-black tree) to improve lookup performance from O(n) to O(log n).
+
+**Key Changes**:
+- **Threshold for Treeification**: The default threshold for treeification is 8. If the bucket exceeds this size, it is converted to a tree.
+- **Minimum Capacity for Treeification**: If the map size is less than 64, it will not convert the bucket to a tree even if it exceeds the threshold.
+
+### Example of HashMap and ConcurrentHashMap
+
+**HashMap Example**:
+```java
+import java.util.HashMap;
+
+public class HashMapExample {
+    public static void main(String[] args) {
+        HashMap<String, String> map = new HashMap<>();
+        map.put("1", "One");
+        map.put("2", "Two");
+        System.out.println(map.get("1")); // Outputs: One
+    }
+}
+```
+
+**ConcurrentHashMap Example**:
+```java
+import java.util.concurrent.ConcurrentHashMap;
+
+public class ConcurrentHashMapExample {
+    public static void main(String[] args) {
+        ConcurrentHashMap<String, String> map = new ConcurrentHashMap<>();
+        map.put("1", "One");
+        map.put("2", "Two");
+
+        // Safe concurrent access
+        System.out.println(map.get("1")); // Outputs: One
+    }
+}
+```
+
+### Summary
+
+- **Concurrency**: Semaphores control access to resources, while the Executor framework simplifies concurrent execution.
+- **HashMap vs. ConcurrentHashMap**: HashMap is not thread-safe, while ConcurrentHashMap is designed for concurrent access with better performance.
+- **Java 8 Changes**: HashMap can switch to a tree-based structure for better performance with large bucket sizes.
+
+Here's a detailed explanation of interfaces, functional interfaces, abstract classes, the diamond problem, race conditions, deadlocks, and memory leaks in Java, especially in the context of microservices.
+
+### Interfaces in Java
+
+**Interface**:
+- A reference type in Java, similar to a class, that can contain only constants, method signatures, default methods, static methods, and nested types.
+- Interfaces cannot have instance fields or constructors.
+
+```java
+public interface Animal {
+    void makeSound();
+}
+```
+
+### Functional Interfaces
+
+**Functional Interface**:
+- An interface with exactly one abstract method, which can be used as the assignment target for a lambda expression or method reference.
+- It can have multiple default or static methods.
+
+```java
+@FunctionalInterface
+public interface Greeting {
+    void sayHello();
+
+    default void sayGoodbye() {
+        System.out.println("Goodbye!");
+    }
+}
+```
+
+### Abstract Classes
+
+**Abstract Class**:
+- A class that cannot be instantiated on its own and can have both abstract methods (without a body) and concrete methods (with a body).
+- It can have instance fields and constructors.
+
+```java
+public abstract class Animal {
+    abstract void makeSound();
+
+    public void sleep() {
+        System.out.println("Sleeping...");
+    }
+}
+```
+
+### Diamond Problem
+
+**Diamond Problem**:
+- Occurs when a class inherits from two classes (both of which implement the same interface), leading to ambiguity.
+- Java resolves this through single inheritance for classes, meaning a class can only extend one other class. However, it can implement multiple interfaces.
+
+**Resolution**:
+- If both parent classes provide an implementation of a method, the child class must override the method to resolve the ambiguity.
+
+### Example
+
+```java
+interface A {
+    void display();
+}
+
+interface B {
+    void display();
+}
+
+class C implements A, B {
+    @Override
+    public void display() {
+        System.out.println("Display from class C");
+    }
+}
+```
+
+### Race Condition
+
+**Race Condition**:
+- Occurs when two or more threads access shared data and try to change it simultaneously, leading to unpredictable results.
+
+**Example**:
+```java
+class Counter {
+    private int count = 0;
+
+    public void increment() {
+        count++;
+    }
+
+    public int getCount() {
+        return count;
+    }
+}
+```
+
+**Resolution**:
+- Use synchronization mechanisms to control access to shared resources.
+
+```java
+class SynchronizedCounter {
+    private int count = 0;
+
+    public synchronized void increment() {
+        count++;
+    }
+
+    public synchronized int getCount() {
+        return count;
+    }
+}
+```
+
+### Deadlock
+
+**Deadlock**:
+- A situation where two or more threads are blocked forever, waiting for each other to release resources.
+
+**Example**:
+```java
+class A {
+    synchronized void methodA(B b) {
+        b.last();
+    }
+
+    synchronized void last() {}
+}
+
+class B {
+    synchronized void methodB(A a) {
+        a.last();
+    }
+
+    synchronized void last() {}
+}
+```
+
+**Resolution**:
+- Avoid circular dependencies by locking resources in a consistent order or using a timeout mechanism.
+
+### Memory Leaks in Java
+
+**Memory Leak**:
+- Occurs when objects are no longer used but still referenced, preventing garbage collection.
+
+**Common Causes**:
+- Unintentional references in collections.
+- Static fields holding references to objects.
+- Listeners and callbacks not being removed.
+
+**Resolution**:
+- Use weak references (`WeakReference`), remove unused references, and regularly profile the application for memory usage.
+
+### Memory Leaks in Microservices
+
+**Causes**:
+- Resource mismanagement (like database connections, file handles).
+- Improperly managed caches that hold onto data longer than necessary.
+
+**Resolution**:
+- Implement proper resource management, use connection pooling, and regularly monitor and clean caches.
+
+### Summary
+
+1. **Interfaces vs. Abstract Classes**: Interfaces allow multiple inheritance for behavior, while abstract classes provide a common base with shared code.
+2. **Diamond Problem**: Resolved by overriding methods in the implementing class.
+3. **Race Conditions**: Managed using synchronization.
+4. **Deadlock**: Prevented by avoiding circular wait conditions.
+5. **Memory Leaks**: Handled by eliminating unnecessary references and using weak references. In microservices, careful resource management is crucial to avoid leaks.
+
+This combination of concepts is essential for writing robust, maintainable, and efficient Java applications and microservices.
+
+### Functional Interfaces in Java
+
+A **functional interface** is an interface that contains exactly one abstract method, which can be implemented using a lambda expression or method reference. Java 8 introduced the ability to include **default** and **static** methods in interfaces.
+
+### Default and Static Methods
+
+1. **Default Methods**: 
+   - These methods can provide a default implementation in the interface itself. They allow you to add new methods to interfaces without breaking existing implementations.
+
+   ```java
+   @FunctionalInterface
+   public interface MyFunctionalInterface {
+       void performAction();
+
+       default void defaultMethod() {
+           System.out.println("Default method in MyFunctionalInterface");
+       }
+   }
+   ```
+
+2. **Static Methods**: 
+   - These methods belong to the interface itself rather than any instance. They can be called without creating an instance of the interface.
+
+   ```java
+   public interface MyStaticInterface {
+       static void staticMethod() {
+           System.out.println("Static method in MyStaticInterface");
+       }
+   }
+   ```
+
+### Ambiguity Example with Default Methods
+
+Ambiguity arises when a class implements two interfaces that have the same default method. Here’s how this can occur:
+
+#### Example
+
+```java
+interface InterfaceA {
+    default void show() {
+        System.out.println("Show from InterfaceA");
+    }
+}
+
+interface InterfaceB {
+    default void show() {
+        System.out.println("Show from InterfaceB");
+    }
+}
+
+class MyClass implements InterfaceA, InterfaceB {
+    // Ambiguity: show() is inherited from both interfaces
+}
+```
+
+In the above example, `MyClass` inherits the `show()` method from both `InterfaceA` and `InterfaceB`, causing ambiguity.
+
+### Resolution of Ambiguity
+
+To resolve the ambiguity, you must override the conflicting default method in the implementing class:
+
+```java
+class MyClass implements InterfaceA, InterfaceB {
+    @Override
+    public void show() {
+        // You can choose which implementation to call or provide your own
+        InterfaceA.super.show(); // Calls the method from InterfaceA
+        // or
+        InterfaceB.super.show(); // Calls the method from InterfaceB
+        // or provide a completely new implementation
+        System.out.println("Custom show from MyClass");
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        MyClass obj = new MyClass();
+        obj.show(); // Will call the overridden show method
+    }
+}
+```
+
+### Summary
+
+- **Functional Interface**: Contains exactly one abstract method and can have default and static methods.
+- **Default Method Ambiguity**: Occurs when two interfaces with the same default method are implemented.
+- **Resolution**: Override the conflicting method in the implementing class, specifying which default method to call if needed.
+
+This pattern ensures that the implementing class clearly defines its behavior, avoiding ambiguity and potential runtime errors.
+
+
+Here are some common interview questions and answers related to Kubernetes and Docker that can help you prepare for your interview.
+
+### Docker Interview Questions
+
+#### 1. What is Docker?
+
+**Answer:**
+Docker is an open-source platform that automates the deployment, scaling, and management of applications using containerization. It allows developers to package applications and their dependencies into a standardized unit called a container, ensuring consistency across various environments.
+
+#### 2. What are the benefits of using Docker?
+
+**Answer:**
+- **Isolation**: Containers encapsulate applications and their dependencies, providing isolation from other containers.
+- **Portability**: Containers can run on any system that has Docker installed, making it easy to move applications between environments.
+- **Efficiency**: Docker containers share the host OS kernel, making them lightweight compared to virtual machines.
+- **Scalability**: Docker simplifies the process of scaling applications up or down.
+
+#### 3. What is the difference between a Docker image and a container?
+
+**Answer:**
+- **Docker Image**: A read-only template used to create containers. It contains the application code, libraries, and dependencies.
+- **Container**: A running instance of a Docker image. Containers are isolated from each other and can communicate through defined channels.
+
+#### 4. How do you create a Docker container?
+
+**Answer:**
+You can create a Docker container using the following command:
+```bash
+docker run -d --name my-container my-image
+```
+This command runs a container named `my-container` from the `my-image` image in detached mode.
+
+### Kubernetes Interview Questions
+
+#### 5. What is Kubernetes?
+
+**Answer:**
+Kubernetes (K8s) is an open-source container orchestration platform designed to automate the deployment, scaling, and management of containerized applications. It helps manage the lifecycle of containers across a cluster of machines.
+
+#### 6. What are Pods in Kubernetes?
+
+**Answer:**
+A Pod is the smallest deployable unit in Kubernetes, which can contain one or more containers. Containers within a Pod share the same network namespace and can communicate with each other using `localhost`. They also share storage volumes.
+
+#### 7. What is a Deployment in Kubernetes?
+
+**Answer:**
+A Deployment is a Kubernetes resource that provides declarative updates to Pods and ReplicaSets. It allows you to describe an application’s desired state, such as which images to use and the number of replicas, and Kubernetes ensures that the actual state matches the desired state.
+
+#### 8. What is a Service in Kubernetes?
+
+**Answer:**
+A Service is an abstraction that defines a logical set of Pods and a policy for accessing them. It provides a stable endpoint (IP address or DNS name) to access the Pods, enabling load balancing and service discovery.
+
+### Advanced Questions
+
+#### 9. What is the purpose of a Dockerfile?
+
+**Answer:**
+A Dockerfile is a text file that contains a set of instructions to build a Docker image. It specifies the base image, the application code, dependencies, environment variables, and the commands to run when the container starts.
+
+#### 10. Explain Kubernetes ConfigMaps and Secrets.
+
+**Answer:**
+- **ConfigMap**: A Kubernetes resource used to store non-sensitive configuration data in key-value pairs, allowing you to separate configuration from application code.
+- **Secret**: A Kubernetes resource used to store sensitive information (like passwords or API keys) securely. Secrets are encoded in base64 and can be mounted as environment variables or volumes in Pods.
+
+#### 11. How do you scale applications in Kubernetes?
+
+**Answer:**
+You can scale applications in Kubernetes using the `kubectl scale` command or by modifying the Deployment resource:
+```bash
+kubectl scale deployment my-deployment --replicas=5
+```
+This command scales the `my-deployment` to 5 replicas.
+
+#### 12. What is Helm?
+
+**Answer:**
+Helm is a package manager for Kubernetes that allows you to define, install, and manage Kubernetes applications using Helm charts. Helm charts are pre-configured application resources that simplify the deployment of complex applications.
+
+### Behavioral Questions
+
+#### 13. Describe a challenging situation you faced while using Docker/Kubernetes and how you resolved it.
+
+**Answer:**
+[Provide a specific example from your experience. Discuss the challenge, the steps you took to troubleshoot, the resolution, and what you learned from the experience.]
+
+### Conclusion
+
+These questions cover a range of topics from basic to advanced concepts in Docker and Kubernetes. Familiarize yourself with these answers and tailor them with your own experiences to prepare for your interview.
+
+Here are some common interview questions and answers related to CI/CD (Continuous Integration/Continuous Deployment) and Azure:
+
+### CI/CD Interview Questions
+
+#### 1. What is CI/CD?
+
+**Answer:**
+CI/CD stands for Continuous Integration and Continuous Deployment. It is a software development practice that enables teams to deliver code changes more frequently and reliably. Continuous Integration involves automatically testing and integrating code changes into a shared repository. Continuous Deployment automates the release of those changes to production, ensuring that new features and fixes can be deployed rapidly and safely.
+
+#### 2. What are the benefits of CI/CD?
+
+**Answer:**
+- **Faster Release Cycles**: Automates the build, test, and deployment processes, allowing for quicker releases.
+- **Improved Code Quality**: Automated testing helps catch bugs early in the development cycle.
+- **Reduced Risk**: Smaller, incremental changes are easier to manage and troubleshoot.
+- **Enhanced Collaboration**: Teams can work more effectively together with a shared understanding of the codebase.
+
+#### 3. What tools are commonly used for CI/CD?
+
+**Answer:**
+Common CI/CD tools include:
+- Jenkins
+- GitHub Actions
+- GitLab CI/CD
+- CircleCI
+- Travis CI
+- Azure DevOps
+
+### Azure Interview Questions
+
+#### 4. What is Azure DevOps?
+
+**Answer:**
+Azure DevOps is a set of development tools and services provided by Microsoft to support the entire software development lifecycle, including planning, development, testing, delivery, and monitoring. It includes services like Azure Boards, Azure Repos, Azure Pipelines, Azure Test Plans, and Azure Artifacts.
+
+#### 5. How do you create a CI/CD pipeline in Azure DevOps?
+
+**Answer:**
+To create a CI/CD pipeline in Azure DevOps:
+1. Go to Azure DevOps and create a new project.
+2. Navigate to "Pipelines" and select "Create Pipeline."
+3. Choose your repository (e.g., Azure Repos, GitHub).
+4. Define your pipeline using YAML or the classic editor, specifying build and deployment stages.
+5. Configure triggers for CI (e.g., on push) and CD (e.g., on successful build).
+6. Save and run the pipeline.
+
+#### 6. What is the difference between Azure Pipelines and GitHub Actions?
+
+**Answer:**
+- **Azure Pipelines**: A service in Azure DevOps that supports multi-platform builds and deployments, can integrate with other Azure DevOps services, and is suitable for complex enterprise environments.
+- **GitHub Actions**: An automation tool integrated directly into GitHub, allowing users to create workflows based on GitHub events, and is more suited for projects hosted on GitHub.
+
+### Advanced Questions
+
+#### 7. What are environment variables in CI/CD, and why are they important?
+
+**Answer:**
+Environment variables are key-value pairs used to store configuration data, such as API keys or database connection strings. They are important because they help separate code from configuration, allowing for different settings in development, testing, and production environments without changing the codebase.
+
+#### 8. Explain the concept of Infrastructure as Code (IaC).
+
+**Answer:**
+Infrastructure as Code (IaC) is the practice of managing and provisioning computing infrastructure through machine-readable definition files rather than physical hardware configuration. This allows teams to automate the setup of infrastructure, maintain version control of configurations, and ensure consistent environments.
+
+### Behavioral Questions
+
+#### 9. Describe a challenging CI/CD implementation you faced and how you overcame it.
+
+**Answer:**
+[Provide a specific example from your experience. Discuss the challenge, the steps taken to resolve it, the outcome, and what you learned from the experience.]
+
+### Conclusion
+
+These questions cover fundamental and advanced topics related to CI/CD and Azure. Familiarizing yourself with these concepts and tailoring the answers with your own experiences will help you prepare effectively for your interview.
+
+Sure! Here’s a detailed explanation of the complete process of deploying microservices using Docker, Kubernetes, Jenkins, CI/CD, and AWS, along with a diagram in Mermaid syntax.
+
+### Overview of the Deployment Process
+
+1. **Development**: Code is developed and tested locally.
+2. **Dockerization**: Create Docker images for the microservices.
+3. **Push to Registry**: Push Docker images to a container registry (e.g., Docker Hub or AWS ECR).
+4. **Continuous Integration**: Use Jenkins to automate the build and testing process.
+5. **Kubernetes Deployment**: Deploy the Docker images to a Kubernetes cluster in AWS (EKS).
+6. **Continuous Deployment**: Use Jenkins to automate the deployment of the application.
+7. **Monitoring**: Monitor the deployed application.
+
+### Diagram
+
+```mermaid
+graph TD
+    A[Developer] -->|Push Code| B[Version Control (Git)]
+    B -->|Webhooks| C[Jenkins]
+    C -->|Build and Test| D[Docker Image]
+    D -->|Push| E[Docker Registry (ECR)]
+    E -->|Trigger Deployment| F[Kubernetes (EKS)]
+    F -->|Run Pods| G[Microservices]
+    G -->|Monitor| H[Monitoring Tools (CloudWatch)]
+```
+
+### Step-by-Step Process
+
+#### 1. Development
+
+- Developers write code in their local environments.
+- Code is versioned using a version control system (like Git).
+
+#### 2. Dockerization
+
+**Dockerfile Example**:
+```dockerfile
+# Use the official Node.js image
+FROM node:14
+
+# Set the working directory
+WORKDIR /app
+
+# Copy package.json and install dependencies
+COPY package*.json ./
+RUN npm install
+
+# Copy the application code
+COPY . .
+
+# Expose the application port
+EXPOSE 3000
+
+# Start the application
+CMD ["npm", "start"]
+```
+
+**Build Docker Image**:
+```bash
+docker build -t my-microservice:latest .
+```
+
+#### 3. Push to Registry
+
+**Push to AWS ECR**:
+1. Authenticate Docker to ECR:
+   ```bash
+   aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin <aws_account_id>.dkr.ecr.us-east-1.amazonaws.com
+   ```
+
+2. Tag the image:
+   ```bash
+   docker tag my-microservice:latest <aws_account_id>.dkr.ecr.us-east-1.amazonaws.com/my-microservice:latest
+   ```
+
+3. Push the image:
+   ```bash
+   docker push <aws_account_id>.dkr.ecr.us-east-1.amazonaws.com/my-microservice:latest
+   ```
+
+#### 4. Continuous Integration (Jenkins)
+
+**Jenkins Pipeline Example (Jenkinsfile)**:
+```groovy
+pipeline {
+    agent any
+    stages {
+        stage('Build') {
+            steps {
+                script {
+                    docker.build('my-microservice:latest')
+                }
+            }
+        }
+        stage('Test') {
+            steps {
+                script {
+                    // Run tests (if applicable)
+                }
+            }
+        }
+        stage('Push') {
+            steps {
+                script {
+                    docker.withRegistry('https://<aws_account_id>.dkr.ecr.us-east-1.amazonaws.com', 'ecr:aws_access_key_id') {
+                        docker.image('my-microservice:latest').push()
+                    }
+                }
+            }
+        }
+    }
+}
+```
+
+#### 5. Kubernetes Deployment
+
+**Kubernetes Deployment YAML**:
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-microservice
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: my-microservice
+  template:
+    metadata:
+      labels:
+        app: my-microservice
+    spec:
+      containers:
+      - name: my-microservice
+        image: <aws_account_id>.dkr.ecr.us-east-1.amazonaws.com/my-microservice:latest
+        ports:
+        - containerPort: 3000
+```
+
+**Deploy to EKS**:
+```bash
+kubectl apply -f deployment.yaml
+```
+
+#### 6. Continuous Deployment
+
+Jenkins can trigger deployments to Kubernetes using the Kubernetes CLI or Helm charts once the Docker image is built and pushed.
+
+**Jenkins Deployment Stage Example**:
+```groovy
+stage('Deploy to Kubernetes') {
+    steps {
+        script {
+            sh 'kubectl apply -f deployment.yaml'
+        }
+    }
+}
+```
+
+#### 7. Monitoring
+
+Use AWS CloudWatch or other monitoring tools to track the health and performance of the microservices running in EKS.
+
+### Summary
+
+1. **Develop** the microservices and version control using Git.
+2. **Dockerize** the application and build the Docker image.
+3. **Push** the image to AWS ECR.
+4. Set up a **Jenkins pipeline** to automate the CI/CD process.
+5. Deploy the application to **Kubernetes** on AWS EKS.
+6. **Monitor** the application using tools like AWS CloudWatch.
+
+This comprehensive process outlines how to efficiently deploy microservices using Docker, Kubernetes, Jenkins, and AWS.
+
+
 ### Orchestrator-Based Saga Pattern
 
 The Orchestrator-based Saga pattern is a way to manage distributed transactions across multiple microservices. In this pattern, a central orchestrator service coordinates the transactions and ensures that all steps are executed in a reliable manner. If a step fails, the orchestrator handles the rollback through compensating transactions.
@@ -171,7 +908,7 @@ app.listen(3000, () => console.log('Orchestrator running on port 3000'));
 
 The orchestrator-based saga pattern allows for managing complex transactions across multiple microservices while ensuring reliability through compensating actions. This example provides a basic overview, and you can expand it with more advanced features like event sourcing, retries, and logging for production use.
 
-Sure! Let’s create a **Mermaid diagram** for the orchestrator-based Saga pattern, followed by a **Spring Boot** implementation for the same scenario.
+A **Mermaid diagram** for the orchestrator-based Saga pattern, followed by a **Spring Boot** implementation for the same scenario.
 
 ### Mermaid Diagram
 
@@ -405,6 +1142,7 @@ By following this structure, you ensure that all services remain consistent and 
 Here’s a Mermaid diagram that outlines the Saga Orchestrator pattern for booking a vacation, including the booking of a flight, reserving a hotel, and renting a car, with appropriate rollback actions in case of failures.
 
 ```mermaid
+
 graph TD
     A[Orchestrator] -->|Step 1: Book Flight| B[Service A - Book Flight]
     B -->|Success| C[Service B - Reserve Hotel]
@@ -1269,375 +2007,8 @@ After the burst limit is reached, any further requests would be rejected or queu
 
 By implementing these strategies, you can effectively manage memory and enhance the performance of your microservices. Each aspect contributes to a more resilient and efficient architecture, capable of handling high loads and ensuring system stability.
 
-Here are some common interview questions and answers related to Kubernetes and Docker that can help you prepare for your interview.
 
-### Docker Interview Questions
-
-#### 1. What is Docker?
-
-**Answer:**
-Docker is an open-source platform that automates the deployment, scaling, and management of applications using containerization. It allows developers to package applications and their dependencies into a standardized unit called a container, ensuring consistency across various environments.
-
-#### 2. What are the benefits of using Docker?
-
-**Answer:**
-- **Isolation**: Containers encapsulate applications and their dependencies, providing isolation from other containers.
-- **Portability**: Containers can run on any system that has Docker installed, making it easy to move applications between environments.
-- **Efficiency**: Docker containers share the host OS kernel, making them lightweight compared to virtual machines.
-- **Scalability**: Docker simplifies the process of scaling applications up or down.
-
-#### 3. What is the difference between a Docker image and a container?
-
-**Answer:**
-- **Docker Image**: A read-only template used to create containers. It contains the application code, libraries, and dependencies.
-- **Container**: A running instance of a Docker image. Containers are isolated from each other and can communicate through defined channels.
-
-#### 4. How do you create a Docker container?
-
-**Answer:**
-You can create a Docker container using the following command:
-```bash
-docker run -d --name my-container my-image
-```
-This command runs a container named `my-container` from the `my-image` image in detached mode.
-
-### Kubernetes Interview Questions
-
-#### 5. What is Kubernetes?
-
-**Answer:**
-Kubernetes (K8s) is an open-source container orchestration platform designed to automate the deployment, scaling, and management of containerized applications. It helps manage the lifecycle of containers across a cluster of machines.
-
-#### 6. What are Pods in Kubernetes?
-
-**Answer:**
-A Pod is the smallest deployable unit in Kubernetes, which can contain one or more containers. Containers within a Pod share the same network namespace and can communicate with each other using `localhost`. They also share storage volumes.
-
-#### 7. What is a Deployment in Kubernetes?
-
-**Answer:**
-A Deployment is a Kubernetes resource that provides declarative updates to Pods and ReplicaSets. It allows you to describe an application’s desired state, such as which images to use and the number of replicas, and Kubernetes ensures that the actual state matches the desired state.
-
-#### 8. What is a Service in Kubernetes?
-
-**Answer:**
-A Service is an abstraction that defines a logical set of Pods and a policy for accessing them. It provides a stable endpoint (IP address or DNS name) to access the Pods, enabling load balancing and service discovery.
-
-### Advanced Questions
-
-#### 9. What is the purpose of a Dockerfile?
-
-**Answer:**
-A Dockerfile is a text file that contains a set of instructions to build a Docker image. It specifies the base image, the application code, dependencies, environment variables, and the commands to run when the container starts.
-
-#### 10. Explain Kubernetes ConfigMaps and Secrets.
-
-**Answer:**
-- **ConfigMap**: A Kubernetes resource used to store non-sensitive configuration data in key-value pairs, allowing you to separate configuration from application code.
-- **Secret**: A Kubernetes resource used to store sensitive information (like passwords or API keys) securely. Secrets are encoded in base64 and can be mounted as environment variables or volumes in Pods.
-
-#### 11. How do you scale applications in Kubernetes?
-
-**Answer:**
-You can scale applications in Kubernetes using the `kubectl scale` command or by modifying the Deployment resource:
-```bash
-kubectl scale deployment my-deployment --replicas=5
-```
-This command scales the `my-deployment` to 5 replicas.
-
-#### 12. What is Helm?
-
-**Answer:**
-Helm is a package manager for Kubernetes that allows you to define, install, and manage Kubernetes applications using Helm charts. Helm charts are pre-configured application resources that simplify the deployment of complex applications.
-
-### Behavioral Questions
-
-#### 13. Describe a challenging situation you faced while using Docker/Kubernetes and how you resolved it.
-
-**Answer:**
-[Provide a specific example from your experience. Discuss the challenge, the steps you took to troubleshoot, the resolution, and what you learned from the experience.]
-
-### Conclusion
-
-These questions cover a range of topics from basic to advanced concepts in Docker and Kubernetes. Familiarize yourself with these answers and tailor them with your own experiences to prepare for your interview.
-
-Here are some common interview questions and answers related to CI/CD (Continuous Integration/Continuous Deployment) and Azure:
-
-### CI/CD Interview Questions
-
-#### 1. What is CI/CD?
-
-**Answer:**
-CI/CD stands for Continuous Integration and Continuous Deployment. It is a software development practice that enables teams to deliver code changes more frequently and reliably. Continuous Integration involves automatically testing and integrating code changes into a shared repository. Continuous Deployment automates the release of those changes to production, ensuring that new features and fixes can be deployed rapidly and safely.
-
-#### 2. What are the benefits of CI/CD?
-
-**Answer:**
-- **Faster Release Cycles**: Automates the build, test, and deployment processes, allowing for quicker releases.
-- **Improved Code Quality**: Automated testing helps catch bugs early in the development cycle.
-- **Reduced Risk**: Smaller, incremental changes are easier to manage and troubleshoot.
-- **Enhanced Collaboration**: Teams can work more effectively together with a shared understanding of the codebase.
-
-#### 3. What tools are commonly used for CI/CD?
-
-**Answer:**
-Common CI/CD tools include:
-- Jenkins
-- GitHub Actions
-- GitLab CI/CD
-- CircleCI
-- Travis CI
-- Azure DevOps
-
-### Azure Interview Questions
-
-#### 4. What is Azure DevOps?
-
-**Answer:**
-Azure DevOps is a set of development tools and services provided by Microsoft to support the entire software development lifecycle, including planning, development, testing, delivery, and monitoring. It includes services like Azure Boards, Azure Repos, Azure Pipelines, Azure Test Plans, and Azure Artifacts.
-
-#### 5. How do you create a CI/CD pipeline in Azure DevOps?
-
-**Answer:**
-To create a CI/CD pipeline in Azure DevOps:
-1. Go to Azure DevOps and create a new project.
-2. Navigate to "Pipelines" and select "Create Pipeline."
-3. Choose your repository (e.g., Azure Repos, GitHub).
-4. Define your pipeline using YAML or the classic editor, specifying build and deployment stages.
-5. Configure triggers for CI (e.g., on push) and CD (e.g., on successful build).
-6. Save and run the pipeline.
-
-#### 6. What is the difference between Azure Pipelines and GitHub Actions?
-
-**Answer:**
-- **Azure Pipelines**: A service in Azure DevOps that supports multi-platform builds and deployments, can integrate with other Azure DevOps services, and is suitable for complex enterprise environments.
-- **GitHub Actions**: An automation tool integrated directly into GitHub, allowing users to create workflows based on GitHub events, and is more suited for projects hosted on GitHub.
-
-### Advanced Questions
-
-#### 7. What are environment variables in CI/CD, and why are they important?
-
-**Answer:**
-Environment variables are key-value pairs used to store configuration data, such as API keys or database connection strings. They are important because they help separate code from configuration, allowing for different settings in development, testing, and production environments without changing the codebase.
-
-#### 8. Explain the concept of Infrastructure as Code (IaC).
-
-**Answer:**
-Infrastructure as Code (IaC) is the practice of managing and provisioning computing infrastructure through machine-readable definition files rather than physical hardware configuration. This allows teams to automate the setup of infrastructure, maintain version control of configurations, and ensure consistent environments.
-
-### Behavioral Questions
-
-#### 9. Describe a challenging CI/CD implementation you faced and how you overcame it.
-
-**Answer:**
-[Provide a specific example from your experience. Discuss the challenge, the steps taken to resolve it, the outcome, and what you learned from the experience.]
-
-### Conclusion
-
-These questions cover fundamental and advanced topics related to CI/CD and Azure. Familiarizing yourself with these concepts and tailoring the answers with your own experiences will help you prepare effectively for your interview.
-
-Sure! Here’s a detailed explanation of the complete process of deploying microservices using Docker, Kubernetes, Jenkins, CI/CD, and AWS, along with a diagram in Mermaid syntax.
-
-### Overview of the Deployment Process
-
-1. **Development**: Code is developed and tested locally.
-2. **Dockerization**: Create Docker images for the microservices.
-3. **Push to Registry**: Push Docker images to a container registry (e.g., Docker Hub or AWS ECR).
-4. **Continuous Integration**: Use Jenkins to automate the build and testing process.
-5. **Kubernetes Deployment**: Deploy the Docker images to a Kubernetes cluster in AWS (EKS).
-6. **Continuous Deployment**: Use Jenkins to automate the deployment of the application.
-7. **Monitoring**: Monitor the deployed application.
-
-### Diagram
-
-```mermaid
-graph TD
-    A[Developer] -->|Push Code| B[Version Control (Git)]
-    B -->|Webhooks| C[Jenkins]
-    C -->|Build and Test| D[Docker Image]
-    D -->|Push| E[Docker Registry (ECR)]
-    E -->|Trigger Deployment| F[Kubernetes (EKS)]
-    F -->|Run Pods| G[Microservices]
-    G -->|Monitor| H[Monitoring Tools (CloudWatch)]
-```
-
-### Step-by-Step Process
-
-#### 1. Development
-
-- Developers write code in their local environments.
-- Code is versioned using a version control system (like Git).
-
-#### 2. Dockerization
-
-**Dockerfile Example**:
-```dockerfile
-# Use the official Node.js image
-FROM node:14
-
-# Set the working directory
-WORKDIR /app
-
-# Copy package.json and install dependencies
-COPY package*.json ./
-RUN npm install
-
-# Copy the application code
-COPY . .
-
-# Expose the application port
-EXPOSE 3000
-
-# Start the application
-CMD ["npm", "start"]
-```
-
-**Build Docker Image**:
-```bash
-docker build -t my-microservice:latest .
-```
-
-#### 3. Push to Registry
-
-**Push to AWS ECR**:
-1. Authenticate Docker to ECR:
-   ```bash
-   aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin <aws_account_id>.dkr.ecr.us-east-1.amazonaws.com
-   ```
-
-2. Tag the image:
-   ```bash
-   docker tag my-microservice:latest <aws_account_id>.dkr.ecr.us-east-1.amazonaws.com/my-microservice:latest
-   ```
-
-3. Push the image:
-   ```bash
-   docker push <aws_account_id>.dkr.ecr.us-east-1.amazonaws.com/my-microservice:latest
-   ```
-
-#### 4. Continuous Integration (Jenkins)
-
-**Jenkins Pipeline Example (Jenkinsfile)**:
-```groovy
-pipeline {
-    agent any
-    stages {
-        stage('Build') {
-            steps {
-                script {
-                    docker.build('my-microservice:latest')
-                }
-            }
-        }
-        stage('Test') {
-            steps {
-                script {
-                    // Run tests (if applicable)
-                }
-            }
-        }
-        stage('Push') {
-            steps {
-                script {
-                    docker.withRegistry('https://<aws_account_id>.dkr.ecr.us-east-1.amazonaws.com', 'ecr:aws_access_key_id') {
-                        docker.image('my-microservice:latest').push()
-                    }
-                }
-            }
-        }
-    }
-}
-```
-
-#### 5. Kubernetes Deployment
-
-**Kubernetes Deployment YAML**:
-```yaml
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: my-microservice
-spec:
-  replicas: 3
-  selector:
-    matchLabels:
-      app: my-microservice
-  template:
-    metadata:
-      labels:
-        app: my-microservice
-    spec:
-      containers:
-      - name: my-microservice
-        image: <aws_account_id>.dkr.ecr.us-east-1.amazonaws.com/my-microservice:latest
-        ports:
-        - containerPort: 3000
-```
-
-**Deploy to EKS**:
-```bash
-kubectl apply -f deployment.yaml
-```
-
-#### 6. Continuous Deployment
-
-Jenkins can trigger deployments to Kubernetes using the Kubernetes CLI or Helm charts once the Docker image is built and pushed.
-
-**Jenkins Deployment Stage Example**:
-```groovy
-stage('Deploy to Kubernetes') {
-    steps {
-        script {
-            sh 'kubectl apply -f deployment.yaml'
-        }
-    }
-}
-```
-
-#### 7. Monitoring
-
-Use AWS CloudWatch or other monitoring tools to track the health and performance of the microservices running in EKS.
-
-### Summary
-
-1. **Develop** the microservices and version control using Git.
-2. **Dockerize** the application and build the Docker image.
-3. **Push** the image to AWS ECR.
-4. Set up a **Jenkins pipeline** to automate the CI/CD process.
-5. Deploy the application to **Kubernetes** on AWS EKS.
-6. **Monitor** the application using tools like AWS CloudWatch.
-
-This comprehensive process outlines how to efficiently deploy microservices using Docker, Kubernetes, Jenkins, and AWS.
-
-Sure! Here’s an overview of Angular, React, microservices, and threading, along with their interactions and use cases.
-
-### Angular
-
-**Overview**:
-Angular is a TypeScript-based open-source web application framework led by the Angular Team at Google. It is primarily used for building single-page applications (SPAs).
-
-**Key Features**:
-- **Component-Based Architecture**: Encourages reusability and organization of code.
-- **Dependency Injection**: Facilitates better code organization and testing.
-- **Two-Way Data Binding**: Synchronizes data between the model and the view.
-- **RxJS**: Supports reactive programming for handling asynchronous data.
-
-**Use Case**: Angular is suitable for enterprise-level applications with complex UIs, such as dashboards or form-heavy applications.
-
-### React
-
-**Overview**:
-React is a JavaScript library for building user interfaces, maintained by Facebook. It allows developers to create large web applications that can change data, without reloading the page.
-
-**Key Features**:
-- **Component-Based Architecture**: Promotes the creation of reusable UI components.
-- **Virtual DOM**: Improves performance by minimizing direct manipulation of the DOM.
-- **One-Way Data Binding**: Ensures a unidirectional data flow, which simplifies debugging.
-- **Hooks**: Allows state and lifecycle management in functional components.
-
-**Use Case**: React is often used for dynamic and interactive UIs, such as social media platforms and real-time applications.
-
-### Microservices
+## Microservices
 
 **Overview**:
 Microservices architecture is a design approach where an application is built as a collection of small, loosely coupled services, each responsible for a specific business capability.
@@ -1783,400 +2154,37 @@ Sharding in MongoDB is a powerful technique for managing large datasets and ensu
   - Simpler implementation (no need to change the application architecture).
   - Immediate performance improvements.
 
-### Semaphore and Executor in Java
-
-**Semaphore**:
-- A synchronization aid that allows controlling access to a shared resource by maintaining a set number of permits.
-- Useful in limiting the number of concurrent threads accessing a particular resource.
-
-**Example**:
-```java
-import java.util.concurrent.Semaphore;
-
-public class SemaphoreExample {
-    private static final Semaphore semaphore = new Semaphore(3); // Allow 3 concurrent access
-
-    public static void main(String[] args) {
-        for (int i = 0; i < 10; i++) {
-            new Thread(new Task(i)).start();
-        }
-    }
-
-    static class Task implements Runnable {
-        private final int id;
-
-        Task(int id) {
-            this.id = id;
-        }
-
-        public void run() {
-            try {
-                semaphore.acquire();
-                System.out.println("Task " + id + " is executing");
-                Thread.sleep(2000); // Simulate work
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } finally {
-                System.out.println("Task " + id + " is releasing");
-                semaphore.release();
-            }
-        }
-    }
-}
-```
-
-**Executor Framework**:
-- Provides a high-level API for concurrent task execution.
-- The `ExecutorService` interface allows you to manage a pool of threads.
-
-**Example**:
-```java
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
-public class ExecutorExample {
-    public static void main(String[] args) {
-        ExecutorService executor = Executors.newFixedThreadPool(3);
-        
-        for (int i = 0; i < 10; i++) {
-            final int taskId = i;
-            executor.submit(() -> {
-                System.out.println("Task " + taskId + " is executing");
-                try {
-                    Thread.sleep(2000); // Simulate work
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                System.out.println("Task " + taskId + " is completed");
-            });
-        }
-        
-        executor.shutdown();
-    }
-}
-```
-
-### ConcurrentHashMap vs. HashMap
-
-**HashMap**:
-- Not synchronized; not thread-safe.
-- Can lead to data inconsistency when accessed by multiple threads concurrently.
-
-**ConcurrentHashMap**:
-- Designed for concurrent access; thread-safe.
-- Uses segmentation to allow multiple threads to read and write concurrently without locking the entire map.
-- Improved performance in multi-threaded scenarios.
-
-### Internal Representation of Map in Java
-
-**Java 8 Changes**:
-- In Java 8, the internal structure of `HashMap` was optimized.
-- When the number of elements in a bucket exceeds a certain threshold (default 8), the bucket is converted from a linked list to a balanced tree (specifically, a red-black tree) to improve lookup performance from O(n) to O(log n).
-
-**Key Changes**:
-- **Threshold for Treeification**: The default threshold for treeification is 8. If the bucket exceeds this size, it is converted to a tree.
-- **Minimum Capacity for Treeification**: If the map size is less than 64, it will not convert the bucket to a tree even if it exceeds the threshold.
-
-### Example of HashMap and ConcurrentHashMap
-
-**HashMap Example**:
-```java
-import java.util.HashMap;
-
-public class HashMapExample {
-    public static void main(String[] args) {
-        HashMap<String, String> map = new HashMap<>();
-        map.put("1", "One");
-        map.put("2", "Two");
-        System.out.println(map.get("1")); // Outputs: One
-    }
-}
-```
-
-**ConcurrentHashMap Example**:
-```java
-import java.util.concurrent.ConcurrentHashMap;
-
-public class ConcurrentHashMapExample {
-    public static void main(String[] args) {
-        ConcurrentHashMap<String, String> map = new ConcurrentHashMap<>();
-        map.put("1", "One");
-        map.put("2", "Two");
-
-        // Safe concurrent access
-        System.out.println(map.get("1")); // Outputs: One
-    }
-}
-```
-
 ### Summary
 
 - **Scaling**: Horizontal scaling involves adding more machines, while vertical scaling involves upgrading existing hardware.
-- **Concurrency**: Semaphores control access to resources, while the Executor framework simplifies concurrent execution.
-- **HashMap vs. ConcurrentHashMap**: HashMap is not thread-safe, while ConcurrentHashMap is designed for concurrent access with better performance.
-- **Java 8 Changes**: HashMap can switch to a tree-based structure for better performance with large bucket sizes.
 
-Here's a detailed explanation of interfaces, functional interfaces, abstract classes, the diamond problem, race conditions, deadlocks, and memory leaks in Java, especially in the context of microservices.
+Sure! Here’s an overview of Angular, React, microservices, and threading, along with their interactions and use cases.
 
-### Interfaces in Java
+### Angular
 
-**Interface**:
-- A reference type in Java, similar to a class, that can contain only constants, method signatures, default methods, static methods, and nested types.
-- Interfaces cannot have instance fields or constructors.
+**Overview**:
+Angular is a TypeScript-based open-source web application framework led by the Angular Team at Google. It is primarily used for building single-page applications (SPAs).
 
-```java
-public interface Animal {
-    void makeSound();
-}
-```
+**Key Features**:
+- **Component-Based Architecture**: Encourages reusability and organization of code.
+- **Dependency Injection**: Facilitates better code organization and testing.
+- **Two-Way Data Binding**: Synchronizes data between the model and the view.
+- **RxJS**: Supports reactive programming for handling asynchronous data.
 
-### Functional Interfaces
+**Use Case**: Angular is suitable for enterprise-level applications with complex UIs, such as dashboards or form-heavy applications.
 
-**Functional Interface**:
-- An interface with exactly one abstract method, which can be used as the assignment target for a lambda expression or method reference.
-- It can have multiple default or static methods.
+### React
 
-```java
-@FunctionalInterface
-public interface Greeting {
-    void sayHello();
+**Overview**:
+React is a JavaScript library for building user interfaces, maintained by Facebook. It allows developers to create large web applications that can change data, without reloading the page.
 
-    default void sayGoodbye() {
-        System.out.println("Goodbye!");
-    }
-}
-```
+**Key Features**:
+- **Component-Based Architecture**: Promotes the creation of reusable UI components.
+- **Virtual DOM**: Improves performance by minimizing direct manipulation of the DOM.
+- **One-Way Data Binding**: Ensures a unidirectional data flow, which simplifies debugging.
+- **Hooks**: Allows state and lifecycle management in functional components.
 
-### Abstract Classes
-
-**Abstract Class**:
-- A class that cannot be instantiated on its own and can have both abstract methods (without a body) and concrete methods (with a body).
-- It can have instance fields and constructors.
-
-```java
-public abstract class Animal {
-    abstract void makeSound();
-
-    public void sleep() {
-        System.out.println("Sleeping...");
-    }
-}
-```
-
-### Diamond Problem
-
-**Diamond Problem**:
-- Occurs when a class inherits from two classes (both of which implement the same interface), leading to ambiguity.
-- Java resolves this through single inheritance for classes, meaning a class can only extend one other class. However, it can implement multiple interfaces.
-
-**Resolution**:
-- If both parent classes provide an implementation of a method, the child class must override the method to resolve the ambiguity.
-
-### Example
-
-```java
-interface A {
-    void display();
-}
-
-interface B {
-    void display();
-}
-
-class C implements A, B {
-    @Override
-    public void display() {
-        System.out.println("Display from class C");
-    }
-}
-```
-
-### Race Condition
-
-**Race Condition**:
-- Occurs when two or more threads access shared data and try to change it simultaneously, leading to unpredictable results.
-
-**Example**:
-```java
-class Counter {
-    private int count = 0;
-
-    public void increment() {
-        count++;
-    }
-
-    public int getCount() {
-        return count;
-    }
-}
-```
-
-**Resolution**:
-- Use synchronization mechanisms to control access to shared resources.
-
-```java
-class SynchronizedCounter {
-    private int count = 0;
-
-    public synchronized void increment() {
-        count++;
-    }
-
-    public synchronized int getCount() {
-        return count;
-    }
-}
-```
-
-### Deadlock
-
-**Deadlock**:
-- A situation where two or more threads are blocked forever, waiting for each other to release resources.
-
-**Example**:
-```java
-class A {
-    synchronized void methodA(B b) {
-        b.last();
-    }
-
-    synchronized void last() {}
-}
-
-class B {
-    synchronized void methodB(A a) {
-        a.last();
-    }
-
-    synchronized void last() {}
-}
-```
-
-**Resolution**:
-- Avoid circular dependencies by locking resources in a consistent order or using a timeout mechanism.
-
-### Memory Leaks in Java
-
-**Memory Leak**:
-- Occurs when objects are no longer used but still referenced, preventing garbage collection.
-
-**Common Causes**:
-- Unintentional references in collections.
-- Static fields holding references to objects.
-- Listeners and callbacks not being removed.
-
-**Resolution**:
-- Use weak references (`WeakReference`), remove unused references, and regularly profile the application for memory usage.
-
-### Memory Leaks in Microservices
-
-**Causes**:
-- Resource mismanagement (like database connections, file handles).
-- Improperly managed caches that hold onto data longer than necessary.
-
-**Resolution**:
-- Implement proper resource management, use connection pooling, and regularly monitor and clean caches.
-
-### Summary
-
-1. **Interfaces vs. Abstract Classes**: Interfaces allow multiple inheritance for behavior, while abstract classes provide a common base with shared code.
-2. **Diamond Problem**: Resolved by overriding methods in the implementing class.
-3. **Race Conditions**: Managed using synchronization.
-4. **Deadlock**: Prevented by avoiding circular wait conditions.
-5. **Memory Leaks**: Handled by eliminating unnecessary references and using weak references. In microservices, careful resource management is crucial to avoid leaks.
-
-This combination of concepts is essential for writing robust, maintainable, and efficient Java applications and microservices.
-
-### Functional Interfaces in Java
-
-A **functional interface** is an interface that contains exactly one abstract method, which can be implemented using a lambda expression or method reference. Java 8 introduced the ability to include **default** and **static** methods in interfaces.
-
-### Default and Static Methods
-
-1. **Default Methods**: 
-   - These methods can provide a default implementation in the interface itself. They allow you to add new methods to interfaces without breaking existing implementations.
-
-   ```java
-   @FunctionalInterface
-   public interface MyFunctionalInterface {
-       void performAction();
-
-       default void defaultMethod() {
-           System.out.println("Default method in MyFunctionalInterface");
-       }
-   }
-   ```
-
-2. **Static Methods**: 
-   - These methods belong to the interface itself rather than any instance. They can be called without creating an instance of the interface.
-
-   ```java
-   public interface MyStaticInterface {
-       static void staticMethod() {
-           System.out.println("Static method in MyStaticInterface");
-       }
-   }
-   ```
-
-### Ambiguity Example with Default Methods
-
-Ambiguity arises when a class implements two interfaces that have the same default method. Here’s how this can occur:
-
-#### Example
-
-```java
-interface InterfaceA {
-    default void show() {
-        System.out.println("Show from InterfaceA");
-    }
-}
-
-interface InterfaceB {
-    default void show() {
-        System.out.println("Show from InterfaceB");
-    }
-}
-
-class MyClass implements InterfaceA, InterfaceB {
-    // Ambiguity: show() is inherited from both interfaces
-}
-```
-
-In the above example, `MyClass` inherits the `show()` method from both `InterfaceA` and `InterfaceB`, causing ambiguity.
-
-### Resolution of Ambiguity
-
-To resolve the ambiguity, you must override the conflicting default method in the implementing class:
-
-```java
-class MyClass implements InterfaceA, InterfaceB {
-    @Override
-    public void show() {
-        // You can choose which implementation to call or provide your own
-        InterfaceA.super.show(); // Calls the method from InterfaceA
-        // or
-        InterfaceB.super.show(); // Calls the method from InterfaceB
-        // or provide a completely new implementation
-        System.out.println("Custom show from MyClass");
-    }
-}
-
-public class Main {
-    public static void main(String[] args) {
-        MyClass obj = new MyClass();
-        obj.show(); // Will call the overridden show method
-    }
-}
-```
-
-### Summary
-
-- **Functional Interface**: Contains exactly one abstract method and can have default and static methods.
-- **Default Method Ambiguity**: Occurs when two interfaces with the same default method are implemented.
-- **Resolution**: Override the conflicting method in the implementing class, specifying which default method to call if needed.
-
-This pattern ensures that the implementing class clearly defines its behavior, avoiding ambiguity and potential runtime errors.
-
+**Use Case**: React is often used for dynamic and interactive UIs, such as social media platforms and real-time applications.
 
 Debugging React and Angular code involves various tools and techniques. Here’s a concise guide for each:
 
@@ -2229,3 +2237,4 @@ Debugging React and Angular code involves various tools and techniques. Here’s
 - **Network Monitoring**: Use the Network tab to check API calls and responses.
 
 By using these strategies and tools, you can efficiently debug both React and Angular applications.
+
