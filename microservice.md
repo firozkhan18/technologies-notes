@@ -1,5 +1,264 @@
 Core Java Interview Questions:
 
+### Interfaces in Java
+
+**Interface**:
+- A reference type in Java, similar to a class, that can contain only constants, method signatures, default methods, static methods, and nested types.
+- Interfaces cannot have instance fields or constructors.
+
+```java
+public interface Animal {
+    void makeSound();
+}
+```
+
+### Functional Interfaces
+
+**Functional Interface**:
+- An interface with exactly one abstract method, which can be used as the assignment target for a lambda expression or method reference.
+- It can have multiple default or static methods.
+
+```java
+@FunctionalInterface
+public interface Greeting {
+    void sayHello();
+
+    default void sayGoodbye() {
+        System.out.println("Goodbye!");
+    }
+}
+```
+
+### Abstract Classes
+
+**Abstract Class**:
+- A class that cannot be instantiated on its own and can have both abstract methods (without a body) and concrete methods (with a body).
+- It can have instance fields and constructors.
+
+```java
+public abstract class Animal {
+    abstract void makeSound();
+
+    public void sleep() {
+        System.out.println("Sleeping...");
+    }
+}
+```
+
+### Diamond Problem
+
+**Diamond Problem**:
+- Occurs when a class inherits from two classes (both of which implement the same interface), leading to ambiguity.
+- Java resolves this through single inheritance for classes, meaning a class can only extend one other class. However, it can implement multiple interfaces.
+
+**Resolution**:
+- If both parent classes provide an implementation of a method, the child class must override the method to resolve the ambiguity.
+
+### Example
+
+```java
+interface A {
+    void display();
+}
+
+interface B {
+    void display();
+}
+
+class C implements A, B {
+    @Override
+    public void display() {
+        System.out.println("Display from class C");
+    }
+}
+```
+
+### Race Condition
+
+**Race Condition**:
+- Occurs when two or more threads access shared data and try to change it simultaneously, leading to unpredictable results.
+
+**Example**:
+```java
+class Counter {
+    private int count = 0;
+
+    public void increment() {
+        count++;
+    }
+
+    public int getCount() {
+        return count;
+    }
+}
+```
+
+**Resolution**:
+- Use synchronization mechanisms to control access to shared resources.
+
+```java
+class SynchronizedCounter {
+    private int count = 0;
+
+    public synchronized void increment() {
+        count++;
+    }
+
+    public synchronized int getCount() {
+        return count;
+    }
+}
+```
+
+### Deadlock
+
+**Deadlock**:
+- A situation where two or more threads are blocked forever, waiting for each other to release resources.
+
+**Example**:
+```java
+class A {
+    synchronized void methodA(B b) {
+        b.last();
+    }
+
+    synchronized void last() {}
+}
+
+class B {
+    synchronized void methodB(A a) {
+        a.last();
+    }
+
+    synchronized void last() {}
+}
+```
+
+**Resolution**:
+- Avoid circular dependencies by locking resources in a consistent order or using a timeout mechanism.
+
+### Memory Leaks in Java
+
+**Memory Leak**:
+- Occurs when objects are no longer used but still referenced, preventing garbage collection.
+
+**Common Causes**:
+- Unintentional references in collections.
+- Static fields holding references to objects.
+- Listeners and callbacks not being removed.
+
+**Resolution**:
+- Use weak references (`WeakReference`), remove unused references, and regularly profile the application for memory usage.
+
+### Memory Leaks in Microservices
+
+**Causes**:
+- Resource mismanagement (like database connections, file handles).
+- Improperly managed caches that hold onto data longer than necessary.
+
+**Resolution**:
+- Implement proper resource management, use connection pooling, and regularly monitor and clean caches.
+
+### Summary
+
+1. **Interfaces vs. Abstract Classes**: Interfaces allow multiple inheritance for behavior, while abstract classes provide a common base with shared code.
+2. **Diamond Problem**: Resolved by overriding methods in the implementing class.
+3. **Race Conditions**: Managed using synchronization.
+4. **Deadlock**: Prevented by avoiding circular wait conditions.
+5. **Memory Leaks**: Handled by eliminating unnecessary references and using weak references. In microservices, careful resource management is crucial to avoid leaks.
+
+This combination of concepts is essential for writing robust, maintainable, and efficient Java applications and microservices.
+
+### Functional Interfaces in Java
+
+A **functional interface** is an interface that contains exactly one abstract method, which can be implemented using a lambda expression or method reference. Java 8 introduced the ability to include **default** and **static** methods in interfaces.
+
+### Default and Static Methods
+
+1. **Default Methods**: 
+   - These methods can provide a default implementation in the interface itself. They allow you to add new methods to interfaces without breaking existing implementations.
+
+   ```java
+   @FunctionalInterface
+   public interface MyFunctionalInterface {
+       void performAction();
+
+       default void defaultMethod() {
+           System.out.println("Default method in MyFunctionalInterface");
+       }
+   }
+   ```
+
+2. **Static Methods**: 
+   - These methods belong to the interface itself rather than any instance. They can be called without creating an instance of the interface.
+
+   ```java
+   public interface MyStaticInterface {
+       static void staticMethod() {
+           System.out.println("Static method in MyStaticInterface");
+       }
+   }
+   ```
+
+### Ambiguity Example with Default Methods
+
+Ambiguity arises when a class implements two interfaces that have the same default method. Here’s how this can occur:
+
+#### Example
+
+```java
+interface InterfaceA {
+    default void show() {
+        System.out.println("Show from InterfaceA");
+    }
+}
+
+interface InterfaceB {
+    default void show() {
+        System.out.println("Show from InterfaceB");
+    }
+}
+
+class MyClass implements InterfaceA, InterfaceB {
+    // Ambiguity: show() is inherited from both interfaces
+}
+```
+
+In the above example, `MyClass` inherits the `show()` method from both `InterfaceA` and `InterfaceB`, causing ambiguity.
+
+### Resolution of Ambiguity
+
+To resolve the ambiguity, you must override the conflicting default method in the implementing class:
+
+```java
+class MyClass implements InterfaceA, InterfaceB {
+    @Override
+    public void show() {
+        // You can choose which implementation to call or provide your own
+        InterfaceA.super.show(); // Calls the method from InterfaceA
+        // or
+        InterfaceB.super.show(); // Calls the method from InterfaceB
+        // or provide a completely new implementation
+        System.out.println("Custom show from MyClass");
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        MyClass obj = new MyClass();
+        obj.show(); // Will call the overridden show method
+    }
+}
+```
+
+### Summary
+
+- **Functional Interface**: Contains exactly one abstract method and can have default and static methods.
+- **Default Method Ambiguity**: Occurs when two interfaces with the same default method are implemented.
+- **Resolution**: Override the conflicting method in the implementing class, specifying which default method to call if needed.
+
+This pattern ensures that the implementing class clearly defines its behavior, avoiding ambiguity and potential runtime errors.
+
 In Java, you can have multiple interfaces, each with default methods, and you can implement both interfaces in a single class. When a class implements multiple interfaces that have default methods with the same signature, you might run into conflicts. Here's a guide on how to handle such situations:
 
 ### Example Interfaces
@@ -283,264 +542,6 @@ public class ConcurrentHashMapExample {
 
 Here's a detailed explanation of interfaces, functional interfaces, abstract classes, the diamond problem, race conditions, deadlocks, and memory leaks in Java, especially in the context of microservices.
 
-### Interfaces in Java
-
-**Interface**:
-- A reference type in Java, similar to a class, that can contain only constants, method signatures, default methods, static methods, and nested types.
-- Interfaces cannot have instance fields or constructors.
-
-```java
-public interface Animal {
-    void makeSound();
-}
-```
-
-### Functional Interfaces
-
-**Functional Interface**:
-- An interface with exactly one abstract method, which can be used as the assignment target for a lambda expression or method reference.
-- It can have multiple default or static methods.
-
-```java
-@FunctionalInterface
-public interface Greeting {
-    void sayHello();
-
-    default void sayGoodbye() {
-        System.out.println("Goodbye!");
-    }
-}
-```
-
-### Abstract Classes
-
-**Abstract Class**:
-- A class that cannot be instantiated on its own and can have both abstract methods (without a body) and concrete methods (with a body).
-- It can have instance fields and constructors.
-
-```java
-public abstract class Animal {
-    abstract void makeSound();
-
-    public void sleep() {
-        System.out.println("Sleeping...");
-    }
-}
-```
-
-### Diamond Problem
-
-**Diamond Problem**:
-- Occurs when a class inherits from two classes (both of which implement the same interface), leading to ambiguity.
-- Java resolves this through single inheritance for classes, meaning a class can only extend one other class. However, it can implement multiple interfaces.
-
-**Resolution**:
-- If both parent classes provide an implementation of a method, the child class must override the method to resolve the ambiguity.
-
-### Example
-
-```java
-interface A {
-    void display();
-}
-
-interface B {
-    void display();
-}
-
-class C implements A, B {
-    @Override
-    public void display() {
-        System.out.println("Display from class C");
-    }
-}
-```
-
-### Race Condition
-
-**Race Condition**:
-- Occurs when two or more threads access shared data and try to change it simultaneously, leading to unpredictable results.
-
-**Example**:
-```java
-class Counter {
-    private int count = 0;
-
-    public void increment() {
-        count++;
-    }
-
-    public int getCount() {
-        return count;
-    }
-}
-```
-
-**Resolution**:
-- Use synchronization mechanisms to control access to shared resources.
-
-```java
-class SynchronizedCounter {
-    private int count = 0;
-
-    public synchronized void increment() {
-        count++;
-    }
-
-    public synchronized int getCount() {
-        return count;
-    }
-}
-```
-
-### Deadlock
-
-**Deadlock**:
-- A situation where two or more threads are blocked forever, waiting for each other to release resources.
-
-**Example**:
-```java
-class A {
-    synchronized void methodA(B b) {
-        b.last();
-    }
-
-    synchronized void last() {}
-}
-
-class B {
-    synchronized void methodB(A a) {
-        a.last();
-    }
-
-    synchronized void last() {}
-}
-```
-
-**Resolution**:
-- Avoid circular dependencies by locking resources in a consistent order or using a timeout mechanism.
-
-### Memory Leaks in Java
-
-**Memory Leak**:
-- Occurs when objects are no longer used but still referenced, preventing garbage collection.
-
-**Common Causes**:
-- Unintentional references in collections.
-- Static fields holding references to objects.
-- Listeners and callbacks not being removed.
-
-**Resolution**:
-- Use weak references (`WeakReference`), remove unused references, and regularly profile the application for memory usage.
-
-### Memory Leaks in Microservices
-
-**Causes**:
-- Resource mismanagement (like database connections, file handles).
-- Improperly managed caches that hold onto data longer than necessary.
-
-**Resolution**:
-- Implement proper resource management, use connection pooling, and regularly monitor and clean caches.
-
-### Summary
-
-1. **Interfaces vs. Abstract Classes**: Interfaces allow multiple inheritance for behavior, while abstract classes provide a common base with shared code.
-2. **Diamond Problem**: Resolved by overriding methods in the implementing class.
-3. **Race Conditions**: Managed using synchronization.
-4. **Deadlock**: Prevented by avoiding circular wait conditions.
-5. **Memory Leaks**: Handled by eliminating unnecessary references and using weak references. In microservices, careful resource management is crucial to avoid leaks.
-
-This combination of concepts is essential for writing robust, maintainable, and efficient Java applications and microservices.
-
-### Functional Interfaces in Java
-
-A **functional interface** is an interface that contains exactly one abstract method, which can be implemented using a lambda expression or method reference. Java 8 introduced the ability to include **default** and **static** methods in interfaces.
-
-### Default and Static Methods
-
-1. **Default Methods**: 
-   - These methods can provide a default implementation in the interface itself. They allow you to add new methods to interfaces without breaking existing implementations.
-
-   ```java
-   @FunctionalInterface
-   public interface MyFunctionalInterface {
-       void performAction();
-
-       default void defaultMethod() {
-           System.out.println("Default method in MyFunctionalInterface");
-       }
-   }
-   ```
-
-2. **Static Methods**: 
-   - These methods belong to the interface itself rather than any instance. They can be called without creating an instance of the interface.
-
-   ```java
-   public interface MyStaticInterface {
-       static void staticMethod() {
-           System.out.println("Static method in MyStaticInterface");
-       }
-   }
-   ```
-
-### Ambiguity Example with Default Methods
-
-Ambiguity arises when a class implements two interfaces that have the same default method. Here’s how this can occur:
-
-#### Example
-
-```java
-interface InterfaceA {
-    default void show() {
-        System.out.println("Show from InterfaceA");
-    }
-}
-
-interface InterfaceB {
-    default void show() {
-        System.out.println("Show from InterfaceB");
-    }
-}
-
-class MyClass implements InterfaceA, InterfaceB {
-    // Ambiguity: show() is inherited from both interfaces
-}
-```
-
-In the above example, `MyClass` inherits the `show()` method from both `InterfaceA` and `InterfaceB`, causing ambiguity.
-
-### Resolution of Ambiguity
-
-To resolve the ambiguity, you must override the conflicting default method in the implementing class:
-
-```java
-class MyClass implements InterfaceA, InterfaceB {
-    @Override
-    public void show() {
-        // You can choose which implementation to call or provide your own
-        InterfaceA.super.show(); // Calls the method from InterfaceA
-        // or
-        InterfaceB.super.show(); // Calls the method from InterfaceB
-        // or provide a completely new implementation
-        System.out.println("Custom show from MyClass");
-    }
-}
-
-public class Main {
-    public static void main(String[] args) {
-        MyClass obj = new MyClass();
-        obj.show(); // Will call the overridden show method
-    }
-}
-```
-
-### Summary
-
-- **Functional Interface**: Contains exactly one abstract method and can have default and static methods.
-- **Default Method Ambiguity**: Occurs when two interfaces with the same default method are implemented.
-- **Resolution**: Override the conflicting method in the implementing class, specifying which default method to call if needed.
-
-This pattern ensures that the implementing class clearly defines its behavior, avoiding ambiguity and potential runtime errors.
 
 
 Here are some common interview questions and answers related to Kubernetes and Docker that can help you prepare for your interview.
