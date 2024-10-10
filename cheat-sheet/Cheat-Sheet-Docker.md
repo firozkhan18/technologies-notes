@@ -613,3 +613,120 @@ VOLUME /test
 ### Docker Swarm
    Docker Swarm(or swarm) is an open-source tool used to cluster and orchestrate Docker containers.
 
+### Key Concepts in Kubernetes
+
+Let’s break down the concepts of **Pods**, **Nodes**, **Container Images**, **Clusters**, **Replicas**, and **Ingress** in Kubernetes.
+
+---
+
+#### 1. Pod
+A **Pod** is the smallest and simplest unit in the Kubernetes object model that you create or deploy. A Pod encapsulates one or more containers, storage resources, a unique network IP, and options for how to run the containers.
+
+**Example Pod Manifest**:
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: mypod
+spec:
+  containers:
+  - name: mycontainer
+    image: nginx:latest
+    ports:
+    - containerPort: 80
+```
+
+---
+
+#### 2. Node
+A **Node** is a worker machine in Kubernetes. Each node can run multiple Pods and is managed by the control plane. Nodes can be physical or virtual machines and contain the necessary services to run Pods, including:
+
+- **Kubelet**: An agent that manages the Pods on the node.
+- **Kube Proxy**: Handles network routing.
+- **Container Runtime**: Software that runs the containers (e.g., Docker, containerd).
+
+**Example Command to View Nodes**:
+```bash
+kubectl get nodes
+```
+
+---
+
+#### 3. Container Image
+A **Container Image** is a lightweight, standalone, executable software package that includes everything needed to run a piece of software, including the code, runtime, libraries, and environment variables. In Kubernetes, images are stored in container registries (e.g., Docker Hub, Google Container Registry).
+
+**Example Image Reference in a Pod**:
+```yaml
+containers:
+- name: mycontainer
+  image: nginx:latest
+```
+
+---
+
+#### 4. Cluster
+A **Kubernetes Cluster** consists of a set of nodes (both control plane and worker nodes) that run containerized applications. The control plane manages the cluster and ensures the desired state of applications is maintained.
+
+**Basic Components**:
+- **Control Plane**: Includes the API server, etcd, scheduler, and controller manager.
+- **Worker Nodes**: Execute the applications in Pods.
+
+**Example Command to Get Cluster Information**:
+```bash
+kubectl cluster-info
+```
+
+---
+
+#### 5. Replica
+In Kubernetes, a **Replica** refers to the number of identical Pods running at any given time. The **Deployment** resource is commonly used to manage replicas, allowing scaling up or down easily.
+
+**Example Deployment with Replicas**:
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: myapp
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: myapp
+  template:
+    metadata:
+      labels:
+        app: myapp
+    spec:
+      containers:
+      - name: mycontainer
+        image: nginx:latest
+```
+
+---
+
+#### 6. Ingress
+**Ingress** is a Kubernetes resource that manages external access to services within a cluster, typically HTTP and HTTPS traffic. It provides a way to define rules for routing traffic to different services based on the request host or path.
+
+**Example Ingress Manifest**:
+```yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: myapp-ingress
+spec:
+  rules:
+  - host: myapp.example.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: myservice
+            port:
+              number: 80
+```
+
+### Conclusion
+
+Understanding these fundamental concepts—Pods, Nodes, Container Images, Clusters, Replicas, and Ingress—is essential for working effectively with Kubernetes. Together, they enable the deployment, scaling, and management of containerized applications in a cloud-native environment.
