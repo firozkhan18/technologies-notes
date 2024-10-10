@@ -9546,3 +9546,118 @@ While `Runnable` and `Callable` were already functional interfaces, Java 8 intro
 ### Conclusion
 
 In summary, while default and static methods in regular interfaces are useful for providing shared functionality, functional interfaces specifically facilitate functional programming in Java. They allow for cleaner, more expressive code through the use of lambda expressions, enabling developers to write code that is both concise and easy to understand. The introduction of new functional interfaces in Java 8 enhanced the language's capabilities and aligned it more closely with functional programming principles.
+
+In a microservices architecture, a circuit breaker pattern helps to handle failures gracefully and maintain system stability. Here's an example involving three microservices: A, B, and C.
+
+### Scenario
+
+- **Microservice A**: Calls Microservice B.
+- **Microservice B**: Calls Microservice C.
+- **Microservice C**: Performs a specific task, such as retrieving data from a database.
+
+### Circuit Breaker Pattern Explanation
+
+1. **Normal Operation**: When all services are running fine, A calls B, and B calls C, and everything works as expected.
+
+2. **Failure**: If C experiences a failure (e.g., due to a timeout or an exception), it will not respond to B in a timely manner.
+
+3. **Circuit Breaker Activation**:
+   - After a certain number of failures in a defined time period, the circuit breaker in B "trips," causing it to return an error response immediately without attempting to call C.
+   - This prevents B from constantly trying to call C, allowing C time to recover.
+
+4. **Fallback Mechanism**: During the tripped state, B can return a default response or cached data to A, improving user experience.
+
+5. **Recovery**: After a timeout period, the circuit breaker transitions to a "half-open" state, allowing a limited number of requests to pass through to C. If these requests succeed, the circuit breaker resets to "closed." If they fail, it remains "open."
+
+### Example Implementation
+
+Here's a simplified implementation using pseudocode to illustrate the concept:
+
+#### Microservice A
+```java
+public class ServiceA {
+    private ServiceB serviceB;
+
+    public void performAction() {
+        try {
+            serviceB.callServiceB();
+        } catch (Exception e) {
+            // Handle fallback or error response
+            System.out.println("Service B is currently unavailable. Please try again later.");
+        }
+    }
+}
+```
+
+#### Microservice B with Circuit Breaker
+```java
+public class ServiceB {
+    private ServiceC serviceC;
+    private CircuitBreaker circuitBreaker;
+
+    public ServiceB() {
+        circuitBreaker = new CircuitBreaker(); // Initialize circuit breaker
+    }
+
+    public void callServiceB() {
+        if (circuitBreaker.isOpen()) {
+            // Return fallback response
+            System.out.println("Returning fallback response from Service B.");
+            return;
+        }
+
+        try {
+            serviceC.callServiceC(); // Call to Service C
+        } catch (Exception e) {
+            circuitBreaker.recordFailure(); // Record the failure
+            throw new RuntimeException("Failed to call Service C.");
+        }
+    }
+}
+```
+
+#### Circuit Breaker Implementation
+```java
+public class CircuitBreaker {
+    private boolean open = false;
+    private int failureCount = 0;
+    private long lastFailureTime = 0;
+    private final int THRESHOLD = 3; // Number of failures to trip
+    private final long TIMEOUT = 5000; // Timeout in milliseconds
+
+    public boolean isOpen() {
+        if (open) {
+            // Check if timeout has expired
+            if (System.currentTimeMillis() - lastFailureTime > TIMEOUT) {
+                open = false; // Reset to half-open state
+            }
+        }
+        return open;
+    }
+
+    public void recordFailure() {
+        failureCount++;
+        lastFailureTime = System.currentTimeMillis();
+        if (failureCount >= THRESHOLD) {
+            open = true; // Trip the circuit breaker
+        }
+    }
+}
+```
+
+#### Microservice C
+```java
+public class ServiceC {
+    public void callServiceC() {
+        // Simulate processing
+        if (Math.random() < 0.5) { // Randomly simulate failure
+            throw new RuntimeException("Service C failure.");
+        }
+        System.out.println("Service C executed successfully.");
+    }
+}
+```
+
+### Summary
+
+In this example, when Microservice A calls Microservice B, if B encounters repeated failures while calling C, it will trip the circuit breaker, preventing further attempts to call C until it's determined that C has recovered. This pattern enhances resilience and stability in a microservices architecture, ensuring that a failure in one service does not cascade and affect the entire system.
