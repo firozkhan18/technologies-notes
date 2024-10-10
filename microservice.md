@@ -1,5 +1,154 @@
 Core Java Interview Questions:
 
+In Java, you can have multiple interfaces, each with default methods, and you can implement both interfaces in a single class. When a class implements multiple interfaces that have default methods with the same signature, you might run into conflicts. Here's a guide on how to handle such situations:
+
+### Example Interfaces
+
+Let's define two interfaces, each with a default method:
+
+```java
+interface InterfaceA {
+    default void display() {
+        System.out.println("InterfaceA display");
+    }
+}
+
+interface InterfaceB {
+    default void display() {
+        System.out.println("InterfaceB display");
+    }
+}
+```
+
+### Implementing Both Interfaces
+
+Now, if a class implements both `InterfaceA` and `InterfaceB`, it will need to resolve the conflict between the `display` methods provided by these interfaces:
+
+```java
+public class MyClass implements InterfaceA, InterfaceB {
+    @Override
+    public void display() {
+        // You can choose which default method to use, or provide a new implementation
+        InterfaceA.super.display();  // Calls the default method from InterfaceA
+        // InterfaceB.super.display();  // Uncomment this to call the default method from InterfaceB
+        // Alternatively, provide a completely new implementation
+        System.out.println("MyClass display");
+    }
+
+    public static void main(String[] args) {
+        MyClass obj = new MyClass();
+        obj.display();  // This will call the overridden display method
+    }
+}
+```
+
+### Key Points
+
+1. **Default Method Conflict**: When a class implements multiple interfaces with conflicting default methods, it must override the method to resolve the ambiguity. You cannot directly use both default implementations.
+
+2. **Accessing Default Methods**: Inside the overridden method, you can explicitly call the default methods of the interfaces using the syntax `InterfaceName.super.methodName()`. This allows you to selectively use the default implementations from one or both interfaces.
+
+3. **Providing a New Implementation**: Instead of calling the default methods from the interfaces, you can also provide a completely new implementation in the class.
+
+### Running the Example
+
+If you run the `main` method in `MyClass`, the output will depend on how you resolve the conflict in the `display` method:
+
+- If you call `InterfaceA.super.display()`, you'll see "InterfaceA display".
+- If you call `InterfaceB.super.display()`, you'll see "InterfaceB display".
+- If you provide a new implementation, you'll see "MyClass display".
+
+This way, you have the flexibility to manage multiple interface implementations and their default methods effectively.
+
+In Java, functional interfaces are interfaces with a single abstract method. They are used primarily for lambda expressions and method references. Although functional interfaces are primarily defined by their single abstract method, they can also contain default and static methods. Here’s how to work with default and static methods in functional interfaces and what they’re used for in real-time scenarios.
+
+### Example of Functional Interfaces with Default Methods
+
+Let's say we have two functional interfaces with default methods:
+
+```java
+@FunctionalInterface
+interface FunctionalA {
+    void abstractMethod();  // Single abstract method
+
+    default void defaultMethod() {
+        System.out.println("FunctionalA defaultMethod");
+    }
+
+    static void staticMethod() {
+        System.out.println("FunctionalA staticMethod");
+    }
+}
+
+@FunctionalInterface
+interface FunctionalB {
+    void abstractMethod();  // Single abstract method
+
+    default void defaultMethod() {
+        System.out.println("FunctionalB defaultMethod");
+    }
+
+    static void staticMethod() {
+        System.out.println("FunctionalB staticMethod");
+    }
+}
+```
+
+### Implementing Both Interfaces
+
+When a class implements both interfaces, it must handle the potential conflict between the default methods of the interfaces:
+
+```java
+public class MyClass implements FunctionalA, FunctionalB {
+    @Override
+    public void abstractMethod() {
+        System.out.println("MyClass abstractMethod");
+    }
+
+    @Override
+    public void defaultMethod() {
+        FunctionalA.super.defaultMethod();  // Calls the default method from FunctionalA
+        FunctionalB.super.defaultMethod();  // Calls the default method from FunctionalB
+    }
+
+    public static void main(String[] args) {
+        MyClass obj = new MyClass();
+        obj.abstractMethod();  // Calls the overridden abstract method
+        obj.defaultMethod();   // Calls the overridden default method
+        
+        // Accessing static methods of the interfaces
+        FunctionalA.staticMethod();  // Calls static method from FunctionalA
+        FunctionalB.staticMethod();  // Calls static method from FunctionalB
+    }
+}
+```
+
+### Explanation of Default and Static Methods
+
+**Default Methods:**
+
+- **Purpose:** Default methods allow you to add new methods to an interface without breaking the classes that already implement the interface. They provide a way to extend the functionality of interfaces while preserving backward compatibility.
+  
+- **Use Case:** Default methods are useful when you want to provide a common implementation that can be shared across multiple implementations but still allow implementing classes to override it if needed. For example, you might have a `Printable` interface with a default `print` method that provides a basic implementation, but implementing classes could provide more specific implementations if required.
+
+**Static Methods:**
+
+- **Purpose:** Static methods in interfaces are associated with the interface itself, not with instances of the interface. They cannot be overridden by implementing classes and are called using the interface name.
+
+- **Use Case:** Static methods can be used for utility functions that are related to the interface but do not operate on the instance data. For instance, if you have a `MathOperations` interface, you might include static methods for common mathematical operations like `add` or `subtract` that can be used independently of any implementation.
+
+### Real-Time Scenarios
+
+1. **Default Methods:**
+   - **Legacy Code:** If you are working with an older interface in a library that many classes implement, adding a default method can be a way to introduce new functionality without forcing all existing implementations to change.
+   - **Common Behavior:** In a user interface library, a `Drawable` interface might have a default `draw` method that provides a basic rendering logic, but specific UI components can override it to provide custom drawing behavior.
+
+2. **Static Methods:**
+   - **Utility Functions:** Interfaces that define utility functions or constants can benefit from static methods. For example, an `HttpUtils` interface might include static methods for common HTTP operations like building URLs or parsing responses.
+   - **Factory Methods:** You might use static methods in interfaces to provide factory methods for creating instances of implementing classes. This is often seen in design patterns like the Factory Method or Singleton.
+
+By understanding how to use default and static methods in functional interfaces, you can leverage the flexibility of Java interfaces while maintaining clean and effective code architecture.
+
 ### Semaphore and Executor in Java
 
 **Semaphore**:
