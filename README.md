@@ -9661,3 +9661,27 @@ public class ServiceC {
 ### Summary
 
 In this example, when Microservice A calls Microservice B, if B encounters repeated failures while calling C, it will trip the circuit breaker, preventing further attempts to call C until it's determined that C has recovered. This pattern enhances resilience and stability in a microservices architecture, ensuring that a failure in one service does not cascade and affect the entire system.
+
+The **threshold** in a circuit breaker pattern is a critical parameter that determines when the circuit breaker should trip from a "closed" state to an "open" state. Here’s a breakdown of its purpose:
+
+### Purpose of Threshold
+
+1. **Failure Detection**:
+   - The threshold defines the number of failures (e.g., exceptions or timeouts) that must occur within a specified time frame before the circuit breaker considers the service to be unhealthy. 
+
+2. **Preventing Overload**:
+   - By setting a threshold, you prevent the system from continuously trying to call a service that is already failing. This helps reduce the load on the failing service, allowing it time to recover without being overwhelmed by requests.
+
+3. **Stability**:
+   - A well-chosen threshold helps stabilize the overall system. If the threshold is too low, the circuit breaker may trip unnecessarily, leading to frequent interruptions in service. If it's too high, the system may continue to send requests to a failing service, potentially causing cascading failures.
+
+4. **Configurable Resilience**:
+   - The threshold can often be adjusted based on the application's requirements and the expected load on services. This allows teams to fine-tune how sensitive the circuit breaker is to failures.
+
+### Example in Context
+
+In the earlier example, if the threshold is set to 3, it means that if Microservice B encounters 3 consecutive failures when calling Microservice C within a specific time period, the circuit breaker will trip and enter the "open" state. During this state, requests to Microservice C will be blocked, and a fallback response can be provided instead.
+
+### Summary
+
+The threshold plays a vital role in ensuring the effectiveness of the circuit breaker pattern, allowing systems to balance resilience against failures and maintaining service availability.
