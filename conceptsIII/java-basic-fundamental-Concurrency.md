@@ -355,6 +355,40 @@ We can pass the Runnable as a parameter to the Thread class constructor as targe
 We can’t call invokeAll(), invokeAny() methods of ExecutorService by passing the collection of Runnable as a parameter	We can call invokeAll(), invokeAny() methods of ExecutorService by passing the collection of Callable as a parameter
 See Also: Difference between Callable and Runnable
 
+Here’s the corrected version of your text:
+
+### Runnable vs. Callable
+
+**Runnable**: 
+- If a thread is not required to return a value after completing its execution, use the Runnable interface.
+- The Runnable interface is defined in the `java.lang` package since Java 1.0. 
+- It contains the `run()` method:
+
+```java
+public interface Runnable {
+    public abstract void run();
+}
+```
+
+**Callable**: 
+- If a thread is required to return a value after completing its execution, use the Callable interface.
+- The Callable interface is defined in the `java.util.concurrent` package since Java 1.5. 
+- It contains the `call()` method:
+
+```java
+public interface Callable<V> {
+    V call() throws Exception;
+}
+```
+
+### Key Differences:
+- We can pass a Runnable as a parameter to the Thread class constructor as a target.
+- We cannot pass a Callable directly to the Thread class constructor.
+- We cannot call `invokeAll()` or `invokeAny()` methods of `ExecutorService` by passing a collection of Runnable as a parameter.
+- We can call `invokeAll()` or `invokeAny()` methods of `ExecutorService` by passing a collection of Callable as a parameter.
+
+See also: Difference between Callable and Runnable.
+
 ### 3.4. What is the difference between class-level lock and object-level lock?
 The object-level lock is used when we want to synchronize the instance properties or critical sections of a class such that only one thread can execute synchronized methods and locks on the given instance.
 
