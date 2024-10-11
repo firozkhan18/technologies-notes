@@ -51,31 +51,31 @@ The separation of concerns in the CQRS design pattern can be outlined as follows
 ### Key Components of CQRS Design Pattern in Microservices
 In a microservices architecture implementing the CQRS (Command Query Responsibility Segregation) pattern, the key components include:
 
-Command Service:
-- Command Handlers: Responsible for receiving, validating, and executing commands that change the state of the system.
-- Domain Logic: Implements business rules and domain-specific logic required to process commands.
-- Transactional Behavior: Ensures atomicity, consistency, isolation, and durability (ACID properties) of command execution.
-Query Service:
-- Query Handlers: Retrieve data from the system in response to read requests without modifying the state.
-- Optimized Data Access: Utilizes efficient data retrieval mechanisms, such as denormalization, caching, or indexing, to optimize query performance.
-- Scalability: Scales independently to handle varying read workloads efficiently.
-Event Bus or Message Broker:
-- Asynchronous Communication: Facilitates communication between command and query services through events or messages.
-- Publish-Subscribe Mechanism: Allows command services to publish events representing state changes, which query services can subscribe to for eventual consistency.
-- Decoupling: Enables loose coupling between services, promoting flexibility, and fault tolerance.
-Data Stores:
-- Write Store (Command Side): Optimized for handling write operations, such as inserts, updates, and deletes. May use NoSQL databases for scalability and performance.
-- Read Store (Query Side): Optimized for efficient data retrieval. May use relational databases for complex queries or specialized data stores for specific use cases.
-API Gateway or Service Mesh:
-- Entry Point: Provides a single entry point for clients to interact with the microservices architecture.
-- Routing and Load Balancing: Routes requests to the appropriate command or query services and balances the load across instances.
-- Security and Authentication: Enforces security policies, authentication, and authorization mechanisms.
+- Command Service:
+   - Command Handlers: Responsible for receiving, validating, and executing commands that change the state of the system.
+   - Domain Logic: Implements business rules and domain-specific logic required to process commands.
+   - Transactional Behavior: Ensures atomicity, consistency, isolation, and durability (ACID properties) of command execution.
+- Query Service:
+   - Query Handlers: Retrieve data from the system in response to read requests without modifying the state.
+   - Optimized Data Access: Utilizes efficient data retrieval mechanisms, such as denormalization, caching, or indexing, to optimize query performance.
+   - Scalability: Scales independently to handle varying read workloads efficiently.
+- Event Bus or Message Broker:
+   - Asynchronous Communication: Facilitates communication between command and query services through events or messages.
+   - Publish-Subscribe Mechanism: Allows command services to publish events representing state changes, which query services can subscribe to for eventual consistency.
+   - Decoupling: Enables loose coupling between services, promoting flexibility, and fault tolerance.
+- Data Stores:
+   - Write Store (Command Side): Optimized for handling write operations, such as inserts, updates, and deletes. May use NoSQL databases for scalability and performance.
+   - Read Store (Query Side): Optimized for efficient data retrieval. May use relational databases for complex queries or specialized data stores for specific use cases.
+- API Gateway or Service Mesh:
+   - Entry Point: Provides a single entry point for clients to interact with the microservices architecture.
+   - Routing and Load Balancing: Routes requests to the appropriate command or query services and balances the load across instances.
+   - Security and Authentication: Enforces security policies, authentication, and authorization mechanisms.
 ### Advantages of CQRS Design Pattern in Microservices
 Below are the advantages of CQRS Design Pattern in Microservices:
 
 - Scalability:
   - Independent Scaling: Command and query services can be scaled independently based on the workload they handle. This allows for better resource allocation and improved performance as each service can be optimized for its specific responsibilities.
-  Performance Optimization:
+- Performance Optimization:
   - Optimized Data Access: Command and query services can use separate data storage mechanisms optimized for their respective operations. For example, command services may use a NoSQL database for fast write operations, while query services may use a relational database for complex queries.
   - Efficient Read Operations: Query services can denormalize data, use caching strategies, or employ specialized data stores to optimize read operations and improve response times.
 - Flexibility and Maintainability:
