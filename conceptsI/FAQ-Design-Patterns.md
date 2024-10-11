@@ -10,7 +10,7 @@ A design pattern is a general repeatable/reusable solution to a commonly occurri
 - Abstract Factory
 - Builder
 - Prototype
-
+- Object Pool
 ## Structural
 
 - Adapter
@@ -34,6 +34,7 @@ A design pattern is a general repeatable/reusable solution to a commonly occurri
 - Strategy
 - Template Method
 - Visitor
+- Null Object
 
 ## Backend communication design patterns
 1. Request response
@@ -1100,6 +1101,77 @@ classDiagram
     ConcretePrototype <|-- Prototype
 ```
 
+### 6. Object Pool Pattern
+
+The Object Pool Pattern is used to manage a set of reusable objects instead of creating and destroying them on demand. This is useful when the cost of creating and destroying objects is high.
+
+**Code Example:**
+
+```java
+import java.util.ArrayList;
+import java.util.List;
+
+class Connection {
+    public void connect() {
+        System.out.println("Connected to database.");
+    }
+}
+
+class ConnectionPool {
+    private List<Connection> availableConnections = new ArrayList<>();
+    private List<Connection> usedConnections = new ArrayList<>();
+    private static final int MAX_POOL_SIZE = 5;
+
+    public Connection getConnection() {
+        if (availableConnections.isEmpty() && usedConnections.size() < MAX_POOL_SIZE) {
+            Connection connection = new Connection();
+            usedConnections.add(connection);
+            return connection;
+        } else if (!availableConnections.isEmpty()) {
+            Connection connection = availableConnections.remove(availableConnections.size() - 1);
+            usedConnections.add(connection);
+            return connection;
+        }
+        return null; // No available connections
+    }
+
+    public void releaseConnection(Connection connection) {
+        usedConnections.remove(connection);
+        availableConnections.add(connection);
+    }
+}
+
+// Usage
+public class Main {
+    public static void main(String[] args) {
+        ConnectionPool pool = new ConnectionPool();
+        
+        Connection conn1 = pool.getConnection();
+        conn1.connect(); // Output: Connected to database.
+
+        pool.releaseConnection(conn1);
+        
+        Connection conn2 = pool.getConnection();
+        conn2.connect(); // Output: Connected to database.
+    }
+}
+```
+
+**Mermaid Diagram:**
+
+```mermaid
+classDiagram
+    class Connection {
+        +connect()
+    }
+    class ConnectionPool {
+        +getConnection()
+        +releaseConnection(connection)
+    }
+    ConnectionPool --> Connection
+```
+
+---
 ## **Structural Design Patterns**
 
 ### **1. Adapter**
@@ -3038,6 +3110,97 @@ classDiagram
     Fruit --> Visitor
     ShoppingCartVisitor --> Visitor
 ```
+### 12. Null Object Pattern
+
+The Null Object Pattern uses a special object with defined behavior to represent a null reference. This avoids null checks and makes the code cleaner.
+
+**Code Example:**
+
+```java
+abstract class AbstractCustomer {
+    protected String name;
+
+    public abstract String getName();
+    public abstract boolean isNil();
+}
+
+class RealCustomer extends AbstractCustomer {
+    public RealCustomer(String name) {
+        this.name = name;
+    }
+
+    @Override
+    public String getName() {
+        return name;
+    }
+
+    @Override
+    public boolean isNil() {
+        return false;
+    }
+}
+
+class NullCustomer extends AbstractCustomer {
+    @Override
+    public String getName() {
+        return "Not Available";
+    }
+
+    @Override
+    public boolean isNil() {
+        return true;
+    }
+}
+
+class CustomerFactory {
+    public static final String[] names = { "Alice", "Bob", "Charlie" };
+
+    public static AbstractCustomer getCustomer(String name) {
+        for (String n : names) {
+            if (n.equalsIgnoreCase(name)) {
+                return new RealCustomer(name);
+            }
+        }
+        return new NullCustomer();
+    }
+}
+
+// Usage
+public class Main {
+    public static void main(String[] args) {
+        AbstractCustomer customer1 = CustomerFactory.getCustomer("Alice");
+        AbstractCustomer customer2 = CustomerFactory.getCustomer("Dave");
+
+        System.out.println(customer1.getName()); // Output: Alice
+        System.out.println(customer2.getName()); // Output: Not Available
+    }
+}
+```
+
+**Mermaid Diagram:**
+
+```mermaid
+classDiagram
+    class AbstractCustomer {
+        +getName()
+        +isNil()
+    }
+    class RealCustomer {
+        +getName()
+        +isNil()
+    }
+    class NullCustomer {
+        +getName()
+        +isNil()
+    }
+    class CustomerFactory {
+        +getCustomer(name)
+    }
+    AbstractCustomer <|-- RealCustomer
+    AbstractCustomer <|-- NullCustomer
+```
+
+---
 ## **Backend Communication Design Patterns**
 
 ### **1. Request Response**
