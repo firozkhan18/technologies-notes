@@ -316,6 +316,19 @@ CPU drain is very low hence performance is very high as only one waiting thread 
 Only one waiting thread will be executed which got the notification.	Which thread will execute depends on the thread scheduler as every waiting thread got the notification.
 See Also: wait(), notify() and notifyAll() methods
 
+In Java, `notify()` and `notifyAll()` are methods used for thread communication in a synchronized context.
+
+1. **notify()**: This method wakes up a single thread that is waiting on the object's monitor. If multiple threads are waiting, one of them is chosen at random to be awakened.
+
+2. **notifyAll()**: This method wakes up all threads that are waiting on the object's monitor. All awakened threads will compete to acquire the monitor lock, which may lead to multiple threads being active after they are notified.
+
+### Key Differences:
+- **Thread Selection**: `notify()` wakes up one thread, while `notifyAll()` wakes up all waiting threads.
+- **Use Cases**: Use `notify()` when you only need one thread to proceed, and `notifyAll()` when multiple threads might need to check the condition after being notified.
+
+Choosing between them depends on the specific synchronization requirements of your application.
+
+
 ### 3.3.What is the difference between Callable and Runnable?
 Runnable	Callable
 If a thread is not required to return some value after completing its execution then use Runnable interface	If a thread is required to return some value after completing its execution then use Callable interface
