@@ -10092,6 +10092,126 @@ Here’s how to implement CORS in popular API gateways:
 
 Implementing CORS through an API gateway is a powerful approach in a microservice architecture. It centralizes CORS management, simplifies configurations, enhances security, and provides a consistent policy across all services. This method helps ensure that applications remain secure while allowing necessary cross-origin interactions.
 
+### Preflight Requests in CORS
 
+**Preflight requests** are an important part of the CORS (Cross-Origin Resource Sharing) mechanism that allows browsers to determine if a cross-origin request is safe to send. This is particularly relevant for HTTP requests that may modify server data (e.g., `POST`, `PUT`, `DELETE`), as well as requests with certain headers.
+
+### What Are Preflight Requests?
+
+- **Definition**: A preflight request is an `OPTIONS` request sent by the browser to the server before the actual request. It checks if the cross-origin request is allowed based on the CORS policy.
+- **Purpose**: The main goal is to ensure that the server is configured to accept requests from the requesting origin, including the specific HTTP methods and headers that will be used.
+
+### When Are Preflight Requests Triggered?
+
+Preflight requests are triggered in the following scenarios:
+
+1. **Using HTTP methods other than GET or POST**: Methods like `PUT`, `DELETE`, and `PATCH` require a preflight check.
+2. **Custom headers**: If the request includes any headers not considered "simple" (e.g., `X-Custom-Header`).
+3. **Content types**: If the request uses a content type other than `application/x-www-form-urlencoded`, `multipart/form-data`, or `text/plain`.
+
+### Example of a Preflight Request
+
+Here's what a typical preflight request and response might look like:
+
+#### Preflight Request (OPTIONS)
+
+```http
+OPTIONS /api/resource HTTP/1.1
+Host: api.example.com
+Origin: http://client.example.com
+Access-Control-Request-Method: POST
+Access-Control-Request-Headers: Content-Type, Authorization
+```
+
+#### Preflight Response
+
+```http
+HTTP/1.1 204 No Content
+Access-Control-Allow-Origin: http://client.example.com
+Access-Control-Allow-Methods: POST, GET, OPTIONS
+Access-Control-Allow-Headers: Content-Type, Authorization
+```
+
+### How to Handle Preflight Requests
+
+To handle preflight requests effectively in your API, you need to ensure that your server is configured to respond to `OPTIONS` requests properly. Here’s how to do this in various server frameworks:
+
+#### 1. **Express.js (Node.js)**
+
+```javascript
+const express = require('express');
+const cors = require('cors');
+const app = express();
+
+// Configure CORS
+app.use(cors({
+    origin: 'http://client.example.com',
+    methods: ['GET', 'POST', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+}));
+
+// Handle OPTIONS requests
+app.options('*', (req, res) => {
+    res.header("Access-Control-Allow-Origin", "http://client.example.com");
+    res.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+    res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+    res.sendStatus(204); // No Content
+});
+
+// Example route
+app.post('/api/resource', (req, res) => {
+    res.json({ message: 'Resource created' });
+});
+
+app.listen(3000, () => {
+    console.log('Server running on port 3000');
+});
+```
+
+#### 2. **Spring Boot**
+
+```java
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+@Configuration
+public class WebConfig implements WebMvcConfigurer {
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**")
+                .allowedOrigins("http://client.example.com")
+                .allowedMethods("GET", "POST", "OPTIONS")
+                .allowedHeaders("Content-Type", "Authorization")
+                .allowCredentials(true);
+    }
+}
+```
+
+#### 3. **Nginx**
+
+```nginx
+server {
+    location /api/ {
+        # Handle preflight requests
+        if ($request_method = OPTIONS) {
+            add_header 'Access-Control-Allow-Origin' 'http://client.example.com';
+            add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS';
+            add_header 'Access-Control-Allow-Headers' 'Content-Type, Authorization';
+            add_header 'Content-Length' 0;
+            return 204; # No Content
+        }
+        
+        # Actual request handling
+        proxy_pass http://backend_service;
+        add_header 'Access-Control-Allow-Origin' 'http://client.example.com';
+    }
+}
+```
+
+### Conclusion
+
+Handling preflight requests properly is essential for enabling secure and functional cross-origin requests in your web applications. By responding correctly to `OPTIONS` requests, you ensure that browsers can confirm permissions before making potentially unsafe requests. This not only enhances security but also improves the user experience by allowing seamless interactions between client applications and your APIs.
 
 
