@@ -1023,39 +1023,43 @@ The factory pattern in Java is heavily used everywhere, including in the JDK, op
 
 The Factory Method pattern is a powerful tool in Java for creating objects while promoting flexibility and decoupling. By using factory methods, developers can write more maintainable and adaptable code.
 
+# Java Decorator Design Pattern
 
-
-
-
-
-
-## Java Decorator Design Pattern
-In this tutorial, we will cover:
+In this Java tutorial, we will cover:
 - What is the decorator pattern in Java?
 - When to use the decorator pattern in Java?
 - How to use the decorator pattern in Java?
 - Example of the decorator design pattern
 - Advantages and disadvantages of the decorator pattern in Java
 
-### What is the Decorator Design Pattern in Java?
-- The Decorator design pattern enhances the functionality of a specific object at runtime or dynamically.
-- Other instances of the same class remain unaffected, allowing individual objects to gain new behavior.
-- It involves wrapping the original object through a decorator object.
-- Based on abstract classes, concrete implementations are derived from them.
-- It is a structural design pattern and widely used.
+## What is Decorator Design Pattern in Java?
 
-### Problems Solved by Decorator Pattern
+- The decorator design pattern is used to enhance the functionality of a particular object at runtime or dynamically.
+- Other instances of the same class will not be affected, so individual objects gain new behavior.
+- Essentially, we wrap the original object with a decorator object.
+- This pattern is based on abstract classes, from which we derive concrete implementations.
+- It is a structural design pattern and is widely used.
+- This pattern operates at the individual object level.
+  
+This question is often asked in many Core Java interviews, especially in investment banks.
+
+## Problem Solved by Decorator Pattern
+
+The decorator pattern addresses the limitation of adding functionality to individual objects or changing the state of a particular object at runtime. Traditional methods require providing specific behavior to all objects of that class at design time via inheritance or subclasses. The decorator pattern enables us to give individual objects of the same class specific behavior or state at runtime without affecting other objects of the same class.
+
 The pattern allows adding functionality to individual objects dynamically, without affecting other instances of the same class. If a particular functionality is required for only some objects, the Decorator pattern provides a solution where specific behavior or state can be assigned at runtime.
 
-### When to Use Decorator Pattern in Java
-- When subclassing becomes impractical, leading to a large number of different possibilities for independent objects or combinations.
-- To add functionality to individual objects at runtime.
+## When to Use Decorator Pattern in Java
 
-### Code Example of Decorator Design Pattern
-Below is a code example demonstrating the Decorator pattern in Java.
+- When subclassing becomes impractical and a large number of different possibilities are needed to create independent objects or combinations.
+- When we want to add functionality to an individual object, not to all objects, at runtime.
+
+## Code Example of Decorator Design Pattern
+
+To better understand the decorator design pattern, let’s see a code example using the decorator pattern in Java. You can also look inside the JDK to find classes and packages that use the decorator pattern.
 
 ```java
-// Component
+// Component in Decorator Design Pattern
 public abstract class Currency {
     String description = "Unknown currency";
 
@@ -1099,7 +1103,7 @@ public abstract class Decorator extends Currency {
     public abstract String getDescription();
 }
 
-// Concrete Decorator for USD
+// Concrete Decorator
 public class USDDecorator extends Decorator {
     Currency currency;
 
@@ -1108,11 +1112,11 @@ public class USDDecorator extends Decorator {
     }
 
     public String getDescription() {
-        return currency.getCurrencyDescription() + ", it's US Dollar";
+        return currency.getDescription() + " , it's US Dollar";
     }
 }
 
-// Another Concrete Decorator for SGD
+// Another Concrete Decorator
 public class SGDDecorator extends Decorator {
     Currency currency;
 
@@ -1121,16 +1125,16 @@ public class SGDDecorator extends Decorator {
     }
 
     public String getDescription() {
-        return currency.getCurrencyDescription() + ", it's Singapore Dollar";
+        return currency.getDescription() + " , it's Singapore Dollar";
     }
 }
 
-// Main class to check currency
+// Currency Check
 public class CurrencyCheck {
     public static void main(String[] args) {
         // Without adding decorators
         Currency curr = new Dollar();
-        System.out.println(curr.getCurrencyDescription() + " dollar. " + curr.cost(2.0));
+        System.out.println(curr.getDescription() + " dollar. " + curr.cost(2.0));
 
         // Adding decorators
         Currency curr2 = new USDDecorator(new Dollar());
@@ -1142,19 +1146,29 @@ public class CurrencyCheck {
 }
 ```
 
-### Explanation of the Code
-- **Component Interface**: The `Currency` interface represents the component that can be decorated.
-- **Concrete Component**: `Dollar` and `Rupee` are concrete implementations of the component that can be enhanced.
-- **Decorator**: An abstract class that holds a reference to the component it decorates.
-- **Concrete Decorators**: `USDDecorator` and `SGDDecorator` add specific behavior to the currency objects dynamically.
+## Explanation of the Code
+
+We can understand the components of the decorator pattern in the following terms:
+
+- **Component Interface**: In our example, the `Currency` interface is the component that can be used on its own or require a decorator.
+- **Concrete Component**: This implements the component and allows adding new behavior dynamically. `Dollar` and `Rupee` are concrete implementations of `Currency`.
+- **Decorator**: The decorator contains a "has-a" relationship. In simple terms, it has an instance variable that holds a reference to the component it decorates. The decorator is an abstract class that extends `Currency`.
+- **Concrete Decorator**: This is an implementation of the decorator. `USDDecorator` and `SGDDecorator` are implementations of the decorator that contain an instance variable for the component interface.
 
 ## Advantages of Decorator Design Pattern in Java
-- **Flexibility**: More flexible than inheritance as it allows adding responsibilities at
 
- runtime.
+Here are the main advantages of using the decorator design pattern:
+
+- The decorator pattern is more flexible than inheritance because inheritance adds responsibilities at compile time, while decorators can add functionality at runtime.
+- The decorator pattern enhances or modifies the object's functionality.
+
+- **Flexibility**: More flexible than inheritance as it allows adding responsibilities at runtime.
 - **Functionality Enhancement**: Modifies or enhances the functionality of objects dynamically.
+- 
+## Disadvantages of Decorator Pattern
 
-## Disadvantage of Decorator Pattern
+The main disadvantage of using the decorator pattern in Java is that code maintenance can become challenging due to the presence of many similar small objects (each decorator).
+
 The main disadvantage is that maintaining the code can become a problem due to the proliferation of similar small objects (each decorator).
 
 ## Differences Between String, StringBuffer, and StringBuilder in Java
