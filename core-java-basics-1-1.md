@@ -1,4 +1,4 @@
-```markdown
+
 # What is Java Class?
 
 A Java class is nothing but a template for the object you are going to create or it’s a blueprint using which we create an object. In simple words, we can say it’s a specification or a pattern which we define, and every object we define will follow that pattern.
@@ -214,7 +214,6 @@ Main Thread is woken now
 7. There is a misconception that calling `t.sleep()` will put Thread "t" into a sleeping state; this is not true because `Thread.sleep()` is a static method and always puts the current thread into a sleeping state, not thread "t".
 ```
 
-```markdown
 # NoClassDefFoundError vs ClassNotFoundException
 
 Before examining the differences between `ClassNotFoundException` and `NoClassDefFoundError`, let's explore some similarities that often lead to confusion between these two errors:
@@ -422,11 +421,7 @@ class Cake {
 ```
 Cake{sugar=1.0, butter=0.5, eggs=2}
 ```
-```
 
-Here's the complete markdown content, including the missing parts:
-
-```markdown
 # Builder Design Pattern in Java – Pros and Cons
 
 The Builder pattern has several disadvantages, but the advantages clearly outweigh them. Below are the pros and cons of the Builder design pattern for creating objects in Java.
@@ -666,8 +661,6 @@ The main disadvantage is that maintaining the code can become a problem due to t
 6. **Creation**: Strings can be created from various sources, including char arrays and other strings.
 7. **Overridden Methods**: The `equals()` and `hashcode()` methods are overridden for proper comparison.
 
-Here's the markdown content for the "Problem with String in Java" section:
-
 
 ### Problem with String in Java
 One of the biggest strengths of Java's `String` class is its immutability, but this can also be a significant problem if not used correctly. Often, we create a `String` and then perform numerous operations on it, such as converting it to uppercase, lowercase, extracting substrings, or concatenating it with other strings. Since `String` is an immutable class, every operation creates a new `String`, discarding the older one. This leads to the creation of many temporary objects in the heap, resulting in increased memory usage and potential performance issues.
@@ -680,13 +673,10 @@ To address these problems, Java provides two alternative classes: `StringBuffer`
 - **StringBuilder**: Introduced in JDK 5, `StringBuilder` offers similar functionality to `StringBuffer` but is not synchronized, making it more efficient for single-threaded scenarios.
 
 Using `StringBuffer` or `StringBuilder` can significantly reduce memory overhead when performing multiple string operations.
-```
 
 Feel free to include this in your documentation!
 
-Sure! Here's the content formatted in Markdown:
 
-```markdown
 # Differences between String and StringBuffer in Java
 
 The main difference between `String` and `StringBuffer` is that `String` is immutable while `StringBuffer` is mutable. This means you can modify a `StringBuffer` object once you have created it without creating any new object. This mutable property makes `StringBuffer` an ideal choice for dealing with strings in Java. You can convert a `StringBuffer` into a `String` using its `toString()` method.
