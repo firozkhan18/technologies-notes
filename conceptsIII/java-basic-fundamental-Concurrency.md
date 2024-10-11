@@ -316,6 +316,14 @@ CPU drain is very low hence performance is very high as only one waiting thread 
 Only one waiting thread will be executed which got the notification.	Which thread will execute depends on the thread scheduler as every waiting thread got the notification.
 See Also: wait(), notify() and notifyAll() methods
 
+Here’s the corrected version of your text:
+
+**notify()**: Only one thread is notified among all the waiting threads. The risk of infinite waiting and missing the execution of a thread is high, as there’s a chance that some threads may not receive the notification. CPU drain is low, leading to relatively high performance, since only one waiting thread receives the notification. Only the notified thread will proceed, while which thread executes depends on the thread scheduler.
+
+**notifyAll()**: All waiting threads are notified. The risk of infinite waiting and missing the execution of a thread is low, as every thread receives a notification. CPU drain is high, resulting in lower performance, as all waiting threads will be notified and compete for execution. All notified threads will be considered for execution, again depending on the thread scheduler.
+
+See also: wait(), notify(), and notifyAll() methods.
+
 In Java, `notify()` and `notifyAll()` are methods used for thread communication in a synchronized context.
 
 1. **notify()**: This method wakes up a single thread that is waiting on the object's monitor. If multiple threads are waiting, one of them is chosen at random to be awakened.
