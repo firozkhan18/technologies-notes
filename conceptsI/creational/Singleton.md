@@ -221,9 +221,7 @@ In the above code, we have a private static inner class `SingletonInner` that ho
 - **Global Dependency**: The Singleton pattern creates a global dependency, making it harder to replace the Singleton with an alternative implementation or to use dependency injection for providing instances.
 - **Hard to Subclass**: Subclassing a Singleton can be challenging. Because the constructor is typically private, extending a Singleton requires additional care and may not follow standard inheritance patterns.
 - **Lifecycle Management**: The Singleton pattern may not handle scenarios where the instance needs to be explicitly destroyed or reset. Managing the lifecycle of the Singleton can become a concern.
-- **Global
-
- Access Point Abuse**: Overusing global state can lead to less modular design. Singleton instances can be abused if not carefully controlled, leading to code that is hard to maintain or understand.
+- **Global Access Point Abuse**: Overusing global state can lead to less modular design. Singleton instances can be abused if not carefully controlled, leading to code that is hard to maintain or understand.
 
 ## Conclusion
 It's important for some classes to have exactly one instance, even if many objects exist. The Singleton pattern ensures that a class keeps track of its single instance and provides a way to access it.
