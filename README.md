@@ -10214,4 +10214,53 @@ server {
 
 Handling preflight requests properly is essential for enabling secure and functional cross-origin requests in your web applications. By responding correctly to `OPTIONS` requests, you ensure that browsers can confirm permissions before making potentially unsafe requests. This not only enhances security but also improves the user experience by allowing seamless interactions between client applications and your APIs.
 
+### Dependency Injection (DI) vs. Inversion of Control (IoC)
+
+**Inversion of Control (IoC)** and **Dependency Injection (DI)** are related concepts in software design, particularly within the context of object-oriented programming and frameworks like Spring. Here’s a detailed comparison of the two:
+
+### Inversion of Control (IoC)
+
+**Definition**:
+- IoC is a design principle where the control of object creation and management is transferred from the application code to a container or framework. Instead of the application code controlling the flow, the framework dictates it.
+
+**Characteristics**:
+- **Decoupling**: IoC promotes loose coupling between components, making them easier to test and maintain.
+- **Control Flow**: The framework or container handles the lifecycle and interactions of objects, rather than the application code doing it directly.
+
+**Examples**:
+- Frameworks like Spring and Java EE use IoC to manage application components, allowing developers to focus on business logic rather than object lifecycle management.
+
+### Dependency Injection (DI)
+
+**Definition**:
+- DI is a specific implementation of the IoC principle. It refers to the technique where an object's dependencies are provided to it, rather than the object creating the dependencies itself.
+
+**Types of DI**:
+1. **Constructor Injection**: Dependencies are provided through the class constructor.
+2. **Setter Injection**: Dependencies are provided through setter methods.
+3. **Interface Injection**: Dependencies are provided through an interface that the client implements.
+
+**Characteristics**:
+- **Explicit Dependencies**: By using DI, the dependencies of a class are explicit, making it easier to understand what the class requires.
+- **Flexibility**: DI allows for easy swapping of implementations (e.g., for testing purposes).
+
+**Examples**:
+- In Spring, DI can be configured via annotations (e.g., `@Autowired`) or XML configuration.
+
+### Key Differences
+
+| Aspect                     | Inversion of Control (IoC)                               | Dependency Injection (DI)                                  |
+|---------------------------|--------------------------------------------------------|----------------------------------------------------------|
+| **Concept**               | General principle of delegating control to a framework | Specific technique for providing dependencies to objects  |
+| **Focus**                 | Overall control and lifecycle management of components   | Provision of specific dependencies to classes             |
+| **Implementation**        | Can be implemented using various methods, including DI | Primarily implemented through DI patterns (constructor, setter, etc.) |
+| **Examples**              | Spring, Java EE, etc., using various IoC containers     | Spring’s use of `@Autowired`, Guice, etc.                |
+| **Complexity**            | More abstract, broader scope                             | More concrete, focuses on object relationships            |
+
+### Conclusion
+
+- **IoC** is the overarching principle that emphasizes the delegation of control to a container or framework, leading to better separation of concerns and decoupling. 
+- **DI** is a specific technique within IoC for providing dependencies, making classes easier to manage, test, and modify.
+
+Understanding both concepts is crucial for designing flexible and maintainable software systems, especially when working with frameworks like Spring.
 
