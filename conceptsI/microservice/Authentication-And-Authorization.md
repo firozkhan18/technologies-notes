@@ -131,9 +131,7 @@ Below are the differences between Role-Based Access Control (RBAC) and Attribute
 
 | Aspect | Role-Based Access Control (RBAC) | Attribute-Based Access Control (ABAC) |
 |--------|----------------------------------|---------------------------------------|
-| Core Principle | Access is granted based on predefined roles assigned to users or groups. | Access is granted based on attributes associated with users
-
-, resources, and environment. |
+| Core Principle | Access is granted based on predefined roles assigned to users or groups. | Access is granted based on attributes associated with users, resources, and environment. |
 | Authorization Logic | Authorization decisions are based on the roles assigned to users. | Authorization decisions are based on policies that evaluate attributes, such as user attributes, resource attributes, and environmental attributes. |
 | Flexibility | Less flexible, as access control is primarily determined by roles. | More flexible, as access control policies can consider a wide range of attributes, allowing for finer-grained control. |
 | Granularity | Provides coarse-grained access control, as permissions are assigned based on roles. | Provides fine-grained access control, as access decisions can be based on multiple attributes and conditions. |
