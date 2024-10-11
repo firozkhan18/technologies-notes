@@ -51,7 +51,7 @@ Hide/Show table of contents
 |---- | ---------|
 |1 | [**Q&A-Design-Patterns**](conceptsI/FAQ-Design-Patterns.md)|
 |2 | [**Java Collection Framework**](Java-Collection-Framework.md)|
-|3 | [**Java Thread & Concurrency**](java-basic-fundamental-Concurrency.md)|
+|3 | [**Java Thread & Concurrency**](conceptsIII/java-basic-fundamental-Concurrency.md)|
 |4 | [**Java File I/O**](FileIO-In-Java.md)|
 |5 | [**End-to-End CICD Pipeline Implementation**](End-to-End-CICD-Pipeline-Implementation.md)|
 |6 | [**Java Basic Differences & Comparisions**](java-basic-differences-and-comparisions.md)|
