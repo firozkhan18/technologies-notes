@@ -43,6 +43,7 @@ In short in java everything must be thinking in terms of java class its nothing 
 ### How to make Thread-Safe Code in Java
 Example of Non Thread Safe Code in Java
 ### Here is an example of non thread-safe code, look at the code and find out why this code is not thread safe?
+```java
 /*
  * Non Thread-Safe Class in Java
  */
@@ -55,6 +56,7 @@ public class Counter {
         return count++;
     }
 }
+```
 Above example is not thread-safe because ++ (increment operator) is not an atomic operation and can be broken down into read, update and write operation. if multiple thread call getCount() approximately same time each of these three operation may coincide or overlap with each other for example while thread 1 is updating value , thread 2 reads and still gets old value, which eventually let thread 2 override thread 1 increment and one count is lost because multiple thread called it concurrently.
 How to make code Thread-Safe in Java
 ### There are multiple ways to make this code thread safe in Java:
