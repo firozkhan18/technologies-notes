@@ -292,6 +292,107 @@ public class SortByName implements Comparator<Person> {
 - When working with external classes where you cannot implement `Comparable`, `Comparator` is your solution.
 - Ensure the order of comparison is clear and consistent.
 
+
+# Comparator vs Comparable in Java
+
+The `Comparator` interface in Java is defined in the `java.util` package, while the `Comparable` interface is defined in the `java.lang` package. This distinction suggests that `Comparator` should be used as a utility to sort objects, whereas `Comparable` should be provided by default.
+
+## Key Differences
+
+- **Comparator Interface**: 
+  - Method: `public int compare(Object o1, Object o2)`
+  - Returns a negative integer, zero, or a positive integer if the first argument is less than, equal to, or greater than the second.
+
+- **Comparable Interface**:
+  - Method: `public int compareTo(Object o)`
+  - Returns a negative integer, zero, or a positive integer if this object is less than, equal to, or greater than the specified object.
+
+The logical difference between these two is that the `Comparator` compares two objects provided to it, while the `Comparable` interface compares "this" reference with the specified object. 
+
+`Comparable` is used to implement the natural ordering of objects. In the Java API, classes like `String`, `Date`, and wrapper classes implement the `Comparable` interface. It is always a good practice to override `compareTo()` for value objects.
+
+If any class implements the `Comparable` interface, then collections of that object (either `List` or `Array`) can be sorted automatically using `Collections.sort()` or `Arrays.sort()` methods. Objects implementing `Comparable` can be used as keys in a `SortedMap` (like `TreeMap`) or elements in a `SortedSet` (like `TreeSet`), without specifying any `Comparator`.
+
+This overview highlights some theoretical and practical differences between the `Comparator` and `Comparable` interfaces. It helps you decide when to use `Comparator` vs. `Comparable`, but things become clearer with best practices around using both interfaces.
+
+## Example of Comparator and Comparable in Java
+
+### Class Definition
+
+Let's consider a `Person` class and sort the persons based on `person_id`, which acts as the primary key in a database, and also sort by their name.
+
+Sorting based on `person_id` can be treated as natural order sorting, while sorting based on the name field can be implemented using the `Comparator` interface.
+
+### Implementing Comparable
+
+To sort based on `person_id`, we need to implement the `compareTo()` method.
+
+```java
+public class Person implements Comparable<Person> {
+    private int person_id;
+    private String name;
+
+    /**
+     * Compare current person with specified person
+     * return zero if person_id for both persons is the same
+     * return negative if current person_id is less than specified one
+     * return positive if specified person_id is greater than specified one
+     */
+    @Override
+    public int compareTo(Person o) {
+        return this.person_id - o.person_id;
+    }
+}
+```
+
+Generally, you should avoid using the difference of integers to determine the output of the `compareTo` method, as the result of integer subtraction can overflow. However, if you are sure that both operands are positive, it can be one of the quickest ways to compare two objects. See my post on things to remember while overriding `compareTo` in Java for more tips.
+
+### Implementing Comparator
+
+To sort based on the person's name, we can implement the `compare(Object o1, Object o2)` method of the `Comparator` class.
+
+```java
+import java.util.Comparator;
+
+public class SortByPersonName implements Comparator<Person> {
+    @Override
+    public int compare(Person p1, Person p2) {
+        return p1.getName().compareTo(p2.getName());
+    }
+}
+```
+
+Similar guidelines apply while implementing the `compare()` method as well. Instead of using the subtraction operator, it's better to use logical operators to compare whether two integers are equal to, less than, or greater than. 
+
+You can write various types of `Comparator` based on your needs, such as `ReverseComparator`, `ANDComparator`, `ORComparator`, etc., which will return negative or positive numbers based on logical results. 
+
+### String Comparison in Java
+
+In Java, `String` is immutable and one of the most used value classes. For comparing strings, we shouldn't worry because `String` implements the `Comparable` interface and provides a lexicographic implementation for the `compareTo` method, which compares two strings based on their character contents in lexical order. You just need to call `String.compareTo(AnotherString)`, and Java will determine whether the specified string is greater than, equal to, or less than the current object.
+
+See my post on examples to compare strings in Java for alternative ways of comparing strings.
+
+### Date Comparison in Java
+
+Dates are represented by the `java.util.Date` class in Java. Like `String`, `Date` also implements `Comparable`, so they will be automatically sorted based on their natural ordering if stored in any sorted collection like `TreeSet` or `TreeMap`. 
+
+If you want to explicitly compare two dates in Java, you can call the `Date.compareTo(AnotherDate)` method, and it will tell whether the specified date is greater than, equal to, or less than the current date. See my post on ways to compare dates in Java for more alternatives.
+
+## When to Use Comparator and Comparable in Java
+
+Here are some best practices and recommendations on when to use `Comparator` or `Comparable` in Java:
+
+1. If there is a natural or default way of sorting an object that already exists during the development of the class, then use `Comparable`. This is intuitive; for example, people should be able to guess correctly that `String`s are sorted chronologically, or `Employee`s can be sorted by their ID.
+
+2. If an object can be sorted in multiple ways and clients need to specify which parameter sorting should take place, then use the `Comparator` interface. For example, an `Employee` can be sorted by name, salary, or department, and clients need an API to handle that.
+
+3. Sometimes you may need to write code to sort objects of a class for which you are not the original author, or you don't have access to the code. In these cases, you cannot implement `Comparable`, and `Comparator` is the only way to sort those objects.
+
+4. Be aware of how those objects will behave when stored in a `SortedSet` or `SortedMap` like `TreeSet` and `TreeMap`. If an object doesn't implement `Comparable`, then while putting it into a `SortedMap`, always provide the corresponding `Comparator` that can provide the sorting logic.
+
+5. The order of comparison is very important while implementing the `Comparable` or `Comparator` interface. For example, if you are sorting objects based on the name, you can compare the first name or last name in any order, so decide judiciously.
+
+6. `Comparator` has the distinct advantage of being self-descriptive. For example, if you are writing a `Comparator` to compare two `Employee`s based on their salary, name that comparator `SalaryComparator`.
 ## Observer Design Pattern in Java
 
 ### What is the Observer Design Pattern?
