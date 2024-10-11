@@ -831,6 +831,5 @@ The questions surrounding `HashMap` in Java verify concepts such as:
 - Resizing behavior of `HashMap`
 
 This overview covers the significant concepts and potential interview questions related to `String`, `StringBuffer`, `StringBuilder`, `wait()`, `notify()`, `Iterator`, `HashMap`, and their differences in Java.
-```
 
 Feel free to modify or add any additional sections as needed!
