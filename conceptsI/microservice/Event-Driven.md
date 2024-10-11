@@ -113,58 +113,99 @@ Common use cases for EDA include:
 ## Implementation of Event-Driven Architecture (EDA)
 Implementing Event-Driven Architecture involves several components. Below is a simplified example using Python.
 
-### Example: Online Ordering System
+### Java Implementation: Online Ordering System
 
-```python
-# Event Bus
-class EventBus:
-    subscribers = {}
+```java
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-    @classmethod
-    def subscribe(cls, event_type, subscriber):
-        if event_type not in cls.subscribers:
-            cls.subscribers[event_type] = []
-        cls.subscribers[event_type].append(subscriber)
+// Event Bus
+class EventBus {
+    private static final Map<String, List<EventSubscriber>> subscribers = new HashMap<>();
 
-    @classmethod
-    def publish(cls, event_type, data=None):
-        if event_type in cls.subscribers:
-            for subscriber in cls.subscribers[event_type]:
-                subscriber.handle_event(event_type, data)
+    public static void subscribe(String eventType, EventSubscriber subscriber) {
+        subscribers.computeIfAbsent(eventType, k -> new ArrayList<>()).add(subscriber);
+    }
 
-# Event Subscriber
-class OrderNotificationSubscriber:
-    def handle_event(self, event_type, data=None):
-        if event_type == 'OrderPlaced':
-            print("Notification: Your order with ID {} has been placed!".format(data['order_id']))
+    public static void publish(String eventType, Object data) {
+        if (subscribers.containsKey(eventType)) {
+            for (EventSubscriber subscriber : subscribers.get(eventType)) {
+                subscriber.handleEvent(eventType, data);
+            }
+        }
+    }
+}
 
-# Event Publisher
-class OrderService:
-    def place_order(self, order_id):
-        # Order placement logic here
-        # ...
-        EventBus.publish('OrderPlaced', {'order_id': order_id})
+// Event Subscriber Interface
+interface EventSubscriber {
+    void handleEvent(String eventType, Object data);
+}
 
-# Example Usage
-if __name__ == "__main__":
-    order_notification_subscriber = OrderNotificationSubscriber()
-    order_service = OrderService()
-    
-    EventBus.subscribe('OrderPlaced', order_notification_subscriber)
-    
-    order_service.place_order(order_id=123)
-```
+// Order Notification Subscriber
+class OrderNotificationSubscriber implements EventSubscriber {
+    @Override
+    public void handleEvent(String eventType, Object data) {
+        if ("OrderPlaced".equals(eventType)) {
+            System.out.println("Notification: Your order with ID " + ((OrderData) data).getOrderId() + " has been placed!");
+        }
+    }
+}
 
-### Output
-```
-Notification: Your order with ID 123 has been placed!
+// Event Publisher
+class OrderService {
+    public void placeOrder(int orderId) {
+        // Order placement logic here
+        // ...
+
+        // Notify subscribers about the order placement
+        EventBus.publish("OrderPlaced", new OrderData(orderId));
+    }
+}
+
+// Order Data Class
+class OrderData {
+    private final int orderId;
+
+    public OrderData(int orderId) {
+        this.orderId = orderId;
+    }
+
+    public int getOrderId() {
+        return orderId;
+    }
+}
+
+// Main Class
+public class Main {
+    public static void main(String[] args) {
+        // Creating instances
+        OrderNotificationSubscriber orderNotificationSubscriber = new OrderNotificationSubscriber();
+        OrderService orderService = new OrderService();
+
+        // Subscribing the subscriber to the 'OrderPlaced' event
+        EventBus.subscribe("OrderPlaced", orderNotificationSubscriber);
+
+        // Placing an order
+        orderService.placeOrder(123);
+    }
+}
 ```
 
 ### Explanation of the Code
-- **Event Bus**: Central hub for handling events, allowing components to subscribe and publish events.
-- **Event Subscriber**: Handles the ‘OrderPlaced’ event, could trigger notifications or other actions.
-- **Event Publisher**: Represents a service that places orders and publishes the ‘OrderPlaced’ event.
-- **Example Usage**: Creates instances, subscribes to the event, and places an order.
+1. **EventBus**: A central hub for handling event subscriptions and publications.
+2. **EventSubscriber Interface**: An interface for subscribers to implement event handling.
+3. **OrderNotificationSubscriber**: Implements the event subscriber interface to handle "OrderPlaced" events.
+4. **OrderService**: Publishes events when an order is placed.
+5. **OrderData**: A simple data class to encapsulate order information.
+6. **Main Class**: Sets up the event system, subscribes to events, and simulates placing an order.
+
+### Output
+When you run this code, the output will be:
+```
+Notification: Your order with ID 123 has been placed!
+``` 
 
 ## Event-Driven vs. Message Driven Architecture
 | Aspect                | Event-Driven Architecture (EDA)                        | Message-Driven Architecture (MDA)                        |
