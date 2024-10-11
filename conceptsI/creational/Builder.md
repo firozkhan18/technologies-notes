@@ -31,6 +31,77 @@ You are tasked with implementing a system for building custom computers. Each co
 ### UML Class Diagram for Builder Design Pattern
 ![UML Class Diagram](UML-Class-Diagram-for-Builder-Design-Pattern)
 
+Here's a UML class diagram for the Builder Design Pattern example involving the `Computer`, `Builder`, `GamingComputerBuilder`, `ComputerDirector`, and `Main` classes:
+
+```plaintext
++---------------------+
+|       Computer      |
++---------------------+
+| - cpu: String       |
+| - ram: String       |
+| - storage: String   |
++---------------------+
+| + setCPU(cpu: String): void      |
+| + setRAM(ram: String): void      |
+| + setStorage(storage: String): void|
+| + displayInfo(): void            |
++---------------------+
+
+         ^
+         |
+         |
+         |
++---------------------+
+|       Builder       |
++---------------------+
+| + buildCPU(): void  |
+| + buildRAM(): void  |
+| + buildStorage(): void|
+| + getResult(): Computer |
++---------------------+
+
+         ^
+         |
+         |
++---------------------+
+| GamingComputerBuilder|
++---------------------+
+| - computer: Computer |
++---------------------+
+| + buildCPU(): void   |
+| + buildRAM(): void   |
+| + buildStorage(): void|
+| + getResult(): Computer |
++---------------------+
+
+         ^
+         |
+         |
++---------------------+
+|  ComputerDirector    |
++---------------------+
+| + construct(builder: Builder): void |
++---------------------+
+
+         ^
+         |
+         |
++---------------------+
+|        Main         |
++---------------------+
+| + main(args: String[]): void |
++---------------------+
+```
+
+### Description of the UML Diagram:
+- **Computer**: Represents the product that is being constructed. It has attributes for CPU, RAM, and storage, along with methods to set these attributes and display the computer's configuration.
+- **Builder**: An interface that declares the methods required for building parts of the `Computer`.
+- **GamingComputerBuilder**: A concrete builder that implements the `Builder` interface to construct a specific configuration of a `Computer`.
+- **ComputerDirector**: Responsible for managing the construction process using a `Builder`.
+- **Main**: The client that uses the director and builder to create a `Computer`.
+
+This diagram provides a visual representation of how the classes interact and their relationships within the Builder Design Pattern.
+
 ### 1. Product (Computer)
 ```java
 // Product
