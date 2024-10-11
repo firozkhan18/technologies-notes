@@ -1164,7 +1164,7 @@ Here are the main advantages of using the decorator design pattern:
 
 - **Flexibility**: More flexible than inheritance as it allows adding responsibilities at runtime.
 - **Functionality Enhancement**: Modifies or enhances the functionality of objects dynamically.
-- 
+
 ## Disadvantages of Decorator Pattern
 
 The main disadvantage of using the decorator pattern in Java is that code maintenance can become challenging due to the presence of many similar small objects (each decorator).
@@ -1174,6 +1174,9 @@ The main disadvantage is that maintaining the code can become a problem due to t
 ## Differences Between String, StringBuffer, and StringBuilder in Java
 
 ### String in Java
+
+Before discussing the differences between `String`, `StringBuffer`, and `StringBuilder`, let’s explore some fundamental properties of the `String` class in Java:
+
 1. **Immutable**: Strings are immutable, allowing for benefits like cached hashcodes, making them efficient as `HashMap` keys.
 2. **String Literals**: Defined with double quotes, created in the string pool.
 3. **Comparison**: Using `==` on string literals returns true as they reference the same instance. Use `equals()` for proper comparisons.
@@ -1182,6 +1185,19 @@ The main disadvantage is that maintaining the code can become a problem due to t
 6. **Creation**: Strings can be created from various sources, including char arrays and other strings.
 7. **Overridden Methods**: The `equals()` and `hashcode()` methods are overridden for proper comparison.
 
+- **Immutability**: Strings are immutable in Java, meaning once created, their values cannot be changed. This offers several benefits, such as:
+  - Cached hashcode values, making `String` a fast key for hashmaps.
+  - Safe sharing between multiple threads without extra synchronization.
+  
+- **String Literals**: When represented in double quotes (e.g., `"abcd"`), they are referred to as String literals, which are created in the String pool. When comparing two String literals using the equality operator `==`, it returns true because they refer to the same instance. However, comparing objects with `==` is not recommended; always use the `equals` method to check equality.
+
+- **Concatenation**: The `+` operator is overloaded for `String` and is used to concatenate two strings. Internally, this operation is implemented using either `StringBuffer` or `StringBuilder`.
+
+- **Character Representation**: Strings are backed by a character array and represented in UTF-16 format. This behavior can cause memory leaks since the same character array is shared between the source String and a substring, preventing the source String from being garbage collected.
+
+- **Equality and Hashing**: The `String` class overrides `equals()` and `hashCode()`. Two Strings are considered equal if they contain the same characters in the same order and case. For case-insensitive comparison, use `equalsIgnoreCase()`. The `equals` method must be consistent with the `compareTo()` method for Strings since `SortedSet` and `SortedMap` (e.g., `TreeMap`) rely on `compareTo()` for comparison.
+
+- **String Creation**: You can create a String from a character array, byte array, another String, or from `StringBuffer` or `StringBuilder`. The Java `String` class provides constructors for all these options.
 
 ### Problem with String in Java
 One of the biggest strengths of Java's `String` class is its immutability, but this can also be a significant problem if not used correctly. Often, we create a `String` and then perform numerous operations on it, such as converting it to uppercase, lowercase, extracting substrings, or concatenating it with other strings. Since `String` is an immutable class, every operation creates a new `String`, discarding the older one. This leads to the creation of many temporary objects in the heap, resulting in increased memory usage and potential performance issues.
@@ -1195,18 +1211,18 @@ To address these problems, Java provides two alternative classes: `StringBuffer`
 
 Using `StringBuffer` or `StringBuilder` can significantly reduce memory overhead when performing multiple string operations.
 
-Feel free to include this in your documentation!
+The biggest strength of `String`—its immutability—can also be a disadvantage if not managed properly. Frequent modifications (e.g., changing case, extracting substrings, concatenation) result in new `String` objects being created and the older ones discarded, leading to temporary garbage in the heap. Strings created using literals remain in the String pool. To address this issue, Java provides `StringBuffer` and `StringBuilder`. `StringBuffer` is the older class, while `StringBuilder` was introduced in JDK 5.!
 
 
-# Differences between String and StringBuffer in Java
+### Differences between String and StringBuffer in Java
 
 The main difference between `String` and `StringBuffer` is that `String` is immutable while `StringBuffer` is mutable. This means you can modify a `StringBuffer` object once you have created it without creating any new object. This mutable property makes `StringBuffer` an ideal choice for dealing with strings in Java. You can convert a `StringBuffer` into a `String` using its `toString()` method.
 
-**String vs StringBuffer** or **what is the difference between StringBuffer and String** is one of the popular Java interview questions for either phone interviews or first rounds. Nowadays, they also include `StringBuilder` and ask about **String vs StringBuffer vs StringBuilder**, so be prepared for that. 
+- **Mutability**: `String` is immutable, while `StringBuffer` is mutable, meaning you can modify a `StringBuffer` object without creating a new instance.
+- **Usage**: This mutable property makes `StringBuffer` ideal for operations involving multiple modifications to Strings.
+- **Conversion**: You can convert a `StringBuffer` to a `String` using its `toString()` method.
 
-In the next section, we will see the difference between `StringBuffer` and `StringBuilder` in Java.
-
-## Difference between StringBuilder and StringBuffer in Java
+### Difference between StringBuilder and StringBuffer in Java
 
 `StringBuffer` is very good with mutable strings, but it has one disadvantage: all its public methods are synchronized, which makes it thread-safe but, at the same time, slow. In JDK 5, a similar class called `StringBuilder` was introduced, which is a copy of `StringBuffer` but without synchronization. 
 
@@ -1214,15 +1230,21 @@ Try to use `StringBuilder` whenever possible; it performs better in most cases t
 
 If you compare `StringBuilder` and `StringBuffer`, you will find that they are exactly similar, and all API methods applicable to `StringBuffer` are also applicable to `StringBuilder` in Java. On the other hand, **String vs StringBuffer** is completely different, and their APIs are also completely different; the same is true for **StringBuilder vs String**.
 
+- **Synchronization**: `StringBuffer` is synchronized, making it thread-safe but slower. In contrast, `StringBuilder` is not synchronized, which typically allows for better performance.
+- **Use Cases**: Prefer `StringBuilder` for most cases due to its speed advantage over `StringBuffer`. 
+
+Both `StringBuilder` and `StringBuffer` have similar API methods, while `String` and `StringBuffer` have completely different APIs.
+
 ### Summary
 
 In summary, here is a list of differences between `StringBuffer`, `String`, and `StringBuilder` in Java:
-
-- `String` is immutable, while `StringBuffer` and `StringBuilder` are mutable objects.
-- `StringBuffer` is synchronized while `StringBuilder` is not, which makes `StringBuilder` faster than `StringBuffer`.
-- The concatenation operator `+` is internally implemented using either `StringBuffer` or `StringBuilder`.
-- Use `String` if you require immutability, use `StringBuffer` if you need mutable + thread-safety, and use `StringBuilder` if you require mutable + without thread-safety.
-
+- **Immutability**: `String` is immutable, while `StringBuffer` and `StringBuilder` are mutable objects.
+- **Synchronization**: `StringBuffer` is synchronized, making it thread-safe; `StringBuilder` is not, which makes it faster than `StringBuffer`.
+- **Concatenation**: The `+` operator is internally implemented using either `StringBuffer` or `StringBuilder`.
+- **Use Cases**:
+  - Use `String` if you require immutability.
+  - Use `StringBuffer` if you need mutable strings with thread safety.
+  - Use `StringBuilder` if you need mutable strings without thread safety.
 ---
 
 # Reason Why wait(), notify(), and notifyAll() are in Object Class
