@@ -38,16 +38,16 @@ The separation of concerns in the CQRS design pattern can be outlined as follows
   Validation and Business Logic: Command microservices enforce business rules and validate incoming requests to ensure data integrity and consistency.
    - Transactional Behavior: Commands often execute within transactional boundaries to guarantee atomicity, consistency, isolation, and durability (ACID properties).
 - Query Responsibility:
- - Read Operations: Microservices dedicated to handling queries focus on retrieving data from the system. They respond to requests for information without altering the system’s state.
-Optimized Data Retrieval: Query microservices optimize data storage and retrieval mechanisms for efficient read operations. This may involve denormalizing data, employing caching strategies, or using specialized query languages.
- - Scalability: Query microservices may be scaled independently based on the read workload, allowing for efficient resource allocation and performance optimization.
+    - Read Operations: Microservices dedicated to handling queries focus on retrieving data from the system. They respond to requests for information without altering the system’s state.
+   Optimized Data Retrieval: Query microservices optimize data storage and retrieval mechanisms for efficient read operations. This may involve denormalizing data, employing caching strategies, or using specialized query languages.
+    - Scalability: Query microservices may be scaled independently based on the read workload, allowing for efficient resource allocation and performance optimization.
 - Communication and Coordination:
- - Command-Query Separation: Clear boundaries exist between microservices handling commands and those handling queries, preventing overlap and ensuring each service has a well-defined responsibility.
- - Asynchronous Communication: Command and query microservices may communicate asynchronously, allowing for decoupled interactions and fault tolerance. Asynchronous messaging systems or event-driven architectures facilitate communication between services.
- - Eventual Consistency: Asynchronous communication can lead to eventual consistency between the command and query sides. Microservices must handle eventual consistency scenarios gracefully, ensuring data correctness and minimizing user impact.
-Domain Modeling:
- - Domain-Driven Design (DDD): Microservices align with domain boundaries defined by DDD principles. Each microservice encapsulates a specific domain or business capability, ensuring cohesive behavior and encapsulation of domain logic.
- - Bounded Contexts: Microservices define bounded contexts within the domain, delineating areas where different rules and definitions apply. This ensures clarity and separation of concerns within complex domains.
+    - Command-Query Separation: Clear boundaries exist between microservices handling commands and those handling queries, preventing overlap and ensuring each service has a well-defined responsibility.
+    - Asynchronous Communication: Command and query microservices may communicate asynchronously, allowing for decoupled interactions and fault tolerance. Asynchronous messaging systems or event-driven architectures facilitate communication between services.
+    - Eventual Consistency: Asynchronous communication can lead to eventual consistency between the command and query sides. Microservices must handle eventual consistency scenarios gracefully, ensuring data correctness and minimizing user impact.
+   Domain Modeling:
+    - Domain-Driven Design (DDD): Microservices align with domain boundaries defined by DDD principles. Each microservice encapsulates a specific domain or business capability, ensuring cohesive behavior and encapsulation of domain logic.
+    - Bounded Contexts: Microservices define bounded contexts within the domain, delineating areas where different rules and definitions apply. This ensures clarity and separation of concerns within complex domains.
 ### Key Components of CQRS Design Pattern in Microservices
 In a microservices architecture implementing the CQRS (Command Query Responsibility Segregation) pattern, the key components include:
 
