@@ -1259,6 +1259,13 @@ In Java, in order to enter the critical section of code, threads need a lock and
 
 ## Why wait(), notify(), and notifyAll() are called from synchronized blocks or methods in Java
 
+We use `wait()`, `notify()`, or `notifyAll()` mostly for inter-thread communication. For example, in the Producer-Consumer scenario:
+
+- The Producer thread waits if the buffer is full.
+- The Consumer thread notifies the Producer after creating space in the buffer by consuming an element.
+
+When `notify()` or `notifyAll()` is called, it notifies one or multiple threads that a condition has changed. Once the notification thread leaves the synchronized block, all waiting threads compete for the object lock they are waiting on. The "lucky" thread returns from the `wait()` method after reacquiring the lock and proceeds further.
+
 We use `wait()` and `notify()` or `notifyAll()` methods mostly for inter-thread communication. One thread is waiting after checking a condition (e.g., in the Producer-Consumer example, the Producer thread is waiting if the buffer is full, and the Consumer thread notifies the Producer thread after creating space in the buffer by consuming an element). 
 
 Calling `notify()` or `notifyAll()` issues a notification to a single or multiple threads that a condition has changed. Once the notifying thread leaves the synchronized block, all the threads that are waiting fight for the object lock on which they are waiting, and the lucky thread returns from the `wait()` method after reacquiring the lock and proceeds further.
@@ -1278,12 +1285,42 @@ This potential race condition is resolved by using the `synchronized` keyword an
 
 I am not sure if this is what the interviewer was actually expecting, but this is what I thought would at least make sense. Please correct me if I'm wrong, and let us know if there is any other convincing reason for calling `wait()`, `notify()`, or `notifyAll()` methods in Java.
 
+### How the Race Condition Gets Resolved
+
+This race condition is resolved using the `synchronized` keyword and the locking provided by Java. To call the `wait()`, `notify()`, or `notifyAll()` methods, we must have obtained the lock for the object on which we're calling the method. Since the `wait()` method also releases the lock prior to waiting and reacquires it before returning, we use this lock to ensure that checking the condition (buffer is full or not) and setting the condition (taking an element from the buffer) is atomic, which can be achieved using synchronized methods or blocks.
+
+I am not sure if this is what the interviewer was expecting, but I thought it made sense. Please correct me if I'm wrong, and let me know if there are any other convincing reasons for calling `wait()`, `notify()`, or `notifyAll()` methods in Java.
+
 ### Summary of Reasons
 
 We call `wait()`, `notify()`, or `notifyAll()` methods in Java from synchronized methods or synchronized blocks to avoid:
 
 - `IllegalMonitorStateException` in Java, which will occur if we don't call `wait()`, `notify()`, or `notifyAll()` methods from a synchronized context.
 - Any potential race condition between `wait()` and `notify()` methods in Java.
+
+- **IllegalMonitorStateException**: This exception occurs if we don't call `wait()`, `notify()`, or `notifyAll()` from a synchronized context.
+- **Potential Race Condition**: To prevent race conditions between the `wait` and `notify` methods in Java.
+  
+# Reason Why `wait`, `notify`, and `notifyAll` are in Object Class
+
+Here are some thoughts on why these methods should not be in the `Thread` class:
+
+1. **Communication Mechanism**: 
+   - `wait` and `notify` are not just normal methods or synchronization utilities; they serve as communication mechanisms between threads in Java. 
+   - The `Object` class is the correct place for these methods because they need to be available for every object. This is especially relevant since the synchronization mechanism is not available via any Java keyword.
+
+2. **Locks on Per Object Basis**: 
+   - Locks are made available on a per-object basis, which is another reason why `wait`, `notify`, and `notifyAll` are declared in the `Object` class rather than the `Thread` class.
+   - In Java, to enter the critical section of code, threads need locks and wait for them without knowing which thread holds the lock. They simply know a lock is held by some thread and should wait, aligning with the purpose of having these methods in the `Object` class.
+
+### Example of Potential Race Condition
+
+1. The Producer thread tests the condition (whether the buffer is full) and confirms it must wait (after finding the buffer is full).
+2. The Consumer thread sets the condition after consuming an element from the buffer.
+3. The Consumer thread calls the `notify()` method, but this goes unheard since the Producer thread is not yet waiting.
+4. The Producer thread calls the `wait()` method and goes into a waiting state.
+
+Due to this race condition, we could potentially lose a notification, and if the buffer only contains one element, the Producer thread will be waiting forever, causing the program to hang.
 
 ---
 
