@@ -1541,7 +1541,73 @@ class FlyweightFactory {
     }
 }
 ```
+The Flyweight Pattern is used to minimize memory usage by sharing objects that are similar in nature. It is particularly useful when dealing with a large number of similar objects.
 
+**Code Example:**
+
+```java
+import java.util.HashMap;
+
+interface Shape {
+    void draw();
+}
+
+class Circle implements Shape {
+    private String color;
+
+    public Circle(String color) {
+        this.color = color;
+    }
+
+    @Override
+    public void draw() {
+        System.out.println("Circle of color: " + color);
+    }
+}
+
+class ShapeFactory {
+    private HashMap<String, Shape> shapes = new HashMap<>();
+
+    public Shape getCircle(String color) {
+        if (!shapes.containsKey(color)) {
+            shapes.put(color, new Circle(color));
+        }
+        return shapes.get(color);
+    }
+}
+
+// Usage
+public class Main {
+    public static void main(String[] args) {
+        ShapeFactory shapeFactory = new ShapeFactory();
+
+        Shape redCircle = shapeFactory.getCircle("Red");
+        Shape greenCircle = shapeFactory.getCircle("Green");
+        Shape anotherRedCircle = shapeFactory.getCircle("Red");
+
+        redCircle.draw();  // Output: Circle of color: Red
+        greenCircle.draw(); // Output: Circle of color: Green
+        System.out.println(redCircle == anotherRedCircle);  // Output: true
+    }
+}
+```
+
+**Mermaid Diagram:**
+
+```mermaid
+classDiagram
+    class Shape {
+        +draw()
+    }
+    class Circle {
+        +draw()
+    }
+    class ShapeFactory {
+        +getCircle(color)
+    }
+    ShapeFactory --> Shape
+    Shape <|-- Circle
+```
 ### **6. Proxy**
 Provides a surrogate or placeholder for another object to control access to it.
 
@@ -1571,6 +1637,76 @@ class Proxy implements Subject {
         realSubject.request();
     }
 }
+```
+The Proxy Pattern provides a surrogate or placeholder for another object to control access to it.
+
+**Code Example:**
+
+```java
+interface Image {
+    void display();
+}
+
+class RealImage implements Image {
+    private String filename;
+
+    public RealImage(String filename) {
+        this.filename = filename;
+        loadImageFromDisk();
+    }
+
+    private void loadImageFromDisk() {
+        System.out.println("Loading " + filename);
+    }
+
+    @Override
+    public void display() {
+        System.out.println("Displaying " + filename);
+    }
+}
+
+class ProxyImage implements Image {
+    private RealImage realImage;
+    private String filename;
+
+    public ProxyImage(String filename) {
+        this.filename = filename;
+    }
+
+    @Override
+    public void display() {
+        if (realImage == null) {
+            realImage = new RealImage(filename);
+        }
+        realImage.display();
+    }
+}
+
+// Usage
+public class Main {
+    public static void main(String[] args) {
+        Image image = new ProxyImage("photo.jpg");
+        image.display(); // Output: Loading photo.jpg
+                         //         Displaying photo.jpg
+    }
+}
+```
+
+**Mermaid Diagram:**
+
+```mermaid
+classDiagram
+    class Image {
+        +display()
+    }
+    class RealImage {
+        +display()
+    }
+    class ProxyImage {
+        +display()
+    }
+    Image <|-- RealImage
+    Image <|-- ProxyImage
 ```
 
 ### **7. Facade**
@@ -1930,6 +2066,71 @@ class Context {
     }
 }
 ```
+The Interpreter Pattern is used to define a grammar for a language and provides an interpreter to evaluate sentences in that language.
+
+**Code Example:**
+
+```java
+import java.util.HashMap;
+
+interface Expression {
+    int interpret(HashMap<String, Integer> context);
+}
+
+class Number implements Expression {
+    private int number;
+
+    public Number(int number) {
+        this.number = number;
+    }
+
+    @Override
+    public int interpret(HashMap<String, Integer> context) {
+        return number;
+    }
+}
+
+class Plus implements Expression {
+    private Expression left;
+    private Expression right;
+
+    public Plus(Expression left, Expression right) {
+        this.left = left;
+        this.right = right;
+    }
+
+    @Override
+    public int interpret(HashMap<String, Integer> context) {
+        return left.interpret(context) + right.interpret(context);
+    }
+}
+
+// Usage
+public class Main {
+    public static void main(String[] args) {
+        Expression expression = new Plus(new Number(5), new Number(3));
+        HashMap<String, Integer> context = new HashMap<>();
+        System.out.println("Result: " + expression.interpret(context));  // Output: Result: 8
+    }
+}
+```
+
+**Mermaid Diagram:**
+
+```mermaid
+classDiagram
+    class Expression {
+        +interpret(context)
+    }
+    class Number {
+        +interpret(context)
+    }
+    class Plus {
+        +interpret(context)
+    }
+    Expression <|-- Number
+    Expression <|-- Plus
+```
 
 ### **4. Iterator**
 Provides a way to access the elements of an aggregate object sequentially without exposing its underlying representation.
@@ -2089,7 +2290,60 @@ class ConcreteColleague2 extends Colleague {
     }
 }
 ```
+The Mediator Pattern defines an object that encapsulates how a set of objects interact. It promotes loose coupling by preventing objects from referring to each other explicitly.
 
+**Code Example:**
+
+```java
+import java.util.ArrayList;
+import java.util.List;
+
+class ChatRoom {
+    public static void showMessage(User user, String message) {
+        System.out.println(user.getName() + ": " + message);
+    }
+}
+
+class User {
+    private String name;
+
+    public User(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void sendMessage(String message) {
+        ChatRoom.showMessage(this, message);
+    }
+}
+
+// Usage
+public class Main {
+    public static void main(String[] args) {
+        User user1 = new User("Alice");
+        User user2 = new User("Bob");
+
+        user1.sendMessage("Hi Bob!"); // Output: Alice: Hi Bob!
+        user2.sendMessage("Hello Alice!"); // Output: Bob: Hello Alice!
+    }
+}
+```
+
+**Mermaid Diagram:**
+
+```mermaid
+classDiagram
+    class ChatRoom {
+        +showMessage(user, message)
+    }
+    class User {
+        +sendMessage(message)
+    }
+    User --> ChatRoom
+```
 ### **6. Memento**
 Captures and restores an object's internal state without violating encapsulation.
 
@@ -2143,7 +2397,73 @@ class Caretaker {
     }
 }
 ```
+The Memento Pattern allows an object to capture its internal state so that it can be restored later without violating encapsulation.
 
+**Code Example:**
+
+```java
+class Memento {
+    private String state;
+
+    public Memento(String state) {
+        this.state = state;
+    }
+
+    public String getState() {
+        return state;
+    }
+}
+
+class Originator {
+    private String state;
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public Memento saveStateToMemento() {
+        return new Memento(state);
+    }
+
+    public void getStateFromMemento(Memento memento) {
+        state = memento.getState();
+    }
+}
+
+// Usage
+public class Main {
+    public static void main(String[] args) {
+        Originator originator = new Originator();
+        originator.setState("State #1");
+        Memento memento = originator.saveStateToMemento();
+
+        originator.setState("State #2");
+        System.out.println("Current State: " + originator.getState()); // Output: State #2
+
+        originator.getStateFromMemento(memento);
+        System.out.println("Restored State: " + originator.getState()); // Output: State #1
+    }
+}
+```
+
+**Mermaid Diagram:**
+
+```mermaid
+classDiagram
+    class Memento {
+        +getState()
+    }
+    class Originator {
+        +setState(state)
+        +saveStateToMemento()
+        +getStateFromMemento(memento)
+    }
+    Originator --> Memento
+```
 ### **7. Observer**
 Defines a dependency between objects so that when one object changes state, all its dependents are notified and updated automatically.
 
@@ -2300,7 +2620,88 @@ class Context {
     }
 }
 ```
+The State Pattern allows an object to alter its behavior when its internal state changes. It appears as if the object has changed its class.
 
+**Code Example:**
+
+```java
+interface State {
+    void doAction(Context context);
+}
+
+class StartState implements State {
+    public void doAction(Context context) {
+        System.out.println("Player is in start state");
+        context.setState(this);
+    }
+
+    public String toString() {
+        return "Start State";
+    }
+}
+
+class StopState implements State {
+    public void doAction(Context context) {
+        System.out.println("Player is in stop state");
+        context.setState(this);
+    }
+
+    public String toString() {
+        return "Stop State";
+    }
+}
+
+class Context {
+    private State state;
+
+    public void setState(State state) {
+        this.state = state;
+    }
+
+    public State getState() {
+        return state;
+    }
+}
+
+// Usage
+public class Main {
+    public static void main(String[] args) {
+        Context context = new Context();
+
+        StartState startState = new StartState();
+        startState.doAction(context);
+
+        System.out.println(context.getState()); // Output: Start State
+
+        StopState stopState = new StopState();
+        stopState.doAction(context);
+
+        System.out.println(context.getState()); // Output: Stop State
+    }
+}
+```
+
+**Mermaid Diagram:**
+
+```mermaid
+classDiagram
+    class State {
+        +doAction(context)
+    }
+    class StartState {
+        +doAction(context)
+    }
+    class StopState {
+        +doAction(context)
+    }
+    class Context {
+        +setState(state)
+        +getState()
+    }
+    Context --> State
+    State <|-- StartState
+    State <|-- StopState
+```
 ### **9. Strategy**
 Defines a family of algorithms, encapsulates each one, and makes them interchangeable.
 
@@ -2434,6 +2835,89 @@ class ConcreteClass extends AbstractClass {
 }
 ```
 
+The Template Method Pattern defines the skeleton of an algorithm in a method, deferring some steps to subclasses. It lets subclasses redefine certain steps of an algorithm without changing the
+
+ algorithm's structure.
+
+**Code Example:**
+
+```java
+abstract class Game {
+    abstract void initialize();
+    abstract void startPlay();
+    abstract void endPlay();
+
+    // Template method
+    public final void play() {
+        initialize();
+        startPlay();
+        endPlay();
+    }
+}
+
+class Cricket extends Game {
+    void initialize() {
+        System.out.println("Cricket Game Initialized!");
+    }
+
+    void startPlay() {
+        System.out.println("Cricket Game Started!");
+    }
+
+    void endPlay() {
+        System.out.println("Cricket Game Finished!");
+    }
+}
+
+class Football extends Game {
+    void initialize() {
+        System.out.println("Football Game Initialized!");
+    }
+
+    void startPlay() {
+        System.out.println("Football Game Started!");
+    }
+
+    void endPlay() {
+        System.out.println("Football Game Finished!");
+    }
+}
+
+// Usage
+public class Main {
+    public static void main(String[] args) {
+        Game cricket = new Cricket();
+        cricket.play();
+        
+        Game football = new Football();
+        football.play();
+    }
+}
+```
+
+**Mermaid Diagram:**
+
+```mermaid
+classDiagram
+    class Game {
+        +initialize()
+        +startPlay()
+        +endPlay()
+        +play()
+    }
+    class Cricket {
+        +initialize()
+        +startPlay()
+        +endPlay()
+    }
+    class Football {
+        +initialize()
+        +startPlay()
+        +endPlay()
+    }
+    Game <|-- Cricket
+    Game <|-- Football
+```
 ### **11. Visitor**
 Defines a new operation to a group of objects without changing the classes of the elements on which it operates.
 
@@ -2487,7 +2971,73 @@ class ElementB implements Element {
     }
 }
 ```
+The Visitor Pattern allows adding new operations to existing object structures without modifying them. It represents an operation to be performed on elements of an object structure.
 
+**Code Example:**
+
+```java
+interface Visitor {
+    void visit(Book book);
+    void visit(Fruit fruit);
+}
+
+class Book {
+    void accept(Visitor visitor) {
+        visitor.visit(this);
+    }
+}
+
+class Fruit {
+    void accept(Visitor visitor) {
+        visitor.visit(this);
+    }
+}
+
+class ShoppingCartVisitor implements Visitor {
+    public void visit(Book book) {
+        System.out.println("Book added to cart.");
+    }
+
+    public void visit(Fruit fruit) {
+        System.out.println("Fruit added to cart.");
+    }
+}
+
+// Usage
+public class Main {
+    public static void main(String[] args) {
+        Book book = new Book();
+        Fruit fruit = new Fruit();
+
+        ShoppingCartVisitor visitor = new ShoppingCartVisitor();
+        book.accept(visitor);  // Output: Book added to cart.
+        fruit.accept(visitor);  // Output: Fruit added to cart.
+    }
+}
+```
+
+**Mermaid Diagram:**
+
+```mermaid
+classDiagram
+    class Visitor {
+        +visit(book)
+        +visit(fruit)
+    }
+    class Book {
+        +accept(visitor)
+    }
+    class Fruit {
+        +accept(visitor)
+    }
+    class ShoppingCartVisitor {
+        +visit(book)
+        +visit(fruit)
+    }
+    Book --> Visitor
+    Fruit --> Visitor
+    ShoppingCartVisitor --> Visitor
+```
 ## **Backend Communication Design Patterns**
 
 ### **1. Request Response**
