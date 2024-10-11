@@ -23,6 +23,48 @@ The Prototype Design Pattern consists of the following components:
 3. **Client**: The code or module that requests the creation of new objects by interacting with the prototype.
 4. **Clone Method**: Declared in the prototype interface or abstract class, it specifies how an object should be copied or cloned.
 
+Here's a UML class diagram for the Prototype Design Pattern based on the provided Java classes:
+
+```plaintext
++-----------------+
+|    <<interface>>|
+|      Shape      |
++-----------------+
+| + clone(): Shape |
+| + draw(): void   |
++-----------------+
+         ^
+         |
+         |
++-----------------+
+|    Circle       |
++-----------------+
+| - color: String |
++-----------------+
+| + Circle(color: String) |
+| + clone(): Shape        |
+| + draw(): void          |
++-----------------+
+         ^
+         |
+         |
++-----------------+
+|    ShapeClient  |
++-----------------+
+| - shapePrototype: Shape |
++-----------------+
+| + ShapeClient(prototype: Shape) |
+| + createShape(): Shape          |
++-----------------+
+```
+
+### Description:
+- **Shape**: An interface that declares the `clone()` and `draw()` methods.
+- **Circle**: A concrete class that implements the `Shape` interface, defining the `clone()` method for cloning itself and the `draw()` method to display the shape.
+- **ShapeClient**: The client class that uses a `Shape` prototype to create new shapes by calling the `createShape()` method.
+
+This diagram captures the essence of the Prototype Design Pattern, showing the relationship between the prototype interface, concrete prototype, and client.
+
 ### 1. Prototype Interface or Abstract Class
 The Prototype Interface or Abstract Class declares the method(s) for cloning an object. It defines a common interface that concrete prototypes must implement, ensuring that all prototypes can be cloned in a consistent manner.
 
