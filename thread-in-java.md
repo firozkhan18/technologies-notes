@@ -1,147 +1,100 @@
-How To Stop A Thread In Java?
+# How To Stop A Thread In Java?
 
-How do you stop a thread in java? now-a-days, this has been the popular question in the java interviews. 
-Because, stop() method has been deprecated for some safety reasons. 
-As stop() method has been deprecated, interviewer will be interested in what logic you will be using to stop a thread. 
-There are two ways through which you can stop a thread in java. 
-One is using boolean variable and second one is using interrupt() method. 
-In this post, we will discuss both of these methods.
+How do you stop a thread in Java? This has become a popular question in Java interviews, especially since the `stop()` method has been deprecated for safety reasons. Interviewers are often interested in the logic you will use to stop a thread. There are two main ways to stop a thread in Java:
 
-How To Stop A Thread In Java Using A boolean Variable?
-In this method, we declare one boolean variable called flag in a thread. 
-Initially we set this flag as true. Keep the task to be performed in while loop inside the run() method by passing this flag. 
-This will make thread continue to run until flag becomes false. 
-We have defined stopRunning() method. 
-This method will set the flag as false and stops the thread. 
-Whenever you want to stop the thread, just call this method. 
-Also notice that we have declared flag as volatile.
-This will make thread to read its value from the main memory, thus making sure that thread always gets its updated value.
+1. Using a boolean variable
+2. Using the `interrupt()` method
 
-class MyThread extends Thread
-{
-    //Initially setting the flag as true     
-    private volatile boolean flag = true;     
-    //This method will set flag as false     
-    public void stopRunning(){
+In this post, we will discuss both methods.
+
+## How To Stop A Thread In Java Using A Boolean Variable
+
+In this method, we declare a boolean variable called `flag` in the thread. Initially, we set this flag to `true`. We keep the task to be performed in a `while` loop inside the `run()` method, which continues to run until the flag becomes `false`. We define a `stopRunning()` method that sets the flag to `false`, effectively stopping the thread. Additionally, we declare the flag as `volatile` to ensure that the thread reads its value from main memory, ensuring it always gets the updated value.
+
+```java
+class MyThread extends Thread {
+    // Initially setting the flag as true
+    private volatile boolean flag = true;
+
+    // This method will set flag to false
+    public void stopRunning() {
         flag = false;
-    }     
+    }
+
     @Override
-    public void run(){
-        //Keep the task in while loop         
-        //This will make thread continue to run until flag becomes false         
-        while (flag){
+    public void run() {
+        // Keep the task in while loop
+        // This will make the thread continue to run until flag becomes false
+        while (flag) {
             System.out.println("I am running....");
-        }         
+        }
         System.out.println("Stopped Running....");
     }
 }
- 
-public class MainClass 
-{   
-    public static void main(String[] args) 
-    {
-        MyThread thread = new MyThread();         
-        thread.start();         
+
+public class MainClass {
+    public static void main(String[] args) {
+        MyThread thread = new MyThread();
+        thread.start();
         try {
             Thread.sleep(100);
-        } 
-        catch (InterruptedException e) 
-        {
+        } catch (InterruptedException e) {
             e.printStackTrace();
-        }         
-        //call stopRunning() method whenever you want to stop a thread         
+        }
+        // Call stopRunning() method whenever you want to stop the thread
         thread.stopRunning();
-    }   
+    }
 }
-Output :
+```
 
+### Output:
+
+```
 I am running….
 I am running….
-I am running….
-I am running….
-I am running….
-I am running….
-I am running….
-I am running….
-I am running….
-I am running….
-I am running….
-I am running….
-I am running….
-I am running….
-I am running….
-I am running….
-I am running….
-I am running….
-I am running….
+...
 I am running….
 Stopped Running….
+```
 
-How To Stop A Thread In Java Using interrupt() Method?
+## How To Stop A Thread In Java Using the `interrupt()` Method
 
-In this method, we use interrupt() method to stop a thread. 
-Whenever you call interrupt() method on a thread, it sets the interrupted status of a thread. 
-This status can be obtained by interrupted() method. 
+In this method, we use the `interrupt()` method to stop a thread. Whenever you call the `interrupt()` method on a thread, it sets the interrupted status of the thread. This status can be checked using the `interrupted()` method. The status is then used in a `while` loop to stop the thread.
 
-This status is used in a while loop to stop a thread.
-
-class MyThread extends Thread
-{   
+```java
+class MyThread extends Thread {
     @Override
-    public void run()
-    {
-        while (!Thread.interrupted())
-        {
+    public void run() {
+        while (!Thread.interrupted()) {
             System.out.println("I am running....");
-        }         
+        }
         System.out.println("Stopped Running.....");
     }
 }
- 
-public class MainClass 
-{   
-    public static void main(String[] args) 
-    {
-        MyThread thread = new MyThread();         
-        thread.start();         
-        try
-        {
-            Thread.sleep(100);
-        } 
-        catch (InterruptedException e) 
-        {
-            e.printStackTrace();
-        }         
-        //interrupting the thread         
-        thread.interrupt();
-    }   
-}
-Output :
 
+public class MainClass {
+    public static void main(String[] args) {
+        MyThread thread = new MyThread();
+        thread.start();
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        // Interrupting the thread
+        thread.interrupt();
+    }
+}
+```
+
+### Output:
+
+```
 I am running….
 I am running….
+...
 I am running….
-I am running….
-I am running….
-I am running….
-I am running….
-I am running….
-I am running….
-I am running….
-I am running….
-I am running….
-I am running….
-I am running….
-I am running….
-I am running….
-I am running….
-I am running….
-I am running….
-I am running….
-I am running….
-I am running….
-I am running….
-I am running….
-I am running….
-I am running….
-Stopped Running…..
+Stopped Running….
+``` 
+
+Both methods provide effective ways to manage thread lifecycle in Java, but using `interrupt()` is generally preferred in modern Java programming practices.
