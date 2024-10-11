@@ -45,7 +45,7 @@ The separation of concerns in the CQRS design pattern can be outlined as follows
     - Command-Query Separation: Clear boundaries exist between microservices handling commands and those handling queries, preventing overlap and ensuring each service has a well-defined responsibility.
     - Asynchronous Communication: Command and query microservices may communicate asynchronously, allowing for decoupled interactions and fault tolerance. Asynchronous messaging systems or event-driven architectures facilitate communication between services.
     - Eventual Consistency: Asynchronous communication can lead to eventual consistency between the command and query sides. Microservices must handle eventual consistency scenarios gracefully, ensuring data correctness and minimizing user impact.
-   Domain Modeling:
+- Domain Modeling:
     - Domain-Driven Design (DDD): Microservices align with domain boundaries defined by DDD principles. Each microservice encapsulates a specific domain or business capability, ensuring cohesive behavior and encapsulation of domain logic.
     - Bounded Contexts: Microservices define bounded contexts within the domain, delineating areas where different rules and definitions apply. This ensures clarity and separation of concerns within complex domains.
 ### Key Components of CQRS Design Pattern in Microservices
