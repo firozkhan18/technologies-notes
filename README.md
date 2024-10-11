@@ -56,9 +56,6 @@ Hide/Show table of contents
 |5 | [**End-to-End CICD Pipeline Implementation**](End-to-End-CICD-Pipeline-Implementation.md)|
 |6 | [**Java Basic Differences & Comparisions**](java-basic-differences-and-comparisions.md)|
 
-technologies-notes/conceptsI
-
-
 ## Java Programing Exercises
 * [java-basic-exercises-001-Basic-1](exercisesI/java-basic-exercises-001-Basic-1.md)
 * [java-basic-exercises-002-Basic-2](exercisesI/java-basic-exercises-002-Basic-2.md)
@@ -97,5 +94,4 @@ technologies-notes/conceptsI
 * [java-programming-question-answer-4-java-8](exercisesII/java-programming-question-answer-4-java-8.md)
 * [java-programming-question-answer-5-java-8](exercisesII/java-programming-question-answer-5-java-8.md)
 * [java-programming-question-answer-consolidated](exercisesII/java-programming-question-answer-consolidated.md)
-
 </details>
