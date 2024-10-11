@@ -15,7 +15,7 @@ For an in-depth understanding of the Builder pattern, the System Design Course c
 ## Components of the Builder Design Pattern
 1. **Product**: The complex object that the Builder pattern constructs. It consists of multiple components or parts, and its structure can vary based on the implementation. The Product is typically a class with attributes representing the different parts that the Builder constructs.
    
-2. **Builder**: An interface or an abstract class that declares the construction steps for building a complex object. It includes methods for constructing individual parts of the product. By defining an interface, the Builder allows for the creation of different concrete builders that can produce variations of the product.
+2. **Builder**: An interface that declares the construction steps for building a complex object. It includes methods for constructing individual parts of the product. By defining an interface, the Builder allows for the creation of different concrete builders that can produce variations of the product.
    
 3. **ConcreteBuilder**: Classes that implement the Builder interface, providing specific implementations for building each part of the product. Each ConcreteBuilder is tailored to create a specific variation of the product and keeps track of the product being constructed.
    
@@ -32,191 +32,187 @@ You are tasked with implementing a system for building custom computers. Each co
 ![UML Class Diagram](UML-Class-Diagram-for-Builder-Design-Pattern)
 
 ### 1. Product (Computer)
-```cpp
+```java
 // Product
-class Computer {
-private:
-    std::string cpu_;
-    std::string ram_;
-    std::string storage_;
+public class Computer {
+    private String cpu;
+    private String ram;
+    private String storage;
 
-public:
-    void setCPU(const std::string& cpu) {
-        cpu_ = cpu;
+    public void setCPU(String cpu) {
+        this.cpu = cpu;
     }
 
-    void setRAM(const std::string& ram) {
-        ram_ = ram;
+    public void setRAM(String ram) {
+        this.ram = ram;
     }
 
-    void setStorage(const std::string& storage) {
-        storage_ = storage;
+    public void setStorage(String storage) {
+        this.storage = storage;
     }
 
-    void displayInfo() const {
-        std::cout << "Computer Configuration:"
-                  << "\nCPU: " << cpu_
-                  << "\nRAM: " << ram_
-                  << "\nStorage: " << storage_ << "\n\n";
+    public void displayInfo() {
+        System.out.println("Computer Configuration:");
+        System.out.println("CPU: " + cpu);
+        System.out.println("RAM: " + ram);
+        System.out.println("Storage: " + storage);
+        System.out.println();
     }
-};
+}
 ```
 
 ### 2. Builder
-```cpp
+```java
 // Builder interface
-class Builder {
-public:
-    virtual void buildCPU() = 0;
-    virtual void buildRAM() = 0;
-    virtual void buildStorage() = 0;
-    virtual Computer getResult() = 0;
-};
+public interface Builder {
+    void buildCPU();
+    void buildRAM();
+    void buildStorage();
+    Computer getResult();
+}
 ```
 
 ### 3. ConcreteBuilder
-```cpp
+```java
 // ConcreteBuilder
-class GamingComputerBuilder : public Builder {
-private:
-    Computer computer_;
+public class GamingComputerBuilder implements Builder {
+    private Computer computer;
 
-public:
-    void buildCPU() override {
-        computer_.setCPU("Gaming CPU");
+    public GamingComputerBuilder() {
+        this.computer = new Computer();
     }
 
-    void buildRAM() override {
-        computer_.setRAM("16GB DDR4");
+    @Override
+    public void buildCPU() {
+        computer.setCPU("Gaming CPU");
     }
 
-    void buildStorage() override {
-        computer_.setStorage("1TB SSD");
+    @Override
+    public void buildRAM() {
+        computer.setRAM("16GB DDR4");
     }
 
-    Computer getResult() override {
-        return computer_;
+    @Override
+    public void buildStorage() {
+        computer.setStorage("1TB SSD");
     }
-};
+
+    @Override
+    public Computer getResult() {
+        return computer;
+    }
+}
 ```
 
 ### 4. Director
-```cpp
+```java
 // Director
-class ComputerDirector {
-public:
-    void construct(Builder& builder) {
+public class ComputerDirector {
+    public void construct(Builder builder) {
         builder.buildCPU();
         builder.buildRAM();
         builder.buildStorage();
     }
-};
+}
 ```
 
 ### 5. Client
-```cpp
+```java
 // Client
-int main() {
-    GamingComputerBuilder gamingBuilder;
-    ComputerDirector director;
+public class Main {
+    public static void main(String[] args) {
+        GamingComputerBuilder gamingBuilder = new GamingComputerBuilder();
+        ComputerDirector director = new ComputerDirector();
 
-    director.construct(gamingBuilder);
-    Computer gamingComputer = gamingBuilder.getResult();
+        director.construct(gamingBuilder);
+        Computer gamingComputer = gamingBuilder.getResult();
 
-    gamingComputer.displayInfo();
-
-    return 0;
+        gamingComputer.displayInfo();
+    }
 }
 ```
 
 ### Complete Combined Code for the Above Example
-```cpp
-#include <iostream>
-#include <string>
+```java
+public class Computer {
+    private String cpu;
+    private String ram;
+    private String storage;
 
-using namespace std;
-
-// Product
-class Computer {
-public:
-    void setCPU(const std::string& cpu) {
-        cpu_ = cpu;
+    public void setCPU(String cpu) {
+        this.cpu = cpu;
     }
 
-    void setRAM(const std::string& ram) {
-        ram_ = ram;
+    public void setRAM(String ram) {
+        this.ram = ram;
     }
 
-    void setStorage(const std::string& storage) {
-        storage_ = storage;
+    public void setStorage(String storage) {
+        this.storage = storage;
     }
 
-    void displayInfo() const {
-        std::cout << "Computer Configuration:"
-                  << "\nCPU: " << cpu_
-                  << "\nRAM: " << ram_
-                  << "\nStorage: " << storage_ << "\n\n";
+    public void displayInfo() {
+        System.out.println("Computer Configuration:");
+        System.out.println("CPU: " + cpu);
+        System.out.println("RAM: " + ram);
+        System.out.println("Storage: " + storage);
+        System.out.println();
+    }
+}
+
+public interface Builder {
+    void buildCPU();
+    void buildRAM();
+    void buildStorage();
+    Computer getResult();
+}
+
+public class GamingComputerBuilder implements Builder {
+    private Computer computer;
+
+    public GamingComputerBuilder() {
+        this.computer = new Computer();
     }
 
-private:
-    string cpu_;
-    string ram_;
-    string storage_;
-};
-
-// Builder interface
-class Builder {
-public:
-    virtual void buildCPU() = 0;
-    virtual void buildRAM() = 0;
-    virtual void buildStorage() = 0;
-    virtual Computer getResult() = 0;
-};
-
-// ConcreteBuilder
-class GamingComputerBuilder : public Builder {
-private:
-    Computer computer_;
-
-public:
-    void buildCPU() override {
-        computer_.setCPU("Gaming CPU");
+    @Override
+    public void buildCPU() {
+        computer.setCPU("Gaming CPU");
     }
 
-    void buildRAM() override {
-        computer_.setRAM("16GB DDR4");
+    @Override
+    public void buildRAM() {
+        computer.setRAM("16GB DDR4");
     }
 
-    void buildStorage() override {
-        computer_.setStorage("1TB SSD");
+    @Override
+    public void buildStorage() {
+        computer.setStorage("1TB SSD");
     }
 
-    Computer getResult() override {
-        return computer_;
+    @Override
+    public Computer getResult() {
+        return computer;
     }
-};
+}
 
-// Director
-class ComputerDirector {
-public:
-    void construct(Builder& builder) {
+public class ComputerDirector {
+    public void construct(Builder builder) {
         builder.buildCPU();
         builder.buildRAM();
         builder.buildStorage();
     }
-};
+}
 
-// Client
-int main() {
-    GamingComputerBuilder gamingBuilder;
-    ComputerDirector director;
+public class Main {
+    public static void main(String[] args) {
+        GamingComputerBuilder gamingBuilder = new GamingComputerBuilder();
+        ComputerDirector director = new ComputerDirector();
 
-    director.construct(gamingBuilder);
-    Computer gamingComputer = gamingBuilder.getResult();
+        director.construct(gamingBuilder);
+        Computer gamingComputer = gamingBuilder.getResult();
 
-    gamingComputer.displayInfo();
-
-    return 0;
+        gamingComputer.displayInfo();
+    }
 }
 ```
 
