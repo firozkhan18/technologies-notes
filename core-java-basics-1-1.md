@@ -212,7 +212,6 @@ Main Thread is woken now
 5. The `sleep()` method throws `InterruptedException` if another thread interrupts a sleeping thread.
 6. With `sleep()` in Java, it’s not guaranteed that when a sleeping thread wakes up, it will definitely get the CPU; instead, it goes to the Runnable state and competes for CPU with other threads.
 7. There is a misconception that calling `t.sleep()` will put Thread "t" into a sleeping state; this is not true because `Thread.sleep()` is a static method and always puts the current thread into a sleeping state, not thread "t".
-```
 
 # NoClassDefFoundError vs ClassNotFoundException
 
