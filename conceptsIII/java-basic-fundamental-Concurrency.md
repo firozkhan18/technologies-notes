@@ -78,7 +78,33 @@ On the running thread, if you call join(), wait() or suspend(), the thread enter
 While calling notify() or notifyAll() method thread does not immediately release the lock that’s why the waiting thread that got the notification has to wait for the running thread to release the lock of the object. At this stage, the thread is in the BLOCKED state. Once the thread acquires the lock then it moves to the RUNNABLE (Ready to Run) state.
 If the run() method completes or we call the stop() method on the running thread, the thread enters into the DEAD or TERMINATED state.
 See Also: Java Thread Life Cycle and States
+Here's a Mermaid diagram representing the thread life cycle based on the provided details:
 
+```mermaid
+stateDiagram-v2
+    [*] --> NEW: Create Thread Instance
+    NEW --> RUNNABLE: Call start()
+    RUNNABLE --> RUNNING: Thread Scheduler Assigns Processor
+    RUNNING --> TIMED_WAITING: Call sleep(time), join(time), or wait(time)
+    TIMED_WAITING --> RUNNABLE: Event Occurs
+    RUNNING --> WAITING: Call join(), wait(), or suspend()
+    WAITING --> RUNNABLE: Event Occurs
+    RUNNING --> BLOCKED: Call notify() or notifyAll() (waiting for lock)
+    BLOCKED --> RUNNABLE: Acquires Lock
+    RUNNING --> DEAD: run() Completes or stop() Called
+```
+
+### Explanation of States:
+
+- **NEW**: The thread is created but not started.
+- **RUNNABLE**: The thread is ready to run and waiting for CPU time.
+- **RUNNING**: The thread is actively executing.
+- **TIMED_WAITING**: The thread is waiting for a specified time (e.g., sleep, join).
+- **WAITING**: The thread is waiting indefinitely for another thread to perform a particular action.
+- **BLOCKED**: The thread is waiting to acquire a lock held by another thread.
+- **DEAD**: The thread has finished execution or has been terminated.
+
+This diagram visually illustrates the transitions between the various states in a thread's life cycle.
 ### 1.5. Can we override Thread.start()?
 Yes, we can override the Thread.start() method, but the overridden method will be executed just like a normal method call executed by the main thread only. It will not spawn a new Thread similar to the default start() method.
 ```java
