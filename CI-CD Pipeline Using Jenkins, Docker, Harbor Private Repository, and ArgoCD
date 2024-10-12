@@ -15,6 +15,8 @@ CI/CD pipelines are essential for producing high-quality software in today's dev
 6. **Syncing with ArgoCD**: ArgoCD retrieves the most recent updates from the deployment source to ensure everything is current.
 7. **Deploying to Kubernetes**: ArgoCD syncs the modifications with the Kubernetes cluster, deploying the application into designated pods.
 
+![Desktop Screenshot](images/cicdn-1.PNG)
+
 ## Tools Needed
 
 - Kubernetes Cluster
@@ -78,6 +80,8 @@ pipeline {
 }
 ```
 
+![Desktop Screenshot](images/cicdn-2.PNG)
+
 **Explanation of Each Stage**:
 
 - **Build**:
@@ -102,11 +106,17 @@ This job modifies the Kubernetes deployment YAML file on GitHub to include the n
 - **GitHub Plugin**
 - **GitHub credentials with push access permission**
 
+![Desktop Screenshot](images/cicdn-3.PNG)
+
 **Create Freestyle Project** with the name `push_image_tag_git` and configure it as follows:
+
+![Desktop Screenshot](images/cicdn-4.PNG)
 
 1. **Parameter Configuration**: Ensure "This project is parameterized" is selected and configure the string parameter accordingly.
 2. **Source Code Management**: Select Git, paste the repository URL, and choose the appropriate credentials.
 3. **Build Steps**: Add Execute Shell and paste the following:
+
+![Desktop Screenshot](images/cicdn-5.PNG)
 
 ```bash
 sed -i "s#image: 10.1.1.1/library/harbor_cicd:v.*#image: 10.1.1.1/library/harbor_cicd:v${Build_Number_Image}#" Deployment/deployment.yaml
@@ -119,9 +129,13 @@ git commit -m "Deployment file modified by Jenkins job with the image Harbor ima
 
 4. **Post-Build Actions**: Select "Push Only If Build Succeeds" and specify the branch name and target remote name.
 
+![Desktop Screenshot](images/cicdn-6.PNG)
+
 ### 3. Trigger the Build Docker Job
 
 Manually trigger the `Build_Docker_Image_Push_Harbor` job. It will:
+
+![Desktop Screenshot](images/cicdn-7.PNG)
 
 - Clone the GitHub repository and build a Docker image.
 - Log into a Harbor registry, tag the image with the build number, and push it.
@@ -131,6 +145,8 @@ Manually trigger the `Build_Docker_Image_Push_Harbor` job. It will:
 
 Set up an ArgoCD application to monitor the `deployment.yaml` file, ensuring the Kubernetes Deployment environment stays in sync with any modifications.
 
+![Desktop Screenshot](images/cicdn-8.PNG)
+
 **ArgoCD Application Configuration**:
 - **CLUSTER**: `https://kubernetes.default.svc`
 - **NAMESPACE**: `webapp`
@@ -138,6 +154,10 @@ Set up an ArgoCD application to monitor the `deployment.yaml` file, ensuring the
 - **PATH**: `Deployment`
 
 You may need to create the `webapp` namespace in your Kubernetes Cluster.
+
+![Desktop Screenshot](images/cicdn-9.PNG)
+
+![Desktop Screenshot](images/cicdn-10.PNG)
 
 ### 5. Access the Pods
 
