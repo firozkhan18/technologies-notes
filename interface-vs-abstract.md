@@ -1,19 +1,19 @@
-Interface Vs Abstract Class After Java 8
+## Interface Vs Abstract Class After Java 8
 
 With the introduction of concrete methods (default and static methods) to interfaces from Java 8, the gap between interface and abstract class has been reduced significantly. 
 Now both can have concrete methods as well as abstract methods. But, still there exist some minute differences between them. 
 In this article, we will try to list down the differences between interface Vs abstract class after Java 8.
 
-Differences Between Interface And Abstract Class After Java 8 :
+### Differences Between Interface And Abstract Class After Java 8 :
 
-1) Fields
+- 1) Fields
 Interface fields are public, static and final by default. 
 Interfaces still don’t support non-static and non-final variables. 
 Interfaces can only have public, static and final variables. 
 On the other hand, abstract class can have static as well as non-static and final as well as non-final variables. 
 They also support private and protected variables along with public variables.
 
-2) Methods
+- 2) Methods
 After Java 8, an interface can have default and static methods along with abstract methods. 
 Interfaces don’t support final methods. 
 But, abstract classes support final as well as non-final methods and static as well as non-static methods along with abstract methods.
@@ -21,23 +21,23 @@ But, abstract classes support final as well as non-final methods and static as w
 Also note that, only interfaces can have default methods. 
 Abstract classes can’t have default methods.
 
-3) Constructors
+- 3) Constructors
 Interfaces can’t have constructors. 
 Abstract classes can have any number of constructors.
 
-4) Member’s Accessibility
+- 4) Member’s Accessibility
 All members of interfaces are public by default. 
 Interfaces don’t support private and protected members. 
 But, abstract classes support all type of members – private, protected and public members.
 
-5) Multiple Inheritance
+- 5) Multiple Inheritance
 A class can extend only one abstract class, but can implement multiple interfaces. 
 Thus, a class can inherit multiple properties from multiple sources only through interfaces, not through abstract classes.
 
-Interface Vs Abstract Class After Java 8 :
+### Interface Vs Abstract Class After Java 8 :
 The below table and program summarizes the similarities and differences between interface and abstract class after Java 8.
 
-Interface Vs Abstract Class After Java 8
+## Interface Vs Abstract Class After Java 8
 ```java
 interface anyInterface
 {
@@ -90,7 +90,7 @@ abstract class anyAbstractClass
     //No default method in an abstract class
 }
 ```
-Java 8 Interface Changes : Default Methods And Static Methods
+## Java 8 Interface Changes : Default Methods And Static Methods
 
 It has been a tough task for Java API developers to add new methods to current interfaces. Because, even if you add a single abstract method to an interface, all existing implementations of that interface have to be updated with implementation of new method. What if there exist hundreds or thousands of implementations of an interface? Even worse, What if you don’t have control over all of those implementations? 
 To overcome such overhead, new features are introduced to interfaces from Java 8. 
@@ -100,9 +100,9 @@ Java 8 Interface Changes
 From Java 8, interfaces can also have concrete methods i.e methods with body along with abstract methods. 
 This is the major change introduced to interfaces in Java 8 to help Java API developers to update and maintain the interfaces. The interfaces can have concrete methods either in the form of default methods or static methods.
 
-A) Default Methods
+### A) Default Methods
 
-1) Definition With Example
+- 1) Definition With Example
 Default methods of an interface are the concrete methods i.e methods with body for which implementing classes need not to give implementation. 
 They inherit default implementation. Default methods start with the modifier default.
 ```java
@@ -125,18 +125,18 @@ class AnyClass implements InterfaceWithDefaultMethod
     //No need to implement defaultMethod()
 }
 ```
-2) Why Default Methods?
+- 2) Why Default Methods?
 
 Default methods are introduced to add extra features to current interfaces without disrupting their existing implementations. For example, stream() is a default method which is added to Collection interface in Java 8. If stream() would have been added as abstract method, then all classes implementing Collection interface must have implemented stream() method which may have irritated existing users.
 
 Thanks to Java 8 default method feature, now it is a default method, all implementations of Collection interface inherit default implementation of stream() method.
 
 
-3) Three Rules To Solve Diamond Problem
+- 3) Three Rules To Solve Diamond Problem
 
 In Java, a class can extend only one class but can implement multiple interfaces. With the introduction of default methods, it is possible that your class inherit multiple methods with same signature. In such scenarios, to solve the conflict, Java 8 specifies 3 rules to follow.
 
-Rule 1 : Select classes over interfaces
+- Rule 1 : Select classes over interfaces
 
 If your class inherit multiple methods with same signature then a method from super class is selected (Remember a class can inherit only one class).
 
@@ -180,7 +180,7 @@ Output :
 
 1
 Hi... From Class One
-Rule 2 : Select most specific interfaces than general interfaces.
+- Rule 2 : Select most specific interfaces than general interfaces.
 
 If your class doesn’t extend any class and inherit multiple methods with same signature from multiple interfaces which belong to same hierarchy, then a method from most specific interface is selected (If interface X extends Y then X is more specific than Y).
 
@@ -257,9 +257,9 @@ Output :
 Hi... From Interface One
 Java 8 interfaces changes
 
-B) Static Methods
+### B) Static Methods
 
-1) Definition With Example
+- 1) Definition With Example
 From Java 8, interfaces can also have static methods. Static methods are also concrete methods but they can’t be implemented.
 ```java
 interface InterfaceWithDefaultAndStaticMethod
@@ -286,7 +286,7 @@ class AnyClass implements InterfaceWithDefaultAndStaticMethod
     //Can't implement staticMethod()
 }
 ```
-2) Why Static Methods?
+- 2) Why Static Methods?
 
 Do you know? Collection and Collections.
 
