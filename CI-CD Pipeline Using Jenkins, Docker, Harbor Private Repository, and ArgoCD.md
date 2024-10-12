@@ -106,16 +106,16 @@ This job modifies the Kubernetes deployment YAML file on GitHub to include the n
 - **GitHub Plugin**
 - **GitHub credentials with push access permission**
 
-![Desktop Screenshot](images/cicdn-3.PNG)
-
 **Create Freestyle Project** with the name `push_image_tag_git` and configure it as follows:
+
+1. **Parameter Configuration**: Ensure "This project is parameterized" is selected and configure the string parameter accordingly.
+
+![Desktop Screenshot](images/cicdn-3.PNG)
+2. **Source Code Management**: Select Git, paste the repository URL, and choose the appropriate credentials which has the permission/access to your GitHub. 
 
 ![Desktop Screenshot](images/cicdn-4.PNG)
 
-1. **Parameter Configuration**: Ensure "This project is parameterized" is selected and configure the string parameter accordingly.
-2. **Source Code Management**: Select Git, paste the repository URL, and choose the appropriate credentials.
 3. **Build Steps**: Add Execute Shell and paste the following:
-
 ![Desktop Screenshot](images/cicdn-5.PNG)
 
 ```bash
@@ -129,23 +129,40 @@ git commit -m "Deployment file modified by Jenkins job with the image Harbor ima
 
 4. **Post-Build Actions**: Select "Push Only If Build Succeeds" and specify the branch name and target remote name.
 
+This script locates the image tag in the Deployment.yaml file, replaces it with the specified version from the Jenkins build (${Build_Number_Image}), configures the email and name for Git commits, adds all modified files to the Git staging area, and commits the changes with a descriptive message.
+
+D. In the Post-Build Actionssection, select ‘Push Only If Build Succeeds’ Then, specify the branch name and the target remote name under the ‘Branches’ field. I am specifying branch name asmain and the target remote name asorigin
+
 ![Desktop Screenshot](images/cicdn-6.PNG)
 
 ### 3. Trigger the Build Docker Job
 
-Manually trigger the `Build_Docker_Image_Push_Harbor` job. It will:
+Manually trigger the Build_Docker_Image_Push_Harbor it will perform the below actions and it will trigger the Push_image_Tag_Git job. Both of the jobs will perform the below
+
+Build_Docker_Image_Push_Harbor
+
+Build Stage: Clones a GitHub repository and builds a Docker image.
+Push to Harbor Stage: Logs into a Harbor registry, tags the image with the build number, and pushes it.
+Trigger GitHub Push Stage: Triggers downstream job Push_image_Tag_Gitand passes the build number as a parameter.
+Push_image_Tag_Git
+
+Execute Shell: It will locate the image tag in the Deployment.yaml file, replace it with the specified version from the previous Jenkins build, configures the email and name for Git commits, adds all modified files to the Git staging area, and commits the changes with a descriptive message.
+Here is the output of the Status
 
 ![Desktop Screenshot](images/cicdn-7.PNG)
 
+Manually trigger the `Build_Docker_Image_Push_Harbor` job. It will:
 - Clone the GitHub repository and build a Docker image.
 - Log into a Harbor registry, tag the image with the build number, and push it.
 - Trigger the downstream job `push_image_tag_git` to update the deployment file.
 
+To ensure synchronization between the Docker image build and the Kubernetes Deployment, the version specified in the Deployment.yaml file will be updated to reflect the build number generated during the Build_Docker_Image_Push_Harbor
+
+![Desktop Screenshot](images/cicdn-8.PNG)
+
 ### 4. Re-create Pods with a Newer Version of Image
 
 Set up an ArgoCD application to monitor the `deployment.yaml` file, ensuring the Kubernetes Deployment environment stays in sync with any modifications.
-
-![Desktop Screenshot](images/cicdn-8.PNG)
 
 **ArgoCD Application Configuration**:
 - **CLUSTER**: `https://kubernetes.default.svc`
