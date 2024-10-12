@@ -402,7 +402,7 @@ synchronized (this){...}
 
 The class-level lock is used when we want to synchronize class-specific properties or critical sections (static members) such that only one thread can execute synchronized methods and blocks on any instance of that class in the runtime.
 
-We can achieve object-level locking using the synchronized keyword with a static method.
+We can achieve class-level locking using the synchronized keyword with a static method.
 
 public synchronized static void demoMethod(){...}
 
@@ -411,28 +411,7 @@ or
 synchronized (MyClass.class){...}
 
 Read More: Object level lock vs Class level lock
-
-
-What is the difference between class-level lock and object-level lock?
-The object-level lock is used when we want to synchronize the instance properties or critical sections of a class such that only one thread can execute synchronized methods and locks on the given instance.
-
-We can achieve object-level locking using the synchronized keyword.
-
-public synchronized void demoMethod(){...}
-
-or
-
-synchronized (this){...}
-
-The class-level lock is used when we want to synchronize class-specific properties or critical sections (static members) such that only one thread can execute synchronized methods and blocks on any instance of that class in the runtime.
-
-We can achieve class-level locking using the synchronized keyword with a static method.
-
-public synchronized static void demoMethod(){...}
-
-or
-
-synchronized (MyClass.class){...}
+ 
 ## 4. Deadlock, Livelock, and Race Condition
 ### 4.1. What is the deadlock and the main reason behind the deadlock?
 A deadlock is a situation where two threads are holding the lock on some different resources, and both threads are waiting for each other to release the lock but no one is able to release to lock on the resources that it’s holding, and both threads remain in the BLOCKED state and end up creating a circular dependency. Hence this infinite amount of waiting for each other to release the lock is nothing but a deadlock.
@@ -443,6 +422,57 @@ A real-life example of a deadlock situation is “Couples saying on the phone: N
 Thread synchronization is the main reason behind the deadlock situation. Improper use of synchronized methods and blocks can lead our program to a deadlock situation. Hence it’s never recommended to use synchronization if there is no specific requirement.
 
 See Also: How to Create a Deadlock and Solve in Java
+
+Thread synchronization can lead to deadlocks if not managed properly. Deadlocks occur when two or more threads are blocked forever, each waiting for resources held by the other. To avoid deadlocks, consider these strategies:
+
+1. **Minimize Synchronization**: Only use synchronized methods or blocks when absolutely necessary.
+
+2. **Lock Ordering**: Ensure that all threads acquire locks in a consistent order.
+
+3. **Timeouts**: Implement timeouts when acquiring locks, allowing threads to back off if they cannot obtain a lock within a certain time.
+
+4. **Deadlock Detection**: Implement mechanisms to detect and recover from deadlocks.
+
+5. **Avoid Nested Locks**: Minimize the use of nested locks, as they increase complexity and risk of deadlocks.
+
+By being cautious with synchronization, you can significantly reduce the risk of deadlocks in your application.
+
+
+Deadlock detection involves identifying when a deadlock has occurred and then taking action to recover from it. Here are some common approaches to implement deadlock detection and recovery:
+
+### 1. **Resource Allocation Graph (RAG)**
+   - **Concept**: Use a graph where nodes represent processes and resources. An edge from a process to a resource indicates that the process is requesting that resource, while an edge from a resource to a process indicates that the resource is allocated to that process.
+   - **Detection**: Periodically check the graph for cycles. If a cycle is detected, a deadlock exists.
+   - **Recovery**: Terminate one or more processes in the cycle or preempt resources to break the deadlock.
+
+### 2. **Wait-For Graph (WFG)**
+   - **Concept**: Similar to RAG, but only represents the processes and their wait relationships. An edge from process A to process B indicates that A is waiting for a resource held by B.
+   - **Detection**: Again, check for cycles in the graph.
+   - **Recovery**: Similar strategies as with RAG can be applied.
+
+### 3. **Detection Algorithms**
+   - **Banker’s Algorithm**: Though primarily used for resource allocation and avoidance, it can be adapted to periodically check the system state for potential deadlocks.
+   - **Timeouts**: If a thread exceeds a certain waiting period for a resource, assume a deadlock and take corrective action.
+
+### 4. **Logging and Monitoring**
+   - Maintain logs of resource requests and allocations. Analyze these logs to detect patterns that might indicate potential deadlocks.
+   - Use monitoring tools to keep track of thread states and resource usage, allowing for early detection of deadlock conditions.
+
+### 5. **Recovery Techniques**
+   - **Process Termination**: Kill one or more processes involved in the deadlock.
+   - **Resource Preemption**: Temporarily take resources from some processes to allow others to proceed.
+   - **Rollbacks**: Revert some processes to a safe state and restart them.
+
+### Implementation Example
+1. **Cycle Detection in RAG**:
+   - Periodically construct the resource allocation graph.
+   - Use depth-first search (DFS) to detect cycles.
+
+2. **Action on Detection**:
+   - If a cycle is found, choose a victim process based on criteria such as priority or resource usage.
+   - Terminate or roll back the victim process.
+
+By implementing these strategies, you can detect and recover from deadlocks effectively, maintaining system stability.
 
 ### 4.2. What is the difference between Deadlock, Livelock, and Starvation?
 ### Deadlock
