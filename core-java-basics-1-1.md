@@ -656,6 +656,117 @@ public class Factory {
 ### Conclusion:
 The Builder design pattern not only provides a flexible solution for constructing complex objects but also enhances code readability. The resulting code is easy to maintain, avoids errors, and allows a clean separation between construction and representation.
 
+
+### Builder Design Pattern in Java – Pros and Cons
+Like everything, the Builder pattern also has some disadvantages, but if you look below, the advantages clearly outnumber the disadvantages. Here are a few advantages and disadvantages of the Builder design pattern for creating objects in Java.
+
+- Advantages:
+    - 1) More maintainable if the number of fields required to create an object is more than 4 or 5.
+    - 2) Less error-prone as the user will know what they are passing because of explicit method calls.
+    - 3) More robust as only fully constructed objects will be available to the client.
+
+- Disadvantages:
+    - 1) Verbose and code duplication as Builder needs to copy all fields from the Original or Item class.
+
+### When to Use Builder Design Pattern in Java
+The Builder Design pattern is a creational pattern and should be used when the number of parameters required in the constructor is more than manageable, usually 4 or at most 5. Don't confuse the Builder with the Factory pattern; there is an obvious difference between the Builder and Factory patterns, as Factory can be used to create different implementations of the same interface, but Builder is tied to its Container class and only returns an object of the outer class.
+
+### What is Static Factory Method or Factory Design Pattern
+The Factory design pattern is used to create objects or classes in Java, providing loose coupling and high cohesion. The Factory pattern encapsulates the object creation logic, making it easy to change it later when you change how an object gets created or even introduce a new object with just a change in one class. In the GOF pattern list, the Factory pattern is listed as a Creation design pattern. The Factory should be an interface, and clients first either create a factory or get a factory, which is later used to create objects.
+
+### Example of Static Factory Method in JDK
+The best example of the Factory method design pattern is the `valueOf()` method, which is in the String and wrapper classes like Integer and Boolean, and is used for type conversion (i.e., converting String to Integer or String to double in Java). Some more examples of the factory method design pattern from JDK are:
+- `valueOf()` method, which returns an object created by a factory equivalent to the value of the parameter passed.
+- `getInstance()` method, which creates an instance of the Singleton class.
+- `newInstance()` method, which is used to create and return a new instance from the factory method every time it's called.
+- `getType()` and `newType()`, equivalent to `getInstance()` and `newInstance()` factory methods but used when the factory method resides in a separate class.
+
+### Problem Solved by Factory Method Pattern in Java
+Whenever we talk about object-oriented languages, it is based upon concepts like abstraction and polymorphism, with encapsulation and delegation as important concepts. Any design will be considered good if tasks are delegated to different objects and some kind of encapsulation is present.
+
+Sometimes our application or framework does not know what kind of object it has to create at runtime; it knows only the interface or abstract class, and as we know, we cannot create an object of an interface or abstract class. So the main problem is that the framework knows when it has to create but doesn’t know what kind of object.
+
+Whenever we create an object using `new()`, we violate the principle of programming for interfaces rather than implementations, which eventually results in inflexible code that is difficult to maintain. By using the Factory design pattern in Java, we can resolve this problem. 
+
+Another problem we may face is when a class needs to contain objects of other classes or class hierarchies within it; this can be easily achieved by just using the `new` keyword and the class constructor. The issue with this approach is that it is a very hard-coded way to create objects, creating a dependency between the two classes.
+
+So, the factory pattern solves this problem easily by modeling an interface for creating an object that, at creation time, can let its subclasses decide which class to instantiate. The Factory Pattern promotes loose coupling by eliminating the need to bind application-specific classes into the code. The factory methods are typically implemented as virtual methods, so this pattern is also referred to as the “Virtual Constructor.” These methods create the objects of the products or target classes.
+
+### When to Use Factory Design Pattern in Java
+- Static Factory methods are common in frameworks where library code needs to create objects of types that may be subclassed by applications using the framework.
+- Some or all concrete products can be created in multiple ways, or we want to leave open the option that in the future there may be new ways to create the concrete product.
+- The factory method is used when products don't need to know how they are created.
+- We can use the factory pattern where we have to create an object of any one of the subclasses depending on the data provided.
+
+### Code Example of Factory Design Pattern in Java
+Let’s see an example of how the factory pattern is implemented in code. We have a requirement to create multiple currencies (e.g., INR, SGD, USD), and the code should be extensible to accommodate new currencies as well. Here, we have made `Currency` an interface, and all currency implementations are concrete implementations of the `Currency` interface. The Factory Class will create a `Currency` based on the country and return the concrete implementation, which will be stored in an interface type. This makes the code dynamic and extensible.
+
+### Here is the complete code example of the Factory pattern in Java:
+```java
+interface Currency {
+       String getSymbol();
+}
+// Concrete Rupee Class code
+class Rupee implements Currency {
+       @Override
+       public String getSymbol() {
+              return "Rs";
+       }
+}
+// Concrete SGD class Code
+class SGDDollar implements Currency {
+       @Override
+       public String getSymbol() {
+              return "SGD";
+       }
+}
+// Concrete US Dollar code
+class USDollar implements Currency {
+       @Override
+       public String getSymbol() {
+              return "USD";
+       }
+}
+
+// Factory Class code
+class CurrencyFactory {
+       public static Currency createCurrency(String country) {
+              if (country.equalsIgnoreCase("India")) {
+                     return new Rupee();
+              } else if (country.equalsIgnoreCase("Singapore")) {
+                     return new SGDDollar();
+              } else if (country.equalsIgnoreCase("US")) {
+                     return new USDollar();
+              }
+              throw new IllegalArgumentException("No such currency");
+       }
+}
+// Factory client code
+public class Factory {
+       public static void main(String args[]) {
+              String country = args[0];
+              Currency currency = CurrencyFactory.createCurrency(country);
+              System.out.println(currency.getSymbol());
+       }
+}
+```
+### Advantages of Factory Method Pattern in Java
+The Factory pattern in Java is heavily used everywhere, including JDK, open-source libraries, and other frameworks. The following are the main advantages of using the Factory pattern in Java:
+- 1) The Factory method design pattern decouples the calling class from the target class, resulting in less coupled and highly cohesive code. 
+   E.g.: JDBC is a good example for this pattern; application code doesn't need to know what database it will use, so it doesn't know what database-specific driver classes it should use. Instead, it uses factory methods to get Connections, Statements, and other objects to work with, allowing flexibility to change the back-end database without changing the DAO layer if you are using ANSI SQL features and not coded on DBMS-specific features.
+- 2) The Factory pattern in Java enables subclasses to provide extended versions of an object because creating an object inside the factory is more flexible than creating an object directly in the client. Since the client is working on the interface level, any time you can enhance the implementation and return from the Factory.
+- 3) Another benefit of using the Factory design pattern in Java is that it encourages consistency in code since every time an object is created using the Factory rather than using different constructors at different client sides.
+- 4) Code written using the Factory design pattern in Java is also easy to debug and troubleshoot because you have a centralized method for object creation, and every client is getting an object from the same place.
+
+### Some More Advantages of Factory Method Design Pattern:
+- 1. Static factory methods used in the Factory design pattern enforce the use of interfaces rather than implementations, which is a good practice. For example:
+  `Map synchronizedMap = Collections.synchronizedMap(new HashMap());`
+- 2. Since static factory methods have a return type as an interface, they allow you to replace the implementation with a better performance version in newer releases.
+- 3. Another advantage of the static factory method pattern is that they can cache frequently used objects and eliminate duplicate object creation. The `Boolean.valueOf()` method is a good example, which caches true and false boolean values.
+- 4. The Factory method pattern is also recommended by Joshua Bloch in "Effective Java."
+- 5. The Factory method pattern offers an alternative way of creating objects.
+- 6. The Factory pattern can also be used to hide information related to the creation of objects.
+
 ---
 
 ## What is Singleton Design Pattern in Java?
