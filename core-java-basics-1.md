@@ -988,17 +988,6 @@ One of its biggest strength Immutability is also biggest problem of Java String 
 - **Thread Safety**: `StringBuilder` is not synchronized, which makes it faster than `StringBuffer` for single-threaded scenarios.
 - **Use Case**: Preferred in single-threaded contexts or situations where thread safety is not a concern, due to better performance.
 
-### Summary of Differences
-| Feature                  | String                  | StringBuffer            | StringBuilder            |
-|--------------------------|-------------------------|-------------------------|--------------------------|
-| **Mutability**           | Immutable               | Mutable                 | Mutable                  |
-| **Thread Safety**        | N/A                     | Synchronized (thread-safe) | Not synchronized (faster) |
-| **Performance**          | Slower for modifications | Slower due to synchronization | Faster due to no synchronization |
-| **Conversion to String** | Use `toString()` method | Use `toString()` method | Use `toString()` method  |
-| **Use Cases**            | For constant string values | For multi-threaded scenarios | For performance in single-threaded contexts |
-
-Understanding these differences is crucial for optimizing performance and ensuring thread safety in your Java applications.
-
 ### Differences between String and StringBuffer in Java
 Main difference between String and StringBuffer is String is immutable while StringBuffer is mutable means you can modify a StringBuffer object once you created it without creating any new object. This mutable property makes StringBuffer an ideal choice for dealing with Strings in Java. You can convert a StringBuffer into String by its toString() method. String vs StringBuffer or what is difference between StringBuffer and String is one of the popular Java interview questions for either phone interview or first round. Now days they also include StringBuilder and ask String vs StringBuffer vs StringBuilder. So be preparing for that. In the next section we will see difference between StringBuffer and StringBuilder in Java.
 
@@ -1012,14 +1001,17 @@ StringBuffer is very good with mutable String but it has one disadvantage all it
   - **StringBuilder**: Not synchronized, thus faster but not thread-safe.
 - **Performance**: `StringBuilder` is generally preferred for single-threaded scenarios because it offers better performance due to the lack of synchronization overhead.
 
-#### Key Differences
+### Summary of Differences
 | Feature                  | String                  | StringBuffer            | StringBuilder            |
 |--------------------------|-------------------------|-------------------------|--------------------------|
 | **Mutability**           | Immutable               | Mutable                 | Mutable                  |
 | **Thread Safety**        | N/A                     | Synchronized (thread-safe) | Not synchronized (faster) |
-| **Performance**          | Slower for multiple operations due to immutability | Slower due to synchronization | Faster due to no synchronization |
-| **Use Cases**            | When immutability is required | When thread safety is required | For high-performance scenarios without thread safety |
+| **Performance**          | Slower for modifications or Slower for multiple operations due to immutability | Slower due to synchronization | Faster due to no synchronization |
+| **Conversion to String** | Use `toString()` method | Use `toString()` method | Use `toString()` method  |
+| **Use CasesI**            | For constant string values | For multi-threaded scenarios | For performance in single-threaded contexts |
+| **Use CasesII**            | When immutability is required | When thread safety is required | For high-performance scenarios without thread safety |
 | **API Methods**          | Different from `StringBuffer` and `StringBuilder` | Similar to `StringBuilder` | Similar to `StringBuffer` |
+Understanding these differences is crucial for optimizing performance and ensuring thread safety in your Java applications.
 
 ### Summary
 - Use **String** when you need an immutable sequence of characters.
