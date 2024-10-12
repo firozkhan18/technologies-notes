@@ -52,6 +52,23 @@ public @interface PreventDuplicateValidator {
 - **optionalValues**: Values that can be added to the key for flexibility.
 - **expireTime**: Key expiration time value, default is 10 seconds.
 
+### Purpose of the `PreventDuplicateValidator` Annotation
+
+1. **Prevent Duplicate Requests**: This annotation is designed to be used on methods (usually in a Spring Boot application) to prevent the processing of duplicate requests. It allows you to specify which fields in the request body should be used to determine whether a request is a duplicate.
+
+2. **Configuration Parameters**: The annotation includes several attributes that allow for customization of its behavior:
+   - **`includeFieldKeys()`**: An array of field names that will be used to generate a unique key for each request. If two requests have the same values for these fields, they are considered duplicates.
+   - **`optionalValues()`**: An array of additional values that can be included in the key. This allows for more granular control over what constitutes a duplicate request.
+   - **`expireTime()`**: This specifies how long (in milliseconds) the key representing the request should remain in the cache (e.g., Redis) before it expires. The default value is set to 10 seconds.
+
+### Annotations Explained
+
+- **`@Target({ElementType.METHOD})`**: This indicates that the annotation can only be applied to methods. It specifies the scope of the annotation.
+
+- **`@Retention(RetentionPolicy.RUNTIME)`**: This specifies that the annotation should be retained at runtime, making it available for reflection. This is essential for frameworks like Spring, which process annotations during runtime.
+
+- **`@Documented`**: This indicates that whenever the annotation is used, it should be included in the Javadoc documentation. This is helpful for developers to understand what the annotation does when they view the documentation.
+
 #### 2. PreventDuplicateValidatorAspect
 
 This is an advice implementing logic for the `PreventDuplicateValidator` annotation. We use Around Advice for flexibility.
