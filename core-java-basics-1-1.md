@@ -968,3 +968,160 @@ We use these methods for inter-thread communication, where one thread waits afte
 ### Summary of calling wait(), notify(), or notifyAll() from synchronized context
 1. **Avoid IllegalMonitorStateException**: Occurs if we don't call these methods from a synchronized context.
 2. **Prevent Race Conditions**: Ensures proper synchronization between threads.
+
+
+### Java Decorator Design Pattern
+- What is decorator pattern in Java?
+- When to use decorator pattern in Java?
+- How to use decorator pattern in Java?
+- Example of decorator design pattern
+- Advantage and Disadvantage of decorator pattern in Java
+
+### What is decorator design pattern in Java?
+
+- Decorator design pattern is used to enhance the functionality of a particular object at run-time or dynamically.
+- At the same time other instance of same class will not be affected by this so individual object gets the new behavior.
+- Basically we wrap the original object through decorator object.
+- Decorator design pattern is based on abstract classes and we derive concrete implementation from that classes,
+- It’s a structural design pattern and most widely used.
+
+I prefer to answer What is decorator design pattern in point format just to stress on important point like this pattern operator at individual object level. This question also asked in many Core Java interviews in Investment banks
+
+### Problem which is solved by Decorator Pattern:
+Now the question is why this pattern has came into existence what is the problem with existing system, so the answer is if anyone wants to add some functionality to individual object or change the state of particular object at run time it is not possible what the possible is we can provide the specific behavior to all the object of that class at design time by the help of inheritance or using subclass, but Decorator pattern makes possible that we provide individual object of same class a specific behavior or state at run time. This doesn’t affect other object of same Class in Java.
+
+### When to use Decorator pattern in Java
+- When sub classing is become impractical and we need large number of different possibilities to make independent object or we can say we have number of combination for an object.
+- Secondly when we want to add functionality to individual object not to all object at run-time we use decorator design pattern.
+
+### Code Example of decorator design pattern:
+To better understand concept of decorator design pattern let see a code example using Decorator Pattern in Java. You can also look inside JDK and find what are classes and packages which are using decorator pattern.
+```java
+// Component on Decorator design pattern
+public abstract class Currency {
+ String description = "Unknown currency";
+ public String getCurrencyDescription() {
+  return description;
+ }
+
+ public abstract double cost(double value);
+}
+// Concrete Component
+public class Rupee extends Currency {
+double value;
+ public Rupee() {
+  description = "indian rupees";
+ }
+ public double cost(double v){
+  value=v;
+  return value;
+ }
+}
+//Another Concrete Component
+public class Dollar extends Currency{
+double value;
+ public Dollar () {
+  description = "Dollar”;
+ }
+public double cost(double v){
+ value=v;
+  return value;
+ }
+}
+// Decorator
+public abstract class Decorator extends Currency{
+ public abstract String getDescription();
+}
+// Concrete Decorator
+public class USDDecorator extends Decorator{
+ Currency currency; 
+ public USDDecorator(Currency currency){
+  this.currency = currency;
+ }
+ public String getDescription(){
+  return currency.getDescription()+" ,its US Dollar";
+ }
+}
+//Another Concrete Decorator
+public class SGDDecorator extends Decorator{
+ Currency currency;
+ public SGDDecorator(Currency currency){
+  this.currency = currency;
+ }
+ public String getDescription(){
+  return currency.getDescription()+" ,its singapore Dollar";
+ }
+}
+
+Now its time to check currency.
+
+public class CurrencyCheck {
+ public static void main(String[] args) {
+  // without adding decorators
+  Currency curr = new Dollar();
+  System.out.println(curr.getDescription() +" dollar. "+curr.cost(2.0));  
+  //adding decorators
+  Currency curr2 = new USDDecorator(new Dollar());
+  System.out.println(curr2.getDescription() +" dollar. "+curr2.cost(4.0));
+
+Currency curr3 = new SGDDecorator(new Dollar());
+  System.out.println(curr3.getDescription() +" dollar. "+curr3.cost(4.0));
+}
+```
+### Explanation of the code:
+We can understand this in following term;
+1. Component Interface: In our example Currency interface is component which used on its own or we need decorator for that.
+2. Concrete Component: it implements Component and we add new behavior to this object at dynamically. Dollar and Rupee are the concrete implementation of currency.
+3. Decorator: Decorator contains a HAS a Relationship in simple word we can say it has a instance variable that holds reference for component they implement same component which they are going to decorate. Here a Decorator is an abstract class which extends the currency.
+4. Concrete Decorator: it’s an implementation of Decorator So USD Dollar and SGD Dollar are the implementation of Decorator contains instance variable for component interface or the thing which they are going to decorate.
+
+- Advantage of Decorator design Pattern in Java
+In brief we see what the main advantages of using decorator design patterns are.
+1. Decorator Pattern is flexible than inheritance because inheritance add responsibilities at compile time and it will add at run-time.
+2. Decorator pattern enhance or modify the object functionality
+
+- Disadvantage
+Main disadvantage of using Decorator Pattern in Java is that the code maintenance can be a problem as it provides a lot of similar kind of small objects (each decorator).
+
+### Differences between String, StringBuffer and StringBuilder in Java
+String in Java
+Before looking difference between String and StringBuffer or StringBuilder let’s see some fundamental properties of String Class in Java
+
+- 1) String is immutable in Java:  String is by design immutable in Java you can check this post for reason. Immutability offers lot of benefit to the String class e.g. his hashcode value can be cached which makes it a faster hashmap key and one of the reason why String is a popular key in HashMap. Because String is final it can be safely shared between multiple threads  without any extrasynchronization. 
+- 2) when we represent string in double quotes like "abcd" they are referred as String literal and String literals are created in String pools. When you compare two String literals using equality operator "==" it returns true because they are actually same instance of String. Anyway comparing object with equality operator is bad practice in Java and you should always use equals method to check equality.
+- 3) "+" operator is overloaded for String and used to concatenated two string. Internally "+" operation is implemented using either StringBuffer or StringBuilder.
+- 4) Strings are backed up by character Array and represented in UTF-16 format. By the way this behavior can cause memory leak in String because same character array is shared between source String and SubString which can prevent source String from being garbage collected. See How SubString works in Java for more details.
+- 5) String class overrides equals() and hashcode() method and two Strings are considered to be equal if they contain exactly same character in same order and in same case. If you want ignore case comparison of two strings consider using equalsIgnoreCase() method. See  how to correctly override equals method in Java  to learn more about best practices on equals method. Another worth noting point is that equals method must be consistent with compareTo() method for String because SortedSet and SortedMap e.g. TreeMap uses compareTo method to compare String in Java.
+- 7) toString() method provides String representation of any object and its declared in Object class and its recommended for other class to implement this and provide String representation.
+- 8) String is represented using UTF-16 format in Java.
+- 9) In Java you can create String from char array, byte array, another string, from StringBuffer or from StringBuilder. Java String class provides constructor for all of these.
+
+### Problem with String in Java
+One of its biggest strength Immutability is also biggest problem of Java String if not used correctly. many a times we create a String and then perform a lot of operation on them e.g. converting string into uppercase, lowercase , getting substring out of it, concatenating with other string etc. Since String is an immutable class every time a new String is created and older one is discarded which creates lots of temporary garbage in heap. If String are created using String literal they remain in String pool. To resolve this problem Java provides us two Classes StringBuffer and StringBuilder. String Buffer is an older class but StringBuilder is relatively new and added in JDK 5.
+
+### Differences between String and StringBuffer in Java
+Main difference between String and StringBuffer is String is immutable while StringBuffer is mutable means you can modify a StringBuffer object once you created it without creating any new object. This mutable property makes StringBuffer an ideal choice for dealing with Strings in Java. You can convert a StringBuffer into String by its toString() method. String vs StringBuffer or what is difference between StringBuffer and String is one of the popular Java interview questions for either phone interview or first round. Now days they also include StringBuilder and ask String vs StringBuffer vs StringBuilder. So be preparing for that. In the next section we will see difference between StringBuffer and StringBuilder in Java.
+
+### Difference between StringBuilder and StringBuffer in Java
+StringBuffer is very good with mutable String but it has one disadvantage all its public methods are synchronized which makes it thread-safe but same time slow. In JDK 5 they provided similar class called StringBuilder in Java which is a copy of StringBuffer but without synchronization. Try to use StringBuilder whenever possible it performs better in most of cases than StringBuffer class. You can also use "+" for concatenating two string because "+" operation is internal implemented using either StringBuffer or StringBuilder in Java. If you see StringBuilder vs StringBuffer you will find that they are exactly similar and all API methods applicable to StringBuffer are also applicable to StringBuilder in Java. On the other hand String vs StringBuffer is completely different and there API is also completely different, same is true for StringBuilder vs String.
+
+### Summary
+In summary here are list of difference between StringBuffer, String and StringBuilder in Java :
+1) String is immutable while StringBuffer and StringBuilder is mutable object.
+2)
+
+ StringBuffer is synchronized and therefore thread safe but StringBuilder is not synchronized and hence not thread safe.
+3) “+” operator is overloaded for String in Java and internally it is implemented using StringBuffer or StringBuilder.
+4) String is used for immutable, StringBuffer for mutable + thread-safe and StringBuilder for mutable + without thread-safe. So use StringBuilder in most of the cases and StringBuffer only when you need thread-safety.
+
+### Reason Why Wait, Notify and NotifyAll are in Object Class
+1) **Communication Mechanism**: Wait and notify are communication mechanisms between threads so they have to be in Object class which is parent class of all class in Java.
+2) **Locks**: Locks are available on per object basis hence it is justified to have wait and notify in Object class.
+3) **Critical Section**: Thread needs a lock to enter critical sections, therefore it is obvious that we use Object class to implement wait and notify.
+
+### Why wait, notify and notifyAll are called from synchronized block or method in Java
+The wait, notify and notifyAll methods are used for inter-thread communication, where one thread waits after checking a condition and another thread notifies it after the condition changes. This process needs to be atomic to avoid race conditions. This is achieved by using synchronized methods or blocks. If you are not calling wait() and notify() from a synchronized context, you will get an IllegalMonitorStateException. So it is important that whenever you use these methods, they should be called from synchronized context.
+
+### Summary of calling wait(), notify() or notifyAll() from synchronized context
+1) **Avoid IllegalMonitorStateException**: This exception occurs when we don’t call these methods from synchronized context.
+2) **Prevent Race Conditions**: This ensures proper synchronization between threads.
