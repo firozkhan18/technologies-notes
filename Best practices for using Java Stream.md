@@ -514,6 +514,728 @@ public class CafeincodeExample {
 ```
 **Result:** `55`
 
+### Stream `collect` Methods
+
+The `collect` method is a terminal operation that transforms the elements of a stream into a different form, typically a collection or a summary result. Here are some common `collect` methods:
+
+1. **`collect(Collector<? super T, A, R> collector)`**
+
+   This method performs a reduction operation on the elements of the stream using a `Collector`.
+
+   **Examples:**
+
+   - **`Collectors.toList()`**: Collects the elements into a `List`.
+
+     ```java
+     import java.util.Arrays;
+     import java.util.List;
+     import java.util.stream.Collectors;
+
+     public class CollectToListExample {
+         public static void main(String[] args) {
+             List<String> names = Arrays.asList("Alice", "Bob", "Charlie");
+
+             List<String> collectedList = names.stream()
+                 .collect(Collectors.toList());
+
+             System.out.println(collectedList); // Output: [Alice, Bob, Charlie]
+         }
+     }
+     ```
+
+   - **`Collectors.toSet()`**: Collects the elements into a `Set`.
+
+     ```java
+     import java.util.Arrays;
+     import java.util.Set;
+     import java.util.stream.Collectors;
+
+     public class CollectToSetExample {
+         public static void main(String[] args) {
+             List<String> names = Arrays.asList("Alice", "Bob", "Alice");
+
+             Set<String> collectedSet = names.stream()
+                 .collect(Collectors.toSet());
+
+             System.out.println(collectedSet); // Output: [Alice, Bob]
+         }
+     }
+     ```
+
+   - **`Collectors.toMap`**: Collects the elements into a `Map`.
+
+     ```java
+     import java.util.Arrays;
+     import java.util.Map;
+     import java.util.function.Function;
+     import java.util.stream.Collectors;
+
+     public class CollectToMapExample {
+         public static void main(String[] args) {
+             List<String> names = Arrays.asList("Alice", "Bob", "Charlie");
+
+             Map<String, Integer> nameLengthMap = names.stream()
+                 .collect(Collectors.toMap(
+                     Function.identity(), // Key is the name itself
+                     String::length        // Value is the length of the name
+                 ));
+
+             System.out.println(nameLengthMap); // Output: {Alice=5, Bob=3, Charlie=7}
+         }
+     }
+     ```
+
+   - **`Collectors.joining(CharSequence delimiter)`**: Concatenates the elements into a single `String` with a specified delimiter.
+
+     ```java
+     import java.util.Arrays;
+     import java.util.List;
+     import java.util.stream.Collectors;
+
+     public class CollectJoiningExample {
+         public static void main(String[] args) {
+             List<String> names = Arrays.asList("Alice", "Bob", "Charlie");
+
+             String joinedNames = names.stream()
+                 .collect(Collectors.joining(", "));
+
+             System.out.println(joinedNames); // Output: Alice, Bob, Charlie
+         }
+     }
+     ```
+
+   - **`Collectors.groupingBy(Function<? super T, ? extends K>)`**: Groups the elements by a classifier function.
+
+     ```java
+     import java.util.Arrays;
+     import java.util.List;
+     import java.util.Map;
+     import java.util.stream.Collectors;
+
+     public class CollectGroupingByExample {
+         public static void main(String[] args) {
+             List<String> names = Arrays.asList("Alice", "Bob", "Charlie", "David");
+
+             Map<Integer, List<String>> namesByLength = names.stream()
+                 .collect(Collectors.groupingBy(String::length));
+
+             System.out.println(namesByLength); // Output: {3=[Bob], 5=[Alice], 7=[Charlie], 4=[David]}
+         }
+     }
+     ```
+
+   - **`Collectors.partitioningBy(Predicate<? super T>)`**: Partitions the elements into two groups based on a predicate.
+
+     ```java
+     import java.util.Arrays;
+     import java.util.List;
+     import java.util.Map;
+     import java.util.stream.Collectors;
+
+     public class CollectPartitioningByExample {
+         public static void main(String[] args) {
+             List<String> names = Arrays.asList("Alice", "Bob", "Charlie", "David");
+
+             Map<Boolean, List<String>> partitionedNames = names.stream()
+                 .collect(Collectors.partitioningBy(name -> name.length() > 4));
+
+             System.out.println(partitionedNames);
+             // Output: {false=[Bob, David], true=[Alice, Charlie]}
+         }
+     }
+     ```
+
+   - **`Collectors.counting()`**: Counts the number of elements.
+
+     ```java
+     import java.util.Arrays;
+     import java.util.List;
+     import java.util.stream.Collectors;
+
+     public class CollectCountingExample {
+         public static void main(String[] args) {
+             List<String> names = Arrays.asList("Alice", "Bob", "Charlie");
+
+             long count = names.stream()
+                 .collect(Collectors.counting());
+
+             System.out.println(count); // Output: 3
+         }
+     }
+     ```
+
+   - **`Collectors.summingInt(ToIntFunction<? super T>)`**: Sums the integer values of the elements.
+
+     ```java
+     import java.util.Arrays;
+     import java.util.List;
+     import java.util.stream.Collectors;
+
+     public class CollectSummingIntExample {
+         public static void main(String[] args) {
+             List<String> names = Arrays.asList("Alice", "Bob", "Charlie");
+
+             int totalLength = names.stream()
+                 .collect(Collectors.summingInt(String::length));
+
+             System.out.println(totalLength); // Output: 15
+         }
+     }
+     ```
+
+   - **`Collectors.averagingDouble(ToDoubleFunction<? super T>)`**: Calculates the average of the double values of the elements.
+
+     ```java
+     import java.util.Arrays;
+     import java.util.List;
+     import java.util.stream.Collectors;
+
+     public class CollectAveragingDoubleExample {
+         public static void main(String[] args) {
+             List<String> names = Arrays.asList("Alice", "Bob", "Charlie");
+
+             double averageLength = names.stream()
+                 .collect(Collectors.averagingDouble(String::length));
+
+             System.out.println(averageLength); // Output: 5.0
+         }
+     }
+     ```
+
+### Summary
+
+- **`map`**:
+  - `map(Function<? super T, ? extends R> mapper)`: Transforms elements.
+  - `flatMap(Function<? super T, ? extends Stream<? extends R>> mapper)`: Transforms elements into a stream and flattens.
+
+- **`collect`**:
+  - `collect(Collector<? super T, A, R> collector)`: Collects results into a form like `List`, `Set`, `Map`, etc.
+  - Common collectors include `toList`, `toSet`, `toMap`, `joining`, `groupingBy`, `partitioningBy`, `counting`, `summarizingInt`, `averagingDouble`, etc.
+ 
+In Java Streams, the `collect` operation is a terminal operation that transforms the elements of a stream into a different form, typically a collection or a summary result. The `collect` method is highly versatile and is used to accumulate elements of a stream into various data structures or summary results.
+
+### **Overview of `Stream.collect`**
+
+**Definition**:
+```java
+<R, A> R collect(Collector<? super T, A, R> collector);
+```
+
+- **Generic Type Parameters**:
+  - `T`: The type of elements in the stream.
+  - `A`: The type of the intermediate accumulation result.
+  - `R`: The type of the result of the collection.
+
+- **Parameters**:
+  - `collector`: A `Collector` that defines the accumulation strategy. It describes how to accumulate elements into a result.
+
+- **Returns**:
+  - The result of the collection operation, typically a collection or summary result.
+
+### **Types of Collectors**
+
+Java provides several built-in `Collector` implementations in the `Collectors` utility class, which cover common scenarios. Below are the main types of collectors and their uses:
+
+#### 1. **To Collection Collectors**
+
+- **`toList()`**
+  - **Description**: Collects the elements into a `List`.
+  - **Example**:
+    ```java
+    List<String> names = Arrays.asList("Alice", "Bob", "Charlie");
+    List<String> result = names.stream().collect(Collectors.toList());
+    // Result: [Alice, Bob, Charlie]
+    ```
+
+- **`toSet()`**
+  - **Description**: Collects the elements into a `Set`.
+  - **Example**:
+    ```java
+    Set<String> uniqueNames = names.stream().collect(Collectors.toSet());
+    // Result: [Alice, Bob, Charlie] (order may vary)
+    ```
+
+- **`toMap`**
+  - **Description**: Collects the elements into a `Map` using a key and value function.
+  - **Example**:
+    ```java
+    Map<Integer, String> nameMap = names.stream()
+        .collect(Collectors.toMap(String::length, Function.identity()));
+    // Result: {5=Alice, 3=Bob, 7=Charlie}
+    ```
+
+#### 2. **Summary Statistics Collectors**
+
+- **`counting()`**
+  - **Description**: Counts the number of elements.
+  - **Example**:
+    ```java
+    long count = names.stream().collect(Collectors.counting());
+    // Result: 3
+    ```
+
+- **`summarizingInt`**
+  - **Description**: Collects statistics (count, sum, min, average, max) for integers.
+  - **Example**:
+    ```java
+    IntSummaryStatistics stats = names.stream()
+        .mapToInt(String::length)
+        .collect(Collectors.summarizingInt(length -> length));
+    // Result: IntSummaryStatistics{count=3, sum=14, min=3, average=4.666667, max=7}
+    ```
+
+- **`summarizingDouble`**
+  - **Description**: Collects statistics for doubles.
+  - **Example**:
+    ```java
+    DoubleSummaryStatistics stats = names.stream()
+        .mapToDouble(String::length)
+        .collect(Collectors.summarizingDouble(length -> length));
+    // Result: DoubleSummaryStatistics{count=3, sum=14.0, min=3.0, average=4.666667, max=7.0}
+    ```
+
+- **`summarizingLong`**
+  - **Description**: Collects statistics for longs.
+  - **Example**:
+    ```java
+    LongSummaryStatistics stats = names.stream()
+        .mapToLong(String::length)
+        .collect(Collectors.summarizingLong(length -> length));
+    // Result: LongSummaryStatistics{count=3, sum=14, min=3, average=4.666667, max=7}
+    ```
+
+#### 3. **Joining Strings**
+
+- **`joining()`**
+  - **Description**: Concatenates the elements into a single `String`.
+  - **Example**:
+    ```java
+    String joined = names.stream().collect(Collectors.joining(", "));
+    // Result: "Alice, Bob, Charlie"
+    ```
+
+- **`joining(CharSequence delimiter, CharSequence prefix, CharSequence suffix)`**
+  - **Description**: Concatenates the elements with a delimiter, prefix, and suffix.
+  - **Example**:
+    ```java
+    String joined = names.stream().collect(Collectors.joining(", ", "[", "]"));
+    // Result: "[Alice, Bob, Charlie]"
+    ```
+
+#### 4. **Partitioning and Grouping**
+
+- **`partitioningBy(Predicate<? super T> predicate)`**
+  - **Description**: Partitions the elements into two groups based on a predicate.
+  - **Example**:
+    ```java
+    Map<Boolean, List<String>> partitioned = names.stream()
+        .collect(Collectors.partitioningBy(name -> name.length() > 4));
+    // Result: {false=[Bob], true=[Alice, Charlie]}
+    ```
+
+- **`groupingBy(Function<? super T, ? extends K> classifier)`**
+  - **Description**: Groups elements by a classifier function.
+  - **Example**:
+    ```java
+    Map<Integer, List<String>> groupedByLength = names.stream()
+        .collect(Collectors.groupingBy(String::length));
+    // Result: {3=[Bob], 5=[Alice], 7=[Charlie]}
+    ```
+
+- **`groupingBy(Function<? super T, ? extends K> classifier, Collector<? super T, A, D> downstream)`**
+  - **Description**: Groups elements by a classifier function and applies a downstream collector.
+  - **Example**:
+    ```java
+    Map<Integer, Set<String>> groupedByLengthWithSet = names.stream()
+        .collect(Collectors.groupingBy(String::length, Collectors.toSet()));
+    // Result: {3=[Bob], 5=[Alice], 7=[Charlie]}
+    ```
+
+#### 5. **Reducing**
+
+- **`reducing(BinaryOperator<T> accumulator)`**
+  - **Description**: Performs a reduction on the elements using an associative accumulation function.
+  - **Example**:
+    ```java
+    Optional<String> concatenated = names.stream()
+        .collect(Collectors.reducing((s1, s2) -> s1 + s2));
+    // Result: Optional[AliceBobCharlie]
+    ```
+
+- **`reducing(T identity, BinaryOperator<T> accumulator)`**
+  - **Description**: Performs a reduction with an identity value.
+  - **Example**:
+    ```java
+    String concatenated = names.stream()
+        .collect(Collectors.reducing("", (s1, s2) -> s1 + s2));
+    // Result: AliceBobCharlie
+    ```
+
+### **Custom Collectors**
+
+In addition to the standard collectors provided by `Collectors`, you can create custom collectors using the `Collector` interface.
+
+**Example**: Custom collector to concatenate strings with a specific format.
+
+```java
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
+import java.util.function.Function;
+import java.util.stream.Collector.Characteristics;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.StringJoiner;
+
+public class CustomCollector {
+
+    public static Collector<String, ?, String> customJoining(String delimiter) {
+        return Collector.of(
+            StringJoiner::new,
+            (joiner, element) -> joiner.add(element),
+            StringJoiner::merge,
+            StringJoiner::toString,
+            Collector.Characteristics.IDENTITY_FINISH
+        );
+    }
+
+    public static void main(String[] args) {
+        List<String> names = Arrays.asList("Alice", "Bob", "Charlie");
+        String result = names.stream()
+                             .collect(customJoining(" | "));
+        System.out.println(result);  // Output: Alice | Bob | Charlie
+    }
+}
+```
+
+### **Summary**
+
+The `collect` operation in Java Streams is extremely versatile, allowing you to gather and transform stream elements into various forms such as collections, summary statistics, and custom results. Understanding the available collectors and their use cases will help you effectively process and accumulate data in your stream pipelines.
+
+These methods provide a rich set of tools to process and transform collections in a functional style.
+Sure! Here are several complex coding examples using the `map` and `collect` methods in Java Streams. These examples will showcase various `Collector` implementations and how to use them in different scenarios.
+
+### 1. **Transforming Data and Collecting into Lists and Sets**
+
+#### Example: Transform and Collect into a List of Transformed Objects
+
+```java
+import java.util.*;
+import java.util.stream.Collectors;
+
+class Person {
+    private String name;
+    private int age;
+
+    // Constructor, getters, setters
+    public Person(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+
+    public String getName() { return name; }
+    public int getAge() { return age; }
+
+    @Override
+    public String toString() {
+        return name + " (" + age + ")";
+    }
+}
+
+public class TransformAndCollect {
+    public static void main(String[] args) {
+        List<Person> people = Arrays.asList(
+            new Person("Alice", 30),
+            new Person("Bob", 25),
+            new Person("Charlie", 35),
+            new Person("David", 30)
+        );
+
+        // Convert names to uppercase and collect into a List
+        List<String> upperCaseNames = people.stream()
+            .map(person -> person.getName().toUpperCase())
+            .collect(Collectors.toList());
+
+        System.out.println("Uppercase Names: " + upperCaseNames);
+
+        // Collect unique ages into a Set
+        Set<Integer> uniqueAges = people.stream()
+            .map(Person::getAge)
+            .collect(Collectors.toSet());
+
+        System.out.println("Unique Ages: " + uniqueAges);
+    }
+}
+```
+
+### 2. **Grouping and Partitioning Data**
+
+#### Example: Grouping by Age and Counting
+
+```java
+import java.util.*;
+import java.util.stream.Collectors;
+
+class Person {
+    private String name;
+    private int age;
+
+    // Constructor, getters, setters
+    public Person(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+
+    public String getName() { return name; }
+    public int getAge() { return age; }
+
+    @Override
+    public String toString() {
+        return name + " (" + age + ")";
+    }
+}
+
+public class GroupingAndCounting {
+    public static void main(String[] args) {
+        List<Person> people = Arrays.asList(
+            new Person("Alice", 30),
+            new Person("Bob", 25),
+            new Person("Charlie", 35),
+            new Person("David", 30),
+            new Person("Eve", 25)
+        );
+
+        // Group by age and count the number of people in each age group
+        Map<Integer, Long> ageGroupCount = people.stream()
+            .collect(Collectors.groupingBy(Person::getAge, Collectors.counting()));
+
+        System.out.println("Age Group Count: " + ageGroupCount);
+    }
+}
+```
+
+#### Example: Partitioning by Age and Grouping
+
+```java
+import java.util.*;
+import java.util.stream.Collectors;
+
+class Person {
+    private String name;
+    private int age;
+
+    // Constructor, getters, setters
+    public Person(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+
+    public String getName() { return name; }
+    public int getAge() { return age; }
+
+    @Override
+    public String toString() {
+        return name + " (" + age + ")";
+    }
+}
+
+public class PartitioningAndGrouping {
+    public static void main(String[] args) {
+        List<Person> people = Arrays.asList(
+            new Person("Alice", 30),
+            new Person("Bob", 25),
+            new Person("Charlie", 35),
+            new Person("David", 30),
+            new Person("Eve", 25)
+        );
+
+        // Partition by age greater than 30
+        Map<Boolean, List<Person>> partitionedByAge = people.stream()
+            .collect(Collectors.partitioningBy(person -> person.getAge() > 30));
+
+        System.out.println("Partitioned by Age > 30: " + partitionedByAge);
+
+        // Group by age and collect names into a List
+        Map<Integer, List<String>> namesByAge = people.stream()
+            .collect(Collectors.groupingBy(
+                Person::getAge,
+                Collectors.mapping(Person::getName, Collectors.toList())
+            ));
+
+        System.out.println("Names by Age: " + namesByAge);
+    }
+}
+```
+
+### 3. **Collecting Statistics**
+
+#### Example: Collecting Summary Statistics for Ages
+
+```java
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.IntSummaryStatistics;
+
+class Person {
+    private String name;
+    private int age;
+
+    // Constructor, getters, setters
+    public Person(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+
+    public String getName() { return name; }
+    public int getAge() { return age; }
+
+    @Override
+    public String toString() {
+        return name + " (" + age + ")";
+    }
+}
+
+public class SummaryStatistics {
+    public static void main(String[] args) {
+        List<Person> people = Arrays.asList(
+            new Person("Alice", 30),
+            new Person("Bob", 25),
+            new Person("Charlie", 35),
+            new Person("David", 30),
+            new Person("Eve", 25)
+        );
+
+        // Collecting statistics for ages
+        IntSummaryStatistics stats = people.stream()
+            .mapToInt(Person::getAge)
+            .collect(Collectors.summarizingInt(age -> age));
+
+        System.out.println("Age Statistics: " + stats);
+    }
+}
+```
+
+#### Example: Calculating Average Salary by Department
+
+```java
+import java.util.*;
+import java.util.stream.Collectors;
+
+class Employee {
+    private int id;
+    private String name;
+    private double salary;
+    private String department;
+
+    // Constructor, getters, setters
+    public Employee(int id, String name, double salary, String department) {
+        this.id = id;
+        this.name = name;
+        this.salary = salary;
+        this.department = department;
+    }
+
+    public double getSalary() { return salary; }
+    public String getDepartment() { return department; }
+
+    @Override
+    public String toString() {
+        return name + " (" + salary + ")";
+    }
+}
+
+public class AverageSalaryByDepartment {
+    public static void main(String[] args) {
+        List<Employee> employees = Arrays.asList(
+            new Employee(1, "Alice", 50000, "HR"),
+            new Employee(2, "Bob", 60000, "Engineering"),
+            new Employee(3, "Charlie", 70000, "Engineering"),
+            new Employee(4, "David", 55000, "HR"),
+            new Employee(5, "Eve", 65000, "Marketing")
+        );
+
+        // Collect average salary by department
+        Map<String, Double> avgSalaryByDept = employees.stream()
+            .collect(Collectors.groupingBy(
+                Employee::getDepartment,
+                Collectors.averagingDouble(Employee::getSalary)
+            ));
+
+        System.out.println("Average Salary by Department: " + avgSalaryByDept);
+    }
+}
+```
+
+### 4. **Joining Strings**
+
+#### Example: Joining Names with a Custom Delimiter
+
+```java
+import java.util.*;
+import java.util.stream.Collectors;
+
+class Person {
+    private String name;
+
+    // Constructor, getters, setters
+    public Person(String name) {
+        this.name = name;
+    }
+
+    public String getName() { return name; }
+
+    @Override
+    public String toString() {
+        return name;
+    }
+}
+
+public class JoiningStrings {
+    public static void main(String[] args) {
+        List<Person> people = Arrays.asList(
+            new Person("Alice"),
+            new Person("Bob"),
+            new Person("Charlie")
+        );
+
+        // Join names with a delimiter
+        String namesJoined = people.stream()
+            .map(Person::getName)
+            .collect(Collectors.joining(", ", "Names: ", "."));
+
+        System.out.println(namesJoined);
+    }
+}
+```
+
+### 5. **Custom Collector**
+
+#### Example: Custom Collector to Concatenate Strings with Prefix and Suffix
+
+```java
+import java.util.*;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
+import java.util.StringJoiner;
+
+public class CustomCollectorExample {
+    public static void main(String[] args) {
+        List<String> words = Arrays.asList("apple", "banana", "cherry");
+
+        // Custom collector
+        Collector<String, ?, String> customJoining = Collector.of(
+            () -> new StringJoiner(", ", "[", "]"),
+            StringJoiner::add,
+            StringJoiner::merge,
+            StringJoiner::toString
+        );
+
+        String result = words.stream().collect(customJoining);
+
+        System.out.println(result);  // Output: [apple, banana, cherry]
+    }
+}
+```
+
 ## collect
 `collect` collects the elements of a stream into a specific data structure.
 
@@ -530,6 +1252,16 @@ public class CafeincodeExample {
 }
 ```
 **Result:** `[1, 2, 3, 4, 5]`
+
+### Summary
+
+These examples demonstrate a variety of complex coding scenarios using the `map` and `collect` methods in Java Streams. Each example highlights different types of collectors, such as:
+
+- Collecting into collections (`toList`, `toSet`, `toMap`)
+- Grouping and partitioning data (`groupingBy`, `partitioningBy`)
+- Calculating summary statistics (`summarizingInt`, `averagingDouble`)
+- Joining elements into a single string (`joining`)
+- Using custom collectors for specialized collection operations
 
 ## count
 `count` counts the number of elements in a stream.
