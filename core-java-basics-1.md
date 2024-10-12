@@ -59,10 +59,12 @@ highBetaStock.sell();
 ### Summary:
 In short, in Java, everything must be thought of in terms of a Java class. It’s nothing but a template with its own members and methods for accessing those members. The visibility of each member is determined by the developer, specifying where they want to use those objects.
 
+# How to Make Thread-Safe Code in Java
 
-### How to make Thread-Safe Code in Java
-Example of Non Thread Safe Code in Java
-### Here is an example of non thread-safe code, look at the code and find out why this code is not thread safe?
+## Example of Non Thread-Safe Code in Java
+
+Here is an example of non thread-safe code. Look at the code and find out why this code is not thread-safe.
+
 ```java
 /*
  * Non Thread-Safe Class in Java
@@ -77,26 +79,36 @@ public class Counter {
     }
 }
 ```
-Above example is not thread-safe because ++ (increment operator) is not an atomic operation and can be broken down into read, update and write operation. if multiple thread call getCount() approximately same time each of these three operation may coincide or overlap with each other for example while thread 1 is updating value , thread 2 reads and still gets old value, which eventually let thread 2 override thread 1 increment and one count is lost because multiple thread called it concurrently.
-How to make code Thread-Safe in Java
-### There are multiple ways to make this code thread safe in Java:
-- 1) Use synchronized keyword in Java and lock the getCount() method so that only one thread can execute it at a time which removes possibility of coinciding or interleaving.
-- 2) Use Atomic Integer, which makes this ++ operation atomic and since atomic operations are thread-safe and saves cost of external synchronization.
 
-- Here is a thread-safe version of Counter class in Java:
+The above example is not thread-safe because the `++` (increment operator) is not an atomic operation and can be broken down into read, update, and write operations. If multiple threads call `getCount()` at approximately the same time, each of these three operations may coincide or overlap with each other. For example, while thread 1 is updating the value, thread 2 reads and still gets the old value, which eventually lets thread 2 override thread 1's increment, resulting in a lost count because multiple threads called it concurrently.
+
+## How to Make Code Thread-Safe in Java
+
+There are multiple ways to make this code thread-safe in Java:
+
+1. **Use synchronized keyword** in Java and lock the `getCount()` method so that only one thread can execute it at a time, which removes the possibility of coinciding or interleaving.
+
+2. **Use Atomic Integer**, which makes this `++` operation atomic, and since atomic operations are thread-safe, it saves the cost of external synchronization.
+   
+### Here is a thread-safe version of the Counter class in Java:
+
 ```java
 /*
  * Thread-Safe Example in Java
  */
+import java.util.concurrent.atomic.AtomicInteger;
+
 public class Counter {
     private int count;
-    AtomicInteger atomicCount = new AtomicInteger( 0 );
+    AtomicInteger atomicCount = new AtomicInteger(0);
+
     /*
-     * This method thread-safe now because of locking and synchornization
+     * This method is thread-safe now because of locking and synchronization
      */
     public synchronized int getCount(){
         return count++;
     }  
+
     /*
      * This method is thread-safe because count is incremented atomically
      */
@@ -108,46 +120,53 @@ public class Counter {
 ### Important points about Thread-Safety in Java
 Here are some points worth remembering to write thread safe code in Java, this knowledge also helps you to avoid some serious concurrency issues in Java like race condition or deadlock in Java:
 
-- 1) Immutable objects are by default thread-safe because there state cannot be modified once created. Since String is immutable in Java, its inherently thread-safe.
-- 2) Read only or final variables in Java are also thread-safe in Java.
-- 3) Locking is one way of achieving thread-safety in Java.
-- 4) Static variables if not synchronized properly become major cause of thread-safety issues.
-- 5) Example of thread-safe class in Java: Vector, Hashtable, ConcurrentHashMap, String etc.
-- 6) Atomic operations in Java are thread-safe e.g. reading a 32 bit int from memory because it’s an atomic operation it can't interleave with other thread.
-- 7) local variables are also thread-safe because each thread has their own copy and using local variables is good way to writing thread-safe code in Java.
-- 8) In order to avoid thread-safety issue minimize sharing of objects between multiple thread.
-- 9) Volatile keyword in Java can also be used to instruct thread not to cache variables and read from main memory and can also instruct JVM not to reorder or optimize code from threading perspective.
-
+- **Immutable objects** are by default thread-safe because their state cannot be modified once created. Since `String` is immutable in Java, it is inherently thread-safe.
+- **Read-only or final variables** in Java are also thread-safe.
+- **Locking** is one way of achieving thread-safety in Java.
+- **Static variables**, if not synchronized properly, can become a major cause of thread-safety issues.
+- Examples of thread-safe classes in Java: `Vector`, `Hashtable`, `ConcurrentHashMap`, `String`, etc.
+- **Atomic operations** in Java are thread-safe (e.g., reading a 32-bit int from memory because it’s an atomic operation it can't interleave with other thread).
+- **Local variables** are also thread-safe because each thread has its own copy, and using local variables is a good way to write thread-safe code.
+- To avoid thread-safety issues, minimize sharing of objects between multiple threads.
+- **Volatile keyword** in Java can also be used to instruct threads not to cache variables, reading from main memory, and can also instruct the JVM not to reorder or optimize code from a threading perspective.
+  
 ### 2 ways to find if thread holds lock on object in Java
 Here I am giving my answer and what I had discovered after interview
 
-- 1)I thought about IllegalMonitorStateException which wait() and notify() methods throw when they get called from non-synchronized context so I said I would call newspaper.wait() and if this call throws exception it means thread in java is not holding lock, otherwise thread holds lock.
+1. I thought about `IllegalMonitorStateException`, which `wait()` and `notify()` methods throw when they get called from a non-synchronized context. I said I would call `newspaper.wait()`, and if this call throws an exception, it means the thread in Java is not holding the lock; otherwise, the thread holds the lock.
 
-- 2)Later I discovered that thread is a static method called holdsLock(Object obj) which returns true or false based on whether threads holds lock on object passed.
+2. Later, I discovered that there is a static method called `holdsLock(Object obj)` which returns true or false based on whether the thread holds the lock on the object passed.
 
-### Wait vs Sleep vs Yield in Java
-Difference between Wait and Sleep in Java
+## Wait vs Sleep vs Yield in Java
 
-Main difference between wait and sleep is that wait() method release the acquired monitor when thread is waiting while Thread.sleep() method keeps the lock or monitor even if thread is waiting. Also wait method in java should be called from synchronized method or block while there is no such requirement for sleep() method. Another difference is Thread.sleep() method is a static method and applies on current thread, while wait() is an instance specific method and only got wake up if some other thread calls notify method on same object. also in case of sleep, sleeping thread immediately goes to Runnable state after waking up while in case of wait, waiting thread first acquires the lock and then goes into Runnable state. So based upon your need if you require a specified second of pause use sleep() method or if you want to implement inter-thread communication use wait method.
+### Difference between Wait and Sleep in Java
 
-Here is list of difference between wait and sleep in Java :
+The main difference between `wait` and `sleep` is that the `wait()` method releases the acquired monitor when the thread is waiting, while the `Thread.sleep()` method keeps the lock or monitor even if the thread is waiting. Also, the `wait` method in Java should be called from a synchronized method or block, while there is no such requirement for the `sleep()` method. 
 
-- 1) wait is called from synchronized context only while sleep can be called without synchronized block. see Why wait and notify needs to call from synchronized method for more detail.
-- 2) wait is called on Object while sleep is called on Thread. see Why wait and notify are defined in object class instead of Thread.
-- 3) waiting thread can be awake by calling notify and notifyAll while sleeping thread can not be awaken by calling notify method.
-- 4) wait is normally done on condition, Thread wait until a condition is true while sleep is just to put your thread on sleep.
-- 5) wait release lock on object while waiting while sleep doesn’t release lock while waiting.
+Another difference is that `Thread.sleep()` is a static method and applies to the current thread, while `wait()` is an instance-specific method and only wakes up if some other thread calls the `notify` method on the same object. In the case of `sleep`, the sleeping thread immediately goes to the Runnable state after waking up, while in the case of `wait`, the waiting thread first acquires the lock and then goes into the Runnable state.
+
+So based upon your need if you require a specified second of pause use sleep() method or if you want to implement inter-thread communication use wait method.
+
+### Here is a list of differences between wait and sleep in Java:
+
+- `wait` is called from synchronized context only, while `sleep` can be called without a synchronized block.
+- `wait` is called on an Object, while `sleep` is called on a Thread.
+- The waiting thread can be awoken by calling `notify` and `notifyAll`, while the sleeping thread cannot be awakened by calling the `notify` method.
+- `wait` is normally done on a condition; the thread waits until a condition is true, while `sleep` is just to pause the thread.
+- `wait` releases the lock on the object while waiting, while `sleep` doesn’t release the lock while waiting.
 
 ### Difference between yield and sleep in java
 
-Major difference between yield and sleep in Java is that yield() method pauses the currently executing thread temporarily for giving a chance to the remaining waiting threads of the same priority to execute. If there is no waiting thread or all the waiting threads have a lower priority then the same thread will continue its execution. The yielded thread when it will get the chance for execution is decided by the thread scheduler whose behavior is vendor dependent. Yield method doesn’t guarantee  that current thread will pause or stop but it guarantee that CPU will be relinquish by current Thread as a result of call to Thread.yield() method in java.
+The major difference between `yield` and `sleep` in Java is that the `yield()` method pauses the currently executing thread temporarily, giving a chance to the remaining waiting threads of the same priority to execute. If there are no waiting threads or all the waiting threads have a lower priority, the same thread will continue its execution. The yielded thread's scheduling is decided by the thread scheduler, whose behavior is vendor-dependent. 
 
-Sleep method in Java has two variants one which takes millisecond as sleeping time while other which takes both mill and nano second for sleeping duration.
+The `yield` method doesn’t guarantee that the current thread will pause or stop, but it guarantees that the CPU will be relinquished by the current Thread as a result of the call to `Thread.yield()`.
 
+The `sleep` method in Java has two variants: one which takes milliseconds as the sleeping time, and the other which takes both milliseconds and nanoseconds for sleeping duration.
+```
 sleep(long millis)
 or
 sleep(long millis,int nanos)
-
+```
 Cause the currently executing thread to sleep for the specified number of milliseconds plus the specified number of nanoseconds.
 
 ### Example of Thread Sleep method in Java
@@ -171,20 +190,24 @@ public class SleepTest {
 
 }
 ```
-Output:
+### Output:
+```
 main is going to sleep for 1 Second
 Main Thread is woken now
+```
 
 ### 10 points about Thread sleep() method in Java
-I have listed down some important and worth to remember points about Sleep() method of Thread Class in Java:
-- 1) Thread.sleep() method is used to pause the execution, relinquish the CPU and return it to thread scheduler.
-- 2) Thread.sleep() method is a static method and always puts current thread on sleep.
-- 3) Java has two variants of sleep method in Thread class one with one argument which takes milliseconds as duration for sleep and other method with two arguments one is millisecond and other is nanosecond.
-- 4) Unlike wait() method in Java, sleep() method of Thread class doesn't relinquish the lock it has acquired.
-- 5) sleep() method throws Interrupted Exception if another thread interrupt a sleeping thread in java.
-- 6) With sleep() in Java its not guaranteed that when sleeping thread woke up it will definitely get CPU, instead it will go to Runnable state and fight for CPU with other thread.
-- 7) There is a misconception about sleep method in Java that calling t.sleep() will put Thread "t" into sleeping state, that's not true because Thread.sleep method is a static method it always put current thread into Sleeping state and not thread "t".
 
+Here are some important points to remember about the `sleep()` method of the Thread class in Java:
+
+1. The `Thread.sleep()` method is used to pause execution, relinquish the CPU, and return it to the thread scheduler.
+2. The `Thread.sleep()` method is a static method and always puts the current thread to sleep.
+3. Java has two variants of the `sleep` method in the Thread class: one with one argument (milliseconds) and the other with two arguments (milliseconds and nanoseconds).
+4. Unlike the `wait()` method in Java, the `sleep()` method of the Thread class doesn't relinquish the lock it has acquired.
+5. The `sleep()` method throws `InterruptedException` if another thread interrupts a sleeping thread in Java.
+6. With `sleep()` in Java, it is not guaranteed that when the sleeping thread wakes up, it will definitely get the CPU; instead, it goes to the Runnable state and competes for CPU with other threads.
+7. There is a misconception about the `sleep` method in Java: calling `t.sleep()` will put Thread "t" into a sleeping state. That's not true because `Thread.sleep` is a static method; it always puts the current thread into a sleeping state and not thread "t".
+   
 ### NoClassDefFoundError vs ClassNotFoundException
 Before seeing the differences between ClassNotFoundException and NoClassDefFoundError let's see some similarities which are main reason of confusion between these two errors:
 
