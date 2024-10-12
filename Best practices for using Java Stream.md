@@ -714,9 +714,9 @@ Output:
 ```
 
 ### Best practice in using Java streams
-// Best practices description (not executable code)
-// Use streams properly for better code organization and readability.
-// Avoid overusing parallel streams
+- Best practices description (not executable code)
+- Use streams properly for better code organization and readability.
+- Avoid overusing parallel streams
 
 Using streams properly makes your code more elegant, easier to see, and neater than the traditional coding style.
 
