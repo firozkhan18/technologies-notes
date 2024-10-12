@@ -544,6 +544,115 @@ class Cake {
 }
 ```
 
+# Builder Design Pattern in Java
+
+## Pros and Cons of the Builder Design Pattern
+The Builder pattern has several advantages that often outweigh its disadvantages:
+
+### Advantages:
+1. **Maintainability**: More maintainable when the number of fields required to create an object exceeds four or five.
+2. **Less Error-Prone**: Reduces errors as users explicitly know what they are passing through method calls.
+3. **Robustness**: Ensures that only fully constructed objects are available to clients.
+
+### Disadvantages:
+1. **Verbosity**: Can lead to verbose code and duplication since the Builder needs to copy all fields from the original or item class.
+
+## When to Use the Builder Design Pattern
+The Builder pattern is a creational pattern that is ideal when the number of parameters required in the constructor is more than four or five. It's important to distinguish between the Builder and Factory patterns; while Factory can create different implementations of the same interface, Builder is tied to its container class and returns only the object of the outer class.
+
+---
+
+# Factory Design Pattern in Java
+
+## What is the Factory Design Pattern?
+The Factory pattern is used to create objects in Java and provides loose coupling and high cohesion. It encapsulates the object creation logic, making it easier to change how objects are created or to introduce new objects with minimal changes.
+
+## Example of Static Factory Method in JDK
+A common example of the Factory method design pattern is the `valueOf()` method in the `String` and wrapper classes like `Integer` and `Boolean`, which are used for type conversion.
+
+### Other Examples Include:
+- `getInstance()` method for creating instances of Singleton classes.
+- `newInstance()` method for creating new instances each time it's called.
+
+## Problems Solved by the Factory Method Pattern
+- **Object Creation**: When the application or framework does not know what kind of object to create at runtime, it can only be aware of the interface or abstract class.
+- **Hard-Coded Dependencies**: Factory pattern addresses the problem of hard-coded object creation, promoting loose coupling by eliminating the need to bind application-specific classes into the code.
+
+## When to Use the Factory Design Pattern
+- Common in frameworks where the library code needs to create objects that may be subclassed by applications.
+- When the concrete products can be created in multiple ways, or there may be future extensions for creating concrete products.
+- When products don't need to know how they are created.
+- When creating an object of a subclass based on provided data.
+
+### Code Example of Factory Design Pattern in Java
+Here's a code example to demonstrate the Factory pattern for creating different currency types:
+
+```java
+interface Currency {
+    String getSymbol();
+}
+
+// Concrete Rupee Class
+class Rupee implements Currency {
+    @Override
+    public String getSymbol() {
+        return "Rs";
+    }
+}
+
+// Concrete SGD Class
+class SGDDollar implements Currency {
+    @Override
+    public String getSymbol() {
+        return "SGD";
+    }
+}
+
+// Concrete USD Class
+class USDollar implements Currency {
+    @Override
+    public String getSymbol() {
+        return "USD";
+    }
+}
+
+// Factory Class
+class CurrencyFactory {
+    public static Currency createCurrency(String country) {
+        if (country.equalsIgnoreCase("India")) {
+            return new Rupee();
+        } else if (country.equalsIgnoreCase("Singapore")) {
+            return new SGDDollar();
+        } else if (country.equalsIgnoreCase("US")) {
+            return new USDollar();
+        }
+        throw new IllegalArgumentException("No such currency");
+    }
+}
+
+// Factory Client Code
+public class Factory {
+    public static void main(String args[]) {
+        String country = args[0];
+        Currency currency = CurrencyFactory.createCurrency(country);
+        System.out.println(currency.getSymbol());
+    }
+}
+```
+
+### Advantages of the Factory Method Pattern
+- **Decoupling**: Decouples the calling class from the target class, resulting in less coupled and more cohesive code. For example, JDBC allows the application code to interact with different database types without knowing the specifics of the database drivers.
+- **Flexibility**: Enables subclasses to provide extended versions of an object.
+- **Consistency**: Promotes consistent object creation since all objects are created through the factory.
+- **Ease of Debugging**: Centralized object creation makes it easier to debug and troubleshoot.
+
+### Additional Advantages of Factory Method Pattern
+- Encourages the use of interfaces rather than implementations, enhancing flexibility.
+- Allows for replacement of implementations without altering client code.
+- Can cache frequently used objects, reducing duplication (e.g., `Boolean.valueOf()` method).
+- Recommended by industry experts, including Joshua Bloch in "Effective Java."
+- Offers an alternative way of creating objects and can hide information related to object creation.
+
 ### Conclusion:
 The Builder design pattern not only provides a flexible solution for constructing complex objects but also enhances code readability. The resulting code is easy to maintain, avoids errors, and allows a clean separation between construction and representation.
 
