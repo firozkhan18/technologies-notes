@@ -22,12 +22,9 @@ We will use:
 
 ### Implementation
 
-#### 1. PreventDuplicateValidator
+Here is the detailed code implementation of each part
 
-We declare this as an annotation with three data fields:
-- **includeFieldKeys**: List of fields needed to generate the key based on the Request Body.
-- **optionalValues**: Values that can be added to the key for flexibility.
-- **expireTime**: Key expiration time value, default is 10 seconds.
+#### 1. PreventDuplicateValidator
 
 ```java
 package com.demo.aop;
@@ -50,6 +47,11 @@ public @interface PreventDuplicateValidator {
 }
 ```
 
+`PreventDuplicateValidator` We declare this as an annotation with three data fields:
+- **includeFieldKeys**: List of fields needed to generate the key based on the Request Body.
+- **optionalValues**: Values that can be added to the key for flexibility.
+- **expireTime**: Key expiration time value, default is 10 seconds.
+
 #### 2. PreventDuplicateValidatorAspect
 
 This is an advice implementing logic for the `PreventDuplicateValidator` annotation. We use Around Advice for flexibility.
@@ -68,10 +70,10 @@ The logic implementation is as follows:
 expireTime: is the key expiration time value, the default is 10 seconds.
 
 package com.demo.aop;
-import com.cafeincode.demo.enums.ErrorCode;
-import com.cafeincode.demo.exception.DuplicationException;
-import com.cafeincode.demo.exception.HandleGlobalException;
-import com.cafeincode.demo.utils.Utils;
+import com.demo.enums.ErrorCode;
+import com.demo.exception.DuplicationException;
+import com.demo.exception.HandleGlobalException;
+import com.demo.utils.Utils;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Arrays;
@@ -233,7 +235,7 @@ public class BeanConfig {
 
 #### 4. BaseResponse
 
-This is the response class that returns results via API, containing fields such as code, message, and data.
+This is the response class that returns results via API, containing fields such as code, message, and data, request_id, etc.
 
 ```java
 package com.demo.dto;
@@ -285,7 +287,7 @@ public class ProductDto {
     private String requestId;
 
 }
-package com.cafeincode.demo.enums;
+package com.demo.enums;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -361,8 +363,8 @@ public interface IProductService {
     ProductDto createProduct(ProductDto dto);
 
 }
-package com.cafeincode.demo.service;
-import com.cafeincode.demo.dto.ProductDto;
+package com.demo.service;
+import com.demo.dto.ProductDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -381,7 +383,7 @@ public class ProductService implements IProductService {
 }
 
 ```
-You can add more logic if needed; I just need to return null to serve the demo purpose.
+The class Utils includes logic functions to extract the request body from ProceedingJoinPoint and the MD5 hash function
 
 ```java
 package com.demo.utils;
@@ -443,7 +445,6 @@ public class Utils {
     }
 }
 ```
-The class Utils includes logic functions to extract the request body from ProceedingJoinPoint and the MD5 hash function
 
 ### Main Controller
 
@@ -463,8 +464,8 @@ spring:
     name: product-service
 server:
   port: 8888
-configure application-local.yml
 ```
+configure application-local.yml
 
 ```yaml
 version: "3.2"
@@ -475,6 +476,12 @@ services:
     ports:
       - '6379:6379'
 ```
+In this main controller section, declare to use annotation with the parameter values above: PreventDuplicateValidator
+
+**includeFieldKeys**: markup will take two fields productIdand transactionId in the request body as input to generate key
+**optionalValues**: option value, I declare here CAFEINCODE
+**expireTime**: data lifetime in Redis cache, I set it to 40 seconds.
+
 ```java
 package com.demo.controller;
 import com.demo.aop.PreventDuplicateValidator;
