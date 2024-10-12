@@ -818,3 +818,153 @@ class Singleton {
 
 ### Conclusion
 Understanding the Observer, Builder, and Singleton design patterns in Java is essential for creating efficient and maintainable code. Each pattern has its use cases, benefits, and drawbacks, making them suitable for different scenarios in software development.
+
+### Java Decorator Design Pattern
+- What is decorator pattern in Java?
+- When to use decorator pattern in Java?
+- How to use decorator pattern in Java?
+- Example of decorator design pattern
+- Advantage and Disadvantage of decorator pattern in Java
+
+### What is decorator design pattern in Java?
+- Decorator design pattern is used to enhance the functionality of a particular object at run-time or dynamically.
+- At the same time, other instances of the same class will not be affected by this, so individual objects get the new behavior.
+- Basically, we wrap the original object through a decorator object.
+- Decorator design pattern is based on abstract classes, and we derive concrete implementations from those classes.
+- It’s a structural design pattern and is most widely used.
+
+### Problem which is solved by Decorator Pattern:
+If anyone wants to add some functionality to an individual object or change the state of a particular object at runtime, it is not possible with traditional subclassing. Decorator pattern makes it possible to provide individual objects of the same class a specific behavior or state at runtime, without affecting other objects of the same class.
+
+### When to use Decorator pattern in Java
+- When subclassing becomes impractical and we need a large number of different possibilities to make independent objects.
+- When we want to add functionality to individual objects, not to all objects at runtime.
+
+### Code Example of decorator design pattern:
+```java
+// Component on Decorator design pattern
+public abstract class Currency {
+    String description = "Unknown currency";
+    public String getCurrencyDescription() {
+        return description;
+    }
+    public abstract double cost(double value);
+}
+
+// Concrete Component
+public class Rupee extends Currency {
+    double value;
+    public Rupee() {
+        description = "Indian rupees";
+    }
+    public double cost(double v) {
+        value = v;
+        return value;
+    }
+}
+
+// Another Concrete Component
+public class Dollar extends Currency {
+    double value;
+    public Dollar() {
+        description = "Dollar";
+    }
+    public double cost(double v) {
+        value = v;
+        return value;
+    }
+}
+
+// Decorator
+public abstract class Decorator extends Currency {
+    public abstract String getDescription();
+}
+
+// Concrete Decorator
+public class USDDecorator extends Decorator {
+    Currency currency; 
+    public USDDecorator(Currency currency) {
+        this.currency = currency;
+    }
+    public String getDescription() {
+        return currency.getDescription() + " ,its US Dollar";
+    }
+}
+
+// Another Concrete Decorator
+public class SGDDecorator extends Decorator {
+    Currency currency;
+    public SGDDecorator(Currency currency) {
+        this.currency = currency;
+    }
+    public String getDescription() {
+        return currency.getDescription() + " ,its Singapore Dollar";
+    }
+}
+
+// Currency Check
+public class CurrencyCheck {
+    public static void main(String[] args) {
+        // without adding decorators
+        Currency curr = new Dollar();
+        System.out.println(curr.getDescription() + " dollar. " + curr.cost(2.0));  
+        
+        // adding decorators
+        Currency curr2 = new USDDecorator(new Dollar());
+        System.out.println(curr2.getDescription() + " dollar. " + curr2.cost(4.0));
+
+        Currency curr3 = new SGDDecorator(new Dollar());
+        System.out.println(curr3.getDescription() + " dollar. " + curr3.cost(4.0));
+    }
+}
+```
+
+### Explanation of the code:
+1. **Component Interface**: In our example, the `Currency` interface is the component which is used on its own or needs a decorator for that.
+2. **Concrete Component**: Implements the component and we add new behavior to this object dynamically. `Dollar` and `Rupee` are the concrete implementations of currency.
+3. **Decorator**: Decorator contains a HAS-a relationship; it has an instance variable that holds a reference for the component. Here, a Decorator is an abstract class that extends the currency.
+4. **Concrete Decorator**: Implementation of the Decorator, e.g., `USDDecorator` and `SGDDecorator`, which contains an instance variable for the component interface.
+
+### Advantages of Decorator design Pattern in Java
+1. Decorator Pattern is more flexible than inheritance because inheritance adds responsibilities at compile time while the decorator adds them at run-time.
+2. Decorator pattern enhances or modifies the object's functionality.
+
+### Disadvantages
+The main disadvantage of using the Decorator Pattern in Java is that code maintenance can become problematic as it provides many similar small objects (each decorator).
+
+### Differences between String, StringBuffer, and StringBuilder in Java
+**String in Java**
+1. **Immutable**: Strings are immutable in Java. Their hashcode value can be cached, making them faster as hashmap keys.
+2. **String Literals**: Created in String pools; using `==` for comparison checks reference equality.
+3. **Concatenation**: The `+` operator is overloaded for Strings, implemented using `StringBuffer` or `StringBuilder`.
+4. **Character Array**: Strings are backed by a character array, represented in UTF-16 format.
+5. **Equality**: Strings are equal if they have the same characters in the same order and case.
+6. **toString()**: Provides a String representation of an object.
+
+### Problem with String in Java
+Immutability can lead to temporary garbage in heap if many operations are performed on strings. This is why Java provides `StringBuffer` and `StringBuilder`.
+
+### Differences between String and StringBuffer in Java
+- **String**: Immutable.
+- **StringBuffer**: Mutable, allowing modifications without creating new objects.
+
+### Difference between StringBuilder and StringBuffer in Java
+`StringBuffer` is synchronized, making it thread-safe but slower. `StringBuilder` is a newer class (added in JDK 5) that is not synchronized, thus performing better.
+
+### Summary
+1. **Immutability**: String is immutable; StringBuffer and StringBuilder are mutable.
+2. **Synchronization**: StringBuffer is synchronized, StringBuilder is not.
+3. **Concatenation**: `+` operator is implemented using either StringBuffer or StringBuilder.
+4. **Usage**: Use String for immutability, StringBuffer for mutable + thread-safety, and StringBuilder for mutable + without thread-safety.
+
+### Reason Why Wait, Notify, and NotifyAll are in Object Class
+1. **Communication Mechanism**: Wait and notify are communication mechanisms between threads, making Object class the correct place for them.
+2. **Locks**: Locks are available on a per-object basis, justifying their presence in the Object class.
+3. **Critical Section**: Threads need a lock to enter critical sections, waiting on the object lock.
+
+### Why wait, notify, and notifyAll are called from synchronized block or method in Java
+We use these methods for inter-thread communication, where one thread waits after checking a condition, and another thread notifies it after the condition changes. This process needs to be atomic to avoid race conditions, which is achieved by using synchronized methods or blocks.
+
+### Summary of calling wait(), notify(), or notifyAll() from synchronized context
+1. **Avoid IllegalMonitorStateException**: Occurs if we don't call these methods from a synchronized context.
+2. **Prevent Race Conditions**: Ensures proper synchronization between threads.
