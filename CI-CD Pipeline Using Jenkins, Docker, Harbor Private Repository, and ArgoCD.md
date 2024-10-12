@@ -126,7 +126,6 @@ git config --global user.name "Tanmay"
 git add .
 git commit -m "Deployment file modified by Jenkins job with the image Harbor image 10.1.1.1/library/harbor_cicd:v${Build_Number_Image}"
 ```
-
 4. **Post-Build Actions**: Select "Push Only If Build Succeeds" and specify the branch name and target remote name.
 
 This script locates the image tag in the Deployment.yaml file, replaces it with the specified version from the Jenkins build (${Build_Number_Image}), configures the email and name for Git commits, adds all modified files to the Git staging area, and commits the changes with a descriptive message.
