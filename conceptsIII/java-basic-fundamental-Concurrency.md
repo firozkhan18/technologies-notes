@@ -412,6 +412,27 @@ synchronized (MyClass.class){...}
 
 Read More: Object level lock vs Class level lock
 
+
+What is the difference between class-level lock and object-level lock?
+The object-level lock is used when we want to synchronize the instance properties or critical sections of a class such that only one thread can execute synchronized methods and locks on the given instance.
+
+We can achieve object-level locking using the synchronized keyword.
+
+public synchronized void demoMethod(){...}
+
+or
+
+synchronized (this){...}
+
+The class-level lock is used when we want to synchronize class-specific properties or critical sections (static members) such that only one thread can execute synchronized methods and blocks on any instance of that class in the runtime.
+
+We can achieve class-level locking using the synchronized keyword with a static method.
+
+public synchronized static void demoMethod(){...}
+
+or
+
+synchronized (MyClass.class){...}
 ## 4. Deadlock, Livelock, and Race Condition
 ### 4.1. What is the deadlock and the main reason behind the deadlock?
 A deadlock is a situation where two threads are holding the lock on some different resources, and both threads are waiting for each other to release the lock but no one is able to release to lock on the resources that it’s holding, and both threads remain in the BLOCKED state and end up creating a circular dependency. Hence this infinite amount of waiting for each other to release the lock is nothing but a deadlock.
