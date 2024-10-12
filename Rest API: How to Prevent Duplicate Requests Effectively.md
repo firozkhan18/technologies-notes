@@ -27,7 +27,7 @@ Here is the detailed code implementation of each part
 #### 1. PreventDuplicateValidator
 
 ```java
-package com.demo.aop;
+package com.springboot.microservice.component;
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -86,11 +86,11 @@ The logic implementation is as follows:
 ```java
 expireTime: is the key expiration time value, the default is 10 seconds.
 
-package com.demo.aop;
-import com.demo.enums.ErrorCode;
-import com.demo.exception.DuplicationException;
-import com.demo.exception.HandleGlobalException;
-import com.demo.utils.Utils;
+package com.springboot.microservice.component;
+import com.springboot.microservice.enums.ErrorCode;
+import com.springboot.microservice.exception.DuplicationException;
+import com.springboot.microservice.exception.HandleGlobalException;
+import com.springboot.microservice.utils.Utils;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Arrays;
@@ -205,7 +205,7 @@ public class PreventDuplicateValidatorAspect {
 Add bean configuration for `ObjectMapper` and Redis connection.
 
 ```java
-package com.demo.config;
+package com.springboot.microservice.config;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.beans.factory.annotation.Value;
@@ -255,7 +255,7 @@ public class BeanConfig {
 This is the response class that returns results via API, containing fields such as code, message, and data, request_id, etc.
 
 ```java
-package com.demo.dto;
+package com.springboot.microservice.dto;
 import java.io.Serializable;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -289,7 +289,7 @@ public class BaseResponse<T> implements Serializable {
 This class handles `DuplicationException`, which is triggered by `PreventDuplicateValidatorAspect`.
 
 ```java
-package com.demo.dto;
+package com.springboot.microservice.dto;
 import java.time.Instant;
 import lombok.Data;
 
@@ -304,7 +304,7 @@ public class ProductDto {
     private String requestId;
 
 }
-package com.demo.enums;
+package com.springboot.microservice.enums;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -317,7 +317,7 @@ public enum ErrorCode {
     private final String code;
     private final String message;
 }
-package com.cafeincode.demo.exception;
+package com.springboot.microservice.exception;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -341,7 +341,7 @@ public class DuplicationException extends RuntimeException {
     }
 
 }
-package com.demo.exception;
+package com.springboot.microservice.exception;
 import java.util.HashMap;
 import java.util.Map;
 import org.springframework.http.HttpStatus;
@@ -372,16 +372,16 @@ public class HandleGlobalException extends ResponseEntityExceptionHandler {
 This class includes logic functions to extract the request body and the MD5 hash function.
 
 ```java
-package com.demo.service;
-import com.cafeincode.demo.dto.ProductDto;
+package com.springboot.microservice.service;
+import com.springboot.microservice.dto.ProductDto;
 
 public interface IProductService {
 
     ProductDto createProduct(ProductDto dto);
 
 }
-package com.demo.service;
-import com.demo.dto.ProductDto;
+package com.springboot.microservice.service;
+import com.springboot.microservice.dto.ProductDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -403,7 +403,7 @@ public class ProductService implements IProductService {
 The class Utils includes logic functions to extract the request body from ProceedingJoinPoint and the MD5 hash function
 
 ```java
-package com.demo.utils;
+package com.springboot.microservice.utils;
 import jakarta.xml.bind.DatatypeConverter;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
@@ -500,11 +500,11 @@ In this main controller section, declare to use annotation with the parameter va
 **expireTime**: data lifetime in Redis cache, I set it to 40 seconds.
 
 ```java
-package com.demo.controller;
-import com.demo.aop.PreventDuplicateValidator;
-import com.demo.dto.BaseResponse;
-import com.demo.dto.ProductDto;
-import com.demo.service.ProductService;
+package com.springboot.microservice.controller;
+import com.springboot.microservice.component.PreventDuplicateValidator;
+import com.springboot.microservice.dto.BaseResponse;
+import com.springboot.microservice.dto.ProductDto;
+import com.springboot.microservice.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PostMapping;
