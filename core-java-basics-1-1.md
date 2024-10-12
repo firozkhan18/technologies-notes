@@ -69,7 +69,8 @@ In short, in Java, everything must be thought of in terms of classes. A class is
 
 #### Example of Non Thread-Safe Code in Java
 
-### Here is an example of non thread-safe code, look at the code and find out why this code is not thread safe?
+Here is an example of non thread-safe code, look at the code and find out why this code is not thread safe?
+
 ```java
 /*
  * Non Thread-Safe Class in Java
@@ -88,11 +89,13 @@ Above example is not thread-safe because `++` (increment operator) is not an ato
 
 ### How to Make Code Thread-Safe in Java
 
-### There are multiple ways to make this code thread safe in Java:
+There are multiple ways to make this code thread safe in Java:
+
 1. Use the `synchronized` keyword in Java and lock the `getCount()` method so that only one thread can execute it at a time, which removes the possibility of coinciding or interleaving.
 2. Use `AtomicInteger`, which makes this `++` operation atomic, and since atomic operations are thread-safe, it saves the cost of external synchronization.
 
-### Here is a thread-safe version of the Counter class in Java:
+Here is a thread-safe version of the Counter class in Java:
+
 ```java
 /*
  * Thread-Safe Example in Java
