@@ -306,3 +306,295 @@ Here are some best practices and recommendations on when to use Comparator or Co
 4. The order of comparison is very important while implementing Comparable or Comparator interface. For example, if you are sorting an object based on name, you can compare first name or last name in any order, so decide judiciously.
 
 5. Comparator has the distinct advantage of being self-descriptive. For example, if you are writing a Comparator to compare two Employees based on their salary, name that comparator as `SalaryComparator`. 
+
+## Observer Design Pattern Java Code Example
+
+### What is Observer Design Pattern?
+The Observer design pattern in Java is a crucial pattern used to observe changes in objects. If you want to be notified of changes in a particular object, you can observe that object, and the changes will be communicated to you. The object being observed is referred to as the **Subject**, and the classes that observe the subject are called **Observers**. This is a powerful pattern used heavily in conjunction with the Model-View-Controller (MVC) design pattern, where changes in the model are propagated to the view, allowing it to render updated information. The Observer pattern is a popular topic in Java interviews, especially for mid-senior to senior levels.
+
+### Problem Solved by Observer Pattern:
+If there's a requirement where a specific object changes its state and based on these changes, some or a group of objects need to change their state automatically, the Observer pattern can be implemented to reduce coupling between objects. 
+
+In real-world scenarios, consider when you subscribe to a new phone connection. Whenever a customer registers with a company, all other departments are notified accordingly, and depending on the state, they perform their jobs, like verifying the customer's address and dispatching the welcome kit.
+
+### How Observer Design Pattern is Implemented in Java
+Java simplifies the implementation of this pattern. In the `java.util` package, you can find interfaces, classes, and methods for implementing this pattern.
+
+**Public Interface Observer:**
+- Any class implementing this interface must be notified when the subject or observable object changes its status.
+- `update(Observable ob, Object arg)`: This method is called when the subject changes.
+
+**Class Observable:**
+- It acts as the subject that observers want to monitor.
+
+### Some Important Methods:
+- `addObserver(Observer o)`: Adds observers to the set of observers for this subject or observable object.
+- `deleteObserver(Observer o)`: Deletes observers from the set of observers.
+- `hasChanged()`: Checks if the object has changed.
+- `clearChanged()`: Indicates that the subject has no changes or that all observers have been notified of the changes.
+- `notifyObservers()`: Notifies all observers if the object has changed.
+
+### Code Example of Observer Design Pattern in Java:
+The Observer design pattern is quite generic in how it can be implemented in Java. You can use `java.util.Observable` or `java.util.Observer`, or you can create your own Subject and Observer interfaces. I prefer creating my own interfaces, as illustrated in the following example:
+
+In this example, we have a Loan object that can change its interest rate. When it changes, the Loan notifies the Newspaper or Internet media to display the new loan interest rate. The implementation includes a Subject interface with methods for adding, removing, and notifying Observers, and an Observer interface containing the `update(int interest)` method that gets called when the interest rate changes.
+
+```java
+import java.util.ArrayList;
+
+interface Observer {
+    public void update(float interest);
+}
+
+interface Subject {
+    public void registerObserver(Observer observer);
+    public void removeObserver(Observer observer);
+    public void notifyObservers();
+}
+
+class Loan implements Subject {
+    private ArrayList<Observer> observers = new ArrayList<>();
+    private String type;
+    private float interest;
+    private String bank;
+
+    public Loan(String type, float interest, String bank) {
+        this.type = type;
+        this.interest = interest;
+        this.bank = bank;
+    }
+
+    public float getInterest() {
+        return interest;
+    }
+
+    public void setInterest(float interest) {
+        this.interest = interest;
+        notifyObservers();
+    }
+
+    public String getBank() {
+        return this.bank;
+    }
+
+    public String getType() {
+        return this.type;
+    }
+
+    @Override
+    public void registerObserver(Observer observer) {
+        observers.add(observer);
+    }
+
+    @Override
+    public void removeObserver(Observer observer) {
+        observers.remove(observer);
+    }
+
+    @Override
+    public void notifyObservers() {
+        for (Observer ob : observers) {
+            System.out.println("Notifying Observers of change in Loan interest rate");
+            ob.update(this.interest);
+        }
+    }
+}
+
+class Newspaper implements Observer {
+    @Override
+    public void update(float interest) {
+        System.out.println("Newspaper: Interest Rate updated, new Rate is: " + interest);
+    }
+}
+
+class Internet implements Observer {
+    @Override
+    public void update(float interest) {
+        System.out.println("Internet: Interest Rate updated, new Rate is: " + interest);
+    }
+}
+
+public class ObserverTest {
+    public static void main(String args[]) {
+        Newspaper printMedia = new Newspaper();
+        Internet onlineMedia = new Internet();
+        Loan personalLoan = new Loan("Personal Loan", 12.5f, "Standard Chartered");
+        personalLoan.registerObserver(printMedia);
+        personalLoan.registerObserver(onlineMedia);
+        personalLoan.setInterest(3.5f);
+    }
+}
+```
+
+### Advantage of Observer Design Pattern in Java:
+The main advantage is loose coupling between the observer and observable objects. The subject only knows the list of observers; it does not care about their implementation. All observers are notified by the subject in a single event call, similar to broadcast communication.
+
+### Disadvantages of Observer Design Pattern in Java:
+- Debugging can be challenging if issues arise, as the control flow is implicit between observers and the observable. If there’s a chain of observers, debugging becomes more complex.
+- Memory management can be an issue since the subject holds references to all observers. If we do not unregister observers, it may lead to memory issues.
+
+---
+
+## What Problem Builder Pattern Solves in Java
+The Builder pattern is a creational design pattern that addresses object creation problems. Constructors in Java are used to create objects and can take parameters required for that purpose. However, problems arise when an object can be created with many parameters, some mandatory and others optional. 
+
+For example, consider a class used to create a Cake. You need various ingredients like eggs, milk, and flour, some of which are mandatory, while others, like cherries and fruits, are optional. Overloaded constructors for different types of cakes can lead to too many constructors and potential errors.
+
+### Problems:
+1. Too many constructors to maintain.
+2. Error-prone due to many fields of the same type (e.g., sugar and butter are both in cups).
+
+You can partially solve this by creating a Cake and then adding ingredients, but this approach can leave the object in an inconsistent state during building. Ideally, the cake should not be available until it is fully created. Both problems can be solved using the Builder design pattern, which improves readability and reduces the chance of error by adding ingredients explicitly and ensuring the object is only available once fully constructed.
+
+## Example of Builder Design Pattern in Java
+We will continue with the cake example, using the Builder design pattern. Here, we have a static nested Builder class inside the Cake class, which is used to create the object.
+
+### Guidelines for Builder Design Pattern in Java
+1. Create a static nested class called Builder inside the class whose object will be built (in this example, it's Cake).
+2. The Builder class will have the same set of fields as the original class.
+3. The Builder class will expose methods for adding ingredients (e.g., `sugar()`). Each method will return the same Builder object, allowing for chaining.
+4. The `build()` method will copy all builder field values into the actual class and return an object of the Item class.
+5. The Item class (the class for which we are creating the Builder) should have a private constructor to enforce object creation through the builder.
+
+```java
+public class BuilderPatternExample {
+  
+    public static void main(String args[]) {
+        // Creating object using Builder pattern in Java
+        Cake whiteCake = new Cake.Builder()
+            .sugar(1)
+            .butter(0.5)
+            .eggs(2)
+            .vanilla(2)
+            .flour(1.5)
+            .bakingPowder(0.75)
+            .milk(0.5)
+            .build();
+
+        // Cake is ready to eat :)
+        System.out.println(whiteCake);
+    }
+}
+
+class Cake {
+
+    private final double sugar;   // cup
+    private final double butter;  // cup
+    private final int eggs;
+    private final int vanilla;     // spoon
+    private final double flour;   // cup
+    private final double bakingPowder; // spoon
+    private final double milk;  // cup
+    private final int cherry;
+
+    public static class Builder {
+
+        private double sugar;   // cup
+        private double butter;  // cup
+        private int eggs;
+        private int vanilla;     // spoon
+        private double flour;   // cup
+        private double bakingPowder; // spoon
+        private double milk;  // cup
+        private int cherry;
+
+        // Builder methods for setting properties
+        public Builder sugar(double cup) { this.sugar = cup; return this; }
+        public Builder butter(double cup) { this.butter = cup; return this; }
+        public Builder eggs(int number) { this.eggs = number; return this; }
+        public Builder vanilla(int spoon) { this.vanilla = spoon; return this; }
+        public Builder flour(double cup) { this.flour = cup; return this; }
+        public Builder bakingPowder(double spoon) { this.bakingPowder = spoon; return this; }
+        public Builder milk(double cup) { this.milk = cup; return this; }
+        public Builder cherry(int number) { this.cherry = number; return this; }
+      
+        // Return fully built object
+        public Cake build() {
+            return new Cake(this);
+        }
+    }
+
+    // Private constructor to enforce object creation through builder
+    private
+
+ Cake(Builder builder) {
+        this.sugar = builder.sugar;
+        this.butter = builder.butter;
+        this.eggs = builder.eggs;
+        this.vanilla = builder.vanilla;
+        this.flour = builder.flour;
+        this.bakingPowder = builder.bakingPowder;
+        this.milk = builder.milk;
+        this.cherry = builder.cherry;
+    }
+
+    @Override
+    public String toString() {
+        return "Cake{" +
+                "sugar=" + sugar +
+                ", butter=" + butter +
+                ", eggs=" + eggs +
+                ", vanilla=" + vanilla +
+                ", flour=" + flour +
+                ", bakingPowder=" + bakingPowder +
+                ", milk=" + milk +
+                ", cherry=" + cherry +
+                '}';
+    }
+}
+```
+
+### Conclusion:
+The Builder design pattern not only provides a flexible solution for constructing complex objects but also enhances code readability. The resulting code is easy to maintain, avoids errors, and allows a clean separation between construction and representation.
+
+---
+
+## What is Singleton Design Pattern in Java?
+The Singleton design pattern is a creational pattern that restricts a class to a single instance and provides a global point of access to it. The singleton pattern is widely used in situations where one instance is sufficient to coordinate actions across a system. 
+
+### Use Cases for Singleton Pattern:
+1. **Database Connection Pooling**: Managing connections to a database, ensuring that there is a single instance handling all requests.
+2. **Logging**: A single logger instance that handles all logging throughout the application.
+3. **Configuration**: Ensuring that all parts of an application access the same configuration settings.
+
+### Implementation of Singleton Pattern in Java
+The Singleton pattern can be implemented in several ways, including:
+1. **Eager Initialization**
+2. **Lazy Initialization**
+3. **Thread-Safe Singleton**
+
+Here’s a simple thread-safe implementation of the Singleton design pattern using the lazy initialization approach.
+
+```java
+class Singleton {
+    // Private static instance of the class
+    private static Singleton instance;
+
+    // Private constructor to restrict instantiation from outside the class
+    private Singleton() {
+    }
+
+    // Public static method to provide access to the instance
+    public static Singleton getInstance() {
+        if (instance == null) {
+            synchronized (Singleton.class) {
+                if (instance == null) {
+                    instance = new Singleton();
+                }
+            }
+        }
+        return instance;
+    }
+}
+```
+
+### Advantages of Singleton Pattern:
+1. Controlled access to a single instance, thus ensuring consistent state across the application.
+2. Saves memory and resources as only one instance is created.
+
+### Disadvantages of Singleton Pattern:
+1. It can introduce global state in your application, which may lead to difficulties in testing and debugging.
+2. Can be less flexible, as you cannot easily subclass a Singleton class.
+
+### Conclusion
+Understanding the Observer, Builder, and Singleton design patterns in Java is essential for creating efficient and maintainable code. Each pattern has its use cases, benefits, and drawbacks, making them suitable for different scenarios in software development.
