@@ -331,130 +331,243 @@ Here are some best practices and recommendations for when to use `Comparator` or
 5. **Self-descriptive Comparators**: `Comparator` has the distinct advantage of being self-descriptive. For example, if you are writing a `Comparator` to compare two employees based on their salary, name it `SalaryComparator`, while for `compareTo()`, the name may not be as intuitive.
 
 ## Observer design Pattern Java Code Example
+
 ### What is Observer design Pattern?
-Observer design pattern in Java is very important pattern and as name suggest it’s used to observe things. Suppose you want to notify for change in a particular object than you observer that object and changes are notified to you. Object which is being observed is refereed as Subject and classes which observe subject are called Observer. This is beautiful pattern and used heavily along with Model View Controller Design pattern where change in model is propagated to view so that it can render it with modified information. Observer pattern is also a very popular Java interview questions and mostly asked on Senior or mid senior level.
+
+The Observer design pattern in Java is an important pattern used to observe changes in an object. When a particular object's state changes, the observers are notified of this change. The object being observed is referred to as the **Subject**, while the classes that observe the subject are called **Observers**. This pattern is widely used in conjunction with the Model-View-Controller (MVC) design pattern, where changes in the model are propagated to the view to render modified information. 
+
 ### Problem which is solved by Observer Pattern:
-If we have requirement that if particular object change its state and on depending upon
-This changes some or group of objects automatically change their state we need to implement observer pattern it will reduce coupling between objects.
-In real world if try to find example see when we subscribe for New Phone connection whenever customer is registered with that company all other departments are notified accordingly and then depending upon the state the do their jobs like do the verification of their address then if customer state is verified then dispatch the welcome kit etc.
+
+The Observer pattern addresses the need for automatically updating dependent objects when the state of a particular object changes. This reduces coupling between objects. For instance, when a customer registers for a new phone connection, various departments (like verification and dispatch) are notified to carry out their tasks based on the customer's state.
 
 ### How Observer Design Pattern is implemented in Java;
-For implementation of this pattern java makes our task very easy, developer need not to do so much for implementing this pattern .In java.util package we can find interfaces ,classes and methods for implementing this pattern.
-Public Interface Observer:
-Any class who implements this interface must be notified when subject or observable object change its status.
-Update (Observable Ob, Object arg): This method is called when subject is changed.
-Class Observable:
-It’s a subject to whom observer wants to observe.
 
+Java provides built-in support for the Observer pattern in the `java.util` package, which contains interfaces and classes for this pattern:
+
+- **Observer Interface**: Classes implementing this interface must be notified when the subject or observable object change its status. Update (Observable Ob, Object arg): This method is called when subject is changed.
+- **Observable Class**: This is the subject that observers want to monitor.
+- 
 ### Some Important Method:
-addObserver(Observer o):add Observers in the set of observers for this subject or observalbel object.
-deleteObserver(Observer o): delete Observers in the set of observers .
-hasChanged():check if object has changed.
-clearChanged():this method will indicate that subject has no changes or all the observers has been notified when changes is made.
-notifyObservers(): notify all the observers if object has changed .
 
+- `addObserver(Observer o)`: Adds an observer to the set of observers for this  subject or observalbel object.
+- `deleteObserver(Observer o)`: Removes an observer from the set  of observers.
+- `hasChanged()`: Checks if the object has changed.
+- `clearChanged()`: Indicates that the subject has no changes or that all observers have been notified when changes is made.
+- `notifyObservers()`: Notifies all observers if the object has changed.
+- 
 ### Code Example of Observer design pattern in Java:
 Observer Design pattern is generic than how it is implemented in Java. You are free to choose java.util.Observable or java.util.Observer or writing your own Subject and Observer interface. I prefer having my own Subject and Observer interface and this is how I am going to write my Code Example of Observer design Pattern in java. Mine Example is very Simple you have a Loan on which interest rate is subject to change and when it changes, Loan notifies to Newspaper or Internet media to display new loan interest rate. To implement this we have a Subject interface which contains methods for adding, removing and notifying Observers and an Observer interface which contains update(int interest) method which will be called by Subject implementation when interest rate changes.
+
+Below is a simple example where a `Loan` object notifies its observers (Newspaper and Internet) when its interest rate changes:
+
 ```java
 import java.util.ArrayList;
 
 interface Observer {
-       public void update(float interest);
+    void update(float interest);
 }
+
 interface Subject {
-       public void registerObserver(Observer observer);
-
-       public void removeObserver(Observer observer);
-
-       public void notifyObservers();
+    void registerObserver(Observer observer);
+    void removeObserver(Observer observer);
+    void notifyObservers();
 }
+
 class Loan implements Subject {
-       private ArrayList<Observer> observers = new ArrayList<Observer>();
-       private String type;
-       private float interest;
-       private String bank;
-       public Loan(String type, float interest, String bank) {
-              this.type = type;
-              this.interest = interest;
-              this.bank = bank;
-       }
-       public float getInterest() {
-              return interest;
-       }
-       public void setInterest(float interest) {
-              this.interest = interest;
-              notifyObservers();
-       }
-       public String getBank() {
-              return this.bank;
-       }
+    private ArrayList<Observer> observers = new ArrayList<>();
+    private String type;
+    private float interest;
+    private String bank;
 
-       public String getType() {
-              return this.type;
-       }
-       @Override
-       public void registerObserver(Observer observer) {
-              observers.add(observer);
-       }
-       @Override
-       public void removeObserver(Observer observer) {
-              observers.remove(observer);
-       }
-       @Override
-       public void notifyObservers() {
-              for (Observer ob : observers) {
-                     System.out
-                                  .println("Notifying Observers on change in Loan interest rate");
-                     ob.update(this.interest);
-              }
-       }
+    public Loan(String type, float interest, String bank) {
+        this.type = type;
+        this.interest = interest;
+        this.bank = bank;
+    }
+
+    public float getInterest() {
+        return interest;
+    }
+
+    public void setInterest(float interest) {
+        this.interest = interest;
+        notifyObservers();
+    }
+
+    public String getBank() {
+        return bank;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    @Override
+    public void registerObserver(Observer observer) {
+        observers.add(observer);
+    }
+
+    @Override
+    public void removeObserver(Observer observer) {
+        observers.remove(observer);
+    }
+
+    @Override
+    public void notifyObservers() {
+        for (Observer ob : observers) {
+            System.out.println("Notifying Observers on change in Loan interest rate");
+            ob.update(interest);
+        }
+    }
 }
+
 class Newspaper implements Observer {
-       @Override
-       public void update(float interest) {
-              System.out.println("Newspaper: Interest Rate updated, new Rate is: "
-                           + interest);
-       }
+    @Override
+    public void update(float interest) {
+        System.out.println("Newspaper: Interest Rate updated, new Rate is: " + interest);
+    }
 }
+
 class Internet implements Observer {
-       @Override
-       public void update(float interest) {
-              System.out.println("Internet: Interest Rate updated, new Rate is: "
-                           + interest);
-       }
+    @Override
+    public void update(float interest) {
+        System.out.println("Internet: Interest Rate updated, new Rate is: " + interest);
+    }
 }
+
 public class ObserverTest {
-       public static void main(String args[]) {
-              // this will maintain all loans information
-              Newspaper printMedia = new Newspaper();
-              Internet onlineMedia = new Internet();
-              Loan personalLoan = new Loan("Personal Loan", 12.5f,
-                           "Standard Charterd");
-              personalLoan.registerObserver(printMedia);
-              personalLoan.registerObserver(onlineMedia);
-              personalLoan.setInterest(3.5f);
-       }
+    public static void main(String[] args) {
+        Newspaper printMedia = new Newspaper();
+        Internet onlineMedia = new Internet();
+        Loan personalLoan = new Loan("Personal Loan", 12.5f, "Standard Chartered");
+
+        personalLoan.registerObserver(printMedia);
+        personalLoan.registerObserver(onlineMedia);
+        personalLoan.setInterest(3.5f);
+    }
 }
 ```
 ### Advantage of Observer Design Pattern in Java: 
 Main advantage is loose coupling between objects called observer and observable. The subject only know the list of observers it don’t care about how they have their implementation.All the observers are notified by subject in a single event call as Broadcast communication
 
+- **Loose Coupling**: The subject knows only the list of observers, not their implementations.
+- **Broadcast Communication**: All observers are notified with a single event call.
+
 ### Disadvantage of Observer Design Pattern in Java: 
-- The disadvantage is that the sometime if any problem comes, debugging becomes very difficult because flow of control is implicitly between observers and observable we can predict that now observer is going to fire and if there is chain between observers then debugging become more complex.
-- Another issue is Memory management because subject will hold all the reference of all the observers if we not unregister the object it can create the memory issue.
+
+- **Debugging Complexity**: The flow of control between observers and observable can complicate debugging, especially with chains of observers.
+- **Memory Management**: The subject holds references to all the reference of all the observers, which can lead to memory issues if observers are not unregistered.
 
 ### What problem Builder pattern solves in Java
 As I said earlier Builder pattern is a creational design pattern it means its solves problem related to object creation. Constructors in Java are used to create object and can take parameters required to create object. Problem starts when an Object can be created with lot of parameters, some of them may be mandatory and others may be optional. Consider a class which is used to create Cake, now you need number of item like egg, milk, flour to create cake. many of them are mandatory and some  of them are optional like cherry, fruits etc. If we are going to have overloaded constructor for different kind of cake then there will be many constructor and even worst they will accept many parameter.
-### Problems:
-- 1) too many constructors to maintain.
-- 2) error prone because many fields has same type e.g. sugar and and butter are in cups so instead of 2 cup sugar if you pass 2 cup butter, your compiler will not complain but will get a buttery cake with almost no sugar with high cost of wasting butter.
-You can partially solve this problem by creating Cake and then adding ingredients but that will impose another problem of leaving Object on inconsistent state during building, ideally cake should not be available until its created. Both of these problem can be solved by using Builder design pattern in Java. Builder design pattern not only improves readability but also reduces chance of error by adding ingredients explicitly and making object available once fully constructed. 
 
-By the way there are many design pattern tutorial already there in Javarevisited like Decorator pattern tutorial and  Observer pattern in Java. If you haven’t read them already then its worth looking.
+The Builder pattern is a creational design pattern that addresses challenges related to object creation. When an object requires numerous parameters—some mandatory and others optional—overloaded constructors can become unwieldy and error-prone. For example, a `Cake` class might require mandatory ingredients like eggs and flour, and optional ingredients like cherries. Managing multiple constructors can lead to complexity and confusion.
+
+### Problems with Traditional Constructors:
+1. **Too Many Constructors**: Overloaded constructors can be hard to maintain.
+2. **Error-Prone**: Similar parameter types (e.g., cups of sugar and butter) can lead to mistakes that are not caught at compile-time.
+
+Error-Prone because many fields has same type e.g. sugar and and butter are in cups so instead of 2 cup sugar if you pass 2 cup butter, your compiler will not complain but will get a buttery cake with almost no sugar with high cost of wasting butter.
+ 
+The Builder pattern simplifies this by allowing more readable and manageable object creation.
+
+You can partially solve this problem by creating Cake and then adding ingredients but that will impose another problem of leaving Object on inconsistent state during building, ideally cake should not be available until its created. Both of these problem can be solved by using Builder design pattern in Java. Builder design pattern not only improves readability but also reduces chance of error by adding ingredients explicitly and making object available once fully constructed. 
 
 ## Example of Builder Design pattern in Java
 We will use same example of creating Cake using Builder design pattern in Java. here we have static nested builder class inside Cake which is used to create object.
 
+Here's an example of how to create a `Cake` using the Builder pattern:
+
+```java
+public class BuilderPatternExample {
+
+    public static void main(String[] args) {
+        // Creating a Cake object using the Builder pattern
+        Cake whiteCake = new Cake.Builder()
+                .sugar(1)
+                .butter(0.5)
+                .eggs(2)
+                .vanilla(2)
+                .flour(1.5)
+                .bakingPowder(0.75)
+                .milk(0.5)
+                .build();
+
+        // Cake is ready to eat :)
+        System.out.println(whiteCake);
+    }
+}
+
+class Cake {
+
+    private final double sugar;   // cup
+    private final double butter;  // cup
+    private final int eggs;
+    private final int vanilla;    // spoon
+    private final double flour;    // cup
+    private final double bakingPowder; // spoon
+    private final double milk;      // cup
+    private final int cherry;
+
+    public static class Builder {
+
+        private double sugar;   
+        private double butter;  
+        private int eggs;
+        private int vanilla;     
+        private double flour;   
+        private double bakingPowder; 
+        private double milk;  
+        private int cherry;
+
+        // Builder methods for setting properties
+        public Builder sugar(double cup) { this.sugar = cup; return this; }
+        public Builder butter(double cup) { this.butter = cup; return this; }
+        public Builder eggs(int number) { this.eggs = number; return this; }
+        public Builder vanilla(int spoon) { this.vanilla = spoon; return this; }
+        public Builder flour(double cup) { this.flour = cup; return this; }
+        public Builder bakingPowder(double spoon) { this.bakingPowder = spoon; return this; }
+        public Builder milk(double cup) { this.milk = cup; return this; }
+        public Builder cherry(int number) { this.cherry = number; return this; }
+
+        // Return fully built object
+        public Cake build() {
+            return new Cake(this);
+        }
+    }
+
+    // Private constructor to enforce object creation through builder
+    private Cake(Builder builder) {
+        this.sugar = builder.sugar;
+        this.butter = builder.butter;
+        this.eggs = builder.eggs;
+        this.vanilla = builder.vanilla;
+        this.flour = builder.flour;
+        this.bakingPowder = builder.bakingPowder;
+        this.milk = builder.milk;
+        this.cherry = builder.cherry;       
+    }
+
+    @Override
+    public String toString() {
+        return "Cake{" + 
+                "sugar=" + sugar + 
+                ", butter=" + butter + 
+                ", eggs=" + eggs + 
+                ", vanilla=" + vanilla + 
+                ", flour=" + flour + 
+                ", bakingPowder=" + bakingPowder + 
+                ", milk=" + milk + 
+                ", cherry=" + cherry + 
+                '}';
+    } 
+}
+```
+
+### Output:
+```
+Cake{sugar=1.0, butter=0.5, eggs=2, vanilla=2, flour=1.5, bakingPowder=0.0, milk=0.5, cherry=0}
+```
 ### Guidelines for Builder design pattern in Java
 - 1) Make a static nested class called Builder inside the class whose object will be build by Builder. In this example its Cake.
 - 2) Builder class will have exactly same set of fields as original class.
@@ -539,18 +652,32 @@ Cake{sugar=0.75, butter=0.5, eggs=2, vanila=2, flour=1.5, bakingpowder=0.0, milk
 ```
 ### Builder design pattern in Java – Pros and Cons
 Live everything Builder pattern also has some disadvantages, but if you look at below, advantages clearly outnumber disadvantages of Builder design pattern. Any way here are few advantages and disadvantage of Builder design pattern for creating objects in Java.
-- Advantages:
-	- 1) more maintainable if number of fields required to create object is more than 4 or 5.
-	- 2) less error-prone as user will know what they are passing because of explicit method call.
-	- 3) more robust as only fully constructed object will be available to client.
-- Disadvantages:
-	- 1) verbose and code duplication as Builder needs to copy all fields from Original or Item class.
 
+#### Advantages:
+1. **Maintainability**: More manageable when there are many fields to create an object.
+2. **Less Error-Prone**: Explicit method calls reduce the likelihood of passing incorrect parameters.
+3. **Robustness**: Only fully constructed objects are available to clients.
+
+#### Disadvantages:
+1. **Verbosity and code duplication**: The pattern can lead to more code, as the builder must copy all fields from the original class.
+   
 ### When to use Builder Design pattern in Java
-Builder Design pattern is a creational pattern and should be used when number of parameter required in constructor is more than manageable usually 4 or at most 5. Don't confuse with Builder and Factory pattern there is an obvious difference between Builder and Factory pattern, as Factory can be used to create different implementation of same interface but Builder is tied up with its Container class and only returns object of Outer class.
 
-### What is static factory method or factory design pattern
-Factory design pattern is used to create objects or Class in Java and it provides loose coupling and high cohesion. Factory pattern encapsulate object creation logic which makes it easy to change it later when you change how object gets created or you can even introduce new object with just change in one class. In GOF pattern list Factory pattern is listed as Creation design pattern. Factory should be an interface and clients first either creates factory or get factory which later used to create objects.
+Use the Builder pattern when the number of parameters required in a constructor exceeds four or five. Unlike the Factory pattern, which creates different implementations of the same interface, the Builder pattern is tied to its container class and only returns objects of that outer class.
+
+### What is the Static Factory Method or Factory Design Pattern?
+
+The Factory Design Pattern is a creational pattern used to create objects in Java, promoting loose coupling and high cohesion. It encapsulates the object creation logic, making it easier to change the way objects are created or introduce new objects without modifying existing code. In the "Gang of Four" (GoF) design patterns, the Factory Pattern is classified as a creation pattern. Factory should be an interface and clients first either creates factory or get factory which later used to create objects.
+
+### Key Concepts:
+- **Factory Interface:** This interface is implemented by concrete factory classes.
+- **Client:** The class that uses the factory to create objects.
+
+### Example of Static Factory Method in JDK:
+Common examples include:
+- `valueOf()` methods in wrapper classes (e.g., `Integer.valueOf(String)`).
+- `getInstance()` methods for Singleton classes.
+- `newInstance()` methods to create new instances.
 
 ### Example of static factory method in JDK
  Best Example of Factory method design pattern is valueOf() method which is there in String and wrapper classes like Integer and Boolean and used for type conversion i.e. from converting String to Integer or String to double in java..
@@ -569,12 +696,19 @@ Another problem we can face is class needs to contain objects of other classes o
 
 So factory pattern solve this problem very easily by model an interface for creating an object which at creation time can let its subclasses decide which class to instantiate, Factory Pattern promotes loose coupling by eliminating the need to bind application-specific classes into the code. The factory methods are typically implemented as virtual methods, so this pattern is also referred to as the “Virtual Constructor”. These methods create the objects of the products or target classes.
 
+1. **Decoupling:** It allows the framework or application to be decoupled from the concrete classes it uses. Instead of creating objects with `new`, it relies on factory methods, adhering to the principle of programming to an interface rather than an implementation.
+2. **Dynamic Object Creation:** The application can instantiate subclasses at runtime, depending on provided data, without needing to know specific implementations.
+   
 ### When to use Factory design pattern in Java
 - Static Factory methods are common in frameworks where library code needs to create objects of types which may be sub classed by applications using the framework.        
 - Some or all concrete products can be created in multiple ways, or we want to leave open the option that in the future there may be new ways to create the concrete product.
 - Factory method is used when Products don't need to know how they are created.
 - We  can use factory pattern where we have to create an object of any one of sub-classes depending on the data provided
 
+- When the exact types of objects to create are not known until runtime.
+- When creating objects of a class that might be subclassed.
+- When the creation logic is complex and should be encapsulated.
+  
 ### Code Example of Factory Design Pattern in Java:
 Let’s see an example of how factory pattern is implemented in Code. We have requirement to create multiple currency e.g. INR, SGD, USD and code should be extensible to accommodate new Currency as well. Here we have made Currency as interface and all currency would be concrete implementation of Currency interface. Factory Class will create Currency based upon country and return concrete implementation which will be stored in interface type. This makes code dynamic and extensible.
 
@@ -635,14 +769,27 @@ E.g.: JDBC is a good example for this pattern; application code doesn't need to 
 - 3) Another benefit of using Factory design pattern in Java is that it encourages consistency in Code since every time object is created using Factory rather than using different constructor at different client side.
 - 4) Code written using Factory design pattern in Java is also easy to debug and troubleshoot because you have a centralized method for object creation and every client is getting object from same place.
 
+1. **Decoupling:** It reduces dependencies between the client and concrete classes, leading to more maintainable code.
+2. **Extensibility:** New types of objects can be added easily without modifying existing code.
+3. **Centralized Object Creation:** It simplifies debugging and maintenance since all object creation logic is centralized.
+   
 ### Some more advantages of factory method design pattern is:
 - 1. Static factory method used in factory design pattern enforces use of Interface than implementation which itself a good practice. for example:
+```java
 Map synchronizedMap = Collections.synchronizedMap(new HashMap());
+```
 - 2. Since static factory method have return type as Interface, it allows you to replace implementation with better performance version in newer release.
 - 3. Another advantage of static factory method pattern is that they can cache frequently used object and eliminate duplicate object creation. Boolean.valueOf() method is good example which caches true and false boolean value.
 - 4. Factory method pattern is also recommended by Joshua Bloch in Effective Java.
 - 5 Factory method pattern offers alternative way of creating object.
 - 6. Factory pattern can also be used to hide information related to creation of object.
+
+- **Encourages Interface Usage:** Promotes the use of interfaces over implementations.
+- **Caching:** Static factory methods can cache frequently used objects, improving performance.
+- **Flexibility:** Allows returning different implementations from the same factory method.
+
+### Conclusion:
+The Factory Design Pattern is essential for creating flexible and maintainable Java applications. It abstracts object creation, enabling better adherence to the principles of OOP, such as encapsulation and polymorphism. This pattern is widely used in various frameworks and libraries in Java, making it a fundamental concept for developers to master.
 
 ### Java Decorator Design Pattern
 - What is decorator pattern in Java?
@@ -659,87 +806,116 @@ Map synchronizedMap = Collections.synchronizedMap(new HashMap());
 - Decorator design pattern is based on abstract classes and we derive concrete implementation from that classes,
 - It’s a structural design pattern and most widely used.
 
-I prefer to answer What is decorator design pattern in point format just to stress on important point like this pattern operator at individual object level. This question also asked in many Core Java interviews in Investment banks
-
+- The Decorator Pattern is a structural design pattern used to enhance the functionality of an object dynamically at runtime.
+- It allows individual objects to have different behaviors without affecting other instances of the same class.
+- The original object is wrapped in a decorator object, which adds new behaviors.
+- The pattern relies on abstract classes and concrete implementations, providing flexibility and reusability.
+  
 ### Problem which is solved by Decorator Pattern:
 Now the question is why this pattern has came into existence what is the problem with existing system, so the answer is if anyone wants to add some functionality to individual object or change the state of particular object at run time it is not possible what the possible is we can provide the specific behavior to all the object of that class at design time by the help of inheritance or using subclass, but Decorator pattern makes possible that we provide individual object of same class a specific behavior or state at run time. This doesn’t affect other object of same Class in Java.
+
+- It addresses the limitation of adding functionality to individual objects at runtime, as traditional inheritance would apply changes to all instances.
+- It provides a way to mix and match different functionalities to objects without creating an explosion of subclasses.
 
 ### When to use Decorator pattern in Java
 - When sub classing is become impractical and we need large number of different possibilities to make independent object or we can say we have number of combination for an object.
 - Secondly when we want to add functionality to individual object not to all object at run-time we use decorator design pattern.
 
+- When subclassing becomes impractical due to a large number of combinations needed for different behaviors.
+- When there's a need to add functionality to individual objects at runtime, rather than to all instances of a class.
+
 ### Code Example of decorator design pattern:
 To better understand concept of decorator design pattern let see a code example using Decorator Pattern in Java. You can also look inside JDK and find what are classes and packages which are using decorator pattern.
-```java
-// Component on Decorator design pattern
-public abstract class Currency {
- String description = "Unknown currency";
- public String getCurrencyDescription() {
-  return description;
- }
 
- public abstract double cost(double value);
+Here's a practical example of the Decorator Pattern in Java, using currency representation:
+
+```java
+// Component in Decorator design pattern
+public abstract class Currency {
+    String description = "Unknown currency";
+
+    public String getCurrencyDescription() {
+        return description;
+    }
+
+    public abstract double cost(double value);
 }
+
 // Concrete Component
 public class Rupee extends Currency {
-double value;
- public Rupee() {
-  description = "indian rupees";
- }
- public double cost(double v){
-  value=v;
-  return value;
- }
+    public Rupee() {
+        description = "Indian Rupees";
+    }
+
+    public double cost(double value) {
+        return value;
+    }
 }
-//Another Concrete Component
-public class Dollar extends Currency{
-double value;
- public Dollar () {
-  description = "Dollar”;
- }
-public double cost(double v){
- value=v;
-  return value;
- }
+
+// Another Concrete Component
+public class Dollar extends Currency {
+    public Dollar() {
+        description = "Dollar";
+    }
+
+    public double cost(double value) {
+        return value;
+    }
 }
+
 // Decorator
-public abstract class Decorator extends Currency{
- public abstract String getDescription();
-}
-// Concrete Decorator
-public class USDDecorator extends Decorator{
- Currency currency; 
- public USDDecorator(Currency currency){
-  this.currency = currency;
- }
- public String getDescription(){
-  return currency.getDescription()+" ,its US Dollar";
- }
-}
-//Another Concrete Decorator
-public class SGDDecorator extends Decorator{
- Currency currency;
- public SGDDecorator(Currency currency){
-  this.currency = currency;
- }
- public String getDescription(){
-  return currency.getDescription()+" ,its singapore Dollar";
- }
+public abstract class Decorator extends Currency {
+    public abstract String getDescription();
 }
 
-Now its time to check currency.
+// Concrete Decorator for USD
+public class USDDecorator extends Decorator {
+    Currency currency;
 
+    public USDDecorator(Currency currency) {
+        this.currency = currency;
+    }
+
+    public String getDescription() {
+        return currency.getCurrencyDescription() + " (USD)";
+    }
+
+    public double cost(double value) {
+        return currency.cost(value); // Delegating the cost calculation
+    }
+}
+
+// Another Concrete Decorator for SGD
+public class SGDDecorator extends Decorator {
+    Currency currency;
+
+    public SGDDecorator(Currency currency) {
+        this.currency = currency;
+    }
+
+    public String getDescription() {
+        return currency.getCurrencyDescription() + " (SGD)";
+    }
+
+    public double cost(double value) {
+        return currency.cost(value); // Delegating the cost calculation
+    }
+}
+
+// Test the Decorator Pattern
 public class CurrencyCheck {
- public static void main(String[] args) {
-  // without adding decorators
-  Currency curr = new Dollar();
-  System.out.println(curr.getDescription() +" dollar. "+curr.cost(2.0));  
-  //adding decorators
-  Currency curr2 = new USDDecorator(new Dollar());
-  System.out.println(curr2.getDescription() +" dollar. "+curr2.cost(4.0));
+    public static void main(String[] args) {
+        // Without decorators
+        Currency curr1 = new Dollar();
+        System.out.println(curr1.getCurrencyDescription() + ": " + curr1.cost(2.0));
 
-Currency curr3 = new SGDDecorator(new Dollar());
-  System.out.println(curr3.getDescription() +" dollar. "+curr3.cost(4.0));
+        // Adding decorators
+        Currency curr2 = new USDDecorator(new Dollar());
+        System.out.println(curr2.getDescription() + ": " + curr2.cost(4.0));
+
+        Currency curr3 = new SGDDecorator(new Dollar());
+        System.out.println(curr3.getDescription() + ": " + curr3.cost(4.0));
+    }
 }
 ```
 ### Explanation of the code:
@@ -749,13 +925,28 @@ We can understand this in following term;
 3. Decorator: Decorator contains a HAS a Relationship in simple word we can say it has a instance variable that holds reference for component they implement same component which they are going to decorate. Here a Decorator is an abstract class which extends the currency.
 4. Concrete Decorator: it’s an implementation of Decorator So USD Dollar and SGD Dollar are the implementation of Decorator contains instance variable for component interface or the thing which they are going to decorate.
 
+1. **Component Interface:** The `Currency` class serves as the component interface that can be decorated.
+2. **Concrete Components:** The `Rupee` and `Dollar` classes are implementations of the `Currency` interface.
+3. **Decorator Class:** The `Decorator` abstract class extends `Currency` and includes a method for getting the description.
+4. **Concrete Decorators:** The `USDDecorator` and `SGDDecorator` classes extend the `Decorator` class and add specific behavior while holding a reference to a `Currency` object.
+
+#### Advantages of the Decorator Pattern:
+1. **Flexibility:** The Decorator Pattern is more flexible than inheritance, allowing dynamic behavior changes at runtime.
+2. **Enhanced Functionality:** It provides a way to add or modify functionality to objects without modifying the original object or class.
+
 - Advantage of Decorator design Pattern in Java
 In brief we see what the main advantages of using decorator design patterns are.
 1. Decorator Pattern is flexible than inheritance because inheritance add responsibilities at compile time and it will add at run-time.
 2. Decorator pattern enhance or modify the object functionality
 
+#### Disadvantages of the Decorator Pattern:
+1. **Complexity:** The pattern can introduce a lot of small objects, making the codebase harder to maintain and understand.
+2. **Overhead:** Each decorator adds a level of indirection, which can introduce additional complexity and runtime overhead.
+   
 - Disadvantage
 Main disadvantage of using Decorator Pattern in Java is that the code maintenance can be a problem as it provides a lot of similar kind of small objects (each decorator).
+
+In summary, the Decorator Pattern is a powerful way to extend the behavior of objects dynamically and should be used when you need flexibility in enhancing functionality without affecting other instances.
 
 ### Differences between String, StringBuffer and StringBuilder in Java
 String in Java
@@ -770,22 +961,77 @@ Before looking difference between String and StringBuffer or StringBuilder let�
 - 8) String is represented using UTF-16 format in Java.
 - 9) In Java you can create String from char array, byte array, another string, from StringBuffer or from StringBuilder. Java String class provides constructor for all of these.
 
+
+
+#### String in Java
+- **Immutability**: Strings are immutable, meaning once created, their values cannot be changed. Any operation that modifies a string results in the creation of a new string object.
+- **String Pool**: Strings created using double quotes (e.g., `"abcd"`) are stored in a special area of memory called the String Pool. If two string literals are the same, they reference the same object.
+- **Concatenation**: The `+` operator is overloaded for string concatenation, which is internally implemented using `StringBuffer` or `StringBuilder`.
+- **Character Representation**: Strings are backed by a character array and are represented in UTF-16 format.
+- **Memory Management**: The immutability can lead to memory inefficiencies due to the creation of many temporary string objects during operations like concatenation or substring extraction.
+
 ### Problem with String in Java
 One of its biggest strength Immutability is also biggest problem of Java String if not used correctly. many a times we create a String and then perform a lot of operation on them e.g. converting string into uppercase, lowercase , getting substring out of it, concatenating with other string etc. Since String is an immutable class every time a new String is created and older one is discarded which creates lots of temporary garbage in heap. If String are created using String literal they remain in String pool. To resolve this problem Java provides us two Classes StringBuffer and StringBuilder. String Buffer is an older class but StringBuilder is relatively new and added in JDK 5.
+
+#### String
+- **Immutability**: Strings are immutable, meaning once a `String` object is created, its value cannot be changed. Any operation that seems to modify the string (like concatenation) actually creates a new `String` object.
+- **Performance**: Due to immutability, using `String` for multiple modifications (like concatenation in loops) can lead to performance issues and increased memory usage, as many temporary objects are created.
+- **Use Case**: Best suited for cases where the string value does not need to change.
+
+#### StringBuffer
+- **Mutability**: `StringBuffer` is mutable, allowing you to modify the contents without creating new objects. This makes it more efficient for scenarios where strings need to be altered frequently.
+- **Thread Safety**: All public methods in `StringBuffer` are synchronized, making it thread-safe. However, this synchronization can introduce performance overhead.
+- **Use Case**: Ideal for use in a multi-threaded environment where multiple threads might be modifying the same string.
+
+#### StringBuilder
+- **Mutability**: Like `StringBuffer`, `StringBuilder` is also mutable, allowing in-place modifications without creating new objects.
+- **Thread Safety**: `StringBuilder` is not synchronized, which makes it faster than `StringBuffer` for single-threaded scenarios.
+- **Use Case**: Preferred in single-threaded contexts or situations where thread safety is not a concern, due to better performance.
+
+### Summary of Differences
+| Feature                  | String                  | StringBuffer            | StringBuilder            |
+|--------------------------|-------------------------|-------------------------|--------------------------|
+| **Mutability**           | Immutable               | Mutable                 | Mutable                  |
+| **Thread Safety**        | N/A                     | Synchronized (thread-safe) | Not synchronized (faster) |
+| **Performance**          | Slower for modifications | Slower due to synchronization | Faster due to no synchronization |
+| **Conversion to String** | Use `toString()` method | Use `toString()` method | Use `toString()` method  |
+| **Use Cases**            | For constant string values | For multi-threaded scenarios | For performance in single-threaded contexts |
+
+Understanding these differences is crucial for optimizing performance and ensuring thread safety in your Java applications.
 
 ### Differences between String and StringBuffer in Java
 Main difference between String and StringBuffer is String is immutable while StringBuffer is mutable means you can modify a StringBuffer object once you created it without creating any new object. This mutable property makes StringBuffer an ideal choice for dealing with Strings in Java. You can convert a StringBuffer into String by its toString() method. String vs StringBuffer or what is difference between StringBuffer and String is one of the popular Java interview questions for either phone interview or first round. Now days they also include StringBuilder and ask String vs StringBuffer vs StringBuilder. So be preparing for that. In the next section we will see difference between StringBuffer and StringBuilder in Java.
 
-### Difference between StringBuilder and StringBuffer in Java
+#### StringBuffer vs. StringBuilder
+
 StringBuffer is very good with mutable String but it has one disadvantage all its public methods are synchronized which makes it thread-safe but same time slow. In JDK 5 they provided similar class called StringBuilder in Java which is a copy of StringBuffer but without synchronization. Try to use StringBuilder whenever possible it performs better in most of cases than StringBuffer class. You can also use "+" for concatenating two string because "+" operation is internal implemented using either StringBuffer or StringBuilder in Java. If you see StringBuilder vs StringBuffer you will find that they are exactly similar and all API methods applicable to StringBuffer are also applicable to StringBuilder in Java. On the other hand String vs StringBuffer is completely different and there API is also completely different, same is true for StringBuilder vs String.
 
+- **Mutability**: Both `StringBuffer` and `StringBuilder` are mutable, meaning their content can be modified without creating new objects.
+- **Thread Safety**:
+  - **StringBuffer**: Methods are synchronized, making it thread-safe but slower due to the overhead of synchronization.
+  - **StringBuilder**: Not synchronized, thus faster but not thread-safe.
+- **Performance**: `StringBuilder` is generally preferred for single-threaded scenarios because it offers better performance due to the lack of synchronization overhead.
+
+#### Key Differences
+| Feature                  | String                  | StringBuffer            | StringBuilder            |
+|--------------------------|-------------------------|-------------------------|--------------------------|
+| **Mutability**           | Immutable               | Mutable                 | Mutable                  |
+| **Thread Safety**        | N/A                     | Synchronized (thread-safe) | Not synchronized (faster) |
+| **Performance**          | Slower for multiple operations due to immutability | Slower due to synchronization | Faster due to no synchronization |
+| **Use Cases**            | When immutability is required | When thread safety is required | For high-performance scenarios without thread safety |
+| **API Methods**          | Different from `StringBuffer` and `StringBuilder` | Similar to `StringBuilder` | Similar to `StringBuffer` |
+
 ### Summary
+- Use **String** when you need an immutable sequence of characters.
+- Use **StringBuffer** when you need a mutable string and thread-safety is required.
+- Use **StringBuilder** when you need a mutable string in a single-threaded context for better performance. 
+
 In summary here are list of difference between StringBuffer, String and StringBuilder in Java :
 1) String is immutable while StringBuffer and StringBuilder is mutable object.
 2) StringBuffer is synchronized while StringBuilder is not which makes StringBuilder faster than StringBuffer.
 3) Concatenation operator "+" is internal implemented using either StringBuffer or StringBuilder.
 4) Use String if you require immutability, use Stringbuffer in java if you need mutable + thread-safety and use StringBuilder in Java if you require mutable + without thread-safety.
-
+   
 ### Reason Why Wait , Notify and NotifyAll are in Object Class.
 Here are some thoughts on why they should not be in Thread class which make sense to me :
 - 1) Wait and notify is not just normal methods or synchronization utility, more than that they are communication mechanism between two threads in Java. And Object class is correct place to make them available for every object if this mechanism is not available via any java keyword like synchronized. Remember synchronized and wait notify are two different area and don’t confuse that they are same or related. Synchronized is to provide mutual exclusion and ensuring thread safety of Java class like race condition while wait and notify are communication mechanism between two thread.
