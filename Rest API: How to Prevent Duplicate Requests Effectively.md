@@ -30,7 +30,24 @@ We declare this as an annotation with three data fields:
 - **expireTime**: Key expiration time value, default is 10 seconds.
 
 ```java
-// Java code for PreventDuplicateValidator
+package com.demo.aop;
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
+@Target({ElementType.METHOD})
+@Retention(RetentionPolicy.RUNTIME)
+@Documented
+public @interface PreventDuplicateValidator {
+
+    String[] includeFieldKeys() default {};
+
+    String[] optionalValues() default {};
+
+    long expireTime() default 10_000L;
+}
 ```
 
 #### 2. PreventDuplicateValidatorAspect
@@ -48,7 +65,120 @@ The logic implementation is as follows:
 7. If not, insert the key into Redis with the expiration time and continue the main logic using `pjp.proceed()`.
 
 ```java
-// Java code for PreventDuplicateValidatorAspect
+expireTime: is the key expiration time value, the default is 10 seconds.
+
+package com.demo.aop;
+import com.cafeincode.demo.enums.ErrorCode;
+import com.cafeincode.demo.exception.DuplicationException;
+import com.cafeincode.demo.exception.HandleGlobalException;
+import com.cafeincode.demo.utils.Utils;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.Around;
+import org.aspectj.lang.annotation.Aspect;
+import org.springframework.data.redis.connection.RedisStringCommands;
+import org.springframework.data.redis.core.RedisCallback;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.types.Expiration;
+import org.springframework.stereotype.Component;
+
+@Aspect
+@Component
+@RequiredArgsConstructor
+@Slf4j
+public class PreventDuplicateValidatorAspect {
+
+    private final RedisTemplate redisTemplate;
+    private final ObjectMapper objectMapper;
+
+    @Around(value = "@annotation(preventDuplicateValidator)", argNames = "pjp, preventDuplicateValidator")
+    public Object aroundAdvice(ProceedingJoinPoint pjp, PreventDuplicateValidator preventDuplicateValidator)
+        throws Throwable {
+
+        var includeKeys = preventDuplicateValidator.includeFieldKeys();
+        var optionalValues = preventDuplicateValidator.optionalValues();
+        var expiredTime = preventDuplicateValidator.expireTime();
+
+        if (includeKeys == null || includeKeys.length == 0) {
+            log.warn("[PreventDuplicateRequestAspect] ignore because includeKeys not found in annotation");
+            return pjp.proceed();
+        }
+
+        //extract request body in request body
+        var requestBody = Utils.extractRequestBody(pjp);
+        if (requestBody == null) {
+            log.warn(
+                "[PreventDuplicateRequestAspect] ignore because request body object find not found in method arguments");
+            return pjp.proceed();
+        }
+
+        //parse request body to map<String, Object>
+        var requestBodyMap = convertJsonToMap(requestBody);
+
+        //build key redis from: includeKeys, optionalValues, requestBodyMap
+        var keyRedis = buildKeyRedisByIncludeKeys(includeKeys, optionalValues, requestBodyMap);
+
+        //hash keyRedis to keyRedisMD5: this is Optional, should be using Fast MD5 hash to replace
+        var keyRedisMD5 = Utils.hashMD5(keyRedis);
+
+        log.info(String.format("[PreventDuplicateRequestAspect] rawKey: [%s] and generated keyRedisMD5: [%s]", keyRedis,
+            keyRedisMD5));
+
+        //handle logic check duplicate request by key in Redis
+        deduplicateRequestByRedisKey(keyRedisMD5, expiredTime);
+
+        return pjp.proceed();
+    }
+
+    private String buildKeyRedisByIncludeKeys(String[] includeKeys, String[] optionalValues, Map<String, Object> requestBodyMap) {
+
+        var keyWithIncludeKey = Arrays.stream(includeKeys)
+            .map(requestBodyMap::get)
+            .filter(Objects::nonNull)
+            .map(Object::toString)
+            .collect(Collectors.joining(":"));
+
+        if (optionalValues.length > 0) {
+            return keyWithIncludeKey + ":" + String.join(":", optionalValues);
+        }
+        return keyWithIncludeKey;
+    }
+
+
+    public void deduplicateRequestByRedisKey(String key, long expiredTime) {
+        var firstSet = (Boolean) redisTemplate.execute((RedisCallback<Boolean>) connection ->
+            connection.set(key.getBytes(), key.getBytes(), Expiration.milliseconds(expiredTime),
+                RedisStringCommands.SetOption.SET_IF_ABSENT));
+
+        if (firstSet != null && firstSet) {
+            log.info(String.format("[PreventDuplicateRequestAspect] key: %s has set successfully !!!", key));
+            return;
+        }
+        log.warn(String.format("[PreventDuplicateRequestAspect] key: %s has already existed !!!", key));
+        throw new DuplicationException(ErrorCode.ERROR_DUPLICATE.getCode(), ErrorCode.ERROR_DUPLICATE.getMessage());
+    }
+
+    public Map<String, Object> convertJsonToMap(Object jsonObject) {
+        if (jsonObject == null) {
+            return Collections.emptyMap();
+        }
+        try {
+            return objectMapper.convertValue(jsonObject, new TypeReference<>() {
+            });
+        } catch (Exception ignored) {
+            return Collections.emptyMap();
+        }
+    }
+}
+
 ```
 
 #### 3. Bean Configuration
@@ -56,7 +186,49 @@ The logic implementation is as follows:
 Add bean configuration for `ObjectMapper` and Redis connection.
 
 ```java
-// Java code for BeanConfig
+package com.demo.config;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
+import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
+import org.springframework.data.redis.core.RedisTemplate;
+
+@Configuration
+public class BeanConfig {
+
+    @Value("${redis.host}")
+    private String redisHost;
+
+    @Value("${redis.port}")
+    private int redisPort;
+
+    @Bean(name = "objectMapper")
+    @Primary
+    public ObjectMapper objectMapper() {
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
+        return mapper;
+    }
+
+    @Bean
+    public RedisConnectionFactory redisConnectionFactory() {
+        var config = new RedisStandaloneConfiguration(redisHost, redisPort);
+        return new LettuceConnectionFactory(config);
+    }
+
+    @Bean
+    @Primary
+    public RedisTemplate<Object, Object> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
+        var template = new RedisTemplate<>();
+        template.setConnectionFactory(redisConnectionFactory);
+        return template;
+    }
+}
 ```
 
 #### 4. BaseResponse
@@ -64,7 +236,33 @@ Add bean configuration for `ObjectMapper` and Redis connection.
 This is the response class that returns results via API, containing fields such as code, message, and data.
 
 ```java
-// Java code for BaseResponse
+package com.demo.dto;
+import java.io.Serializable;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@SuperBuilder
+public class BaseResponse<T> implements Serializable {
+
+    public static final String OK_CODE = "200";
+    public static final String OK_MESSAGE = "Successfully";
+    private String code;
+    private String message;
+    private T data;
+
+    public static <T> BaseResponse<T> ofSucceeded(T data) {
+        BaseResponse<T> response = new BaseResponse<>();
+        response.code = OK_CODE;
+        response.message = OK_MESSAGE;
+        response.data = data;
+        return response;
+    }
+}
 ```
 
 #### 5. HandleGlobalException
@@ -72,7 +270,82 @@ This is the response class that returns results via API, containing fields such 
 This class handles `DuplicationException`, which is triggered by `PreventDuplicateValidatorAspect`.
 
 ```java
-// Java code for HandleGlobalException
+package com.demo.dto;
+import java.time.Instant;
+import lombok.Data;
+
+@Data
+public class ProductDto {
+
+    private String productId;
+    private String productName;
+    private String productDescription;
+    private String transactionId;
+    private Instant requestTime;
+    private String requestId;
+
+}
+package com.cafeincode.demo.enums;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
+@AllArgsConstructor
+@Getter
+public enum ErrorCode {
+
+    ERROR_DUPLICATE("CF_275", "Duplicated data, please try again later");
+
+    private final String code;
+    private final String message;
+}
+package com.cafeincode.demo.exception;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.http.HttpStatus;
+
+@Getter
+@Setter
+@AllArgsConstructor
+@Builder
+public class DuplicationException extends RuntimeException {
+
+    private String code;
+    private String message;
+    private HttpStatus httpStatus;
+
+    public DuplicationException(String code, String message) {
+        this.code = code;
+        this.message = message;
+        httpStatus = HttpStatus.BAD_REQUEST;
+    }
+
+}
+package com.demo.exception;
+import java.util.HashMap;
+import java.util.Map;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+
+@ControllerAdvice
+public class HandleGlobalException extends ResponseEntityExceptionHandler {
+
+    @ExceptionHandler(DuplicationException.class)
+    private ResponseEntity<?> handleError(Exception ex) {
+
+        //TODO: you should custom more here
+
+        Map<String, String> body = new HashMap<>();
+        body.put("code", ((DuplicationException) ex).getCode());
+        body.put("message", ex.getMessage());
+        return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
+    }
+}
+
 ```
 
 #### 6. Utility Functions
@@ -80,8 +353,97 @@ This class handles `DuplicationException`, which is triggered by `PreventDuplica
 This class includes logic functions to extract the request body and the MD5 hash function.
 
 ```java
-// Java code for Utils
+package com.demo.service;
+import com.cafeincode.demo.dto.ProductDto;
+
+public interface IProductService {
+
+    ProductDto createProduct(ProductDto dto);
+
+}
+package com.cafeincode.demo.service;
+import com.cafeincode.demo.dto.ProductDto;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
+
+@Component
+@Slf4j
+@RequiredArgsConstructor
+public class ProductService implements IProductService {
+
+    @Override
+    public ProductDto createProduct(ProductDto dto) {
+        //TODO: more logic here
+        return null;
+    }
+
+}
+
 ```
+You can add more logic if needed; I just need to return null to serve the demo purpose.
+
+```java
+package com.demo.utils;
+import jakarta.xml.bind.DatatypeConverter;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
+import java.security.MessageDigest;
+import lombok.extern.slf4j.Slf4j;
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.reflect.MethodSignature;
+import org.springframework.web.bind.annotation.RequestBody;
+
+@Slf4j
+public class Utils {
+
+    private Utils() {
+    }
+
+    public static Object extractRequestBody(ProceedingJoinPoint pjp) {
+        try {
+            for (int i = 0; i < pjp.getArgs().length; i++) {
+                Object arg = pjp.getArgs()[i];
+                if (arg != null && isAnnotatedWithRequestBody(pjp, i)) {
+                    return arg;
+                }
+            }
+        } catch (Exception ex) {
+            log.error("", ex);
+        }
+        return null;
+    }
+
+    private static boolean isAnnotatedWithRequestBody(ProceedingJoinPoint pjp, int paramIndex) {
+        var method = getMethod(pjp);
+        var parameterAnnotations = method.getParameterAnnotations();
+        for (Annotation annotation : parameterAnnotations[paramIndex]) {
+            if (RequestBody.class.isAssignableFrom(annotation.annotationType())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static Method getMethod(ProceedingJoinPoint pjp) {
+        MethodSignature methodSignature = (MethodSignature) pjp.getSignature();
+        return methodSignature.getMethod();
+    }
+
+    public static String hashMD5(String source) {
+        String res = null;
+        try {
+            var messageDigest = MessageDigest.getInstance("MD5");
+            var mdBytes = messageDigest.digest(source.getBytes());
+            res = DatatypeConverter.printHexBinary(mdBytes);
+        } catch (Exception e) {
+            log.error("", e);
+        }
+        return res;
+    }
+}
+```
+The class Utils includes logic functions to extract the request body from ProceedingJoinPoint and the MD5 hash function
 
 ### Main Controller
 
@@ -90,6 +452,61 @@ In the main controller, we use the `PreventDuplicateValidator` annotation with t
 - **optionalValues**: Declaring an optional value, "CAFEINCODE".
 - **expireTime**: Setting the Redis cache lifetime to 40 seconds.
 
+The class Utils includes logic functions to extract the request body from ProceedingJoinPoint and the MD5 hash function
+
+```yaml
+redis:
+  host: localhost
+  port: 6379
+spring:
+  application:
+    name: product-service
+server:
+  port: 8888
+configure application-local.yml
+```
+
+```yaml
+version: "3.2"
+services:
+  redis:
+    container_name: demo-service-redis
+    image: redis:6.2.5
+    ports:
+      - '6379:6379'
+```
+```java
+package com.demo.controller;
+import com.demo.aop.PreventDuplicateValidator;
+import com.demo.dto.BaseResponse;
+import com.demo.dto.ProductDto;
+import com.demo.service.ProductService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@Slf4j
+@RequestMapping("/products")
+@RequiredArgsConstructor
+public class ProductController {
+
+    private final ProductService productService;
+
+    @PostMapping
+    @PreventDuplicateValidator(
+        includeFieldKeys = {"productId", "transactionId"},
+        optionalValues = {"CAFEINCODE"},
+        expireTime = 40_000L)
+    public BaseResponse<?> createProduct(@RequestBody ProductDto request) {
+        return BaseResponse.ofSucceeded(productService.createProduct(request));
+    }
+
+}
+```
 ### Running the Project
 
 1. For MacOS and Windows, ensure Docker Desktop is running and execute:
