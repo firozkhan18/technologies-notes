@@ -225,9 +225,11 @@ From Java 8, interfaces can also have concrete methods, i.e., methods with a bod
    ```
 
 2. **Why Static Methods?**  
-   Java API developers have followed a pattern of supplying a utility class along with an interface to perform basic operations on such
 
- objects. But from Java 8, they have broken this pattern by introducing static methods to interfaces. With the introduction of static methods to interfaces, such utility classes will disappear and methods to perform basic operations will be kept as static methods in the interface itself.
-```
+Do you know? Collection and Collections.
 
-Feel free to modify any parts as needed!
+Collection is an interface and Collections is an utility class containing only static methods which operate on Collection objects.
+
+Java API developers have followed a pattern of supplying a utility class along with an interface to perform basic operations on such objects. But from Java 8, they have broken this pattern by introducing static methods to interfaces. 
+
+With the introduction of static methods to interfaces, such utility classes will disappear and methods to perform basic operations will be kept as static methods in the interface itself.
