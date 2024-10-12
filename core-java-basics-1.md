@@ -211,15 +211,25 @@ Here are some important points to remember about the `sleep()` method of the Thr
 ### NoClassDefFoundError vs ClassNotFoundException
 Before seeing the differences between ClassNotFoundException and NoClassDefFoundError let's see some similarities which are main reason of confusion between these two errors:
 
-- 1) Both NoClassDefFoundError and ClassNotFoundException are related to unavailability of a class at run-time.
-- 2) Both ClassNotFoundException and NoClassDefFoundError are related to java classpath.
+1. Both `NoClassDefFoundError` and `ClassNotFoundException` are related to the unavailability of a class at runtime.
+2. Both `ClassNotFoundException` and `NoClassDefFoundError` are related to the Java classpath.
 
 Now let's see the difference between NoClassDefFoundError and ClassNotFoundException:
 
-- 1) ClassNotFoundException comes in java if we try to load a class at run-time using with Class.forName() or ClassLoader.loadClass() or ClassLoader.findSystemClass() method and requested class is not available in Java. the most of the time it looks like that we have the class in classpath but eventually it turns out to be issue related to classpath and application may not be using classpath what we think it was using e.g. classpath defined in jar's manifest file will take precedence over CLASSPATH or -cp option, for more details see How classpath works in java. On the other hand NoClassDefFoundError is little different than ClassNotFoundException, in this case culprit class was present during compile time and let's application to compile successfully and linked successfully but not available during run-time due to various reason.
-- 2) ClassNotFoundException is a checked Exception derived directly from java.lang.Exception class and you need to provide explicit handling for it while NoClassDefFoundError is an Error derived from LinkageError.
-- 3) If you are using ClassLoader in Java and have two classloaders then if a ClassLoader tries to access a class which is loaded by another classloader will result in ClassNoFoundException.
-- 4) ClassNotFoundException comes up when there is an explicit loading of class is involved by providing name of class at runtime using ClassLoader.loadClass, Class.forName while NoClassDefFoundError is a result of implicit loading of class because of a method call from that class or any variable access.
+1. **Cause of Occurrence**:
+   - `ClassNotFoundException` occurs in Java if we try to load a class at runtime using `Class.forName()`, `ClassLoader.loadClass()`, or `ClassLoader.findSystemClass()` methods and the requested class is not available. Most of the time, it seems like we have the class in the classpath, but it turns out to be an issue related to the classpath, and the application may not be using the classpath that we think it was using. For example, the classpath defined in a JAR's manifest file will take precedence over the `CLASSPATH` or `-cp` option. For more details, see how classpath works in Java.
+   - On the other hand, `NoClassDefFoundError` is slightly different from `ClassNotFoundException`; in this case, the culprit class was present during compile time, allowing the application to compile successfully and link correctly, but it is not available during runtime due to various reasons.
+
+2. **Exception Type**:
+   - `ClassNotFoundException` is a checked exception derived directly from the `java.lang.Exception` class, and you need to provide explicit handling for it.
+   - `NoClassDefFoundError` is an error derived from `LinkageError`.
+
+3. **ClassLoader Behavior**:
+   - If you are using `ClassLoader` in Java and have two classloaders, trying to access a class loaded by another classloader will result in `ClassNotFoundException`.
+
+4. **Loading Mechanism**:
+   - `ClassNotFoundException` arises when there is explicit loading of a class by providing the name of the class at runtime using `ClassLoader.loadClass()` or `Class.forName()`, while `NoClassDefFoundError` is a result of implicit loading of a class due to a method call from that class or any variable access.
+
 
 ### Comparator vs Comparable in Java
 
@@ -293,12 +303,17 @@ String is immutable in Java and one of the most used value class. For comparing 
 Dates are represented by java.util.Date class in Java and like String,  Date also implements Comparable in Java so they will be automatically sorted based on there natural ordering if they got stored in any sorted collection like TreeSet or TreeMap. If you explicitly wants to compare two dates in Java you can call Date.compareTo(AnotherDate) method in Java and it will tell whether specified date is greater than , equal to or less than current String. See my post 3 ways to compare Dates in Java for more alternatives of comparing two dates.
 
 ### When to use Comparator and Comparable in Java
-At last let’s see some best practices and recommendation on when to use Comparator or Comparable in Java:
-- 1) If there is a natural or default way of sorting Object already exist during development of Class than use Comparable. This is intuitive and you given the class name people should be able to guess it correctly like Strings are sorted chronically, Employee can be sorted by there Id etc. On the other hand if an Object can be sorted on multiple ways and client is specifying on which parameter sorting should take place than use Comparator interface. for example Employee can again be sorted on name, salary or department and clients needs an API to do that. Comparator implementation can sort out this problem.
-- 2) Some time you write code to sort object of a class for which you are not the original author, or you don't have access to code. In these cases you can not implement Comparable and Comparator is only way to sort those objects.
-- 3) Beware with the fact that How those object will behave if stored in SorteSet or SortedMap like TreeSet and TreeMap. If an object doesn't implement Comparable than while putting them into SortedMap, always provided corresponding Comparator which can provide sorting logic.
-- 4) Order of comparison is very important while implementing Comparable or Comparator interface. for example if you are sorting object based upon name than you can compare first name or last name on any order, so decide it judiciously. I have shared more detailed tips on compareTo on my post how to implement CompareTo in Java.
-- 5) Comparator has a distinct advantage of being self descriptive  for example if you are writing Comparator to compare two Employees based upon there salary than name that comparator as SalaryComparator, on the other hand compareTo().
+Here are some best practices and recommendations for when to use `Comparator` or `Comparable` in Java:
+
+1. **Natural Sorting**: If there is a natural or default way of sorting an object during the development of a class, then use `Comparable`. This is intuitive; given the class name, people should be able to guess it correctly, like strings sorted chronologically, employees sorted by their ID, etc. If an object can be sorted in multiple ways, and the client specifies the sorting parameter, use the `Comparator` interface.
+
+2. **External Sorting**: Sometimes, you may write code to sort objects of a class for which you are not the original author or do not have access to the code. In these cases, you cannot implement `Comparable`, and `Comparator` is the only way to sort those objects.
+
+3. **Behavior in Sorted Collections**: Be aware of how those objects will behave when stored in `SortedSet` or `SortedMap` like `TreeSet` and `TreeMap`. If an object doesn't implement `Comparable`, always provide the corresponding `Comparator` when putting them into a `SortedMap`.
+
+4. **Order of Comparison**: The order of comparison is very important while implementing `Comparable` or `Comparator` interfaces. For example, if you are sorting objects based on name, you can compare the first name or last name in any order, so decide it judiciously.
+
+5. **Self-descriptive Comparators**: `Comparator` has the distinct advantage of being self-descriptive. For example, if you are writing a `Comparator` to compare two employees based on their salary, name it `SalaryComparator`, while for `compareTo()`, the name may not be as intuitive.
 
 ## Observer design Pattern Java Code Example
 ### What is Observer design Pattern?
