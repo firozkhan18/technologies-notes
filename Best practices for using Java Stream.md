@@ -1,6 +1,3 @@
-Sure! Here's your content converted to Markdown format:
-
-```markdown
 # Popular Functions of Java Stream
 
 ## filter
