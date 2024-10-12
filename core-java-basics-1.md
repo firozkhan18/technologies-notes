@@ -1226,6 +1226,7 @@ In this example of Java synchronization code is not properly synchronized becaus
 
 ### Example of Synchronized Block in Java
 Using synchronized block in java is also similar to using synchronized keyword in methods. Only important thing to note here is that if object used to lock synchronized block of code, Singleton.class in below example is null then Java synchronized block will throw a NullPointerException.
+```java
 public class Singleton{
 
 private static volatile Singleton _instance;
@@ -1239,7 +1240,7 @@ public static Singleton getInstance(){
    }
    return _instance;
 }
-
+```
 This is a classic example of double checked locking in Singleton. In this example of Java synchronized code, we have made only critical section (part of code which is creating instance of singleton) synchronized and saved some performance. If you make whole method synchronized than every call of this method will be blocked, while you only need blocking to create singleton instance on first call. By the way, this is not the only way to write thread-safe singleton in Java. You can use Enum, or lazy loading to avoid thread-safety issue during instantiation. Even above code will not behave as expected because prior to Java 1.5, double checked locking was broker and even with volatile variable you can view half initialized object. Introduction of Java memory model and happens before guarantee in Java 5 solves this issue. To read more about Singleton in Java see that.
 
 ### Important points of synchronized keyword in Java
