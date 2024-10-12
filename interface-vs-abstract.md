@@ -100,9 +100,11 @@ From Java 8, interfaces can also have concrete methods, i.e., methods with a bod
    ```
 
 2. **Why Default Methods?**  
-   Default methods are introduced to add extra features to current interfaces without disrupting their existing implementations. For example, `stream()` is a default method that is added to the `Collection` interface in Java 8. If `stream()` would have been added as an abstract method, then all classes implementing the `Collection` interface must have implemented the `stream()` method, which may have irritated existing users. Thanks to Java 8 default method feature, now it is a default method, and all implementations of the `Collection` interface inherit the default implementation of the `stream()` method.
+   Default methods are introduced to add extra features to current interfaces without disrupting their existing implementations. For example, `stream()` is a default method that is added to the `Collection` interface in Java 8. If `stream()` would have been added as an abstract method, then all classes implementing the `Collection` interface must have implemented the `stream()` method, which may have irritated existing users.
 
-3. **Three Rules To Solve Diamond Problem**  
+   Thanks to Java 8 default method feature, now it is a default method, and all implementations of the `Collection` interface inherit the default implementation of the `stream()` method.
+
+4. **Three Rules To Solve Diamond Problem**  
    In Java, a class can extend only one class but can implement multiple interfaces. With the introduction of default methods, it is possible that your class inherits multiple methods with the same signature. In such scenarios, to solve the conflict, Java 8 specifies three rules to follow.
 
    - **Rule 1**: Select classes over interfaces  
