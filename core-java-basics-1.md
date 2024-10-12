@@ -716,7 +716,7 @@ In summary here are list of difference between StringBuffer, String and StringBu
 ### Reason Why Wait , Notify and NotifyAll are in Object Class.
 Here are some thoughts on why they should not be in Thread class which make sense to me :
 - 1) Wait and notify is not just normal methods or synchronization utility, more than that they are communication mechanism between two threads in Java. And Object class is correct place to make them available for every object if this mechanism is not available via any java keyword like synchronized. Remember synchronized and wait notify are two different area and don’t confuse that they are same or related. Synchronized is to provide mutual exclusion and ensuring thread safety of Java class like race condition while wait and notify are communication mechanism between two thread.
-- 2 )Locks are made available on per Object basis, which is another reason wait and notify is declared in Object class rather then Thread class.
+- 2 ) Locks are made available on per Object basis, which is another reason wait and notify is declared in Object class rather then Thread class.
 - 3) In Java in order to enter critical section of code, Threads needs lock and they wait for lock, they don't know which threads holds lock instead they just know the lock is hold by some thread and they should wait for lock instead of knowing which thread is inside the synchronized block and asking them to release lock. this analogy fits with wait and notify being on object class rather than thread in Java.
 
 ### Why wait notify and notifyAll called from synchronized block or method in Java
