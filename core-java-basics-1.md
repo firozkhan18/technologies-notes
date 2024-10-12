@@ -1,44 +1,64 @@
 ### What is Java Class?
-Java class is nothing but a template for object you are going to create or it’s a blue print by using this we create an object. In simple word we can say it’s a specification or a pattern which we define and every object we define will follow that pattern.
+Java class is nothing but a template for the object you are going to create, or it’s a blueprint by using which we create an object. In simple words, we can say it’s a specification or a pattern which we define, and every object we define will follow that pattern.
+
 ### What does Java Class Consist?
-- When we create class in java the first step is keyword class and then name of the class or identifier we can say.
-- Next is class body which starts with curly braces {} and between this all things related with that class means their property and method will come here.
-Template is:
-Class (name of the class) {
-(Here define member of class)
+When we create a class in Java, the first step is the keyword `class` followed by the name of the class (identifier). Next is the class body, which starts with curly braces `{}`, and between these, all things related to that class, including their properties and methods, will come here.
+
+**Template**:
+```
+Class (name of the class) { (Here define members of class) }
+```
+
+### Access Level of Class:
+Java class has mainly two types of access levels:
+- **Default**: Class objects are accessible only inside the package.
+- **Public**: Class objects are accessible in code in any package.
+
+### What are Members of Class?
+When we create a class, it’s totally incomplete without defining any member of this class, similar to how a family is incomplete if they have no members.
+
+1. **Field**: Field is nothing but the property of the class or object which we are going to create. For example, if we are creating a class called `Computer`, it may have properties like `model`, `mem_size`, `hd_size`, `os_type`, etc.
+  
+2. **Method**: Method is nothing but the operation that an object can perform. It defines the behavior of the object and how it can interact with the outside world, e.g., `startMethod()`, `shutdownMethod()`.
+
+### Access Level of Members:
+Access level is nothing but where we can use the members of the class. Each field and method has an access level:
+- **private**: Accessible only in this class.
+- **package or default**: Accessible only in this package.
+- **protected**: Accessible only in this package and in all subclasses of this class.
+- **public**: Accessible everywhere this class is available.
+
+### Real-world Example of Class in Java Programming:
+In the real world, if we want to understand a class, everything of the same quality can be visualized as a class, e.g., men, women, birds, bicycles, cars, or we can say vehicles. The entire vehicle can make one class, having properties like `no_of_wheels`, `color`, `model`, `brand`, etc. We can think of methods like `changeGear()`, `speedOfVehicle()`, `applyBrake()`, etc., on that class. 
+
+Similarly, all human beings can also be one class, with members like men, women, child, and methods like `isAlive()`, `isDeath()`. Again, we can make `Men` or `Women` a separate class and define their properties and methods accordingly. In short, in Java, every problem we encounter can be thought of in terms of class and object.
+
+### One Java Class Example:
+```java
+class Stock {
+    public String commodity;
+    public double price;
+
+    public void buy(int no_of_commodity) {}
+
+    public boolean sell() {}
 }
-### Access level of class:
-Java class has mainly two type of access level:
-Default: class objects are accessible only inside the package.
-Public: class objects are accessible in code in any package.
-### What are members of Class?
-When we create a class its totally incomplete without defining any member of this class same like we can understand one family is incomplete if they have no members.
-**Field**: field is nothing but the property of the class or object which we are going to create .for example if we are creating a class called computer then they have property like model, mem_size, hd_size, os_type etc
-**Method**: method is nothing but the operation that an object can perform it define the behavior of object how an object can interact with outside world .startMethod (), shutdownMethod ().
-**Access Level of members**: Access level is nothing but where we can use that members of the class.
-Each field and method has an access level:
-•	private: accessible only in this class
-•	package or default: accessible only in this package
-•	protected: accessible only in this package and in all subclasses of this class
-•	public: accessible everywhere this class is available
-### Real world example of Class in Java Programming:
-In real world if we want to understand about the class everything of same quality  can be visualize as a class e.g. men,women,birds ,bicycles ,cars or  we can say vehicle .
-The entire vehicle will make one class they have the property like no_of_wheels, color, model, brand etc.now we can think changeGear () and speedOfvehicle (), applyBreak () etc as a method on that class. Similarly all human being also can be one class now their member will be a men ,women ,child.,isAlive() ,isDeath() can be their method or behavior of that class .again we can make Men or women a separate class and define their property and method accordingly,
-In short in java every problem we get solution can be think in terms of class and object.
-### One Java class example:
-Class Stock {
-Public commodity;
-Public price;
-Public void buy (int no_of commodity) {}
-Public boolean sale () {}
-}
-In this example Stock is called Class and commodity, price are field and buy() and sale() are two methods defined inside class. To access elements of Class you need to create an instance of class Stock. You can create instance of Class using keyword new as shown below
+```
+In this example, `Stock` is called the Class, and `commodity`, `price` are fields. The `buy()` and `sell()` methods are defined inside the class. To access elements of the class, you need to create an instance of the class `Stock`. You can create an instance using the keyword `new` as shown below:
+
+```java
 Stock highBetaStock = new Stock();
-For calling method of Stock just call by using instance.
+```
+
+For calling methods of `Stock`, use the instance:
+```java
 highBetaStock.buy(1000);
 highBetaStock.sell();
+```
+
 ### Summary:
-In short in java everything must be thinking in terms of java class its nothing but a template they have their own members and methods for accessing those members. The entire member has their own visibility which is decided by the developer where they want to use those objects.
+In short, in Java, everything must be thought of in terms of a Java class. It’s nothing but a template with its own members and methods for accessing those members. The visibility of each member is determined by the developer, specifying where they want to use those objects.
+
 
 ### How to make Thread-Safe Code in Java
 Example of Non Thread Safe Code in Java
