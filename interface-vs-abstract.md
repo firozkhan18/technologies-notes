@@ -19,9 +19,11 @@ With the introduction of concrete methods (default and static methods) to interf
 5. **Multiple Inheritance**  
    A class can extend only one abstract class but can implement multiple interfaces. Thus, a class can inherit multiple properties from multiple sources only through interfaces, not through abstract classes.
 
-## Summary of Similarities and Differences
+## Interface Vs Abstract Class After Java 8
 
-### Code Example
+### Summary of Similarities and Differences
+
+**Code Example**
 
 ```java
 interface anyInterface {
