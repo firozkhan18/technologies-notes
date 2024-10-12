@@ -2436,7 +2436,9 @@ Java Serialization API allows us to convert an Object to stream that we can send
 ### Java Serializable Interface
 If you want a class object to be serializable, all you need to do it implement the java.io.Serializableinterface. Serializable is a marker interface and has no fields or methods to implement. It’s like an Opt-In process through which we make our classes serializable.
 Serialization process is implemented by ObjectInputStream and ObjectOutputStream, so all we need is a wrapper over them to either save it to file or send it over the network. Let’s see a simple Serialization example.
+
 Employee.java
+```java
 package com.journaldev.serialization;
  
 import java.io.Serializable;
@@ -2489,9 +2491,13 @@ public class Employee implements Serializable {
 //  }
      
 }
+```
 Notice that it’s a simple java bean with some properties and getter-setter methods. If you want an object property to be not serialized to stream, you can use transient keyword like I have done with salary variable.
 Now suppose we want to write our objects to file and then deserialize it from the same file. So we need utility methods that will use ObjectInputStream and ObjectOutputStream for serialization purposes.
+
+
 SerializationUtil.java
+```java
 package com.journaldev.serialization;
  
 import java.io.FileInputStream;
@@ -2529,9 +2535,12 @@ public class SerializationUtil {
     }
  
 }
+```
 Notice that the method arguments work with Object that is the base class of any java object. It’s written in this way to be generic in nature.
 Now let’s write a test program to see Java Serialization in action.
+
 SerializationTest.java
+```java
 package com.journaldev.serialization;
  
 import java.io.IOException;
@@ -2563,20 +2572,24 @@ public class SerializationTest {
         System.out.println("emp Object::"+emp);
         System.out.println("empNew Object::"+empNew);
     }
- 
- 
 }
+```
 When we run above test program, we get following output.
+```
 emp Object::Employee{name=Pankaj,id=100,salary=5000}
 empNew Object::Employee{name=Pankaj,id=100,salary=0}
+```
 Since salary is a transient variable, it’s value was not saved to file and hence not retrieved in the new object. Similarly static variable values are also not serialized since they belongs to class and not object.
-Class Refactoring with Serialization and serialVersionUID
+
+### Class Refactoring with Serialization and serialVersionUID
 Java Serialization permits some changes in the java class if they can be ignored. Some of the changes in class that will not affect the deserialization process are:
 •	Adding new variables to the class
 •	Changing the variables from transient to non-transient, for serialization it’s like having a new field.
 •	Changing the variable from static to non-static, for serialization it’s like having a new field.
 But for all these changes to work, the java class should have serialVersionUID defined for the class. Let’s write a test class just for deserialization of the already serialized file from previous test class.
+
 DeserializationTest.java
+```java
 package com.journaldev.serialization;
  
 import java.io.IOException;
@@ -2599,7 +2612,10 @@ public class DeserializationTest {
     }
  
 }
+```
 Now uncomment the “password” variable and it’s getter-setter methods from Employee class and run it. You will get below exception;
+
+```
 java.io.InvalidClassException: com.journaldev.serialization.Employee; local class incompatible: stream classdesc serialVersionUID = -6470090944414208496, local class serialVersionUID = -6234198221249432383
     at java.io.ObjectStreamClass.initNonProxy(ObjectStreamClass.java:604)
     at java.io.ObjectInputStream.readNonProxyDesc(ObjectInputStream.java:1601)
@@ -2610,14 +2626,20 @@ java.io.InvalidClassException: com.journaldev.serialization.Employee; local clas
     at com.journaldev.serialization.SerializationUtil.deserialize(SerializationUtil.java:22)
     at com.journaldev.serialization.DeserializationTest.main(DeserializationTest.java:13)
 empNew Object::null
+```
 The reason is clear that serialVersionUID of the previous class and new class are different. Actually if the class doesn’t define serialVersionUID, it’s getting calculated automatically and assigned to the class. Java uses class variables, methods, class name, package etc to generate this unique long number. If you are working with any IDE, you will automatically get a warning that “The serializable class Employee does not declare a static final serialVersionUID field of type long”.
+
 We can use java utility “serialver” to generate the class serialVersionUID, for Employee class we can run it with below command.
 1	SerializationExample/bin$serialver -classpath . com.journaldev.serialization.Employee
 Note that it’s not required that the serial version is generated from this program itself, we can assign this value as we want. It just need to be there to let deserialization process know that the new class is the new version of the same class and should be deserialized of possible.
+
 For example, uncomment only the serialVersionUID field from the Employee class and runSerializationTest program. Now uncomment the password field from Employee class and run theDeserializationTest program and you will see that the object stream is deserialized successfully because the change in Employee class is compatible with serialization process.
-Java Externalizable Interface
+
+### Java Externalizable Interface
 If you notice the serialization process, it’s done automatically. Sometimes we want to obscure the object data to maintain it’s integrity. We can do this by implementing java.io.Externalizable interface and provide implementation of writeExternal() and readExternal() methods to be used in serialization process.
+
 Person.java
+```java
 package com.journaldev.externalization;
  
 import java.io.Externalizable;
@@ -2680,8 +2702,11 @@ public class Person implements Externalizable{
     }
  
 }
+```
 Notice that I have changed the field values before converting it to Stream and then while reading reversed the changes. In this way, we can maintain data integrity of some sorts. We can throw exception if after reading the stream data, the integrity checks fail. Let’s write a test program to see it in action.
+
 ExternalizationTest.java
+```java
 package com.journaldev.externalization;
  
 import java.io.FileInputStream;
@@ -2724,6 +2749,7 @@ public class ExternalizationTest {
     }
  
 }
+```
 When we run above program, we get following output.
 1	Person Object Read=Person{id=1,name=Pankaj,gender=Male}
 So which one is better to be used for serialization purpose. Actually it’s better to use Serializable interface and by the time we reach at the end of article, you will know why.
@@ -2738,7 +2764,9 @@ Usually while implementing above methods, it’s kept as private so that subclas
 ### Serialization with Inheritance
 Sometimes we need to extend a class that doesn’t implement Serializable interface. If we rely on the automatic serialization behavior and the superclass has some state, then they will not be converted to stream and hence not retrieved later on.
 This is one place, where readObject() and writeObject() methods really help. By providing their implementation, we can save the super class state to the stream and then retrieve it later on. Let’s see this in action.
+
 SuperClass.java
+```java
 package com.journaldev.serialization.inheritance;
  
 public class SuperClass {
@@ -2757,12 +2785,13 @@ public class SuperClass {
     }
     public void setValue(String value) {
         this.value = value;
-    }
-     
-     
+    }   
 }
+```
 SuperClass is a simple java bean but it’s not implementing Serializable interface.
+
 SubClass.java
+```java
 package com.journaldev.serialization.inheritance;
  
 import java.io.IOException;
@@ -2816,10 +2845,13 @@ public class SubClass extends SuperClass implements Serializable, ObjectInputVal
     }
      
 }
+```
 Notice that order of writing and reading the extra data to the stream should be same. We can put some logic in reading and writing data to make it secure.
 Also notice that the class is implementing ObjectInputValidation interface. By implementingvalidateObject() method, we can put some business validations to make sure that the data integrity is not harmed.
 Let’s write a test class and see if we can retrieve the super class state from serialized data or not.
+
 InheritanceSerializationTest.java
+```java
 package com.journaldev.serialization.inheritance;
  
 import java.io.IOException;
@@ -2850,8 +2882,8 @@ public class InheritanceSerializationTest {
             e.printStackTrace();
         }
     }
- 
 }
+```
 When we run above class, we get following output.
 1	SubClass read = SubClass{id=10,value=Data,name=Pankaj}
 So in this way, we can serialize super class state even though it’s not implementing Serializable interface. This strategy comes handy when the super class is a third-party class that we can’t change.
@@ -2861,7 +2893,9 @@ Java Serialization comes with some serious pitfalls such as;
 •	Serialization causes huge security risks, an attacker can change the stream sequence and cause harm to the system. For example, user role is serialized and an attacker change the stream value to make it admin and run malicious code.
 Serialization Proxy pattern is a way to achieve greater security with Serialization. In this pattern, an inner private static class is used as a proxy class for serialization purpose. This class is designed in the way to maintain the state of the main class. This pattern is implemented by properly implementing readResolve()and writeReplace() methods.
 Let us first write a class which implements serialization proxy pattern and then we will analyze it for better understanding.
+
 Data.java
+```java
 package com.journaldev.serialization.proxy;
  
 import java.io.InvalidObjectException;
@@ -2922,6 +2956,7 @@ public class Data implements Serializable{
         throw new InvalidObjectException("Proxy is not used, something fishy");
     }
 }
+```
 •	Both Data and DataProxy class should implement Serializable interface.
 •	DataProxy should be able to maintain the state of Data object.
 •	DataProxy is inner private static class, so that other classes can’t access it.
@@ -2930,7 +2965,9 @@ public class Data implements Serializable{
 •	DataProxy class should implement readResolve() method returning Data object. So when Data class is deserialized, internally DataProxy is deserialized and when it’s readResolve() method is called, we get Data object.
 •	Finally implement readObject() method in Data class and throw InvalidObjectException to avoid hackers attack trying to fabricate Data object stream and parse it.
 Let’s write a small test to check whether implementation works or not.
+
 SerializationProxyTest.java
+```java
 package com.journaldev.serialization.proxy;
  
 import java.io.IOException;
@@ -2957,8 +2994,8 @@ public class SerializationProxyTest {
             e.printStackTrace();
         }
     }
- 
 }
+```
 When we run above class, we get below output in console.
 1	Data{data=Pankaj}
 If you will open the data.ser file, you can see that DataProxy object is saved as stream in the file.
