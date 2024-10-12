@@ -1155,7 +1155,10 @@ interface Session extends Serializable, Clonnable{ }
 Here Session interface in Java is also a Serializable and Clonnable. This is not true for Class in Java and one Class can only extend at most another Class. In Java one Class can implement multiple interfaces. They are required to provide implementation of all methods declared inside interface or they can declare themselves as abstract class.
 
 ### Example of interface in Java
-Java standard library itself has many inbuilt interfaces like Serializable, Clonnable, Runnable or Callable interface in Java.  Declaring interface is easy but making it correct in first attempt is hard but if you are in business of designing API then you need to get it right in first attempt because it’s not possible to modify interface once it released without breaking all its implementation. Here is an example of declaring interface in Java:
+Java standard library itself has many inbuilt interfaces like Serializable, Clonnable, Runnable or Callable interface in Java.  Declaring interface is easy but making it correct in first attempt is hard but if you are in business of designing API then you need to get it right in first attempt because it’s not possible to modify interface once it released without breaking all its implementation. 
+
+Here is an example of declaring interface in Java:
+```java
  interface SessionIDCreator extends Serializable, Cloneable{
         String TYPE = "AUTOMATIC";
         int createSessionId();
@@ -1171,7 +1174,7 @@ Java standard library itself has many inbuilt interfaces like Serializable, Clon
         }
       
     }
-
+```
 In above example of interface in Java, SessionIDCreator is an interface while SerialSessionIDCreator is a implementation of interface. @Override annotation can be used on interface method from Java 6 onwards, so always try to use it. It’s one of those coding practice which should be in your code review checklist.
 
 ### When to use interface in Java
