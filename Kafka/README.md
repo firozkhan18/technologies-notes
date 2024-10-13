@@ -41,23 +41,80 @@ Here's a guide for setting up Apache Kafka on Windows using the KRaft mode and Z
    ```cmd
    bin\zookeeper-server-start.bat config\zookeeper.properties
    ```
+**D:\kafka>.\bin\windows\zookeeper-server-start.bat .\config\zookeeper.properties**
 
+```
+Microsoft Windows [Version 10.0.19045.5011]
+(c) Microsoft Corporation. All rights reserved.
+
+D:\kafka>.\bin\windows\zookeeper-server-start.bat .\config\zookeeper.properties
+[2024-10-13 13:48:21,071] INFO Reading configuration from: .\config\zookeeper.properties (org.apache.zookeeper.server.quorum.QuorumPeerConfig)
+[2024-10-13 13:48:21,182] INFO clientPortAddress is 0.0.0.0:2181 (org.apache.zookeeper.server.quorum.QuorumPeerConfig)
+[2024-10-13 13:48:21,183] INFO secureClientPort is not set (org.apache.zookeeper.server.quorum.QuorumPeerConfig)
+[2024-10-13 13:48:21,183] INFO observerMasterPort is not set (org.apache.zookeeper.server.quorum.QuorumPeerConfig)
+[2024-10-13 13:48:21,183] INFO metricsProvider.className is org.apache.zookeeper.metrics.impl.DefaultMetricsProvider (org.apache.zookeeper.server.quorum.QuorumPeerConfig)
+[2024-10-13 13:48:21,190] INFO autopurge.snapRetainCount set to 3 (org.apache.zookeeper.server.DatadirCleanupManager)
+[2024-10-13 13:48:21,190] INFO autopurge.purgeInterval set to 0 (org.apache.zookeeper.server.DatadirCleanupManager)
+[2024-10-13 13:48:21,190] INFO Purge task is not scheduled. (org.apache.zookeeper.server.DatadirCleanupManager)
+[2024-10-13 13:48:21,190] WARN Either no config or no quorum defined in config, running in standalone mode (org.apache.zookeeper.server.quorum.QuorumPeerMain)
+[2024-10-13 13:48:21,196] INFO Log4j 1.2 jmx support not found; jmx disabled. (org.apache.zookeeper.jmx.ManagedUtil)
+[2024-10-13 13:48:21,197] INFO Reading configuration from: .\config\zookeeper.properties (org.apache.zookeeper.server.quorum.QuorumPeerConfig)
+[2024-10-13 13:48:21,198] INFO clientPortAddress is 0.0.0.0:2181 (org.apache.zookeeper.server.quorum.QuorumPeerConfig)
+[2024-10-13 13:48:21,198] INFO secureClientPort is not set (org.apache.zookeeper.server.quorum.QuorumPeerConfig)
+[2024-10-13 13:48:21,198] INFO observerMasterPort is not set (org.apache.zookeeper.server.quorum.QuorumPeerConfig)
+[2024-10-13 13:48:21,199] INFO metricsProvider.className is org.apache.zookeeper.metrics.impl.DefaultMetricsProvider (org.apache.zookeeper.server.quorum.QuorumPeerConfig)
+[2024-10-13 13:48:21,199] INFO Starting server (org.apache.zookeeper.server.ZooKeeperServerMain)
+[2024-10-13 13:48:21,228] INFO ServerMetrics initialized with provider org.apache.zookeeper.metrics.impl.DefaultMetricsProvider@1d119efb (org.apache.zookeeper.server.ServerMetrics)
+[2024-10-13 13:48:21,232] INFO ACL digest algorithm is: SHA1 (org.apache.zookeeper.server.auth.DigestAuthenticationProvider)
+[2024-10-13 13:48:21,233] INFO zookeeper.DigestAuthenticationProvider.enabled = true (org.apache.zookeeper.server.auth.DigestAuthenticationProvider)
+[2024-10-13 13:48:21,238] INFO zookeeper.snapshot.trust.empty : false (org.apache.zookeeper.server.persistence.FileTxnSnapLog)
+[2024-10-13 13:48:21,262] INFO  (org.apache.zookeeper.server.ZooKeeperServer)
+[2024-10-13 13:48:21,263] INFO   ______                  _                                           (org.apache.zookeeper.server.ZooKeeperServer)
+[2024-10-13 13:48:21,264] INFO  |___  /                 | |                                          (org.apache.zookeeper.server.ZooKeeperServer)
+[2024-10-13 13:48:21,268] INFO     / /    ___     ___   | | __   ___    ___   _ __     ___   _ __    (org.apache.zookeeper.server.ZooKeeperServer)
+[2024-10-13 13:48:21,269] INFO    / /    / _ \   / _ \  | |/ /  / _ \  / _ \ | '_ \   / _ \ | '__| (org.apache.zookeeper.server.ZooKeeperServer)
+[2024-10-13 13:48:21,269] INFO   / /__  | (_) | | (_) | |   <  |  __/ |  __/ | |_) | |  __/ | |     (org.apache.zookeeper.server.ZooKeeperServer)
+[2024-10-13 13:48:21,271] INFO  /_____|  \___/   \___/  |_|\_\  \___|  \___| | .__/   \___| |_| (org.apache.zookeeper.server.ZooKeeperServer)
+[2024-10-13 13:48:21,271] INFO                                               | |                      (org.apache.zookeeper.server.ZooKeeperServer)
+[2024-10-13 13:48:21,272] INFO                                               |_|                      (org.apache.zookeeper.server.ZooKeeperServer)
+[2024-10-13 13:48:21,273] INFO  (org.apache.zookeeper.server.ZooKeeperServer)
+[2024-10-13 13:48:21,282] INFO Server environment:zookeeper.version=3.8.4-9316c2a7a97e1666d8f4593f34dd6fc36ecc436c, built on 2024-02-12 22:16 UTC (org.apache.zookeeper.server.ZooKeeperServer)
+[2024-10-13 13:48:21,283] INFO Server environment:host.name=LAPTOP-EJNI8C5H.mshome.net (org.apache.zookeeper.server.ZooKeeperServer)
+```
 2. **Start Kafka Broker**:
    Open another Command Prompt and run:
    ```cmd
    bin\kafka-server-start.bat config\server.properties
    ```
+**D:\kafka>.\bin\windows\kafka-server-start.bat .\config\server.properties**
+```
+Microsoft Windows [Version 10.0.19045.5011]
+(c) Microsoft Corporation. All rights reserved.
+
+D:\kafka>.\bin\windows\kafka-server-start.bat .\config\server.properties
+[2024-10-13 13:55:26,736] INFO Registered kafka:type=kafka.Log4jController MBean (kafka.utils.Log4jControllerRegistration$)
+[2024-10-13 13:55:27,439] INFO Setting -D jdk.tls.rejectClientInitiatedRenegotiation=true to disable client-initiated TLS renegotiation (org.apache.zookeeper.common.X509Util)
+```
 
 ### Step 3: Create a Topic
 
 1. Open another Command Prompt and run:
    ```cmd
    bin\kafka-topics.bat --create --topic quickstart-events --bootstrap-server localhost:9092
+
+   Or
+
+   D:\kafka>.\bin\windows\kafka-topics.bat --create --topic quickstart-events --bootstrap-server localhost:9092
    ```
+
 
 2. To describe the topic:
    ```cmd
    bin\kafka-topics.bat --describe --topic quickstart-events --bootstrap-server localhost:9092
+
+   Or
+
+   D:\kafka>.\bin\windows\kafka-topics.bat --describe --topic quickstart-events --bootstrap-server localhost:9092
    ```
 
 ### Step 4: Write Events into the Topic
@@ -65,6 +122,11 @@ Here's a guide for setting up Apache Kafka on Windows using the KRaft mode and Z
 1. Open another Command Prompt and run:
    ```cmd
    bin\kafka-console-producer.bat --topic quickstart-events --bootstrap-server localhost:9092
+
+   Or
+
+  D:\kafka>.\bin\windows\kafka-console-producer.bat --topic quickstart-events --bootstrap-server localhost:9092
+
    ```
 
 2. Type in some events:
@@ -80,6 +142,10 @@ Here's a guide for setting up Apache Kafka on Windows using the KRaft mode and Z
 1. Open another Command Prompt and run:
    ```cmd
    bin\kafka-console-consumer.bat --topic quickstart-events --from-beginning --bootstrap-server localhost:9092
+
+Or
+
+  D:\kafka>.\bin\windows\kafka-console-consumer.bat --topic quickstart-events --from-beginning --bootstrap-server localhost:9092
    ```
 
 ### Step 6: Import/Export Data with Kafka Connect
@@ -101,6 +167,10 @@ Here's a guide for setting up Apache Kafka on Windows using the KRaft mode and Z
    Run the following command in the Command Prompt:
    ```cmd
    bin\connect-standalone.bat config\connect-standalone.properties config\connect-file-source.properties config\connect-file-sink.properties
+
+   Or
+
+   D:\kafka>.\bin\windows\connect-standalone.bat config\connect-standalone.properties config\connect-file-source.properties config\connect-file-sink.properties
    ```
 
 4. **Check the Output**:
