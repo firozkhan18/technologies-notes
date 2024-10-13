@@ -209,3 +209,58 @@ rd /s /q C:\path\to\kafka_2.13-3.8.0\tmp\zookeeper
 ### Congratulations!
 
 You have successfully completed the Apache Kafka quickstart on Windows. To learn more, explore the [Kafka documentation](https://kafka.apache.org/documentation/) and consider joining local Kafka meetups or watching Kafka Summit talks.
+
+
+The error messages you're seeing indicate that your application is trying to connect to a Kafka broker at `127.0.0.1:9092`, but it cannot establish a connection. Here are some steps to troubleshoot this issue:
+
+### 1. Check Kafka Broker Status
+Make sure that your Kafka broker is running. You can check the status using:
+
+```bash
+# If using systemd
+systemctl status kafka
+
+# If running Kafka manually, check your terminal for logs
+```
+
+### 2. Verify Configuration
+Ensure that your Kafka broker is configured to listen on `127.0.0.1:9092`. Check the `server.properties` file, typically located in the `config` directory of your Kafka installation:
+
+```properties
+listeners=PLAINTEXT://127.0.0.1:9092
+```
+
+### 3. Check for Multiple Kafka Instances
+If you have multiple Kafka brokers or instances running, ensure you're connecting to the correct one. You may also need to verify that the advertised listeners are set up correctly:
+
+```properties
+advertised.listeners=PLAINTEXT://127.0.0.1:9092
+```
+
+### 4. Firewall and Network Issues
+If your Kafka broker is running on a different machine or container, ensure that network settings or firewalls aren't blocking access to port 9092.
+
+### 5. Review Logs
+Check the logs of your Kafka broker for any errors or warnings that might provide more context on why the connection is failing. Logs are typically found in the `logs` directory of your Kafka installation.
+
+### 6. Test Connection Manually
+You can use a tool like `telnet` or `nc` to check if you can reach the Kafka broker on port 9092:
+
+```bash
+telnet 127.0.0.1 9092
+```
+
+### 7. Client Configuration
+Double-check your application's Kafka client configuration to ensure it's pointing to the correct broker. If you have set up a different configuration for development or production, ensure you're using the right profile.
+
+### 8. Restart Kafka
+Sometimes, simply restarting the Kafka broker can resolve transient issues:
+
+```bash
+# If using systemd
+sudo systemctl restart kafka
+
+# If running manually, stop and then start the broker
+```
+
+After checking these items, try running your application again. If you continue to face issues, feel free to share any additional logs or configurations!
