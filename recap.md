@@ -10907,8 +10907,10 @@ If you have further questions or need clarification on any specific aspect, feel
 # Section 2 - Kafka:
 
 <details>
-[Kafka Concepts](#Kafka/Kafka-Concepts.md)
-[Kafka Connect](#Kafka/Kafka-Connect.md)
+	
+[Kafka Concepts](Kafka/Kafka-Concepts.md)
+[Kafka Connect](Kafka/Kafka-Connect.md)
+
 </details>
 
 # Section 3 - SQL:
