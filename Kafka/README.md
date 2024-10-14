@@ -432,4 +432,61 @@ After restarting, you can verify that Kafka Connect is running and recognizing t
 curl http://localhost:8083/connector-plugins
 ```
 
+Your configuration for the Debezium PostgreSQL connector looks mostly good, but here are a few things to ensure it works properly:
 
+### 1. Connector URL
+Make sure the `kafka.connect.url` is correct:
+```plaintext
+kafka.connect.url=http://localhost:8083/connectors/
+```
+This URL is where the Kafka Connect REST API will be available.
+
+### 2. PostgreSQL Connection Details
+Double-check the PostgreSQL connection details:
+- **Host**: Ensure PostgreSQL is running on `localhost`.
+- **Port**: Confirm that the port `5433` is correct for your PostgreSQL instance.
+- **User**: The user `postgres` should have the necessary permissions to access the database.
+- **Password**: Ensure that the password is correct.
+
+### 3. Database and Server Name
+Verify that the database `ms_cache_272` and server name `ms_cache` are correctly configured.
+
+### 4. Include List
+Make sure the table `ms_schema.products_m` exists in your PostgreSQL database and is accessible by the configured user.
+
+### 5. Slot Name
+The `kafka.connect.slot.name` must match a logical replication slot in PostgreSQL. You can create it using SQL:
+```sql
+SELECT * FROM pg_create_logical_replication_slot('ms_272_slot', 'pgoutput');
+```
+Make sure the slot is created before starting the connector.
+
+### Starting the Connector
+After ensuring all configurations are correct, you can create the connector using a POST request to the Kafka Connect REST API. Here’s an example of how to do that using `curl`:
+
+```bash
+curl -X POST -H "Content-Type: application/json" --data '{
+  "name": "postgres-connector",
+  "config": {
+    "connector.class": "io.debezium.connector.postgresql.PostgresConnector",
+    "tasks.max": "1",
+    "database.hostname": "'"$kafka.connect.db.host"'",
+    "database.port": "'"$kafka.connect.db.port"'",
+    "database.user": "'"$kafka.connect.db.user"'",
+    "database.password": "'"$kafka.connect.db.password"'",
+    "database.dbname": "'"$kafka.connect.db.name"'",
+    "database.server.name": "'"$kafka.connect.db.server.name"'",
+    "table.include.list": "'"$kafka.connect.table.include.list"'",
+    "plugin.name": "pgoutput",
+    "slot.name": "'"$kafka.connect.slot.name"'"
+  }
+}' http://localhost:8083/connectors/
+```
+
+Make sure to replace the placeholders with your actual configuration.
+
+### Checking Status
+After creating the connector, you can check its status with:
+```bash
+curl -X GET http://localhost:8083/connectors/postgres-connector/status
+```
