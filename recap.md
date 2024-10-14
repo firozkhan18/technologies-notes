@@ -1,4 +1,33 @@
+Here is an example of security configurations in Angular:
 
+1. To implement security in Angular, you can use Angular Route Guards to protect routes based on user authentication and authorization.
+2. Create a service to authenticate users using JWT tokens or OAuth.
+3. Implement guards such as CanActivate, CanActivateChild, CanDeactivate, and Resolve to control access to specific routes.
+4. Use HTTP Interceptors to add authorization headers or handle token expiration.
+5. Implement user roles and permissions to restrict access to certain features or data.
+6. Store sensitive data securely using Angular’s Secure Storage API or encrypting data before sending it over HTTP requests.
+7. Always validate user input on the client-side and server-side to prevent XSS and CSRF attacks.
+8. Use Content Security Policy (CSP) to prevent malicious scripts from running in your Angular application.
+9. Implement Cross-Origin Resource Sharing (CORS) to restrict access to your API from unauthorized domains.
+10. Keep Angular dependencies and packages updated to prevent security vulnerabilities.
+11. Enable HTTPS to encrypt data transmitted between the client and server.
+12. Regularly perform security audits and code reviews to identify and fix security issues in your Angular application.
+
+The 12 rules of microservices, as defined by Sam Newman in his book "Building Microservices," are:
+
+1. Model around business domain concepts
+2. Design for failure
+3. Decentralize all the things
+4. Embrace shared-nothing architecture
+5. Automate everything
+6. Enable easy and confident changes
+7. Architecture evolves over time
+8. Build a culture of automation
+9. Design for operability
+10. Monitor everything
+11. Log everything
+12. Secure everything
+13. 
 # Section 1 - Java:
 <details>
 In Java, the Reflection API allows you to inspect and manipulate classes and objects at runtime. This includes accessing and invoking private methods. While accessing private methods can be useful for certain tasks, it's generally recommended to use reflection sparingly and cautiously due to potential impacts on code maintainability and security.
