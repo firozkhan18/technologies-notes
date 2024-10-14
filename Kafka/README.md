@@ -490,3 +490,77 @@ After creating the connector, you can check its status with:
 ```bash
 curl -X GET http://localhost:8083/connectors/postgres-connector/status
 ```
+The error message indicates several issues with the connector configuration. Here’s how to resolve them:
+
+### 1. Use Actual Values
+You need to replace the environment variable placeholders (e.g., `$kafka.connect.db.host`) with actual values in your JSON configuration. Here’s an updated example:
+
+```json
+{
+  "name": "postgres-connector",
+  "config": {
+    "connector.class": "io.debezium.connector.postgresql.PostgresConnector",
+    "tasks.max": "1",
+    "database.hostname": "localhost",  // Replace with your DB host
+    "database.port": "5433",            // Replace with your DB port
+    "database.user": "postgres",        // Replace with your DB user
+    "database.password": "2023.Sigma",  // Replace with your DB password
+    "database.dbname": "ms_cache_272",  // Replace with your DB name
+    "database.server.name": "ms_cache",  // Replace with your server name
+    "table.include.list": "ms_schema.products_m",  // Replace with your table
+    "plugin.name": "pgoutput",
+    "slot.name": "ms_272_slot",  // Ensure this matches your logical slot name
+    "topic.prefix": "ms_cache_272"  // Add a topic prefix
+  }
+}
+```
+
+### 2. Key Issues Addressed
+- **Topic Prefix**: You need to add a `topic.prefix` field. This is required for naming the topics that will be created.
+- **Database Port**: Ensure that the database port is an integer (in quotes as a string).
+- **Database Hostname**: Use a valid hostname; avoid using variable syntax in the JSON.
+- **Slot Name**: Make sure the slot name follows the naming conventions (only lowercase letters, digits, and underscores).
+
+### 3. Send the POST Request
+After updating the configuration with actual values, send the POST request to create the connector:
+
+```bash
+curl -X POST -H "Content-Type: application/json" --data '{
+  "name": "postgres-connector",
+  "config": {
+    "connector.class": "io.debezium.connector.postgresql.PostgresConnector",
+    "tasks.max": "1",
+    "database.hostname": "localhost",
+    "database.port": "5433",
+    "database.user": "postgres",
+    "database.password": "2023.Sigma",
+    "database.dbname": "ms_cache_272",
+    "database.server.name": "ms_cache",
+    "table.include.list": "ms_schema.products_m",
+    "plugin.name": "pgoutput",
+    "slot.name": "ms_272_slot",
+    "topic.prefix": "ms_cache_272"
+  }
+}' http://localhost:8083/connectors/
+```
+
+### 4. Validate Configuration
+You can also validate your configuration before sending it by using:
+```bash
+curl -X POST -H "Content-Type: application/json" --data '{
+  "config": {
+    "connector.class": "io.debezium.connector.postgresql.PostgresConnector",
+    "tasks.max": "1",
+    "database.hostname": "localhost",
+    "database.port": "5433",
+    "database.user": "postgres",
+    "database.password": "2023.Sigma",
+    "database.dbname": "ms_cache_272",
+    "database.server.name": "ms_cache",
+    "table.include.list": "ms_schema.products_m",
+    "plugin.name": "pgoutput",
+    "slot.name": "ms_272_slot",
+    "topic.prefix": "ms_cache_272"
+  }
+}' http://localhost:8083/connector-plugins/io.debezium.connector.postgresql.PostgresConnector/config/validate
+```
