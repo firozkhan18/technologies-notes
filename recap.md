@@ -1,6 +1,7 @@
 # Section 1 - Java:
 <details>
 
+## Object-Oriented Programming (OOP)
 
 Object-Oriented Programming (OOP) is a programming paradigm based on the concept of "objects," which can contain data and methods. Java is a fully object-oriented language, and its OOP principles facilitate modular and reusable code. Here’s an in-depth look at the core concepts of OOP:
 
@@ -188,127 +189,9 @@ Functional programming (FP) and Object-Oriented Programming (OOP) are two distin
 
 5. **Ease of Testing**: Pure functions (functions without side effects) are easier to test and reason about compared to methods in OOP that might rely on shared mutable state.
 
+---
 
-The **try-with-resources** statement in Java is a feature that simplifies the management of resources like files, sockets, or database connections. It ensures that each resource is closed automatically at the end of the statement, which helps prevent resource leaks and makes your code cleaner and more maintainable.
-
-### Key Benefits of Try-With-Resources
-
-1. **Automatic Resource Management**: Resources that implement `java.lang.AutoCloseable` are automatically closed at the end of the `try` block, even if an exception occurs.
-2. **Cleaner Code**: Reduces boilerplate code by eliminating the need for explicit `finally` blocks to close resources.
-3. **Exception Handling**: If an exception occurs while closing a resource, it is suppressed, allowing you to handle the original exception.
-
-### Basic Syntax
-
-```java
-try (ResourceType resource = new ResourceType()) {
-    // Use the resource
-} catch (ExceptionType e) {
-    // Handle exception
-}
-```
-
-### Example 1: Reading a File
-
-Here’s a simple example that demonstrates how to read a file using `BufferedReader` in a try-with-resources statement:
-
-```java
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-
-public class TryWithResourcesExample {
-    public static void main(String[] args) {
-        String filePath = "example.txt";
-
-        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                System.out.println(line);
-            }
-        } catch (IOException e) {
-            System.err.println("Error reading the file: " + e.getMessage());
-        }
-    }
-}
-```
-
-### Explanation
-
-- The `BufferedReader` is opened in the try-with-resources statement.
-- It reads lines from the specified file and prints them.
-- The `BufferedReader` is automatically closed when the block exits, even if an exception occurs.
-
-### Example 2: Writing to a File
-
-Here's another example that shows how to write to a file using `BufferedWriter`:
-
-```java
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
-
-public class WriteToFileExample {
-    public static void main(String[] args) {
-        String filePath = "output.txt";
-
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
-            writer.write("Hello, World!");
-            writer.newLine();
-            writer.write("This is an example of try-with-resources.");
-        } catch (IOException e) {
-            System.err.println("Error writing to the file: " + e.getMessage());
-        }
-    }
-}
-```
-
-### Explanation
-
-- A `BufferedWriter` is used to write to a specified file.
-- The writer automatically closes at the end of the try block, ensuring resources are freed properly.
-
-### Example 3: Multiple Resources
-
-You can manage multiple resources in a single try-with-resources statement:
-
-```java
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-
-public class MultipleResourcesExample {
-    public static void main(String[] args) {
-        String inputFilePath = "input.txt";
-        String outputFilePath = "output.txt";
-
-        try (
-            BufferedReader reader = new BufferedReader(new FileReader(inputFilePath));
-            BufferedWriter writer = new BufferedWriter(new FileWriter(outputFilePath))
-        ) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                writer.write(line);
-                writer.newLine();
-            }
-        } catch (IOException e) {
-            System.err.println("Error processing files: " + e.getMessage());
-        }
-    }
-}
-```
-
-### Explanation
-
-- Both `BufferedReader` and `BufferedWriter` are declared in the try-with-resources statement.
-- This setup allows reading from one file and writing to another seamlessly.
-
-### Summary
-
-The try-with-resources statement is a powerful feature in Java that enhances resource management by ensuring that all resources are closed automatically. This leads to cleaner code, reduced boilerplate, and minimized risk of resource leaks. If you have further questions or need more examples, feel free to ask!
-
-
+## Functional Interfaces - Purpose of Default & Methods in Functional Interfaces
 
 It seems there might be some confusion in your question regarding the term "default method." However, I assume you're asking about the purpose of default methods in interfaces in Java 8, especially in the context of already existing methods in interfaces. Here's a clearer breakdown:
 
@@ -1054,6 +937,125 @@ public class ExceptionHandlingExample {
 #### 4. Finalize
 - The `finalize()` method is called by the garbage collector on an object when it determines that there are no more references to the object. It’s used for cleanup operations before the object is removed from memory. However, relying on `finalize()` is discouraged in favor of explicit resource management (like using `try-with-resources`).
 
+The **try-with-resources** statement in Java is a feature that simplifies the management of resources like files, sockets, or database connections. It ensures that each resource is closed automatically at the end of the statement, which helps prevent resource leaks and makes your code cleaner and more maintainable.
+
+### Key Benefits of Try-With-Resources
+
+1. **Automatic Resource Management**: Resources that implement `java.lang.AutoCloseable` are automatically closed at the end of the `try` block, even if an exception occurs.
+2. **Cleaner Code**: Reduces boilerplate code by eliminating the need for explicit `finally` blocks to close resources.
+3. **Exception Handling**: If an exception occurs while closing a resource, it is suppressed, allowing you to handle the original exception.
+
+### Basic Syntax
+
+```java
+try (ResourceType resource = new ResourceType()) {
+    // Use the resource
+} catch (ExceptionType e) {
+    // Handle exception
+}
+```
+
+### Example 1: Reading a File
+
+Here’s a simple example that demonstrates how to read a file using `BufferedReader` in a try-with-resources statement:
+
+```java
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+
+public class TryWithResourcesExample {
+    public static void main(String[] args) {
+        String filePath = "example.txt";
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                System.out.println(line);
+            }
+        } catch (IOException e) {
+            System.err.println("Error reading the file: " + e.getMessage());
+        }
+    }
+}
+```
+
+### Explanation
+
+- The `BufferedReader` is opened in the try-with-resources statement.
+- It reads lines from the specified file and prints them.
+- The `BufferedReader` is automatically closed when the block exits, even if an exception occurs.
+
+### Example 2: Writing to a File
+
+Here's another example that shows how to write to a file using `BufferedWriter`:
+
+```java
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+
+public class WriteToFileExample {
+    public static void main(String[] args) {
+        String filePath = "output.txt";
+
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
+            writer.write("Hello, World!");
+            writer.newLine();
+            writer.write("This is an example of try-with-resources.");
+        } catch (IOException e) {
+            System.err.println("Error writing to the file: " + e.getMessage());
+        }
+    }
+}
+```
+
+### Explanation
+
+- A `BufferedWriter` is used to write to a specified file.
+- The writer automatically closes at the end of the try block, ensuring resources are freed properly.
+
+### Example 3: Multiple Resources
+
+You can manage multiple resources in a single try-with-resources statement:
+
+```java
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+
+public class MultipleResourcesExample {
+    public static void main(String[] args) {
+        String inputFilePath = "input.txt";
+        String outputFilePath = "output.txt";
+
+        try (
+            BufferedReader reader = new BufferedReader(new FileReader(inputFilePath));
+            BufferedWriter writer = new BufferedWriter(new FileWriter(outputFilePath))
+        ) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                writer.write(line);
+                writer.newLine();
+            }
+        } catch (IOException e) {
+            System.err.println("Error processing files: " + e.getMessage());
+        }
+    }
+}
+```
+
+### Explanation
+
+- Both `BufferedReader` and `BufferedWriter` are declared in the try-with-resources statement.
+- This setup allows reading from one file and writing to another seamlessly.
+
+### Summary
+
+The try-with-resources statement is a powerful feature in Java that enhances resource management by ensuring that all resources are closed automatically. This leads to cleaner code, reduced boilerplate, and minimized risk of resource leaks. If you have further questions or need more examples, feel free to ask!
+
 ### Garbage Collection and Memory Management
 
 #### 5. Garbage Collection
@@ -1301,7 +1303,9 @@ Serialization and deserialization in Java are mechanisms used to convert an obje
 
 Serialization and deserialization in Java provide a convenient way to persist object states and transmit objects across different layers or systems. Understanding how to implement and manage these processes is essential for effective Java programming, especially in distributed applications.
 
+---
 
+## Design Patterns
 
 Design patterns are typical solutions to common problems in software design. They are divided into three main categories: Creational, Structural, and Behavioral patterns. Here’s a detailed explanation of each category, along with coding examples in Java.
 
