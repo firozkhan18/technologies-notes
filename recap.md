@@ -13753,6 +13753,531 @@ jobs:
 
 This comprehensive guide should provide a robust framework for building, deploying, and managing an e-commerce application using a modern microservices architecture. Each component plays a critical role in ensuring that the system is scalable, performant, and secure.
 
+In microservices architecture, managing transactions and ensuring data consistency across distributed systems can be challenging. Concepts like the Saga pattern, CQRS (Command Query Responsibility Segregation), event-driven architecture, two-phase commit, and event sourcing help address these challenges. Here’s a detailed look at these patterns and how to implement transaction management and security in Spring Boot microservices.
+
+### 1. Saga Pattern
+
+**Definition**: The Saga pattern manages distributed transactions by breaking them into smaller, manageable transactions (or steps) that can be executed independently. Each step is a local transaction that updates data within a single microservice.
+
+**Types**:
+- **Choreography**: Each service publishes events when it completes a transaction. Other services listen for these events and execute their transactions accordingly.
+- **Orchestration**: A central coordinator service manages the saga by calling the local transactions in the required order and handling failures.
+
+**Example**: If a user places an order, the Saga might consist of steps like:
+1. Reserve items (Service A).
+2. Charge payment (Service B).
+3. Send confirmation (Service C).
+
+**Use Case**: Sagas are useful for managing long-running business processes across multiple microservices without relying on a single, monolithic transaction.
+
+### 2. CQRS (Command Query Responsibility Segregation)
+
+**Definition**: CQRS separates the data modification (command) operations from data retrieval (query) operations, allowing for optimized and scalable solutions.
+
+**Use Case**:
+- **Commands**: Handle changes to data (create, update, delete).
+- **Queries**: Retrieve data, which can be optimized independently from commands.
+
+**Benefits**:
+- Improved performance, scalability, and security.
+- Allows for different models for reads and writes.
+
+### 3. Event-Driven Architecture
+
+**Definition**: In an event-driven architecture, services communicate by emitting and consuming events. This decouples services and allows for asynchronous communication.
+
+**Example**: After a user registers, the User Service emits a `UserRegistered` event that other services can consume to perform additional actions (e.g., sending a welcome email).
+
+**Benefits**:
+- Loose coupling of services.
+- Enhanced scalability and flexibility.
+
+### 4. Two-Phase Commit (2PC)
+
+**Definition**: 2PC is a distributed algorithm that ensures all participating services in a transaction either commit or roll back changes, thus maintaining consistency.
+
+**Phases**:
+1. **Prepare Phase**: Each participant votes on whether they can commit.
+2. **Commit Phase**: If all participants vote yes, the coordinator instructs all to commit. If any vote no, all participants roll back.
+
+**Drawback**: 2PC can lead to blocking issues and is not well-suited for highly available systems due to its synchronous nature.
+
+### 5. Event Sourcing
+
+**Definition**: In event sourcing, state changes are stored as a sequence of events rather than storing the current state. This allows for complete historical tracking of changes.
+
+**Example**: Instead of storing just the final state of an order, you store events like `OrderCreated`, `OrderConfirmed`, and `OrderShipped`.
+
+**Benefits**:
+- Complete audit trail.
+- Ability to rebuild state by replaying events.
+
+### 6. Transaction Management in Spring Boot Microservices
+
+**Approaches**:
+1. **Local Transactions**: Each microservice manages its own local transaction. Use Sagas for distributed transactions.
+2. **Choreography**: Use event-driven architecture to handle transactions asynchronously.
+3. **Orchestration**: Use a centralized service to manage complex transactions across services.
+
+**Implementation Example**: Using a Saga with Spring Boot.
+
+1. **Define Events**:
+
+```java
+public class OrderCreatedEvent {
+    private String orderId;
+    private String userId;
+    // Getters and Setters
+}
+```
+
+2. **Service to Publish Events**:
+
+```java
+import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.stereotype.Service;
+
+@Service
+public class OrderService {
+    private final KafkaTemplate<String, OrderCreatedEvent> kafkaTemplate;
+
+    public OrderService(KafkaTemplate<String, OrderCreatedEvent> kafkaTemplate) {
+        this.kafkaTemplate = kafkaTemplate;
+    }
+
+    public void createOrder(String userId) {
+        // Logic to create an order
+        OrderCreatedEvent event = new OrderCreatedEvent();
+        // Set properties
+        kafkaTemplate.send("order-topic", event);
+    }
+}
+```
+
+3. **Service to Consume Events**:
+
+```java
+import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.stereotype.Service;
+
+@Service
+public class NotificationService {
+    
+    @KafkaListener(topics = "order-topic", groupId = "notification")
+    public void handleOrderCreated(OrderCreatedEvent event) {
+        // Logic to send notification
+    }
+}
+```
+
+### 7. Security in Spring Boot Microservices
+
+**Key Aspects**:
+1. **Authentication and Authorization**: Use Spring Security with JWT (JSON Web Tokens) or OAuth2 for secure access control.
+2. **API Gateway**: Use an API Gateway to centralize authentication, routing, and rate limiting.
+3. **Secure Communication**: Use HTTPS for secure communication between services.
+4. **Input Validation**: Always validate and sanitize inputs to prevent attacks like SQL injection.
+
+**Example of JWT Authentication**:
+
+1. **Add Dependencies**:
+   ```xml
+   <dependency>
+       <groupId>io.jsonwebtoken</groupId>
+       <artifactId>jjwt</artifactId>
+       <version>0.9.1</version>
+   </dependency>
+   ```
+
+2. **Generate JWT Token**:
+
+```java
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.stereotype.Service;
+
+import java.util.Date;
+
+@Service
+public class JwtService {
+    private final String SECRET_KEY = "your_secret_key";
+
+    public String generateToken(String username) {
+        return Jwts.builder()
+                .setSubject(username)
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10)) // 10 hours
+                .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
+                .compact();
+    }
+}
+```
+
+3. **Secure Endpoints**:
+
+```java
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+
+@EnableWebSecurity
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http.csrf().disable()
+            .authorizeRequests()
+            .antMatchers("/public/**").permitAll()
+            .anyRequest().authenticated();
+    }
+}
+```
+
+### Conclusion
+
+In Spring Boot microservices, employing patterns like Saga, CQRS, event-driven architecture, and event sourcing, along with robust transaction management and security practices, can significantly enhance the performance and reliability of your applications. Understanding these concepts allows for better design choices in distributed systems, ensuring data consistency, scalability, and secure communication among services.
+
+Preventing multiple requests and managing service load in a Spring Boot microservices architecture involves several strategies to ensure that your services remain responsive and efficient under heavy traffic. Here are some techniques and best practices to consider:
+
+### 1. Rate Limiting
+
+**Definition**: Rate limiting controls the number of requests a client can make to a service within a specified time period.
+
+**Implementation**:
+- **Using Spring Cloud Gateway**: You can implement rate limiting at the API Gateway level.
+
+```yaml
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: rate_limit_route
+          uri: http://your_service_url
+          predicates:
+            - Path=/api/your-endpoint
+          filters:
+            - RequestRateLimiter=1,2 # 1 request per 2 seconds
+```
+
+- **Using Bucket4j**: You can also implement rate limiting within your service.
+
+```java
+import net.jodah.failsafe.Failsafe;
+import net.jodah.failsafe.RateLimiter;
+
+@Service
+public class YourService {
+    private final RateLimiter rateLimiter = RateLimiter.of("myRateLimiter", RateLimitConfig.custom().limit(1).timeout(Duration.ofSeconds(1)).build());
+
+    public void yourMethod() {
+        Failsafe.with(rateLimiter).run(() -> {
+            // Your service logic
+        });
+    }
+}
+```
+
+### 2. Circuit Breaker Pattern
+
+**Definition**: The circuit breaker pattern prevents a service from trying to execute an operation that's likely to fail, allowing the system to recover.
+
+**Implementation**:
+- **Using Resilience4j**:
+
+```java
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import org.springframework.stereotype.Service;
+
+@Service
+public class YourService {
+
+    @CircuitBreaker
+    public String yourMethod() {
+        // Your service logic
+        return "Success";
+    }
+}
+```
+
+### 3. Load Balancing
+
+**Definition**: Load balancing distributes incoming requests across multiple instances of a service to prevent overload on a single instance.
+
+**Implementation**:
+- **Using Spring Cloud Netflix Ribbon** (for client-side load balancing):
+
+```yaml
+ribbon:
+  eureka:
+    enabled: true
+```
+
+- **Using Spring Cloud LoadBalancer** (for server-side load balancing):
+
+```java
+@Bean
+public LoadBalancerClientFactory loadBalancerClientFactory() {
+    return new LoadBalancerClientFactory();
+}
+```
+
+### 4. Caching
+
+**Definition**: Caching frequently accessed data reduces the load on the backend services.
+
+**Implementation**:
+- **Using Spring Cache**:
+
+```java
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.stereotype.Service;
+
+@Service
+public class YourService {
+
+    @Cacheable("yourCache")
+    public String getData(String param) {
+        // Your expensive logic
+        return "Expensive Data";
+    }
+}
+```
+
+### 5. Asynchronous Processing
+
+**Definition**: Asynchronous processing allows requests to be handled in the background, freeing up resources.
+
+**Implementation**:
+- **Using `@Async`**:
+
+```java
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.stereotype.Service;
+
+@Service
+public class YourService {
+
+    @Async
+    public void yourAsyncMethod() {
+        // Your long-running task
+    }
+}
+```
+
+### 6. Bulkheads
+
+**Definition**: Bulkheads isolate different parts of a system to prevent a failure in one area from impacting others.
+
+**Implementation**:
+- **Using Resilience4j**:
+
+```java
+import io.github.resilience4j.bulkhead.annotation.Bulkhead;
+
+@Service
+public class YourService {
+
+    @Bulkhead(name = "bulkhead1", fallbackMethod = "fallbackMethod")
+    public String yourMethod() {
+        // Your service logic
+    }
+
+    public String fallbackMethod(Throwable t) {
+        return "Fallback response";
+    }
+}
+```
+
+### 7. Message Queues
+
+**Definition**: Offload tasks to a message queue to decouple services and manage load.
+
+**Implementation**:
+- **Using RabbitMQ or Kafka** to handle incoming requests asynchronously:
+
+```java
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.stereotype.Service;
+
+@Service
+public class YourService {
+
+    private final RabbitTemplate rabbitTemplate;
+
+    public YourService(RabbitTemplate rabbitTemplate) {
+        this.rabbitTemplate = rabbitTemplate;
+    }
+
+    public void sendMessage(String message) {
+        rabbitTemplate.convertAndSend("yourQueue", message);
+    }
+}
+```
+
+### 8. Health Checks and Monitoring
+
+**Definition**: Regular health checks and monitoring help you identify issues before they escalate.
+
+**Implementation**:
+- **Using Spring Boot Actuator** to expose endpoints for health checks:
+
+```yaml
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+```
+
+### Conclusion
+
+By implementing these strategies, you can effectively manage multiple requests and service load in your Spring Boot microservices. Techniques like rate limiting, circuit breakers, load balancing, and asynchronous processing not only enhance the resilience of your application but also improve the overall user experience. Regular monitoring and health checks further ensure that your services remain responsive under varying loads.
+
+Managing error handling, health checks, tracing, performance monitoring, and memory leaks is crucial for building secure and robust applications. Additionally, preventing unauthorized attacks, especially in sensitive areas like banking transactions, requires implementing various security measures. Here’s a comprehensive approach to these topics.
+
+### 1. Error Handling and Health Checks
+
+**Error Handling**:
+- Implement global exception handling in your Spring Boot application using `@ControllerAdvice`.
+
+```java
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
+
+@ControllerAdvice
+public class GlobalExceptionHandler {
+    
+    @ExceptionHandler(Exception.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public String handleAllExceptions(Exception ex) {
+        // Log the exception
+        return "An error occurred: " + ex.getMessage();
+    }
+}
+```
+
+**Health Checks**:
+- Use Spring Boot Actuator to expose health endpoints.
+
+```yaml
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+```
+
+### 2. Tracing and Performance Monitoring
+
+**Tracing**:
+- Use Spring Cloud Sleuth to add tracing to your application, which integrates with distributed tracing systems like Zipkin.
+
+```xml
+<dependency>
+    <groupId>org.springframework.cloud</groupId>
+    <artifactId>spring-cloud-starter-sleuth</artifactId>
+</dependency>
+```
+
+**Performance Monitoring**:
+- Use tools like Prometheus and Grafana to monitor application performance.
+- Integrate with Application Performance Management (APM) tools such as New Relic or Dynatrace for deeper insights.
+
+### 3. Preventing Memory Leaks
+
+**Best Practices**:
+- **Monitor Resources**: Use profiling tools (e.g., VisualVM, JProfiler) to monitor memory usage and identify leaks.
+- **Avoid Long-lived References**: Use weak references where applicable to avoid keeping objects in memory longer than necessary.
+- **Clean Up Resources**: Ensure that resources like database connections, file handles, etc., are properly closed after use.
+
+### 4. Preventing Unauthorized Attacks
+
+**Authentication and Authorization**:
+- Implement JWT or OAuth2 for securing endpoints and ensuring that only authorized users can access sensitive operations.
+
+**Input Validation**:
+- Always validate and sanitize user inputs to prevent attacks like SQL injection and XSS.
+
+**CSRF Protection**:
+- Enable CSRF protection in Spring Security for state-changing requests.
+
+### 5. Valid and Invalid User Modification
+
+In the context of banking transactions (debit/credit), users might manipulate requests using tools like Postman or browser developer tools. Here’s how to manage this:
+
+**Example Scenario**:
+- A valid user might try to change the amount or account number in the request payload.
+
+**Prevention Strategies**:
+
+1. **Server-Side Validation**:
+   - Always validate transaction requests on the server-side. Check if the user has permission to perform the transaction and validate the data provided.
+
+```java
+public void debitAccount(String accountId, BigDecimal amount) {
+    // Validate if the user has sufficient balance
+    if (userBalance < amount) {
+        throw new InsufficientFundsException("Not enough funds.");
+    }
+}
+```
+
+2. **Use HTTPS**:
+   - Ensure all communications are done over HTTPS to prevent man-in-the-middle attacks.
+
+3. **Digital Signatures**:
+   - Use digital signatures for sensitive operations. The server can verify the integrity and authenticity of the request.
+
+4. **Logging and Auditing**:
+   - Log all transactions with user IDs, timestamps, and amounts. This can help trace back unauthorized activities.
+
+5. **Rate Limiting**:
+   - Implement rate limiting to prevent brute-force attempts or abuse of the API.
+
+### 6. Example: Secure Debit/Credit Transaction Endpoint
+
+```java
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("/api/banking")
+public class BankingController {
+
+    @PostMapping("/debit")
+    public ResponseEntity<String> debit(@RequestBody DebitRequest request) {
+        // Validate user and request
+        validateDebitRequest(request);
+        
+        // Perform transaction
+        accountService.debitAccount(request.getAccountId(), request.getAmount());
+        return ResponseEntity.ok("Transaction successful");
+    }
+
+    private void validateDebitRequest(DebitRequest request) {
+        // Check user authentication and account validity
+        if (!isUserAuthorized(request.getUserId())) {
+            throw new UnauthorizedException("User not authorized");
+        }
+        
+        // Additional validations
+        if (request.getAmount().compareTo(BigDecimal.ZERO) <= 0) {
+            throw new InvalidRequestException("Amount must be greater than zero");
+        }
+    }
+}
+```
+
+### Conclusion
+
+To build a secure and efficient Spring Boot application, focus on error handling, health checks, tracing, performance monitoring, and preventing memory leaks. Implement strong security measures, including proper authentication and authorization, to protect sensitive operations like banking transactions. By validating requests server-side and logging transactions, you can help mitigate unauthorized modifications and ensure the integrity of your application.
+
+</details>
+
+# Deploying a microservices architecture on AWS involves several components and services.
+
+<details>
+	
 Deploying a microservices architecture on AWS involves several components and services. Here’s a detailed guide on how to deploy an e-commerce application with microservices using AWS services such as ECS (Elastic Container Service) or EKS (Elastic Kubernetes Service), S3 for static content, RDS for relational databases, and DynamoDB for NoSQL databases. Additionally, we'll cover CI/CD pipeline setup using AWS CodePipeline and AWS CodeBuild.
 
 ### **1. Infrastructure Setup**
