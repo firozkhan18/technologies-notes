@@ -879,7 +879,6 @@ public class InterfaceExample {
 ### Conclusion
 
 While both regular and functional interfaces serve to define contracts for classes, functional interfaces specifically enable a functional programming approach in Java, allowing for cleaner and more maintainable code. Default and static methods enhance the flexibility and reusability of interfaces, making them more powerful in modern Java development. If you have further questions or need more examples, feel free to ask!
-In Java, memory management and garbage collection (GC) are crucial aspects of application performance and stability. Here’s a breakdown of the memory pools, garbage collection algorithms, and techniques to prevent memory leaks, specifically in Java and J2EE applications.
 
 ---
 
@@ -1062,6 +1061,8 @@ The try-with-resources statement is a powerful feature in Java that enhances res
 ---
 
 ## Garbage Collection and Memory Management
+
+In Java, memory management and garbage collection (GC) are crucial aspects of application performance and stability. Here’s a breakdown of the memory pools, garbage collection algorithms, and techniques to prevent memory leaks, specifically in Java and J2EE applications.
 
 #### 5. Garbage Collection
 - Garbage collection (GC) is the process of automatically identifying and disposing of objects that are no longer in use in order to reclaim memory. This helps prevent memory leaks.
