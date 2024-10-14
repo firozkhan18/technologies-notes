@@ -13,6 +13,8 @@ Hide/Show table of contents
 |---- | ---------|
 |1 | [**Cheat-Sheet-Docker**](cheat-sheet/Cheat-Sheet-Docker.md)|
 |2 | [**Cheat-Sheet-Kafka**](cheat-sheet/Cheat-Sheet-Kafka.md)|
+|2.1 | [**Kafka Concepts**](Kafka/Kafka-Concepts.md)|
+|2.2 | [**Kafka Connect**](Kafka/Kafka-Connect.md)|
 |3 | [**Cheat-Sheet-Kubernetes**](cheat-sheet/Cheat-Sheet-Kubernetes.md)|
 |4 | [**Cheat-Sheet-Linux**](cheat-sheet/Cheat-Sheet-Linux.md)|
 |5 | [**Cheat-Sheet-Java8**](cheat-sheet/Cheat-Sheet-Java8.md)|
