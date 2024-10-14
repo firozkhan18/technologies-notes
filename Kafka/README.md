@@ -263,4 +263,171 @@ sudo systemctl restart kafka
 # If running manually, stop and then start the broker
 ```
 
-After checking these items, try running your application again. If you continue to face issues, feel free to share any additional logs or configurations!
+The Kafka Connect Debezium Driver for PostgreSQL is a tool that captures changes from a PostgreSQL database and streams them into Kafka topics. This allows applications to react to changes in the database in real-time, enabling event-driven architectures.
+
+### Key Features of Debezium PostgreSQL Connector
+
+1. **Change Data Capture (CDC)**: It tracks changes to database rows (inserts, updates, deletes) and publishes them as events to Kafka topics.
+
+2. **Logical Replication**: Debezium uses PostgreSQL's logical decoding feature to capture changes. Ensure that your PostgreSQL database has logical replication enabled.
+
+3. **Configuration Options**: Offers various configuration options for tuning performance, filtering specific tables, and setting up snapshotting of existing data.
+
+4. **Data Format**: Debezium formats the change events in a standard JSON format, making it easier for consumers to process the data.
+
+### Setting Up Debezium PostgreSQL Connector
+
+1. **Install the Connector**:
+   - Download the Debezium PostgreSQL connector from the [Debezium website](https://debezium.io/releases/).
+   - Unzip it into the Kafka Connect plugins directory (e.g., `/kafka/plugins`).
+
+2. **Configure PostgreSQL**:
+   - Enable logical replication in your PostgreSQL instance. You may need to modify the `postgresql.conf` and `pg_hba.conf` files.
+   - Create a replication slot for Debezium.
+
+   Example settings in `postgresql.conf`:
+   ```plaintext
+   wal_level = logical
+   max_replication_slots = 1
+   max_wal_senders = 1
+   ```
+
+3. **Create the Connector Configuration**:
+   - Use the following JSON configuration for the connector:
+
+   ```json
+   {
+     "name": "postgres-connector",
+     "config": {
+       "connector.class": "io.debezium.connector.postgresql.PostgresConnector",
+       "tasks.max": "1",
+       "database.hostname": "localhost",
+       "database.port": "5432",
+       "database.user": "your_username",
+       "database.password": "your_password",
+       "database.dbname": "your_database",
+       "database.server.name": "your_server_name",
+       "table.include.list": "schema_name.table_name",
+       "plugin.name": "pgoutput",
+       "slot.name": "your_slot_name"
+     }
+   }
+   ```
+
+4. **Deploy the Connector**:
+   - Use the Kafka Connect REST API to deploy the connector. You can do this with a command like:
+
+   ```bash
+   curl -X POST -H "Content-Type: application/json" --data @connector-config.json http://localhost:8083/connectors
+   ```
+
+5. **Monitor the Connector**:
+   - Use the Kafka Connect REST API to monitor the status of your connector:
+
+   ```bash
+   curl http://localhost:8083/connectors/postgres-connector/status
+   ```
+
+### Troubleshooting
+
+- **Logs**: Check the Kafka Connect logs for any error messages that can help identify issues during setup.
+- **PostgreSQL Logs**: Look at PostgreSQL logs to ensure that logical replication is set up correctly and that no errors are occurring on the database side.
+- **Schema Changes**: Be mindful of schema changes in your PostgreSQL database, as they may affect the connector's ability to capture changes.
+
+### Resources
+
+- [Debezium Documentation](https://debezium.io/documentation/)
+- [PostgreSQL Logical Replication](https://www.postgresql.org/docs/current/logical-replication.html)
+
+To set up the Debezium PostgreSQL connector, you'll need to determine the Kafka Connect plugins directory in your setup. Here’s how to find or set it up:
+
+1. **Default Location**: The plugins directory is often specified in the `connect-distributed.properties` configuration file. You can typically find this file in the `config` directory of your Kafka installation (e.g., `D:\kafka\config\connect-distributed.properties`).
+
+2. **Edit the Configuration**:
+   - Open the `connect-distributed.properties` file.
+   - Look for the line that starts with `plugin.path=`. If it’s not present, you can add it.
+   - Set the path to your plugins directory, for example:
+     ```properties
+     plugin.path=D:/kafka/plugins
+     ```
+
+3. **Create the Plugins Directory**:
+   - If you don’t already have a `plugins` directory, you can create one. For example, create `D:\kafka\plugins`.
+
+4. **Install the Connector**:
+   - Download the Debezium PostgreSQL connector from the [Debezium website](https://debezium.io/download/).
+   - Unzip the connector files into the `D:\kafka\plugins` directory.
+
+5. **Restart Kafka Connect**: After installing the connector, restart the Kafka Connect service for it to recognize the new plugin.
+
+### Example Directory Structure
+After installing, your plugins directory might look something like this:
+```
+D:\kafka\plugins\
+    └── debezium-connector-postgresql
+        ├── debezium-connector-postgresql-x.y.z.jar
+        ├── other-dependencies.jar
+        └── ...
+```
+
+### Verifying the Installation
+You can verify the installation by checking the Kafka Connect REST API to see if the connector is recognized:
+```bash
+curl http://localhost:8083/connector-plugins
+```
+
+
+To restart Kafka Connect, follow these steps based on your environment (Windows or Linux). Here’s how you can do it:
+
+### On Windows
+
+1. **Stop Kafka Connect**:
+   - If you started Kafka Connect using a command prompt, simply close that command prompt window. If it's running as a service, use the following command:
+     ```bash
+     kafka-stop.bat
+     ```
+   - If you don't have a script to stop it, you can manually terminate the process using the Task Manager.
+
+2. **Start Kafka Connect**:
+   - Open a new command prompt window.
+   - Navigate to your Kafka installation directory:
+     ```bash
+     cd D:\kafka
+     ```
+   - Start Kafka Connect with the following command:
+     ```bash
+     D:\kafka>.\bin\windows\connect-distributed.bat .\config\connect-distributed.properties
+     ```
+
+### On Linux
+
+1. **Stop Kafka Connect**:
+   - If you started Kafka Connect in a terminal session, use `Ctrl+C` to stop it.
+   - If it’s running as a service, use the following command:
+     ```bash
+     systemctl stop kafka-connect
+     ```
+
+2. **Start Kafka Connect**:
+   - Open a terminal and navigate to your Kafka installation directory:
+     ```bash
+     cd /path/to/kafka
+     ```
+   - Start Kafka Connect using:
+     ```bash
+     bin/connect-distributed.sh config/connect-distributed.properties
+     ```
+
+### Verify the Restart
+
+After restarting, you can verify that Kafka Connect is running and recognizing the new connector by checking the status:
+
+```bash
+curl http://localhost:8083/connector-plugins
+```
+
+D:\kafka>.\bin\windows\connect-distributed.bat .\config\connect-distributed.properties
+[2024-10-14 05:43:16,434] INFO Kafka Connect worker initializing ... (org.apache.kafka.connect.cli.AbstractConnectCli:114)
+[2024-10-14 05:43:16,446] INFO WorkerInfo values:
+        jvm.args = -Xmx256M, -XX:+UseG1GC, -XX:MaxGCPauseMillis=20, -XX:InitiatingHeapOccupancyPercent=35, -XX:+ExplicitGCInvokesConcurrent, -Djava.awt.headless=true, -Dcom.sun.management.jmxremote, -Dcom.sun.management.jmxremote.authenticate=false, -Dcom.sun.management.jmxremote.ssl=false, -Dkafka.logs.dir=D:\kafka/logs, -Dlog4j.configuration=file:D:\kafka/config/connect-log4j.properties
+        jvm.spec = Oracle Corporation, Java HotSpot(TM) 64-Bit Server VM, 22.0.2, 22.0.2+9-70
