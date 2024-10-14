@@ -1,3 +1,21 @@
+## Table of Contents
+
+1. [Introduction](#introduction)
+2. [Documentation](#documentation)
+3. [Overview](#overview)
+4. [Resilience Patterns](#resilience-patterns)
+5. [Spring Boot](#spring-boot)
+6. [Usage Examples](#usage-examples)
+   - [CircuitBreaker, Retry and Fallback](#circuitbreaker-retry-and-fallback)
+   - [RateLimiter](#ratelimiter)
+   - [Bulkhead](#bulkhead)
+7. [Consume Emitted Events](#consume-emitted-events)
+   - [Examples](#examples)
+8. [Talks](#talks)
+9. [Companies That Use Resilience4j](#companies-that-use-resilience4j)
+
+## Introduction
+
 # Section 1 - Java:
 <details>
 
