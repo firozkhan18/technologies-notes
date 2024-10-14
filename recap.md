@@ -10908,8 +10908,6 @@ If you have further questions or need clarification on any specific aspect, feel
 
 <details>
 
- 
-
 Certainly! Apache Kafka is a distributed streaming platform used for building real-time data pipelines and streaming applications. Here’s an in-depth look at Kafka interview questions, including replication concepts and examples.
 
 ### 1. **What is Apache Kafka, and what are its key components?**
