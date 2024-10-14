@@ -4966,6 +4966,7 @@ Sure! Let's break down the SQL and MongoDB interview questions, covering common 
   UPDATE accounts SET balance = balance + 100 WHERE account_id = 2;
   COMMIT;
   ```
+</details>
 
 # Section 4 - React:
 
@@ -8185,7 +8186,7 @@ Understanding these concepts helps in designing scalable systems that efficientl
 
 </details>
 
-# Section 7 Improving Performance:
+# Section 6 Improving Performance:
 
 <details>
 
