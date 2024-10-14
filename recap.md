@@ -1,6 +1,6 @@
 
 # Section 1 - Java:
-
+<details>
 In Java, the Reflection API allows you to inspect and manipulate classes and objects at runtime. This includes accessing and invoking private methods. While accessing private methods can be useful for certain tasks, it's generally recommended to use reflection sparingly and cautiously due to potential impacts on code maintainability and security.
 
 Here’s a step-by-step guide on how to use the Reflection API to call private methods in a class:
@@ -2827,10 +2827,11 @@ log(); // Only the last call will execute after 2 seconds
 
 These examples cover a range of fundamental JavaScript concepts, such as string manipulation, array operations, and asynchronous programming patterns. Being familiar with these types of questions can help you perform well in coding interviews. If you need more questions or specific topics, feel free to ask!
 
-
+</details>
 
 # Section 2 - Kafka:
 
+<details>
 Certainly! Apache Kafka is a distributed streaming platform used for building real-time data pipelines and streaming applications. Here’s an in-depth look at Kafka interview questions, including replication concepts and examples.
 
 ### 1. **What is Apache Kafka, and what are its key components?**
@@ -4080,7 +4081,11 @@ spec:
 
 You now have a complete setup for a Spring Boot application using Kafka and MongoDB, all running on Kubernetes and Docker. This configuration allows your application to handle messages in an event-driven manner, storing the results in MongoDB. Adjust the configurations based on your environment and specific needs. If you have further questions or need additional details, feel free to ask!
 
+</details>
+
 # Section 3 - SQL:
+
+<details>
 
 **DENSE_RANK()** is a window function in SQL that assigns ranks to rows within a partition of a result set. Unlike `RANK()`, which may produce gaps in rank values when there are ties, `DENSE_RANK()` does not leave gaps. This function is useful for ranking items when you want a consecutive ranking without gaps.
 
@@ -4964,6 +4969,7 @@ Sure! Let's break down the SQL and MongoDB interview questions, covering common 
 
 # Section 4 - React:
 
+<details>
 
 ### **1. Real DOM (Document Object Model)**
 
@@ -7731,9 +7737,12 @@ export default DataFetcher;
 
 This will start your React application, and you should see the counter and the user list being fetched and displayed. If you have any specific features or additional concepts you'd like to see implemented, let me know!
 
+</details>
 
 # Section 5 - MongoDB:
 
+<details>
+	
 ### MongoDB Interview Questions and Configuration
 
 **1. Basic Commands**
@@ -8174,8 +8183,11 @@ In addition to scaling up and down, **Horizontal Scaling** (or scaling out/in) i
 
 Understanding these concepts helps in designing scalable systems that efficiently handle varying workloads and optimize resource usage.
 
+</details>
+
 # Section 7 Improving Performance:
 
+<details>
 
 Here's an in-depth guide with example code and explanations for improving performance, managing microservices architecture, and using various tools and techniques:
 
@@ -9005,8 +9017,11 @@ Managing memory and improving performance in a Java Spring Boot microservices ar
 
 By implementing these strategies, you can manage memory effectively, improve performance, and scale your microservices to handle increasing load and ensure system reliability.
 
+</details>
+
 # Section 8 Hibernate:
 
+<details>
 
 Caching is a crucial optimization technique in software development, especially in microservices and database interactions. In the context of Spring Boot and Hibernate, caching can significantly enhance performance by reducing database access.
 
@@ -9532,6 +9547,8 @@ While Hibernate is a specific implementation of the JPA specification, the `Enti
 
 The `EntityManager` is a fundamental component in managing entities in JPA and Hibernate, providing an abstraction layer for performing database operations, managing the persistence context, executing queries, and handling transactions. Understanding its role and functionality is essential for effective data management in Java applications. If you have any more questions or need examples, feel free to ask!
 In modern web development, particularly with libraries and frameworks like React, understanding the concepts of the Virtual DOM and Real DOM is crucial. These concepts help optimize performance and improve the user experience. Let's delve into both:
+
+</details>
 
 The Circuit Breaker pattern is a design pattern used in software development to handle failures in a distributed system. It helps prevent a failure in one part of a system from cascading and affecting the entire system. This pattern is particularly useful in microservices architectures where services depend on each other.
 
