@@ -1,4 +1,5 @@
-     new Employee("Bob", 80000),
+```
+new Employee("Bob", 80000),
         new Employee("Charlie", 90000)
     );
 
@@ -13,6 +14,7 @@
   }
 }
 ```
+
 **DENSE_RANK()** is a window function in SQL that assigns ranks to rows within a partition of a result set. Unlike `RANK()`, which may produce gaps in rank values when there are ties, `DENSE_RANK()` does not leave gaps. This function is useful for ranking items when you want a consecutive ranking without gaps.
 
 Here are some common interview questions related to `DENSE_RANK()` along with examples:
