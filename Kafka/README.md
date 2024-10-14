@@ -531,9 +531,9 @@ curl -X POST -H "Content-Type: application/json" --data '{
     "connector.class": "io.debezium.connector.postgresql.PostgresConnector",
     "tasks.max": "1",
     "database.hostname": "localhost",
-    "database.port": "5433",
+    "database.port": "5432",
     "database.user": "postgres",
-    "database.password": "2023.Sigma",
+    "database.password": "postgres",
     "database.dbname": "ms_cache_272",
     "database.server.name": "ms_cache",
     "table.include.list": "ms_schema.products_m",
@@ -552,9 +552,9 @@ curl -X POST -H "Content-Type: application/json" --data '{
     "connector.class": "io.debezium.connector.postgresql.PostgresConnector",
     "tasks.max": "1",
     "database.hostname": "localhost",
-    "database.port": "5433",
+    "database.port": "5432",
     "database.user": "postgres",
-    "database.password": "2023.Sigma",
+    "database.password": "postgres",
     "database.dbname": "ms_cache_272",
     "database.server.name": "ms_cache",
     "table.include.list": "ms_schema.products_m",
@@ -564,3 +564,207 @@ curl -X POST -H "Content-Type: application/json" --data '{
   }
 }' http://localhost:8083/connector-plugins/io.debezium.connector.postgresql.PostgresConnector/config/validate
 ```
+The "Connection refused" error indicates that the PostgreSQL server is not currently running on port 5433 or is not accepting connections on that port. Here are some steps you can take to troubleshoot this issue:
+
+### 1. Check PostgreSQL Server Status
+Make sure the PostgreSQL server is running. You can do this via the Services app in Windows:
+
+- Press `Win + R`, type `services.msc`, and hit Enter.
+- Look for the PostgreSQL service (it may be named something like `postgresql-x64-16`).
+- Ensure the service is running. If not, start it.
+
+### 2. Verify PostgreSQL Configuration
+Check your PostgreSQL configuration files (`postgresql.conf` and `pg_hba.conf`):
+
+- **postgresql.conf**:
+  - Locate the `port` setting and ensure it is set to `5433`.
+  - Ensure that the `listen_addresses` setting is set to `localhost` or `*` to accept connections.
+
+- **pg_hba.conf**:
+  - Ensure it has an entry allowing connections from your user and database. For example:
+
+    ```plaintext
+    host    ms_cache_272    postgres    127.0.0.1/32    md5
+    host    ms_cache_272    postgres    ::1/128         md5
+    ```
+
+### 3. Restart PostgreSQL
+After making any changes, restart the PostgreSQL service again.
+
+### 4. Test Connectivity
+Once the service is confirmed running, attempt the connection command again:
+
+```bash
+"C:\Program Files\PostgreSQL\16\bin\psql.exe" -h localhost -p 5433 -U postgres -d ms_cache_272
+```
+
+### 5. Check for Multiple PostgreSQL Instances
+If you have multiple versions of PostgreSQL installed, ensure you’re connecting to the correct instance. Check if another version is running on the default port (5432).
+
+### 6. Check Firewall Settings
+Ensure that your firewall settings allow traffic through port 5433.
+
+If you don’t have the `ms_cache_272` database yet, you can create it using the following steps:
+
+1. **Connect to PostgreSQL**:
+   First, connect to the default database (usually `postgres`):
+   ```bash
+   "C:\Program Files\PostgreSQL\16\bin\psql.exe" -h localhost -p 5432 -U postgres
+   ```
+
+2. **Create the Database**:
+   Once you’re in the PostgreSQL prompt, create the `ms_cache_272` database by running:
+   ```sql
+   CREATE DATABASE ms_cache_272;
+   ```
+
+3. **Verify Creation**:
+   You can list all databases to confirm it was created:
+   ```sql
+   \l
+   ```
+
+4. **Connect to Your New Database**:
+   After creating the database, connect to it:
+   ```bash
+   "C:\Program Files\PostgreSQL\16\bin\psql.exe" -h localhost -p 5432 -U postgres -d ms_cache_272
+   ```
+
+
+```
+Microsoft Windows [Version 10.0.19045.5011]
+(c) Microsoft Corporation. All rights reserved.
+
+C:\Program Files\PostgreSQL\16\pgAdmin 4\runtime>"
+C:\Program Files\PostgreSQL\16\pgAdmin 4\runtime\p
+sql.exe" "host=localhost port=5432 dbname=postgres
+ user=postgres sslmode=prefer connect_timeout=10"
+2>>&1
+psql (16.3)
+WARNING: Console code page (437) differs from Wind
+ows code page (1252)
+         8-bit characters might not work correctly
+. See psql reference
+         page "Notes for Windows users" for detail
+s.
+Type "help" for help.
+
+postgres=# CREATE DATABASE ms_cache_272;
+CREATE DATABASE
+postgres=#
+```
+
+You should execute that command in the Command Prompt on your Windows machine. Here’s how to do it:
+
+1. **Open Command Prompt**:
+   - Press `Win + R`, type `cmd`, and hit `Enter`. This opens the Command Prompt.
+
+2. **Run the psql Command**:
+   - In the Command Prompt window, paste the following command:
+     ```bash
+     "C:\Program Files\PostgreSQL\16\bin\psql.exe" -h localhost -p 5432 -U postgres -d ms_cache_272
+     ```
+   - Press `Enter`.
+
+3. **Enter Password**:
+   - If prompted, enter the password for the `postgres` user.
+```
+Microsoft Windows [Version 10.0.19045.5011]
+(c) Microsoft Corporation. All rights reserved.
+
+C:\Users\HP>"C:\Program Files\PostgreSQL\16\bin\psql.exe" -h localhost -p 5432 -U postgres -d ms_cache_272
+Password for user postgres:
+psql (16.3)
+WARNING: Console code page (437) differs from Windows code page (1252)
+         8-bit characters might not work correctly. See psql reference
+         page "Notes for Windows users" for details.
+Type "help" for help.
+
+ms_cache_272=#
+
+```
+
+The JSON configuration you provided for the PostgreSQL Debezium connector looks mostly correct. Here’s a breakdown of the key settings and some recommendations for making sure it works smoothly:
+
+### Configuration Breakdown
+- **name**: The name of the connector, which you've set to `"postgres-connector"`.
+- **connector.class**: This specifies the Debezium PostgreSQL connector.
+- **tasks.max**: The maximum number of tasks to run for this connector. You have set it to `1`.
+- **database.hostname**: Set to `"localhost"`, which is correct if PostgreSQL is running on the same machine.
+- **database.port**: Set to `"5432"`, which should match the PostgreSQL configuration.
+- **database.user**: The user to connect to the database; ensure the user exists.
+- **database.password**: The password for the database user.
+- **database.dbname**: The name of the database you're trying to connect to (`ms_cache_272`).
+- **database.server.name**: A logical name for the database server that will be used in Kafka topics.
+- **table.include.list**: Specifies which tables to include in the change data capture.
+- **plugin.name**: This should be set to `"pgoutput"` for the logical replication.
+- **slot.name**: The name of the replication slot, which should comply with naming conventions.
+- **topic.prefix**: This prefix will be added to the topic names.
+
+### Recommendations
+1. **Replication Slot**: Ensure that the replication slot named `"ms_272_slot"` is created in PostgreSQL. You can create it using the following command:
+   ```sql
+   SELECT pg_create_logical_replication_slot('ms_272_slot', 'pgoutput');
+   ```
+
+2. **Testing Connection**: Before trying to start the connector, ensure you can connect to the database with the provided user and password:
+   ```bash
+   "C:\Program Files\PostgreSQL\16\bin\psql.exe" -h localhost -p 5432 -U postgres -d ms_cache_272
+   ```
+
+3. **Send the POST Request**: You can use `curl` to send the configuration to Kafka Connect. Ensure you're using the correct URL:
+   ```bash
+   curl -X POST -H "Content-Type: application/json" --data '{
+       "name": "postgres-connector",
+       "config": {
+           "connector.class": "io.debezium.connector.postgresql.PostgresConnector",
+           "tasks.max": "1",
+           "database.hostname": "localhost",
+           "database.port": "5432",
+           "database.user": "postgres",
+           "database.password": "postgres",
+           "database.dbname": "ms_cache_272",
+           "database.server.name": "ms_cache",
+           "table.include.list": "ms_schema.products_m",
+           "plugin.name": "pgoutput",
+           "slot.name": "ms_272_slot",
+           "topic.prefix": "ms_cache_272"
+       }
+   }' http://localhost:8083/connectors/
+   ```
+
+4. **Monitor Logs**: After submitting the request, check the Kafka Connect logs for any errors or confirmation that the connector was created successfully.
+```
+[2024-10-14 06:19:02,289] INFO [0:0:0:0:0:0:0:1] - - [14/Oct/2024:00:49:02 +0000] "POST /connector-plugins/io.debezium.connector.postgresql.PostgresConnector/config/validate HTTP/1.1" 405 58 "-" "PostmanRuntime/7.42.0" 5 (org.apache.kafka.connect.runtime.rest.RestServer:62)
+[2024-10-14 06:23:23,366] INFO [AdminClient clientId=connect-cluster-shared-admin] Node 0 disconnected. (org.apache.kafka.clients.NetworkClient:1017)
+[2024-10-14 06:28:23,490] INFO [AdminClient clientId=connect-cluster-shared-admin] Node 0 disconnected. (org.apache.kafka.clients.NetworkClient:1017)
+```
+5. **Validate Configuration**: If you still face issues, use the validation endpoint to ensure the configuration is correct:
+   ```bash
+   curl -X POST -H "Content-Type: application/json" --data '{
+       "connector.class": "io.debezium.connector.postgresql.PostgresConnector",
+       "tasks.max": "1",
+       "database.hostname": "localhost",
+       "database.port": "5432",
+       "database.user": "postgres",
+       "database.password": "postgres",
+       "database.dbname": "ms_cache_272",
+       "database.server.name": "ms_cache",
+       "table.include.list": "ms_schema.products_m",
+       "plugin.name": "pgoutput",
+       "slot.name": "ms_272_slot",
+       "topic.prefix": "ms_cache_272"
+   }' http://localhost:8083/connectors/validate
+   ```
+```
+[2024-10-14 06:19:02,289] INFO [0:0:0:0:0:0:0:1] - - [14/Oct/2024:00:49:02 +0000] "POST /connector-plugins/io.debezium.connector.postgresql.PostgresConnector/config/validate HTTP/1.1" 405 58 "-" "PostmanRuntime/7.42.0" 5 (org.apache.kafka.connect.runtime.rest.RestServer:62)
+[2024-10-14 06:23:23,366] INFO [AdminClient clientId=connect-cluster-shared-admin] Node 0 disconnected. (org.apache.kafka.clients.NetworkClient:1017)
+[2024-10-14 06:28:23,490] INFO [AdminClient clientId=connect-cluster-shared-admin] Node 0 disconnected. (org.apache.kafka.clients.NetworkClient:1017)
+
+[2024-10-14 06:32:17,694] INFO Successfully tested connection for jdbc:postgresql://localhost:5432/ms_cache_272 with user 'postgres' (io.debezium.connector.postgresql.PostgresConnector:147)
+[2024-10-14 06:32:17,713] INFO Connection gracefully closed (io.debezium.jdbc.JdbcConnection:952)
+[2024-10-14 06:32:17,714] INFO AbstractConfig values:
+ (org.apache.kafka.common.config.AbstractConfig:372)
+[2024-10-14 06:32:17,722] INFO [0:0:0:0:0:0:0:1] - - [14/Oct/2024:01:02:15 +0000] "POST /connectors/ HTTP/1.1" 409 74 "-" "PostmanRuntime/7.42.0" 2141 (org.apache.kafka.connect.runtime.rest.RestServer:62)
+After making these checks and adjustments, try sending the POST request again to create the connector.
+
