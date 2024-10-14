@@ -881,6 +881,9 @@ public class InterfaceExample {
 While both regular and functional interfaces serve to define contracts for classes, functional interfaces specifically enable a functional programming approach in Java, allowing for cleaner and more maintainable code. Default and static methods enhance the flexibility and reusability of interfaces, making them more powerful in modern Java development. If you have further questions or need more examples, feel free to ask!
 In Java, memory management and garbage collection (GC) are crucial aspects of application performance and stability. Here’s a breakdown of the memory pools, garbage collection algorithms, and techniques to prevent memory leaks, specifically in Java and J2EE applications.
 
+---
+
+## Exception Handling
 
 In Java, exception handling is a powerful mechanism to manage runtime errors, allowing the normal flow of program execution to continue. Here’s an overview of exception handling, including checked and unchecked exceptions, as well as `final`, `finally`, `finalize`, and garbage collection.
 
@@ -1056,7 +1059,9 @@ public class MultipleResourcesExample {
 
 The try-with-resources statement is a powerful feature in Java that enhances resource management by ensuring that all resources are closed automatically. This leads to cleaner code, reduced boilerplate, and minimized risk of resource leaks. If you have further questions or need more examples, feel free to ask!
 
-### Garbage Collection and Memory Management
+---
+
+## Garbage Collection and Memory Management
 
 #### 5. Garbage Collection
 - Garbage collection (GC) is the process of automatically identifying and disposing of objects that are no longer in use in order to reclaim memory. This helps prevent memory leaks.
@@ -1174,7 +1179,9 @@ For fullstack applications, particularly those using J2EE frameworks, the follow
 
 Understanding memory pools, garbage collection algorithms, and effective memory leak prevention techniques is essential for developing robust Java and J2EE applications. By implementing best practices for memory management and monitoring, you can improve application performance and stability. If you have further questions or need more detailed explanations on specific areas, feel free to ask!
 
-If you have any further questions or need more specific examples, feel free to ask!
+---
+
+## Marker Interface
 
 In Java, a **marker interface** is an interface that has no methods or fields. Its primary purpose is to signal to the Java compiler or runtime that a class possesses a certain property or should be treated in a specific way.
 
@@ -1212,6 +1219,10 @@ In this example, the `User` class implements the `Serializable` marker interface
 With the advent of annotations in Java (introduced in Java 5), many uses of marker interfaces have been replaced by annotations, which can provide more flexibility and better metadata handling. For instance, the `@Deprecated` annotation serves a similar purpose without needing a dedicated interface.
 
 Overall, while marker interfaces are less common today, they still hold significance in certain contexts within Java.
+
+---
+
+## Serialization & Deserialization
 
 Serialization and deserialization in Java are mechanisms used to convert an object into a byte stream and vice versa. This process is essential for saving the state of an object to a file or transmitting it over a network.
 
@@ -1637,7 +1648,9 @@ class LightOffCommand implements Command {
 
 Design patterns are crucial for creating scalable and maintainable software. By understanding and implementing these patterns, developers can solve common problems effectively. If you have more specific questions or need further examples, feel free to ask!
 
-### Types of Class Loaders in Java
+---
+
+## Types of Class Loaders in Java
 
 Java uses a hierarchical class loading mechanism to load classes into the Java Virtual Machine (JVM). Here are the main types of class loaders:
 
@@ -1721,9 +1734,9 @@ public class ReflectionExample {
 - Java class loaders are responsible for loading classes into memory, and they follow a hierarchical structure.
 - The Reflection API provides powerful capabilities to access and manipulate private members of a class, enhancing flexibility at the cost of performance and type safety.
 
-If you have further questions or need additional details, feel free to ask!
+---
 
-### What is Immutability?
+## What is Immutability?
 
 **Immutability** refers to the property of an object whose state cannot be modified after it is created. Immutable objects are particularly useful in multi-threaded applications, as they can be shared between threads without the risk of being changed, which helps avoid issues like race conditions.
 
@@ -1803,8 +1816,9 @@ public class Main {
 
 Immutability is a powerful concept in programming that enhances safety and simplicity. By following the guidelines to create immutable classes, you can ensure that your objects remain consistent and thread-safe. If you have further questions or need more examples, feel free to ask!
 
+---
 
-
+## Thread & Concurrency Executor Framework
 
 Sure! Let’s break down each of these concepts, starting with the concurrency executor framework, then moving on to threads, functional interfaces, default methods, and the differences between `HashMap` and `ConcurrentHashMap`.
 
@@ -2639,7 +2653,9 @@ While `Runnable` and `Callable` were already functional interfaces, Java 8 intro
 
 In summary, while default and static methods in regular interfaces are useful for providing shared functionality, functional interfaces specifically facilitate functional programming in Java. They allow for cleaner, more expressive code through the use of lambda expressions, enabling developers to write code that is both concise and easy to understand. The introduction of new functional interfaces in Java 8 enhanced the language's capabilities and aligned it more closely with functional programming principles.
 
+---
 
+## Iterator in Java
 
 In Java, iterators are part of the Java Collections Framework and are used to traverse collections such as lists, sets, and maps. There are several types of iterators in Java, each with its specific use cases and characteristics.
 
@@ -2840,7 +2856,9 @@ Yes, in addition to the iterators already discussed, there are a few more specia
 
 In addition to the previously discussed iterators, Java provides several specialized iterators and mechanisms that cater to different needs and data structures. Understanding these iterators helps in selecting the right one based on the specific requirements of your application.
 
+---
 
+## Custom implementations for data structures
 
 Creating custom implementations for data structures like linked lists, maps, and sets from scratch can help you understand how these structures work under the hood. Additionally, I'll include an example of a class that demonstrates a memory leak to show how issues can arise and be mitigated.
 
@@ -3038,7 +3056,9 @@ public class MemoryLeakDemo {
 
 When implementing data structures and managing memory, it's crucial to understand how references are handled and how to properly clean up resources to avoid memory leaks.
 
-# Java Reflection API
+---
+
+## Java Reflection API
 
 In Java, the Reflection API allows you to inspect and manipulate classes and objects at runtime. This includes accessing and invoking private methods. While accessing private methods can be useful for certain tasks, it's generally recommended to use reflection sparingly and cautiously due to potential impacts on code maintainability and security.
 
@@ -3143,7 +3163,9 @@ Reflection is often used in frameworks and libraries for tasks like:
 
 In summary, while the Reflection API provides powerful capabilities to interact with private methods, it should be used judiciously to avoid compromising code integrity and performance.
 
-### Java Code Snippet for Employee List
+---
+
+## Java Code Snippet for Employee List
 
 #### Original Code
 
@@ -3515,7 +3537,9 @@ log(); // Only the last call will execute after 2 seconds
 
 These examples cover a range of fundamental JavaScript concepts, such as string manipulation, array operations, and asynchronous programming patterns. Being familiar with these types of questions can help you perform well in coding interviews. If you need more questions or specific topics, feel free to ask!
 
-# Complete Tutorial on Threads and Concurrency in Java
+---
+
+## Complete Tutorial on Threads and Concurrency in Java
 
 ## Table of Contents
 
