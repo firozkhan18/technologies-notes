@@ -1,4 +1,4 @@
-Here is an example of security configurations in Angular:
+### Example of security configurations in Angular:
 
 1. To implement security in Angular, you can use Angular Route Guards to protect routes based on user authentication and authorization.
 2. Create a service to authenticate users using JWT tokens or OAuth.
@@ -13,7 +13,7 @@ Here is an example of security configurations in Angular:
 11. Enable HTTPS to encrypt data transmitted between the client and server.
 12. Regularly perform security audits and code reviews to identify and fix security issues in your Angular application.
 
-The 12 rules of microservices, as defined by Sam Newman in his book "Building Microservices," are:
+### The 12 rules of microservices, as defined by Sam Newman in his book "Building Microservices," are:
 
 1. Model around business domain concepts
 2. Design for failure
@@ -27,7 +27,9 @@ The 12 rules of microservices, as defined by Sam Newman in his book "Building Mi
 10. Monitor everything
 11. Log everything
 12. Secure everything
-13. 
+
+These rules guide the development and deployment of microservices architectures, emphasizing principles such as scalability, resilience, and agility.
+
 # Section 1 - Java:
 <details>
 In Java, the Reflection API allows you to inspect and manipulate classes and objects at runtime. This includes accessing and invoking private methods. While accessing private methods can be useful for certain tasks, it's generally recommended to use reflection sparingly and cautiously due to potential impacts on code maintainability and security.
