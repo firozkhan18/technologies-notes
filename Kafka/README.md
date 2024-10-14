@@ -398,7 +398,13 @@ To restart Kafka Connect, follow these steps based on your environment (Windows 
      ```bash
      D:\kafka>.\bin\windows\connect-distributed.bat .\config\connect-distributed.properties
      ```
-
+```
+D:\kafka>.\bin\windows\connect-distributed.bat .\config\connect-distributed.properties
+[2024-10-14 05:43:16,434] INFO Kafka Connect worker initializing ... (org.apache.kafka.connect.cli.AbstractConnectCli:114)
+[2024-10-14 05:43:16,446] INFO WorkerInfo values:
+        jvm.args = -Xmx256M, -XX:+UseG1GC, -XX:MaxGCPauseMillis=20, -XX:InitiatingHeapOccupancyPercent=35, -XX:+ExplicitGCInvokesConcurrent, -Djava.awt.headless=true, -Dcom.sun.management.jmxremote, -Dcom.sun.management.jmxremote.authenticate=false, -Dcom.sun.management.jmxremote.ssl=false, -Dkafka.logs.dir=D:\kafka/logs, -Dlog4j.configuration=file:D:\kafka/config/connect-log4j.properties
+        jvm.spec = Oracle Corporation, Java HotSpot(TM) 64-Bit Server VM, 22.0.2, 22.0.2+9-70
+```
 ### On Linux
 
 1. **Stop Kafka Connect**:
@@ -426,8 +432,4 @@ After restarting, you can verify that Kafka Connect is running and recognizing t
 curl http://localhost:8083/connector-plugins
 ```
 
-D:\kafka>.\bin\windows\connect-distributed.bat .\config\connect-distributed.properties
-[2024-10-14 05:43:16,434] INFO Kafka Connect worker initializing ... (org.apache.kafka.connect.cli.AbstractConnectCli:114)
-[2024-10-14 05:43:16,446] INFO WorkerInfo values:
-        jvm.args = -Xmx256M, -XX:+UseG1GC, -XX:MaxGCPauseMillis=20, -XX:InitiatingHeapOccupancyPercent=35, -XX:+ExplicitGCInvokesConcurrent, -Djava.awt.headless=true, -Dcom.sun.management.jmxremote, -Dcom.sun.management.jmxremote.authenticate=false, -Dcom.sun.management.jmxremote.ssl=false, -Dkafka.logs.dir=D:\kafka/logs, -Dlog4j.configuration=file:D:\kafka/config/connect-log4j.properties
-        jvm.spec = Oracle Corporation, Java HotSpot(TM) 64-Bit Server VM, 22.0.2, 22.0.2+9-70
+
