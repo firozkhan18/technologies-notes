@@ -9549,10 +9549,6 @@ Managing memory and improving performance in a Java Spring Boot microservices ar
 
 By implementing these strategies, you can manage memory effectively, improve performance, and scale your microservices to handle increasing load and ensure system reliability.
 
-</details>
-
-
-
 The Circuit Breaker pattern is a design pattern used in software development to handle failures in a distributed system. It helps prevent a failure in one part of a system from cascading and affecting the entire system. This pattern is particularly useful in microservices architectures where services depend on each other.
 
 ### **Key Concepts of the Circuit Breaker Pattern**
@@ -9681,6 +9677,11 @@ public class CircuitBreakerExample {
 The Circuit Breaker pattern is a crucial design pattern for building resilient systems. It helps in managing and isolating failures, preventing them from cascading, and ensuring that the system remains responsive and available. By using libraries like Resilience4j, you can implement and manage circuit breakers effectively in your applications.
 
 
+
+
+# Section 8 Spring & Springboot Framework
+
+<details>
 
 In Spring Framework, Dependency Injection (DI), Aspect-Oriented Programming (AOP), and Transaction Management are core concepts that help in building flexible, modular, and maintainable applications. Here’s a detailed explanation of each:
 
@@ -10188,6 +10189,10 @@ public class EventConsumer {
 
 By understanding and applying these communication patterns appropriately, you can build a more resilient, scalable, and maintainable microservices architecture.
 
+</details>
+
+# Section 10 Microservices
+<details>
 Designing and deploying an e-commerce application with microservices involves a range of considerations to ensure scalability, performance, reliability, and maintainability. This guide covers key components like API Gateway, Eureka Registry, Zipkin, caching, circuit breakers, Kafka, security, performance optimization, scaling, and deployment using Docker and Kubernetes. We’ll also touch on setting up a CI/CD pipeline.
 
 ### **1. Microservices Architecture Overview**
@@ -11421,3 +11426,5 @@ spec:
 ### Conclusion
 
 This setup illustrates how to containerize a Spring Boot microservice with MongoDB, deploy it using Docker, and manage it with Kubernetes. You can further enhance the app by implementing CI/CD pipelines and exploring advanced Kubernetes features like Helm charts, persistent storage, and service mesh. If you have any questions or need further clarification, feel free to ask!
+
+</details>
