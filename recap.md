@@ -9676,8 +9676,7 @@ public class CircuitBreakerExample {
 
 The Circuit Breaker pattern is a crucial design pattern for building resilient systems. It helps in managing and isolating failures, preventing them from cascading, and ensuring that the system remains responsive and available. By using libraries like Resilience4j, you can implement and manage circuit breakers effectively in your applications.
 
-
-
+</details>
 
 # Section 8 Spring & Springboot Framework
 
