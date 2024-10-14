@@ -146,7 +146,7 @@ Collections.sort(names, (String a, String b) -> {
 });
 ```
 
-[Complete Fundamental Concepts Of Java Lambda expressions](java-basic-fundamental-lambda-expressions.md)
+[Complete Fundamental Concepts Of Java Lambda expressions](conceptsIII/java-basic-fundamental-lambda-expressions.md)
 
 ## Functional Interface
 An Interface that contains exactly one abstract method is known as functional interface. It can have any number of default, static methods but can contain only one abstract method.
@@ -336,11 +336,11 @@ public class App {
 
 These methods enhance the flexibility and functionality of interfaces in Java, making it easier to work with functional programming and interface-based design patterns. They also support better code organization and reuse, contributing to more maintainable and extensible codebases.
 
-[Complete Fundamental Concepts Of Java Functional Interfaces](java-basic-fundamental-functional-interfaces.md)
+[Complete Fundamental Concepts Of Java Functional Interfaces](conceptsIII/java-basic-fundamental-functional-interfaces.md)
 
 ## Method References
 
-[Complete Fundamental Concepts Of Java Method References](java-basic-fundamental-method-references.md)
+[Complete Fundamental Concepts Of Java Method References](conceptsIII/java-basic-fundamental-method-references.md)
 
 ## Stream
 Introduced in Java 8, the Stream API is used to process collections of objects. A stream is a sequence of objects that supports various methods which can be pipelined to produce the desired result.
@@ -409,7 +409,7 @@ List<Integer> array = Arrays.asList(-2, 0, 4, 6, 8);
 int sum = array.stream().reduce(0, (element1, element2) -> element1 + element2); 
 ```
 
-[Complete Fundamental Concepts Of Java Stream](java-basic-fundamental-Stream.md)
+[Complete Fundamental Concepts Of Java Stream](conceptsIII/java-basic-fundamental-Stream.md)
 
 ## Optional
 Every Java Programmer is familiar with NullPointerException. It can crash your code. And it is very hard to avoid it without using too many null checks.
@@ -421,7 +421,7 @@ Optional<String> largeString = listOfStrings.stream().filter(str -> str.length()
 largeString.ifPresent(System.out::println);
 ```
 
-[Complete Fundamental Concepts Of Java Optional](java-basic-fundamental-optional.md)
+[Complete Fundamental Concepts Of Java Optional](conceptsIII/java-basic-fundamental-optional.md)
 
 ## Date
 Java 8 introduced new APIs for Date and Time to address the shortcomings of the older java.util.Date and java.util.Calendar.
