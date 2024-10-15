@@ -2340,3 +2340,136 @@ public class UserServiceTest {
 3. **Testcontainers Integration**: Provides a way to run tests against real services (like databases) in isolated environments.
 
 By applying TDD and integrating Testcontainers, you can build reliable, maintainable applications that behave as expected in various scenarios. This approach ultimately leads to a more resilient software architecture.
+
+To set up a Spring Boot microservice application with a self-signed certificate for MongoDB, while leveraging Docker and adhering to best practices, follow the detailed steps below. This includes setting up the project structure, configuring the necessary services, and handling security with certificates.
+
+### Project Structure
+
+Here's how your project should be structured:
+
+```
+/my-microservice
+│
+├── /src
+│   ├── /main
+│   │   ├── /java              # Your Java code
+│   │   └── /resources         # Resource files
+│   │       └── /certs        # Certificates and keys
+│   │           ├── mongodb-key.pem      # Private key
+│   │           └── mongodb-cert.pem     # Self-signed certificate
+│   └── /test                 # Test code
+│
+├── Dockerfile                 # Dockerfile for your application
+├── docker-compose.yml         # Docker Compose configuration
+└── application.properties      # Application configuration
+```
+
+### Step 1: Generate Self-Signed Certificates
+
+Use the `keytool` and `OpenSSL` commands as outlined in your initial request to generate the certificates and keys. Ensure that they are placed in the `/src/main/resources/certs` directory.
+
+### Step 2: Docker Configuration
+
+**Dockerfile**:
+
+Make sure your Dockerfile copies the `resources` folder into the image:
+
+```dockerfile
+FROM openjdk:17-jdk-slim
+VOLUME /tmp
+COPY target/my-microservice.jar app.jar
+COPY src/main/resources/certs /app/certs  # Copy certs to the image
+ENTRYPOINT ["java","-jar","/app.jar"]
+```
+
+### Step 3: Docker Compose Configuration
+
+**docker-compose.yml**:
+
+Set up your MongoDB service to use TLS with the generated certificates:
+
+```yaml
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongo:4.4
+    ports:
+      - "27019:27017"
+    volumes:
+      - ./src/main/resources/certs/mongodb-cert.pem:/etc/ssl/mongodb-cert.pem
+      - ./src/main/resources/certs/mongodb-key.pem:/etc/ssl/mongodb-key.pem
+    command: ["mongod", "--tlsMode", "requireTLS", "--tlsCertificateKeyFile", "/etc/ssl/mongodb-cert.pem"]
+    networks:
+      - app-network
+
+  springboot-app:
+    build: .
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mongodb
+    networks:
+      - app-network
+    environment:
+      SPRING_DATA_MONGODB_URI: "mongodb://mongodb:27017/yourdbname?tls=true"
+
+networks:
+  app-network:
+    driver: bridge
+```
+
+### Step 4: Spring Boot Application Configuration
+
+**application.properties**:
+
+Configure your Spring Boot application to use the MongoDB URI with TLS enabled:
+
+```properties
+spring.data.mongodb.uri=mongodb://mongodb:27017/yourdbname?tls=true
+spring.data.mongodb.ssl.trust-store=/app/certs/mongodb-cert.pem
+spring.data.mongodb.ssl.trust-store-password=your_keystore_password
+```
+
+### Step 5: Accessing Certificates in Code
+
+In your Spring Boot application, you can load and use the certificates as needed:
+
+```java
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.stereotype.Service;
+
+import java.io.InputStream;
+
+@Service
+public class CertificateLoader {
+
+    public void loadCertificates() {
+        try (InputStream privateKeyStream = new ClassPathResource("certs/mongodb-key.pem").getInputStream();
+             InputStream certStream = new ClassPathResource("certs/mongodb-cert.pem").getInputStream()) {
+
+            // Use the streams as needed...
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+### Step 6: Running the Application
+
+1. **Build your application**:
+   ```bash
+   mvn clean package
+   ```
+
+2. **Run Docker Compose**:
+   ```bash
+   docker-compose up
+   ```
+
+### Conclusion
+
+By following these steps, you've set up a Spring Boot microservice that securely connects to a MongoDB instance using TLS with self-signed certificates. This structure also supports easy certificate management and can be extended with further microservices or features as needed.
+
+If you have any further questions or need assistance with specific implementations, feel free to ask!
