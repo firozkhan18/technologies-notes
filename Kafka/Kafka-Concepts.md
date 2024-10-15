@@ -68,6 +68,74 @@ graph TD;
 - **Producer**: Sends messages to a topic.
 - **Consumer**: Reads messages from a topic.
 
+Below diagram reflecting that Partition 0 does not have a follower and Partition 1 does not have a leader:
+
+```mermaid
+graph TD;
+    A[Kafka Cluster] -->|contains| B[Broker 1]
+    A -->|contains| C[Broker 2]
+    A -->|contains| D[Broker 3]
+
+    B -->|has| E[Topic A]
+    B -->|has| F[Topic B]
+    C -->|has| E
+    D -->|has| F
+
+    E -->|has| G[Partition 0]
+    E -->|has| H[Partition 1]
+    F -->|has| I[Partition 0]
+
+    G -->|offset| J[0]
+    G -->|offset| K[1]
+    G -->|offset| L[2]
+
+    subgraph Leader and Followers
+        G -->|Leader| M[Leader Node]
+        H -->|Follower| N[Follower Node 1]
+        H -->|Follower| O[Follower Node 2]
+    end
+
+    G -->|No Followers| P[No Followers]
+    H -->|No Leader| Q[No Leader]
+
+    P -->|Notice| R[Partition 0 Follower Status]
+    Q -->|Notice| S[Partition 1 Leader Status]
+
+    P[Producer] -->|produces to| E
+    Q[Consumer] -->|consumes from| E
+
+    classDef cluster fill:#f9f,stroke:#333,stroke-width:2px;
+    class A cluster;
+
+    classDef broker fill:#bbf,stroke:#333,stroke-width:2px;
+    class B,C,D broker;
+
+    classDef topic fill:#cff,stroke:#333,stroke-width:2px;
+    class E,F topic;
+
+    classDef partition fill:#fcf,stroke:#333,stroke-width:2px;
+    class G,H,I partition;
+
+    classDef offset fill:#ffc,stroke:#333,stroke-width:2px;
+    class J,K,L offset;
+
+    classDef leader fill:#ff0,stroke:#333,stroke-width:2px;
+    class M leader;
+
+    classDef follower fill:#0f0,stroke:#333,stroke-width:2px;
+    class N,O follower;
+
+    classDef producer fill:#f0f,stroke:#333,stroke-width:2px;
+    class P producer;
+
+    classDef consumer fill:#f0f,stroke:#333,stroke-width:2px;
+    class Q consumer;
+```
+
+### Changes Made:
+- **Partition 0**: It has been noted that it has no followers, indicating it is solely managed by its leader without any replicas.
+- **Partition 1**: It has been noted that it has no leader, meaning it cannot handle writes until a leader is assigned.
+
 ### 1. **What is Apache Kafka, and what are its key components?**
 
 **Answer:**
