@@ -2,7 +2,7 @@
 
 Apache Kafka is a distributed streaming platform used for building real-time data pipelines and streaming applications. Here’s an in-depth look at Kafka interview questions, including replication concepts and examples.
 
-To illustrate the concepts of a Kafka cluster, broker, server, partition, offset, follower, leader, producer, consumer, and topic, you can use a Mermaid diagram. Below is an example of how you might represent these elements in a Mermaid diagram:
+To illustrate the concepts of a Kafka cluster, broker, server, partition, offset, follower, leader, producer, consumer, and topic, you can use below diagram. Below is an example of how you might represent these elements in below diagram:
 
 ```mermaid
 graph TD;
