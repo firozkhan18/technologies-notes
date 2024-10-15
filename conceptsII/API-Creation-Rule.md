@@ -1890,3 +1890,453 @@ graph TD
 ### Summary
 
 This architecture effectively combines JWT-based security with CQRS and an event-driven design. It clearly separates the responsibilities of commands and queries, allowing for better scalability and maintainability while ensuring secure access to services. By leveraging JWT for authentication and authorization, we can protect both the command and query sides of the application.
+
+### Domain-Driven Design (DDD)
+
+Domain-Driven Design (DDD) is a software development approach that focuses on modeling software based on the core business domain. The goal is to align the software design and architecture with the business requirements, making it easier to manage complexity and adapt to changing business needs. Here’s an in-depth exploration of key concepts in DDD:
+
+### 1. Domain
+
+The **domain** is the subject area or problem space that the software application is addressing. It encompasses the knowledge and activities relevant to a specific business context. Understanding the domain is critical for identifying the key concepts and relationships that will drive the design of the system.
+
+### 2. Ubiquitous Language
+
+DDD emphasizes the use of a **ubiquitous language**, which is a common language shared by both developers and domain experts. This language should be used in discussions, documentation, and code to ensure clear communication and reduce misunderstandings. It reflects the terms and concepts used in the business domain.
+
+### 3. Key Concepts
+
+#### a. Entities
+
+**Entities** are objects that have a distinct identity and lifecycle. They are defined not just by their attributes but by their identity, which remains consistent throughout their lifecycle. An entity can change its attributes over time but retains its identity.
+
+- **Characteristics of Entities**:
+  - **Identity**: Each entity has a unique identifier (like an ID) that distinguishes it from other entities, even if their attributes are the same.
+  - **Lifecycle**: Entities have a lifecycle that can include creation, modification, and deletion.
+
+**Example**:
+In an e-commerce application, an `Order` can be considered an entity. Each order has a unique order ID, and its attributes (like status, items, and customer) may change over time, but it remains the same order throughout its lifecycle.
+
+```java
+public class Order {
+    private String orderId; // Unique identifier
+    private String status;
+    private List<Item> items;
+
+    // Constructor, getters, setters, etc.
+}
+```
+
+#### b. Value Objects
+
+**Value Objects** are objects that describe attributes but do not have a unique identity. They are defined solely by their attributes and are immutable. If two value objects have the same attributes, they are considered equal.
+
+- **Characteristics of Value Objects**:
+  - **No Identity**: Value objects do not have a unique identifier.
+  - **Immutability**: They should be immutable; once created, their attributes cannot change.
+  - **Equality**: Value objects are compared based on their attributes.
+
+**Example**:
+In the same e-commerce application, an `Address` can be a value object. Two addresses with the same street, city, and postal code are considered the same address.
+
+```java
+public class Address {
+    private final String street;
+    private final String city;
+    private final String postalCode;
+
+    // Constructor, getters, and equality methods
+}
+```
+
+#### c. Aggregates
+
+**Aggregates** are clusters of related entities and value objects treated as a single unit for data changes. An aggregate defines a boundary around a group of entities that are closely related and should be manipulated together. Each aggregate has a root entity, known as the **Aggregate Root**, which is the only member that can be directly referenced outside the aggregate.
+
+- **Characteristics of Aggregates**:
+  - **Root Entity**: Each aggregate has a root entity that controls access to the other entities within the aggregate.
+  - **Consistency Boundary**: Changes to the aggregate are treated as a single transaction, ensuring consistency across all its members.
+  - **Encapsulation**: Aggregates encapsulate the internal structure and logic, exposing only what is necessary through the aggregate root.
+
+**Example**:
+In the e-commerce application, an `Order` aggregate might include the `Order` entity as the root and `OrderItem` as a related entity.
+
+```java
+public class Order {
+    private String orderId;
+    private String status;
+    private List<OrderItem> orderItems;
+
+    // Method to add an item
+    public void addItem(OrderItem item) {
+        // Business logic to add an item
+    }
+}
+
+public class OrderItem {
+    private String itemId;
+    private int quantity;
+
+    // Constructor, getters, etc.
+}
+```
+
+### 4. Repositories
+
+Repositories are responsible for encapsulating the logic required to access and manipulate aggregates. They provide a collection-like interface for accessing aggregates and handle the persistence of entities.
+
+**Example**:
+```java
+public interface OrderRepository {
+    Order findById(String orderId);
+    void save(Order order);
+}
+```
+
+### 5. Domain Services
+
+Domain services are used for operations that do not naturally fit within a single entity or value object. They encapsulate domain logic that involves multiple aggregates or does not belong to a specific aggregate.
+
+**Example**:
+A service to handle payment processing could be a domain service that coordinates between the `Order` and `Payment` aggregates.
+
+### 6. Bounded Contexts
+
+In DDD, a **bounded context** defines the limits of a particular model. Each bounded context can have its own model, and different models can coexist in the same application, reducing complexity by isolating different parts of the system.
+
+### Summary
+
+Domain-Driven Design provides a structured approach to building complex systems by focusing on the business domain. Key concepts like entities, value objects, aggregates, and bounded contexts help ensure that the software aligns closely with business needs and is easier to maintain and evolve. By using DDD, developers can create a shared understanding of the domain, leading to better designs and more robust applications.
+
+The **Circuit Breaker** and **Bulkhead** patterns are essential for building resilient microservices. Both patterns help manage failures and improve system stability under load.
+
+### 1. Circuit Breaker Pattern
+
+The Circuit Breaker pattern prevents an application from repeatedly trying to execute an operation that is likely to fail. When a certain threshold of failures is reached, the circuit breaker trips and subsequent calls to the service are automatically failed until the service is deemed healthy again.
+
+#### Implementation Example
+
+You can use libraries like **Resilience4j** or **Hystrix** to implement the Circuit Breaker pattern. Below is an example using Resilience4j.
+
+**Maven Dependency**
+```xml
+<dependency>
+    <groupId>io.github.resilience4j</groupId>
+    <artifactId>resilience4j-spring-boot2</artifactId>
+    <version>1.7.1</version>
+</dependency>
+```
+
+**Configuration**
+```yaml
+resilience4j:
+  circuitbreaker:
+    instances:
+      orderService:
+        registerHealthIndicator: true
+        slidingWindowSize: 10
+        failureRateThreshold: 50
+        waitDurationInOpenState: 10000
+```
+
+**Service Implementation**
+```java
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import org.springframework.stereotype.Service;
+
+@Service
+public class OrderService {
+
+    @CircuitBreaker(name = "orderService")
+    public Order placeOrder(Order order) {
+        // Simulate a service call
+        return externalServiceCall(order);
+    }
+
+    private Order externalServiceCall(Order order) {
+        // Simulate external service call, can throw exception
+        if (Math.random() < 0.5) { // Simulate failure
+            throw new RuntimeException("Service failed");
+        }
+        return order; // Assume order is successfully placed
+    }
+}
+```
+
+**Controller**
+```java
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("/orders")
+public class OrderController {
+
+    private final OrderService orderService;
+
+    public OrderController(OrderService orderService) {
+        this.orderService = orderService;
+    }
+
+    @PostMapping
+    public ResponseEntity<Order> createOrder(@RequestBody Order order) {
+        return ResponseEntity.ok(orderService.placeOrder(order));
+    }
+}
+```
+
+### 2. Bulkhead Pattern
+
+The Bulkhead pattern isolates different parts of a system, preventing a failure in one area from affecting other areas. This is similar to compartments in a ship; if one compartment takes on water, the others remain intact.
+
+#### Implementation Example
+
+You can also implement the Bulkhead pattern using Resilience4j.
+
+**Configuration**
+```yaml
+resilience4j:
+  bulkhead:
+    instances:
+      orderService:
+        maxConcurrentCalls: 10
+        maxWaitDuration: 1000
+```
+
+**Service Implementation**
+```java
+import io.github.resilience4j.bulkhead.annotation.Bulkhead;
+import org.springframework.stereotype.Service;
+
+@Service
+public class InventoryService {
+
+    @Bulkhead(name = "inventoryService")
+    public Inventory checkInventory(String productId) {
+        // Simulate a long-running operation
+        try {
+            Thread.sleep(2000); // Simulate delay
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+        return new Inventory(productId, 10); // Assume stock available
+    }
+}
+```
+
+### Using Both Patterns Together
+
+You can apply both patterns to a microservice to enhance resilience. For example, when placing an order, you might want to call both the `OrderService` and `InventoryService`, each protected by their respective patterns.
+
+**Combined Service Example**
+```java
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.bulkhead.annotation.Bulkhead;
+import org.springframework.stereotype.Service;
+
+@Service
+public class OrderProcessingService {
+
+    private final OrderService orderService;
+    private final InventoryService inventoryService;
+
+    public OrderProcessingService(OrderService orderService, InventoryService inventoryService) {
+        this.orderService = orderService;
+        this.inventoryService = inventoryService;
+    }
+
+    @CircuitBreaker(name = "orderProcessingService")
+    @Bulkhead(name = "orderProcessingService")
+    public Order processOrder(Order order) {
+        // Check inventory
+        Inventory inventory = inventoryService.checkInventory(order.getProductId());
+        if (inventory.getAvailable() > 0) {
+            // Place order if inventory is sufficient
+            return orderService.placeOrder(order);
+        } else {
+            throw new RuntimeException("Insufficient inventory");
+        }
+    }
+}
+```
+
+### Summary
+
+- **Circuit Breaker**: Protects against failures in external calls by stopping further attempts when failures exceed a threshold.
+- **Bulkhead**: Isolates different components to prevent cascading failures, allowing the system to continue functioning even if one part is down.
+
+By implementing these patterns, you can significantly enhance the resilience of your microservices architecture, ensuring better availability and responsiveness under varying load conditions.
+
+### Test-Driven Development (TDD)
+
+**Test-Driven Development (TDD)** is a software development approach that emphasizes writing tests before writing the actual code that needs to be tested. This methodology encourages better design, improved code quality, and increased confidence in the functionality of the software.
+
+#### TDD Cycle
+
+The TDD cycle follows a simple, repetitive process often referred to as **Red-Green-Refactor**:
+
+1. **Red**: Write a test for a new feature. The test should fail since the feature is not implemented yet.
+2. **Green**: Write the minimal code necessary to make the test pass.
+3. **Refactor**: Clean up the code while keeping the tests passing, ensuring the code is well-structured and maintainable.
+
+### Benefits of TDD
+
+- **Improved Code Quality**: By writing tests first, developers ensure that the code meets the specified requirements.
+- **Documentation**: Tests serve as documentation for how the code is expected to behave.
+- **Fewer Bugs**: Continuous testing reduces the number of bugs and issues in the final product.
+- **Confidence to Refactor**: With tests in place, developers can refactor code with confidence, knowing that they have a safety net.
+
+### Example of TDD in Action
+
+Let's build a simple example of a **Calculator** service using TDD, along with integrating **Testcontainers** for testing.
+
+#### Step 1: Write the First Test (Red Phase)
+
+**CalculatorServiceTest.java**
+```java
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.Test;
+
+public class CalculatorServiceTest {
+
+    private final CalculatorService calculatorService = new CalculatorService();
+
+    @Test
+    public void testAdd() {
+        int result = calculatorService.add(2, 3);
+        assertEquals(5, result);
+    }
+}
+```
+
+At this point, if you run the test, it will fail because the `CalculatorService` and the `add` method do not exist yet.
+
+#### Step 2: Implement Minimal Code (Green Phase)
+
+**CalculatorService.java**
+```java
+public class CalculatorService {
+
+    public int add(int a, int b) {
+        return a + b; // Simple implementation
+    }
+}
+```
+
+Now, if you run the test again, it should pass.
+
+#### Step 3: Refactor (Refactor Phase)
+
+Since our code is quite simple, we might not need significant refactoring yet. However, if we had multiple operations, we could consider structuring them better.
+
+### Adding More Functionality
+
+Let's say we want to add subtraction.
+
+**New Test for Subtraction**
+**CalculatorServiceTest.java**
+```java
+@Test
+public void testSubtract() {
+    int result = calculatorService.subtract(5, 3);
+    assertEquals(2, result);
+}
+```
+
+Run the test—it will fail because we haven't implemented the `subtract` method yet.
+
+**Implement Subtraction**
+**CalculatorService.java**
+```java
+public int subtract(int a, int b) {
+    return a - b; // Simple implementation
+}
+```
+
+### Integrating Testcontainers
+
+**Testcontainers** is a Java library that allows you to run lightweight, throwaway instances of common databases, Selenium web drivers, and anything else that can run in a Docker container. For this example, we can use Testcontainers to test against a database, but for our simple calculator, we won't necessarily need it. However, I’ll show you how to integrate Testcontainers for a more realistic scenario, such as a service that interacts with a database.
+
+#### Example with a Database Service
+
+Let's say we have a **UserService** that interacts with a PostgreSQL database.
+
+**Dependencies**
+```xml
+<dependency>
+    <groupId>org.testcontainers</groupId>
+    <artifactId>junit-jupiter</artifactId>
+    <version>1.16.2</version>
+    <scope>test</scope>
+</dependency>
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-data-jpa</artifactId>
+</dependency>
+<dependency>
+    <groupId>org.postgresql</groupId>
+    <artifactId>postgresql</artifactId>
+    <scope>runtime</scope>
+</dependency>
+```
+
+**UserService.java**
+```java
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+@Service
+public class UserService {
+
+    @Autowired
+    private UserRepository userRepository;
+
+    public User createUser(User user) {
+        return userRepository.save(user);
+    }
+}
+```
+
+**UserServiceTest.java**
+```java
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
+import org.testcontainers.containers.PostgreSQLContainer;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+@Testcontainers
+@SpringBootTest
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+public class UserServiceTest {
+
+    @Container
+    public static PostgreSQLContainer<?> database = new PostgreSQLContainer<>("postgres:latest")
+        .withDatabaseName("testdb")
+        .withUsername("user")
+        .withPassword("password");
+
+    @Autowired
+    private UserService userService;
+
+    @Test
+    public void testCreateUser() {
+        User user = new User("john.doe@example.com", "John Doe");
+        User createdUser = userService.createUser(user);
+        assertThat(createdUser).isNotNull();
+        assertThat(createdUser.getId()).isNotNull();
+        assertThat(createdUser.getEmail()).isEqualTo("john.doe@example.com");
+    }
+}
+```
+
+### Summary
+
+1. **TDD Process**: Write tests before code (Red), implement minimal code (Green), and refactor (Refactor).
+2. **Benefits of TDD**: Enhances code quality, serves as documentation, reduces bugs, and boosts developer confidence.
+3. **Testcontainers Integration**: Provides a way to run tests against real services (like databases) in isolated environments.
+
+By applying TDD and integrating Testcontainers, you can build reliable, maintainable applications that behave as expected in various scenarios. This approach ultimately leads to a more resilient software architecture.
