@@ -52,7 +52,8 @@ graph TD
 
     B -->|Index| H[Bucket 2]
     H -->|Hash| I[Node4]
-    H -->|Next| J[Node5]  |Collision resolution via linked list|
+    I -->|Next| J[Node5]  %% Node4 points to Node5 in the linked list
+    J -->|Next| K[Node6]  %% Node5 points to Node6
 
     K[ConcurrentHashMap] -->|Hash Function| L[Hash Code]
     L -->|Segmented Buckets| M[Segmented Array]
@@ -74,6 +75,8 @@ graph TD
         I -->|Value| Y[Value4]
         J[Node5] -->|Key| Z[Key5]
         J -->|Value| AA[Value5]
+        K[Node6] -->|Key| AB[Key6]
+        K -->|Value| AC[Value6]
     end
 
     style A fill:#bbf,stroke:#333,stroke-width:2px
@@ -94,6 +97,68 @@ graph TD
 
 - **Hashing** is a critical mechanism that enables fast data retrieval by converting keys into hash codes, which dictate their storage locations.
 - Both `Hashtable` and `ConcurrentHashMap` leverage this concept but differ in their synchronization and collision resolution methods, with `ConcurrentHashMap` designed for better concurrency in multi-threaded environments.
+
+- Thanks for your patience! Let’s simplify the diagram without using unsupported comments or annotations. Here’s a revised version of the Mermaid diagram that clearly represents the internal structure of a `Hashtable` and `ConcurrentHashMap` without the use of comments.
+
+### Revised Mermaid Diagram
+
+```mermaid
+graph TD
+    A[Hashtable] --> B[Array of Buckets]
+    
+    B -->|Index| C[Bucket 0]
+    C -->|Hash| D[Node1]
+    C -->|Hash| E[Node2]
+
+    B -->|Index| F[Bucket 1]
+    F -->|Hash| G[Node3]
+
+    B -->|Index| H[Bucket 2]
+    H -->|Hash| I[Node4]
+    I -->|Next| J[Node5]
+    J -->|Next| K[Node6]
+
+    L[ConcurrentHashMap] -->|Hash Function| M[Hash Code]
+    M -->|Segmented Buckets| N[Segmented Array]
+    N -->|Bucket Structure| O[Bucket Array]
+    O -->|Collision Resolution| P[Linked List / Tree]
+    O -->|Key-Value Pairs| Q[Key1: Value1]
+    O --> R[Key2: Value2]
+
+    subgraph Bucket Structure
+        direction TB
+        D[Node1] -->|Key| S[Key1]
+        D -->|Value| T[Value1]
+        E[Node2] -->|Key| U[Key2]
+        E -->|Value| V[Value2]
+        G[Node3] -->|Key| W[Key3]
+        G -->|Value| X[Value3]
+        I[Node4] -->|Key| Y[Key4]
+        I -->|Value| Z[Value4]
+        J[Node5] -->|Key| AA[Key5]
+        J -->|Value| AB[Value5]
+        K[Node6] -->|Key| AC[Key6]
+        K -->|Value| AD[Value6]
+    end
+
+    style A fill:#bbf,stroke:#333,stroke-width:2px
+    style L fill:#f9f,stroke:#333,stroke-width:2px
+```
+
+### Explanation of the Diagram
+
+1. **Hashtable**:
+   - **Array of Buckets**: The `Hashtable` contains an array where each bucket can store entries.
+   - **Collision Handling**: In buckets, if multiple keys hash to the same index, they are stored as nodes in a linked list (Node4 points to Node5, which points to Node6).
+
+2. **ConcurrentHashMap**:
+   - **Segmented Buckets**: The `ConcurrentHashMap` divides its structure into segments for better concurrency.
+   - **Bucket Array**: Similar to `Hashtable`, it manages key-value pairs, and handles collisions using a linked list or tree structure.
+
+### Summary
+
+This diagram illustrates how both `Hashtable` and `ConcurrentHashMap` use hashing and handle collisions, without unsupported comments. If you have any further questions or need more modifications, feel free to ask!
+
 
 Hashing in a `Hashtable` and the concept of buckets in a `ConcurrentHashMap` are fundamental to how these data structures manage their data. Here’s an overview of each:
 
