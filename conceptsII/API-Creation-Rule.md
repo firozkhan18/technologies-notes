@@ -1752,3 +1752,70 @@ graph TD
 9. **Microservice Processing**: If access is granted, the microservice processes the request; if not, a 403 Forbidden response is returned.
 
 This diagram captures the essential components and flow involved in JWT authentication and authorization in a microservices architecture using Spring Boot.
+
+To integrate JWT authentication and authorization within a Saga design pattern using an event-driven architecture, we need to consider how services interact, handle state, and manage transactions. Below is a Mermaid diagram that illustrates this setup, along with a brief explanation of each component.
+
+### Mermaid Diagram
+
+```mermaid
+graph TD
+    A[User] -->|Login with Credentials| B[Authentication Service]
+    B -->|Valid Credentials| C[Generate JWT Token]
+    C -->|Return JWT| A
+    A -->|Request with JWT| D[API Gateway]
+    D -->|Validate JWT| E[Authorization Service]
+    E -->|Claims & Roles| F{Role Check}
+    F -->|Has Access| G[Order Service]
+    F -->|No Access| H[403 Forbidden Response]
+
+    G -->|Start Saga| I[Order Created Event]
+    I --> J[Payment Service]
+    J -->|Payment Processed Event| K[Inventory Service]
+    K -->|Inventory Updated Event| L[Notification Service]
+
+    subgraph Saga Transaction
+        direction TB
+        I --> J
+        J --> K
+        K --> L
+    end
+
+    J -->|Payment Failed Event| M[Compensate Payment]
+    K -->|Inventory Failed Event| N[Compensate Inventory]
+    L -->|Notify Failed Event| O[Compensate Notification]
+
+    M -->|Payment Compensated Event| P[Update Order Status]
+    N -->|Inventory Compensated Event| P
+    O -->|Notification Compensated Event| P
+```
+
+### Explanation of the Diagram
+
+1. **User**: Initiates the process by logging in with credentials.
+2. **Authentication Service**: Validates the user's credentials and generates a JWT token upon successful authentication.
+3. **Generate JWT Token**: JWT includes user claims and roles.
+4. **Return JWT**: The token is returned to the user for use in subsequent requests.
+5. **API Gateway**: The user sends requests with the JWT.
+6. **Validate JWT**: The API Gateway validates the JWT.
+7. **Authorization Service**: Extracts claims and roles to determine if the user is authorized.
+8. **Role Check**: Checks if the user has the necessary roles to access the requested service.
+9. **Order Service**: If access is granted, the order service initiates the saga by publishing an "Order Created Event."
+10. **Saga Transaction**: Represents the flow of events between services involved in the saga:
+    - **Payment Service**: Processes the payment and emits a "Payment Processed Event."
+    - **Inventory Service**: Updates inventory based on the order and emits an "Inventory Updated Event."
+    - **Notification Service**: Sends notifications about the order status.
+11. **Compensation Logic**: If any service fails, corresponding compensation events are triggered to revert changes:
+    - **Payment Failed Event** triggers compensation in the payment service.
+    - **Inventory Failed Event** triggers compensation in the inventory service.
+    - **Notify Failed Event** triggers compensation in the notification service.
+12. **Update Order Status**: The order service updates the order status based on compensation outcomes.
+
+### Integration Points
+
+- **Event-Driven Architecture**: Each service communicates via events, allowing for decoupled interactions. Services listen for events they need to act on.
+- **Saga Pattern**: Manages distributed transactions across multiple services. It ensures that all changes are either committed or compensated.
+- **JWT for Security**: Protects access to services. Each service verifies the JWT before processing requests, ensuring that only authorized users can initiate actions that affect the system.
+
+### Summary
+
+This architecture effectively combines JWT-based security with the Saga design pattern in an event-driven environment. It ensures that the system remains secure, scalable, and resilient, providing a robust framework for managing complex transactions across microservices.
