@@ -2817,3 +2817,54 @@ In Apache Kafka, the terms **Broker**, **Server**, and **Cluster** are fundament
 - **Cluster**: A group of brokers working together to provide fault tolerance, scalability, and high availability.
 
 This architecture allows Kafka to efficiently process large volumes of data in real-time, making it a popular choice for event streaming and data integration solutions.
+
+In Apache Kafka, a **retention policy** defines how long Kafka retains messages in a topic before they are eligible for deletion. This is a critical aspect of Kafka’s design, as it helps manage disk space and ensures that old data does not consume resources unnecessarily. Here’s an overview of how retention policies work in Kafka:
+
+### Key Concepts of Retention Policy
+
+1. **Retention Period**:
+   - Messages in a Kafka topic are retained based on a specified time period, defined by the configuration parameter `retention.ms`.
+   - For example, if `retention.ms` is set to 7 days (604800000 milliseconds), messages will be retained for 7 days before they can be deleted.
+
+2. **Retention Size**:
+   - In addition to the time-based retention, Kafka also supports retention based on the size of the topic, controlled by the `retention.bytes` configuration.
+   - If the total size of the messages in a topic exceeds the specified size limit, Kafka will delete the oldest messages to free up space, regardless of the retention period.
+
+3. **Log Segments**:
+   - Kafka stores messages in log segments. Each partition of a topic is divided into segments, and when a retention policy is triggered, entire segments can be deleted.
+   - This helps optimize the performance of the deletion process since Kafka can efficiently manage log segments instead of individual messages.
+
+4. **Default Configuration**:
+   - By default, Kafka sets the retention period to 7 days (`retention.ms = 604800000`) and does not impose a size limit (`retention.bytes = -1`), meaning messages will be retained indefinitely until manually configured otherwise.
+
+5. **Compacted Topics**:
+   - For topics that use **log compaction**, the retention policy is slightly different. Log compaction ensures that only the most recent value for each key is retained, while older records are subject to deletion based on the retention policy.
+   - This is useful for scenarios where you want to keep the latest state of a record rather than all historical data.
+
+### Setting Retention Policies
+
+You can set or modify the retention policies for a Kafka topic using the Kafka command-line tools or via the Admin API. Here’s how you can do it with the command line:
+
+1. **Set Retention Period**:
+   ```bash
+   kafka-configs.sh --bootstrap-server <broker-address> --entity-type topics --entity-name <topic-name> --alter --add-config retention.ms=86400000
+   ```
+
+2. **Set Retention Size**:
+   ```bash
+   kafka-configs.sh --bootstrap-server <broker-address> --entity-type topics --entity-name <topic-name> --alter --add-config retention.bytes=1073741824
+   ```
+
+### Implications of Retention Policies
+
+- **Disk Space Management**: Properly configuring retention policies helps manage disk usage effectively and prevents the broker from running out of disk space.
+- **Data Availability**: Retention settings impact how long consumers can access historical data. Longer retention periods provide more time for consumers to process messages but require more storage.
+- **Use Cases**: The choice of retention policy should align with the application’s requirements—whether it’s for stream processing, event sourcing, or storing logs.
+
+### Summary
+
+- **Retention Policy**: Controls how long messages are retained in Kafka topics based on time (`retention.ms`) and size (`retention.bytes`).
+- **Management**: Kafka uses log segments for efficient retention management, allowing bulk deletions of old messages.
+- **Configuration**: Retention settings can be configured per topic and can significantly impact disk usage and data availability.
+
+By understanding and configuring retention policies, Kafka users can ensure optimal performance and resource utilization tailored to their specific use cases.
