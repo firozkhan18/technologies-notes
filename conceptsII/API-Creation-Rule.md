@@ -1819,3 +1819,74 @@ graph TD
 ### Summary
 
 This architecture effectively combines JWT-based security with the Saga design pattern in an event-driven environment. It ensures that the system remains secure, scalable, and resilient, providing a robust framework for managing complex transactions across microservices.
+
+To apply JWT authentication and authorization in a Command Query Responsibility Segregation (CQRS) design pattern using an event-driven architecture, we separate the responsibilities of handling commands (write operations) from queries (read operations). Here's how this setup can be visualized in a Mermaid diagram:
+
+### Mermaid Diagram
+
+```mermaid
+graph TD
+    A[User] -->|Login with Credentials| B[Authentication Service]
+    B -->|Valid Credentials| C[Generate JWT Token]
+    C -->|Return JWT| A
+    A -->|Request with JWT| D[API Gateway]
+    D -->|Validate JWT| E[Authorization Service]
+    E -->|Claims & Roles| F{Role Check}
+    F -->|Has Access| G[Command Service]
+    F -->|No Access| H[403 Forbidden Response]
+
+    G -->|Create Order Command| I[Order Service]
+    I -->|Order Created Event| J[Event Store]
+
+    subgraph Command Side
+        direction TB
+        I -->|Send Payment Command| K[Payment Service]
+        K -->|Payment Processed Event| L[Inventory Service]
+    end
+
+    subgraph Query Side
+        direction TB
+        M[Query Service] -->|Fetch Order Details| N[Read Model]
+    end
+
+    J -->|Notify Subscribers| O[Payment Service]
+    J -->|Notify Subscribers| P[Inventory Service]
+    O -->|Payment Processed Event| Q[Update Read Model]
+    P -->|Inventory Updated Event| R[Update Read Model]
+```
+
+### Explanation of the Diagram
+
+1. **User**: Initiates the process by logging in with credentials.
+2. **Authentication Service**: Validates user credentials and generates a JWT token on successful authentication.
+3. **Generate JWT Token**: The JWT includes user claims and roles.
+4. **Return JWT**: The token is sent back to the user for use in subsequent requests.
+5. **API Gateway**: The user sends requests with the JWT.
+6. **Validate JWT**: The API Gateway checks the validity of the JWT.
+7. **Authorization Service**: Extracts claims and roles to determine if the user is authorized.
+8. **Role Check**: Validates if the user has the necessary roles to access the command service.
+9. **Command Service**: If access is granted, it processes the command (e.g., creating an order).
+10. **Order Service**: Executes the create order command and emits an "Order Created Event" to the event store.
+11. **Event Store**: Stores the emitted events for the order service.
+12. **Payment Service**: Receives commands to process payments after the order is created.
+13. **Inventory Service**: Updates inventory based on the order and emits events accordingly.
+
+### Command and Query Separation
+
+- **Command Side**: Handles write operations. The order service processes commands and generates events that other services can react to. For instance, after creating an order, it triggers the payment service and inventory service.
+  
+- **Query Side**: Handles read operations separately from the command side. It can fetch order details from a read model, which can be optimized for querying (e.g., a database designed for fast reads).
+
+### Event-Driven Architecture
+
+- **Event Notification**: After the order is created, events are published to notify other services (e.g., payment processing and inventory updates).
+- **Subscribers**: Other services subscribe to the relevant events and update their states accordingly.
+
+### Security with JWT
+
+- **Authorization**: Before executing commands or queries, the JWT is validated to ensure that only authorized users can access specific operations.
+- **Claims and Roles**: The JWT's claims are used to enforce role-based access control, ensuring that only users with the necessary permissions can perform certain commands.
+
+### Summary
+
+This architecture effectively combines JWT-based security with CQRS and an event-driven design. It clearly separates the responsibilities of commands and queries, allowing for better scalability and maintainability while ensuring secure access to services. By leveraging JWT for authentication and authorization, we can protect both the command and query sides of the application.
