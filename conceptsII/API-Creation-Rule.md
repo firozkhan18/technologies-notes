@@ -1232,3 +1232,523 @@ graph TD
 This architecture effectively combines multiple design patterns and tools to create a robust, scalable, and maintainable microservices ecosystem for an e-commerce application. Each component plays a critical role in ensuring the overall system's performance, reliability, and user experience.
 
 This code outline serves as a foundation, and each part can be expanded with additional features, error handling, and optimizations as needed in a real-world application.
+
+Handling a failure in the payment service in the microservices architecture can be addressed using various strategies to ensure resilience and maintain system integrity. Below are the key approaches you can implement, particularly focusing on the Saga pattern and Circuit Breaker, along with compensation actions and fallback mechanisms.
+
+### 1. Saga Pattern
+
+When using the Saga pattern, if the payment service fails, you can initiate a compensating transaction. Here’s how to handle the failure:
+
+- **Compensation Logic**: If the payment fails after an order is created, you can invoke a compensating action that undoes the previous steps (e.g., cancel the order).
+
+**Saga Orchestrator Example**:
+```java
+@Service
+public class SagaOrchestrator {
+
+    @Autowired
+    private OrderService orderService;
+    
+    @Autowired
+    private PaymentService paymentService;
+
+    public void startSaga(Order order) {
+        try {
+            // Step 1: Create Order
+            orderService.createOrder(order);
+            
+            // Step 2: Process Payment
+            paymentService.processPayment(order.getPaymentInfo());
+        } catch (PaymentException e) {
+            // Step 3: Compensation - Cancel Order
+            orderService.cancelOrder(order);
+            // Log or notify the failure
+        }
+    }
+}
+```
+
+### 2. Circuit Breaker
+
+Using a Circuit Breaker can prevent your application from repeatedly trying to call the payment service when it’s known to be failing. This allows the system to gracefully handle failures.
+
+**Circuit Breaker Implementation**:
+```java
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+
+@Service
+public class PaymentService {
+    
+    @CircuitBreaker
+    public PaymentResponse processPayment(PaymentRequest request) {
+        // Logic for processing payment
+        // This will throw PaymentException if the payment fails
+    }
+
+    @Recover
+    public PaymentResponse recover(PaymentRequest request, Throwable t) {
+        // Handle fallback logic, e.g., return a failure response or initiate a notification
+        return new PaymentResponse("Payment service is currently unavailable, please try again later.");
+    }
+}
+```
+
+### 3. Retry Mechanism
+
+Implement a retry mechanism to handle transient failures in the payment service. If the payment service fails due to a temporary issue, you can automatically retry the operation.
+
+**Retry Example**:
+```java
+import org.springframework.retry.annotation.Backoff;
+import org.springframework.retry.annotation.Retryable;
+
+@Service
+public class PaymentService {
+
+    @Retryable(value = { PaymentException.class }, maxAttempts = 3, backoff = @Backoff(delay = 2000))
+    public PaymentResponse processPayment(PaymentRequest request) {
+        // Logic for processing payment
+    }
+
+    @Recover
+    public PaymentResponse recover(PaymentRequest request, PaymentException e) {
+        // Handle the failure after retries
+        return new PaymentResponse("Payment failed after retries.");
+    }
+}
+```
+
+### 4. Asynchronous Notification
+
+If the payment service fails, you might want to notify the user asynchronously about the failure, so they can take appropriate actions, such as trying a different payment method.
+
+**Notification Example**:
+```java
+@Service
+public class NotificationService {
+    
+    public void notifyUser(String userId, String message) {
+        // Logic to send notification (e.g., email, SMS)
+    }
+}
+```
+
+### 5. Event-Driven Approach
+
+If you have an event bus, you can publish an event that indicates a payment failure, which can be handled by another service that might take appropriate actions (e.g., notifying users, logging the failure).
+
+**Event Publisher Example**:
+```java
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.stereotype.Service;
+
+@Service
+public class PaymentService {
+
+    @Autowired
+    private ApplicationEventPublisher eventPublisher;
+
+    public PaymentResponse processPayment(PaymentRequest request) {
+        // Attempt to process payment
+        // If it fails, publish an event
+        eventPublisher.publishEvent(new PaymentFailedEvent(request));
+    }
+}
+```
+
+### Conclusion
+
+In the event of a payment service failure, the strategies outlined above can help maintain system integrity and provide a good user experience. By using the Saga pattern, circuit breakers, retries, and asynchronous notifications, you can create a resilient microservice architecture that effectively handles failures and ensures that compensatory actions are taken when necessary.
+
+Creating a complete microservice example that uses both PostgreSQL (SQL) and MongoDB (NoSQL) for an e-commerce application involves several components. I'll provide a simplified implementation and then explain the differences between SQL and NoSQL databases.
+
+### Microservice Structure
+
+We'll build the following microservices:
+1. **User Service** (using PostgreSQL)
+2. **Order Service** (using MongoDB)
+3. **Payment Service** (using PostgreSQL)
+4. **API Gateway** (optional, for routing)
+
+### 1. User Service (PostgreSQL)
+
+**Dependencies** in `pom.xml`:
+```xml
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-data-jpa</artifactId>
+</dependency>
+<dependency>
+    <groupId>org.postgresql</groupId>
+    <artifactId>postgresql</artifactId>
+</dependency>
+```
+
+**Entity**:
+```java
+@Entity
+public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private String username;
+    private String email;
+
+    // Getters and setters
+}
+```
+
+**Repository**:
+```java
+public interface UserRepository extends JpaRepository<User, Long> {
+}
+```
+
+**Service**:
+```java
+@Service
+public class UserService {
+    @Autowired
+    private UserRepository userRepository;
+
+    public User createUser(User user) {
+        return userRepository.save(user);
+    }
+
+    public User getUser(Long id) {
+        return userRepository.findById(id).orElse(null);
+    }
+}
+```
+
+**Controller**:
+```java
+@RestController
+@RequestMapping("/users")
+public class UserController {
+    @Autowired
+    private UserService userService;
+
+    @PostMapping
+    public ResponseEntity<User> createUser(@RequestBody User user) {
+        return ResponseEntity.ok(userService.createUser(user));
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<User> getUser(@PathVariable Long id) {
+        return ResponseEntity.ok(userService.getUser(id));
+    }
+}
+```
+
+**application.yml**:
+```yaml
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/ecommerce
+    username: your_username
+    password: your_password
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+```
+
+### 2. Order Service (MongoDB)
+
+**Dependencies** in `pom.xml`:
+```xml
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-data-mongodb</artifactId>
+</dependency>
+```
+
+**Entity**:
+```java
+@Document(collection = "orders")
+public class Order {
+    @Id
+    private String id;
+    private Long userId;
+    private List<String> productIds;
+
+    // Getters and setters
+}
+```
+
+**Repository**:
+```java
+public interface OrderRepository extends MongoRepository<Order, String> {
+}
+```
+
+**Service**:
+```java
+@Service
+public class OrderService {
+    @Autowired
+    private OrderRepository orderRepository;
+
+    public Order createOrder(Order order) {
+        return orderRepository.save(order);
+    }
+
+    public List<Order> getOrdersByUserId(Long userId) {
+        return orderRepository.findAll() // Modify to filter by userId
+    }
+}
+```
+
+**Controller**:
+```java
+@RestController
+@RequestMapping("/orders")
+public class OrderController {
+    @Autowired
+    private OrderService orderService;
+
+    @PostMapping
+    public ResponseEntity<Order> createOrder(@RequestBody Order order) {
+        return ResponseEntity.ok(orderService.createOrder(order));
+    }
+}
+```
+
+**application.yml**:
+```yaml
+spring:
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/ecommerce
+```
+
+### 3. Payment Service (PostgreSQL)
+
+This service can be similar to the User Service, utilizing PostgreSQL for handling payment transactions. The structure will follow the same pattern as above.
+
+### 4. API Gateway (Optional)
+
+You can set up an API Gateway using Spring Cloud Gateway to route requests to the appropriate services. This is optional but can simplify client interactions.
+
+### Differences Between SQL and NoSQL
+
+| Feature         | SQL (Relational)                 | NoSQL (Non-relational)             |
+|-----------------|----------------------------------|------------------------------------|
+| Data Structure  | Structured (tables, rows)        | Unstructured or semi-structured (documents, key-value, wide-column, graph) |
+| Schema          | Fixed schema (DDL)               | Dynamic schema (schema-less)       |
+| Transactions     | ACID compliance                  | Often BASE compliance (eventual consistency) |
+| Query Language  | SQL (Structured Query Language)  | Varies (e.g., MongoDB uses BSON queries) |
+| Scalability     | Vertical scaling (adding resources to a single server) | Horizontal scaling (adding more servers) |
+| Use Cases       | Complex queries, transactions, analytics | Large volumes of unstructured data, real-time web apps, IoT applications |
+| Examples        | PostgreSQL, MySQL, Oracle        | MongoDB, Cassandra, Redis, Couchbase |
+
+### Conclusion
+
+This basic implementation sets up a microservice architecture using both SQL and NoSQL databases for an e-commerce application. Each service is independent and can be scaled separately, with data persistence tailored to the requirements of the service. SQL is suited for structured data and complex queries, while NoSQL offers flexibility for unstructured data and high scalability.
+
+### Understanding Claims and Token Generation in JWT
+
+**Claims** are pieces of information asserted about a subject (typically the user). In the context of JWT (JSON Web Token), claims can contain information such as the user's ID, roles, permissions, and other attributes.
+
+#### Types of Claims
+
+1. **Registered Claims**: Standard claims that are defined by the JWT specification, such as:
+   - `sub` (Subject): The principal that is the subject of the JWT.
+   - `iss` (Issuer): Identifies the principal that issued the JWT.
+   - `exp` (Expiration Time): The expiration time of the token.
+   - `iat` (Issued At): The time at which the token was issued.
+
+2. **Public Claims**: Claims that can be defined at will by those using JWTs, but they should be defined in the IANA JSON Web Token Registry or be collision-resistant.
+
+3. **Private Claims**: Custom claims created to share information between parties that agree on using them.
+
+### Token Generation Process
+
+1. **User Authentication**: 
+   - The user provides credentials (username/password).
+   - The application verifies these credentials against a user store (e.g., a database).
+
+2. **Claims Creation**:
+   - Upon successful authentication, the server creates a JWT with the necessary claims. For example, claims can include the user's ID, roles, and permissions.
+
+3. **Token Signing**:
+   - The token is signed using a secret key or private key (for asymmetric algorithms). This ensures that the token cannot be tampered with.
+
+4. **Token Response**:
+   - The server sends the JWT back to the client, which stores it (typically in local storage or a cookie).
+
+5. **Subsequent Requests**:
+   - The client includes the JWT in the `Authorization` header for subsequent requests.
+   - The server validates the token by checking the signature and claims (like expiration).
+
+### Example of Token Generation in Spring Boot
+
+Here's a simplified example of how to generate a JWT with claims in a Spring Boot application:
+
+#### 1. User Authentication Endpoint
+
+```java
+@PostMapping("/authenticate")
+public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthRequest authRequest) throws Exception {
+    // Authenticate user
+    authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
+
+    // Generate JWT token
+    String jwt = jwtUtil.generateToken(authRequest.getUsername());
+
+    return ResponseEntity.ok(new AuthResponse(jwt));
+}
+```
+
+#### 2. JWT Utility Class
+
+```java
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.stereotype.Component;
+
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
+@Component
+public class JwtUtil {
+    private String SECRET_KEY = "your_secret_key";
+
+    public String generateToken(String username) {
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("role", "USER"); // Example role claim
+        return createToken(claims, username);
+    }
+
+    private String createToken(Map<String, Object> claims, String subject) {
+        return Jwts.builder()
+                .setClaims(claims)
+                .setSubject(subject)
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10)) // 10 hours
+                .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
+                .compact();
+    }
+
+    public Claims extractAllClaims(String token) {
+        return Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).getBody();
+    }
+}
+```
+
+### How JWT Interacts with Security to Provide Role and Permission-Based Access
+
+#### 1. Security Configuration
+
+Integrating JWT with Spring Security involves defining how the application handles authorization based on roles and permissions.
+
+**Security Configuration Example**:
+```java
+@Configuration
+@EnableWebSecurity
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
+    @Autowired
+    private JwtRequestFilter jwtRequestFilter;
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http.csrf().disable() // Disable CSRF for stateless authentication
+            .authorizeRequests()
+            .antMatchers("/public/**").permitAll() // Public endpoints
+            .antMatchers("/admin/**").hasRole("ADMIN") // Admin-only endpoints
+            .antMatchers("/user/**").hasAnyRole("USER", "ADMIN") // User and Admin access
+            .anyRequest().authenticated() // All other requests require authentication
+            .and()
+            .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+    }
+}
+```
+
+#### 2. JWT Request Filter
+
+The filter checks the incoming requests for a JWT in the `Authorization` header and verifies it.
+
+**JWT Request Filter Example**:
+```java
+@Component
+public class JwtRequestFilter extends OncePerRequestFilter {
+    @Autowired
+    private JwtUtil jwtUtil;
+
+    @Autowired
+    private MyUserDetailsService userDetailsService; // Load user details from database
+
+    @Override
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
+            throws ServletException, IOException {
+        final String authorizationHeader = request.getHeader("Authorization");
+        String username = null;
+        String jwt = null;
+
+        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+            jwt = authorizationHeader.substring(7);
+            username = jwtUtil.extractUsername(jwt);
+        }
+
+        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+            UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+            if (jwtUtil.validateToken(jwt, userDetails.getUsername())) {
+                UsernamePasswordAuthenticationToken authenticationToken =
+                        new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+            }
+        }
+        chain.doFilter(request, response);
+    }
+}
+```
+
+### Role and Permission-Based Access Control
+
+- **Role-Based Access Control (RBAC)**: With RBAC, you assign users to roles. Each role has certain permissions. For example, an `ADMIN` role may have permission to access certain endpoints, while a `USER` role may have limited access.
+
+- **Permission-Based Access Control**: This is a more granular approach, where individual permissions are assigned to users directly, allowing for more complex access controls.
+
+### Summary
+
+- **Claims**: Contain user information, roles, and permissions within the JWT.
+- **Token Generation**: Involves authenticating the user, creating a token with claims, signing it, and returning it to the user.
+- **JWT in Security**: Integrated with Spring Security to manage role and permission-based access, ensuring that only authorized users can access certain endpoints.
+
+This architecture allows for scalable and secure applications, where access control is managed effectively through JWT and Spring Security.
+
+Certainly! Here's a Mermaid diagram illustrating the flow of JWT authentication and role/permission-based access control in a microservices architecture using Spring Boot:
+
+```mermaid
+graph TD
+    A[User] -->|Login with Credentials| B[Authentication Service]
+    B -->|Valid Credentials| C[Generate JWT Token]
+    C -->|Return JWT| A
+    A -->|Request with JWT| D[API Gateway]
+    D -->|Validate JWT| E[Authorization Service]
+    E -->|Claims & Roles| F{Role Check}
+    F -->|Has Access| G[Microservice 1]
+    F -->|No Access| H[403 Forbidden Response]
+    D -->|Request to Other Microservices| I[Microservice 2]
+    I -->|Validate JWT| E
+    I -->|Claims & Roles| F
+    F -->|Has Access| J[Microservice 2 Processing]
+    F -->|No Access| H
+```
+
+### Explanation of the Diagram:
+
+1. **User**: Initiates the process by logging in with credentials.
+2. **Authentication Service**: Validates the credentials and, if valid, generates a JWT token.
+3. **Generate JWT Token**: The JWT contains user claims and roles.
+4. **Return JWT**: The token is sent back to the user for use in subsequent requests.
+5. **API Gateway**: The user includes the JWT in requests to the API Gateway.
+6. **Validate JWT**: The API Gateway checks the validity of the JWT.
+7. **Authorization Service**: Extracts claims and roles from the JWT.
+8. **Role Check**: Determines if the user has access to the requested microservice based on roles/permissions.
+9. **Microservice Processing**: If access is granted, the microservice processes the request; if not, a 403 Forbidden response is returned.
+
+This diagram captures the essential components and flow involved in JWT authentication and authorization in a microservices architecture using Spring Boot.
