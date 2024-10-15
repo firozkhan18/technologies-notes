@@ -2736,3 +2736,91 @@ ssl.key-store-password=your_keystore_password
 By placing your PEM files inside the `resources` folder, you make them part of your application's classpath. This approach allows for easier access and management, especially when deploying the application as a JAR. If you have further questions or need assistance, feel free to ask!
 
 
+# Implementation Step
+
+### Solutions
+
+1. **Update the Common Name (CN)**:
+   - When you generate your keystore and certificate, ensure that the Common Name (CN) matches the hostname you are using to access the service. For local testing, you might want to set it to `localhost`.
+   - If you're using a tool like `keytool` to create your keystore, you can specify the CN during the creation process.
+
+   Example command to create a self-signed certificate with `keytool`:
+   ```bash
+   keytool -genkeypair -alias myservice -keyalg RSA -keysize 2048 -keystore mykeystore.jks -validity 365
+   ```
+   When prompted for "What is your first and last name?", enter `localhost`.
+
+2. **Use `localhost` in the Certificate**:
+   - If you've already generated the keystore, you can regenerate it with the correct Common Name (CN) or update the existing one if possible.
+```
+	D:\>keytool -genkeypair -alias microservice -keyalg RSA -keysize 2048 -keystore mykeystore.jks -validity 365
+	Enter keystore password:
+	Enter the distinguished name. Provide a single dot (.) to leave a sub-component empty or press ENTER to use the default value in braces.
+	What is your first and last name?
+	What is the name of your organizational unit?
+	What is the name of your organization?
+	What is the name of your City or Locality?
+	What is the name of your State or Province?
+	What is the two-letter country code for this unit?
+	Is CN=localhost, OU=IT, O=DEV, L=DURG, ST=CG, C=IN correct?
+	  [no]:  Yes
+	Generating 2,048 bit RSA key pair and self-signed certificate (SHA384withRSA) with a validity of 365 days
+	        for: CN=localhost, OU=IT, O=DEV, L=DURG, ST=CG, C=IN
+	
+	D:\>
+```
+3. **Accessing with IP Address or Different Hostname**:
+   - If you're trying to access the service using `localhost`, ensure that your certificate has `localhost` as the CN.
+   - If you access the service using an IP address (like `127.0.0.1`), your certificate must also match that.
+
+4. **Trust the Self-Signed Certificate (Development Only)**:
+   - If this is just for development and you're using a self-signed certificate, you can add the certificate to your local Java truststore, but this is generally not recommended for production.
+   - You can import the certificate into the truststore using:
+   ```bash
+   keytool -import -alias myservice -file mycert.crt -keystore cacerts
+   ```
+
+5. **Configure `RestTemplate` to Ignore SSL Validation (Development Only)**:
+   - You can modify your `TrustAnyTrustManager` to also trust the hostname, but this is not secure and should only be done in development environments.
+
+
+The error message indicates that the certificate's Common Name (CN) does not match the hostname you're using (in this case, `localhost`). Here’s how to resolve the issue step-by-step:
+
+### Step 1: Generate a New Keystore with Correct CN
+
+
+### Step 2: Update `application.properties`
+
+Ensure your `application.properties` file still points to the correct keystore:
+```properties
+server.port=8443
+server.ssl.key-store=classpath:mykeystore.jks
+server.ssl.key-store-password=superman
+server.ssl.keyStoreType=JKS
+server.ssl.keyAlias=myservice
+```
+
+### Step 3: Restart Your Spring Boot Application
+
+Once you have created the new keystore, restart your Spring Boot application.
+
+### Step 4: Make the HTTPS Call
+
+Try accessing your secure endpoint again using:
+```plaintext
+https://localhost:8443/api/resource
+```
+
+### Additional Tips
+
+- **Browser Access**: If you access the service from a web browser, you might still get a warning about the certificate being self-signed. You can usually proceed after acknowledging the warning.
+  
+- **Check the Certificate**: If you're unsure about the certificate details, you can list the contents of the keystore:
+  ```bash
+  keytool -list -v -keystore mykeystore.jks
+  ```
+
+- **Using `curl`**: You can also test the endpoint with `curl`, adding `-k` to ignore SSL errors if necessary:
+  ```bash
+  curl -k https://localhost:8443/api/resource
+  ```
