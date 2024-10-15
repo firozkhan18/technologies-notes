@@ -79,3 +79,51 @@ graph TD
 
 - The diagram visually represents how both data structures handle hashing and storage of key-value pairs, with emphasis on the differences in their collision resolution and concurrent access mechanisms. 
 - `Hashtable` uses a straightforward approach with linked lists for collisions, while `ConcurrentHashMap` optimizes for concurrency and performance with segmented locking and improved collision handling using trees or linked lists.
+
+Here’s a Mermaid diagram that illustrates the concepts of `HashMap` and `HashSet`, highlighting how they manage data using hashing.
+
+### Mermaid Diagram
+
+```mermaid
+graph TD
+    A[HashMap] -->|Hash Function| B[Hash Code]
+    B -->|Index Calculation| C[Bucket Array]
+    C -->|Collision Resolution| D[Linked List / Tree]
+    C -->|Key-Value Pairs| E[Key1: Value1]
+    C --> E
+    C --> F[Key2: Value2]
+
+    G[HashSet] -->|Hash Function| H[Hash Code]
+    H -->|Index Calculation| I[Bucket Array]
+    I -->|Collision Resolution| J[Linked List / Tree]
+    I -->|Unique Values| K[Value1]
+    I --> K
+    I --> L[Value2]
+
+    style A fill:#bbf,stroke:#333,stroke-width:2px
+    style G fill:#f9f,stroke:#333,stroke-width:2px
+```
+
+### Explanation
+
+1. **HashMap**:
+   - **Hash Function**: When a key-value pair is added, the key is processed by a hash function to generate a hash code.
+   - **Index Calculation**: The hash code is converted into an index for the internal bucket array.
+   - **Bucket Array**: This array holds the entries in the `HashMap`.
+   - **Collision Resolution**: If two keys hash to the same index, a linked list or tree is used to manage multiple entries at that index.
+   - **Key-Value Pairs**: Each entry in the `HashMap` consists of a key and its corresponding value.
+
+2. **HashSet**:
+   - **Hash Function**: Similar to `HashMap`, the object is processed by a hash function to generate a hash code.
+   - **Index Calculation**: The hash code determines the index in the bucket array.
+   - **Bucket Array**: This array stores unique values.
+   - **Collision Resolution**: Like `HashMap`, if collisions occur, a linked list or tree is used to manage values.
+   - **Unique Values**: The `HashSet` only stores unique elements, so it contains no duplicates.
+
+### Summary
+
+- **`HashMap`**: A collection that stores key-value pairs, where each key is unique, and each key maps to a value. It uses hashing to optimize retrieval and manages collisions using linked lists or trees.
+  
+- **`HashSet`**: A collection that stores unique values (no duplicates) and does not associate values with keys. It also uses hashing and manages collisions similarly to `HashMap`.
+
+This diagram helps illustrate the structural similarities and differences between `HashMap` and `HashSet`, particularly in how they use hashing and handle collisions.
