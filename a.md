@@ -52,7 +52,7 @@ graph TD
 
     B -->|Index| H[Bucket 2]
     H -->|Hash| I[Node4]
-    H -->|Next| J[Node5]  %% Collision resolution via linked list
+    H -->|Next| J[Node5]  - Collision resolution via linked list
 
     K[ConcurrentHashMap] -->|Hash Function| L[Hash Code]
     L -->|Segmented Buckets| M[Segmented Array]
