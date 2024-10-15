@@ -68,6 +68,8 @@ graph TD;
 - **Producer**: Sends messages to a topic.
 - **Consumer**: Reads messages from a topic.
 
+---
+
 Below diagram reflecting that Partition 0 does not have a follower and Partition 1 does not have a leader:
 
 ```mermaid
@@ -136,6 +138,44 @@ graph TD;
 - **Partition 0**: It has been noted that it has no followers, indicating it is solely managed by its leader without any replicas.
 - **Partition 1**: It has been noted that it has no leader, meaning it cannot handle writes until a leader is assigned.
 
+---
+
+In Apache Kafka, the assignment of leaders and followers for partitions is a critical part of its design, ensuring high availability and fault tolerance. Here’s how this process works and who is responsible for it:
+
+### 1. Leader and Follower Roles
+
+- **Leader**: Each partition in a Kafka topic has a leader broker that handles all read and write requests for that partition. The leader is responsible for data consistency and coordinating updates.
+- **Follower**: Followers replicate the data from the leader. They are responsible for keeping a copy of the partition's data and fetching updates from the leader.
+
+### 2. Assignment Process
+
+#### a. Topic Creation
+- When a new topic is created, the Kafka cluster assigns a leader and followers for each partition based on the broker configuration and replication factor specified during topic creation.
+- For example, if a topic is created with 3 partitions and a replication factor of 2, Kafka will select one broker as the leader for each partition and assign one or more followers.
+
+#### b. Controller Role
+- **Controller**: One of the brokers in the cluster is designated as the controller. The controller is responsible for managing the overall state of the cluster, including leader election and partition assignments.
+- The controller is elected using Apache ZooKeeper (or, in newer versions, Kafka's own Raft-based consensus mechanism).
+
+#### c. Leader Election
+- The controller monitors the state of the brokers and performs leader elections when necessary, such as:
+  - **Initial Assignment**: When a topic is created, the controller assigns leaders to partitions.
+  - **Broker Failure**: If a broker that is currently a leader fails, the controller will detect this and elect a new leader from the in-sync replicas (followers) of that partition.
+  - **Broker Recovery**: When a failed broker recovers, it may become a follower again and wait for leadership reassignment if it is still an in-sync replica.
+
+### 3. In-Sync Replicas (ISR)
+- The set of followers that are up-to-date with the leader is known as the **In-Sync Replica set (ISR)**. Only these followers can become leaders in case of a leader failure.
+- The ISR is maintained by the leader, which periodically checks the status of its followers. If a follower falls behind (e.g., due to network issues), it may be removed from the ISR.
+
+### 4. Configuration
+- **Replication Factor**: Determines how many copies of each partition exist in the cluster, influencing how many followers can be assigned.
+- **Min Insync Replicas**: A configuration parameter that specifies the minimum number of replicas that must acknowledge a write before it is considered successful. This ensures data durability.
+
+### Summary
+- **Who Assigns**: The controller broker, elected from the cluster, is responsible for assigning leaders and followers.
+- **How It Works**: It assigns a leader to each partition upon topic creation and monitors broker health to reassign leadership in case of failures.
+
+This design ensures that Kafka remains resilient and can handle failures without losing data, maintaining a high level of availability and reliability in message processing.
 ### 1. **What is Apache Kafka, and what are its key components?**
 
 **Answer:**
