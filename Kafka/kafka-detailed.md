@@ -2807,13 +2807,13 @@ Here are the `curl` commands for making GET and POST requests to your Spring Boo
 To publish messages using the GET endpoint, you can use the following `curl` command:
 
 ```bash
-curl -X GET "http://localhost:8080/producer-app/publish/YourMessage"
+curl -X GET "http://localhost:9191/producer-app/publish/YourMessage"
 ```
 
 Replace `YourMessage` with the actual message you want to publish. For example:
 
 ```bash
-curl -X GET "http://localhost:8080/producer-app/publish/HelloWorld"
+curl -X GET "http://localhost:9191/producer-app/publish/HelloWorld"
 ```
 
 ### 2. POST Request
@@ -2821,7 +2821,7 @@ curl -X GET "http://localhost:8080/producer-app/publish/HelloWorld"
 To publish a `Customer` object using the POST endpoint, you can use the following `curl` command:
 
 ```bash
-curl -X POST "http://localhost:8080/producer-app/publish" \
+curl -X POST "http://localhost:9191/producer-app/publish" \
      -H "Content-Type: application/json" \
      -d '{"name": "John Doe", "email": "john.doe@example.com"}'
 ```
@@ -2837,3 +2837,40 @@ Make sure to replace the JSON data in the `-d` option with the actual fields of 
 Let me know if you have any questions or need further assistance!
 
 ![Setting the Scheme](IMAGES/OffsetExplorer.PNG)
+It looks like you're looking at a log of messages being published, possibly from a Kafka topic. The values appear to represent the following:
+
+- **Partition (0)**: The partition number of the Kafka topic.
+- **Offset (99951, 99952, etc.)**: The offset of the message within the partition.
+- **Value**: The message itself, encoded as a hexadecimal string. For instance, `2248656C6C6F576F726C64203A20393939353122` corresponds to a string in the format `HelloWorld : 99951`.
+- **Timestamp**: The time the message was published.
+
+### Decoding the Hexadecimal Values
+
+If you want to decode the hexadecimal strings back to their original messages, you can use a simple script in Python or any programming language that handles hexadecimal to string conversion. Here's an example in Python:
+
+```python
+def hex_to_string(hex_str):
+    bytes_object = bytes.fromhex(hex_str)
+    return bytes_object.decode("utf-8")
+
+hex_values = [
+    "2248656C6C6F576F726C64203A20393939353122",
+    "2248656C6C6F576F726C64203A20393939353222",
+    "2248656C6C6F576F726C64203A20393939353322",
+    # Add more as needed
+]
+
+for hex_value in hex_values:
+    print(hex_to_string(hex_value))
+```
+
+### Output Interpretation
+
+Each decoded message would show something like:
+- `HelloWorld : 99951`
+- `HelloWorld : 99952`
+- etc.
+
+### If You Need Further Assistance
+
+If you have specific questions about handling these messages or analyzing the data, let me know!
