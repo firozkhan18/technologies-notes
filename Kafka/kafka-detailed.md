@@ -2799,3 +2799,41 @@ spring:
 </project>
 ```
 https://www.kafkatool.com/download.html
+
+Here are the `curl` commands for making GET and POST requests to your Spring Boot application.
+
+### 1. GET Request
+
+To publish messages using the GET endpoint, you can use the following `curl` command:
+
+```bash
+curl -X GET "http://localhost:8080/producer-app/publish/YourMessage"
+```
+
+Replace `YourMessage` with the actual message you want to publish. For example:
+
+```bash
+curl -X GET "http://localhost:8080/producer-app/publish/HelloWorld"
+```
+
+### 2. POST Request
+
+To publish a `Customer` object using the POST endpoint, you can use the following `curl` command:
+
+```bash
+curl -X POST "http://localhost:8080/producer-app/publish" \
+     -H "Content-Type: application/json" \
+     -d '{"name": "John Doe", "email": "john.doe@example.com"}'
+```
+
+Make sure to replace the JSON data in the `-d` option with the actual fields of your `Customer` object. For example, if your `Customer` class has fields like `name` and `email`, structure the JSON accordingly.
+
+### Notes
+
+- Ensure that your Spring Boot application is running on port `8080` or adjust the URL accordingly.
+- Make sure that the `Customer` class fields in the JSON match the expected structure in your application.
+- If you're using a different port or context path, modify the URL in the `curl` commands accordingly.
+
+Let me know if you have any questions or need further assistance!
+
+![Setting the Scheme](IMAGES/OffsetExplorer.PNG)
