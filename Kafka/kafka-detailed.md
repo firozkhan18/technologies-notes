@@ -1,18 +1,16 @@
+# kafka for beginners
 
-
-
-kafka for beginners
-components and architecture 
-kafka installation
-kafka CLI and workflows
-installing kafka using docker-compose
-kafka producer example using springboot
-kafka consumer example using springboot
-kafka serialize & deserialize
-kafka partition
-kafka e2e testing in spring boot with test containers 
-kafka error handling
-kafka schema registry
+- components and architecture 
+- kafka installation
+- kafka CLI and workflows
+- installing kafka using docker-compose
+- kafka producer example using springboot
+- kafka consumer example using springboot
+- kafka serialize & deserialize
+- kafka partition
+- kafka e2e testing in spring boot with test containers 
+- kafka error handling
+- kafka schema registry
 
 ![Setting the Scheme](IMAGES/kafka-flow-1.png)
 
@@ -171,30 +169,32 @@ enable.auto.commit=true
 
 These configurations can be fine-tuned based on your application's specific needs, such as performance requirements, message durability, and fault tolerance.
 
-spring-boot-dockerize
-## How to Dockerize Spring Boot Application
+## spring-boot-dockerize
+### How to Dockerize Spring Boot Application
 
-Build Docker Image
+**Build Docker Image**
 ```
 $ docker build -t spring-boot-docker.jar .
 ```
-Check Docker Image
+**Check Docker Image**
 ```
 $ docker image ls
 ```
-Run Docker Image
+**Run Docker Image**
 ```
 $ docker run -p 9090:8080 spring-boot-docker.jar
 ```
 In the run command, we have specified that the port 8080 on the container should be mapped to the port 9090 on the Host OS.
 
-Dockerfile
+**Dockerfile**
 ```
 FROM openjdk:8
 EXPOSE 8080
 ADD target/spring-boot-docker.jar spring-boot-docker.jar 
 ENTRYPOINT ["java","-jar","/spring-boot-docker.jar"]
 ```
+**pom.xml**
+
 ```pom
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -241,6 +241,7 @@ ENTRYPOINT ["java","-jar","/spring-boot-docker.jar"]
 
 </project>
 ```
+**SpringBootDockerApplication.java**
 ```java
 package com.javatechie.spring.boot.docker.demo;
 
@@ -358,7 +359,7 @@ ENTRYPOINT ["java","-jar","spring-boot-docker-maven.jar"]
 </project>
 ```
 
-springboot-docker-ecs
+## springboot-docker-ecs
 ```java
 package com.javatechie.aws.ecs;
 
@@ -397,21 +398,22 @@ Run your Docker image on AWS ECS (Elastic Container Service)
 
 - Build Docker Image.
 
-		mvn spring-boot:build-image
+  mvn spring-boot:build-image
    
 - Run Docker Image.
 
-		docker run --tty --publish 8080:8080 <image-name>
+  docker run --tty --publish 8080:8080 <image-name>
     
 - Tag Docker Image
 
-		docker tag <image-name> tag-name/<image-name>
+ docker tag <image-name> tag-name/<image-name>
     
 - Push Docker Image to Docker Hub
 
-		docker push tag-name/<image-name>
+docker push tag-name/<image-name>
 		
-- Application Flow  
+- Application Flow
+   
 ```pom
 <img width="576" alt="11" src="https://user-images.githubusercontent.com/25712816/91267149-570d0780-e790-11ea-8497-806b30cbcfc2.PNG">
 
@@ -492,7 +494,7 @@ The data which we can see as part of documentation will loaded from MockMvc Test
 
 
 
-docker-remote-debug
+### docker-remote-debug
 ```
 FROM openjdk:8
 EXPOSE 8080 8000
@@ -500,7 +502,7 @@ ADD target/spring-docker-demo.jar spring-docker-demo.jar
 ADD entrypoint.sh entrypoint.sh
 ENTRYPOINT ["sh","/entrypoint.sh"]
 ```
-entrypoint.sh
+### entrypoint.sh
 ```
 java -Xdebug -Xrunjdwp:transport=dt_socket,server=y,address=8000,suspend=n -jar spring-docker-demo.jar
 ```
@@ -649,7 +651,6 @@ public class EmployeeRepository {
     }
 }
 ```
-springboot-mongo-docker
 
 # springboot-mongodb-docker
 Deploying Spring Boot and MongoDB as Containers Using Docker and Docker Compose
@@ -769,7 +770,7 @@ public class SpringbootMongodbDockerApplication {
 
 }
 ```
-Dockerfile
+**Dockerfile**
 
 ```
 FROM openjdk:8
