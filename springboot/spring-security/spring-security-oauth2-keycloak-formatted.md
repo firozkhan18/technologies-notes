@@ -1,4 +1,3 @@
-```markdown
 # Spring Security OAuth2 Keycloak Demo
 
 This repository contains source code to demonstrate OAuth2 features using Spring Security and KeyCloak Authorization Server.
@@ -309,6 +308,4 @@ In the `Available Roles` section, find the role we just created (`user`) and cli
 ### Conclusion
 
 Congratulations! You now have a fully working Keycloak setup for OAuth2 authorization in your applications. You can follow through the rest of the projects in this repository to see how the integration works with Spring Boot and Angular applications.
-```
 
-This README file provides a comprehensive guide on setting up a Spring Security OAuth2 project with Keycloak. If you have any specific aspects you'd like to adjust or any additional sections to include, just let me know!
