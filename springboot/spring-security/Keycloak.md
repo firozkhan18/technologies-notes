@@ -112,6 +112,28 @@ CREATE DATABASE keycloak;
 GRANT ALL PRIVILEGES ON DATABASE keycloak TO keycloak;
 ```
 
+# PSQL Command Line Tool
+
+```sql
+Server [localhost]:
+Database [postgres]:
+Port [5432]:
+Username [postgres]:
+Password for user postgres:
+psql (16.3)
+WARNING: Console code page (437) differs from Windows code page (1252)
+         8-bit characters might not work correctly. See psql reference
+         page "Notes for Windows users" for details.
+Type "help" for help.
+
+postgres=# CREATE USER keycloak WITH ENCRYPTED PASSWORD 'keycloak';
+CREATE ROLE
+postgres=# CREATE DATABASE keycloak;
+CREATE DATABASE
+postgres=# GRANT ALL PRIVILEGES ON DATABASE keycloak TO keycloak;
+GRANT
+postgres=#
+```
 ### Start Keycloak
 
 Run the following command in your terminal:
