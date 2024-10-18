@@ -171,6 +171,109 @@ for(var figure: figures) {
   System.out.println(figure.area());
 }
 ```
+---
+# Java Functional Programming
 
+Java has increasingly embraced functional programming concepts, especially with the introduction of Java 8. This approach focuses on using functions as first-class citizens, allowing for more concise and expressive code. Below is an overview of key concepts in Java functional programming.
 
-More about lambdas and method references in the following chapter.
+## Table of Contents
+
+- [1. Java Higher Order Functions](#1-java-higher-order-functions)
+- [2. Java Functional Interfaces](#2-java-functional-interfaces)
+- [3. Java Functional Composition](#3-java-functional-composition)
+- [4. Java Stream API](#4-java-stream-api)
+
+---
+
+## 1. Java Higher Order Functions
+Higher order functions are functions that can take other functions as parameters or return them as results. This allows for greater flexibility and code reuse.
+
+### Example:
+```java
+import java.util.function.Function;
+
+public class HigherOrderExample {
+    public static void main(String[] args) {
+        Function<Integer, Integer> square = x -> x * x;
+        Function<Integer, Integer> result = applyFunction(square, 5);
+        System.out.println(result); // Outputs: 25
+    }
+
+    static Integer applyFunction(Function<Integer, Integer> func, Integer value) {
+        return func.apply(value);
+    }
+}
+```
+
+## 2. Java Functional Interfaces
+A functional interface is an interface that contains exactly one abstract method. These interfaces can be implemented using lambda expressions or method references.
+
+### Common Functional Interfaces:
+- **`Predicate<T>`**: Represents a boolean-valued function of one argument.
+- **`Function<T, R>`**: Represents a function that accepts one argument and produces a result.
+- **`Consumer<T>`**: Represents an operation that accepts a single input argument and returns no result.
+- **`Supplier<T>`**: Represents a supplier of results.
+
+### Example:
+```java
+import java.util.function.Function;
+
+public class FunctionalInterfaceExample {
+    public static void main(String[] args) {
+        Function<String, Integer> stringLength = String::length;
+        System.out.println(stringLength.apply("Hello")); // Outputs: 5
+    }
+}
+```
+
+## 3. Java Functional Composition
+Functional composition allows you to combine multiple functions into a single function. This enables more modular and reusable code.
+
+### Example:
+```java
+import java.util.function.Function;
+
+public class CompositionExample {
+    public static void main(String[] args) {
+        Function<Integer, Integer> doubleValue = x -> x * 2;
+        Function<Integer, Integer> addThree = x -> x + 3;
+
+        // Compose the two functions
+        Function<Integer, Integer> composedFunction = doubleValue.andThen(addThree);
+        System.out.println(composedFunction.apply(5)); // Outputs: 13
+    }
+}
+```
+
+## 4. Java Stream API
+The Stream API is a powerful feature that enables functional-style operations on sequences of elements, such as collections. It allows for easy manipulation and processing of data.
+
+### Key Operations:
+- **Filtering**: Using `filter()` to select elements based on a condition.
+- **Mapping**: Using `map()` to transform elements.
+- **Reducing**: Using `reduce()` to aggregate results.
+
+### Example:
+```java
+import java.util.Arrays;
+import java.util.List;
+
+public class StreamApiExample {
+    public static void main(String[] args) {
+        List<Integer> numbers = Arrays.asList(1, 2, 3, 4, 5);
+
+        // Calculate the sum of squares of even numbers
+        int sum = numbers.stream()
+                         .filter(n -> n % 2 == 0)
+                         .map(n -> n * n)
+                         .reduce(0, Integer::sum);
+
+        System.out.println(sum); // Outputs: 20
+    }
+}
+```
+
+---
+
+By leveraging these functional programming concepts, Java developers can write cleaner, more maintainable, and more expressive code. This paradigm promotes immutability and helps reduce side effects, leading to more robust applications.
+
