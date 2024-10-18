@@ -568,3 +568,182 @@ Sharding in MongoDB is a powerful technique for managing large datasets and ensu
 ### Summary
 
 - **Scaling**: Horizontal scaling involves adding more machines, while vertical scaling involves upgrading existing hardware.
+
+In Java, the ClassLoader is a part of the Java Runtime Environment (JRE) that is responsible for loading classes into memory. It dynamically loads classes at runtime and is an essential component of the Java programming model. The ClassLoader finds the binary representation of a class and loads it into the Java Virtual Machine (JVM).
+
+### Types of ClassLoaders
+
+Java has a hierarchical structure of class loaders. The main types of class loaders are:
+
+1. **Bootstrap ClassLoader**
+   - The parent of all class loaders.
+   - Loads core Java classes located in the `<JAVA_HOME>/lib` directory, such as `java.lang.*`, `java.util.*`, etc.
+   - It is part of the JVM itself and written in native code.
+
+2. **Extension ClassLoader (or Platform ClassLoader)**
+   - Loads classes from the Java extension directory (`<JAVA_HOME>/lib/ext`).
+   - It is a child of the Bootstrap ClassLoader.
+   - Typically used for loading classes from external libraries that extend the standard Java platform.
+
+3. **System ClassLoader (or Application ClassLoader)**
+   - Loads classes from the application classpath (e.g., directories and JAR files specified in the `CLASSPATH` environment variable).
+   - It is a child of the Extension ClassLoader.
+   - Most user-defined classes are loaded by this loader.
+
+4. **Custom ClassLoaders**
+   - Developers can create their own class loaders by extending the `java.lang.ClassLoader` class.
+   - Custom class loaders are useful for loading classes from non-standard sources, such as a database, network, or custom file formats.
+
+### ClassLoader Hierarchy
+
+The hierarchy of class loaders in Java is as follows:
+
+```
+Bootstrap ClassLoader
+         |
+   Extension ClassLoader
+         |
+   System ClassLoader
+```
+
+### Summary
+
+- **Bootstrap ClassLoader**: Loads core Java classes.
+- **Extension ClassLoader**: Loads classes from the Java extension directory.
+- **System ClassLoader**: Loads classes from the application classpath.
+- **Custom ClassLoaders**: User-defined loaders for specialized class-loading requirements.
+
+---
+In Java, there are several ways to create objects. Here are the main methods:
+
+1. **Using the `new` Keyword**
+   - The most common way to create an object.
+   - Syntax:
+     ```java
+     ClassName obj = new ClassName();
+     ```
+
+2. **Using the `newInstance()` Method**
+   - This method is part of the `Class` class and can be used to create an instance of a class using reflection.
+   - Syntax:
+     ```java
+     ClassName obj = ClassName.class.newInstance();
+     ```
+
+3. **Using the `clone()` Method**
+   - If a class implements the `Cloneable` interface, you can create a new object as a copy of an existing object.
+   - Syntax:
+     ```java
+     ClassName obj1 = new ClassName();
+     ClassName obj2 = (ClassName) obj1.clone();
+     ```
+
+4. **Using Factory Methods**
+   - Classes can have static factory methods that return instances of the class. This is a common design pattern.
+   - Example:
+     ```java
+     ClassName obj = ClassName.createInstance();
+     ```
+
+5. **Using Deserialization**
+   - Objects can be created from a serialized state using the `ObjectInputStream` class.
+   - Syntax:
+     ```java
+     ObjectInputStream in = new ObjectInputStream(new FileInputStream("objectfile.ser"));
+     ClassName obj = (ClassName) in.readObject();
+     ```
+
+6. **Using Inner Classes**
+   - You can create an object of an inner class directly using an instance of the outer class.
+   - Syntax:
+     ```java
+     OuterClass outer = new OuterClass();
+     OuterClass.InnerClass inner = outer.new InnerClass();
+     ```
+
+7. **Using Anonymous Classes**
+   - Java allows you to create an object of a class without explicitly defining a class.
+   - Syntax:
+     ```java
+     ClassName obj = new ClassName() {
+         // Override methods here
+     };
+     ```
+
+### Summary
+
+- **`new` keyword**: Most common method.
+- **`newInstance()`**: Reflection-based object creation.
+- **`clone()`**: Create a copy of an existing object.
+- **Factory methods**: Static methods for instance creation.
+- **Deserialization**: Restore object state from a serialized format.
+- **Inner classes**: Instantiate inner classes using outer class objects.
+- **Anonymous classes**: Create instances without a separate class definition.
+
+---
+In Java, `wait()`, `sleep()`, `join()`, and `yield()` are methods used in multi-threading to manage thread behavior. Here’s a breakdown of each:
+
+### 1. `wait()`
+- **Purpose**: Causes the current thread to wait until another thread invokes the `notify()` or `notifyAll()` method on the same object.
+- **Use Case**: Typically used for inter-thread communication, especially when a thread needs to wait for a condition to be fulfilled by another thread.
+- **How It Works**:
+  - Must be called from within a synchronized block or method.
+  - Releases the lock held by the thread, allowing other threads to access the synchronized block.
+
+**Example**:
+```java
+synchronized (object) {
+    while (conditionNotMet) {
+        object.wait(); // Waits for notification
+    }
+}
+```
+
+### 2. `sleep()`
+- **Purpose**: Pauses the execution of the current thread for a specified period.
+- **Use Case**: Often used to create delays in execution or simulate processing time.
+- **How It Works**:
+  - It does not release any locks held by the thread.
+  - It can throw `InterruptedException`.
+
+**Example**:
+```java
+try {
+    Thread.sleep(1000); // Sleeps for 1 second
+} catch (InterruptedException e) {
+    e.printStackTrace();
+}
+```
+
+### 3. `join()`
+- **Purpose**: Waits for a thread to die (i.e., finish its execution).
+- **Use Case**: Used when you want one thread to wait for another to complete its execution before continuing.
+- **How It Works**:
+  - It can take an optional timeout parameter.
+  - After calling `join()`, the current thread will be blocked until the thread it joins has completed.
+
+**Example**:
+```java
+Thread t1 = new Thread(() -> {
+    // Some work
+});
+t1.start();
+t1.join(); // Waits for t1 to finish
+```
+
+### 4. `yield()`
+- **Purpose**: Suggests that the current thread is willing to yield its current use of the CPU.
+- **Use Case**: Used to improve the efficiency of thread scheduling, allowing other threads of the same priority to run.
+- **How It Works**:
+  - It does not guarantee that the thread will relinquish the CPU; it merely makes a request to the thread scheduler.
+
+**Example**:
+```java
+Thread.yield(); // Suggests that the current thread yield
+```
+
+### Summary
+- **`wait()`**: Used for inter-thread communication, releases locks.
+- **`sleep()`**: Pauses the thread without releasing locks, for a specified time.
+- **`join()`**: Makes the calling thread wait for another thread to finish.
+- **`yield()`**: Suggests to the scheduler that the current thread can be paused to allow other threads to run.
