@@ -749,6 +749,715 @@ In this example, separate locks for `sum1` and `sum2` allow multiple threads to 
 Understanding race conditions and critical sections is essential for developing robust multithreaded applications. By implementing proper synchronization techniques, you can effectively manage shared resources, ensuring correct program behavior and improving application performance.
 
 ---
+# Thread Safety and Shared Resources
+
+## Overview
+Thread safety refers to code that can be safely executed by multiple threads simultaneously without causing race conditions. Understanding what resources Java threads share is crucial for ensuring thread-safe behavior.
+
+## Local Variables
+Local variables are stored in each thread's own stack, meaning they are not shared between threads. Thus, local primitive variables are inherently thread-safe.
+
+### Example of Thread-Safe Local Variable
+```java
+public void someMethod() {
+    long threadSafeInt = 0;
+    threadSafeInt++;
+}
+```
+In this example, each thread has its own `threadSafeInt`, making it thread-safe.
+
+## Local Object References
+Local references to objects differ from local primitives. While the reference itself is not shared, the object it points to resides in the shared heap.
+
+### Conditions for Thread Safety with Local Objects
+- If an object created within a method does not escape that method (i.e., it is not returned or made accessible to other threads), it is thread-safe.
+
+### Example of Thread-Safe Local Object
+```java
+public void someMethod() {
+    LocalObject localObject = new LocalObject();
+    localObject.callMethod();
+    method2(localObject);
+}
+
+public void method2(LocalObject localObject) {
+    localObject.setValue("value");
+}
+```
+In this case, `localObject` is confined to `someMethod()`, ensuring thread safety as it cannot be accessed by other threads.
+
+## Object Member Variables
+Object member variables (fields) are stored on the heap and can lead to race conditions if accessed by multiple threads simultaneously.
+
+### Example of Non-Thread-Safe Code
+```java
+public class NotThreadSafe {
+    StringBuilder builder = new StringBuilder();
+
+    public void add(String text) {
+        this.builder.append(text);
+    }
+}
+
+// Shared instance leads to race conditions
+NotThreadSafe sharedInstance = new NotThreadSafe();
+new Thread(new MyRunnable(sharedInstance)).start();
+new Thread(new MyRunnable(sharedInstance)).start();
+```
+In this example, two threads modifying the same `NotThreadSafe` instance can result in race conditions.
+
+### Thread-Safe Usage of Non-Thread-Safe Objects
+```java
+new Thread(new MyRunnable(new NotThreadSafe())).start();
+new Thread(new MyRunnable(new NotThreadSafe())).start();
+```
+By using separate instances, each thread operates independently, avoiding race conditions.
+
+## The Thread Control Escape Rule
+To assess whether your resource access is thread-safe, consider the **Thread Control Escape Rule**:
+- If a resource is created, used, and disposed of within the same thread's control, and never escapes that control, it is thread-safe.
+
+### Application of the Rule
+- Resources include objects, arrays, file handles, database connections, etc.
+- Even if a resource is managed thread-safely, if it references shared resources, the overall thread safety may be compromised.
+
+### Example of Potential Race Condition with Shared Resources
+```java
+// Two threads operating on a shared database resource
+Thread 1 checks if record X exists.
+Thread 2 checks if record X exists.
+Thread 1 inserts record X.
+Thread 2 inserts record X.
+```
+In this scenario, both threads may attempt to insert the same record, leading to data integrity issues.
+
+## Conclusion
+Understanding thread safety involves recognizing how local variables, local object references, and member variables interact in a multithreaded context. The Thread Control Escape Rule helps determine the safety of resource usage. Always consider both the direct management of objects and their implications on shared resources to ensure robust thread-safe programming.
+
+---
+# Thread Safety and Immutability
+
+## Overview
+Thread safety can be achieved through immutability, meaning that shared objects cannot be modified after their creation. This helps prevent race conditions, which occur when multiple threads access the same resource, especially when writing to it.
+
+## Creating Immutable Objects
+An immutable object is one whose state cannot be changed after it is created. Here’s an example of an immutable class:
+
+### Example of an Immutable Class
+```java
+public class ImmutableValue {
+    private final int value;
+
+    public ImmutableValue(int value) {
+        this.value = value;
+    }
+
+    public int getValue() {
+        return this.value;
+    }
+
+    public ImmutableValue add(int valueToAdd) {
+        return new ImmutableValue(this.value + valueToAdd);
+    }
+}
+```
+In this `ImmutableValue` class:
+- The `value` is set only once in the constructor.
+- There are no setter methods, ensuring that the value cannot be changed after creation.
+- The `add` method returns a new instance instead of modifying the existing instance.
+
+## The Reference is not Thread Safe!
+While the immutable object itself is thread-safe, the reference to that object may not be. Consider the following example:
+
+### Example of Non-Thread-Safe Reference
+```java
+public class Calculator {
+    private ImmutableValue currentValue = null;
+
+    public ImmutableValue getValue() {
+        return currentValue;
+    }
+
+    public void setValue(ImmutableValue newValue) {
+        this.currentValue = newValue;
+    }
+
+    public void add(int newValue) {
+        this.currentValue = this.currentValue.add(newValue);
+    }
+}
+```
+In this `Calculator` class:
+- The reference `currentValue` can be changed by both the `setValue` and `add` methods.
+- Even though `ImmutableValue` is thread-safe, the `Calculator` class is not, because it allows changing the reference to different `ImmutableValue` instances.
+
+## Making the Calculator Class Thread Safe
+To ensure thread safety in the `Calculator` class, you can synchronize its methods:
+
+### Example of Synchronized Methods
+```java
+public class Calculator {
+    private ImmutableValue currentValue = null;
+
+    public synchronized ImmutableValue getValue() {
+        return currentValue;
+    }
+
+    public synchronized void setValue(ImmutableValue newValue) {
+        this.currentValue = newValue;
+    }
+
+    public synchronized void add(int newValue) {
+        this.currentValue = this.currentValue.add(newValue);
+    }
+}
+```
+By adding the `synchronized` keyword:
+- Only one thread can execute any of these methods at a time, ensuring that the reference to `currentValue` is modified safely.
+
+## Conclusion
+Immutability is a powerful way to achieve thread safety in Java, as it prevents state changes that could lead to race conditions. However, when using immutable objects, it’s crucial to manage the references to those objects carefully to maintain thread safety. Synchronizing access to mutable references ensures that shared resources are accessed safely in a multithreaded environment.
+
+---
+# Java Memory Model
+
+## Overview
+The Java Memory Model (JMM) defines how the Java Virtual Machine (JVM) interacts with memory, particularly regarding how threads see shared variables and how synchronization is managed. Understanding the JMM is crucial for writing correct concurrent Java programs.
+
+### Key Concepts
+1. **Thread Stacks and Heap**: Each thread has its own stack containing local variables, while shared objects are stored in the heap. Local variables are not visible to other threads, whereas objects on the heap can be accessed by any thread with a reference.
+
+2. **Visibility**: Changes made to shared variables by one thread may not be immediately visible to other threads due to caching mechanisms at the hardware level.
+
+3. **Race Conditions**: Occur when multiple threads access shared variables concurrently and at least one thread modifies them, leading to unpredictable behavior.
+
+## Internal Java Memory Model
+### Memory Structure
+- **Thread Stack**: Contains local variables and method call information. Each thread's local variables are isolated and not shared.
+- **Heap**: Stores all objects, including the member variables of these objects. Objects are shared among threads.
+
+#### Diagram Overview
+- Local variables (primitive types and references) are stored on the thread stack.
+- Objects themselves are stored on the heap. 
+- Each thread has its own version of local variables, but shared objects are accessed via references pointing to the same memory location.
+
+### Example
+```java
+public class MyRunnable implements Runnable {
+    public void run() {
+        methodOne();
+    }
+
+    public void methodOne() {
+        int localVariable1 = 45; // Local to thread
+        MySharedObject localVariable2 = MySharedObject.sharedInstance; // Points to shared object
+        methodTwo();
+    }
+
+    public void methodTwo() {
+        Integer localVariable1 = new Integer(99); // Unique per thread
+    }
+}
+```
+
+## Hardware Memory Architecture
+Modern hardware architecture may include multiple CPUs and cache layers, leading to potential inconsistencies in how variables are accessed and updated. CPUs may use registers and cache for faster access to data, complicating visibility between threads.
+
+### Memory Access
+- **Registers**: Fast, in-CPU memory.
+- **Cache Memory**: Faster than RAM but slower than registers. 
+- **Main Memory (RAM)**: Where all variables ultimately reside.
+
+## Bridging JMM and Hardware Memory
+### Visibility Issues
+Without proper synchronization or the use of `volatile`, changes made to a shared object by one thread may not be visible to others due to caching in CPU registers or cache memory.
+
+### Race Conditions
+Race conditions occur when multiple threads modify shared data without proper synchronization. This can lead to unexpected results because threads may read stale data from their local caches.
+
+### Solutions
+- **Volatile Keyword**: Ensures a variable is always read from and written back to main memory, providing visibility guarantees.
+- **Synchronized Blocks**: Ensures that only one thread can access a critical section of code at a time, flushing variables to and from main memory correctly.
+
+### Example of Race Condition
+```java
+public class Counter {
+    private int count = 0;
+
+    public void increment() {
+        count++; // This can lead to race conditions
+    }
+}
+```
+
+If two threads call `increment()` simultaneously, both may read the same value of `count` before either writes back the incremented value, resulting in a lost update.
+
+## Conclusion
+Understanding the Java Memory Model is essential for designing robust concurrent applications. Proper synchronization and visibility management are critical to avoiding race conditions and ensuring that all threads see the correct state of shared data. Using constructs like `volatile` and synchronized blocks helps bridge the gap between the Java memory model and the underlying hardware architecture.
+
+---
+# Java Happens Before Guarantee
+
+The **Java Happens Before Guarantee** is crucial for understanding the visibility and ordering of variable accesses in a multithreaded environment. It establishes a framework that allows developers to reason about the execution order of statements across threads, ensuring that changes made by one thread become visible to others under specific conditions.
+
+## Overview of Instruction Reordering
+
+Modern CPUs can execute independent instructions out of order to improve performance. However, this can lead to inconsistencies in a multithreaded context if one thread updates a variable while another thread reads it. The **happens-before** relationship helps mitigate this issue by providing guarantees on the visibility of variables.
+
+### Example of Instruction Reordering
+
+Consider two independent instructions:
+
+```java
+a = b + c;  // Independent instruction
+d = e + f;  // Independent instruction
+```
+
+These can be executed in parallel. However, if one instruction depends on the result of another, reordering can lead to incorrect results:
+
+```java
+a = b + c;  // Must complete before
+d = a + e;  // This instruction
+```
+
+### Problems in Multi-CPU Systems
+
+In a multi-CPU environment, instruction reordering can introduce problems. Consider the following class:
+
+```java
+public class FrameExchanger {
+    private long framesStoredCount = 0;
+    private long framesTakenCount = 0;
+    private boolean hasNewFrame = false;
+    private Frame frame = null;
+
+    public void storeFrame(Frame frame) {
+        this.frame = frame;
+        this.framesStoredCount++;
+        this.hasNewFrame = true;
+    }
+
+    public Frame takeFrame() {
+        while (!hasNewFrame) {
+            // busy wait
+        }
+        Frame newFrame = this.frame;
+        this.framesTakenCount++;
+        this.hasNewFrame = false;
+        return newFrame;
+    }
+}
+```
+
+In this example, if the JVM reorders the `storeFrame` method, it can lead to incorrect behavior, where the drawing thread might process an old frame.
+
+## Java Volatile Visibility Guarantee
+
+The `volatile` keyword in Java provides visibility guarantees. When a volatile variable is written, all variables visible to that thread at the time of the write are synchronized to main memory. This ensures that any thread reading the volatile variable sees the most recent values of those variables.
+
+### Write Visibility Guarantee
+
+When you write to a volatile variable, it ensures that all other variables visible to that thread are also synchronized to main memory:
+
+```java
+this.nonVolatileVarA = 34;
+this.nonVolatileVarB = new String("Text");
+this.volatileVarC = 300;  // Volatile write
+```
+
+### Read Visibility Guarantee
+
+When reading a volatile variable, it ensures that all variables visible to the thread are refreshed from main memory:
+
+```java
+c = other.volatileVarC;  // Volatile read
+b = other.nonVolatileB;
+a = other.nonVolatileA;
+```
+
+## Happens Before Guarantees
+
+### For Volatile Writes
+
+A write to a volatile variable guarantees that all prior writes to non-volatile variables happen before the write to the volatile variable. This means:
+
+```java
+this.frame = frame;         // Non-volatile write
+this.framesStoredCount++;   // Non-volatile write
+this.hasNewFrame = true;    // Volatile write
+```
+
+The first two writes cannot be reordered after the last volatile write.
+
+### For Volatile Reads
+
+A read of a volatile variable guarantees that any subsequent reads of volatile or non-volatile variables happen after the read. This means:
+
+```java
+int a = this.volatileVarA;  // Volatile read
+int b = this.nonVolatileVarB;  // Must happen after
+int c = this.nonVolatileVarC;  // Must happen after
+```
+
+## Java Synchronized Visibility Guarantee
+
+The `synchronized` keyword provides similar visibility guarantees to `volatile`, but with a slightly different mechanism.
+
+### Entry Visibility Guarantee
+
+When a thread enters a synchronized block, all variables visible to that thread are refreshed from main memory:
+
+```java
+public void get(Values v) {
+    synchronized (this) {
+        v.valC = this.valC;  // Ensured to be up-to-date
+    }
+}
+```
+
+### Exit Visibility Guarantee
+
+When a thread exits a synchronized block, all changed variables are flushed to main memory:
+
+```java
+public void set(Values v) {
+    this.valA = v.valA;
+    this.valB = v.valB;
+    synchronized (this) {
+        this.valC = v.valC;  // Ensured to be flushed
+    }
+}
+```
+
+## Conclusion
+
+Understanding the Java Happens Before Guarantee is essential for writing correct multithreaded applications. It helps prevent issues caused by instruction reordering and ensures that threads see the most up-to-date values of shared variables. By leveraging `volatile` and `synchronized`, developers can create robust and efficient concurrent programs.
+
+---
+
+### Java Synchronized Blocks
+
+**Java Synchronized Tutorial Video**
+- A video version of this tutorial is available for those who prefer visual learning.
+
+**Java Concurrency Utilities**
+- The synchronized mechanism is Java's initial approach for synchronizing access to shared objects among multiple threads. However, with the introduction of Java 5, a range of concurrency utility classes were added to provide more refined concurrency control.
+
+**The Java Synchronized Keyword**
+- Synchronized blocks are denoted with the `synchronized` keyword and can only be executed by one thread at a time based on the object they are synchronized on. Other threads attempting to enter the block will be blocked until the current thread exits.
+
+**Types of Synchronized Blocks:**
+1. **Synchronized Instance Methods**
+   - Synchronized on the object instance:
+     ```java
+     public synchronized void add(int value) {
+         this.count += value;
+     }
+     ```
+   - Only one thread per instance can execute synchronized methods.
+
+2. **Synchronized Static Methods**
+   - Synchronized on the class object:
+     ```java
+     public static synchronized void add(int value) {
+         count += value;
+     }
+     ```
+   - Only one thread can execute any static synchronized method in the class at a time.
+
+3. **Synchronized Blocks in Instance Methods**
+   - You can synchronize specific code blocks within methods:
+     ```java
+     public void add(int value) {
+         synchronized(this) {
+             this.count += value;
+         }
+     }
+     ```
+   - Ensures that only one thread can execute the synchronized block at a time.
+
+4. **Synchronized Blocks in Static Methods**
+   - Similar to instance methods but synchronized on the class object:
+     ```java
+     public static void log2(String msg1, String msg2) {
+         synchronized(MyClass.class) {
+             log.writeln(msg1);
+             log.writeln(msg2);
+         }
+     }
+     ```
+
+5. **Synchronized Blocks in Lambda Expressions**
+   - Synchronized blocks can also be included in lambda expressions:
+     ```java
+     Consumer<String> func = (String param) -> {
+         synchronized(SynchronizedExample.class) {
+             // Code here
+         }
+     };
+     ```
+
+**Java Synchronized Example**
+- Example of synchronizing thread access to a shared instance:
+  ```java
+  public class Counter {
+      public synchronized void add(long value) {
+          this.count += value;
+      }
+  }
+  ```
+
+**Synchronized and Data Visibility**
+- The synchronized keyword ensures that all changes made by a thread are visible to other threads once it exits a synchronized block.
+
+**Synchronized and Instruction Reordering**
+- The synchronized keyword also prevents reordering of instructions that could lead to unexpected behavior in multi-threaded environments.
+
+**What Objects to Synchronize On**
+- It is advisable to avoid synchronizing on String objects or primitive type wrappers due to potential optimization issues. Instead, use `this` or `new Object()` as monitor objects.
+
+**Synchronized Block Limitations and Alternatives**
+- Synchronized blocks allow only one thread at a time, which may not be ideal for all scenarios. Alternatives include Read/Write Locks, Semaphores, or using volatile variables for single-writer, multiple-reader situations.
+
+**Synchronized Block Performance Overhead**
+- There is a performance cost associated with entering and exiting synchronized blocks, so it’s best to minimize the scope of synchronization to necessary operations.
+
+**Synchronized Block Reentrance**
+- A thread can reenter a synchronized block it holds the lock on, allowing for recursive calls without deadlock as long as the lock is held by the same thread.
+
+**Synchronized Blocks in Cluster Setups**
+- Synchronized blocks only prevent access from threads within the same JVM. For synchronization across multiple JVMs, other mechanisms are required.
+
+---
+# Java Volatile Keyword: A Comprehensive Guide
+
+## Overview
+The `volatile` keyword in Java is used to indicate that a variable's value will be modified by different threads. It ensures that all reads and writes to the variable go directly to and from the main memory, thus avoiding caching issues in CPU registers. This article delves into the nuances of the `volatile` keyword, including its guarantees, visibility issues, and when to use it effectively.
+
+## 1. Variable Visibility Problems
+In a multithreaded environment, threads may not see the latest changes made to variables by other threads due to caching mechanisms. For example, if Thread 1 increments a counter without declaring it as `volatile`, Thread 2 may not read the updated value from main memory, leading to inconsistent results.
+
+### Example:
+```java
+public class SharedObject {
+    public int counter = 0;
+}
+```
+
+## 2. The Java Volatile Visibility Guarantee
+Declaring a variable as `volatile` ensures that all writes to that variable are immediately visible to other threads. This means that Thread 2 will see the updates made by Thread 1 without delay.
+
+### Example:
+```java
+public class SharedObject {
+    public volatile int counter = 0;
+}
+```
+
+## 3. Full Volatile Visibility Guarantee
+The visibility guarantee extends beyond the `volatile` variable itself. If one thread writes to a `volatile` variable, all variables visible to that thread before the write will be visible to any thread that reads that `volatile` variable afterward.
+
+### Example:
+```java
+public class MyClass {
+    private int years;
+    private int months;
+    private volatile int days;
+
+    public void update(int years, int months, int days) {
+        this.years = years;
+        this.months = months;
+        this.days = days;
+    }
+}
+```
+
+## 4. Instruction Reordering Challenges
+Java allows the JVM and CPU to reorder instructions for performance optimizations. This can lead to issues when volatile variables are involved. The `volatile` keyword prevents certain reordering, ensuring that operations before the volatile write are completed before the volatile write occurs.
+
+## 5. The Java Volatile Happens-Before Guarantee
+The `volatile` keyword provides a "happens-before" guarantee, which ensures the order of operations concerning volatile variables:
+
+- Writes to a volatile variable happen before subsequent reads of that variable by any thread.
+- This guarantee prevents critical sections from being reordered in a way that would compromise data consistency.
+
+## 6. Volatile is Not Always Enough
+While `volatile` ensures visibility, it does not guarantee atomicity. If multiple threads read and write to a shared variable, simply marking it as `volatile` is insufficient.
+
+### Example Scenario:
+If Thread 1 reads a shared counter, increments it, and then writes it back, while Thread 2 does the same, both may read the same initial value, leading to incorrect results.
+
+## 7. When is Volatile Enough?
+Using `volatile` is adequate when:
+- One thread writes to a variable and other threads only read it.
+- No computations depend on the previous value of the variable.
+
+However, if operations depend on the current state of the variable, use `synchronized` blocks or atomic classes from `java.util.concurrent`.
+
+## 8. Performance Considerations of Volatile
+Reading from and writing to volatile variables incurs a performance cost since these operations interact directly with main memory. This is slower compared to accessing local CPU registers. Hence, `volatile` should be used judiciously.
+
+## Conclusion
+The `volatile` keyword is a powerful tool in Java for handling variable visibility across threads. Understanding its guarantees and limitations is essential for developing reliable multithreaded applications. Use it when visibility is crucial but remember that for atomic operations, synchronization mechanisms are necessary.
+
+---
+## CPU Cache Coherence in Java Concurrency
+
+In Java concurrency, it's important to understand the interaction between threads, memory, and CPU caches. When a thread writes to a volatile variable or exits a synchronized block, it flushes certain variables from CPU registers, but the process is more nuanced than a simple write to main memory.
+
+### What Actually Happens
+
+When a thread writes to a volatile variable or exits a synchronized block, the following occurs:
+
+1. **Flush to CPU Cache**: The variables in the thread's CPU registers are flushed to the CPU cache rather than directly to main memory. This allows for faster access by the CPU.
+
+2. **Cache Coherence Protocols**: The motherboard's hardware employs cache coherence protocols to ensure that any changes made in one CPU's cache are visible to other CPUs. This maintains consistency across multiple cores.
+
+3. **Possible Delayed Flush to Main Memory**: The system might not immediately write these flushed variables to main memory. Instead, they can stay in the CPU cache until needed for other data, optimizing performance.
+
+### Implications for Developers
+
+As a developer, you don't need to manage these low-level details of CPU cache coherence. The hardware handles it effectively, balancing the need for speed with data consistency. While there is some performance overhead from these coherence operations, it is generally preferable to direct memory writes.
+
+### Visualization
+
+To clarify:
+
+- **Incorrect Understanding**: It's a common misconception that volatile writes flush data directly to main memory.
+- **Correct Understanding**: Instead, data is flushed from CPU registers to the CPU cache, where coherence protocols manage visibility among other CPUs.
+
+### Conclusion
+
+Understanding CPU cache coherence enhances your grasp of Java's concurrency model, particularly around the volatile keyword and synchronized blocks. While you don’t have to worry about the intricacies of cache coherence, knowing how it operates can help you write more efficient concurrent programs.
+
+---
+# False Sharing in Java
+
+False sharing occurs when multiple threads write to different variables that reside within the same CPU cache line, leading to performance issues. This tutorial explores false sharing, its impact on performance, and strategies to mitigate it.
+
+## What is False Sharing?
+
+False sharing happens when two threads running on different CPUs write to different variables that are stored in the same CPU cache line. When one thread modifies its variable, the entire cache line is invalidated in the other thread’s cache, requiring it to reload the cache line, even if it doesn't need the modified variable. 
+
+### Illustration
+
+![False Sharing Illustration](link-to-image)
+
+### Cache Lines
+
+- **Cache Line Size**: Typically, a cache line consists of 64 bytes. When CPUs fetch data, they retrieve entire cache lines instead of individual bytes, which can lead to false sharing if multiple variables are stored within the same line.
+  
+### Cache Line Invalidation
+
+When a CPU writes to a variable, that cache line becomes "dirty" and needs to be synchronized across other CPUs, leading to cache line invalidation. This process incurs a performance penalty because the CPU must wait for the cache line to be refreshed.
+
+## Performance Penalty of False Sharing
+
+The performance degradation arises because of frequent cache line invalidations and reloads. This results in wasted CPU cycles as threads spend time waiting for cache lines to be refreshed instead of executing instructions.
+
+## Java Code Example
+
+### Example of False Sharing
+
+Here’s a simple example that demonstrates false sharing:
+
+```java
+public class Counter {
+    public volatile long count1 = 0;
+    public volatile long count2 = 0;
+}
+
+public class FalseSharingExample {
+    public static void main(String[] args) {
+        Counter counter1 = new Counter();
+        long iterations = 1_000_000_000;
+
+        Thread thread1 = new Thread(() -> {
+            long startTime = System.currentTimeMillis();
+            for (long i = 0; i < iterations; i++) {
+                counter1.count1++;
+            }
+            System.out.println("Thread 1 time: " + (System.currentTimeMillis() - startTime));
+        });
+
+        Thread thread2 = new Thread(() -> {
+            long startTime = System.currentTimeMillis();
+            for (long i = 0; i < iterations; i++) {
+                counter1.count2++;
+            }
+            System.out.println("Thread 2 time: " + (System.currentTimeMillis() - startTime));
+        });
+
+        thread1.start();
+        thread2.start();
+    }
+}
+```
+
+### Improved Performance by Avoiding False Sharing
+
+To avoid false sharing, ensure that counters are stored in separate objects:
+
+```java
+public class FalseSharingFixed {
+    public static void main(String[] args) {
+        Counter counter1 = new Counter(); // Separate instances
+        Counter counter2 = new Counter();
+        long iterations = 1_000_000_000;
+
+        // Similar thread code as above...
+    }
+}
+```
+
+## Fixing False Sharing Problems
+
+To fix false sharing, you need to ensure that variables accessed by different threads do not share the same cache line. 
+
+### Using the @Contended Annotation
+
+Java provides the `@Contended` annotation (available from Java 8) to help mitigate false sharing by adding padding around variables:
+
+```java
+public class Counter1 {
+    @jdk.internal.vm.annotation.Contended
+    public volatile long count1 = 0;
+    public volatile long count2 = 0;
+}
+```
+
+### Grouping Fields
+
+You can group fields using the `@Contended` annotation to keep them close while ensuring padding between different groups:
+
+```java
+public class GroupedCounter {
+    @jdk.internal.vm.annotation.Contended("group1")
+    public volatile long count1 = 0;
+    
+    @jdk.internal.vm.annotation.Contended("group1")
+    public volatile long count2 = 0;
+    
+    @jdk.internal.vm.annotation.Contended("group2")
+    public volatile long count3 = 0;
+}
+```
+
+### Configuring Padding Size
+
+By default, `@Contended` adds 128 bytes of padding. You can configure this padding size with a JVM argument:
+
+```
+-XX:ContendedPaddingWidth=64
+```
+
+Adjusting this value can optimize performance based on your CPU's cache line size.
+
+## Conclusion
+
+False sharing can significantly impact performance in concurrent Java applications. Understanding how it occurs and implementing strategies to prevent it, such as using the `@Contended` annotation or separating variables into different objects, can lead to more efficient multi-threaded applications.
+
+---
 
 # Thread Pools
 
