@@ -1,3 +1,43 @@
+# Java Concurrency Utilities - java.util.concurrent
+
+
+Java 5 added a new package to the Java platform, the `java.util.concurrent` package. This package contains a set of classes that makes it easier to develop concurrent (multithreaded) applications in Java. Before this package was added, you would have to program your utility classes yourself.
+
+## Table of Contents
+Here is a list of the topics covered in this `java.util.concurrent` trail. This list (menu) is also present at the top right of every page in the trail.
+
+- [Java BlockingQueue](#java-blockingqueue)
+- [Java ArrayBlockingQueue](#java-arrayblockingqueue)
+- [Java DelayQueue](#java-delayqueue)
+- [Java LinkedBlockingQueue](#java-linkedblockingqueue)
+- [Java PriorityBlockingQueue](#java-priorityblockingqueue)
+- [Java SynchronousQueue](#java-synchronousqueue)
+- [Java BlockingDeque](#java-blockingdeque)
+- [Java LinkedBlockingDeque](#java-linkedblockingdeque)
+- [Java ConcurrentMap](#java-concurrentmap)
+- [Java ConcurrentNavigableMap](#java-concurrentnavigablemap)
+- [Java CountDownLatch](#java-countdownlatch)
+- [Java CyclicBarrier](#java-cyclicbarrier)
+- [Java Exchanger](#java-exchanger)
+- [Java Semaphore](#java-semaphore)
+- [Java ExecutorService](#java-executorservice)
+- [Java Callable](#java-callable)
+- [Java Future](#java-future)
+- [Java ThreadPoolExecutor](#java-threadpoolexecutor)
+- [Java ScheduledExecutorService](#java-scheduledexecutorservice)
+- [Java ForkJoinPool](#java-forkjoinpool)
+- [Java Lock](#java-lock)
+- [Java ReadWriteLock](#java-readwritelock)
+- [Java AtomicInteger](#java-atomicinteger)
+- [Java AtomicLong](#java-atomiclong)
+- [Java AtomicReference](#java-atomicreference)
+- [Java AtomicStampedReference](#java-atomicstampedreference)
+- [Java AtomicIntegerArray](#java-atomicintegerarray)
+- [Java AtomicLongArray](#java-atomiclongarray)
+- [Java AtomicReferenceArray](#java-atomicreferencearray)
+
+
+
 ### BlockingQueue and Its Implementations
 
 #### 1. BlockingQueue
@@ -149,6 +189,154 @@
 
 ### Conclusion
 These concurrent structures and primitives in Java provide robust tools for building multi-threaded applications. They help manage complexity by ensuring thread safety and facilitating synchronization, which are critical for performance and correctness in concurrent programming. If you have specific use cases or examples you'd like to explore further, let me know!
+
+---
+
+# Java BlockingQueue
+
+## Overview
+The Java `BlockingQueue` interface, `java.util.concurrent.BlockingQueue`, represents a thread-safe queue for inserting and removing elements. Multiple threads can concurrently add and remove elements from a `BlockingQueue` without encountering concurrency issues.
+
+The term "blocking queue" refers to its capability to block threads attempting to insert or take elements from the queue. For example, if a thread tries to take an element and the queue is empty, it will block until an element is available. The behavior depends on the methods called on the `BlockingQueue`.
+
+## Java BlockingQueue Tutorial Video
+If you prefer video, check out my video version of this tutorial: [Java BlockingQueue Tutorial](https://yourlink.com).
+
+## BlockingQueue Implementations
+Since `BlockingQueue` is an interface, you must use one of its implementations:
+- `ArrayBlockingQueue`
+- `DelayQueue`
+- `LinkedBlockingQueue`
+- `LinkedBlockingDeque`
+- `LinkedTransferQueue`
+- `PriorityBlockingQueue`
+- `SynchronousQueue`
+
+Click the links to learn more about each implementation.
+
+## BlockingQueue Usage
+A `BlockingQueue` is typically used in producer-consumer scenarios where one thread produces objects and another consumes them. The producing thread continues until the queue reaches its capacity, at which point it is blocked until a consumer removes an item.
+
+### BlockingQueue Methods
+The `BlockingQueue` interface has four sets of methods for inserting, removing, and examining elements, each with different behaviors if an operation cannot be completed immediately:
+
+| Action | Throws Exception | Special Value | Blocks | Times Out |
+|--------|------------------|---------------|--------|-----------|
+| Insert | `add(o)`        | `offer(o)`    | `put(o)` | `offer(o, timeout, timeunit)` |
+| Remove | `remove(o)`     | `poll()`      | `take()` | `poll(timeout, timeunit)` |
+| Examine | `element()`     | `peek()`      | -      | - |
+
+- **Throws Exception:** An exception is thrown if the operation fails.
+- **Special Value:** A special value is returned (often `true` or `false`) if the operation fails.
+- **Blocks:** The method blocks until the operation can be completed.
+- **Times Out:** The method blocks until the operation can be completed or times out after a specified duration.
+
+### Important Notes
+- Null cannot be added to a `BlockingQueue`; attempting to do so will throw a `NullPointerException`.
+- Elements can be accessed in various ways, including removing specific elements, though this is not efficient.
+
+## Java BlockingQueue Example
+Here’s an example using the `ArrayBlockingQueue` implementation:
+
+```java
+public class BlockingQueueExample {
+    public static void main(String[] args) throws Exception {
+        BlockingQueue<String> queue = new ArrayBlockingQueue<>(1024);
+
+        Producer producer = new Producer(queue);
+        Consumer consumer = new Consumer(queue);
+
+        new Thread(producer).start();
+        new Thread(consumer).start();
+
+        Thread.sleep(4000);
+    }
+}
+
+class Producer implements Runnable {
+    protected BlockingQueue<String> queue;
+
+    public Producer(BlockingQueue<String> queue) {
+        this.queue = queue;
+    }
+
+    public void run() {
+        try {
+            queue.put("1");
+            Thread.sleep(1000);
+            queue.put("2");
+            Thread.sleep(1000);
+            queue.put("3");
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+}
+
+class Consumer implements Runnable {
+    protected BlockingQueue<String> queue;
+
+    public Consumer(BlockingQueue<String> queue) {
+        this.queue = queue;
+    }
+
+    public void run() {
+        try {
+            System.out.println(queue.take());
+            System.out.println(queue.take());
+            System.out.println(queue.take());
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+## BlockingQueue Methods
+### `add()`
+Adds an element if space is available; throws `IllegalStateException` if full.
+
+### `offer()`
+Adds an element if space is available; returns `false` if full.
+
+### `offer(long millis, TimeUnit timeUnit)`
+Adds an element if space becomes available within the timeout; returns `false` if not.
+
+### `put()`
+Inserts an element, blocking if necessary until space becomes available.
+
+### `take()`
+Removes and returns the first element; blocks if the queue is empty.
+
+### `poll()`
+Removes and returns the first element; returns `null` if empty.
+
+### `poll(long timeMillis, TimeUnit timeUnit)`
+Removes and returns the first element, waiting for a specified time; returns `null` if no element is available.
+
+### `remove(Object o)`
+Removes one instance of the specified element; returns `true` if successful.
+
+### `peek()`
+Returns the first element without removing it; returns `null` if empty.
+
+### `element()`
+Returns the first element without removing it; throws `NoSuchElementException` if empty.
+
+### `contains(Object o)`
+Returns `true` if the queue contains the specified object.
+
+### `drainTo(Collection dest)`
+Drains all elements to the specified collection.
+
+### `drainTo(Collection dest, int maxElements)`
+Drains up to `maxElements` to the specified collection.
+
+### `size()`
+Returns the number of elements in the queue.
+
+### `remainingCapacity()`
+Returns the remaining capacity of the queue.
 
 ---
 
