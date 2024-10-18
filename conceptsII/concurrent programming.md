@@ -149,3 +149,197 @@
 
 ### Conclusion
 These concurrent structures and primitives in Java provide robust tools for building multi-threaded applications. They help manage complexity by ensuring thread safety and facilitating synchronization, which are critical for performance and correctness in concurrent programming. If you have specific use cases or examples you'd like to explore further, let me know!
+
+---
+
+Sure! Here are examples for some of the key concurrent structures and synchronization primitives in Java:
+
+### 1. BlockingQueue Example: ArrayBlockingQueue
+
+```java
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
+
+public class ArrayBlockingQueueExample {
+    public static void main(String[] args) {
+        BlockingQueue<Integer> queue = new ArrayBlockingQueue<>(5);
+
+        // Producer thread
+        Thread producer = new Thread(() -> {
+            try {
+                for (int i = 0; i < 10; i++) {
+                    queue.put(i);
+                    System.out.println("Produced: " + i);
+                }
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        });
+
+        // Consumer thread
+        Thread consumer = new Thread(() -> {
+            try {
+                for (int i = 0; i < 10; i++) {
+                    Integer value = queue.take();
+                    System.out.println("Consumed: " + value);
+                }
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        });
+
+        producer.start();
+        consumer.start();
+    }
+}
+```
+
+### 2. CountDownLatch Example
+
+```java
+import java.util.concurrent.CountDownLatch;
+
+public class CountDownLatchExample {
+    public static void main(String[] args) throws InterruptedException {
+        CountDownLatch latch = new CountDownLatch(3);
+
+        for (int i = 0; i < 3; i++) {
+            final int workerId = i + 1;
+            new Thread(() -> {
+                try {
+                    Thread.sleep(1000); // Simulate work
+                    System.out.println("Worker " + workerId + " finished.");
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                } finally {
+                    latch.countDown();
+                }
+            }).start();
+        }
+
+        latch.await(); // Wait for all workers to finish
+        System.out.println("All workers finished.");
+    }
+}
+```
+
+### 3. CyclicBarrier Example
+
+```java
+import java.util.concurrent.CyclicBarrier;
+
+public class CyclicBarrierExample {
+    public static void main(String[] args) throws InterruptedException {
+        final int numberOfWorkers = 3;
+        CyclicBarrier barrier = new CyclicBarrier(numberOfWorkers, () -> System.out.println("All workers arrived at the barrier."));
+
+        for (int i = 0; i < numberOfWorkers; i++) {
+            final int workerId = i + 1;
+            new Thread(() -> {
+                try {
+                    System.out.println("Worker " + workerId + " is working...");
+                    Thread.sleep(1000); // Simulate work
+                    barrier.await(); // Wait for other workers
+                    System.out.println("Worker " + workerId + " passed the barrier.");
+                } catch (Exception e) {
+                    Thread.currentThread().interrupt();
+                }
+            }).start();
+        }
+    }
+}
+```
+
+### 4. ExecutorService Example
+
+```java
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+public class ExecutorServiceExample {
+    public static void main(String[] args) {
+        ExecutorService executor = Executors.newFixedThreadPool(3);
+
+        for (int i = 0; i < 5; i++) {
+            final int taskId = i + 1;
+            executor.submit(() -> {
+                System.out.println("Task " + taskId + " is running.");
+                try {
+                    Thread.sleep(1000); // Simulate work
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+            });
+        }
+
+        executor.shutdown(); // Shutdown the executor
+    }
+}
+```
+
+### 5. AtomicInteger Example
+
+```java
+import java.util.concurrent.atomic.AtomicInteger;
+
+public class AtomicIntegerExample {
+    public static void main(String[] args) {
+        AtomicInteger atomicCount = new AtomicInteger(0);
+
+        Thread incrementer = new Thread(() -> {
+            for (int i = 0; i < 5; i++) {
+                System.out.println("Incrementing: " + atomicCount.incrementAndGet());
+            }
+        });
+
+        Thread decrementer = new Thread(() -> {
+            for (int i = 0; i < 5; i++) {
+                System.out.println("Decrementing: " + atomicCount.decrementAndGet());
+            }
+        });
+
+        incrementer.start();
+        decrementer.start();
+    }
+}
+```
+
+### 6. SynchronousQueue Example
+
+```java
+import java.util.concurrent.SynchronousQueue;
+
+public class SynchronousQueueExample {
+    public static void main(String[] args) {
+        SynchronousQueue<Integer> queue = new SynchronousQueue<>();
+
+        // Producer thread
+        new Thread(() -> {
+            for (int i = 0; i < 5; i++) {
+                try {
+                    System.out.println("Producing: " + i);
+                    queue.put(i); // Blocks until a consumer is ready
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+            }
+        }).start();
+
+        // Consumer thread
+        new Thread(() -> {
+            for (int i = 0; i < 5; i++) {
+                try {
+                    Integer value = queue.take(); // Blocks until a producer is ready
+                    System.out.println("Consuming: " + value);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+            }
+        }).start();
+    }
+}
+```
+
+### Conclusion
+These examples illustrate various concurrency mechanisms in Java, including blocking queues, synchronization aids, and atomic variables. You can run these snippets to see how they work in action. If you need further explanations or more examples, feel free to ask!
+
