@@ -1458,6 +1458,653 @@ Adjusting this value can optimize performance based on your CPU's cache line siz
 False sharing can significantly impact performance in concurrent Java applications. Understanding how it occurs and implementing strategies to prevent it, such as using the `@Contended` annotation or separating variables into different objects, can lead to more efficient multi-threaded applications.
 
 ---
+# Java ThreadLocal Tutorial
+
+The `ThreadLocal` class in Java allows you to create variables that are accessible only by the thread that created them. This makes it easier to create thread-safe code without using synchronization, as each thread maintains its own value.
+
+## Creating a ThreadLocal
+
+You can create a `ThreadLocal` instance like any other object:
+
+```java
+private ThreadLocal<String> threadLocal = new ThreadLocal<>();
+```
+
+Each thread can now set and get its own value from this `ThreadLocal`.
+
+## Setting and Getting Values
+
+### Set ThreadLocal Value
+
+To set a value, use the `set()` method:
+
+```java
+threadLocal.set("A thread local value");
+```
+
+### Get ThreadLocal Value
+
+To retrieve the value, use the `get()` method:
+
+```java
+String threadLocalValue = threadLocal.get();
+```
+
+### Remove ThreadLocal Value
+
+To remove the value from a `ThreadLocal`, call the `remove()` method:
+
+```java
+threadLocal.remove();
+```
+
+## Generic ThreadLocal
+
+You can specify a type for `ThreadLocal`:
+
+```java
+private ThreadLocal<String> myThreadLocal = new ThreadLocal<>();
+```
+
+Now you can store only `String` values without typecasting:
+
+```java
+myThreadLocal.set("Hello ThreadLocal");
+String threadLocalValue = myThreadLocal.get();
+```
+
+## Initial ThreadLocal Value
+
+### Override initialValue()
+
+You can set an initial value for a `ThreadLocal` by subclassing it and overriding the `initialValue()` method:
+
+```java
+private ThreadLocal<String> myThreadLocal = new ThreadLocal<String>() {
+    @Override
+    protected String initialValue() {
+        return String.valueOf(System.currentTimeMillis());
+    }
+};
+```
+
+### Provide a Supplier Implementation
+
+You can also use the `withInitial(Supplier)` method to set an initial value:
+
+```java
+ThreadLocal<String> threadLocal = ThreadLocal.withInitial(() -> String.valueOf(System.currentTimeMillis()));
+```
+
+## Lazy Setting of ThreadLocal Value
+
+In cases where the initial value isn't available at the time of `ThreadLocal` creation, you can set it lazily:
+
+```java
+public class MyDateFormatter {
+    private ThreadLocal<SimpleDateFormat> simpleDateFormatThreadLocal = new ThreadLocal<>();
+
+    public String format(Date date) {
+        SimpleDateFormat sdf = getThreadLocalSimpleDateFormat();
+        return sdf.format(date);
+    }
+
+    private SimpleDateFormat getThreadLocalSimpleDateFormat() {
+        SimpleDateFormat sdf = simpleDateFormatThreadLocal.get();
+        if (sdf == null) {
+            sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            simpleDateFormatThreadLocal.set(sdf);
+        }
+        return sdf;
+    }
+}
+```
+
+## Using ThreadLocal with Thread Pool or ExecutorService
+
+Using `ThreadLocal` with a thread pool or `ExecutorService` is straightforward. Each thread in the pool will maintain its own value.
+
+## Full ThreadLocal Example
+
+Here's a complete example demonstrating `ThreadLocal`:
+
+```java
+public class ThreadLocalExample {
+    public static void main(String[] args) throws InterruptedException {
+        MyRunnable sharedRunnableInstance = new MyRunnable();
+        Thread thread1 = new Thread(sharedRunnableInstance);
+        Thread thread2 = new Thread(sharedRunnableInstance);
+
+        thread1.start();
+        thread2.start();
+
+        thread1.join();
+        thread2.join();
+    }
+}
+
+public class MyRunnable implements Runnable {
+    private ThreadLocal<Integer> threadLocal = new ThreadLocal<>();
+
+    @Override
+    public void run() {
+        threadLocal.set((int) (Math.random() * 100D));
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        System.out.println(threadLocal.get());
+    }
+}
+```
+
+In this example, each thread sets its own value in `ThreadLocal`, and they cannot see each other's values.
+
+## InheritableThreadLocal
+
+`InheritableThreadLocal` is a subclass of `ThreadLocal` that allows child threads to inherit the value from the parent thread:
+
+```java
+public class InheritableThreadLocalExample {
+    public static void main(String[] args) {
+        InheritableThreadLocal<String> inheritableThreadLocal = new InheritableThreadLocal<>();
+
+        Thread thread1 = new Thread(() -> {
+            inheritableThreadLocal.set("Parent Thread Value");
+            System.out.println(inheritableThreadLocal.get());
+
+            Thread childThread = new Thread(() -> {
+                System.out.println(inheritableThreadLocal.get());
+            });
+            childThread.start();
+        });
+
+        thread1.start();
+    }
+}
+```
+
+In this example, the child thread can access the value set by the parent thread in `InheritableThreadLocal`, but a normal `ThreadLocal` value remains inaccessible to child threads.
+
+## Conclusion
+
+The `ThreadLocal` class is a powerful feature for maintaining thread-specific data without explicit synchronization. Understanding how to use `ThreadLocal` and `InheritableThreadLocal` can greatly enhance the thread-safety and performance of your Java applications.
+
+---
+# Java Thread Signaling Tutorial
+
+Java provides a robust mechanism for thread signaling through the `wait()`, `notify()`, and `notifyAll()` methods, which are part of the `Object` class. This functionality enables threads to communicate, allowing one thread to wait for a signal from another.
+
+## Key Concepts
+
+### wait(), notify(), and notifyAll()
+
+- **wait()**: Causes the current thread to wait until another thread invokes `notify()` or `notifyAll()` on the same object.
+- **notify()**: Wakes up a single thread that is waiting on this object's monitor.
+- **notifyAll()**: Wakes up all threads waiting on this object's monitor.
+
+These methods must be called from within a synchronized block on the object whose monitor is being used.
+
+### Example Implementation
+
+Here’s a simple example demonstrating how to use these methods for inter-thread communication:
+
+```java
+public class MonitorObject {}
+
+public class MyWaitNotify {
+    private final MonitorObject myMonitorObject = new MonitorObject();
+
+    public void doWait() {
+        synchronized (myMonitorObject) {
+            try {
+                myMonitorObject.wait();
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt(); // Restore interrupted status
+            }
+        }
+    }
+
+    public void doNotify() {
+        synchronized (myMonitorObject) {
+            myMonitorObject.notify();
+        }
+    }
+}
+```
+
+### How It Works
+
+1. **Thread A** calls `doWait()`, entering a synchronized block and invoking `wait()` on `myMonitorObject`. This thread is now blocked until another thread calls `notify()` or `notifyAll()` on the same object.
+2. **Thread B** calls `doNotify()`, also entering a synchronized block. It then calls `notify()`, waking up one waiting thread (if any) from the wait state.
+
+## Missed Signals
+
+If `notify()` is called when no threads are waiting, the signal is lost. To prevent this, you can use a member variable to track whether a signal was sent:
+
+```java
+public class MyWaitNotify2 {
+    private final MonitorObject myMonitorObject = new MonitorObject();
+    private boolean wasSignalled = false;
+
+    public void doWait() {
+        synchronized (myMonitorObject) {
+            while (!wasSignalled) {
+                try {
+                    myMonitorObject.wait();
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+            }
+            wasSignalled = false; // Clear the signal
+        }
+    }
+
+    public void doNotify() {
+        synchronized (myMonitorObject) {
+            wasSignalled = true;
+            myMonitorObject.notify();
+        }
+    }
+}
+```
+
+### Spurious Wakeups
+
+Threads can wake up without a call to `notify()` or `notifyAll()`, known as spurious wakeups. To guard against this, use a while loop instead of an if statement when checking the signal:
+
+```java
+public class MyWaitNotify3 {
+    private final MonitorObject myMonitorObject = new MonitorObject();
+    private boolean wasSignalled = false;
+
+    public void doWait() {
+        synchronized (myMonitorObject) {
+            while (!wasSignalled) {
+                try {
+                    myMonitorObject.wait();
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+            }
+            wasSignalled = false; // Clear the signal
+        }
+    }
+
+    public void doNotify() {
+        synchronized (myMonitorObject) {
+            wasSignalled = true;
+            myMonitorObject.notify();
+        }
+    }
+}
+```
+
+## Multiple Threads Waiting for the Same Signals
+
+Using a while loop also helps manage multiple threads. If several threads are waiting and one is notified, only that thread will proceed. Others will recheck the signal, and if it’s cleared, they will go back to waiting.
+
+## Avoiding Common Pitfalls
+
+### Don't Call wait() on Constant Strings or Global Objects
+
+Using global objects or constant strings for signaling can lead to unintended behavior, as these objects may be shared across different instances. For example:
+
+```java
+public class MyWaitNotifyBad {
+    private final String myMonitorObject = ""; // Problematic!
+
+    public void doWait() {
+        synchronized (myMonitorObject) {
+            while (!wasSignalled) {
+                try {
+                    myMonitorObject.wait();
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+            }
+            wasSignalled = false; // Clear the signal
+        }
+    }
+
+    public void doNotify() {
+        synchronized (myMonitorObject) {
+            wasSignalled = true;
+            myMonitorObject.notify();
+        }
+    }
+}
+```
+
+This is dangerous because the same string literal may be used across different instances, leading to missed signals. Always use a unique object for synchronization.
+
+## Conclusion
+
+Understanding and correctly implementing thread signaling in Java is crucial for building responsive multi-threaded applications. By leveraging `wait()`, `notify()`, and `notifyAll()`, along with careful management of synchronization, you can effectively manage inter-thread communication and avoid common pitfalls.
+
+---
+# Thread Deadlock in Java
+
+Deadlock is a situation in concurrent programming where two or more threads are blocked forever, each waiting for the other to release a resource. This typically occurs when multiple threads need the same locks but acquire them in different orders.
+
+## Understanding Deadlock
+
+### Basic Example
+
+Consider two threads and two resources (locks), A and B:
+
+- **Thread 1** locks A and then tries to lock B.
+- **Thread 2** locks B and then tries to lock A.
+
+This results in a deadlock:
+
+- **Thread 1** is waiting for B (which is locked by Thread 2).
+- **Thread 2** is waiting for A (which is locked by Thread 1).
+
+### Visualization
+
+```
+Thread 1  -> locks A
+            -> waits for B
+
+Thread 2  -> locks B
+            -> waits for A
+```
+
+### Code Example
+
+Here's a Java example demonstrating a potential deadlock scenario using a `TreeNode` class:
+
+```java
+import java.util.ArrayList;
+import java.util.List;
+
+public class TreeNode {
+    TreeNode parent = null;  
+    List<TreeNode> children = new ArrayList<>();
+
+    public synchronized void addChild(TreeNode child) {
+        if (!this.children.contains(child)) {
+            this.children.add(child);
+            child.setParentOnly(this);
+        }
+    }
+
+    public synchronized void addChildOnly(TreeNode child) {
+        if (!this.children.contains(child)) {
+            this.children.add(child);
+        }
+    }
+
+    public synchronized void setParent(TreeNode parent) {
+        this.parent = parent;
+        parent.addChildOnly(this);
+    }
+
+    public synchronized void setParentOnly(TreeNode parent) {
+        this.parent = parent;
+    }
+}
+```
+
+### Deadlock Scenario
+
+If **Thread 1** executes `parent.addChild(child)` while **Thread 2** executes `child.setParent(parent)` at the same time, the following sequence occurs:
+
+1. **Thread 1** locks `parent` to execute `addChild`.
+2. **Thread 2** locks `child` to execute `setParent`.
+3. **Thread 1** then tries to call `setParentOnly` on `child` but is blocked because `child` is locked by **Thread 2**.
+4. **Thread 2** tries to call `addChildOnly` on `parent`, which is locked by **Thread 1**.
+
+Both threads are now waiting on each other indefinitely.
+
+## More Complicated Deadlocks
+
+Deadlocks can involve more than two threads, making them even harder to detect. Consider four threads in a deadlock:
+
+1. **Thread 1** locks A and waits for B.
+2. **Thread 2** locks B and waits for C.
+3. **Thread 3** locks C and waits for D.
+4. **Thread 4** locks D and waits for A.
+
+This creates a circular wait condition:
+
+- **Thread 1** -> **Thread 2** -> **Thread 3** -> **Thread 4** -> back to **Thread 1**.
+
+## Database Deadlocks
+
+Deadlocks are not limited to threads. They can also occur in database transactions. Here’s how:
+
+1. **Transaction 1** locks Record 1 for update.
+2. **Transaction 2** locks Record 2 for update.
+3. **Transaction 1** tries to lock Record 2.
+4. **Transaction 2** tries to lock Record 1.
+
+Both transactions are now waiting on each other, resulting in a deadlock. Since locks are taken during various requests and not all required locks are known ahead of time, detecting and preventing deadlocks can be quite challenging in database systems.
+
+## Preventing Deadlocks
+
+To minimize the risk of deadlocks, consider the following strategies:
+
+1. **Lock Ordering**: Always acquire locks in a consistent order across threads.
+2. **Lock Timeout**: Implement a timeout mechanism where a thread will stop waiting after a certain period and retry.
+3. **Deadlock Detection**: Use algorithms to periodically check for deadlocks and resolve them if detected.
+4. **Resource Allocation Graphs**: Maintain a graph to track resource allocation and avoid circular waits.
+
+Understanding and managing deadlocks is crucial in developing robust multi-threaded applications, ensuring that your program runs smoothly without indefinite blocking.
+
+---
+# Deadlock Prevention in Java
+
+Deadlock prevention techniques are essential in multi-threaded programming to ensure that threads do not get stuck waiting indefinitely for resources held by each other. Here are three effective strategies:
+
+## 1. Lock Ordering
+
+**Concept**: To prevent deadlock, ensure that all threads acquire locks in a predetermined order. This way, if every thread follows the same locking sequence, circular wait conditions cannot arise.
+
+### Example:
+- **Thread 1**:
+  - Lock A
+  - Lock B
+
+- **Thread 2**:
+  - Lock A
+  - Lock C
+
+- **Thread 3**:
+  - Lock A
+  - Lock B
+  - Lock C
+
+By enforcing that all threads must acquire lock A before B or C, you can prevent deadlocks.
+
+### Implementation Tips:
+- Establish a global order for locks that all threads adhere to.
+- Use enumerated types or constants to represent lock order, making it clear and less error-prone.
+
+## 2. Lock Timeout
+
+**Concept**: Set a timeout for lock acquisition attempts. If a thread cannot obtain the required lock within a specified time, it gives up, releases any locks it holds, waits for a random time, and retries. This method can help avoid deadlocks by reducing contention among threads.
+
+### Example:
+1. **Thread 1** locks A.
+2. **Thread 2** locks B.
+3. **Thread 1** tries to lock B but times out.
+4. **Thread 1** releases A and waits before retrying.
+5. **Thread 2** tries to lock A but also times out.
+6. **Thread 2** releases B and waits before retrying.
+
+### Implementation Tips:
+- Use custom lock classes or concurrency utilities from `java.util.concurrent` for implementing timeouts.
+- Ensure to handle cases where locks may take longer to release.
+
+## 3. Deadlock Detection
+
+**Concept**: When prevention strategies are not feasible, use detection mechanisms to identify deadlocks. This involves monitoring the locks held by threads and the locks they are requesting.
+
+### Process:
+- Maintain a data structure (like a graph) to track the relationships between threads and locks.
+- When a thread requests a lock, check if it’s already held by another thread.
+- If a thread is blocked, traverse the graph to see if it forms a cycle.
+
+### Graph Representation:
+Imagine a graph where:
+- Nodes represent threads.
+- Directed edges represent lock requests.
+
+If there is a cycle in this graph, a deadlock exists.
+
+### Handling Detected Deadlocks:
+1. **Backoff and Retry**: Release all locks and wait before retrying, similar to lock timeout but specifically for detected deadlocks.
+2. **Priority Assignment**: Assign priorities to threads. If a deadlock is detected, allow only the lowest priority thread to back off, enabling others to continue.
+
+### Implementation Tips:
+- Regularly check for deadlocks in long-running applications.
+- Use tools or libraries that can help visualize lock acquisition and detect deadlocks automatically.
+
+## Summary
+
+Implementing effective deadlock prevention strategies is crucial in Java multi-threading:
+
+- **Lock Ordering** ensures consistent lock acquisition order.
+- **Lock Timeout** allows threads to back off and retry, reducing contention.
+- **Deadlock Detection** identifies and resolves deadlocks when they occur.
+
+By using these techniques, you can significantly improve the robustness of your concurrent applications, reducing the likelihood of deadlock situations.
+
+---
+# Starvation and Fairness in Java
+
+Starvation occurs when a thread is perpetually denied the CPU time it needs to execute, typically due to resource allocation policies that favor other threads. This can lead to performance issues and responsiveness problems in multi-threaded applications. Fairness, on the other hand, ensures that all threads are given a reasonable opportunity to execute, thus mitigating starvation.
+
+## Causes of Starvation in Java
+
+1. **Thread Priority**: 
+   - In Java, threads can be assigned priorities (1 to 10). Higher-priority threads can consume most of the CPU time, causing lower-priority threads to starve. 
+   - It is often advisable to leave thread priorities at their default levels to avoid such issues.
+
+2. **Blocked Threads**: 
+   - When multiple threads contend for access to synchronized blocks, the JVM does not guarantee which thread will get access next. A thread may remain blocked indefinitely if other threads continuously acquire the lock first.
+
+3. **Indefinite Waiting**: 
+   - Threads waiting on an object using `wait()` may be starved if `notify()` is always called on other waiting threads. This leads to scenarios where a thread is never awakened to continue its execution.
+
+## Implementing Fairness in Java
+
+While achieving perfect fairness is challenging, Java provides mechanisms to enhance fairness in synchronization.
+
+### Using Locks Instead of Synchronized Blocks
+
+Using explicit locks can help manage fairness better than synchronized methods or blocks. Below is an example of a custom lock implementation.
+
+#### Basic Lock Implementation
+
+```java
+public class Lock {
+    private boolean isLocked = false;
+    private Thread lockingThread = null;
+
+    public synchronized void lock() throws InterruptedException {
+        while (isLocked) {
+            wait();
+        }
+        isLocked = true;
+        lockingThread = Thread.currentThread();
+    }
+
+    public synchronized void unlock() {
+        if (this.lockingThread != Thread.currentThread()) {
+            throw new IllegalMonitorStateException("Calling thread has not locked this lock");
+        }
+        isLocked = false;
+        lockingThread = null;
+        notify();
+    }
+}
+```
+
+This simple lock implementation does not ensure fairness, as there is no guarantee of which waiting thread will acquire the lock next.
+
+### A Fair Lock Implementation
+
+To implement a fair lock, we can use a queue to manage waiting threads. Below is a fair lock implementation:
+
+```java
+import java.util.ArrayList;
+import java.util.List;
+
+public class FairLock {
+    private boolean isLocked = false;
+    private Thread lockingThread = null;
+    private List<QueueObject> waitingThreads = new ArrayList<>();
+
+    public void lock() throws InterruptedException {
+        QueueObject queueObject = new QueueObject();
+        synchronized (this) {
+            waitingThreads.add(queueObject);
+        }
+
+        while (true) {
+            synchronized (this) {
+                if (!isLocked && waitingThreads.get(0) == queueObject) {
+                    isLocked = true;
+                    waitingThreads.remove(0);
+                    lockingThread = Thread.currentThread();
+                    return;
+                }
+            }
+            queueObject.doWait();
+        }
+    }
+
+    public synchronized void unlock() {
+        if (this.lockingThread != Thread.currentThread()) {
+            throw new IllegalMonitorStateException("Calling thread has not locked this lock");
+        }
+        isLocked = false;
+        lockingThread = null;
+        if (!waitingThreads.isEmpty()) {
+            waitingThreads.get(0).doNotify();
+        }
+    }
+}
+
+class QueueObject {
+    private boolean isNotified = false;
+
+    public synchronized void doWait() throws InterruptedException {
+        while (!isNotified) {
+            wait();
+        }
+        isNotified = false;
+    }
+
+    public synchronized void doNotify() {
+        isNotified = true;
+        notify();
+    }
+}
+```
+
+### Key Features of FairLock:
+- **Queue Management**: Threads calling `lock()` are queued, ensuring that only the first thread in line can proceed.
+- **Single Notification**: Instead of notifying all waiting threads, only the next thread in the queue is awakened.
+- **Avoiding Missed Signals**: By managing wait states within a dedicated `QueueObject`, we can prevent missed signals that may occur if a thread is preempted just before calling `wait()`.
+
+## A Note on Performance
+
+While a fair lock ensures better access control and reduces the chances of starvation, it comes with some performance overhead compared to simpler lock implementations. The impact of this overhead depends on:
+- The length of time the critical section takes to execute.
+- How often the lock is contended.
+
+In high-contention scenarios, the overhead may be negligible relative to the benefits of reduced starvation and improved responsiveness.
+
+## Conclusion
+
+Implementing fairness in Java threading involves addressing the causes of starvation through careful management of lock acquisition. By utilizing fair lock implementations, you can significantly improve thread behavior, ensuring that all threads have a chance to execute without indefinitely waiting.
+
+---
 
 # Thread Pools
 
