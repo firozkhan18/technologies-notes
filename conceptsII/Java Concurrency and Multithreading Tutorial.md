@@ -150,6 +150,21 @@ With multithreading, the server can process multiple requests concurrently. Even
 
 ---
 
+# Multithreading Costs
+
+## More Complex Design
+While some parts of a multithreaded application can be simpler than a single-threaded application, others introduce significant complexity. Specifically, code executed by multiple threads that accesses shared data requires careful management. Thread interaction can be intricate, and errors arising from incorrect thread synchronization are often difficult to detect, reproduce, and fix.
+
+## Context Switching Overhead
+When a CPU switches from executing one thread to another, it must save the current thread's state (including local data and program pointers) and load the next thread's state. This process is known as a **context switch**. Context switching is resource-intensive, and excessive switching can degrade performance.
+
+For more details on context switching, you can refer to [Wikipedia](http://en.wikipedia.org/wiki/Context_switch).
+
+## Increased Resource Consumption
+Each thread consumes system resources, including CPU time and memory for its stack. Additionally, the operating system requires resources to manage these threads. For example, creating a program with 100 threads that merely waits can lead to significant memory usage. This overhead should be considered when designing applications with many threads.
+
+---
+
 # Thread Pools
 
 ## Introduction to Thread Pools
