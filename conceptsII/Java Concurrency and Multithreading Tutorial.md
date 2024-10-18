@@ -2106,6 +2106,1052 @@ Implementing fairness in Java threading involves addressing the causes of starva
 
 ---
 
+# Nested Monitor Lockout in Java
+
+Nested monitor lockout is a concurrency problem in Java that can lead to threads being indefinitely blocked, similar to a deadlock but occurring under different conditions. Understanding how it arises and its implications is crucial for designing robust multi-threaded applications.
+
+## How Nested Monitor Lockout Occurs
+
+Nested monitor lockout occurs in the following sequence:
+
+1. **Thread 1 acquires a lock on Object A.**
+2. **Thread 1 then tries to acquire a lock on Object B** while already holding the lock on A.
+3. **Thread 1 calls `B.wait()`** to wait for a signal from another thread, releasing the lock on B but **not on A**.
+4. **Thread 2 attempts to acquire locks on A and B in that order**.
+5. Thread 2 cannot proceed because **Thread 1 still holds the lock on A**.
+6. **Thread 1 remains blocked**, waiting for Thread 2 to signal it, creating a cycle of dependency.
+
+This results in both threads waiting on each other indefinitely, leading to a nested monitor lockout scenario.
+
+### Example: Naive Lock Implementation
+
+```java
+public class Lock {
+    protected MonitorObject monitorObject = new MonitorObject();
+    protected boolean isLocked = false;
+
+    public void lock() throws InterruptedException {
+        synchronized (this) {
+            while (isLocked) {
+                synchronized (this.monitorObject) {
+                    this.monitorObject.wait();
+                }
+            }
+            isLocked = true;
+        }
+    }
+
+    public void unlock() {
+        synchronized (this) {
+            isLocked = false;
+            synchronized (this.monitorObject) {
+                this.monitorObject.notify();
+            }
+        }
+    }
+}
+```
+
+In this implementation:
+- The `lock()` method first synchronizes on `this`, then tries to acquire a lock on `monitorObject`. 
+- If `isLocked` is true, the thread waits on `monitorObject`, but it still holds the lock on `this`.
+- This leads to a situation where the thread cannot exit `lock()` until it successfully releases the lock on `this`, but it cannot do so until it is notified.
+
+## A More Realistic Example
+
+A more realistic scenario arises when implementing fairness in a lock. Consider the following fair lock implementation:
+
+```java
+public class FairLock {
+    private boolean isLocked = false;
+    private Thread lockingThread = null;
+    private List<QueueObject> waitingThreads = new ArrayList<>();
+
+    public void lock() throws InterruptedException {
+        QueueObject queueObject = new QueueObject();
+        synchronized (this) {
+            waitingThreads.add(queueObject);
+            while (isLocked || waitingThreads.get(0) != queueObject) {
+                synchronized (queueObject) {
+                    queueObject.wait();
+                }
+            }
+            waitingThreads.remove(queueObject);
+            isLocked = true;
+            lockingThread = Thread.currentThread();
+        }
+    }
+
+    public synchronized void unlock() {
+        if (this.lockingThread != Thread.currentThread()) {
+            throw new IllegalMonitorStateException("Calling thread has not locked this lock");
+        }
+        isLocked = false;
+        lockingThread = null;
+        if (!waitingThreads.isEmpty()) {
+            QueueObject queueObject = waitingThreads.get(0);
+            synchronized (queueObject) {
+                queueObject.notify();
+            }
+        }
+    }
+}
+```
+
+### Key Issues:
+- The `lock()` method calls `queueObject.wait()` within two synchronized blocks (one on `this`, the other on `queueObject`).
+- When a thread waits on `queueObject`, it releases that lock but continues to hold the lock on `this`.
+- If another thread calls `unlock()`, it will block because it cannot enter the synchronized block on `this`, which is still held by the waiting thread.
+
+## Nested Monitor Lockout vs. Deadlock
+
+While both nested monitor lockout and deadlock result in threads being indefinitely blocked, they occur under different conditions:
+
+- **Deadlock** happens when two or more threads hold locks and wait for each other to release their locks in different orders. For example, if Thread 1 locks A and waits for B while Thread 2 locks B and waits for A, a deadlock occurs.
+
+- **Nested Monitor Lockout** arises when one thread holds a lock and waits for a signal from another thread that requires a lock that the first thread holds. In this case, both threads are waiting for each other based on their dependency chain.
+
+### Summary of Differences:
+- In **deadlock**, threads are waiting for each other to release locks.
+- In **nested monitor lockout**, one thread holds a lock and waits for a signal, while another thread needs that lock to provide the signal.
+
+## Conclusion
+
+Nested monitor lockout is a subtle but significant issue in Java concurrency that can lead to indefinite blocking of threads. By carefully designing locking mechanisms and avoiding nested synchronization on shared objects, developers can prevent this issue and ensure smoother thread execution. Understanding the differences between nested monitor lockout and deadlock is crucial for effective concurrency control in Java applications.
+
+---
+
+# Slipped Conditions in Java
+
+## What is Slipped Conditions?
+
+Slipped conditions occur when a thread checks a condition and finds it suitable for action, but before it acts, another thread modifies the condition, making the original action erroneous. This scenario can lead to unexpected behavior in multi-threaded applications.
+
+### Example of Slipped Conditions
+
+Consider the following naive implementation of a lock:
+
+```java
+public class Lock {
+    private boolean isLocked = true;
+
+    public void lock() {
+        synchronized(this) {
+            while(isLocked) {
+                try {
+                    this.wait();
+                } catch(InterruptedException e) {
+                    // do nothing, keep waiting
+                }
+            }
+        }
+        synchronized(this) {
+            isLocked = true;
+        }
+    }
+
+    public synchronized void unlock() {
+        isLocked = false;
+        this.notify();
+    }
+}
+```
+
+### Explanation
+
+In this implementation:
+
+1. The first synchronized block checks if `isLocked` is false. If so, it waits.
+2. If multiple threads call `lock()` simultaneously, they can both see `isLocked` as false and proceed to the second synchronized block.
+3. If one thread is preempted right after checking `isLocked`, another thread could change `isLocked`, leading both threads to mistakenly think they can proceed.
+
+This situation exemplifies slipped conditions, where the condition changed between the check and the action.
+
+## A More Realistic Example
+
+While the previous example illustrates the concept, a more practical scenario involves a fair lock implementation. The naive fair lock could suffer from slipped conditions if not designed carefully.
+
+### Naive Fair Lock Implementation
+
+```java
+public class FairLock {
+    private boolean isLocked = false;
+    private Thread lockingThread = null;
+    private List<QueueObject> waitingThreads = new ArrayList<>();
+
+    public void lock() throws InterruptedException {
+        QueueObject queueObject = new QueueObject();
+
+        synchronized(this) {
+            waitingThreads.add(queueObject);
+        }
+
+        boolean mustWait = true;
+        while(mustWait) {
+            synchronized(this) {
+                mustWait = isLocked || waitingThreads.get(0) != queueObject;
+            }
+
+            synchronized(queueObject) {
+                if(mustWait) {
+                    try {
+                        queueObject.wait();
+                    } catch(InterruptedException e) {
+                        waitingThreads.remove(queueObject);
+                        throw e;
+                    }
+                }
+            }
+        }
+
+        synchronized(this) {
+            waitingThreads.remove(queueObject);
+            isLocked = true;
+            lockingThread = Thread.currentThread();
+        }
+    }
+
+    public synchronized void unlock() {
+        if (this.lockingThread != Thread.currentThread()) {
+            throw new IllegalMonitorStateException("Calling thread has not locked this lock");
+        }
+        isLocked = false;
+        lockingThread = null;
+        if (!waitingThreads.isEmpty()) {
+            QueueObject queueObject = waitingThreads.get(0);
+            synchronized(queueObject) {
+                queueObject.notify();
+            }
+        }
+    }
+}
+```
+
+### Issues
+
+In this version:
+
+- The `lock()` method has multiple synchronized blocks, leading to potential slipped conditions.
+- If Thread A checks `mustWait` and finds it false, it may finish the lock process before Thread B, which is still checking the condition. If Thread A unlocks the lock before Thread B acts, Thread B may end up waiting indefinitely.
+
+## Removing the Slipped Conditions Problem
+
+To resolve slipped conditions, condition checking and setting must occur atomically within the same synchronized block. Here's a revised version:
+
+### Revised Fair Lock Implementation
+
+```java
+public class FairLock {
+    private boolean isLocked = false;
+    private Thread lockingThread = null;
+    private List<QueueObject> waitingThreads = new ArrayList<>();
+
+    public void lock() throws InterruptedException {
+        QueueObject queueObject = new QueueObject();
+
+        synchronized(this) {
+            waitingThreads.add(queueObject);
+        }
+
+        boolean mustWait = true;
+        while(mustWait) {
+            synchronized(this) {
+                mustWait = isLocked || waitingThreads.get(0) != queueObject;
+                if (!mustWait) {
+                    waitingThreads.remove(queueObject);
+                    isLocked = true;
+                    lockingThread = Thread.currentThread();
+                    return;
+                }
+            }
+
+            synchronized(queueObject) {
+                if (mustWait) {
+                    try {
+                        queueObject.wait();
+                    } catch(InterruptedException e) {
+                        waitingThreads.remove(queueObject);
+                        throw e;
+                    }
+                }
+            }
+        }
+    }
+
+    public synchronized void unlock() {
+        if (this.lockingThread != Thread.currentThread()) {
+            throw new IllegalMonitorStateException("Calling thread has not locked this lock");
+        }
+        isLocked = false;
+        lockingThread = null;
+        if (!waitingThreads.isEmpty()) {
+            QueueObject queueObject = waitingThreads.get(0);
+            synchronized(queueObject) {
+                queueObject.notify();
+            }
+        }
+    }
+}
+```
+
+### Key Changes
+
+- The checking of `mustWait` and setting of `isLocked` are done within the same synchronized block.
+- This ensures that if a thread evaluates `mustWait` to false, it also updates `isLocked` atomically.
+
+### Addressing Missed Signals
+
+Even with this adjustment, the implementation may still experience a missed signal problem. If a thread calls `unlock()` right after another thread checks the condition but before it calls `wait()`, the notification may be missed.
+
+To handle missed signals, you could implement a semaphore-like mechanism where the `QueueObject` stores the signal state internally, ensuring that notifications are not lost.
+
+## Conclusion
+
+Understanding slipped conditions is crucial for developing robust multi-threaded applications. By ensuring that condition checks and updates are done atomically, you can prevent issues that lead to unexpected behavior and improve the overall reliability of your concurrency mechanisms.
+
+---
+# Locks in Java
+
+Locks are advanced thread synchronization mechanisms that offer more flexibility than Java's built-in synchronized blocks. They are part of the `java.util.concurrent.locks` package introduced in Java 5, allowing for greater control over thread access to shared resources.
+
+## A Simple Lock
+
+Let's start with a basic implementation using synchronized blocks:
+
+```java
+public class Counter {
+    private int count = 0;
+
+    public int inc() {
+        synchronized(this) {
+            return ++count;
+        }
+    }
+}
+```
+
+This ensures that only one thread can execute `++count` at a time.
+
+### Using a Lock
+
+Here's how the `Counter` class looks when using a custom Lock:
+
+```java
+public class Counter {
+    private Lock lock = new Lock();
+    private int count = 0;
+
+    public int inc() {
+        lock.lock();
+        int newCount = ++count;
+        lock.unlock();
+        return newCount;
+    }
+}
+```
+
+### Simple Lock Implementation
+
+Here’s a simple lock implementation:
+
+```java
+public class Lock {
+    private boolean isLocked = false;
+
+    public synchronized void lock() throws InterruptedException {
+        while (isLocked) {
+            wait();
+        }
+        isLocked = true;
+    }
+
+    public synchronized void unlock() {
+        isLocked = false;
+        notify();
+    }
+}
+```
+
+### Key Points
+
+- The `while(isLocked)` loop prevents spurious wakeups by rechecking the condition after a thread is awakened.
+- Threads wait in the `wait()` call until notified by the `unlock()` method.
+
+## Lock Reentrance
+
+### Reentrancy in Synchronized Blocks
+
+Synchronized blocks in Java are reentrant, meaning a thread can re-enter a synchronized block if it already holds the lock:
+
+```java
+public class Reentrant {
+    public synchronized void outer() {
+        inner();
+    }
+
+    public synchronized void inner() {
+        // do something
+    }
+}
+```
+
+### Non-Reentrant Lock Implementation
+
+If we use the custom `Lock`, it won’t be reentrant:
+
+```java
+public class Reentrant2 {
+    Lock lock = new Lock();
+
+    public void outer() {
+        lock.lock();
+        inner();
+        lock.unlock();
+    }
+
+    public void inner() {
+        lock.lock(); // This will block
+        // do something
+        lock.unlock();
+    }
+}
+```
+
+### Making the Lock Reentrant
+
+To make the lock reentrant, we modify the implementation:
+
+```java
+public class Lock {
+    private boolean isLocked = false;
+    private Thread lockedBy = null;
+    private int lockedCount = 0;
+
+    public synchronized void lock() throws InterruptedException {
+        Thread callingThread = Thread.currentThread();
+        while (isLocked && lockedBy != callingThread) {
+            wait();
+        }
+        isLocked = true;
+        lockedCount++;
+        lockedBy = callingThread;
+    }
+
+    public synchronized void unlock() {
+        if (Thread.currentThread() == this.lockedBy) {
+            lockedCount--;
+            if (lockedCount == 0) {
+                isLocked = false;
+                notify();
+            }
+        }
+    }
+}
+```
+
+### Key Changes
+
+- The `lock()` method checks if the thread calling `lock()` is the same as the one that currently holds the lock.
+- A counter (`lockedCount`) tracks how many times the lock has been acquired, ensuring it can only be released when the same number of `unlock()` calls are made.
+
+## Lock Fairness
+
+Java's synchronized blocks do not guarantee the order in which threads acquire locks, which can lead to starvation. A fair lock ensures that threads are granted access in the order they requested it. 
+
+### Starvation Issue
+
+Starvation occurs when some threads are perpetually denied access to a resource because other threads are continuously granted access first.
+
+## Calling unlock() From a Finally Clause
+
+When using locks, it’s essential to ensure that `unlock()` is called even if an exception occurs. This can be achieved using a `finally` clause:
+
+```java
+lock.lock();
+try {
+    // Critical section code, which may throw an exception
+} finally {
+    lock.unlock();
+}
+```
+
+### Importance of Finally Clause
+
+- If an exception is thrown, the `finally` block ensures that `unlock()` is still called, preventing the lock from remaining locked indefinitely, which could lead to deadlock for other threads.
+
+## Conclusion
+
+Understanding and implementing locks in Java is crucial for managing thread synchronization effectively. By using advanced constructs like reentrant locks and ensuring proper handling of exceptions with `finally`, you can create robust and reliable multi-threaded applications.
+
+---
+### Read / Write Locks in Java
+
+Read / write locks are advanced synchronization mechanisms that allow multiple threads to read a resource simultaneously while ensuring exclusive access for writing. This is particularly useful when reading is more frequent than writing, as it enhances performance by allowing concurrent reads.
+
+#### Basic Implementation of Read / Write Lock
+
+Here’s a simplified implementation of a read/write lock:
+
+```java
+public class ReadWriteLock {
+
+    private int readers = 0;
+    private int writers = 0;
+    private int writeRequests = 0;
+
+    public synchronized void lockRead() throws InterruptedException {
+        while (writers > 0 || writeRequests > 0) {
+            wait();
+        }
+        readers++;
+    }
+
+    public synchronized void unlockRead() {
+        readers--;
+        notifyAll();
+    }
+
+    public synchronized void lockWrite() throws InterruptedException {
+        writeRequests++;
+        while (readers > 0 || writers > 0) {
+            wait();
+        }
+        writeRequests--;
+        writers++;
+    }
+
+    public synchronized void unlockWrite() {
+        writers--;
+        notifyAll();
+    }
+}
+```
+
+### Reentrance in Read / Write Locks
+
+The above implementation is not reentrant. This means if a thread holding a read or write lock tries to acquire it again, it will block. Here's how to implement reentrance:
+
+#### Read Reentrance
+
+To allow reentrance for readers, track how many times a thread has acquired read access:
+
+```java
+private Map<Thread, Integer> readingThreads = new HashMap<>();
+
+public synchronized void lockRead() throws InterruptedException {
+    Thread callingThread = Thread.currentThread();
+    while (!canGrantReadAccess(callingThread)) {
+        wait();
+    }
+    readingThreads.put(callingThread, getReadAccessCount(callingThread) + 1);
+}
+
+public synchronized void unlockRead() {
+    Thread callingThread = Thread.currentThread();
+    int accessCount = getReadAccessCount(callingThread);
+    if (accessCount == 1) {
+        readingThreads.remove(callingThread);
+    } else {
+        readingThreads.put(callingThread, accessCount - 1);
+    }
+    notifyAll();
+}
+
+// Helper methods
+private boolean canGrantReadAccess(Thread callingThread) {
+    return writers == 0 && !(writeRequests > 0 && !isReader(callingThread));
+}
+
+private int getReadAccessCount(Thread callingThread) {
+    return readingThreads.getOrDefault(callingThread, 0);
+}
+```
+
+#### Write Reentrance
+
+For write reentrance, check if the calling thread already holds the write lock:
+
+```java
+private Thread writingThread = null;
+
+public synchronized void lockWrite() throws InterruptedException {
+    Thread callingThread = Thread.currentThread();
+    while (!canGrantWriteAccess(callingThread)) {
+        wait();
+    }
+    writeAccesses++;
+    writingThread = callingThread;
+}
+
+public synchronized void unlockWrite() {
+    if (writingThread != Thread.currentThread()) {
+        throw new IllegalMonitorStateException("Not the writing thread");
+    }
+    writeAccesses--;
+    if (writeAccesses == 0) {
+        writingThread = null;
+    }
+    notifyAll();
+}
+
+private boolean canGrantWriteAccess(Thread callingThread) {
+    return writers == 0 && (writingThread == null || writingThread == callingThread);
+}
+```
+
+### Fully Reentrant ReadWriteLock Implementation
+
+Here is a complete implementation that includes all the reentrance conditions discussed:
+
+```java
+public class ReadWriteLock {
+
+    private Map<Thread, Integer> readingThreads = new HashMap<>();
+    private int writeAccesses = 0;
+    private Thread writingThread = null;
+    private int writeRequests = 0;
+
+    public synchronized void lockRead() throws InterruptedException {
+        Thread callingThread = Thread.currentThread();
+        while (!canGrantReadAccess(callingThread)) {
+            wait();
+        }
+        readingThreads.put(callingThread, getReadAccessCount(callingThread) + 1);
+    }
+
+    public synchronized void unlockRead() {
+        Thread callingThread = Thread.currentThread();
+        if (!isReader(callingThread)) {
+            throw new IllegalMonitorStateException("Not a reader");
+        }
+        int accessCount = getReadAccessCount(callingThread);
+        if (accessCount == 1) {
+            readingThreads.remove(callingThread);
+        } else {
+            readingThreads.put(callingThread, accessCount - 1);
+        }
+        notifyAll();
+    }
+
+    public synchronized void lockWrite() throws InterruptedException {
+        writeRequests++;
+        Thread callingThread = Thread.currentThread();
+        while (!canGrantWriteAccess(callingThread)) {
+            wait();
+        }
+        writeRequests--;
+        writeAccesses++;
+        writingThread = callingThread;
+    }
+
+    public synchronized void unlockWrite() {
+        if (writingThread != Thread.currentThread()) {
+            throw new IllegalMonitorStateException("Not the writing thread");
+        }
+        writeAccesses--;
+        if (writeAccesses == 0) {
+            writingThread = null;
+        }
+        notifyAll();
+    }
+
+    // Helper methods
+    private boolean canGrantReadAccess(Thread callingThread) {
+        return writingThread == null && !(writeRequests > 0 && !isReader(callingThread));
+    }
+
+    private boolean canGrantWriteAccess(Thread callingThread) {
+        return writingThread == null && readingThreads.size() == 0
+               || writingThread == callingThread;
+    }
+
+    private boolean isReader(Thread callingThread) {
+        return readingThreads.containsKey(callingThread);
+    }
+
+    private int getReadAccessCount(Thread callingThread) {
+        return readingThreads.getOrDefault(callingThread, 0);
+    }
+}
+```
+
+### Handling Exceptions
+
+Always call `unlockRead()` and `unlockWrite()` from a `finally` block to ensure the lock is released, even if an exception occurs:
+
+```java
+lock.lockWrite();
+try {
+    // Critical section code
+} finally {
+    lock.unlockWrite();
+}
+```
+
+This ensures the lock is released correctly, preventing deadlocks where other threads are indefinitely blocked. 
+
+### Conclusion
+
+Implementing a fully reentrant read/write lock involves managing thread ownership and access counts carefully. By utilizing synchronized methods and appropriate data structures, you can create a robust lock that facilitates concurrent access while preventing issues like starvation and deadlocks.
+
+---
+### Reentrance Lockout
+
+Reentrance lockout occurs when a thread attempts to reacquire a lock it already holds but is blocked because the lock is not designed to allow reentrance. This can lead to situations similar to deadlocks, where the thread gets stuck waiting for a lock it already owns.
+
+#### Understanding Reentrance
+
+Reentrance means that a thread holding a lock can re-enter the same lock without blocking. In Java, synchronized blocks are inherently reentrant. Here’s an example:
+
+```java
+public class Reentrant {
+
+    public synchronized void outer() {
+        inner(); // Safe to call because this is synchronized on the same monitor
+    }
+
+    public synchronized void inner() {
+        // Do something
+    }
+}
+```
+
+In this example, when a thread calls `outer()`, it holds the lock and can safely call `inner()`, which is also synchronized on the same object.
+
+#### Non-Reentrant Lock Example
+
+Consider the following non-reentrant lock implementation:
+
+```java
+public class Lock {
+
+    private boolean isLocked = false;
+
+    public synchronized void lock() throws InterruptedException {
+        while (isLocked) {
+            wait();
+        }
+        isLocked = true;
+    }
+
+    public synchronized void unlock() {
+        isLocked = false;
+        notify();
+    }
+}
+```
+
+If a thread calls `lock()` twice without an intervening `unlock()`, the second call will block, causing a reentrance lockout.
+
+#### Avoiding Reentrance Lockout
+
+To avoid reentrance lockouts, you have two primary strategies:
+
+1. **Avoid Code That Reenters Locks**: This is the simplest approach, but it may not always be feasible depending on your design.
+
+2. **Use Reentrant Locks**: Reentrant locks allow a thread to acquire the lock multiple times without blocking. Java provides a built-in reentrant lock class in the `java.util.concurrent.locks` package:
+
+```java
+import java.util.concurrent.locks.ReentrantLock;
+
+public class ReentrantExample {
+
+    private final ReentrantLock lock = new ReentrantLock();
+
+    public void outer() {
+        lock.lock();
+        try {
+            inner(); // Safe to call, as lock is reentrant
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    public void inner() {
+        // Do something
+    }
+}
+```
+
+### Conclusion
+
+Whether to use reentrant locks or avoid reentrance in your design depends on your specific use case. Reentrant locks provide greater flexibility but may have performance implications compared to simpler, non-reentrant locks. Assessing the needs of your application will help determine the best approach.
+
+---
+
+### Semaphores
+
+A **Semaphore** is a synchronization construct that can manage access to shared resources by multiple threads. It can be used for signaling between threads or to protect critical sections like locks. Java provides a built-in semaphore implementation in the `java.util.concurrent` package, but understanding the underlying concepts is useful.
+
+#### Simple Semaphore
+
+Here's a basic implementation of a semaphore:
+
+```java
+public class Semaphore {
+    private boolean signal = false;
+
+    public synchronized void take() {
+        this.signal = true;
+        this.notify();
+    }
+
+    public synchronized void release() throws InterruptedException {
+        while (!this.signal) {
+            wait();
+        }
+        this.signal = false;
+    }
+}
+```
+
+In this example:
+- The `take()` method sets a signal, which can be considered a way to notify other threads.
+- The `release()` method waits for the signal before proceeding.
+
+This pattern helps avoid missed signals, which can occur with `wait()` and `notify()`.
+
+#### Using Semaphores for Signaling
+
+You can use semaphores to signal between two threads:
+
+```java
+Semaphore semaphore = new Semaphore();
+
+SendingThread sender = new SendingThread(semaphore);
+ReceivingThread receiver = new ReceivingThread(semaphore);
+
+receiver.start();
+sender.start();
+```
+
+Example threads:
+
+```java
+public class SendingThread extends Thread {
+    private Semaphore semaphore;
+
+    public SendingThread(Semaphore semaphore) {
+        this.semaphore = semaphore;
+    }
+
+    public void run() {
+        while (true) {
+            // Do something, then signal
+            this.semaphore.take();
+        }
+    }
+}
+
+public class ReceivingThread extends Thread {
+    private Semaphore semaphore;
+
+    public ReceivingThread(Semaphore semaphore) {
+        this.semaphore = semaphore;
+    }
+
+    public void run() {
+        while (true) {
+            this.semaphore.release();
+            // Receive signal and do something...
+        }
+    }
+}
+```
+
+#### Counting Semaphore
+
+A counting semaphore keeps track of how many signals it has received. Here's a simple implementation:
+
+```java
+public class CountingSemaphore {
+    private int signals = 0;
+
+    public synchronized void take() {
+        this.signals++;
+        this.notify();
+    }
+
+    public synchronized void release() throws InterruptedException {
+        while (this.signals == 0) {
+            wait();
+        }
+        this.signals--;
+    }
+}
+```
+
+In this version, `take()` increments the signal count, while `release()` waits if no signals are available.
+
+#### Bounded Semaphore
+
+A bounded semaphore limits the number of signals it can hold:
+
+```java
+public class BoundedSemaphore {
+    private int signals = 0;
+    private int bound;
+
+    public BoundedSemaphore(int upperBound) {
+        this.bound = upperBound;
+    }
+
+    public synchronized void take() throws InterruptedException {
+        while (this.signals == bound) {
+            wait();
+        }
+        this.signals++;
+        this.notify();
+    }
+
+    public synchronized void release() throws InterruptedException {
+        while (this.signals == 0) {
+            wait();
+        }
+        this.signals--;
+        this.notify();
+    }
+}
+```
+
+In this implementation, `take()` blocks if the current signal count equals the upper bound, ensuring that no more than the specified number of signals can be held.
+
+#### Using Semaphores as Locks
+
+You can use a bounded semaphore as a lock by setting its upper bound to 1:
+
+```java
+BoundedSemaphore semaphore = new BoundedSemaphore(1);
+
+// Critical section
+semaphore.take();
+try {
+    // Perform actions in the critical section
+} finally {
+    semaphore.release();
+}
+```
+
+In this case, only one thread can hold the semaphore at a time, effectively locking the critical section. If you set the upper bound to a value greater than 1, multiple threads can enter the critical section simultaneously, but you'll need to ensure that they don't interfere with each other.
+
+### Conclusion
+
+Semaphores are versatile tools for managing thread synchronization. They can be used for simple signaling or as locks, depending on the use case. Understanding how to implement and use them effectively can significantly enhance your ability to manage concurrency in Java applications.
+
+---
+### Blocking Queues
+
+A **blocking queue** is a specialized queue that blocks threads when trying to enqueue (add) items to a full queue or dequeue (remove) items from an empty queue. This ensures that threads operate safely without needing additional synchronization.
+
+In Java, blocking queues are part of the `java.util.concurrent` package, introduced in Java 5. Understanding how they work can help you effectively manage thread communication and resource sharing.
+
+#### Blocking Queue Implementation
+
+Here's a simple implementation of a blocking queue:
+
+```java
+import java.util.LinkedList;
+import java.util.List;
+
+public class BlockingQueue {
+    private List<Object> queue = new LinkedList<>();
+    private int limit;
+
+    public BlockingQueue(int limit) {
+        this.limit = limit;
+    }
+
+    public synchronized void enqueue(Object item) throws InterruptedException {
+        while (this.queue.size() == this.limit) {
+            wait();
+        }
+        this.queue.add(item);
+        if (this.queue.size() == 1) {
+            notifyAll(); // Notify waiting threads that an item is available
+        }
+    }
+
+    public synchronized Object dequeue() throws InterruptedException {
+        while (this.queue.size() == 0) {
+            wait();
+        }
+        if (this.queue.size() == this.limit) {
+            notifyAll(); // Notify waiting threads that space is available
+        }
+        return this.queue.remove(0);
+    }
+}
+```
+
+#### Key Features
+
+1. **Thread Safety**: The `synchronized` keyword ensures that only one thread can access the `enqueue` or `dequeue` method at a time, preventing concurrent modification issues.
+
+2. **Blocking Behavior**: 
+   - In the `enqueue` method, if the queue is full (`this.queue.size() == this.limit`), the thread will wait until space is available.
+   - In the `dequeue` method, if the queue is empty (`this.queue.size() == 0`), the thread will wait until an item is added.
+
+3. **Notification**: 
+   - The `notifyAll()` method is called when an item is added to an empty queue (in `enqueue`) or when space becomes available in a full queue (in `dequeue`).
+   - This prevents threads from being blocked indefinitely when conditions change.
+
+### Use Cases
+
+Blocking queues are commonly used in producer-consumer scenarios, where:
+- **Producers** add items to the queue.
+- **Consumers** remove items from the queue.
+
+Using a blocking queue simplifies the synchronization required in such scenarios, as the queue manages the blocking behavior inherently.
+
+### Conclusion
+
+Blocking queues are powerful tools for managing concurrent operations in Java. They facilitate thread communication and resource sharing, making them ideal for situations like producer-consumer patterns. By understanding their implementation and behavior, you can effectively utilize blocking queues in your multithreaded applications.
+
+---
+### The Producer Consumer Pattern
+
+The **producer-consumer pattern** is a classic concurrency design pattern where one or more producer threads generate data (or tasks) that are queued and later consumed by one or more consumer threads. This decoupling allows for better control over resource management, enabling efficient processing of tasks.
+
+#### Key Components
+
+- **Producers**: Threads that create and enqueue tasks or data.
+- **Consumers**: Threads that dequeue and process those tasks or data.
+- **Queue**: A thread-safe data structure (like a BlockingQueue) that holds the tasks between producers and consumers.
+
+### Use Cases
+
+Here are some common use cases for the producer-consumer pattern:
+
+#### 1. Reduce Foreground Thread Latency
+
+In applications where a single foreground thread interacts with the outside world (like a server or a UI thread), offloading long-running tasks to background threads can improve responsiveness. 
+
+- **Server Example**: The foreground thread could be responsible for accepting incoming client connections. Instead of processing requests directly, it offloads the work to background threads.
+  
+- **Desktop GUI Example**: In a GUI application, user actions (like opening or saving files) can be processed by worker threads, keeping the UI thread responsive.
+
+#### 2. Load Balance Work Between Threads
+
+The producer-consumer pattern naturally balances workloads among multiple consumer threads. When tasks are added to the queue, consumer threads can pull from it as they become available, distributing the workload evenly across them.
+
+This approach helps ensure that no single thread becomes a bottleneck, leading to more efficient resource utilization.
+
+#### 3. Backpressure Management
+
+Using a blocking queue allows for backpressure management, which is crucial in scenarios where producers generate tasks faster than consumers can process them.
+
+- **How It Works**: When the queue reaches its capacity, producer threads are blocked from adding more tasks until space becomes available. This mechanism prevents system overload and ensures that producers don’t overwhelm consumers.
+  
+- **Propagation of Backpressure**: If the producers are blocked, they can signal upstream components in the processing pipeline, ensuring that the entire system adapts to the current workload.
+
+### Conclusion
+
+The producer-consumer pattern is an effective way to manage concurrency in applications. By decoupling the production of tasks from their consumption, it allows for improved responsiveness, better load balancing, and effective backpressure management. Whether you're building a server or a desktop application, implementing this pattern can lead to more efficient and scalable solutions.
+
+---
+
+---
+
 # Thread Pools
 
 ## Introduction to Thread Pools
@@ -2242,4 +3288,630 @@ The thread pool implementation consists of two parts: the `ThreadPool` class, wh
 
 To submit a task, call `ThreadPool.execute(Runnable r)`. The task is added to the queue and executed by an available thread. The `stop()` method halts the thread pool, ensuring all threads complete their current tasks before terminating.
 
-This understanding of thread pools can greatly enhance your ability to manage concurrency in Java applications!
+---
+### Thread Congestion in Java
+
+**Thread congestion** occurs when multiple threads attempt to access the same guarded data structure concurrently, leading to inefficiencies as threads queue up to gain access. This congestion can significantly waste execution time, as blocked threads cannot perform any work while waiting.
+
+#### Key Concepts
+
+1. **Guarded Data Structures**: These are data structures that ensure thread safety through synchronization mechanisms, such as synchronized blocks, locks, or concurrent collections (e.g., `BlockingQueue`). 
+
+2. **Thread Blocking**: When a thread attempts to access a blocking data structure while another thread is already using it, the first thread may become blocked. This waiting is managed internally by the Java Virtual Machine (JVM) and can be difficult to identify without profiling tools.
+
+3. **Execution Time Loss**: A blocked thread loses execution time because it cannot perform any operations while waiting. The longer the wait, the greater the loss of potential execution time.
+
+4. **Increasing Threads, Increasing Congestion**: As more threads compete for access to a shared resource, the likelihood and severity of congestion increases, leading to more threads waiting in line.
+
+### Alleviating Thread Congestion
+
+To effectively manage and reduce thread congestion, consider the following strategies:
+
+#### 1. **Multiple Data Structures**
+
+One effective method is to distribute workload across multiple data structures. For instance, each consumer thread can have its own dedicated queue. This setup allows the producer to distribute tasks among these queues, minimizing contention.
+
+- **Example**: If you have three consumer threads, you could create three separate blocking queues. Each consumer thread processes items from its dedicated queue, reducing the number of threads accessing any single queue at the same time.
+
+#### 2. **Non-blocking Concurrency Algorithms**
+
+Implementing non-blocking concurrency algorithms can also help alleviate congestion. These algorithms allow threads to access shared resources without being blocked, thus maximizing their execution time.
+
+- **Advantages**: Non-blocking data structures can significantly reduce wait times and improve overall throughput, especially in high-concurrency scenarios.
+
+### Conclusion
+
+Thread congestion in Java can lead to inefficiencies and wasted execution time. Understanding the mechanics of thread blocking and employing strategies such as multiple data structures and non-blocking algorithms can help mitigate these issues, resulting in a more efficient concurrent application. Profiling tools can assist in identifying potential congestion points, allowing for proactive management and optimization of thread interactions.
+
+---
+### Compare and Swap (CAS)
+
+**Compare and Swap (CAS)** is a powerful atomic operation used in concurrent programming. It compares the current value of a variable to an expected value, and if they are equal, it swaps the current value with a new value. This operation is crucial for implementing lock-free data structures and optimizing concurrency.
+
+#### Key Concepts
+
+1. **Check Then Act**: This common pattern in concurrent algorithms involves checking a variable’s value before performing an action based on that check. For example, a simple lock implementation checks if it’s locked before attempting to lock it. If two threads check the variable simultaneously, a race condition can occur.
+
+   ```java
+   public class ProblematicLock {
+       private volatile boolean locked = false;
+
+       public void lock() {
+           while (this.locked) {
+               // busy wait
+           }
+           this.locked = true;
+       }
+
+       public void unlock() {
+           this.locked = false;
+       }
+   }
+   ```
+
+2. **Atomicity**: To avoid race conditions, check-then-act operations must be atomic. This means that both the check and the subsequent action must complete without interruption by other threads. In Java, you can make a block of code atomic using the `synchronized` keyword.
+
+   ```java
+   public synchronized void lock() {
+       while (this.locked) {
+           // busy wait
+       }
+       this.locked = true;
+   }
+   ```
+
+3. **Blocking Threads is Expensive**: When a thread is blocked waiting to enter a synchronized block, it cannot perform any other operations, leading to potential inefficiencies. The system’s thread management can also introduce delays in unblocking threads.
+
+4. **Hardware Support**: Modern CPUs provide built-in support for atomic CAS operations, which allows threads to execute CAS without being blocked by other threads. This results in better performance, especially in high-concurrency scenarios.
+
+5. **Java’s Atomic Classes**: Java 5 introduced several classes in the `java.util.concurrent.atomic` package that utilize CAS operations. These include:
+   - `AtomicBoolean`
+   - `AtomicInteger`
+   - `AtomicLong`
+   - `AtomicReference`
+   - And more...
+
+### Implementing CAS
+
+#### CAS as a Lock
+
+You can use CAS to implement a simple lock mechanism without traditional blocking. Here’s how it works using `AtomicBoolean`:
+
+```java
+public class CompareAndSwapLock {
+    private AtomicBoolean locked = new AtomicBoolean(false);
+
+    public void unlock() {
+        this.locked.set(false);
+    }
+
+    public void lock() {
+        while (!this.locked.compareAndSet(false, true)) {
+            // busy wait
+        }
+    }
+}
+```
+
+In this example, `compareAndSet(false, true)` will only succeed for one thread at a time, effectively locking the resource.
+
+#### CAS as Optimistic Locking
+
+CAS can also be used for optimistic locking, allowing multiple threads to attempt an operation but only committing one. Here’s a counter class that demonstrates this:
+
+```java
+public class OptimisticLockCounter {
+    private AtomicLong count = new AtomicLong();
+
+    public void inc() {
+        boolean incSuccessful = false;
+        while (!incSuccessful) {
+            long value = this.count.get();
+            long newValue = value + 1;
+            incSuccessful = this.count.compareAndSet(value, newValue);
+        }
+    }
+
+    public long getCount() {
+        return this.count.get();
+    }
+}
+```
+
+In this example, the `inc()` method reads the current count, calculates a new value, and tries to update it. If another thread modifies the count before it’s updated, the CAS operation fails, and the method retries.
+
+### Conclusion
+
+Compare and Swap (CAS) is an essential technique in concurrent programming, allowing for atomic operations without blocking threads. By leveraging CAS, developers can implement efficient, lock-free data structures and algorithms that reduce contention and improve throughput. Java’s atomic classes provide a straightforward way to utilize CAS in applications, making concurrent programming more robust and performant.
+
+---
+### Anatomy of a Synchronizer
+
+Synchronizers, such as locks, semaphores, and blocking queues, share common internal components despite their different functions. Understanding these components can aid in designing effective synchronizers. Below are the key parts of a synchronizer:
+
+#### 1. State
+The state of a synchronizer represents its current condition, which determines whether a thread can access the critical section. For example:
+- **Lock**: Uses a boolean flag (`isLocked`) to indicate if it is locked.
+- **Bounded Semaphore**: Maintains an integer counter (`signals`) and a maximum (`bound`) to track the number of permits available.
+
+**Example Code:**
+```java
+public class Lock {
+    private boolean isLocked = false;
+    
+    public synchronized void lock() throws InterruptedException {
+        while (isLocked) {
+            wait();
+        }
+        isLocked = true;
+    }
+}
+```
+
+#### 2. Access Condition
+The access condition is a boolean check that determines if a thread can proceed with setting the state. This condition is typically evaluated in a loop to handle spurious wakeups.
+
+- **Lock**: Checks if `isLocked` is false.
+- **Bounded Semaphore**: Checks `signals` against `bound` when taking a permit and against zero when releasing.
+
+**Example Code:**
+```java
+public class BoundedSemaphore {
+    private int signals = 0;
+    private int bound = 0;
+
+    public synchronized void take() throws InterruptedException {
+        while (signals == bound) wait();
+        signals++;
+        notify();
+    }
+    
+    public synchronized void release() throws InterruptedException {
+        while (signals == 0) wait();
+        signals--;
+        notify();
+    }
+}
+```
+
+#### 3. State Changes
+When a thread successfully accesses the critical section, the synchronizer's state must reflect this change. For instance:
+- **Lock**: Sets `isLocked` to true.
+- **Semaphore**: Adjusts the `signals` counter up or down.
+
+**Example Code:**
+```java
+public class Lock {
+    public synchronized void unlock() {
+        isLocked = false;
+        notify();
+    }
+}
+```
+
+#### 4. Notification Strategy
+After a state change, the synchronizer may need to notify other waiting threads. There are generally three strategies:
+- **Notify all waiting threads** using `notifyAll()`.
+- **Notify one random waiting thread** using `notify()`.
+- **Notify a specific waiting thread** by associating threads with distinct objects.
+
+**Example Code:**
+```java
+public class Lock {
+    public synchronized void unlock() {
+        isLocked = false;
+        notify(); // Notify one waiting thread
+    }
+}
+```
+
+#### 5. Test and Set Method
+The test-and-set method checks the current state against the access condition. If access is granted, it updates the state. The method ensures atomic execution.
+
+**Example Code:**
+```java
+public class ReadWriteLock {
+    public synchronized void lockWrite() throws InterruptedException {
+        writeRequests++;
+        Thread callingThread = Thread.currentThread();
+        while (!canGrantWriteAccess(callingThread)) {
+            wait();
+        }
+        writeRequests--;
+        writeAccesses++;
+        writingThread = callingThread;
+    }
+}
+```
+
+#### 6. Set Method
+The set method changes the internal state directly, without conditions. An example is the `unlock()` method of a lock.
+
+**Example Code:**
+```java
+public class Lock {
+    public synchronized void unlock() {
+        isLocked = false;
+        notify();
+    }
+}
+```
+
+### Summary
+Understanding the anatomy of synchronizers—state, access condition, state changes, notification strategy, and the test-and-set and set methods—can enhance your ability to design efficient concurrent systems. Each component plays a crucial role in ensuring proper thread coordination and avoiding race conditions.
+
+---
+Non-blocking Algorithms
+Blocking Concurrency Algorithms
+Non-blocking Concurrency Algorithms
+Non-blocking vs Blocking Algorithms
+Non-blocking Concurrent Data Structures
+Volatile Variables
+The Single Writer Case
+More Advanced Data Structures Based on Volatile Variables
+Optimistic Locking With Compare and Swap
+Why is it Called Optimistic Locking?
+Optimistic Locking is Non-blocking
+Non-swappable Data Structures
+Completable Intended Modifications
+The A-B-A Problem
+A-B-A Solutions
+A Non-blocking Algorithm Template
+Non-blocking Algorithms are Difficult to Implement
+The Benefit of Non-blocking Algorithms
+Choice
+No Deadlocks
+No Thread Suspension
+Reduced Thread Latency
+
+Follow on Twitter Connect on LinkedIn Subscribe on YouTube Subscribe to RSS Feed Subscribe to Telegram Channel
+Non-blocking algorithms in the context of concurrency are algorithms that allows threads to access shared state (or otherwise collaborate or communicate) without blocking the threads involved. In more general terms, an algorithm is said to be non-blocking if the suspension of one thread cannot lead to the suspension of other threads involved in the algorithm.
+
+To better understand the difference between blocking and non-blocking concurrency algorithms, I will start by explaining blocking algorithms and then continue with non-blocking algorithms.
+
+Blocking Concurrency Algorithms
+A blocking concurrency algorithm is an algorithm which either:
+
+A: Performs the action requested by the thread - OR
+B: Blocks the thread until the action can be performed safely
+Many types of algorithms and concurrent data structures are blocking. For instance, the different implementations of the java.util.concurrent.BlockingQueue interface are all blocking data structures. If a thread attempts to insert an element into a BlockingQueue and the queue does not have space, the inserting thread is blocked (suspended) until the BlockingQueue has space for the new element.
+
+This diagram illustrates the behaviour of a blocking algorithm guarding a shared data structure:
+
+The behaviour of a blocking algorithm guarding a shared data structure.
+Non-blocking Concurrency Algorithms
+A non-blocking concurrency algorithm is an algorithm which either:
+
+A: Performs the action requested by the thread - OR
+B: Notifies the requesting thread that the action could not be performed
+Java contains several non-blocking data structures too. The AtomicBoolean, AtomicInteger, AtomicLong and AtomicReference are all examples of non-blocking data structures.
+
+This diagram illustrates the behaviour of a non-blocking algorithm guarding a shared data structure:
+
+The behaviour of a non-blocking algorithm guarding a shared data structure.
+Non-blocking vs Blocking Algorithms
+The main difference between blocking and non-blocking algorithms lies in the second step of their behaviour as described in the above two sections. In other words, the difference lies in what the blocking and non-blocking algorithms do when the requested action cannot be performed:
+
+Blocking algorithms block the thread until the requested action can be performed. Non-blocking algorithms notify the thread requesting the action that the action cannot be performed.
+
+With a blocking algorithm a thread may become blocked until it is possible to perform the requested action. Usually it will be the actions of another thread that makes it possible for the first thread to perform the requested action. If for some reason that other thread is suspended (blocked) somewhere else in the application, and thus cannot perform the action that makes the first thread's requested action possible, the first thread remains blocked - either indefinitely, or until the other thread finally performs the necessary action.
+
+For instance, if a thread tries to insert an element into a full BlockingQueue the thread will block until another thread has taken an element from the BlockingQueue. If for some reason the thread that is supposed to take elements from the BlockingQueue is blocked (suspended) somewhere else in the application, the thread trying to insert the new element remains blocked - either indefinitely, or until the thread taking elements finally takes an element from the BlockingQueue.
+
+Non-blocking Concurrent Data Structures
+In a multithreaded system, threads usually communicate via some kind of data structure. Such data structures can be anything from simple variables to more advanced data structures like queues, maps, stacks etc. To facilitate correct, concurrent access to the data structures by multiple threads, the data structures must be guarded by some concurrent algorithm. The guarding algorithm is what makes the data structure a concurrent data structure.
+
+If the algorithm guarding a concurrent data structure is blocking (uses thread suspension), it is said to be a blocking algorithm. The data structure is thus said to be a blocking, concurrent data structure.
+
+If the algorithm guarding a concurrent data structure is non-blocking, it is said to be a non-blocking algorithm. The data structure is thus said to be a non-blocking, concurrent data structure.
+
+Each concurrent data structure is designed to support a certain method of communication. Which concurrent data structure you can use thus depends on your communication needs. I will cover some non-blocking concurrent data structures in the following sections, and explain in what situations they can be used. The explanation of how these non-blocking data structures work should give you an idea about how non-blocking data structures can be designed and implemented.
+
+Volatile Variables
+Java volatile variables are variables that are always read directly from main memory. When a new value is assigned to a volatile variable the value is always written immediately to main memory. This guarantees that the latest value of a volatile variable is always visible to other threads running on other CPUs. Other threads will read the value of the volatile from main memory every time, instead of from e.g. the CPU cache of the CPU the threads are running on.
+
+Volatile variables are non-blocking. The writing of a value to a volatile variable is an atomic operation. It cannot be interrupted. However, a read-update-write sequence performed on a volatile variable is not atomic. Thus, this code may still lead to race conditions if performed by more than one thread:
+```java
+volatile myVar = 0;
+
+...
+int temp = myVar;
+temp++;
+myVar = temp;
+```
+First the value of the volatile variable myVar is read from main memory into a temp variable. Then the temp variable is incremented by 1. Then the value of the temp variable is assigned to the volatile myVar variable which means it will be written back to main memory.
+
+If two threads execute this code and both of them read the value of myVar, add one to it and write the value back to main memory, then you risk that instead of 2 being added to the myVar variable, only 1 will be added (e.g. both threads read the value 19, increment to 20, and write 20 back).
+
+You might think you won't write code like above, but in practice the above code is equivalent to this:
+
+myVar++;
+When executed, the value of myVar is read into a CPU register or the local CPU cache, one is added, and then the value from the CPU register or CPU cache is written back to main memory.
+
+The Single Writer Case
+In some cases you only have a single thread writing to a shared variable, and multiple threads reading the value of that variable. No race conditions can occur when only a single thread is updating a variable, no matter how many threads are reading it. Therefore, whenever you have only a single writer of a shared variable you can use a volatile variable.
+
+The race conditions occur when multiple threads perform a read-update-write sequence of operations on a shared variable. If you only have one thread perform a read-update-write sequence of operations, and all other threads only perform a read operation, you have no race conditions.
+
+Here is a single writer counter which does not use synchronization but is still concurrent:
+```java
+public class SingleWriterCounter {
+
+    private volatile long count = 0;
+
+    /**
+     * Only one thread may ever call this method,
+     * or it will lead to race conditions.
+     */
+    public void inc() {
+        this.count++;
+    }
+
+
+    /**
+     * Many reading threads may call this method
+     * @return
+     */
+    public long count() {
+        return this.count;
+    }
+}
+```
+Multiple threads can access the same instance of this counter, as long as only one thread calls inc(). And I don't mean one thread at a time. I mean, only the same, single thread is ever allowed to call inc(). Multiple threads can call count(). This will not cause any race conditions.
+
+This diagram illustrates how the threads would access the volatile count variable:
+
+Single writer, multiple reader threads communicating via a volatile variable.
+More Advanced Data Structures Based on Volatile Variables
+It is possible to create data structures that use combinations of volatile variables, where each volatile variable is only written by a single thread, and read by multiple threads. Each volatile variable may be written by a different thread (but only one thread). Using such a data structure multiple threads may be able to send information to each other in a non-blocking way, using the volatile variables.
+
+Here is a simple double writer counter class that shows how that could look:
+```java
+public class DoubleWriterCounter {
+
+    private volatile long countA = 0;
+    private volatile long countB = 0;
+
+    /**
+     * Only one (and the same from thereon) thread may ever call this method,
+     * or it will lead to race conditions.
+     */
+    public void incA() { this.countA++;  }
+
+
+    /**
+     * Only one (and the same from thereon) thread may ever call this method,
+     * or it will lead to race conditions.
+     */
+    public void incB() { this.countB++;  }
+
+
+    /**
+     * Many reading threads may call this method
+     */
+    public long countA() { return this.countA; }
+
+
+    /**
+     * Many reading threads may call this method
+     */
+    public long countB() { return this.countB; }
+}
+```
+As you can see, the DoubleWriterCounter now contains two volatile variables, and two pairs of incrementation and read methods. Only a single thread may ever call incA(), and only a single thread may ever call incB(). It can be different threads calling incA() and incB() though. Many threads are allowed to call countA() and countB(). This will not cause race conditions.
+
+The DoubleWriterCounter can be used for e.g. two threads communicating. The two counts could be tasks produced and tasks consumed. This diagram shows two thread communicating via a data structure similar to the above:
+
+Single writer, multiple reader threads communicating via a volatile variable.
+The smart reader will recognize that you could have achieved the effect of the DoubleWriterCounter by using two SingleWriterCounter instances. You could even have used more threads and SingleWriterCounter instances if you needed to.
+
+Optimistic Locking With Compare and Swap
+If you really need more than one thread to write to the same, shared variable, a volatile variable will not be sufficient. You will need some kind of exclusive access to the variable. This is how such exclusive access could look using a synchronized block in Java:
+```java
+public class SynchronizedCounter {
+    long count = 0;
+
+    public void inc() {
+        synchronized(this) {
+            count++;
+        }
+    }
+
+    public long count() {
+        synchronized(this) {
+            return this.count;
+        }
+    }
+}
+```
+Notice how the inc() and count() methods both contain a synchronized block. This is what we want to avoid - synchronized blocks and wait() - notify() calls etc.
+
+Instead of the two synchronized blocks we can use one of Java's atomic variables. In this case the AtomicLong. Here is how the same counter class could look using an AtomicLong instead:
+```java
+import java.util.concurrent.atomic.AtomicLong;
+
+public class AtomicCounter {
+    private AtomicLong count = new AtomicLong(0);
+
+    public void inc() {
+        boolean updated = false;
+        while(!updated){
+            long prevCount = this.count.get();
+            updated = this.count.compareAndSet(prevCount, prevCount + 1);
+        }
+    }
+
+    public long count() {
+        return this.count.get();
+    }
+}
+```
+This version is just as thread-safe as the previous version. What is interesting about this version is the implementation of the inc() method. The inc() method no longer contains a synchronized block. Instead it contains these lines:
+```java
+boolean updated = false;
+while(!updated){
+    long prevCount = this.count.get();
+    updated = this.count.compareAndSet(prevCount, prevCount + 1);
+}
+```
+These lines are not an atomic operation. That means, that it is possible for two different threads to call the inc() method and execute the long prevCount = this.count.get() statement, and thus both obtain the previous count for the counter. Yet, the above code does not contain any race conditions.
+
+The secret is in the second of the two lines inside the while loop. The compareAndSet() method call is an atomic operation. It compares the internal value of the AtomicLong to an expected value, and if the two values are equal, sets a new internal value for the AtomicLong. The compareAndSet() method is typically supported by compare-and-swap instructions directly in the CPU. Therefore no synchronization is necessary, and no thread suspension is necessary. This saves the thread suspension overhead.
+
+Imagine that the internal value of the AtomicLong is 20. Then two threads read that value, and both tries to call compareAndSet(20, 20 + 1). Since compareAndSet() is an atomic operation, the threads will execute this method sequentially (one at a time).
+
+The first thread will compare the expected value of 20 (the previous value of the counter) to the internal value of the AtomicLong. Since the two values are equal, the AtomicLong will update its internal value to 21 (20 + 1). The updated variable will be set to true and the while loop will stop.
+
+Now the second thread calls compareAndSet(20, 20 + 1). Since the internal value of the AtomicLong is no longer 20, this call will fail. The internal value of the AtomicLong will not be set to 21. The updated variable will be set to false, and the thread will spin one more time around the while loop. This time it will read the value 21 and attempt to update it to 22. If no other thread has called inc() in the meantime, the second iteration will succeed in updating the AtomicLong to 22.
+
+### Why is it Called Optimistic Locking?
+The code shown in the previous section is called optimistic locking. Optimistic locking is different from traditional locking, sometimes also called pessimistic locking. Traditional locking blocks the access to the shared memory with a synchronized block or a lock of some kind. A synchronized block or lock may result in threads being suspended.
+
+Optimistic locking allows all threads to create a copy of the shared memory without any blocking. The threads may then make modifications to their copy, and attempt to write their modified version back into the shared memory. If no other thread has made any modifications to the shared memory, the compare-and-swap operation allows the thread to write its changes to shared memory. If another thread has already changed the shared memory, the thread will have to obtain a new copy, make its changes and attempt to write them to shared memory again.
+
+The reason this is called optimistic locking is that threads obtain a copy of the data they want to change and apply their changes, under the optimistic assumption that no other thread will have made changes to the shared memory in the meantime. When this optimistic assumption holds true, the thread just managed to update shared memory without locking. When this assumption is false, the work was wasted, but still no locking was applied.
+
+Optimistic locking tends to work best with low to medium contention on the shared memory. If the content is very high on the shared memory, threads will waste a lot of CPU cycles copying and modifying the shared memory only to fail writing the changes back to the shared memory. But, if you have a lot of content on shared memory, you should anyways consider redesigning your code to lower the contention.
+
+### Optimistic Locking is Non-blocking
+The optimistic locking mechanism I have shown here is non-blocking. If a thread obtains a copy of the shared memory and gets blocked (for whatever reason) while trying to modify it, no other threads are blocked from accessing the shared memory.
+
+With a traditional lock / unlock paradigm, when a thread locks a lock - that lock remains locked for all other threads until the thread owning the lock unlocks it again. If the thread that locked the lock is blocked somewhere else, that lock remains locked for a very long time - maybe even indefinitely.
+
+### Non-swappable Data Structures
+The simple compare-and-swap optimistic locking works for shared data structures where the whole data structure can be swapped (exchanged) with a new data structure in a single compare-and-swap operation. Swapping the whole data structure with a modified copy may not always be possible or feasible, though.
+
+Imagine if the shared data structure is a queue. Each thread trying to either insert or take elements from the queue would have to copy the whole queue and make the desired modifications to the copy. This could be achieved via an AtomicReference. Copy the reference, copy and modify the queue, and try to swap the reference pointed to in the AtomicReference to the newly created queue.
+
+However, a big data structure may require a lot of memory and CPU cycles to copy. This will make your application spend a lot more memory, and waste a lot of time on the copying. This will impact the performance of your application, especially if contention on the data structure is high. Furthermore, the longer time it takes for a thread to copy and modify the data structure, the bigger the probability is that some other thread will have modified the data structure in between. As you know, if another thread has modified the shared data structure since it was copied, all other threads have to restart their copy-modify operations. This will increase the impact on performance and memory consumption even more.
+
+The next section will explain a method to implement non-blocking data structures which can be updated concurrently, not just copied and modified.
+
+### Sharing Intended Modifications
+Instead of copying and modifying the whole shared data structure, a thread can share its intended modification of the shared data structure. The process for a thread wanting to make a modification to the shared data structure then becomes:
+
+Check if another thread has submitted an intended modification to the data structure.
+If no other thread has submitted an intended modification, create an intended modification (represented by an object) and submit that intended modification to the data structure (using a compare-and-swap operation).
+Carry out the modification of the shared data structure.
+Remove the reference to the intended modification to signal to other threads that the intended modification has been carried out.
+As you can see, the second step can block other threads from submitting an intended modification. Thus, the second step effectively works as a lock of the shared data structure. If one thread successfully submits an intended modification, no other thread can submit an intended modification until the first intended modification is carried out.
+
+If a thread submits an intended modification and then gets blocked doing some other work, the shared data structure is effectively locked. The shared data structure does not directly block the other threads using the data structure. The other threads can detect that they cannot submit an intended modification and decide to something else. Obviously, we need to fix that.
+
+### Completable Intended Modifications
+To avoid that a submitted intended modification can lock the shared data structure, a submitted intended modification object must contain enough information for another thread to complete the modification. Thus, if the thread submitting the intended modification never completes the modification, another thread can complete the modification on its behalf, and keep the shared data structure available for other threads to use.
+
+Here is a diagram illustrating the blueprint of the above described non-blocking algorithm:
+
+A non-blocking algorithm blueprint using completable intended modifications
+The modifications must be carried out as one or more compare-and-swap operations. Thus, if two threads try to complete the intended modification, only one thread will be able to carry out any of the compare-and-swap operations. As soon as a compare-and-swap operation has been completed, further attempts to complete that compare-and-swap operation will fail.
+
+### The A-B-A Problem
+The above illustrated algorithm can suffer from the A-B-A problem. The A-B-A problem refers to the situation where a variable is changed from A to B and then back to A again. For another thread it is thus not possible to detect that the variable was indeed changed.
+
+If thread A checks for ongoing updates, copies data and is suspended by the thread scheduler, a thread B may be able to access the shared data structure in the meanwhile. If thread B performs a full update of the data structure, and removes its intended modification, it will look to thread A as if no modification has taken place since it copied the data structure. However, a modification did take place. When thread A continues to perform its update based on its now out-of-date copy of the data structure, the data structure will have thread B's modification undone.
+
+The following diagram illustrates A-B-A problem from the above situation:
+
+The A-B-A problem which can occur with completable intended modifications.
+A-B-A Solutions
+A common solution to the A-B-A problem is to not just swap a pointer to an intended modification object, but to combine the pointer with a counter, and swap pointer + counter using a single compare-and-swap operation. This is possible in languages that support pointers like C and C++. Thus, even if the current modification pointer is set back to point to "no ongoing modification", the counter part of the pointer + counter will have been incremented, making the update visible to other threads.
+
+In Java you cannot merge a reference and a counter together into a single variable. Instead Java provides the AtomicStampedReference class which can swap a reference and a stamp atomically using a compare-and-swap operation.
+
+### A Non-blocking Algorithm Template
+Below is a code template intended to give you an idea about how non-blocking algorithms are implemented. The template is based on the descriptions given earlier in this tutorial.
+
+NOTE: I am not an expert in non-blocking algorithms, so the template below probably has some errors. Do not base your own non-blocking algorithm implementation on my template. The template is only intended to give you an idea of how the code for a non-blocking algorithm could look. If you want to implement your own non-blocking algorithms, study some real, working non-blocking algorithm implementations first, to learn more about how they are implemented in practice.
+```java
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicStampedReference;
+
+public class NonblockingTemplate {
+
+    public static class IntendedModification {
+        public AtomicBoolean completed =
+                new AtomicBoolean(false);
+    }
+
+    private AtomicStampedReference<IntendedModification>
+        ongoingMod =
+            new AtomicStampedReference<IntendedModification>(null, 0);
+
+    //declare the state of the data structure here.
+
+
+    public void modify() {
+        while(!attemptModifyASR());
+    }
+
+    public boolean attemptModifyASR(){
+
+        boolean modified = false;
+    
+        IntendedModification currentlyOngoingMod =
+        ongoingMod.getReference();
+        int stamp = ongoingMod.getStamp();
+    
+        if(currentlyOngoingMod == null){
+            //copy data structure state - for use
+            //in intended modification
+        
+            //prepare intended modification
+            IntendedModification newMod =
+            new IntendedModification();
+        
+            boolean modSubmitted = 
+                ongoingMod.compareAndSet(null, newMod, stamp, stamp + 1);
+        
+            if(modSubmitted){
+            
+                //complete modification via a series of compare-and-swap operations.
+                //note: other threads may assist in completing the compare-and-swap
+                // operations, so some CAS may fail
+            
+                modified = true;
+            }
+    
+        } else {
+            //attempt to complete ongoing modification, so the data structure is freed up
+            //to allow access from this thread.
+        
+            modified = false;
+        }
+    
+        return modified;
+    }
+}
+```
+### Non-blocking Algorithms are Difficult to Implement
+Non-blocking algorithms are hard to design and implement correctly. Before attempting to implement your own non-blocking algorithms, see if there is not someone who has already developed a non-blocking algorithm for your needs.
+
+Java already comes with a few non-blocking implementations (e.g. ConcurrentLinkedQueue) and will most likely get more non-blocking algorithm implementations in future Java versions.
+
+In addition to Java's built-in non-blocking data structures there are also some open source non-blocking data structures you can use. For instance, the LMAX Disrupter (a queue-like data structure), and the non-blocking HashMap from Cliff Click. See my Java concurrency references page for links to more resources.
+
+The Benefit of Non-blocking Algorithms
+There are several benefits of non-blocking algorithms compared to blocking algorithms. This section will describe these benefits.
+
+### Choice
+The first benefit of non-blocking algorithms is, that threads are given a choice about what to do when their requested action cannot be performed. Instead of just being blocked, the request thread has a choice about what to do. Sometimes there is nothing a thread can do. In that case it can choose to block or wait itself, thus freeing up the CPU for other tasks. But at least the requesting thread is given a choice.
+
+On a single CPU system perhaps it makes sense to suspend a thread that cannot perform a desired action, and let other threads which can perform their work run on the CPU. But even on a single CPU system blocking algorithms may lead to problems like deadlock, starvation and other concurrency problems.
+
+### No Deadlocks
+The second benefit of non-blocking algorithms is, that the suspension of one thread cannot lead to the suspension of other threads. This means that deadlock cannot occur. Two threads cannot be blocked waiting for each other to release a lock they want. Since threads are not blocked when they cannot perform their requested action, they cannot be blocked waiting for each other. Non-blocking algorithms may still result in live lock, where two threads keep attempting some action, but keep being told that it is not possible (because of the actions of the other thread).
+
+### No Thread Suspension
+Suspending and reactivating a thread is costly. Yes, the costs of suspension and reactivation has gone down over time as operating systems and thread libraries become more efficient. However, there is still a high price to pay for thread suspension and reactivation.
+
+Whenever a thread is blocked it is suspended, thus incurring the overhead of thread suspension and reactivation. Since threads are not suspended by non-blocking algorithms, this overhead does not occur. This means that the CPUs can potentially spend more time performing actual business logic instead of context switching.
+
+On a multi CPU system blocking algorithms can have more significant impact on the overall performance. A thread running on CPU A can be blocked waiting for a thread running on CPU B. This lowers the level of parallelism the application is capable of achieving. Of course, CPU A could just schedule another thread to run, but suspending and activating threads (context switches) are expensive. The less threads need to be suspended the better.
+
+### Reduced Thread Latency
+Latency in this context means the time between a requested action becomes possible and the thread actually performs it. Since threads are not suspended in non-blocking algorithms they do not have to pay the expensive, slow reactivation overhead. That means that when a requested action becomes possible threads can respond faster and thus reduce their response latency.
+
+The non-blocking algorithms often obtain the lower latency by busy-waiting until the requested action becomes possible. Of course, in a system with high thread contention on the non-blocking data structure, CPUs may end up burning a lot of cycles during these busy waits. This is a thing to keep in mind. Non-blocking algorithms may not be the best if your data structure has high thread contention. However, there are often ways do redesign your application to have less thread contention.
+
+---
