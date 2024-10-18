@@ -2,6 +2,23 @@
 
 Java exception handling is a powerful mechanism that helps manage errors and exceptional conditions in your programs. Below is a comprehensive overview of key concepts in Java exception handling.
 
+# Table of Contents
+
+  - [1. Basic try-catch-finally](#1-basic-try-catch-finally)
+  - [2. Try With Resources](#2-try-with-resources)
+  - [3. Catching Multiple Exceptions](#3-catching-multiple-exceptions)
+  - [4. Exception Hierarchies](#4-exception-hierarchies)
+  - [5. Checked or Unchecked Exceptions?](#5-checked-or-unchecked-exceptions)
+  - [6. Exception Wrapping](#6-exception-wrapping)
+  - [7. Fail Safe Exception Handling](#7-fail-safe-exception-handling)
+  - [8. Pluggable Exception Handlers](#8-pluggable-exception-handlers)
+  - [9. Where to Log Exceptions?](#9-where-to-log-exceptions)
+  - [10. Validation: Throw Exceptions Early](#10-validation-throw-exceptions-early)
+  - [11. Validation: Throw Exception or Return False](#11-validation-throw-exception-or-return-false)
+  - [12. Exception Handling Templates](#12-exception-handling-templates)
+  - [13. Exception Enrichment](#13-exception-enrichment)
+  - [14. Execution Context](#14-execution-context)
+
 ## 1. Basic try-catch-finally
 The `try-catch-finally` block is the foundation of Java's exception handling mechanism. It allows you to write code that can handle exceptions gracefully.
 
