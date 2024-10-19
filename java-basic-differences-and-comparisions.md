@@ -56,7 +56,17 @@ wait() Vs sleep()
 | Waiting threads can be woken up by other threads by calling notify() or notifyAll() methods.	| Sleeping threads can not be woken up by other threads. If done | so, thread will throw InterruptedException.		| 
 |  To call wait() method, thread must have object lock.	|  To call sleep() method, thread need not to have object lock.		| 
 - See More : wait() Vs sleep()			
-			
+
+### 1. Wait() vs Sleep()
+| Aspect         | Wait()                                         | Sleep()                                       |
+|----------------|-----------------------------------------------|----------------------------------------------|
+| Purpose        | Makes a thread wait until another thread invokes notify/notifyAll. | Pauses the execution of the current thread for a specified time. |
+| Context        | Must be called within a synchronized block.   | Can be called from any context.             |
+| Locking        | Releases the lock on the object.              | Does not release any locks.                  |
+| Interruptible  | Can be interrupted by another thread.         | Can throw `InterruptedException` if interrupted. |
+| Usage          | Used for inter-thread communication.          | Used for timing control.                     |
+
+
 ## Array Vs ArrayList
 
 Array Vs ArrayList
@@ -74,6 +84,13 @@ Array Vs ArrayList
 | Elements are added using assignment operator.| 	Elements are added using add() method.| 		
 - See More : Array Vs ArrayList			
 
+### 2. Array vs ArrayList
+| Aspect         | Array                                            | ArrayList                                      |
+|----------------|-------------------------------------------------|------------------------------------------------|
+| Size           | Fixed size.                                     | Dynamic size; can grow as needed.             |
+| Type           | Can hold both primitives and objects.           | Holds only objects (must use wrapper classes for primitives). |
+| Performance    | Faster for accessing elements.                  | Slower for insertion/deletion due to shifting elements. |
+| Methods        | No built-in methods (must use loops).           | Provides various utility methods (e.g., `add()`, `remove()`). |
   
 ## StackOverflowError Vs OutOfMemoryError			
 			
@@ -87,7 +104,13 @@ StackOverflowError Vs OutOfMemoryError
 |How to avoid?	|How to avoid?	|	
 |Make sure that methods are finishing their execution and leaving the stack memory.	|Try to remove references to objects which you don’t need anymore.|		
 - See More : StackOverflowError Vs OutOfMemoryError			
-		
+
+### 3. StackOverflowError vs OutOfMemoryError
+| Aspect                 | StackOverflowError                             | OutOfMemoryError                             |
+|------------------------|-----------------------------------------------|---------------------------------------------|
+| Cause                   | Exceeding the call stack limit (e.g., deep recursion). | JVM cannot allocate memory for an object. |
+| Recovery                | Not recoverable; indicates a programming error. | May be recoverable by freeing up memory.  |		
+
 ## Shallow Copy Vs Deep Copy		
 			
 Shallow Copy Vs Deep Copy
@@ -99,7 +122,14 @@ Shallow Copy Vs Deep Copy
 |Shallow copy is preferred if an object has only primitive fields.	|Deep copy is preferred if an object has references to other objects as fields.|		
 |Shallow copy is fast and also less expensive.	|Deep copy is slow and very expensive.		|
 - See More : Shallow Copy Vs Deep Copy			
-			
+
+### 4. Shallow Copy vs Deep Copy
+| Aspect         | Shallow Copy                                   | Deep Copy                                     |
+|----------------|------------------------------------------------|------------------------------------------------|
+| Definition      | Copies the references of the objects.          | Creates a new instance of the object and copies all fields. |
+| Changes         | Modifying the copied object affects the original. | Modifying the copied object does not affect the original. |
+| Implementation   | Can be done using the `clone()` method.      | Requires custom cloning logic or serialization. |
+
 ## Equal Operator Vs equals()			
 			
 “==” Operator Vs equals() Method	
@@ -111,7 +141,13 @@ Shallow Copy Vs Deep Copy
 |It is best suitable for primitive types.	|It is best suitable for derived types.		|
 |You can’t override the “==” operator. It behaves same for all objects.	|You can override the equals method according to your business requirements.|		
 - See More : “==” Vs equals()			
-			
+
+   ### 5. "==" vs equals()
+| Aspect         | "=="                                         | equals()                                      |
+|----------------|----------------------------------------------|-----------------------------------------------|
+| Comparison Type | Reference equality (memory address).         | Logical equality (content of objects).       |
+| Usage           | Used for primitives and object references.   | Used for comparing object content; needs to be overridden in custom classes. |
+
 ## Error Vs Exception			
 			
 Errors Vs Exceptions		
@@ -125,7 +161,13 @@ Errors Vs Exceptions
 |Examples : - java.lang.StackOverflowError, java.lang.OutOfMemoryError | Examples :  **Checked Exceptions** : SQLException, IOException	 **Unchecked Exceptions** : ArrayIndexOutOfBoundException, ClassCastException, NullPointerException			|
 
 - See More : Error Vs Exception			
-			
+
+### 6. Error vs Exception
+| Aspect         | Error                                         | Exception                                     |
+|----------------|----------------------------------------------|-----------------------------------------------|
+| Nature         | Indicates serious issues (e.g., `OutOfMemoryError`). | Conditions that applications can handle.     |
+| Handling       | Generally not caught; indicates a JVM issue. | Can be caught and handled by applications.   |
+
 ## Class Variables Vs Instance Variables		
 			
 Class Variables Vs Instance Variables	
@@ -136,7 +178,14 @@ Class Variables Vs Instance Variables
 |"As class variables are common to all objects of a class, changes made to these variables through one object will reflect in another."	|As each object will have its own copy of instance variables, changes made to these variables through one object will not reflect in another object.|		
 |Class variables can be accessed using either class name or object reference.	|Instance variables can be accessed only through object reference.	|	
 - See More : Class Variables Vs Instance Variables			
-			
+
+### 7. Class Variables vs Instance Variables
+| Aspect         | Class Variables                               | Instance Variables                            |
+|----------------|----------------------------------------------|-----------------------------------------------|
+| Declaration     | Declared with the `static` keyword.          | Declared without `static`.                    |
+| Scope           | Shared across all instances.                 | Unique to each instance.                      |
+| Memory          | Loaded once per class.                       | Loaded for each instance created.            |
+
 ## Fail Fast Vs Fail Safe Iterators			
 			
 Fail-Fast Iterators Vs Fail-Safe Iterators
@@ -148,7 +197,13 @@ Fail-Fast Iterators Vs Fail-Safe Iterators
 |These iterators don’t require extra memory.	|These iterators require extra memory to clone the collection.	|	
 |Ex : Iterators returned by ArrayList, Vector, HashMap.	|Ex : Iterator returned by ConcurrentHashMap.		|
 - See More : Fail-Fast Vs Fail-Safe			
-			
+
+ ### 8. Fail Fast vs Fail Safe Iterators
+| Aspect         | Fail Fast                                    | Fail Safe                                    |
+|----------------|----------------------------------------------|----------------------------------------------|
+| Behavior       | Throws `ConcurrentModificationException` when modified during iteration. | Uses a clone of the collection, allowing safe iteration. |
+| Example        | `ArrayList` and `HashMap` iterators.       | `CopyOnWriteArrayList` and `ConcurrentHashMap`. |
+
 ## final Vs finally Vs finalize()			
 	
 final Vs finally Vs finalize()	
@@ -158,7 +213,12 @@ final Vs finally Vs finalize()
 |The value of a variable which is declared as final can’t be changed once it is initialized.	|finally block is always executed whether an exception is occurred or not and occurred exception is handled or not.	|This method is called by garbage collector thread before an object is removed from the memory.	|
 |A method declared as final can’t be overridden or modified in the sub class and a class declared as final can’t be extended.	|Most of time, this block is used to close the resources like database connection, I/O resources etc soon after their use.|	This method is inherited to every class you create in Java.|	
 - See More : final Vs finally Vs finalize			
-			
+
+### 9. final vs finally vs finalize()
+| Aspect         | final                                       | finally                                       | finalize()                                    |
+|----------------|---------------------------------------------|----------------------------------------------|-----------------------------------------------|
+| Usage          | Prevents method overriding, inheritance, or allows constant values. | Executes code after try-catch, regardless of exception. | Called by the garbage collector before an object is destroyed. |
+
 ## ClassNotFoundException Vs NoClassDefFoundError			
 		
 ClassNotFoundException Vs NoClassDefFoundError	
@@ -170,7 +230,12 @@ ClassNotFoundException Vs NoClassDefFoundError
 |It is thrown by the methods like Class.forName(), loadClass() and findSystemClass()."	|It is thrown by the Java Runtime System.|		
 |It occurs when classpath is not updated with required JAR files.	|It occurs when required class definition is missing at run time.|		
 - See More : ClassNotFoundException Vs NoClassDefFoundError			
-			
+
+### 10. ClassNotFoundException vs NoClassDefFoundError
+| Aspect         | ClassNotFoundException                      | NoClassDefFoundError                          |
+|----------------|---------------------------------------------|-----------------------------------------------|
+| Cause          | Class not found during runtime.             | Class was present during compile but not found during runtime. |
+
 ## start() Vs run() Methods		
 		
 start() Vs run()		
@@ -182,7 +247,12 @@ start() Vs run()
 |You can’t call start() method more than once.|	You can call run() method multiple times.|		
 |Use of multi-threaded programming concept.	|No use of multi-threaded programming concept.	|	
 - See More : start() Vs run()			
-			
+
+### 11. start() vs run() Methods
+| Aspect         | start()                                     | run()                                        |
+|----------------|----------------------------------------------|----------------------------------------------|
+| Functionality  | Creates a new thread and invokes `run()`.   | Contains the code that executes in the thread; called directly runs in the current thread. |
+
 ## throw Vs throws Vs Throwable		
 			
 throw Vs throws Vs Throwable	
@@ -191,7 +261,12 @@ throw Vs throws Vs Throwable
 |throw is a keyword in Java which is used to throw an exception manually.	|throws is also a keyword in java which is used in the method signature to indicate that this method may throw mentioned exceptions.	|"Throwable is a super class for all types of errors and exceptions in Java. This class is a member of java.lang package."	|
 |"Using throw keyword, you can throw an exception from any method or block. But, that exception must be of type java.lang.Throwable class or it’s sub classes."	|The caller to such methods must handle the mentioned exceptions either using try-catch blocks or using throws keyword.	|Only instances of this class or it’s sub classes are thrown by the java virtual machine or by the throw statement.	|
 - See More : throw Vs throws Vs Throwable			
-			
+
+### 12. throw vs throws vs Throwable
+| Aspect         | throw                                       | throws                                       | Throwable                                     |
+|----------------|---------------------------------------------|----------------------------------------------|-----------------------------------------------|
+| Usage          | Used to explicitly throw an exception.      | Declares that a method may throw exceptions. | Superclass of all errors and exceptions.     |
+
 ## User Threads Vs Daemon Threads			
 			
 User Threads Vs Daemon Threads	
@@ -205,7 +280,13 @@ It will not exit until all user threads finish their work."	|JVM will not wait f
 |User threads are mainly designed to do some specific task.	|Daemon threads are designed to support the user threads.|		
 |"JVM will not force the user threads to terminate. It will wait for user threads to terminate themselves."	|JVM will force the daemon threads to terminate if all user threads have finished their work.|		
 - See More : User Threads Vs Daemon Threads			
-			
+
+### 13. User Threads vs Daemon Threads vs Worker Threads
+| Aspect         | User Threads                                | Daemon Threads                              | Worker Threads                               |
+|----------------|---------------------------------------------|--------------------------------------------|----------------------------------------------|
+| Purpose        | Perform application tasks; keep JVM alive. | Background tasks; terminated when user threads finish. | Threads performing specific tasks in a thread pool. |
+| Example        | Main application thread.                    | Garbage collector thread.                   | Threads in `ExecutorService`.                |
+
 ## notify() Vs notifyAll()		
 			
 notify() Vs notifyAll()		
@@ -215,7 +296,12 @@ notify() Vs notifyAll()
 |The thread chosen to notify is random i.e randomly one thread will be selected for notification.	|All notified threads will get the lock of the object on a priority basis.		|
 |"Notified thread doesn’t get the lock of the object immediately. It gets once the calling thread releases the lock of that object. Until that it will be in BLOCKED state. It will move from BLOCKED state to RUNNING state once it gets the lock."	|"All notified threads will move from WAITING state to BLOCKED state. The thread which gets the lock of the object moves to RUNNING state. The remaining threads will remain in BLOCKED state until they get the object lock."		|
 - See More : notify() Vs notifyAll()			
-			
+
+ ### 14. notify() vs notifyAll()
+| Aspect         | notify()                                    | notifyAll()                                 |
+|----------------|---------------------------------------------|--------------------------------------------|
+| Functionality  | Wakes up a single waiting thread.           | Wakes up all waiting threads.               |
+
 ## BLOCKED Vs WAITING States		
 			
 WAITING Vs BLOCKED		
@@ -225,7 +311,12 @@ WAITING Vs BLOCKED
 |The WAITING thread is waiting for notification from other threads.	|The BLOCKED thread is waiting for other thread to release the lock.|		
 |The WAITING thread can be interrupted.	|The BLOCKED thread can’t be interrupted.|		
 - See More : BLOCKED Vs WAITING			
-			
+
+### 15. BLOCKED vs WAITING States
+| Aspect         | BLOCKED                                     | WAITING                                     |
+|----------------|---------------------------------------------|---------------------------------------------|
+| Definition     | Waiting to acquire a lock.                  | Waiting indefinitely for another thread to perform an action. |
+
 ## Extends Thread Vs Implements Runnable			
 			
 Implements Runnable Vs Extends Thread
@@ -240,7 +331,13 @@ Implements Runnable Vs Extends Thread
 |More generalized task.	|Thread specific task.		|
 |Maintenance  of the code will be easy.	|Maintenance of the code will be time consuming.|		
 - See More : Extends Thread Vs Implements Runnable			
-			
+
+### 16. Extends Thread vs Implements Runnable
+| Aspect         | Extends Thread                              | Implements Runnable                         |
+|----------------|---------------------------------------------|---------------------------------------------|
+| Implementation  | Creates a new subclass of `Thread`.        | Requires an implementation of `run()` method; can be used with multiple threads. |
+| Flexibility    | Less flexible; cannot extend another class. | More flexible; can implement other interfaces. |
+
 ## Collection Vs Collections			
 			
 Collection Vs Collections		
@@ -249,7 +346,12 @@ Collection Vs Collections
 | "Collection is a root level interface of the Java Collection Framework. Most of the classes in Java Collection Framework inherit from this interface."	| "Collections is an utility class in java.util package. | 
 | It consists of only static methods which are used to operate on objects of type Collection."	List, Set and Queue are main sub interfaces of this interface.	| Collections.max(), Collections.min(), Collections.sort() are some methods of Collections class.		| 
 - See More : Collection Vs Collections			
-			
+
+### 17. Collection vs Collections
+| Aspect         | Collection                                  | Collections                                  |
+|----------------|---------------------------------------------|---------------------------------------------|
+| Type           | Root interface for the Java Collections Framework. | Utility class providing static methods for manipulating collections. |
+
 ## ArrayList Vs LinkedList			
 			
 ArrayList Vs LinkedList		
@@ -265,7 +367,13 @@ ArrayList Vs LinkedList
 |"ArrayList requires less memory compared to LinkedList. Because ArrayList holds only actual data and it’s index."	|LinkedList requires more memory compared to ArrayList. Because, each node in LinkedList holds data and reference to next and previous elements.	|	
 |If your application does more retrieval than the insertions and deletions, then use ArrayList.	|If your application does more insertions and deletions than the retrieval, then use LinkedList.		|
 - See More : ArrayList Vs LinkedList			
-			
+
+### 18. ArrayList vs LinkedList
+| Aspect         | ArrayList                                  | LinkedList                                   |
+|----------------|--------------------------------------------|----------------------------------------------|
+| Structure      | Resizable array.                          | Doubly linked list.                          |
+| Access Time    | Fast random access; slower for insertions/deletions. | Slow random access; fast insertions/deletions. |
+
 ## HashMap vs HashSet			
 			
 HashSet Vs HashMap		
@@ -279,7 +387,13 @@ HashSet Vs HashMap
 |Insertion operation requires only one object.	|Insertion operation requires two objects, key and value.|		
 |HashSet is slightly slower than HashMap.	|HashMap is slightly faster than HashSet.	|	
 - See More : HashMap Vs HashSet			
-			
+
+ ### 19. HashMap vs HashSet
+| Aspect         | HashMap                                    | HashSet                                     |
+|----------------|--------------------------------------------|---------------------------------------------|
+| Structure      | Key-value pairs.                           | Unique values without key-value pairs.     |
+| Nulls          | Allows null values and keys.              | Allows null value but not multiple nulls.  |
+
 ## HashMap Vs HashTable		
 			
 HashMap Vs HashTable	
@@ -294,7 +408,13 @@ HashMap Vs HashTable
 |HashMap is not a legacy class.	|HashTable is a legacy class.	|	
 |"HashMap is preferred in single threaded applications. If you want to use HashMap in multi threaded application, wrap it using Collections.synchronizedMap() method."	|Although HashTable is there to use in multi threaded applications, now a days it is not at all preferred. Because, ConcurrentHashMap is better option than HashTable.|		
 - See More : HashMap Vs HashTable			
-			
+
+### 20. HashMap vs HashTable
+| Aspect         | HashMap                                   | HashTable                                   |
+|----------------|-------------------------------------------|---------------------------------------------|
+| Synchronization | Non-synchronized; not thread-safe.      | Synchronized; thread-safe.                  |
+| Nulls          | Allows null values and keys.             | Does not allow null values or keys.        |
+
 ## Iterator Vs ListIterator		
 			
 Iterator Vs ListIterator
@@ -306,7 +426,13 @@ Iterator Vs ListIterator
 |You can’t iterate a list from the specified index using Iterator.	|But using ListIterator, you can iterate a list from the specified index.|		
 |Methods : hasNext(), next() and remove()	|Methods : hasNext(), hasPrevious(), next(), previous(), nextIndex(), previousIndex(), remove(), set(), add()	|	
 - See More : Iterator Vs ListIterator			
-			
+
+### 21. Iterator vs ListIterator
+| Aspect         | Iterator                                   | ListIterator                                 |
+|----------------|-------------------------------------------|---------------------------------------------|
+| Traversal      | Unidirectional.                           | Bidirectional; can traverse both ways.     |
+| Modification    | Can remove elements.                      | Can add and set elements.                   |
+
 ## ArrayList Vs Vector		
 			
 ArrayList Vs Vector		
@@ -316,7 +442,13 @@ ArrayList Vs Vector
 |As ArrayList is not synchronized, it gives better performance than Vector.	|As Vector is synchronized, it is slightly slower than ArrayList.|		
 |ArrayList is not a legacy code.	|Vector class is considered as legacy, due for deprecation.		|
 - See More : ArrayList Vs Vector			
-			
+
+  ### 22. ArrayList vs Vector
+| Aspect         | ArrayList                                 | Vector                                      |
+|----------------|-------------------------------------------|---------------------------------------------|
+| Synchronization | Non-synchronized.                        | Synchronized; thread-safe.                  |
+| Growth Policy   | Grows by 50% when resized.              | Grows by doubling the size.                 |
+
 ## HashSet Vs TreeSet Vs LinkedHashSet		
 			
 HashSet Vs LinkedHashSet Vs TreeSet	
@@ -330,7 +462,13 @@ HashSet Vs LinkedHashSet Vs TreeSet
 |HashSet allows maximum one null element.	|LinkedHashSet also allows maximum one null element.	|TreeSet doesn’t allow even a single null element. If you try to insert null element into TreeSet, it throws NullPointerException.	|
 |"HashSet requires less memory than LinkedHashSet and TreeSet as it uses only HashMap internally to store its elements."	|LinkedHashSet requires more memory than HashSet as it also maintains LinkedList along with HashMap to store its elements.	|TreeSet also requires more memory than HashSet as it also maintains Comparator to sort the elements along with the TreeMap.	Use HashSet if you don’t want to maintain any order of elements.	|Use LinkedHashSet if you want to maintain insertion order of elements.	Use TreeSet if you want to sort the elements according to some Comparator.	|
 - See More : HashSet Vs LinkedHashSet Vs TreeSet			
-			
+
+### 23. HashSet vs TreeSet vs LinkedHashSet
+| Aspect         | HashSet                                   | TreeSet                                    | LinkedHashSet                              |
+|----------------|-------------------------------------------|-------------------------------------------|-------------------------------------------|
+| Order          | No order; unordered.                      | Sorted order based on natural ordering or comparator. | Maintains insertion order.               |
+| Performance    | Fast access.                              | Slower due to sorting.                    | Slower than HashSet but faster than TreeSet. |
+
 ## Collections Vs Streams		
 			
 Collections Vs Streams		
@@ -343,7 +481,13 @@ Collections Vs Streams
 |Collections are eagerly constructed.	|Streams are lazily constructed.	|	
 |Ex : List, Set, Map…	|Ex : filtering, mapping, matching…		|
 - See More : Collections Vs Streams			
-			
+
+### 24. Collections vs Streams
+| Aspect         | Collections                               | Streams                                     |
+|----------------|-------------------------------------------|--------------------------------------------|
+| Structure      | Represents a group of objects.           | A sequence of elements; can be processed in a functional style. |
+| Operations     | Provides methods for data structure manipulation. | Supports functional-style operations (e.g., `map`, `filter`). |
+
 ## Java 8 Map() Vs flatMap()			
 			
 Map() Vs flatMap()		
@@ -356,7 +500,14 @@ Map() Vs flatMap()
 |Data Transformation : From Stream<T> to Stream<R>	|Data Transformation : From Stream<Stream<T> to Stream<R>	|	
 |Use this method when the mapper function is producing a single value for each input value.	|Use this method when the mapper function is producing multiple values for each input value.		|
 - See More : map() Vs flatMap()			
-			
+
+### 25. Java 8 Map() vs flatMap()
+| Aspect         | map()                                     | flatMap()                                   |
+|----------------
+
+|-------------------------------------------|---------------------------------------------|
+| Functionality  | Transforms each element to another value. | Transforms each element to a stream and flattens it. |
+
 ## Java 8 Stream Intermediate Vs Terminal Operations			
 			
 Intermediate Operations Vs Terminal Operations
@@ -369,7 +520,13 @@ Intermediate Operations Vs Terminal Operations
 |They don’t produce end result.	|They produce end result.		
 |Examples : filter(), map(), distinct(), sorted(), limit(), skip()	|Examples : forEach(), toArray(), reduce(), collect(), min(), max(), count(), anyMatch(), allMatch(), noneMatch(), findFirst(), findAny()		|
 - See More : Intermediate Vs Terminal Operations			
-			
+
+### 26. Java 8 Stream Intermediate vs Terminal Operations
+| Aspect         | Intermediate Operations                   | Terminal Operations                          |
+|----------------|-------------------------------------------|---------------------------------------------|
+| Behavior       | Returns a new stream; can be chained.    | Produces a result; terminates the stream.  |
+| Examples       | `filter()`, `map()`, `sorted()`.         | `collect()`, `forEach()`, `reduce()`.      |
+
 ## Iterator Vs Spliterator In Java 8			
 			
 Iterator Vs Spliterator		
@@ -384,7 +541,14 @@ Iterator Vs Spliterator
 |You can’t extract properties of the iterating elements.|	You can extract some properties of the iterating elements.	|	
 |External iteration.	|Internal iteration.|		
 - See More : Iterator Vs Spliterator			
-			
+
+### 27. Iterator vs Spliterator in Java 8
+| Aspect         | Iterator                                   | Spliterator                                  |
+|----------------|-------------------------------------------|---------------------------------------------|
+| Traversal      | Iterates elements one by one.            | Can traverse in parallel and split for concurrency. |
+| Performance    | Slower for large collections.             | Designed for performance; supports parallelism. |
+
+
 ## Static Binding Vs Dynamic Binding			
 			
 Static Binding Vs Dynamic Binding		
@@ -396,7 +560,13 @@ Static Binding Vs Dynamic Binding
 |Method overloading is the best example of static binding.	|Method overriding is the best example of dynamic binding.|		
 |Private, static and final methods show static binding. Because, they can not be overridden.	|Other than private, static and final methods show dynamic binding. Because, they can be overridden.		|
 - See More : Static Vs Dynamic Binding			
-			
+
+### 28. Static Binding vs Dynamic Binding
+| Aspect         | Static Binding                             | Dynamic Binding                              |
+|----------------|-------------------------------------------|---------------------------------------------|
+| Time           | Resolved at compile time.                 | Resolved at runtime.                        |
+| Example        | Method overloading.                       | Method overriding.                          |
+
 ## Method Overloading Vs Method Overriding			
 			
 Method Overloading Vs Method Overriding
@@ -413,7 +583,13 @@ Method Overloading Vs Method Overriding
 |Final methods can be overloaded.	|Final methods can’t be overridden.	|	
 |For method overloading, only one class is required. I.e. Method overloading happens within a class.	|For method overriding, two classes are required – super class and sub class. That means method overriding happens between two classes.	|	
 - See More : Overloading Vs Overriding			
-			
+
+### 29. Method Overloading vs Method Overriding
+| Aspect         | Method Overloading                         | Method Overriding                           |
+|----------------|-------------------------------------------|---------------------------------------------|
+| Definition      | Same method name, different parameters.  | Redefining a method in a subclass.         |
+| Compile Time    | Resolved at compile time.                 | Resolved at runtime.                        |
+
 ## executeQuery() Vs executeUpdate() Vs execute() In JDBC			
 			
 executeQuery() Vs executeUpdate() Vs execute()
@@ -424,7 +600,12 @@ executeQuery() Vs executeUpdate() Vs execute()
 |This method is used to execute only select queries.	|This method is used to execute only non-select queries.	|This method can be used for both select and non-select queries.	|
 |Ex :  SELECT	|Ex : DML -> INSERT, UPDATE and DELETE  DDL -> CREATE, ALTER	|This method can be used for any type of SQL statements.	|
 - See More : executeQuery() Vs executeUpdate() Vs execute()			
-			
+
+### 30. executeQuery() vs executeUpdate() vs execute() in JDBC
+| Aspect         | executeQuery()                            | executeUpdate()                             | execute()                                  |
+|----------------|-------------------------------------------|---------------------------------------------|--------------------------------------------|
+| Purpose        | For SQL `SELECT`; returns `ResultSet`.   | For `INSERT`, `UPDATE`, `DELETE`; returns affected rows. | Executes any SQL statement.                |
+
 ## Statement Vs PreparedStatement Vs CallableStatement			
 			
 Statement Vs PreparedStatement Vs CallableStatement
@@ -436,7 +617,13 @@ Statement Vs PreparedStatement Vs CallableStatement
 |This interface is mainly used for DDL statements like CREATE, ALTER, DROP etc.	|It is used for any kind of SQL queries which are to be executed multiple times.|	It is used to execute stored procedures and functions.	|
 |The performance of this interface is very low.	|The performance of this interface is better than the Statement interface (when used for multiple execution of same query).	|The performance of this interface is high.|	
 - See More : Statement Vs PreparedStatement Vs CallableStatement			
-			
+
+ ### 31. Statement vs PreparedStatement vs CallableStatement
+| Aspect         | Statement                                  | PreparedStatement                          | CallableStatement                           |
+|----------------|-------------------------------------------|-------------------------------------------|---------------------------------------------|
+| Usage          | For simple SQL queries.                   | Precompiled SQL queries; safe from SQL injection. | For executing stored procedures.            |
+| Performance    | Slower; compiled every time.              | Faster; compiled once.                    | Similar to `PreparedStatement`.             |
+
 ## Process Vs Thread			
 			
 Process Vs Thread		
@@ -448,7 +635,13 @@ Process Vs Thread
 |Context switching between the process is more expensive.|	Context switching between threads of the same process is less expensive.|		
 |Processes don’t share the memory with other processes.	|Threads share the memory with other threads of the same process.	|	
 - See More : Program Vs Process Vs Threads			
-			
+
+### 32. Process vs Thread
+| Aspect         | Process                                    | Thread                                      |
+|----------------|-------------------------------------------|---------------------------------------------|
+| Definition      | A program in execution with its own memory. | Lightweight subprocess; shares memory space with other threads. |
+| Overhead        | Higher memory and resource overhead.      | Lower memory footprint; efficient for multitasking. |
+
 ## Checked And Unchecked Exceptions			
 			
 Checked Exceptions Vs Unchecked Exceptions
@@ -460,7 +653,13 @@ Checked Exceptions Vs Unchecked Exceptions
 |If  these exceptions are not handled properly in the application, they give compile time error.	|"If these exceptions are not handled properly, they don’t give compile time error. But application will be terminated prematurely at run time."	|	
 |All sub classes of java.lang.Exception Class except sub classes of RunTimeException are checked exceptions.	|All sub classes of RunTimeException and sub classes of java.lang.Error are unchecked exceptions.		|
 - See More : Checked Vs Unchecked Exceptions			
-			
+
+ ### 33. Checked and Unchecked Exceptions
+| Aspect         | Checked Exceptions                         | Unchecked Exceptions                        |
+|----------------|-------------------------------------------|--------------------------------------------|
+| Declaration     | Must be caught or declared in method signature. | Do not need to be declared or caught.      |
+| Examples       | `IOException`, `SQLException`.            | `NullPointerException`, `ArrayIndexOutOfBoundsException`. |
+
 ## HashMap Vs ConcurrentHashMap		
 			
 HashMap Vs ConcurrentHashMap		
@@ -473,7 +672,13 @@ HashMap Vs ConcurrentHashMap
 |HashMap is faster.	|ConcurrentHashMap is slower.|		
 |Most suitable for single threaded applications.|	Most suitable for multi threaded applications.	|	
 - See More : HashMap Vs ConcurrentHashMap			
-			
+
+### 34. HashMap vs ConcurrentHashMap
+| Aspect         | HashMap                                   | ConcurrentHashMap                          |
+|----------------|-------------------------------------------|--------------------------------------------|
+| Synchronization | Non-synchronized; not thread-safe.      | Synchronized at segment level; allows concurrent access. |
+| Performance    | Better performance in single-threaded contexts. | Better performance in multi-threaded contexts. |
+
 ## Synchronized HashMap Vs HashTable Vs ConcurrentHashMap			
 			
 Synchronized HashMap Vs HashTable Vs ConcurrentHashMap
