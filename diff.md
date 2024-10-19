@@ -108,6 +108,324 @@ The diamond problem occurs when a class inherits from two classes that both inhe
 **Prevention in Java:**
 Java avoids the diamond problem in interfaces since a class can implement multiple interfaces, and any method from an interface must be implemented. This ensures that there is no ambiguity.
 
+Sure! Let's delve into each of these Java features, focusing on **lambda expressions**, **method references**, **functional interfaces**, **streams**, **optional**, and **completable futures**.
+
+### 1. Lambda Expressions
+
+**Definition:**
+A lambda expression is a concise way to represent a functional interface (an interface with a single abstract method) using an expression rather than an anonymous class.
+
+**Syntax:**
+```java
+(parameters) -> expression
+```
+or
+```java
+(parameters) -> { statements; }
+```
+
+**Example:**
+```java
+// Using a lambda expression to define a Runnable
+Runnable runnable = () -> System.out.println("Running in a lambda expression.");
+new Thread(runnable).start();
+```
+
+**Use Cases:**
+- **Functional Interfaces**: Lambda expressions can be used to create instances of functional interfaces, such as `Runnable`, `Callable`, and `Comparator`.
+- **Simplified Code**: They reduce boilerplate code in event handling, threading, and collection manipulation.
+
+### 2. Method References
+
+**Definition:**
+Method references provide a way to refer to a method without executing it. They are a shorthand for lambda expressions that call a specific method.
+
+**Types of Method References:**
+1. **Static Method Reference**: Refers to a static method.
+   ```java
+   // Using method reference to refer to a static method
+   Function<String, Integer> stringToLength = String::length;
+   ```
+
+2. **Instance Method Reference**: Refers to an instance method of a particular object.
+   ```java
+   String str = "Hello";
+   Supplier<String> stringSupplier = str::toUpperCase;
+   ```
+
+3. **Reference to a Constructor**: Refers to a constructor.
+   ```java
+   Supplier<List<String>> listSupplier = ArrayList::new;
+   ```
+
+**Example:**
+```java
+import java.util.Arrays;
+import java.util.List;
+
+public class MethodReferenceExample {
+    public static void main(String[] args) {
+        List<String> names = Arrays.asList("Alice", "Bob", "Charlie");
+        
+        // Method reference to sort names
+        names.sort(String::compareToIgnoreCase);
+        names.forEach(System.out::println);
+    }
+}
+```
+
+### 3. Functional Interfaces
+
+**Definition:**
+A functional interface is an interface with exactly one abstract method. They can have multiple default or static methods.
+
+**Common Functional Interfaces in Java:**
+- `Runnable`
+- `Callable`
+- `Consumer<T>`
+- `Supplier<T>`
+- `Function<T, R>`
+- `Predicate<T>`
+
+**Example:**
+```java
+@FunctionalInterface
+interface MyFunctionalInterface {
+    void performAction();
+}
+
+// Using a lambda expression to implement the functional interface
+MyFunctionalInterface action = () -> System.out.println("Action performed.");
+action.performAction();
+```
+
+### 4. Streams
+
+**Definition:**
+Streams are a sequence of elements supporting sequential and parallel aggregate operations. They allow for functional-style operations on collections of objects.
+
+**Key Features:**
+- **Lazy Evaluation**: Operations on streams are not executed until a terminal operation is invoked.
+- **Chaining**: You can chain multiple operations, such as `filter`, `map`, and `reduce`.
+- **Parallel Processing**: Streams can be processed in parallel using `parallelStream()`.
+
+**Example:**
+```java
+import java.util.Arrays;
+import java.util.List;
+
+public class StreamExample {
+    public static void main(String[] args) {
+        List<String> names = Arrays.asList("Alice", "Bob", "Charlie", "David");
+
+        // Stream operations
+        names.stream()
+             .filter(name -> name.startsWith("A")) // Filtering
+             .map(String::toUpperCase) // Mapping
+             .forEach(System.out::println); // Terminal operation
+    }
+}
+```
+
+### 5. Optional
+
+**Definition:**
+`Optional` is a container object which may or may not contain a value. It is used to avoid `NullPointerExceptions` and to express the absence of a value more explicitly.
+
+**Key Methods:**
+- `of()`: Returns an `Optional` with a non-null value.
+- `empty()`: Returns an empty `Optional`.
+- `ofNullable()`: Returns an `Optional` that may or may not contain a non-null value.
+- `isPresent()`: Checks if a value is present.
+- `get()`: Returns the value if present; otherwise, it throws an exception.
+- `ifPresent()`: Executes a block of code if a value is present.
+
+**Example:**
+```java
+import java.util.Optional;
+
+public class OptionalExample {
+    public static void main(String[] args) {
+        Optional<String> optionalValue = Optional.ofNullable(null);
+        
+        // Check if value is present
+        optionalValue.ifPresent(value -> System.out.println(value.toUpperCase()));
+
+        // Provide a default value
+        String result = optionalValue.orElse("Default Value");
+        System.out.println(result);
+    }
+}
+```
+
+### 6. CompletableFuture
+
+**Definition:**
+`CompletableFuture` is part of the `java.util.concurrent` package and represents a future result of an asynchronous computation. It provides a way to write non-blocking code using functional programming.
+
+**Key Features:**
+- **Asynchronous Execution**: Allows running tasks asynchronously without blocking.
+- **Chaining**: Supports chaining of tasks using methods like `thenApply()`, `thenAccept()`, and `thenCompose()`.
+- **Exception Handling**: Provides methods like `exceptionally()` to handle exceptions.
+
+**Example:**
+```java
+import java.util.concurrent.CompletableFuture;
+
+public class CompletableFutureExample {
+    public static void main(String[] args) {
+        CompletableFuture<Integer> future = CompletableFuture.supplyAsync(() -> {
+            // Simulating long computation
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+            return 42;
+        });
+
+        // Chaining and handling the result
+        future.thenApply(result -> {
+            System.out.println("Result: " + result);
+            return result * 2;
+        }).thenAccept(finalResult -> System.out.println("Final Result: " + finalResult));
+
+        // Wait for the future to complete
+        future.join();
+    }
+}
+```
+
+### Summary
+
+- **Lambda Expressions**: Provide a concise way to represent functional interfaces.
+- **Method References**: A shorthand for invoking methods directly, improving readability.
+- **Functional Interfaces**: Interfaces with a single abstract method, used extensively with lambdas.
+- **Streams**: A powerful abstraction for processing sequences of elements in a functional style.
+- **Optional**: A container to handle potential absence of values, improving code safety.
+- **CompletableFuture**: A powerful way to handle asynchronous programming, supporting non-blocking execution and chaining.
+
+Sure! Let’s dive into the functional interfaces you mentioned: `Runnable`, `Callable`, `Consumer<T>`, `Supplier<T>`, `Function<T, R>`, and `Predicate<T>`. These interfaces are part of the `java.util.function` package and are used extensively in Java, especially in the context of lambda expressions and functional programming.
+
+### 1. Runnable
+
+**Definition:**
+`Runnable` is a functional interface that represents a task that can be executed by a thread. It has a single abstract method, `run()`, which contains the code to be executed.
+
+**Key Features:**
+- **No Parameters or Return Value:** The `run()` method does not take any parameters and does not return a result.
+- **Common Use Case:** Often used for defining tasks in multi-threading.
+
+**Example:**
+```java
+Runnable runnable = () -> {
+    System.out.println("Running in a Runnable.");
+};
+new Thread(runnable).start();
+```
+
+### 2. Callable
+
+**Definition:**
+`Callable` is similar to `Runnable`, but it can return a result and throw checked exceptions. It has a single method, `call()`, which returns a value.
+
+**Key Features:**
+- **Return Value:** The `call()` method returns a result of type `V`.
+- **Exception Handling:** It can throw checked exceptions.
+
+**Example:**
+```java
+Callable<Integer> callable = () -> {
+    // Simulate a long computation
+    Thread.sleep(1000);
+    return 42;
+};
+
+ExecutorService executor = Executors.newSingleThreadExecutor();
+Future<Integer> future = executor.submit(callable);
+
+try {
+    System.out.println("Result: " + future.get());
+} catch (InterruptedException | ExecutionException e) {
+    e.printStackTrace();
+} finally {
+    executor.shutdown();
+}
+```
+
+### 3. Consumer<T>
+
+**Definition:**
+`Consumer<T>` is a functional interface that represents an operation that takes a single input argument and returns no result. It is used primarily for side effects.
+
+**Key Features:**
+- **Single Input Parameter:** Takes one parameter of type `T`.
+- **No Return Value:** The `accept(T t)` method does not return anything.
+
+**Example:**
+```java
+Consumer<String> printConsumer = s -> System.out.println(s);
+printConsumer.accept("Hello, Consumer!"); // Outputs: Hello, Consumer!
+```
+
+### 4. Supplier<T>
+
+**Definition:**
+`Supplier<T>` is a functional interface that represents a supplier of results. It takes no arguments and returns a value of type `T`.
+
+**Key Features:**
+- **No Input Parameters:** Does not take any parameters.
+- **Return Value:** The `get()` method returns a value of type `T`.
+
+**Example:**
+```java
+Supplier<String> stringSupplier = () -> "Hello, Supplier!";
+System.out.println(stringSupplier.get()); // Outputs: Hello, Supplier!
+```
+
+### 5. Function<T, R>
+
+**Definition:**
+`Function<T, R>` is a functional interface that represents a function that takes an argument of type `T` and produces a result of type `R`.
+
+**Key Features:**
+- **Single Input and Output:** Takes one parameter of type `T` and returns a value of type `R`.
+- **Method Chaining:** It supports method references and can be chained with `andThen()` for combining functions.
+
+**Example:**
+```java
+Function<String, Integer> stringLength = s -> s.length();
+System.out.println("Length: " + stringLength.apply("Hello")); // Outputs: Length: 5
+```
+
+### 6. Predicate<T>
+
+**Definition:**
+`Predicate<T>` is a functional interface that represents a predicate (boolean-valued function) of one argument. It is used for filtering and testing conditions.
+
+**Key Features:**
+- **Single Input Parameter:** Takes one parameter of type `T`.
+- **Returns a Boolean:** The `test(T t)` method returns a boolean value.
+
+**Example:**
+```java
+Predicate<String> isNotEmpty = s -> !s.isEmpty();
+System.out.println(isNotEmpty.test("Hello")); // Outputs: true
+System.out.println(isNotEmpty.test(""));      // Outputs: false
+```
+
+### Summary of Key Points
+
+| Interface       | Method               | Input Type | Return Type   | Use Case                               |
+|-----------------|----------------------|------------|----------------|----------------------------------------|
+| `Runnable`      | `run()`              | None       | Void           | Execute a task in a thread             |
+| `Callable<V>`   | `call()`             | None       | `V`            | Execute a task that returns a result   |
+| `Consumer<T>`   | `accept(T t)`        | `T`        | Void           | Perform an operation on input          |
+| `Supplier<T>`   | `get()`              | None       | `T`            | Provide a value without input          |
+| `Function<T, R>`| `apply(T t)`         | `T`        | `R`            | Transform an input to an output        |
+| `Predicate<T>`  | `test(T t)`          | `T`        | Boolean        | Evaluate a condition on input          |
+
+
 ### Garbage Collection in Java
 
 **Definition:**
