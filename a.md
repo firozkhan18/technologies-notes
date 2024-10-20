@@ -52,8 +52,8 @@ graph TD
 
     B -->|Index| H[Bucket 2]
     H -->|Hash| I[Node4]
-    I -->|Next| J[Node5]  %% Node4 points to Node5 in the linked list
-    J -->|Next| K[Node6]  %% Node5 points to Node6
+    I -->|Next| J[Node5 - Node4 points to Node5 in the linked list]
+    J -->|Next| K[Node6 - Node5 points to Node6]
 
     K[ConcurrentHashMap] -->|Hash Function| L[Hash Code]
     L -->|Segmented Buckets| M[Segmented Array]
