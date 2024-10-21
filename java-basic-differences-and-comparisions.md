@@ -503,9 +503,7 @@ Map() Vs flatMap()
 
 ### 25. Java 8 Map() vs flatMap()
 | Aspect         | map()                                     | flatMap()                                   |
-|----------------
-
-|-------------------------------------------|---------------------------------------------|
+|----------------|-------------------------------------------|---------------------------------------------|
 | Functionality  | Transforms each element to another value. | Transforms each element to a stream and flattens it. |
 
 ## Java 8 Stream Intermediate Vs Terminal Operations			
