@@ -1,8 +1,6 @@
 ## [<<PREV](Part_05_Spring_Boot_Microservices_Security.md) - MICROSERVICE Resilience4J CircuitBreaker - [NEXT>>](Part_07_Spring_Boot_Microservices_Distributed_Tracing.md)
 
-Here's the content you provided, converted into a Markdown format:
 
-```markdown
 ## [<<PREV](Part_04_Spring_Boot_Microservices_API_Gateway.md) - MICROSERVICE SECURITY - [NEXT>>](Part_06_Spring_Boot_Microservices_Resilience4J_Circuit_Breaker.md)
 
 ## Docker
@@ -106,8 +104,3 @@ Before you run Keycloak in production, consider the following actions:
 - Switch to a production-ready database such as PostgreSQL.
 - Configure SSL with your own certificates.
 - Switch the admin password to a more secure password.
-
-For more information, see the server guides.
-```
-
-Feel free to copy this Markdown content into your Markdown editor or viewer!
