@@ -11941,3 +11941,1362 @@ public class HashSetExample {
 - **HashSet**: Use when you need a set that does not allow duplicates and is backed by a `HashMap`.
 
 Each of these collections is optimized for different use cases, and understanding their internal workings can help you choose the right one for your specific needs.
+
+The Java Collection Framework provides a set of classes and interfaces to manage groups of objects. It includes various collections that are used to store, retrieve, manipulate, and communicate aggregate data. The framework is divided into several parts: interfaces, implementations, and algorithms.
+
+### **1. Collection Framework Overview**
+
+#### **1.1. Interfaces**
+
+1. **Collection Interface**: The root interface of the collection hierarchy. It represents a group of objects known as elements.
+   - **List**: An ordered collection (sequence) that allows duplicate elements. Examples include `ArrayList`, `LinkedList`, and `Vector`.
+   - **Set**: A collection that does not allow duplicate elements. Examples include `HashSet`, `LinkedHashSet`, and `TreeSet`.
+   - **Queue**: A collection designed for holding elements prior to processing. Examples include `LinkedList` (also implements Queue), `PriorityQueue`, and `Deque`.
+   - **Deque**: A double-ended queue that allows elements to be added or removed from both ends. Examples include `ArrayDeque` and `LinkedList`.
+
+2. **Map Interface**: A collection of key-value pairs where each key is associated with exactly one value. Examples include `HashMap`, `LinkedHashMap`, and `TreeMap`.
+
+#### **1.2. Implementations**
+
+- **ArrayList**: Implements the `List` interface using a dynamic array. Allows fast random access but slower insertion and deletion.
+- **LinkedList**: Implements both `List` and `Deque` interfaces using a doubly-linked list. Allows fast insertion and deletion but slower random access.
+- **HashSet**: Implements the `Set` interface using a hash table. Does not guarantee the order of elements.
+- **LinkedHashSet**: Extends `HashSet` and maintains a linked list of the entries in the set, providing predictable iteration order.
+- **TreeSet**: Implements the `Set` interface using a Red-Black tree. Guarantees that elements are in sorted order.
+- **HashMap**: Implements the `Map` interface using a hash table. Does not guarantee the order of keys.
+- **LinkedHashMap**: Extends `HashMap` and maintains insertion order.
+- **TreeMap**: Implements the `Map` interface using a Red-Black tree. Guarantees that keys are in sorted order.
+- **PriorityQueue**: Implements the `Queue` interface and orders elements based on their natural ordering or a comparator provided at queue construction.
+- **ArrayDeque**: Implements the `Deque` interface using a resizable array.
+
+### **2. Examples**
+
+#### **ArrayList Example**
+```java
+import java.util.ArrayList;
+import java.util.List;
+
+public class ArrayListExample {
+    public static void main(String[] args) {
+        List<String> list = new ArrayList<>();
+        list.add("Apple");
+        list.add("Banana");
+        list.add("Cherry");
+
+        for (String fruit : list) {
+            System.out.println(fruit);
+        }
+    }
+}
+```
+
+#### **HashSet Example**
+```java
+import java.util.HashSet;
+import java.util.Set;
+
+public class HashSetExample {
+    public static void main(String[] args) {
+        Set<String> set = new HashSet<>();
+        set.add("Apple");
+        set.add("Banana");
+        set.add("Cherry");
+        set.add("Apple"); // Duplicate element, will not be added
+
+        for (String fruit : set) {
+            System.out.println(fruit);
+        }
+    }
+}
+```
+
+#### **HashMap Example**
+```java
+import java.util.HashMap;
+import java.util.Map;
+
+public class HashMapExample {
+    public static void main(String[] args) {
+        Map<String, Integer> map = new HashMap<>();
+        map.put("Apple", 1);
+        map.put("Banana", 2);
+        map.put("Cherry", 3);
+
+        for (Map.Entry<String, Integer> entry : map.entrySet()) {
+            System.out.println(entry.getKey() + ": " + entry.getValue());
+        }
+    }
+}
+```
+
+### **3. Interview Questions and Answers**
+
+#### **Q1: What is the difference between `ArrayList` and `LinkedList`?**
+
+**Answer**:
+- **ArrayList**:
+  - Backed by a dynamic array.
+  - Provides fast random access using index.
+  - Slow insertion and deletion operations, especially when done in the middle of the list.
+  - Better cache locality due to contiguous memory allocation.
+
+- **LinkedList**:
+  - Implemented as a doubly linked list.
+  - Provides fast insertion and deletion operations, especially at the beginning or end of the list.
+  - Slower random access since it requires traversing the list to reach an element.
+  - Uses more memory due to node pointers.
+
+#### **Q2: How does `HashSet` work internally?**
+
+**Answer**:
+- `HashSet` is backed by a `HashMap` instance. 
+- It stores elements using a hash table, which uses hashing to provide efficient lookup, insertion, and deletion operations.
+- The `HashSet` does not guarantee the order of elements.
+- It ensures that no duplicate elements are stored by using the `equals` method to check for element equality.
+
+#### **Q3: Explain the difference between `HashMap` and `TreeMap`.**
+
+**Answer**:
+- **HashMap**:
+  - Uses a hash table for storage.
+  - Provides constant-time performance for basic operations (`get`, `put`).
+  - Does not guarantee the order of keys.
+  - Allows null values and one null key.
+
+- **TreeMap**:
+  - Implements `NavigableMap` and is backed by a Red-Black tree.
+  - Provides log(n) time complexity for basic operations (`get`, `put`).
+  - Guarantees that the keys are sorted in natural order or by a comparator provided at map creation.
+  - Does not allow null keys but allows null values.
+
+#### **Q4: What is the difference between `HashMap` and `LinkedHashMap`?**
+
+**Answer**:
+- **HashMap**:
+  - Does not maintain any order of its entries.
+  - Faster performance for basic operations compared to `LinkedHashMap` due to lack of overhead for maintaining order.
+
+- **LinkedHashMap**:
+  - Maintains a doubly-linked list of entries in the map, preserving the order of insertion.
+  - Slightly slower performance due to additional overhead for maintaining order.
+  - Useful when you need predictable iteration order.
+
+#### **Q5: How does `PriorityQueue` work and when would you use it?**
+
+**Answer**:
+- `PriorityQueue` is a queue that orders elements based on their natural ordering or by a comparator provided at queue construction.
+- It does not guarantee the order of elements except that the head of the queue is the least element according to the ordering.
+- Useful for scenarios where you need to process elements based on priority, such as in task scheduling or implementing algorithms like Dijkstra’s shortest path.
+
+#### **Q6: What is the difference between `String`, `StringBuilder`, and `StringBuffer`?**
+
+**Answer**:
+- **String**:
+  - Immutable; once created, its value cannot be changed.
+  - Suitable for cases where the string value does not change frequently.
+
+- **StringBuilder**:
+  - Mutable; allows modification of the string value.
+  - Not thread-safe, which means it is generally faster in a single-threaded environment.
+  - Ideal for string manipulation in scenarios where thread safety is not a concern.
+
+- **StringBuffer**:
+  - Mutable; similar to `StringBuilder` but synchronized.
+  - Thread-safe, which means it is slower compared to `StringBuilder` due to synchronization overhead.
+  - Suitable for use in multi-threaded environments where thread safety is required.
+
+### **Summary**
+
+The Java Collection Framework offers various interfaces and classes to handle different types of collections, each with its own use cases and performance characteristics. Understanding these collections and their behaviors, along with their implementation details, can significantly impact the performance and scalability of your Java applications.
+
+
+### **3. Class Loaders and Types of Class Loading**
+
+#### **3.1 Class Loader**
+
+A class loader in Java is responsible for loading classes into the Java Virtual Machine (JVM) at runtime. The class loader reads the binary data of a class file and converts it into a `Class` object.
+
+#### **3.2 Types of Class Loading**
+
+1. **Bootstrap Class Loader**: Loads core Java libraries located in the `<JAVA_HOME>/lib` directory. It is part of the JVM.
+2. **Platform Class Loader (or System Class Loader)**: Loads classes from the application's classpath, typically from the `CLASSPATH` environment variable or `-classpath` option.
+3. **Extension Class Loader**: Loads classes from the `jre/lib/ext` directory or from any other directory specified by the `java.ext.dirs` system property.
+4. **Custom Class Loaders**: Developers can create custom class loaders to load classes from specific locations or implement special loading behavior.
+
+#### **Example of a Custom Class Loader**
+
+```java
+import java.io.*;
+
+public class CustomClassLoader extends ClassLoader {
+    private String classPath;
+
+    public CustomClassLoader(String classPath) {
+        this.classPath = classPath;
+    }
+
+    @Override
+    public Class<?> findClass(String name) throws ClassNotFoundException {
+        byte[] b = loadClassData(name);
+        return defineClass(name, b, 0, b.length);
+    }
+
+    private byte[] loadClassData(String name) throws ClassNotFoundException {
+        String path = classPath + "/" + name.replace('.', '/') + ".class";
+        try (InputStream inputStream = new FileInputStream(path);
+             ByteArrayOutputStream buffer = new ByteArrayOutputStream()) {
+            int data = inputStream.read();
+            while (data != -1) {
+                buffer.write(data);
+                data = inputStream.read();
+            }
+            return buffer.toByteArray();
+        } catch (IOException e) {
+            throw new ClassNotFoundException("Class not found: " + name, e);
+        }
+    }
+}
+```
+
+
+
+Threads are a fundamental concept in computer science, particularly in the context of programming and concurrent processing. In Java, threads allow you to run multiple tasks simultaneously within a single process, which can lead to more efficient use of resources and improved performance. Here's an in-depth explanation of threads in Java:
+
+### **1. What is a Thread?**
+
+A thread is a lightweight process that runs within the context of a larger process. Threads within the same process share the same memory space, which allows them to communicate more easily but also requires careful management to avoid conflicts.
+
+### **2. Thread Life Cycle**
+
+A thread in Java goes through several states during its life cycle:
+
+1. **New**: The thread is created but not yet started. It is in the `New` state.
+   ```java
+   Thread t = new Thread();
+   ```
+
+2. **Runnable**: The thread is ready to run and waiting for CPU time. It enters this state when the `start()` method is called.
+   ```java
+   t.start();
+   ```
+
+3. **Blocked**: The thread is blocked waiting for a monitor lock to enter a synchronized block or method.
+
+4. **Waiting**: The thread is waiting indefinitely for another thread to perform a particular action.
+   ```java
+   synchronized(object) {
+       object.wait();
+   }
+   ```
+
+5. **Timed Waiting**: The thread is waiting for a specified period.
+   ```java
+   Thread.sleep(1000); // Sleep for 1 second
+   ```
+
+6. **Terminated**: The thread has completed its execution or has been terminated.
+
+### **3. Creating and Running Threads**
+
+In Java, you can create and run threads in two primary ways:
+
+#### **3.1 Extending the `Thread` Class**
+
+You can create a thread by extending the `Thread` class and overriding its `run()` method.
+
+**Example**:
+```java
+class MyThread extends Thread {
+    @Override
+    public void run() {
+        System.out.println("Thread is running");
+    }
+}
+
+public class ThreadExample {
+    public static void main(String[] args) {
+        MyThread t = new MyThread();
+        t.start(); // Start the thread
+    }
+}
+```
+
+#### **3.2 Implementing the `Runnable` Interface**
+
+Alternatively, you can create a thread by implementing the `Runnable` interface and passing an instance of it to a `Thread` object.
+
+**Example**:
+```java
+class MyRunnable implements Runnable {
+    @Override
+    public void run() {
+        System.out.println("Thread is running");
+    }
+}
+
+public class RunnableExample {
+    public static void main(String[] args) {
+        Thread t = new Thread(new MyRunnable());
+        t.start(); // Start the thread
+    }
+}
+```
+
+### **4. Thread Synchronization**
+
+When multiple threads access shared resources, synchronization is necessary to prevent data corruption and ensure thread safety.
+
+#### **4.1 Synchronized Methods**
+
+Use the `synchronized` keyword to prevent multiple threads from executing a method simultaneously.
+
+**Example**:
+```java
+public synchronized void synchronizedMethod() {
+    // Critical section code
+}
+```
+
+#### **4.2 Synchronized Blocks**
+
+You can also synchronize blocks of code to limit the scope of synchronization.
+
+**Example**:
+```java
+public void method() {
+    synchronized(this) {
+        // Critical section code
+    }
+}
+```
+
+#### **4.3 Locks**
+
+Java provides more advanced synchronization mechanisms using `java.util.concurrent.locks.Lock` and `ReentrantLock`.
+
+**Example**:
+```java
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+
+public class LockExample {
+    private final Lock lock = new ReentrantLock();
+
+    public void criticalSection() {
+        lock.lock();
+        try {
+            // Critical section code
+        } finally {
+            lock.unlock();
+        }
+    }
+}
+```
+
+### **5. Thread Communication**
+
+Threads often need to communicate with each other or coordinate their actions.
+
+#### **5.1 Wait and Notify**
+
+Threads can use `wait()`, `notify()`, and `notifyAll()` methods to communicate and synchronize.
+
+**Example**:
+```java
+public class WaitNotifyExample {
+    private final Object lock = new Object();
+
+    public void waitingThread() throws InterruptedException {
+        synchronized (lock) {
+            lock.wait(); // Wait for notification
+        }
+    }
+
+    public void notifyingThread() {
+        synchronized (lock) {
+            lock.notify(); // Notify waiting threads
+        }
+    }
+}
+```
+
+### **6. Thread Pools**
+
+Using thread pools can improve performance by reusing a fixed number of threads for multiple tasks.
+
+#### **6.1 Executor Framework**
+
+Java provides the `Executor` framework to manage a pool of threads.
+
+**Example**:
+```java
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+public class ThreadPoolExample {
+    public static void main(String[] args) {
+        ExecutorService executor = Executors.newFixedThreadPool(3);
+
+        Runnable task = () -> System.out.println("Task executed by " + Thread.currentThread().getName());
+
+        for (int i = 0; i < 10; i++) {
+            executor.submit(task);
+        }
+
+        executor.shutdown(); // Initiates an orderly shutdown
+    }
+}
+```
+
+### **7. Thread Safety and Concurrency Utilities**
+
+Java provides a variety of concurrency utilities to help with thread safety and coordination.
+
+#### **7.1 Atomic Variables**
+
+Use `java.util.concurrent.atomic` classes for thread-safe operations on single variables.
+
+**Example**:
+```java
+import java.util.concurrent.atomic.AtomicInteger;
+
+public class AtomicExample {
+    private AtomicInteger count = new AtomicInteger(0);
+
+    public void increment() {
+        count.incrementAndGet();
+    }
+}
+```
+
+#### **7.2 Concurrent Collections**
+
+Java offers thread-safe collections such as `ConcurrentHashMap`, `CopyOnWriteArrayList`, etc.
+
+**Example**:
+```java
+import java.util.concurrent.ConcurrentHashMap;
+
+public class ConcurrentHashMapExample {
+    private ConcurrentHashMap<String, Integer> map = new ConcurrentHashMap<>();
+
+    public void addValue(String key, Integer value) {
+        map.put(key, value);
+    }
+}
+```
+
+### **Summary**
+
+- **Thread Life Cycle**: Threads go through states like New, Runnable, Blocked, Waiting, Timed Waiting, and Terminated.
+- **Creating Threads**: Can be done by extending `Thread` or implementing `Runnable`.
+- **Synchronization**: Use synchronized methods, blocks, or locks to ensure thread safety.
+- **Thread Communication**: Use `wait()`, `notify()`, and `notifyAll()` for thread coordination.
+- **Thread Pools**: Managed by the `Executor` framework for efficient thread reuse.
+- **Concurrency Utilities**: Include atomic variables and concurrent collections for thread-safe operations.
+
+Understanding these concepts helps in writing efficient, concurrent applications in Java, enabling better resource utilization and improved performance.
+
+Java Collections and Maps are fundamental data structures that provide a way to store, manage, and manipulate groups of objects. Understanding the different types and their use cases is crucial for writing efficient and effective Java code. Here's an in-depth explanation of Java Collections and Maps, including their features, use cases, and examples.
+
+### **1. Java Collections Framework Overview**
+
+The Java Collections Framework provides a set of interfaces and classes that implement various data structures and algorithms. It is designed to handle different types of collections such as lists, sets, and queues.
+
+#### **1.1 Core Interfaces**
+
+- **Collection**: The root interface in the collection hierarchy. It represents a group of objects.
+- **List**: An ordered collection that allows duplicate elements. Examples: `ArrayList`, `LinkedList`.
+- **Set**: A collection that does not allow duplicate elements. Examples: `HashSet`, `LinkedHashSet`, `TreeSet`.
+- **Queue**: A collection designed for holding elements prior to processing. Examples: `LinkedList`, `PriorityQueue`.
+- **Deque**: A double-ended queue that supports element insertion and removal at both ends. Examples: `ArrayDeque`, `LinkedList`.
+
+#### **1.2 Map Interface**
+
+- **Map**: A collection that maps keys to values, where each key is associated with exactly one value. Examples: `HashMap`, `LinkedHashMap`, `TreeMap`.
+
+### **2. Detailed Explanation of Collections**
+
+#### **2.1 List Interface**
+
+- **ArrayList**
+  - **Description**: A resizable array implementation of the `List` interface. It allows fast random access and is good for scenarios where you need to frequently access elements by index.
+  - **Features**: 
+    - Backed by a dynamic array.
+    - Provides constant-time access to elements.
+    - Not synchronized (not thread-safe).
+  - **Example**:
+    ```java
+    import java.util.ArrayList;
+    import java.util.List;
+
+    public class ArrayListExample {
+        public static void main(String[] args) {
+            List<String> list = new ArrayList<>();
+            list.add("Apple");
+            list.add("Banana");
+            list.add("Cherry");
+
+            for (String fruit : list) {
+                System.out.println(fruit);
+            }
+        }
+    }
+    ```
+
+- **LinkedList**
+  - **Description**: A doubly-linked list implementation of the `List` interface. It supports element insertion and removal more efficiently than `ArrayList`.
+  - **Features**:
+    - Backed by a linked list.
+    - Provides constant-time insertion and removal of elements.
+    - More overhead for random access compared to `ArrayList`.
+  - **Example**:
+    ```java
+    import java.util.LinkedList;
+    import java.util.List;
+
+    public class LinkedListExample {
+        public static void main(String[] args) {
+            List<String> list = new LinkedList<>();
+            list.add("Apple");
+            list.add("Banana");
+            list.add("Cherry");
+
+            for (String fruit : list) {
+                System.out.println(fruit);
+            }
+        }
+    }
+    ```
+
+#### **2.2 Set Interface**
+
+- **HashSet**
+  - **Description**: A collection that does not allow duplicate elements and does not guarantee any order.
+  - **Features**:
+    - Backed by a hash table.
+    - Provides constant-time performance for basic operations (add, remove, contains).
+    - Not synchronized.
+  - **Example**:
+    ```java
+    import java.util.HashSet;
+    import java.util.Set;
+
+    public class HashSetExample {
+        public static void main(String[] args) {
+            Set<String> set = new HashSet<>();
+            set.add("Apple");
+            set.add("Banana");
+            set.add("Cherry");
+
+            for (String fruit : set) {
+                System.out.println(fruit);
+            }
+        }
+    }
+    ```
+
+- **LinkedHashSet**
+  - **Description**: A collection that maintains insertion order and does not allow duplicate elements.
+  - **Features**:
+    - Backed by a hash table and a linked list.
+    - Provides predictable iteration order (insertion order).
+    - Not synchronized.
+  - **Example**:
+    ```java
+    import java.util.LinkedHashSet;
+    import java.util.Set;
+
+    public class LinkedHashSetExample {
+        public static void main(String[] args) {
+            Set<String> set = new LinkedHashSet<>();
+            set.add("Apple");
+            set.add("Banana");
+            set.add("Cherry");
+
+            for (String fruit : set) {
+                System.out.println(fruit);
+            }
+        }
+    }
+    ```
+
+- **TreeSet**
+  - **Description**: A collection that is sorted according to natural ordering or a comparator provided at set creation.
+  - **Features**:
+    - Backed by a `NavigableMap` (TreeMap).
+    - Provides log(n) time complexity for add, remove, and contains operations.
+    - Maintains elements in sorted order.
+  - **Example**:
+    ```java
+    import java.util.TreeSet;
+    import java.util.Set;
+
+    public class TreeSetExample {
+        public static void main(String[] args) {
+            Set<String> set = new TreeSet<>();
+            set.add("Banana");
+            set.add("Apple");
+            set.add("Cherry");
+
+            for (String fruit : set) {
+                System.out.println(fruit);
+            }
+        }
+    }
+    ```
+
+#### **2.3 Queue Interface**
+
+- **LinkedList**
+  - **Description**: Implements both `List` and `Queue` interfaces, allowing it to be used as a queue.
+  - **Features**:
+    - Allows element insertion and removal from both ends.
+    - More flexible than `ArrayDeque` for certain operations.
+  - **Example**:
+    ```java
+    import java.util.LinkedList;
+    import java.util.Queue;
+
+    public class LinkedListQueueExample {
+        public static void main(String[] args) {
+            Queue<String> queue = new LinkedList<>();
+            queue.add("Apple");
+            queue.add("Banana");
+            queue.add("Cherry");
+
+            while (!queue.isEmpty()) {
+                System.out.println(queue.poll());
+            }
+        }
+    }
+    ```
+
+- **PriorityQueue**
+  - **Description**: A queue that orders elements based on their natural ordering or a provided comparator.
+  - **Features**:
+    - Elements are ordered according to their priority.
+    - Does not allow `null` elements.
+  - **Example**:
+    ```java
+    import java.util.PriorityQueue;
+    import java.util.Queue;
+
+    public class PriorityQueueExample {
+        public static void main(String[] args) {
+            Queue<String> queue = new PriorityQueue<>();
+            queue.add("Banana");
+            queue.add("Apple");
+            queue.add("Cherry");
+
+            while (!queue.isEmpty()) {
+                System.out.println(queue.poll());
+            }
+        }
+    }
+    ```
+
+- **ArrayDeque**
+  - **Description**: A resizable array implementation of the `Deque` interface.
+  - **Features**:
+    - Provides efficient operations for both ends of the deque.
+    - No capacity limitations like `LinkedList`.
+  - **Example**:
+    ```java
+    import java.util.ArrayDeque;
+    import java.util.Deque;
+
+    public class ArrayDequeExample {
+        public static void main(String[] args) {
+            Deque<String> deque = new ArrayDeque<>();
+            deque.addFirst("Apple");
+            deque.addLast("Banana");
+            deque.addLast("Cherry");
+
+            while (!deque.isEmpty()) {
+                System.out.println(deque.pollFirst());
+            }
+        }
+    }
+    ```
+
+### **3. Detailed Explanation of Maps**
+
+Maps store key-value pairs, where each key is associated with a single value.
+
+#### **3.1 HashMap**
+
+- **Description**: An implementation of the `Map` interface that uses a hash table.
+- **Features**:
+  - Allows null values and one null key.
+  - Provides constant-time performance for basic operations.
+  - Does not guarantee any order.
+- **Example**:
+  ```java
+  import java.util.HashMap;
+  import java.util.Map;
+
+  public class HashMapExample {
+      public static void main(String[] args) {
+          Map<String, Integer> map = new HashMap<>();
+          map.put("Apple", 1);
+          map.put("Banana", 2);
+          map.put("Cherry", 3);
+
+          for (Map.Entry<String, Integer> entry : map.entrySet()) {
+              System.out.println(entry.getKey() + ": " + entry.getValue());
+          }
+      }
+  }
+  ```
+
+#### **3.2 LinkedHashMap**
+
+- **Description**: An implementation of `Map` that maintains the order of insertion.
+- **Features**:
+  - Allows null values and keys.
+  - Maintains insertion order.
+- **Example**:
+  ```java
+  import java.util.LinkedHashMap;
+  import java.util.Map;
+
+  public class LinkedHashMapExample {
+      public static void main(String[] args) {
+          Map<String, Integer> map = new LinkedHashMap<>();
+          map.put("Apple", 1);
+          map.put("Banana", 2);
+          map.put("Cherry", 3);
+
+          for (Map.Entry<String, Integer> entry : map.entrySet()) {
+              System.out.println(entry.getKey() + ": " + entry.getValue());
+          }
+      }
+  }
+  ```
+
+#### **3.3 TreeMap**
+
+- **Description**: A map implementation that is sorted according to natural ordering or a comparator.
+- **Features**:
+  - Does not allow null keys.
+  - Provides log(n) time complexity for basic operations.
+  - Maintains sorted order.
+- **Example**:
+  ```java
+  import java.util.Map;
+  import java
+
+.util.TreeMap;
+
+  public class TreeMapExample {
+      public static void main(String[] args) {
+          Map<String, Integer> map = new TreeMap<>();
+          map.put("Banana", 2);
+          map.put("Apple", 1);
+          map.put("Cherry", 3);
+
+          for (Map.Entry<String, Integer> entry : map.entrySet()) {
+              System.out.println(entry.getKey() + ": " + entry.getValue());
+          }
+      }
+  }
+  ```
+
+### **4. Comparison and Use Cases**
+
+- **ArrayList vs. LinkedList**: Use `ArrayList` for faster random access and `LinkedList` for frequent insertions and deletions.
+- **HashSet vs. TreeSet**: Use `HashSet` for fast operations with no order and `TreeSet` for sorted elements.
+- **HashMap vs. TreeMap**: Use `HashMap` for fast operations with no order and `TreeMap` for sorted key-value pairs.
+- **PriorityQueue vs. ArrayDeque**: Use `PriorityQueue` when you need elements ordered by priority and `ArrayDeque` for efficient double-ended operations.
+
+### **5. Common Operations**
+
+- **Adding Elements**: `add()`, `put()`
+- **Removing Elements**: `remove()`, `poll()`
+- **Accessing Elements**: `get()`, `peek()`
+- **Iterating**: Using for-each loops, `Iterator`, `ListIterator`, or stream API.
+
+Understanding the Java Collections Framework and Maps allows developers to choose the right data structures for their applications, optimizing performance and efficiency.
+
+In Java, the `final` keyword can be applied to variables, methods, and classes to restrict their modification in different ways. Understanding how `final` works with variables and objects is crucial for proper usage. Let’s break down what happens with `final` variables and why an object referenced by a `final` variable can still be modified.
+
+### **1. Final Variables**
+
+#### **1.1 Final Primitive Variables**
+
+When you declare a primitive variable as `final`, it means that once assigned a value, it cannot be changed. For example:
+
+```java
+final int x = 10;
+x = 20; // This will cause a compilation error.
+```
+
+#### **1.2 Final Reference Variables**
+
+When you declare a reference variable as `final`, it means that the reference (or address) stored in the variable cannot be changed after it has been assigned. However, the object to which the reference points can still be modified if its class allows it. 
+
+**Example**:
+```java
+final Employee emp = new Employee(101);
+emp = new Employee(102); // This will cause a compilation error.
+```
+
+In the above example, attempting to reassign `emp` to point to a different `Employee` object will result in a compilation error. This is because the reference variable `emp` is `final`, so its reference cannot be changed to point to a different `Employee` object.
+
+### **2. Modifying the Object**
+
+While you cannot change the reference of a `final` variable, you can still modify the object it references if the object’s class allows it. The `final` keyword only applies to the reference, not to the internal state of the object.
+
+**Example**:
+
+```java
+class Employee {
+    private int id;
+
+    public Employee(int id) {
+        this.id = id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getId() {
+        return id;
+    }
+}
+
+public class FinalExample {
+    public static void main(String[] args) {
+        final Employee emp = new Employee(101);
+        System.out.println("Initial ID: " + emp.getId());
+
+        // Modifying the object’s internal state
+        emp.setId(102);
+        System.out.println("Modified ID: " + emp.getId());
+
+        // Attempting to reassign the reference will cause a compilation error
+        // emp = new Employee(103); // Uncommenting this line will cause a compilation error
+    }
+}
+```
+
+**Explanation**:
+- **Reference Modification**: The line `emp = new Employee(103);` is commented out because it would cause a compilation error. The `final` keyword prevents reassignment of the reference `emp` to a new `Employee` object.
+- **Object Modification**: The method `emp.setId(102);` successfully changes the internal state of the `Employee` object from `101` to `102`. This is because the `final` keyword does not restrict modifications to the object’s internal state, only the reference itself.
+
+### **3. Summary**
+
+- **Final Variable**: For primitive types, a `final` variable cannot be reassigned. For reference types, a `final` variable cannot be reassigned to a different object, but the object itself can still be modified if it provides methods to do so.
+- **Object State vs. Reference**: The `final` keyword affects the reference, not the state of the object. As long as the object's class allows state changes, those changes are permitted.
+
+In summary, `final` ensures immutability of the reference but not the object itself. The reference to an object marked as `final` cannot be changed to refer to another object, but the content or state of the object itself can be modified if the class does not restrict it.
+
+Sure! Here’s a step-by-step guide on how to use some popular Java profiling tools: **VisualVM**, **YourKit**, and **JProfiler**.
+
+### 1. VisualVM
+
+
+- **VisualVM**: You can find it at [visualvm.github.io](https://visualvm.github.io). This site provides information about the tool, including download links and documentation.
+
+Upgrading Java VisualVM
+VisualVM was previously distributed in Oracle JDK 6~8 as Java VisualVM. It has been discontinued in Oracle JDK 9. The latest Oracle JDK 8 updates contain Java VisualVM based on VisualVM 1.3.9 released on October 04, 2016.
+
+To get the latest features, improvements and security & bug fixes, we recommend upgrading to the most recent VisualVM version distributed as a standalone tool at GitHub.
+
+Use standalone VisualVM
+Standalone VisualVM provides the latest features and bugfixes in a small .zip archive or .dmg application bundle. The tool can run using various JDK distributions and Java versions.
+
+To start using the standalone VisualVM tool, download the latest version from the Download page and run visualvm\bin\visualvm.exe on Windows or visualvm/bin/visualvm on Linux and macOS.
+
+The JDK to run VisualVM can be customized either using visualvm --jdkhome <JDK_HOME> or by setting the visualvm_jdkhome parameter in visualvm\etc\visualvm.conf or visualvm/etc/visualvm.conf config file.
+
+
+**Installation:**
+1. **Download VisualVM**: Go to [VisualVM's website](https://visualvm.github.io/) and download the latest version.
+2. **Install**: Extract the downloaded zip file to a directory of your choice.
+
+**Profiling a Java Application:**
+1. **Launch VisualVM**: Run `visualvm` from the `bin` directory.
+2. **Start Your Java Application**: Ensure your application is running. You may need to add JVM options for profiling:
+   - Add `-Dcom.sun.management.jmxremote` to your Java command line.
+3. **Connect to the Application**:
+   - In VisualVM, your application should appear in the left panel under "Local" or "Remote".
+   - Double-click your application to open its monitoring dashboard.
+4. **Monitor Memory and CPU Usage**:
+   - Go to the "Monitor" tab to view real-time CPU and memory usage.
+5. **Perform Profiling**:
+   - Navigate to the "Profiler" tab.
+   - Click "CPU" to start CPU profiling or "Memory" to start memory profiling.
+   - Execute the parts of your application you want to analyze.
+   - Click "Stop Profiling" when done, and analyze the results.
+6. **View Results**:
+   - Check the call tree and method usage to identify bottlenecks or memory issues.
+
+### 2. YourKit
+
+- **YourKit**: The official website is [www.yourkit.com](https://www.yourkit.com). It offers details about the features, documentation, and trial versions of YourKit Java Profiler.
+
+**Installation:**
+1. **Download YourKit**: Visit [YourKit's website](https://www.yourkit.com/) and download the trial version.
+2. **Install**: Follow the installation instructions provided.
+
+**Profiling a Java Application:**
+1. **Start Your Java Application**: Add YourKit agent to your application by modifying your Java command:
+   ```bash
+   java -agentpath:/path/to/yourkit/lib/yjpagent.so=port=10001 -jar your-application.jar
+   ```
+2. **Launch YourKit**: Start YourKit by executing the `YourKit` application.
+3. **Connect to the Application**:
+   - In YourKit, your application should appear in the "Applications" list.
+   - Select your application to start profiling.
+4. **Profiling CPU and Memory**:
+   - Click on the "CPU" tab to analyze CPU usage.
+   - Use the "Memory" tab to track memory allocation.
+5. **Perform Profiling**:
+   - Start CPU or memory profiling as needed.
+   - Perform actions in your application you want to analyze.
+6. **Analyze Results**:
+   - Review the captured data to identify bottlenecks or excessive memory usage.
+
+### 3. JProfiler
+
+- **JProfiler**:You can find JProfiler's website at [www.ej-technologies.com/products/jprofiler/overview.html](https://www.ej-technologies.com/products/jprofiler/overview.html). There, you can explore features, documentation, and download options for JProfiler, which is a powerful tool for profiling Java applications. If you need specific information or help with JProfiler, let me know!
+
+**Installation:**
+1. **Download JProfiler**: Go to [JProfiler's website](https://www.ej-technologies.com/products/jprofiler/overview.html) and download it.
+2. **Install**: Follow the provided instructions to complete the installation.
+
+**Profiling a Java Application:**
+1. **Start Your Java Application**: Use the JProfiler agent to profile your application by modifying your Java command:
+   ```bash
+   java -agentpath:/path/to/jprofiler/lib/jprofilertagent.so=port=8849 -jar your-application.jar
+   ```
+2. **Launch JProfiler**: Start the JProfiler application.
+3. **Connect to the Application**:
+   - In JProfiler, choose "Session" and then "New Session".
+   - Select "Attach to a running JVM" and choose your application from the list.
+4. **Monitor Performance**:
+   - Use the "CPU" tab to track method calls and performance.
+   - Navigate to the "Memory" tab to analyze memory usage and leaks.
+5. **Perform Profiling**:
+   - Start profiling for CPU or memory.
+   - Execute the operations in your application you want to analyze.
+6. **Analyze Results**:
+   - Use the profiling data to identify high CPU usage methods, memory leaks, and more.
+
+### Conclusion
+
+Each of these profiling tools has its strengths and unique features. By following these steps, you can effectively profile your Java application and identify performance bottlenecks. Make sure to consult the official documentation of each tool for more advanced features and best practices! If you have further questions or need clarification on specific steps, feel free to ask!
+
+Core Java Interview Questions:
+
+### Interfaces in Java
+
+**Interface**:
+- A reference type in Java, similar to a class, that can contain only constants, method signatures, default methods, static methods, and nested types.
+- Interfaces cannot have instance fields or constructors.
+
+```java
+public interface Animal {
+    void makeSound();
+}
+```
+
+### Functional Interfaces
+
+**Functional Interface**:
+- An interface with exactly one abstract method, which can be used as the assignment target for a lambda expression or method reference.
+- It can have multiple default or static methods.
+
+```java
+@FunctionalInterface
+public interface Greeting {
+    void sayHello();
+
+    default void sayGoodbye() {
+        System.out.println("Goodbye!");
+    }
+}
+```
+
+### Abstract Classes
+
+**Abstract Class**:
+- A class that cannot be instantiated on its own and can have both abstract methods (without a body) and concrete methods (with a body).
+- It can have instance fields and constructors.
+
+```java
+public abstract class Animal {
+    abstract void makeSound();
+
+    public void sleep() {
+        System.out.println("Sleeping...");
+    }
+}
+```
+
+### Diamond Problem
+
+**Diamond Problem**:
+- Occurs when a class inherits from two classes (both of which implement the same interface), leading to ambiguity.
+- Java resolves this through single inheritance for classes, meaning a class can only extend one other class. However, it can implement multiple interfaces.
+
+**Resolution**:
+- If both parent classes provide an implementation of a method, the child class must override the method to resolve the ambiguity.
+
+### Example
+
+```java
+interface A {
+    void display();
+}
+
+interface B {
+    void display();
+}
+
+class C implements A, B {
+    @Override
+    public void display() {
+        System.out.println("Display from class C");
+    }
+}
+```
+
+### Race Condition
+
+**Race Condition**:
+- Occurs when two or more threads access shared data and try to change it simultaneously, leading to unpredictable results.
+
+**Example**:
+```java
+class Counter {
+    private int count = 0;
+
+    public void increment() {
+        count++;
+    }
+
+    public int getCount() {
+        return count;
+    }
+}
+```
+
+**Resolution**:
+- Use synchronization mechanisms to control access to shared resources.
+
+```java
+class SynchronizedCounter {
+    private int count = 0;
+
+    public synchronized void increment() {
+        count++;
+    }
+
+    public synchronized int getCount() {
+        return count;
+    }
+}
+```
+
+### Deadlock
+
+**Deadlock**:
+- A situation where two or more threads are blocked forever, waiting for each other to release resources.
+
+**Example**:
+```java
+class A {
+    synchronized void methodA(B b) {
+        b.last();
+    }
+
+    synchronized void last() {}
+}
+
+class B {
+    synchronized void methodB(A a) {
+        a.last();
+    }
+
+    synchronized void last() {}
+}
+```
+
+**Resolution**:
+- Avoid circular dependencies by locking resources in a consistent order or using a timeout mechanism.
+
+### Memory Leaks in Java
+
+**Memory Leak**:
+- Occurs when objects are no longer used but still referenced, preventing garbage collection.
+
+**Common Causes**:
+- Unintentional references in collections.
+- Static fields holding references to objects.
+- Listeners and callbacks not being removed.
+
+**Resolution**:
+- Use weak references (`WeakReference`), remove unused references, and regularly profile the application for memory usage.
+
+### Memory Leaks in Microservices
+
+**Causes**:
+- Resource mismanagement (like database connections, file handles).
+- Improperly managed caches that hold onto data longer than necessary.
+
+**Resolution**:
+- Implement proper resource management, use connection pooling, and regularly monitor and clean caches.
+
+### Summary
+
+1. **Interfaces vs. Abstract Classes**: Interfaces allow multiple inheritance for behavior, while abstract classes provide a common base with shared code.
+2. **Diamond Problem**: Resolved by overriding methods in the implementing class.
+3. **Race Conditions**: Managed using synchronization.
+4. **Deadlock**: Prevented by avoiding circular wait conditions.
+5. **Memory Leaks**: Handled by eliminating unnecessary references and using weak references. In microservices, careful resource management is crucial to avoid leaks.
+
+This combination of concepts is essential for writing robust, maintainable, and efficient Java applications and microservices.
+
+### Functional Interfaces in Java
+
+A **functional interface** is an interface that contains exactly one abstract method, which can be implemented using a lambda expression or method reference. Java 8 introduced the ability to include **default** and **static** methods in interfaces.
+
+### Default and Static Methods
+
+1. **Default Methods**: 
+   - These methods can provide a default implementation in the interface itself. They allow you to add new methods to interfaces without breaking existing implementations.
+
+   ```java
+   @FunctionalInterface
+   public interface MyFunctionalInterface {
+       void performAction();
+
+       default void defaultMethod() {
+           System.out.println("Default method in MyFunctionalInterface");
+       }
+   }
+   ```
+
+2. **Static Methods**: 
+   - These methods belong to the interface itself rather than any instance. They can be called without creating an instance of the interface.
+
+   ```java
+   public interface MyStaticInterface {
+       static void staticMethod() {
+           System.out.println("Static method in MyStaticInterface");
+       }
+   }
+   ```
+
+### Ambiguity Example with Default Methods
+
+Ambiguity arises when a class implements two interfaces that have the same default method. Here’s how this can occur:
+
+#### Example
+
+```java
+interface InterfaceA {
+    default void show() {
+        System.out.println("Show from InterfaceA");
+    }
+}
+
+interface InterfaceB {
+    default void show() {
+        System.out.println("Show from InterfaceB");
+    }
+}
+
+class MyClass implements InterfaceA, InterfaceB {
+    // Ambiguity: show() is inherited from both interfaces
+}
+```
+
+In the above example, `MyClass` inherits the `show()` method from both `InterfaceA` and `InterfaceB`, causing ambiguity.
+
+### Resolution of Ambiguity
+
+To resolve the ambiguity, you must override the conflicting default method in the implementing class:
+
+```java
+class MyClass implements InterfaceA, InterfaceB {
+    @Override
+    public void show() {
+        // You can choose which implementation to call or provide your own
+        InterfaceA.super.show(); // Calls the method from InterfaceA
+        // or
+        InterfaceB.super.show(); // Calls the method from InterfaceB
+        // or provide a completely new implementation
+        System.out.println("Custom show from MyClass");
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        MyClass obj = new MyClass();
+        obj.show(); // Will call the overridden show method
+    }
+}
+```
+
+### Summary
+
+- **Functional Interface**: Contains exactly one abstract method and can have default and static methods.
+- **Default Method Ambiguity**: Occurs when two interfaces with the same default method are implemented.
+- **Resolution**: Override the conflicting method in the implementing class, specifying which default method to call if needed.
+
+This pattern ensures that the implementing class clearly defines its behavior, avoiding ambiguity and potential runtime errors.
+
+In Java, you can have multiple interfaces, each with default methods, and you can implement both interfaces in a single class. When a class implements multiple interfaces that have default methods with the same signature, you might run into conflicts. Here's a guide on how to handle such situations:
+
+### Example Interfaces
+
+Let's define two interfaces, each with a default method:
+
+```java
+interface InterfaceA {
+    default void display() {
+        System.out.println("InterfaceA display");
+    }
+}
+
+interface InterfaceB {
+    default void display() {
+        System.out.println("InterfaceB display");
+    }
+}
+```
+
+### Implementing Both Interfaces
+
+Now, if a class implements both `InterfaceA` and `InterfaceB`, it will need to resolve the conflict between the `display` methods provided by these interfaces:
+
+```java
+public class MyClass implements InterfaceA, InterfaceB {
+    @Override
+    public void display() {
+        // You can choose which default method to use, or provide a new implementation
+        InterfaceA.super.display();  // Calls the default method from InterfaceA
+        // InterfaceB.super.display();  // Uncomment this to call the default method from InterfaceB
+        // Alternatively, provide a completely new implementation
+        System.out.println("MyClass display");
+    }
+
+    public static void main(String[] args) {
+        MyClass obj = new MyClass();
+        obj.display();  // This will call the overridden display method
+    }
+}
+```
+
+### Key Points
+
+1. **Default Method Conflict**: When a class implements multiple interfaces with conflicting default methods, it must override the method to resolve the ambiguity. You cannot directly use both default implementations.
+
+2. **Accessing Default Methods**: Inside the overridden method, you can explicitly call the default methods of the interfaces using the syntax `InterfaceName.super.methodName()`. This allows you to selectively use the default implementations from one or both interfaces.
+
+3. **Providing a New Implementation**: Instead of calling the default methods from the interfaces, you can also provide a completely new implementation in the class.
+
+### Running the Example
+
+If you run the `main` method in `MyClass`, the output will depend on how you resolve the conflict in the `display` method:
+
+- If you call `InterfaceA.super.display()`, you'll see "InterfaceA display".
+- If you call `InterfaceB.super.display()`, you'll see "InterfaceB display".
+- If you provide a new implementation, you'll see "MyClass display".
+
+This way, you have the flexibility to manage multiple interface implementations and their default methods effectively.
+
+In Java, functional interfaces are interfaces with a single abstract method. They are used primarily for lambda expressions and method references. Although functional interfaces are primarily defined by their single abstract method, they can also contain default and static methods. Here’s how to work with default and static methods in functional interfaces and what they’re used for in real-time scenarios.
+
+### Example of Functional Interfaces with Default Methods
+
+Let's say we have two functional interfaces with default methods:
+
+```java
+@FunctionalInterface
+interface FunctionalA {
+    void abstractMethod();  // Single abstract method
+
+    default void defaultMethod() {
+        System.out.println("FunctionalA defaultMethod");
+    }
+
+    static void staticMethod() {
+        System.out.println("FunctionalA staticMethod");
+    }
+}
+
+@FunctionalInterface
+interface FunctionalB {
+    void abstractMethod();  // Single abstract method
+
+    default void defaultMethod() {
+        System.out.println("FunctionalB defaultMethod");
+    }
+
+    static void staticMethod() {
+        System.out.println("FunctionalB staticMethod");
+    }
+}
+```
+
+### Implementing Both Interfaces
+
+When a class implements both interfaces, it must handle the potential conflict between the default methods of the interfaces:
+
+```java
+public class MyClass implements FunctionalA, FunctionalB {
+    @Override
+    public void abstractMethod() {
+        System.out.println("MyClass abstractMethod");
+    }
+
+    @Override
+    public void defaultMethod() {
+        FunctionalA.super.defaultMethod();  // Calls the default method from FunctionalA
+        FunctionalB.super.defaultMethod();  // Calls the default method from FunctionalB
+    }
+
+    public static void main(String[] args) {
+        MyClass obj = new MyClass();
+        obj.abstractMethod();  // Calls the overridden abstract method
+        obj.defaultMethod();   // Calls the overridden default method
+        
+        // Accessing static methods of the interfaces
+        FunctionalA.staticMethod();  // Calls static method from FunctionalA
+        FunctionalB.staticMethod();  // Calls static method from FunctionalB
+    }
+}
+```
+
+### Explanation of Default and Static Methods
+
+**Default Methods:**
+
+- **Purpose:** Default methods allow you to add new methods to an interface without breaking the classes that already implement the interface. They provide a way to extend the functionality of interfaces while preserving backward compatibility.
+  
+- **Use Case:** Default methods are useful when you want to provide a common implementation that can be shared across multiple implementations but still allow implementing classes to override it if needed. For example, you might have a `Printable` interface with a default `print` method that provides a basic implementation, but implementing classes could provide more specific implementations if required.
+
+**Static Methods:**
+
+- **Purpose:** Static methods in interfaces are associated with the interface itself, not with instances of the interface. They cannot be overridden by implementing classes and are called using the interface name.
+
+- **Use Case:** Static methods can be used for utility functions that are related to the interface but do not operate on the instance data. For instance, if you have a `MathOperations` interface, you might include static methods for common mathematical operations like `add` or `subtract` that can be used independently of any implementation.
+
+### Real-Time Scenarios
+
+1. **Default Methods:**
+   - **Legacy Code:** If you are working with an older interface in a library that many classes implement, adding a default method can be a way to introduce new functionality without forcing all existing implementations to change.
+   - **Common Behavior:** In a user interface library, a `Drawable` interface might have a default `draw` method that provides a basic rendering logic, but specific UI components can override it to provide custom drawing behavior.
+
+2. **Static Methods:**
+   - **Utility Functions:** Interfaces that define utility functions or constants can benefit from static methods. For example, an `HttpUtils` interface might include static methods for common HTTP operations like building URLs or parsing responses.
+   - **Factory Methods:** You might use static methods in interfaces to provide factory methods for creating instances of implementing classes. This is often seen in design patterns like the Factory Method or Singleton.
+
+By understanding how to use default and static methods in functional interfaces, you can leverage the flexibility of Java interfaces while maintaining clean and effective code architecture.
+
