@@ -1136,6 +1136,44 @@ Java provides several garbage collection (GC) algorithms to manage memory automa
 
 Choosing the right garbage collector depends on the specific requirements of your application, such as throughput, latency, and memory usage patterns.
 
+A memory leak in Java occurs when the Java Virtual Machine (JVM) retains references to objects that are no longer needed, preventing the garbage collector from reclaiming their memory. This can lead to increased memory usage and ultimately cause an application to run out of memory.
+
+### Causes of Memory Leaks in Java
+
+1. **Static Fields**: Objects held in static fields are not eligible for garbage collection until the class is unloaded, which typically happens only when the application is terminated.
+
+2. **Listener/Callback References**: If an object registers itself as a listener to another object but does not unregister when it is no longer needed, it can lead to memory retention.
+
+3. **Collection Classes**: Holding references in collection classes (e.g., `List`, `Map`) without clearing them can cause leaks, especially in long-lived applications.
+
+4. **ThreadLocal Variables**: Misuse of `ThreadLocal` can lead to memory leaks, particularly in environments with thread pools, as the references can persist beyond the lifecycle of a thread.
+
+5. **Inner Classes**: Non-static inner classes hold an implicit reference to their enclosing class. If the inner class instance outlives the enclosing class, it can prevent garbage collection.
+
+### Prevention Strategies
+
+1. **Nullify References**: Set references to `null` when they are no longer needed, especially in long-lived objects.
+
+2. **Weak References**: Use `WeakReference` or `SoftReference` for caches or listeners that should be cleared when memory is needed.
+
+3. **Unregister Listeners**: Always unregister listeners or callbacks when the objects are no longer needed.
+
+4. **Avoid Static References**: Limit the use of static fields to those that need to persist for the application's lifetime.
+
+5. **Use Profiling Tools**: Utilize memory profiling tools (like VisualVM, YourKit, or Eclipse MAT) to identify and diagnose memory leaks.
+
+6. **Review Data Structures**: Regularly review and clear collections to ensure they do not hold onto unnecessary references.
+
+7. **Limit Inner Class Use**: Consider using static inner classes or standalone classes to avoid unintended references to the enclosing class.
+
+8. **Be Cautious with ThreadLocal**: Use `ThreadLocal` judiciously and ensure values are removed when no longer needed.
+
+### Conclusion
+
+By being mindful of object references, employing the right patterns, and regularly profiling your application, you can effectively prevent memory leaks and maintain optimal memory management in your Java applications.
+
+## ACID properties
+
 ACID properties are a set of principles that ensure reliable processing of database transactions. ACID stands for **Atomicity, Consistency, Isolation, and Durability**. Here’s a breakdown of each property:
 
 ### 1. Atomicity
@@ -1189,6 +1227,8 @@ ACID properties are a set of principles that ensure reliable processing of datab
 
 ### Summary
 The ACID properties are essential for ensuring reliable transaction processing in database systems, providing a framework that maintains data integrity, consistency, and reliability in multi-user environments.
+
+## SOLID principles
 
 The SOLID principles are a set of design principles aimed at making software designs more understandable, flexible, and maintainable. The acronym SOLID stands for five key principles:
 
