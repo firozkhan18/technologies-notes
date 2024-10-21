@@ -1747,6 +1747,7 @@ These patterns enhance the reliability and stability of microservices and distri
 
 Microservice design patterns provide essential strategies for managing complexity in distributed systems. The **Sidecar pattern**, in particular, allows for the separation of concerns by offloading cross-cutting functionalities, which can enhance maintainability and scalability in Spring Boot microservices.
 
+## Overview of `Hashtable` & `ConcurrentHashMap`
 
 Here’s a detailed overview of `Hashtable`, `ConcurrentHashMap`, and hashing itself, along with a Mermaid diagram to visualize their structures.
 
@@ -1847,8 +1848,6 @@ graph TD
 - **Hashing** is a critical mechanism that enables fast data retrieval by converting keys into hash codes, which dictate their storage locations.
 - Both `Hashtable` and `ConcurrentHashMap` leverage this concept but differ in their synchronization and collision resolution methods, with `ConcurrentHashMap` designed for better concurrency in multi-threaded environments.
 
-- Thanks for your patience! Let’s simplify the diagram without using unsupported comments or annotations. Here’s a revised version of the Mermaid diagram that clearly represents the internal structure of a `Hashtable` and `ConcurrentHashMap` without the use of comments.
-
 ### Revised Mermaid Diagram
 
 ```mermaid
@@ -1908,6 +1907,7 @@ graph TD
 
 This diagram illustrates how both `Hashtable` and `ConcurrentHashMap` use hashing and handle collisions, without unsupported comments. If you have any further questions or need more modifications, feel free to ask!
 
+### Hashing in `Hashtable &  `ConcurrentHashMap`
 
 Hashing in a `Hashtable` and the concept of buckets in a `ConcurrentHashMap` are fundamental to how these data structures manage their data. Here’s an overview of each:
 
@@ -1944,7 +1944,7 @@ Hashing in a `Hashtable` and the concept of buckets in a `ConcurrentHashMap` are
 
 Both structures use hashing to manage keys efficiently, but `ConcurrentHashMap` is designed for higher concurrency and better performance in multi-threaded applications.
 
-Sure! Here’s a Mermaid diagram that illustrates the concepts of hashing in a `Hashtable` and the bucket structure in a `ConcurrentHashMap`.
+## Concepts of hashing in a `Hashtable` and the bucket structure in a `ConcurrentHashMap`.
 
 ### Mermaid Diagram
 
@@ -1991,7 +1991,7 @@ graph TD
 - The diagram visually represents how both data structures handle hashing and storage of key-value pairs, with emphasis on the differences in their collision resolution and concurrent access mechanisms. 
 - `Hashtable` uses a straightforward approach with linked lists for collisions, while `ConcurrentHashMap` optimizes for concurrency and performance with segmented locking and improved collision handling using trees or linked lists.
 
-Here’s a Mermaid diagram that illustrates the concepts of `HashMap` and `HashSet`, highlighting how they manage data using hashing.
+Concepts of `HashMap` and `HashSet`, highlighting how they manage data using hashing.
 
 ### Mermaid Diagram
 
@@ -2038,7 +2038,6 @@ graph TD
 - **`HashSet`**: A collection that stores unique values (no duplicates) and does not associate values with keys. It also uses hashing and manages collisions similarly to `HashMap`.
 
 This diagram helps illustrate the structural similarities and differences between `HashMap` and `HashSet`, particularly in how they use hashing and handle collisions.
-
 
 ## Ambiguities in Java technologies
 
@@ -2623,7 +2622,8 @@ In Java, there are several ways to create objects. Here are the main methods:
 - **Anonymous classes**: Create instances without a separate class definition.
 
 ---
-In Java, `wait()`, `sleep()`, `join()`, and `yield()` are methods used in multi-threading to manage thread behavior. Here’s a breakdown of each:
+
+## In Java, `wait()`, `sleep()`, `join()`, and `yield()` are methods used in multi-threading to manage thread behavior. Here’s a breakdown of each:
 
 ### 1. `wait()`
 - **Purpose**: Causes the current thread to wait until another thread invokes the `notify()` or `notifyAll()` method on the same object.
@@ -2851,7 +2851,7 @@ have their class invariant established once upon construction, and it never need
 always have “failure atomicity” (a term used by Joshua Bloch) : if an immutable object throws an exception, it’s never left in an undesirable or indeterminate state
 We also saw the benefits which immutable classes bring in an application. As a design best practice, always aim to make your application Java classes to be immutable. In this way, you can always worry less about concurrency related defects in your program.
 
-
+##  `void` and `Void`
 
 In Java, `void` and `Void` are used in different contexts and have distinct meanings. Here’s a breakdown of the differences between them:
 
@@ -3253,6 +3253,148 @@ public class RaceConditionExample {
 - Use synchronization (e.g., `synchronized` keyword) to ensure that only one thread can access the method at a time.
 - Consider using `java.util.concurrent` classes like `AtomicInteger` for thread-safe operations.
 
+### 1. Race Condition
+
+A race condition occurs when two or more threads access shared data and try to change it simultaneously, leading to inconsistent results.
+
+#### Example of Race Condition
+
+```java
+class Counter {
+    private int count = 0;
+
+    public void increment() {
+        count++; // Not thread-safe
+    }
+
+    public int getCount() {
+        return count;
+    }
+}
+
+public class RaceConditionExample {
+    public static void main(String[] args) throws InterruptedException {
+        Counter counter = new Counter();
+        
+        Thread t1 = new Thread(() -> {
+            for (int i = 0; i < 1000; i++) {
+                counter.increment();
+            }
+        });
+        
+        Thread t2 = new Thread(() -> {
+            for (int i = 0; i < 1000; i++) {
+                counter.increment();
+            }
+        });
+        
+        t1.start();
+        t2.start();
+        t1.join();
+        t2.join();
+        
+        System.out.println("Final count: " + counter.getCount());
+    }
+}
+```
+
+**Output**: The final count is often less than 2000 due to the race condition.
+
+#### How to Prevent Race Conditions:
+- **Synchronization**: Use the `synchronized` keyword to control access to shared resources.
+
+```java
+public synchronized void increment() {
+    count++;
+}
+```
+
+- **Atomic Variables**: Use classes from the `java.util.concurrent.atomic` package.
+
+```java
+import java.util.concurrent.atomic.AtomicInteger;
+
+class Counter {
+    private AtomicInteger count = new AtomicInteger(0);
+
+    public void increment() {
+        count.incrementAndGet(); // Thread-safe increment
+    }
+}
+```
+
+---
+### 1. Race Condition
+
+A race condition occurs when two or more threads access shared data and try to change it simultaneously, leading to inconsistent results.
+
+#### Example of Race Condition
+
+```java
+class Counter {
+    private int count = 0;
+
+    public void increment() {
+        count++; // Not thread-safe
+    }
+
+    public int getCount() {
+        return count;
+    }
+}
+
+public class RaceConditionExample {
+    public static void main(String[] args) throws InterruptedException {
+        Counter counter = new Counter();
+        
+        Thread t1 = new Thread(() -> {
+            for (int i = 0; i < 1000; i++) {
+                counter.increment();
+            }
+        });
+        
+        Thread t2 = new Thread(() -> {
+            for (int i = 0; i < 1000; i++) {
+                counter.increment();
+            }
+        });
+        
+        t1.start();
+        t2.start();
+        t1.join();
+        t2.join();
+        
+        System.out.println("Final count: " + counter.getCount());
+    }
+}
+```
+
+**Output**: The final count is often less than 2000 due to the race condition.
+
+#### How to Prevent Race Conditions:
+- **Synchronization**: Use the `synchronized` keyword to control access to shared resources.
+
+```java
+public synchronized void increment() {
+    count++;
+}
+```
+
+- **Atomic Variables**: Use classes from the `java.util.concurrent.atomic` package.
+
+```java
+import java.util.concurrent.atomic.AtomicInteger;
+
+class Counter {
+    private AtomicInteger count = new AtomicInteger(0);
+
+    public void increment() {
+        count.incrementAndGet(); // Thread-safe increment
+    }
+}
+```
+
+---
 ---
 
 ### 3. Deadlock
@@ -3292,6 +3434,108 @@ public class DeadlockExample {
 - Use a timeout when trying to acquire locks.
 - Implement a locking hierarchy (always acquire locks in the same order).
 
+### 2. Deadlock
+
+A deadlock occurs when two or more threads are blocked forever, waiting for each other to release locks.
+
+#### Example of Deadlock
+
+```java
+class Resource {
+    public synchronized void methodA(Resource other) {
+        System.out.println(Thread.currentThread().getName() + " is in methodA");
+        other.methodB();
+    }
+
+    public synchronized void methodB() {
+        System.out.println(Thread.currentThread().getName() + " is in methodB");
+    }
+}
+
+public class DeadlockExample {
+    public static void main(String[] args) {
+        Resource resource1 = new Resource();
+        Resource resource2 = new Resource();
+
+        Thread t1 = new Thread(() -> resource1.methodA(resource2));
+        Thread t2 = new Thread(() -> resource2.methodA(resource1));
+
+        t1.start();
+        t2.start();
+    }
+}
+```
+
+#### How to Prevent Deadlocks:
+- **Avoid Nested Locks**: Do not hold multiple locks at once.
+- **Lock Ordering**: Always acquire locks in a consistent order.
+- **Use Timeout**: Attempt to acquire locks with a timeout.
+
+```java
+public boolean tryLock(Resource other) {
+    try {
+        if (this.lock.tryLock(100, TimeUnit.MILLISECONDS)) {
+            return other.lock.tryLock(100, TimeUnit.MILLISECONDS);
+        }
+    } catch (InterruptedException e) {
+        Thread.currentThread().interrupt();
+    }
+    return false;
+}
+```
+
+---
+### 2. Deadlock
+
+A deadlock occurs when two or more threads are blocked forever, waiting for each other to release locks.
+
+#### Example of Deadlock
+
+```java
+class Resource {
+    public synchronized void methodA(Resource other) {
+        System.out.println(Thread.currentThread().getName() + " is in methodA");
+        other.methodB();
+    }
+
+    public synchronized void methodB() {
+        System.out.println(Thread.currentThread().getName() + " is in methodB");
+    }
+}
+
+public class DeadlockExample {
+    public static void main(String[] args) {
+        Resource resource1 = new Resource();
+        Resource resource2 = new Resource();
+
+        Thread t1 = new Thread(() -> resource1.methodA(resource2));
+        Thread t2 = new Thread(() -> resource2.methodA(resource1));
+
+        t1.start();
+        t2.start();
+    }
+}
+```
+
+#### How to Prevent Deadlocks:
+- **Avoid Nested Locks**: Do not hold multiple locks at once.
+- **Lock Ordering**: Always acquire locks in a consistent order.
+- **Use Timeout**: Attempt to acquire locks with a timeout.
+
+```java
+public boolean tryLock(Resource other) {
+    try {
+        if (this.lock.tryLock(100, TimeUnit.MILLISECONDS)) {
+            return other.lock.tryLock(100, TimeUnit.MILLISECONDS);
+        }
+    } catch (InterruptedException e) {
+        Thread.currentThread().interrupt();
+    }
+    return false;
+}
+```
+
+---
 ---
 
 ### 4. Fail-Fast vs. Fail-Safe
@@ -3370,129 +3614,8 @@ Understanding these concepts is essential for writing robust Java applications, 
 
 Sure! Let’s explore race conditions, deadlocks, and starvation in Java, along with examples and ways to prevent them.
 
-### 1. Race Condition
 
-A race condition occurs when two or more threads access shared data and try to change it simultaneously, leading to inconsistent results.
 
-#### Example of Race Condition
-
-```java
-class Counter {
-    private int count = 0;
-
-    public void increment() {
-        count++; // Not thread-safe
-    }
-
-    public int getCount() {
-        return count;
-    }
-}
-
-public class RaceConditionExample {
-    public static void main(String[] args) throws InterruptedException {
-        Counter counter = new Counter();
-        
-        Thread t1 = new Thread(() -> {
-            for (int i = 0; i < 1000; i++) {
-                counter.increment();
-            }
-        });
-        
-        Thread t2 = new Thread(() -> {
-            for (int i = 0; i < 1000; i++) {
-                counter.increment();
-            }
-        });
-        
-        t1.start();
-        t2.start();
-        t1.join();
-        t2.join();
-        
-        System.out.println("Final count: " + counter.getCount());
-    }
-}
-```
-
-**Output**: The final count is often less than 2000 due to the race condition.
-
-#### How to Prevent Race Conditions:
-- **Synchronization**: Use the `synchronized` keyword to control access to shared resources.
-
-```java
-public synchronized void increment() {
-    count++;
-}
-```
-
-- **Atomic Variables**: Use classes from the `java.util.concurrent.atomic` package.
-
-```java
-import java.util.concurrent.atomic.AtomicInteger;
-
-class Counter {
-    private AtomicInteger count = new AtomicInteger(0);
-
-    public void increment() {
-        count.incrementAndGet(); // Thread-safe increment
-    }
-}
-```
-
----
-
-### 2. Deadlock
-
-A deadlock occurs when two or more threads are blocked forever, waiting for each other to release locks.
-
-#### Example of Deadlock
-
-```java
-class Resource {
-    public synchronized void methodA(Resource other) {
-        System.out.println(Thread.currentThread().getName() + " is in methodA");
-        other.methodB();
-    }
-
-    public synchronized void methodB() {
-        System.out.println(Thread.currentThread().getName() + " is in methodB");
-    }
-}
-
-public class DeadlockExample {
-    public static void main(String[] args) {
-        Resource resource1 = new Resource();
-        Resource resource2 = new Resource();
-
-        Thread t1 = new Thread(() -> resource1.methodA(resource2));
-        Thread t2 = new Thread(() -> resource2.methodA(resource1));
-
-        t1.start();
-        t2.start();
-    }
-}
-```
-
-#### How to Prevent Deadlocks:
-- **Avoid Nested Locks**: Do not hold multiple locks at once.
-- **Lock Ordering**: Always acquire locks in a consistent order.
-- **Use Timeout**: Attempt to acquire locks with a timeout.
-
-```java
-public boolean tryLock(Resource other) {
-    try {
-        if (this.lock.tryLock(100, TimeUnit.MILLISECONDS)) {
-            return other.lock.tryLock(100, TimeUnit.MILLISECONDS);
-        }
-    } catch (InterruptedException e) {
-        Thread.currentThread().interrupt();
-    }
-    return false;
-}
-```
-
----
 
 ### 3. Starvation
 
@@ -3875,129 +3998,9 @@ Understanding these concurrency issues is crucial for building robust multi-thre
 
 Sure! Let’s explore race conditions, deadlocks, and starvation in Java, along with examples and ways to prevent them.
 
-### 1. Race Condition
 
-A race condition occurs when two or more threads access shared data and try to change it simultaneously, leading to inconsistent results.
 
-#### Example of Race Condition
 
-```java
-class Counter {
-    private int count = 0;
-
-    public void increment() {
-        count++; // Not thread-safe
-    }
-
-    public int getCount() {
-        return count;
-    }
-}
-
-public class RaceConditionExample {
-    public static void main(String[] args) throws InterruptedException {
-        Counter counter = new Counter();
-        
-        Thread t1 = new Thread(() -> {
-            for (int i = 0; i < 1000; i++) {
-                counter.increment();
-            }
-        });
-        
-        Thread t2 = new Thread(() -> {
-            for (int i = 0; i < 1000; i++) {
-                counter.increment();
-            }
-        });
-        
-        t1.start();
-        t2.start();
-        t1.join();
-        t2.join();
-        
-        System.out.println("Final count: " + counter.getCount());
-    }
-}
-```
-
-**Output**: The final count is often less than 2000 due to the race condition.
-
-#### How to Prevent Race Conditions:
-- **Synchronization**: Use the `synchronized` keyword to control access to shared resources.
-
-```java
-public synchronized void increment() {
-    count++;
-}
-```
-
-- **Atomic Variables**: Use classes from the `java.util.concurrent.atomic` package.
-
-```java
-import java.util.concurrent.atomic.AtomicInteger;
-
-class Counter {
-    private AtomicInteger count = new AtomicInteger(0);
-
-    public void increment() {
-        count.incrementAndGet(); // Thread-safe increment
-    }
-}
-```
-
----
-
-### 2. Deadlock
-
-A deadlock occurs when two or more threads are blocked forever, waiting for each other to release locks.
-
-#### Example of Deadlock
-
-```java
-class Resource {
-    public synchronized void methodA(Resource other) {
-        System.out.println(Thread.currentThread().getName() + " is in methodA");
-        other.methodB();
-    }
-
-    public synchronized void methodB() {
-        System.out.println(Thread.currentThread().getName() + " is in methodB");
-    }
-}
-
-public class DeadlockExample {
-    public static void main(String[] args) {
-        Resource resource1 = new Resource();
-        Resource resource2 = new Resource();
-
-        Thread t1 = new Thread(() -> resource1.methodA(resource2));
-        Thread t2 = new Thread(() -> resource2.methodA(resource1));
-
-        t1.start();
-        t2.start();
-    }
-}
-```
-
-#### How to Prevent Deadlocks:
-- **Avoid Nested Locks**: Do not hold multiple locks at once.
-- **Lock Ordering**: Always acquire locks in a consistent order.
-- **Use Timeout**: Attempt to acquire locks with a timeout.
-
-```java
-public boolean tryLock(Resource other) {
-    try {
-        if (this.lock.tryLock(100, TimeUnit.MILLISECONDS)) {
-            return other.lock.tryLock(100, TimeUnit.MILLISECONDS);
-        }
-    } catch (InterruptedException e) {
-        Thread.currentThread().interrupt();
-    }
-    return false;
-}
-```
-
----
 
 ### 3. Starvation
 
