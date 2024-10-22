@@ -1,6 +1,3 @@
-# Step-by-step guide to building a microservices.
-
-```markdown
 # 🎯 Key Takeaways for Quick Navigation
 
 - 🚀 **Tutorial on Developing a Spring Boot Application**: Using microservices architecture, covering patterns like service discovery, configuration, and tracing.
@@ -54,7 +51,56 @@
 - 🛠 **Prometheus Configuration**: Configure Prometheus in Docker Compose to scrape metrics from Spring Boot applications.
 - 📊 **Grafana Setup**: Set up Grafana in Docker Compose with user credentials for UI login.
 - 📝 **Prometheus Configuration File**: Create to define scrape intervals and targets.
-```
+
+### Key Takeaways for Developing a Spring Boot Microservices Application
+
+#### Architecture Overview
+- **Microservices Structure**: Application includes product, order, inventory, and notification services.
+- **Data Storage**: 
+  - Product Service: MongoDB
+  - Order Service: MySQL
+- **Communication**: Utilizes both synchronous (HTTP) and asynchronous methods (e.g., message queues).
+
+#### Essential Components
+- **Service Discovery**: Eureka for locating services.
+- **Configuration Management**: Spring Cloud Config Server for externalized configuration.
+- **API Gateway**: Routes requests and manages communication.
+- **Distributed Tracing**: Spring Cloud Sleuth and Zipkin for tracking requests across services.
+
+#### Development Practices
+- **Project Structure**: Organize as a parent Maven project with individual modules for each service.
+- **Layered Architecture**:
+  - **Controller Layer**: Handles HTTP requests.
+  - **Service Layer**: Contains business logic.
+  - **Repository Layer**: Manages database interactions.
+
+#### Testing
+- **Integration Testing**:
+  - Use `@AutoConfigureMockMvc` and `MockMvc` for simulating HTTP requests.
+  - Testcontainers for running tests with disposable instances of external services.
+
+#### Docker and Containerization
+- **Dockerization**: Create Dockerfiles for each service.
+- **Multi-Stage Builds**: Optimize image size and build times.
+- **Jib Plugin**: Build Docker images directly from Java projects without Dockerfile.
+
+#### Deployment
+- **Docker Compose**: Manage multi-container applications, defining services and dependencies.
+- **Volume Management**: Use Docker volumes for data persistence.
+- **Configuration Overrides**: Customize settings in Docker Compose.
+
+#### Security and Monitoring
+- **Authentication**: Use Keycloak for securing microservices.
+- **Monitoring**:
+  - Spring Boot Actuator to expose application metrics.
+  - Prometheus and Grafana for monitoring and visualization.
+
+#### Best Practices
+- **Avoid `ddl-auto` in Production**: Use migration tools like Liquibase or Flyway instead.
+- **Optimize Service Communication**: Collect and batch data to reduce HTTP calls.
+- **Configuration Management**: Ensure properties can be overridden as needed in different environments.
+
+# Step-by-step guide to building a microservices
 
 ### Step 1: Introduction to Microservices
 
