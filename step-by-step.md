@@ -5920,3 +5920,87 @@ class InventoryServiceApplicationTests {
 In this part of the tutorial series, we successfully built the Order and Inventory Services, along with implementing Flyway for database migrations. In the next part, we will focus on applying microservice design patterns to enhance our application.
 
 
+### While connecting local mysql workbench with docker
+
+**failed to connect mysql at 127.0.0.1:3307 with user root authentication plugin "caching_sha2_password" can not be loaded; the specified module could not be found;**
+
+### Solution:
+
+- Create folder structure in microservice-->docker->mysql->init.db
+- run nelow docker-compose.yml file
+  
+To connect your MySQL Workbench to a MySQL instance running in Docker and resolve the **`caching_sha2_password`** authentication plugin issue, follow these steps:
+
+### Step 1: Modify MySQL Configuration
+
+1. **Update `docker-compose.yml`:** Ensure that the MySQL server in your Docker setup uses the `mysql_native_password` authentication plugin. Modify your `docker-compose.yml` file like this:
+
+   ```yaml
+   version: '3.9'
+   services:
+     mysql:
+       image: mysql:8.0.27
+       container_name: mysql-micro
+       ports:
+         - "3307:3306"
+       environment:
+         MYSQL_ROOT_PASSWORD: mysql
+         MYSQL_ROOT_HOST: '%'
+       command: --default-authentication-plugin=mysql_native_password
+       volumes:
+         - ./docker/mysql/data:/var/lib/mysql
+   ```
+
+2. **Recreate the Container:**
+   Run the following commands in your terminal to stop and remove any existing container, then recreate it:
+
+   ```bash
+   docker-compose down -v
+   docker-compose up -d
+   ```
+
+### Step 2: Connect MySQL Workbench
+
+1. **Open MySQL Workbench:**
+   Launch MySQL Workbench.
+
+2. **Create a New Connection:**
+   - Click on the "+" icon next to "MySQL Connections" to create a new connection.
+   - In the connection settings:
+     - **Connection Name:** Any name you prefer.
+     - **Connection Method:** Standard (TCP/IP).
+     - **Hostname:** `127.0.0.1`.
+     - **Port:** `3307`.
+     - **Username:** `root`.
+     - **Password:** Click "Store in Vault..." and enter `mysql`.
+
+3. **Test Connection:**
+   - Click on "Test Connection." If everything is set up correctly, you should see a success message.
+
+### Step 3: Verify Authentication Method
+
+If you still face issues, log into your MySQL container and check the authentication method used by the root user:
+
+1. **Access MySQL Container:**
+
+   ```bash
+   docker exec -it mysql-micro mysql -u root -p
+   ```
+
+2. **Run the following SQL command:**
+
+   ```sql
+   SELECT User, Host, plugin FROM mysql.user WHERE User = 'root';
+   ```
+
+   Make sure that the plugin for `root` is set to `mysql_native_password`. If it's still set to `caching_sha2_password`, run the following command:
+
+   ```sql
+   ALTER USER 'root'@'%' IDENTIFIED WITH mysql_native_password BY 'mysql';
+   FLUSH PRIVILEGES;
+   ```
+
+### Additional Tips
+
+- Ensure that no other MySQL services are running on port 3307 or 3306 that might conflict with your Docker MySQL instance.
+- If using a firewall or security software, ensure that it allows connections to port 3307.
