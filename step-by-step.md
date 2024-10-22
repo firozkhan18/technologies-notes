@@ -1426,7 +1426,7 @@ Order Service Starter Configuratione
 In Order Service, we are going to use MySQL Database, so let’s go ahead and download MySQL using docker-compose.
 
 Create a docker-compose.yml file with the below contents:
-
+```yaml
 version: '4'
 services:
   mysql:
@@ -1439,35 +1439,36 @@ services:
     volumes:
       - ./mysql/init.sql:/docker-entrypoint-initdb.d/init.sql
       - ./docker/mysql/data:/var/lib/mysql
-
+```
 We need to create the database schema during the start-up of our MySQL Database, for that we added the line ./mysql/init.sql:/docker-entrypoint-initdb.d/init.sql which asks docker to copy the SQL file from the folder 'mysql' into the docker-entrypoint-initdb.d location and executes the SQL file.
 
 If we don't add the above step, then we need to manually create the database.
 
 Now let's configure our project to use MySQL by adding below properties in the application.properties file:
-
+```
 spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
 spring.datasource.url=jdbc:mysql://localhost:3306/order_service
 spring.datasource.username=root
 spring.datasource.password=mysql
 spring.jpa.hibernate.ddl-auto=none
 server.port=8081
-
+```
 We are using the spring.jpa.hibernate.ddl-auto property as none because we don't want Hibernate to create the database tables and manage migrations, we will be handling that using the Flyway library.
 
 Notice that we are running the order-service application on port 8081, as product-service is already running on port 8080
 
 Database Migrations with Flyway
 As mentioned before, we will be using Flyway to execute database migrations, the necessary dependencies for it are already added in the generated project. Here are the dependencies for Flyway:
-
-        <dependency>
-            <groupId>org.flywaydb</groupId>
-            <artifactId>flyway-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.flywaydb</groupId>
-            <artifactId>flyway-mysql</artifactId>
-        </dependency>
+```pom
+<dependency>
+    <groupId>org.flywaydb</groupId>
+    <artifactId>flyway-core</artifactId>
+</dependency>
+<dependency>
+    <groupId>org.flywaydb</groupId>
+    <artifactId>flyway-mysql</artifactId>
+</dependency>
+```
 By using Flyway, we can provide the necessary SQL scripts that will be executed whenever we need to change our database schema. We need to provide these scripts under the src/main/resources/db/migration folder.
 
 Flyway will look for the scripts under this particular folder, and Flyway will also follow a particular naming convention to identify the SQL scripts, we need to name the files like below:
@@ -1481,7 +1482,7 @@ Note that the number, inside the name of the SQL file, needs to be incremented f
 Let's create the below file to create the Order table
 
 V1__init.sql
-
+```sql
 CREATE TABLE `t_orders`
 (
     `id`          bigint(20) NOT NULL AUTO_INCREMENT,
@@ -1491,12 +1492,13 @@ CREATE TABLE `t_orders`
     `quantity` int(11),
     PRIMARY KEY (`id`)
 );
+```
 Before running the migrations, let's create the necessary Model classes and the Submit Order Endpoint.
 
 NOTE: I simplified some logic and the table structure recently. I removed the OrderLineItems table and the related logic to make the who logic simple. So you may find some discrepancies compared to the first version of the article which contains references to the OrderLineItems table.
 
-Order.java
-
+### Order.java
+```java
 package com.programmingtechie.orderservice.model;
 
 import jakarta.persistence.*;
@@ -1522,9 +1524,9 @@ public class Order {
     private BigDecimal price;
     private Integer quantity;
 }
-
-OrderRepository.java
-
+```
+### OrderRepository.java
+```java
 package com.programmingtechie.orderservice.repository;
 
 import com.programmingtechie.orderservice.model.Order;
@@ -1532,8 +1534,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface OrderRepository extends JpaRepository<Order, Long> {
 }
-OrderService.java
-
+```
+### OrderService.java
+```java
 package com.programmingtechie.orderservice.service;
 
 import com.programmingtechie.orderservice.dto.OrderRequest;
@@ -1566,9 +1569,9 @@ public class OrderService {
         return order;
     }
 }
-
-OrderController.java
-
+```
+### OrderController.java
+```java
 package com.programmingtechie.orderservice.controller;
 
 import com.programmingtechie.orderservice.dto.OrderRequest;
@@ -1591,9 +1594,9 @@ public class OrderController {
         return "Order Placed Successfully";
     }
 }
-
-OrderRequest.java
-
+```
+### OrderRequest.java
+```java
 package com.programmingtechie.orderservice.dto;
 
 
@@ -1601,7 +1604,7 @@ import java.math.BigDecimal;
 
 public record OrderRequest(Long id, String skuCode, BigDecimal price, Integer quantity) {
 }
-
+```
 Testing the Application through Postman
 Now Let's test our endpoints using Postman, before that let's start our application by running the OrderServiceApplication.java class
 
@@ -1614,8 +1617,8 @@ The request should be successful with HTTP Status 201 Created and the response b
 Writing Integration Tests for Order Service
 Let's write the integration tests also for the OrderService.
 
-OrderServiceApplicationTests.java
-
+### OrderServiceApplicationTests.java
+```java
 package com.programmingtechie.orderservice;
 
 import io.restassured.RestAssured;
@@ -1672,22 +1675,16 @@ class OrderServiceApplicationTests {
         assertThat(responseBodyString, Matchers.is("Order Placed Successfully"));
     }
 }
-
-Creating Third Microservice - Inventory Service
+```
+## Creating Third Microservice - Inventory Service
 Now let's create our 3rd microservice the Inventory Service. Go to start.spring.io and select the below dependencies:
 
 Spring Web
-
 Spring Data JPA
-
 Lombok
-
 Flyway
-
 MySQL JDBC Driver
-
 Test Containers
-
 Java 21 and Maven as Build tool
 
 The Inventory Service exposes only 1 endpoint, similar to the Order Service, here is a brief overview of the endpoint:
@@ -1699,20 +1696,21 @@ REST Operations for Inventory Service
 As we are using MySQL Database also for the inventory service, we need to first update the mysql/init.sql file with the SQL commands to create the inventory database.
 
 mysql/init.sql
-
+```sql
 CREATE DATABASE IF NOT EXISTS order_service;
 CREATE DATABASE IF NOT EXISTS inventory_service;
+```
 Now let's configure the application.properties file with the relevant Spring Data JPA and Hibernate properties to interact with MySQL Database:
 
 application.yml
-
+```
 spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
 spring.datasource.url=jdbc:mysql://localhost:3306/inventory_service
 spring.datasource.username=root
 spring.datasource.password=mysql
 spring.jpa.hibernate.ddl-auto=none
 server.port=8082
-
+```
 We are using almost the same configuration as the Order Service, the only difference is we will be running the Inventory Service on port 8082.
 
 Let's also create the Flyway migration scripts under the src/main/resources/db/migration folder, here we will be creating 2 scripts:
@@ -1722,7 +1720,7 @@ Let's also create the Flyway migration scripts under the src/main/resources/db/m
 The V1__init.sql file as the name suggests, creates the t_inventory table
 
 V1__init.sql
-
+```sql
 CREATE TABLE `t_inventory`
 (
     `id`       bigint(20) NOT NULL AUTO_INCREMENT,
@@ -1730,17 +1728,19 @@ CREATE TABLE `t_inventory`
     `quantity` int(11)      DEFAULT NULL,
     PRIMARY KEY (`id`)
 );
+```
 V2__add_inventory.sql
-
+```sql
 insert into t_inventory (quantity, sku_code)
 values (100, 'iphone_15'),
        (100, 'pixel_8'),
        (100, 'galaxy_24'),
        (100, 'oneplus_12');
+```
 Now let's go ahead and create the necessary code for implementing the Get Inventory endpoint.
 
-Inventory.java
-
+### Inventory.java
+```java
 package com.programmingtechie.inventoryservice.model;
 
 import lombok.AllArgsConstructor;
@@ -1774,9 +1774,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface InventoryRepository extends JpaRepository<Inventory, Long> {
     boolean existsBySkuCodeAndQuantityIsGreaterThanEqual(String skuCode, int quantity);
 }
-
-InventoryService.java
-
+```
+### InventoryService.java
+```java
 package com.programmingtechie.inventoryservice.service;
 
 import com.programmingtechie.inventoryservice.repository.InventoryRepository;
@@ -1795,9 +1795,9 @@ public class InventoryService {
         return inventoryRepository.existsBySkuCodeAndQuantityIsGreaterThanEqual(skuCode, quantity);
     }
 }
-
-InventoryController.java
-
+```
+### InventoryController.java
+```java
 package com.programmingtechie.inventoryservice.controller;
 
 import com.programmingtechie.inventoryservice.service.InventoryService;
@@ -1818,7 +1818,7 @@ public class InventoryController {
         return inventoryService.isInStock(skuCode, quantity);
     }
 }
-
+```
 Now let's start the application by running the InventoryServiceApplication.class, and you should see the below logs, indicating that the database migrations are executed successfully.
 
 Successfully applied 2 migrations to schema `inventory_service`, now at version v2 (execution time 00:00.033s)
@@ -1829,7 +1829,7 @@ Testing Inventory Service through Postman
 
 Writing Integration Tests
 Let's write integration tests for the Inventory Service.
-
+```java
 InventoryServiceApplicationTests.java
 
 package com.programmingtechie.inventoryservice;
@@ -1889,14 +1889,14 @@ class InventoryServiceApplicationTests {
     }
 
 }
-
+```
 Conclusion
 That's it for the first part of the Spring Boot Microservices Tutorial Series, we create 3 services for our application, and from the next part, we will be concentrating on applying the Microservice Design Patterns to our application.
 
 In the next part, we will learn about Synchronous Inter-Service Communication Pattern using Spring Cloud OpenFeign. Until then, Happy Coding Techies!
 
 Spring Boot Microservices Tutorial - Part 2
-April 3, 2024
+
 In Part 2 of this Spring Boot Microservices Tutorial series, we will implement Synchronous Communication between our Order Service and Inventory Service using Spring Cloud OpenFeign Library.
 
 Spring Cloud OpenFeign library uses that provides OpenFeign integrations with Spring Boot and Spring Cloud. It provides a declarative REST Client that makes consuming REST Endpoints in our code easy.
