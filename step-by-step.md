@@ -533,4 +533,530 @@ _PROTOCOL_MAP=PLAINTEXT:PLAINTEXT -e KAFKA_LISTENERS=PLAINTEXT://0.0.0.0:9092 -e
 
 You now have a basic microservices architecture with user service, API gateway, service discovery, security, circuit breaking, distributed tracing, event-driven architecture, containerization, and monitoring in place. 
 
-Feel free to expand or customize these components as per your project needs! If you have any specific questions or need further details, let me know!
+# Tutorial: Developing a Spring Boot Application Using Microservices Architecture
+
+This tutorial will guide you through developing a Spring Boot application using a microservices architecture, covering essential components like service discovery, configuration management, and tracing.
+
+## Project Overview
+
+### Services Included
+- **Product Service**: Manages product information using MongoDB.
+- **Order Service**: Handles orders using MySQL.
+- **Inventory Service**: Manages inventory stock levels.
+- **Notification Service**: Sends notifications for events.
+
+### Architecture Components
+- **API Gateway**: Routes requests to various services.
+- **Eureka**: Service discovery for locating services.
+- **Config Server**: Centralized configuration management.
+- **Zipkin**: Distributed tracing for tracking request flow.
+
+## Project Structure
+
+We'll use a Maven multi-module project structure, where each service is a separate module. Here’s a high-level view:
+
+```
+microservices-parent
+│
+├── product-service
+│   └── src/main/java/com/example/product
+│
+├── order-service
+│   └── src/main/java/com/example/order
+│
+├── inventory-service
+│   └── src/main/java/com/example/inventory
+│
+├── notification-service
+│   └── src/main/java/com/example/notification
+│
+└── gateway-service
+    └── src/main/java/com/example/gateway
+```
+
+## Step-by-Step Implementation
+
+### 1. Create the Parent Maven Project
+
+Create a new Maven project with the following `pom.xml`:
+
+```xml
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.example</groupId>
+    <artifactId>microservices-parent</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    <modules>
+        <module>product-service</module>
+        <module>order-service</module>
+        <module>inventory-service</module>
+        <module>notification-service</module>
+        <module>gateway-service</module>
+    </modules>
+</project>
+```
+
+### 2. Create the Product Service
+
+**pom.xml** for `product-service`:
+
+```xml
+<project>
+    <parent>
+        <groupId>com.example</groupId>
+        <artifactId>microservices-parent</artifactId>
+    </parent>
+    <artifactId>product-service</artifactId>
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-mongodb</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+    </dependencies>
+</project>
+```
+
+**Product Model**:
+
+```java
+package com.example.product.model;
+
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+@Document(collection = "products")
+public class Product {
+    @Id
+    private String id;
+    private String name;
+    private double price;
+
+    // Getters and setters
+}
+```
+
+**Product Repository**:
+
+```java
+package com.example.product.repository;
+
+import com.example.product.model.Product;
+import org.springframework.data.mongodb.repository.MongoRepository;
+
+public interface ProductRepository extends MongoRepository<Product, String> {
+}
+```
+
+**Product Controller**:
+
+```java
+package com.example.product.controller;
+
+import com.example.product.model.Product;
+import com.example.product.repository.ProductRepository;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/products")
+public class ProductController {
+    private final ProductRepository productRepository;
+
+    public ProductController(ProductRepository productRepository) {
+        this.productRepository = productRepository;
+    }
+
+    @PostMapping
+    public Product createProduct(@RequestBody Product product) {
+        return productRepository.save(product);
+    }
+
+    @GetMapping
+    public List<Product> getAllProducts() {
+        return productRepository.findAll();
+    }
+}
+```
+
+### 3. Create the Order Service
+
+**pom.xml** for `order-service`:
+
+```xml
+<project>
+    <parent>
+        <groupId>com.example</groupId>
+        <artifactId>microservices-parent</artifactId>
+    </parent>
+    <artifactId>order-service</artifactId>
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+        </dependency>
+    </dependencies>
+</project>
+```
+
+**Order Model**:
+
+```java
+package com.example.order.model;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
+@Entity
+public class Order {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private String productId;
+    private int quantity;
+
+    // Getters and setters
+}
+```
+
+**Order Repository**:
+
+```java
+package com.example.order.repository;
+
+import com.example.order.model.Order;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface OrderRepository extends JpaRepository<Order, Long> {
+}
+```
+
+**Order Controller**:
+
+```java
+package com.example.order.controller;
+
+import com.example.order.model.Order;
+import com.example.order.repository.OrderRepository;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/orders")
+public class OrderController {
+    private final OrderRepository orderRepository;
+
+    public OrderController(OrderRepository orderRepository) {
+        this.orderRepository = orderRepository;
+    }
+
+    @PostMapping
+    public Order createOrder(@RequestBody Order order) {
+        return orderRepository.save(order);
+    }
+
+    @GetMapping
+    public List<Order> getAllOrders() {
+        return orderRepository.findAll();
+    }
+}
+```
+
+### 4. Create the Inventory Service
+
+**pom.xml** for `inventory-service`:
+
+```xml
+<project>
+    <parent>
+        <groupId>com.example</groupId>
+        <artifactId>microservices-parent</artifactId>
+    </parent>
+    <artifactId>inventory-service</artifactId>
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+        </dependency>
+    </dependencies>
+</project>
+```
+
+**Inventory Model**:
+
+```java
+package com.example.inventory.model;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
+@Entity
+public class Inventory {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private String productId;
+    private int stock;
+
+    // Getters and setters
+}
+```
+
+**Inventory Repository**:
+
+```java
+package com.example.inventory.repository;
+
+import com.example.inventory.model.Inventory;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface InventoryRepository extends JpaRepository<Inventory, Long> {
+}
+```
+
+**Inventory Controller**:
+
+```java
+package com.example.inventory.controller;
+
+import com.example.inventory.model.Inventory;
+import com.example.inventory.repository.InventoryRepository;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("/inventory")
+public class InventoryController {
+    private final InventoryRepository inventoryRepository;
+
+    public InventoryController(InventoryRepository inventoryRepository) {
+        this.inventoryRepository = inventoryRepository;
+    }
+
+    @GetMapping("/{productId}")
+    public boolean isInStock(@PathVariable String productId) {
+        Inventory inventory = inventoryRepository.findByProductId(productId);
+        return inventory != null && inventory.getStock() > 0;
+    }
+}
+```
+
+### 5. Create the API Gateway
+
+**pom.xml** for `gateway-service`:
+
+```xml
+<project>
+    <parent>
+        <groupId>com.example</groupId>
+        <artifactId>microservices-parent</artifactId>
+    </parent>
+    <artifactId>gateway-service</artifactId>
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-gateway</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-eureka-client</artifactId>
+        </dependency>
+    </dependencies>
+</project>
+```
+
+**Gateway Configuration**:
+
+```java
+package com.example.gateway;
+
+import org.springframework.cloud.gateway.route.RouteLocator;
+import org.springframework.cloud.gateway.builder.RouteLocatorBuilder;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
+public class GatewayConfig {
+    @Bean
+    public RouteLocator customRouteLocator(RouteLocatorBuilder builder) {
+        return builder.routes()
+                .route("product_service", r -> r.path("/products/**").uri("lb://
+
+product-service"))
+                .route("order_service", r -> r.path("/orders/**").uri("lb://order-service"))
+                .route("inventory_service", r -> r.path("/inventory/**").uri("lb://inventory-service"))
+                .build();
+    }
+}
+```
+
+### 6. Setup Service Discovery with Eureka
+
+**Add Dependencies**:
+
+In each service's `pom.xml`, add:
+
+```xml
+<dependency>
+    <groupId>org.springframework.cloud</groupId>
+    <artifactId>spring-cloud-starter-eureka-server</artifactId>
+</dependency>
+```
+
+**Eureka Server Application**:
+
+```java
+package com.example.eureka;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.netflix.eureka.server.EnableEurekaServer;
+
+@SpringBootApplication
+@EnableEurekaServer
+public class EurekaApplication {
+    public static void main(String[] args) {
+        SpringApplication.run(EurekaApplication.class, args);
+    }
+}
+```
+
+### 7. Configure Docker
+
+**Dockerfile Example for Each Service**:
+
+```dockerfile
+# Dockerfile
+FROM openjdk:11-jre-slim
+VOLUME /tmp
+COPY target/product-service-0.0.1-SNAPSHOT.jar app.jar
+ENTRYPOINT ["java","-jar","/app.jar"]
+```
+
+**docker-compose.yml**:
+
+```yaml
+version: '3.8'
+services:
+  eureka-server:
+    image: eureka-server:latest
+    build: ./eureka-server
+    ports:
+      - "8761:8761"
+
+  product-service:
+    image: product-service:latest
+    build: ./product-service
+    ports:
+      - "8081:8080"
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
+
+  order-service:
+    image: order-service:latest
+    build: ./order-service
+    ports:
+      - "8082:8080"
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
+
+  inventory-service:
+    image: inventory-service:latest
+    build: ./inventory-service
+    ports:
+      - "8083:8080"
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
+
+  gateway-service:
+    image: gateway-service:latest
+    build: ./gateway-service
+    ports:
+      - "8080:8080"
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
+```
+
+### 8. Running the Application
+
+To run your application, navigate to your project root directory and execute:
+
+```bash
+docker-compose up --build
+```
+
+### 9. Testing the Services
+
+You can test the services by accessing the following endpoints:
+
+- **Product Service**: 
+  - `POST /products` to create a product.
+  - `GET /products` to retrieve products.
+
+- **Order Service**:
+  - `POST /orders` to create an order.
+  - `GET /orders` to retrieve orders.
+
+- **Inventory Service**:
+  - `GET /inventory/{productId}` to check stock.
+
+### 10. Integration Tests
+
+For testing, create integration tests using JUnit and Testcontainers.
+
+**Example Test**:
+
+```java
+@SpringBootTest
+@AutoConfigureMockMvc
+class ProductControllerTest {
+    @Autowired
+    private MockMvc mockMvc;
+
+    @Test
+    void testCreateProduct() throws Exception {
+        String json = "{\"name\":\"Test Product\",\"price\":100.0}";
+
+        mockMvc.perform(post("/products")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json))
+                .andExpect(status().isOk());
+    }
+}
+```
+
+### 11. Monitoring with Prometheus and Grafana
+
+Add Spring Boot Actuator to each service for monitoring and configure Prometheus and Grafana in your Docker Compose file.
+
+### 12. Conclusion
+
+You now have a fully functional microservices architecture using Spring Boot with essential services, API gateway, service discovery, and Docker setup. This setup provides a solid foundation for building scalable and maintainable applications. Further enhancements can include adding security with Keycloak, distributed tracing with Zipkin, and implementing database migrations using Liquibase or Flyway.
+
