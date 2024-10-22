@@ -5111,4 +5111,812 @@ Tempo Dashboard
 Conclusion
 Observability plays a vital role in ensuring that our applications are running as expected and provides us insights into the inner state of the application.
 
-You can find the complete source code of this application on Github - https://github.com/SaiUpadhyayula/springboot3-observablity
+```
+# 1
+
+# Spring Boot Microservices Tutorial - Part 1
+
+## Introduction
+In this Spring Boot Microservices Tutorial series, you will learn how to develop applications with Microservices Architecture using Spring Boot and Spring Cloud and deploy them using Docker and Kubernetes.
+
+We will cover several concepts and Microservices Architectural Patterns as part of this tutorial series. Here are the topics we will cover in each part:
+
+- **Part 1:** Building REST-based applications using Spring Boot 3 and following several best practices.
+- **Part 2:** Synchronous Inter-Service Communication Pattern using Spring Cloud Open Feign.
+- **Part 3:** Service Discovery Pattern using Spring Cloud Netflix Eureka.
+- **Part 4:** API Gateway Pattern using Spring Cloud Gateway.
+- **Part 5:** Microservices Security using Keycloak.
+- **Part 6:** Circuit Breaker Pattern using Spring Cloud CircuitBreaker with Resilience4J.
+- **Part 7:** Event Driven Architecture Pattern using Kafka.
+- **Part 8:** Observability Pattern, including Distributed Tracing with Open Telemetry and Grafana Tempo, Log Aggregation with Grafana Loki, and Metrics collection with Prometheus.
+- **Part 9:** Containerizing all applications using Docker and running them with Docker Compose.
+- **Part 10:** Migrating Docker Compose workloads to Kubernetes.
+
+## Application Overview
+We will build a simple e-commerce application where customers can order products. Our application will contain the following services:
+
+- Product Service
+- Order Service
+- Inventory Service
+- Notification Service
+
+To focus on the principles of Spring Cloud and Microservices, we will develop services with essential functionality rather than creating fully-featured e-commerce services.
+
+## Download Source Code
+You can download the source code of this project through GitHub: [spring-boot-microservices](https://github.com/SaiUpadhyayula/spring-boot-microservices/tree/initial-setup)
+
+## Architecture Diagram of the Project
+Here is the architecture diagram of the project we are going to cover in this tutorial series:
+
+![Architecture Diagram for Spring Boot Microservices Project](link_to_your_diagram)
+
+## Creating Our First Microservice: Product Service
+Let's start creating our first microservice (Product Service). As discussed before, we will keep this service simple and only include the most important features.
+
+### Service Operations
+| Operation        | HTTP Method | Service Endpoint      |
+|------------------|-------------|------------------------|
+| CREATE PRODUCT    | POST        | /api/product/          |
+| READ ALL PRODUCTS | GET         | /api/product/          |
+
+### Project Setup
+To create the project, go to [start.spring.io](https://start.spring.io) and configure the following:
+
+#### Dependencies:
+- Lombok
+- Spring Web
+- Test Containers
+- Spring Data MongoDB
+- Java 21
+- Maven as the build tool
+
+We will use MongoDB as the database backing our Product Service.
+
+After adding the necessary configuration, click on the **Generate** button to download the source code. Unzip the source code and open it in your favorite IDE.
+
+Run the following command to build the project:
+
+```bash
+mvn clean verify
+```
+
+The application should build successfully without any errors.
+
+### Download MongoDB using Docker and Docker Compose
+We will use Docker to install the necessary software like databases, message queues, and other required software for this project.
+
+If you don't have Docker installed, you can download it [here](https://docs.docker.com/get-docker/).
+
+Create a file called `docker-compose.yml` in the root folder:
+
+```yaml
+version: '4'
+services:
+  mongo:
+    image: mongo:7.0.5
+    container_name: mongo
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: password
+      MONGO_INITDB_DATABASE: product-service
+    volumes:
+      - ./docker/mongodb/data:/data/db
+```
+
+Configure the MongoDB URI Details in the `application.properties` file:
+
+```properties
+spring.data.mongodb.uri=mongodb://root:password@localhost:27017/product-service?authSource=admin
+```
+
+### Creating the Create and Read Endpoints
+Create a model class for the Products.
+
+**Product.java**
+```java
+package com.programmingtechie.productservice.model;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+import java.math.BigDecimal;
+
+@Document(value = "product")
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+@Data
+public class Product {
+    @Id
+    private String id;
+    private String name;
+    private String description;
+    private BigDecimal price;
+}
+```
+
+Next, create the Spring Data MongoDB interface for the Product class.
+
+**ProductRepository.java**
+```java
+package com.programmingtechie.productservice.repository;
+
+import com.programmingtechie.productservice.model.Product;
+import org.springframework.data.mongodb.repository.MongoRepository;
+
+public interface ProductRepository extends MongoRepository<Product, String> {
+}
+```
+
+Now, create the service class which contains the actual business logic.
+
+**ProductService.java**
+```java
+package com.programmingtechie.productservice.service;
+
+import com.programmingtechie.productservice.dto.ProductRequest;
+import com.programmingtechie.productservice.dto.ProductResponse;
+import com.programmingtechie.productservice.model.Product;
+import com.programmingtechie.productservice.repository.ProductRepository;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Service
+@RequiredArgsConstructor
+@Slf4j
+public class ProductService {
+    private final ProductRepository productRepository;
+
+    public void createProduct(ProductRequest productRequest) {
+        Product product = Product.builder()
+                .name(productRequest.name())
+                .description(productRequest.description())
+                .price(productRequest.price())
+                .build();
+
+        productRepository.save(product);
+        log.info("Product {} is saved", product.getId());
+    }
+
+    public List<ProductResponse> getAllProducts() {
+        List<Product> products = productRepository.findAll();
+        return products.stream().map(this::mapToProductResponse).toList();
+    }
+
+    private ProductResponse mapToProductResponse(Product product) {
+        return new ProductResponse(product.getId(), product.getName(),
+                product.getDescription(), product.getPrice());
+    }
+}
+```
+
+Next, create the Controller class to expose the POST and GET endpoints.
+
+**ProductRestController.java**
+```java
+package com.programmingtechie.productservice.controller;
+
+import com.programmingtechie.productservice.dto.ProductRequest;
+import com.programmingtechie.productservice.dto.ProductResponse;
+import com.programmingtechie.productservice.service.ProductService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/api/product")
+@RequiredArgsConstructor
+public class ProductController {
+    private final ProductService productService;
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public void createProduct(@RequestBody ProductRequest productRequest) {
+        productService.createProduct(productRequest);
+    }
+
+    @GetMapping
+    @ResponseStatus(HttpStatus.OK)
+    public List<ProductResponse> getAllProducts() {
+        return productService.getAllProducts();
+    }
+}
+```
+
+### Product Request and Response DTOs
+Create the DTOs used by the ProductController.
+
+**ProductRequest.java**
+```java
+package com.programmingtechie.productservice.dto;
+
+import java.math.BigDecimal;
+
+public record ProductRequest(String name, String description, BigDecimal price) {}
+```
+
+**ProductResponse.java**
+```java
+package com.programmingtechie.productservice.dto;
+
+import java.math.BigDecimal;
+
+public record ProductResponse(String id, String name, String description, BigDecimal price) {}
+```
+
+### Testing the Product Service APIs
+Start the application and test the two endpoints. 
+
+To create a product, call the URL `http://localhost:8080/api/product` with HTTP Method POST. This should return a status of 201.
+
+To test whether the created product is returned as a response, make a GET call to `http://localhost:8080/api/product`.
+
+### Write Integration Tests for Product Service
+Let's write integration tests for the Create Product and Get Products endpoints using TestContainers for MongoDB.
+
+Add the following dependency to your `pom.xml`:
+
+```xml
+<dependency>
+    <groupId>io.rest-assured</groupId>
+    <artifactId>rest-assured</artifactId>
+    <version>5.3.2</version>
+</dependency>
+```
+
+Create the integration test:
+
+**ProductServiceApplicationTests.java**
+```java
+package com.programmingtechie.productservice;
+
+import com.programmingtechie.productservice.dto.ProductRequest;
+import io.restassured.RestAssured;
+import org.hamcrest.Matchers;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
+import org.testcontainers.containers.MongoDBContainer;
+
+import java.math.BigDecimal;
+
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+class ProductServiceApplicationTests {
+    @ServiceConnection
+    static MongoDBContainer mongoDBContainer = new MongoDBContainer("mongo:7.0.7");
+
+    @LocalServerPort
+    private Integer port;
+
+    @BeforeEach
+    void setup() {
+        RestAssured.baseURI = "http://localhost";
+        RestAssured.port = port;
+    }
+
+    static {
+        mongoDBContainer.start();
+    }
+
+    @Test
+    void shouldCreateProduct() throws Exception {
+        ProductRequest productRequest = getProductRequest();
+
+        RestAssured.given()
+                .contentType("application/json")
+                .body(product
+
+Request)
+                .when()
+                .post("/api/product")
+                .then()
+                .log().all()
+                .statusCode(201)
+                .body("id", Matchers.notNullValue())
+                .body("name", Matchers.equalTo(productRequest.name()))
+                .body("description", Matchers.equalTo(productRequest.description()))
+                .body("price", Matchers.is(productRequest.price().intValueExact()));
+    }
+
+    private ProductRequest getProductRequest() {
+        return new ProductRequest("iPhone 13", "iPhone 13", BigDecimal.valueOf(1200));
+    }
+}
+```
+
+## Create Second Microservice - Order Service
+Now let's create our second microservice, the Order Service. This service will contain only one endpoint to submit an order.
+
+### Service Operations
+| Operation   | HTTP Method | Service Endpoint |
+|-------------|-------------|-------------------|
+| PLACE ORDER | POST        | /api/order        |
+
+### Project Setup
+Create the project by visiting [start.spring.io](https://start.spring.io) with the following dependencies:
+
+- Spring Web
+- Lombok
+- Spring Data JPA
+- MySQL Driver
+- Flyway Migration
+- Testcontainers
+
+We will be using Java 21 and Maven as the build tool.
+
+### Docker Compose for MySQL
+Create a `docker-compose.yml` file with the following contents:
+
+```yaml
+version: '4'
+services:
+  mysql:
+    image: mysql:8.3.0
+    container_name: mysql
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: mysql
+    volumes:
+      - ./mysql/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./docker/mysql/data:/var/lib/mysql
+```
+
+The SQL file (`init.sql`) will create the database schema during the startup of our MySQL database.
+
+### Configure MySQL
+Add the following properties to the `application.properties` file:
+
+```properties
+spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+spring.datasource.url=jdbc:mysql://localhost:3306/order_service
+spring.datasource.username=root
+spring.datasource.password=mysql
+spring.jpa.hibernate.ddl-auto=none
+server.port=8081
+```
+```markdown
+# Spring Boot Microservices Tutorial - Part 2: Order Service, Inventory Service, and Database Migrations
+
+**March 28, 2024**
+
+## Introduction
+In Part 1 of this tutorial series, we built our first microservice, the Product Service. In this part, we will develop the Order Service and Inventory Service, along with implementing database migrations using Flyway.
+
+## Service Overview
+We will create two new microservices:
+- **Order Service:** Handles order placements.
+- **Inventory Service:** Checks product availability.
+
+### Order Service
+#### Service Operations
+| Operation   | HTTP Method | Service Endpoint |
+|-------------|-------------|-------------------|
+| PLACE ORDER | POST        | /api/order        |
+
+#### Project Setup
+Use [start.spring.io](https://start.spring.io) to create the Order Service with the following dependencies:
+- Spring Web
+- Lombok
+- Spring Data JPA
+- MySQL Driver
+- Flyway Migration
+- Test Containers
+
+**Configure `application.properties`:**
+```properties
+spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+spring.datasource.url=jdbc:mysql://localhost:3306/order_service
+spring.datasource.username=root
+spring.datasource.password=mysql
+spring.jpa.hibernate.ddl-auto=none
+server.port=8081
+```
+
+#### Flyway Database Migrations
+Add Flyway dependencies to your `pom.xml`:
+
+```xml
+<dependency>
+    <groupId>org.flywaydb</groupId>
+    <artifactId>flyway-core</artifactId>
+</dependency>
+<dependency>
+    <groupId>org.flywaydb</groupId>
+    <artifactId>flyway-mysql</artifactId>
+</dependency>
+```
+
+Create migration scripts under `src/main/resources/db/migration`:
+
+**V1__init.sql**
+```sql
+CREATE TABLE `t_orders` (
+    `id` bigint(20) NOT NULL AUTO_INCREMENT,
+    `order_number` varchar(255) DEFAULT NULL,
+    `sku_code` varchar(255),
+    `price` decimal(19, 2),
+    `quantity` int(11),
+    PRIMARY KEY (`id`)
+);
+```
+
+#### Implementing the Order Service
+**Order.java**
+```java
+package com.programmingtechie.orderservice.model;
+
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import java.math.BigDecimal;
+
+@Entity
+@Table(name = "t_orders")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+public class Order {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private String orderNumber;
+    private String skuCode;
+    private BigDecimal price;
+    private Integer quantity;
+}
+```
+
+**OrderRepository.java**
+```java
+package com.programmingtechie.orderservice.repository;
+
+import com.programmingtechie.orderservice.model.Order;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface OrderRepository extends JpaRepository<Order, Long> {}
+```
+
+**OrderService.java**
+```java
+package com.programmingtechie.orderservice.service;
+
+import com.programmingtechie.orderservice.dto.OrderRequest;
+import com.programmingtechie.orderservice.model.Order;
+import com.programmingtechie.orderservice.repository.OrderRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.UUID;
+
+@Service
+@RequiredArgsConstructor
+@Transactional
+public class OrderService {
+    private final OrderRepository orderRepository;
+
+    public void placeOrder(OrderRequest orderRequest) {
+        var order = mapToOrder(orderRequest);
+        orderRepository.save(order);
+    }
+
+    private static Order mapToOrder(OrderRequest orderRequest) {
+        Order order = new Order();
+        order.setOrderNumber(UUID.randomUUID().toString());
+        order.setPrice(orderRequest.price());
+        order.setQuantity(orderRequest.quantity());
+        order.setSkuCode(orderRequest.skuCode());
+        return order;
+    }
+}
+```
+
+**OrderController.java**
+```java
+package com.programmingtechie.orderservice.controller;
+
+import com.programmingtechie.orderservice.dto.OrderRequest;
+import com.programmingtechie.orderservice.service.OrderService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("/api/order")
+@RequiredArgsConstructor
+public class OrderController {
+    private final OrderService orderService;
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public String placeOrder(@RequestBody OrderRequest orderRequest) {
+        orderService.placeOrder(orderRequest);
+        return "Order Placed Successfully";
+    }
+}
+```
+
+**OrderRequest.java**
+```java
+package com.programmingtechie.orderservice.dto;
+
+import java.math.BigDecimal;
+
+public record OrderRequest(String skuCode, BigDecimal price, Integer quantity) {}
+```
+
+### Testing the Order Service
+Start the application and use Postman to test the POST request at `http://localhost:8081/api/order` with the following JSON body:
+
+```json
+{
+    "skuCode": "iphone_15",
+    "price": 1000,
+    "quantity": 1
+}
+```
+
+### Writing Integration Tests for Order Service
+**OrderServiceApplicationTests.java**
+```java
+package com.programmingtechie.orderservice;
+
+import io.restassured.RestAssured;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
+import org.testcontainers.containers.MySQLContainer;
+
+import static org.hamcrest.Matchers.is;
+
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+class OrderServiceApplicationTests {
+    @ServiceConnection
+    static MySQLContainer mySQLContainer = new MySQLContainer("mysql:8.3.0");
+    
+    @LocalServerPort
+    private Integer port;
+
+    @BeforeEach
+    void setup() {
+        RestAssured.baseURI = "http://localhost";
+        RestAssured.port = port;
+    }
+
+    static {
+        mySQLContainer.start();
+    }
+
+    @Test
+    void shouldSubmitOrder() {
+        String submitOrderJson = """
+                {
+                     "skuCode": "iphone_15",
+                     "price": 1000,
+                     "quantity": 1
+                }
+                """;
+
+        RestAssured.given()
+                .contentType("application/json")
+                .body(submitOrderJson)
+                .when()
+                .post("/api/order")
+                .then()
+                .log().all()
+                .statusCode(201)
+                .body(is("Order Placed Successfully"));
+    }
+}
+```
+
+---
+
+### Inventory Service
+#### Service Operations
+| Operation   | HTTP Method | Service Endpoint  |
+|-------------|-------------|--------------------|
+| CHECK INVENTORY | GET        | /api/inventory    |
+
+#### Project Setup
+Create the Inventory Service with similar dependencies as before using [start.spring.io](https://start.spring.io). Configure the application to run on port 8082.
+
+**Configure `application.properties`:**
+```properties
+spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+spring.datasource.url=jdbc:mysql://localhost:3306/inventory_service
+spring.datasource.username=root
+spring.datasource.password=mysql
+spring.jpa.hibernate.ddl-auto=none
+server.port=8082
+```
+
+#### Flyway Migration Scripts
+Add migration scripts for the Inventory Service:
+
+**V1__init.sql**
+```sql
+CREATE TABLE `t_inventory` (
+    `id` bigint(20) NOT NULL AUTO_INCREMENT,
+    `sku_code` varchar(255) DEFAULT NULL,
+    `quantity` int(11) DEFAULT NULL,
+    PRIMARY KEY (`id`)
+);
+```
+
+**V2__add_inventory.sql**
+```sql
+INSERT INTO t_inventory (quantity, sku_code) VALUES 
+(100, 'iphone_15'),
+(100, 'pixel_8'),
+(100, 'galaxy_24'),
+(100, 'oneplus_12');
+```
+
+#### Implementing the Inventory Service
+**Inventory.java**
+```java
+package com.programmingtechie.inventoryservice.model;
+
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Entity
+@Table(name = "t_inventory")
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+public class Inventory {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private String skuCode;
+    private Integer quantity;
+}
+```
+
+**InventoryRepository.java**
+```java
+package com.programmingtechie.inventoryservice.repository;
+
+import com.programmingtechie.inventoryservice.model.Inventory;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface InventoryRepository extends JpaRepository<Inventory, Long> {
+    boolean existsBySkuCodeAndQuantityIsGreaterThanEqual(String skuCode, int quantity);
+}
+```
+
+**InventoryService.java**
+```java
+package com.programmingtechie.inventoryservice.service;
+
+import com.programmingtechie.inventoryservice.repository.InventoryRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+@Service
+@RequiredArgsConstructor
+public class InventoryService {
+    private final InventoryRepository inventoryRepository;
+
+    @Transactional(readOnly = true)
+    public boolean isInStock(String skuCode, Integer quantity) {
+        return inventoryRepository.existsBySkuCodeAndQuantityIsGreaterThanEqual(skuCode, quantity);
+    }
+}
+```
+
+**InventoryController.java**
+```java
+package com.programmingtechie.inventoryservice.controller;
+
+import com.programmingtechie.inventoryservice.service.InventoryService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("/api/inventory")
+@RequiredArgsConstructor
+public class InventoryController {
+    private final InventoryService inventoryService;
+
+    @GetMapping
+    @ResponseStatus(HttpStatus.OK)
+    public boolean isInStock(@Request
+
+Param String skuCode, @RequestParam Integer quantity) {
+        return inventoryService.isInStock(skuCode, quantity);
+    }
+}
+```
+
+### Testing the Inventory Service
+Use Postman to test the GET request at `http://localhost:8082/api/inventory?skuCode=iphone_15&quantity=100`.
+
+### Writing Integration Tests for Inventory Service
+**InventoryServiceApplicationTests.java**
+```java
+package com.programmingtechie.inventoryservice;
+
+import io.restassured.RestAssured;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
+import org.testcontainers.containers.MySQLContainer;
+
+import static org.hamcrest.Matchers.is;
+
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+class InventoryServiceApplicationTests {
+    @ServiceConnection
+    static MySQLContainer mySQLContainer = new MySQLContainer("mysql:8.3.0");
+    
+    @LocalServerPort
+    private Integer port;
+
+    @BeforeEach
+    void setup() {
+        RestAssured.baseURI = "http://localhost";
+        RestAssured.port = port;
+    }
+
+    static {
+        mySQLContainer.start();
+    }
+
+    @Test
+    void shouldReadInventory() {
+        var response = RestAssured.given()
+                .when()
+                .get("/api/inventory?skuCode=iphone_15&quantity=1")
+                .then()
+                .log().all()
+                .statusCode(200)
+                .extract().response().as(Boolean.class);
+        assertTrue(response);
+
+        var negativeResponse = RestAssured.given()
+                .when()
+                .get("/api/inventory?skuCode=iphone_15&quantity=1000")
+                .then()
+                .log().all()
+                .statusCode(200)
+                .extract().response().as(Boolean.class);
+        assertFalse(negativeResponse);
+    }
+}
+```
+
+## Conclusion
+In this part of the tutorial series, we successfully built the Order and Inventory Services, along with implementing Flyway for database migrations. In the next part, we will focus on applying microservice design patterns to enhance our application.
+
+
