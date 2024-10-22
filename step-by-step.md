@@ -5927,7 +5927,22 @@ In this part of the tutorial series, we successfully built the Order and Invento
 ### Solution:
 
 - Create folder structure in microservice-->docker->mysql->init.db
-- run nelow docker-compose.yml file
+- run below docker-compose.yml file
+
+**`docker-compose.yml`:**
+
+  version: '3.9'
+services:
+  mysql:
+    image: mysql:8.0.27
+    container_name: mysql-micro
+    ports:
+      - "3307:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: mysql
+    volumes:
+      - ./mysql/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./docker/mysql/data:/var/lib/mysql
   
 To connect your MySQL Workbench to a MySQL instance running in Docker and resolve the **`caching_sha2_password`** authentication plugin issue, follow these steps:
 
