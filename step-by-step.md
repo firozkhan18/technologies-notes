@@ -5930,8 +5930,8 @@ In this part of the tutorial series, we successfully built the Order and Invento
 - run below docker-compose.yml file
 
 **`docker-compose.yml`:**
-
-  version: '3.9'
+```yaml
+version: '3.9'
 services:
   mysql:
     image: mysql:8.0.27
@@ -5943,7 +5943,7 @@ services:
     volumes:
       - ./mysql/init.sql:/docker-entrypoint-initdb.d/init.sql
       - ./docker/mysql/data:/var/lib/mysql
-  
+```
 To connect your MySQL Workbench to a MySQL instance running in Docker and resolve the **`caching_sha2_password`** authentication plugin issue, follow these steps:
 
 ### Step 1: Modify MySQL Configuration
