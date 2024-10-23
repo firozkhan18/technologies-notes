@@ -1727,3 +1727,72 @@ Incorporating these practices can help your organisation stay competitive, adapt
 Please let me know your thoughts on comments
 
 If you're enjoying my content, please consider subscribing on other platforms to stay up-to-date with the latest in cutting-edge learning. You can easily find a link tree in my profile section.
+
+
+What tech stack is commonly used for microservices?
+
+Below you will find a diagram showing the microservice tech stack, both for the development phase and for production.
+
+▶️ 𝐏𝐫𝐞-𝐏𝐫𝐨𝐝𝐮𝐜𝐭𝐢𝐨𝐧
+🔹 Define API - This establishes a contract between frontend and backend. We can use Postman or OpenAPI for this.
+
+🔹 Development - Node.js or react is popular for frontend development, and java/python/go for backend development. Also, we need to change the configurations in the API gateway according to API definitions.
+
+🔹 Continuous Integration - JUnit and Jenkins for automated testing. The code is packaged into a Docker image and deployed as microservices.
+
+▶️ 𝐏𝐫𝐨𝐝𝐮𝐜𝐭𝐢𝐨𝐧
+🔹 NGinx is a common choice for load balancers. Cloudflare provides CDN (Content Delivery Network).
+
+🔹 API Gateway - We can use spring boot for the gateway, and use Eureka/Zookeeper for service discovery.
+
+🔹 The microservices are deployed on clouds. We have options among AWS, Microsoft Azure, or Google GCP.
+
+🔹 Cache and Full-text Search - Redis is a common choice for caching key-value pairs. ElasticSearch is used for full-text search.
+
+🔹 Communications - For services to talk to each other, we can use messaging infra Kafka or RPC.
+
+🔹 Persistence - We can use MySQL or PostgreSQL for a relational database, and Amazon S3 for object store. We can also use Cassandra for the wide-column store if necessary.
+
+🔹 Management & Monitoring - To manage so many microservices, the common Ops tools include Prometheus, Elastic Stack, and Kubernetes.
+
+𝐖𝐡𝐲 𝐓𝐫𝐚𝐝𝐢𝐭𝐢𝐨𝐧𝐚𝐥 𝐃𝐚𝐭𝐚𝐛𝐚𝐬𝐞𝐬 𝐅𝐚𝐥𝐥 𝐒𝐡𝐨𝐫𝐭 𝐚𝐧𝐝 𝐭𝐡𝐞 𝐍𝐞𝐜𝐞𝐬𝐬𝐢𝐭𝐲 𝐨𝐟 𝐍𝐨𝐒𝐐𝐋
+
+Databases have come a long way since the days of simple relational models. In the 1970s, SQL databases were perfect for storing structured data in neat rows and columns. But as the digital world evolved, so did the challenges. 
+
+The explosion of the internet, social media, and e-commerce introduced 𝐦𝐚𝐬𝐬𝐢𝐯𝐞, 𝐝𝐢𝐯𝐞𝐫𝐬𝐞 𝐝𝐚𝐭𝐚—from user interactions to real-time analytics. Traditional SQL systems struggled with this new wave of unstructured and semi-structured data.
+
+Enter 𝐍𝐨𝐒𝐐𝐋 𝐝𝐚𝐭𝐚𝐛𝐚𝐬𝐞𝐬. Unlike rigid relational databases, NoSQL offers flexibility and scalability to handle modern data demands. Each type addresses specific challenges:
+
+↳ 𝐃𝐨𝐜𝐮𝐦𝐞𝐧𝐭 𝐃𝐚𝐭𝐚𝐛𝐚𝐬𝐞𝐬 like MongoDB, excel at storing complex, semi-structured data.
+↳ 𝐊𝐞𝐲-𝐕𝐚𝐥𝐮𝐞 𝐒𝐭𝐨𝐫𝐞𝐬 like Redis provide lightning-fast lookups.
+↳ 𝐆𝐫𝐚𝐩𝐡 𝐃𝐚𝐭𝐚𝐛𝐚𝐬𝐞𝐬 like Neo4j map complex relationships—ideal for social networks.
+↳ 𝐂𝐨𝐥𝐮𝐦𝐧-𝐎𝐫𝐢𝐞𝐧𝐭𝐞𝐝 𝐃𝐚𝐭𝐚𝐛𝐚𝐬𝐞𝐬 like Cassandra optimise large-scale data analytics.
+↳ 𝐓𝐢𝐦𝐞-𝐒𝐞𝐫𝐢𝐞𝐬 𝐃𝐚𝐭𝐚𝐛𝐚𝐬𝐞𝐬 like InfluxDB handle real-time data, which is perfect for IoT and monitoring.
+
+Why did NoSQL thrive? It’s simple: NoSQL databases allow for schema flexibility, horizontal scalability, and real-time processing, making them essential for today’s fast-paced, data-driven world.
+
+While NoSQL didn’t replace SQL, it opened a new chapter in data management. The future of databases is a mix of both, offering tailored solutions to meet the growing complexity of data.
+
+How are you managing your data?
+
+# 𝐌𝐚𝐬𝐭𝐞𝐫𝐢𝐧𝐠 𝐃𝐚𝐭𝐚 𝐒𝐭𝐨𝐫𝐚𝐠𝐞: 9 𝘌𝘴𝘴𝘦𝘯𝘵𝘪𝘢𝘭 𝘗𝘢𝘵𝘵𝘦𝘳𝘯𝘴 𝘧𝘰𝘳 𝘌𝘧𝘧𝘪𝘤𝘪𝘦𝘯𝘵 𝘚𝘺𝘴𝘵𝘦𝘮𝘴
+
+Efficient data storage is crucial for businesses looking to scale, improve performance, and optimise system operations. This infographic highlights 9 𝐤𝐞𝐲 𝐝𝐚𝐭𝐚 𝐬𝐭𝐨𝐫𝐚𝐠𝐞 𝐩𝐚𝐭𝐭𝐞𝐫𝐧𝐬 that can help you manage your data more effectively.
+
++-----------------+
+Don’t forget to:
+♻️ 𝘙𝘦𝘱𝘰𝘴𝘵 if you found this post interesting and helpful.
+💡 𝘍𝘰𝘭𝘭𝘰𝘸 me for more insights and 𝘵𝘪𝘱𝘴 on 𝐃𝐚𝐭𝐚 and 𝐀𝐈.
++-----------------+
+
+↳ 𝐒𝐡𝐚𝐫𝐝𝐢𝐧𝐠: Distributes data across multiple servers to manage growth and reduce server load.
+↳ 𝐏𝐚𝐫𝐭𝐢𝐭𝐢𝐨𝐧𝐢𝐧𝐠: Splits data into smaller, more manageable segments for improved query performance.
+↳ 𝐑𝐞𝐩𝐥𝐢𝐜𝐚𝐭𝐢𝐨𝐧: Creates data copies across servers to enhance availability and fault tolerance.
+↳ 𝐅𝐞𝐝𝐞𝐫𝐚𝐭𝐞𝐝 𝐒𝐭𝐨𝐫𝐚𝐠𝐞: Combines data from multiple databases into a unified view without centralisation.
+↳ 𝐎𝐛𝐣𝐞𝐜𝐭 𝐒𝐭𝐨𝐫𝐚𝐠𝐞: Stores unstructured data like media files with associated metadata for easy retrieval.
+↳ 𝐂𝐨𝐥𝐮𝐦𝐧𝐚𝐫 𝐒𝐭𝐨𝐫𝐚𝐠𝐞: Organises data by columns, boosting analytical capabilities and query speed.
+↳ 𝐓𝐢𝐦𝐞-𝐬𝐞𝐫𝐢𝐞𝐬: Specialises in storing and querying time-based data, which is ideal for monitoring and metrics.
+↳ 𝐆𝐫𝐚𝐩𝐡 𝐒𝐭𝐨𝐫𝐚𝐠𝐞: Focuses on the relationships between data points, supporting complex network analyses.
+↳ 𝐈𝐧-𝐦𝐞𝐦𝐨𝐫𝐲 𝐒𝐭𝐨𝐫𝐚𝐠𝐞: Uses RAM to store data for ultra-fast processing and access.
+
+Each pattern offers specific benefits, depending on the nature of your data and business needs. Understanding these options can help you improve system efficiency and make more informed infrastructure decisions.
