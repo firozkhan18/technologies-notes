@@ -17,3 +17,23 @@ Microservices architecture is a way to build applications using small, independe
 7. **Service Registry and Discovery**: This helps keep track of all available services and allows them to find and connect with each other easily.
 
 Using microservices architecture makes applications more efficient, scalable, and easier to maintain.
+
+## Single Sign-On (SSO) streamlines user authentication across multiple applications. 
+
+### Here's how it works:
+
+1. Central authentication: Users log in once to an SSO server.
+2. Token generation: The server creates an encrypted token upon successful login.
+3. Seamless access: Connected applications use this token to verify user identity.
+
+### Key benefits:
+- Reduced password management
+- Enhanced security through centralized control
+- Faster access to new applications
+- Improved user experience
+
+Popular SSO providers include Okta, OneLogin, and PingIdentity.
+
+Implementing SSO can significantly improve both security and productivity in your organization.
+
+Have you implemented SSO? What challenges or benefits have you encountered?
