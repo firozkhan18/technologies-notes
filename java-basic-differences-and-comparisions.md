@@ -147,7 +147,63 @@ Shallow Copy Vs Deep Copy
 |----------------|----------------------------------------------|-----------------------------------------------|
 | Comparison Type | Reference equality (memory address).         | Logical equality (content of objects).       |
 | Usage           | Used for primitives and object references.   | Used for comparing object content; needs to be overridden in custom classes. |
+In Java, the `hashCode()` and `equals()` methods are used to define the equality of objects and to support the use of objects in hash-based collections, such as `HashMap` and `HashSet`. Here’s a brief overview of each method and how they relate to each other:
 
+### `equals()` Method
+
+- **Purpose**: Determines if two objects are considered equal.
+- **Override**: When overriding this method, you should follow these rules:
+  - It must be reflexive: for any non-null reference value `x`, `x.equals(x)` should return `true`.
+  - It must be symmetric: for any non-null reference values `x` and `y`, `x.equals(y)` should return `true` if and only if `y.equals(x)` returns `true`.
+  - It must be transitive: for any non-null reference values `x`, `y`, and `z`, if `x.equals(y)` returns `true` and `y.equals(z)` returns `true`, then `x.equals(z)` should return `true`.
+  - It must be consistent: multiple invocations of `x.equals(y)` should consistently return `true` or consistently return `false`.
+  - For any non-null reference value `x`, `x.equals(null)` should return `false`.
+
+### `hashCode()` Method
+
+- **Purpose**: Returns an integer representation of an object's memory address or value that is used in hash tables.
+- **Override**: When you override `hashCode()`, you should ensure:
+  - If two objects are equal according to the `equals()` method, then calling `hashCode()` on each of the two objects must produce the same integer result.
+  - It’s not required that if two objects are not equal, their hash codes must be different (but it’s good for performance if they are).
+
+### Implementing Both Methods
+
+Here’s an example of how you might implement both methods in a class:
+
+```java
+public class Person {
+    private String name;
+    private int age;
+
+    public Person(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true; // Check if both references are the same
+        if (obj == null || getClass() != obj.getClass()) return false; // Null check and class check
+        Person person = (Person) obj; // Cast to Person
+        return age == person.age && name.equals(person.name); // Field comparisons
+    }
+
+    @Override
+    public int hashCode() {
+        int result = name.hashCode(); // Use String's hash code
+        result = 31 * result + age; // Combine with age, using a prime number
+        return result;
+    }
+}
+```
+
+### Key Points to Remember
+
+1. Always override both methods together to maintain consistency.
+2. Use `@Override` annotation to avoid errors.
+3. Utilize the fields that determine equality in your `hashCode()` implementation.
+
+By following these principles, you ensure that your objects behave correctly in collections that rely on hashing.
 ## Error Vs Exception			
 			
 Errors Vs Exceptions		
