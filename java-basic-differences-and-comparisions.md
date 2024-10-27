@@ -2101,6 +2101,98 @@ class Car implements Vehicle {
 
 In summary, abstract classes and interfaces serve different purposes in Java. Abstract classes are best used for defining a common base with shared functionality, while interfaces are ideal for specifying behaviors that can be implemented by diverse classes. Understanding these differences helps in designing clean and maintainable code in Java applications.
 
+### Difference Between Regular Interface and Functional Interface
+
+**Regular Interface**:
+- An interface in Java can have multiple abstract methods, which means it can define a contract for classes to implement several behaviors.
+- It can also contain default and static methods starting from Java 8, which provide implementations.
+- Regular interfaces do not have the constraints of having only one abstract method.
+
+**Example of Regular Interface**:
+```java
+interface RegularInterface {
+    void method1();
+    void method2();
+    default void defaultMethod() {
+        System.out.println("Default method");
+    }
+}
+```
+
+**Functional Interface**:
+- A functional interface is an interface that has exactly one abstract method. It can have multiple default and static methods but only one abstract method.
+- Functional interfaces are designed to be implemented using lambda expressions, enabling a functional programming style.
+- They are annotated with `@FunctionalInterface`, which is not mandatory but helps in enforcing the functional nature.
+
+**Example of Functional Interface**:
+```java
+@FunctionalInterface
+interface FunctionalInterface {
+    void singleAbstractMethod();
+    default void defaultMethod() {
+        System.out.println("Default method in functional interface");
+    }
+}
+```
+
+### Diamond Problem
+
+The **diamond problem** occurs in multiple inheritance scenarios, particularly with interfaces in Java. It arises when a class inherits from two interfaces that both contain a method with the same signature. This creates ambiguity about which interface's method implementation should be used.
+
+**Diagram of the Diamond Problem**:
+```
+    Interface A
+       /   \
+      /     \
+ Interface B  Interface C
+      \     /
+       \   /
+       Class D
+```
+
+**Example of the Diamond Problem**:
+```java
+interface A {
+    void show();
+}
+
+interface B extends A {
+    default void show() {
+        System.out.println("Show from B");
+    }
+}
+
+interface C extends A {
+    default void show() {
+        System.out.println("Show from C");
+    }
+}
+
+class D implements B, C {
+    // Must override the show method to resolve ambiguity
+    @Override
+    public void show() {
+        B.super.show(); // or C.super.show();
+    }
+}
+```
+
+### Resolution of the Diamond Problem
+
+In Java, the diamond problem is resolved as follows:
+
+1. **Override the Method**: The implementing class (e.g., `D` in the example) must provide its own implementation of the method. This resolves the ambiguity by explicitly specifying which default method to use.
+
+2. **Use Interface Name**: If the class wants to call a specific interface's default method, it can use the syntax `InterfaceName.super.methodName()` to specify which interface's method to invoke.
+
+### Summary
+
+- **Regular Interface**: Can have multiple abstract methods; not designed for functional programming.
+- **Functional Interface**: Has exactly one abstract method; can be implemented using lambda expressions.
+- **Diamond Problem**: Arises from multiple inheritance of methods with the same signature from different interfaces. It is resolved by overriding the method in the implementing class and specifying which interface's method to use if necessary.
+
+If you have further questions or need more details on any aspect, feel free to ask!
+
 Here’s a representation of JVM memory management using a Mermaid diagram:
 
 ```mermaid
@@ -3473,3 +3565,160 @@ graph TD;
 ### Conclusion
 
 A service bus enhances communication in distributed systems by providing message routing, protocol translation, and other features that promote decoupling and reliability. It plays a crucial role in modern architectures, particularly in microservices and service-oriented designs. If you have further questions or need more detailed examples, feel free to ask!
+
+Java 8 introduced a significant number of enhancements and new features that have had a lasting impact on how Java is used. Here are the key changes in Java 8:
+
+### 1. **Lambda Expressions**
+   - Allow you to express instances of single-method interfaces (functional interfaces) using an expression.
+   - **Example**:
+     ```java
+     List<String> names = Arrays.asList("Alice", "Bob", "Charlie");
+     names.forEach(name -> System.out.println(name));
+     ```
+
+### 2. **Functional Interfaces**
+   - An interface that has exactly one abstract method. Commonly used with lambda expressions.
+   - **Examples**: `Runnable`, `Callable`, `Comparator`, and custom interfaces using `@FunctionalInterface` annotation.
+
+### 3. **Streams API**
+   - Provides a new abstraction to process sequences of elements (e.g., collections) in a functional way. Enables operations like filter, map, and reduce.
+   - **Example**:
+     ```java
+     List<String> names = Arrays.asList("Alice", "Bob", "Charlie");
+     List<String> filtered = names.stream()
+                                   .filter(name -> name.startsWith("A"))
+                                   .collect(Collectors.toList());
+     ```
+
+### 4. **Default Methods**
+   - Allows interfaces to have method implementations. This enables adding new methods to interfaces without breaking existing implementations.
+   - **Example**:
+     ```java
+     interface MyInterface {
+         default void print() {
+             System.out.println("Default implementation");
+         }
+     }
+     ```
+
+### 5. **Optional Class**
+   - A container object which may or may not contain a value. It helps avoid `NullPointerException` and represents optional values.
+   - **Example**:
+     ```java
+     Optional<String> name = Optional.ofNullable(getName());
+     name.ifPresent(System.out::println);
+     ```
+
+### 6. **New Date and Time API**
+   - A comprehensive and improved date and time API (java.time package) that addresses the shortcomings of the old `java.util.Date` and `java.util.Calendar` classes.
+   - **Example**:
+     ```java
+     LocalDate today = LocalDate.now();
+     LocalDate birthday = LocalDate.of(1990, Month.JANUARY, 1);
+     Period age = Period.between(birthday, today);
+     ```
+
+### 7. **Nashorn JavaScript Engine**
+   - A new lightweight JavaScript engine that replaces the older Rhino engine. It allows Java applications to execute JavaScript code.
+
+### 8. **New Functional and Collection Methods**
+   - Additional methods in the `Collection` interface (like `forEach`, `spliterator`, `stream`, `removeIf`) and `Map` interface (like `forEach`, `replaceAll`, `putIfAbsent`, `compute`, `merge`).
+
+### 9. **CompletableFuture**
+   - A new class that provides a more powerful and flexible way to handle asynchronous programming and concurrency.
+   - **Example**:
+     ```java
+     CompletableFuture.supplyAsync(() -> {
+         // Perform some long-running task
+         return "Result";
+     }).thenAccept(result -> System.out.println(result));
+     ```
+
+### 10. **Type Annotations**
+   - Enhancements to the type system allowing annotations to be applied to types in addition to declarations.
+   - This includes support for annotations like `@NonNull` or `@ReadOnly` on type use.
+
+### Summary
+
+Java 8 brought a significant shift towards functional programming paradigms in Java, enhancing the language's expressiveness and reducing boilerplate code. These features not only improve code clarity and maintainability but also make Java more powerful for modern development practices. If you have specific features you'd like to explore further or need examples, feel free to ask!
+
+Java 8 introduced several enhancements to the Collections Framework and the Map interface, significantly improving functionality and usability. Here’s a breakdown of the key changes:
+
+### Enhancements in the Collections Framework
+
+1. **New Default Methods**:
+   - The `Collection` interface and its subinterfaces now have default methods. This allows you to add new functionality to interfaces without breaking existing implementations.
+   - **Examples**:
+     - `forEach`: Iterates over each element in the collection.
+     - `stream`: Returns a sequential Stream with this collection as its source.
+     - `removeIf`: Removes elements that satisfy a given predicate.
+   - **Example**:
+     ```java
+     List<String> names = Arrays.asList("Alice", "Bob", "Charlie");
+     names.forEach(name -> System.out.println(name));
+     ```
+
+2. **Streams API**:
+   - Collections can now be processed using the Stream API, which provides a functional approach to processing sequences of elements. This includes operations such as filtering, mapping, and reducing.
+   - **Example**:
+     ```java
+     List<String> names = Arrays.asList("Alice", "Bob", "Charlie");
+     List<String> filteredNames = names.stream()
+                                       .filter(name -> name.startsWith("A"))
+                                       .collect(Collectors.toList());
+     ```
+
+3. **Spliterator**:
+   - A new interface that provides a mechanism for traversing and partitioning elements of a source. It can be used to create parallel streams.
+   - **Example**:
+     ```java
+     Spliterator<String> spliterator = names.spliterator();
+     spliterator.forEachRemaining(System.out::println);
+     ```
+
+### Changes to the Map Interface
+
+1. **New Default Methods**:
+   - The `Map` interface received several new default methods that enhance its functionality.
+   - **Examples**:
+     - `forEach`: Iterates over each entry in the map.
+     - `replaceAll`: Replaces each entry's value with the result of applying a given function.
+     - `putIfAbsent`: Adds a key-value pair only if the key is not already present.
+     - `compute`: Computes a new value for a key based on its current value.
+     - `merge`: Merges the specified value with the existing value if present.
+   - **Example**:
+     ```java
+     Map<String, Integer> map = new HashMap<>();
+     map.put("Alice", 1);
+     map.put("Bob", 2);
+
+     map.forEach((key, value) -> System.out.println(key + ": " + value));
+
+     map.replaceAll((key, value) -> value * 2);
+     ```
+
+2. **Stream Support**:
+   - Maps can now be converted to streams, allowing you to process key-value pairs in a functional style.
+   - **Example**:
+     ```java
+     Map<String, Integer> map = new HashMap<>();
+     map.put("Alice", 1);
+     map.put("Bob", 2);
+     
+     List<String> keys = map.keySet().stream()
+                             .filter(key -> map.get(key) > 1)
+                             .collect(Collectors.toList());
+     ```
+
+3. **New Collection Views**:
+   - The `Map` interface provides views for its keys, values, and entries. You can obtain a stream from these views to process them more easily.
+   - **Example**:
+     ```java
+     Set<String> keys = map.keySet(); // View of keys
+     Collection<Integer> values = map.values(); // View of values
+     Set<Map.Entry<String, Integer>> entries = map.entrySet(); // View of entries
+     ```
+
+### Summary
+
+Java 8 introduced substantial improvements to the Collections Framework and the Map interface, making them more powerful and easier to use. The addition of default methods and the Stream API promotes a more functional programming style, enhancing the expressiveness of Java code. These changes help developers write cleaner, more efficient, and more maintainable code. If you have specific questions about any features or need further examples, feel free to ask!
