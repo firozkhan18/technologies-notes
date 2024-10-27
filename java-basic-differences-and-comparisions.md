@@ -934,6 +934,257 @@ Method Overloading Vs Method Overriding
 | Definition      | Same method name, different parameters.  | Redefining a method in a subclass.         |
 | Compile Time    | Resolved at compile time.                 | Resolved at runtime.                        |
 
+Polymorphism is a core concept in object-oriented programming (OOP) that allows methods to do different things based on the object that it is acting upon. In Java, polymorphism enables objects to be treated as instances of their parent class, allowing for flexible and reusable code. It primarily comes in two forms: compile-time (method overloading) and runtime (method overriding).
+
+### 1. **Types of Polymorphism**
+
+#### a. Compile-Time Polymorphism (Method Overloading)
+
+Compile-time polymorphism occurs when multiple methods have the same name but different parameter lists (different types or number of parameters). The method to be called is resolved at compile time.
+
+**Example**:
+
+```java
+class MathUtils {
+    public int add(int a, int b) {
+        return a + b;
+    }
+
+    public double add(double a, double b) {
+        return a + b;
+    }
+}
+```
+
+In this example, the `add` method is overloaded based on the parameter types.
+
+#### b. Runtime Polymorphism (Method Overriding)
+
+Runtime polymorphism occurs when a method is overridden in a derived class. The method that gets executed is determined at runtime based on the object being referred to, not the reference type.
+
+**Example**:
+
+```java
+class Animal {
+    void sound() {
+        System.out.println("Animal makes a sound");
+    }
+}
+
+class Dog extends Animal {
+    void sound() {
+        System.out.println("Dog barks");
+    }
+}
+
+class Cat extends Animal {
+    void sound() {
+        System.out.println("Cat meows");
+    }
+}
+
+public class TestPolymorphism {
+    public static void main(String[] args) {
+        Animal myDog = new Dog();
+        Animal myCat = new Cat();
+        
+        myDog.sound(); // Outputs: Dog barks
+        myCat.sound(); // Outputs: Cat meows
+    }
+}
+```
+
+### 2. **Benefits of Polymorphism**
+
+- **Code Reusability**: Polymorphism allows methods to be reused across different classes without altering the code structure.
+- **Flexibility and Maintainability**: It makes the code more flexible, as you can add new classes with new behavior without changing existing code.
+- **Easier to Read and Understand**: By abstracting method calls, the code can be easier to read and manage.
+
+### 3. **Design Patterns Based on Polymorphism**
+
+Several design patterns utilize polymorphism to achieve their goals. Here are a few:
+
+#### a. **Strategy Pattern**
+
+The Strategy Pattern defines a family of algorithms, encapsulates each one, and makes them interchangeable. This allows the algorithm to vary independently from the clients that use it.
+
+**Example**:
+
+```java
+interface Strategy {
+    int execute(int a, int b);
+}
+
+class Add implements Strategy {
+    public int execute(int a, int b) {
+        return a + b;
+    }
+}
+
+class Subtract implements Strategy {
+    public int execute(int a, int b) {
+        return a - b;
+    }
+}
+
+class Context {
+    private Strategy strategy;
+
+    public void setStrategy(Strategy strategy) {
+        this.strategy = strategy;
+    }
+
+    public int executeStrategy(int a, int b) {
+        return strategy.execute(a, b);
+    }
+}
+
+// Usage
+public class StrategyPatternExample {
+    public static void main(String[] args) {
+        Context context = new Context();
+        
+        context.setStrategy(new Add());
+        System.out.println("Add: " + context.executeStrategy(5, 3)); // Outputs: 8
+        
+        context.setStrategy(new Subtract());
+        System.out.println("Subtract: " + context.executeStrategy(5, 3)); // Outputs: 2
+    }
+}
+```
+
+#### b. **Factory Method Pattern**
+
+The Factory Method Pattern defines an interface for creating an object but allows subclasses to alter the type of objects that will be created. This pattern leverages polymorphism for creating instances of different classes through a common interface.
+
+**Example**:
+
+```java
+interface Product {
+    void use();
+}
+
+class ConcreteProductA implements Product {
+    public void use() {
+        System.out.println("Using Product A");
+    }
+}
+
+class ConcreteProductB implements Product {
+    public void use() {
+        System.out.println("Using Product B");
+    }
+}
+
+abstract class Creator {
+    public abstract Product factoryMethod();
+}
+
+class ConcreteCreatorA extends Creator {
+    public Product factoryMethod() {
+        return new ConcreteProductA();
+    }
+}
+
+class ConcreteCreatorB extends Creator {
+    public Product factoryMethod() {
+        return new ConcreteProductB();
+    }
+}
+
+// Usage
+public class FactoryMethodExample {
+    public static void main(String[] args) {
+        Creator creator = new ConcreteCreatorA();
+        Product product = creator.factoryMethod();
+        product.use(); // Outputs: Using Product A
+        
+        creator = new ConcreteCreatorB();
+        product = creator.factoryMethod();
+        product.use(); // Outputs: Using Product B
+    }
+}
+```
+
+#### c. **Command Pattern**
+
+The Command Pattern encapsulates a request as an object, thereby allowing for parameterization of clients with queues, requests, and operations. This pattern relies heavily on polymorphism, as commands are executed based on the actual command object passed at runtime.
+
+**Example**:
+
+```java
+interface Command {
+    void execute();
+}
+
+class Light {
+    public void turnOn() {
+        System.out.println("Light is ON");
+    }
+
+    public void turnOff() {
+        System.out.println("Light is OFF");
+    }
+}
+
+class TurnOnCommand implements Command {
+    private Light light;
+
+    public TurnOnCommand(Light light) {
+        this.light = light;
+    }
+
+    public void execute() {
+        light.turnOn();
+    }
+}
+
+class TurnOffCommand implements Command {
+    private Light light;
+
+    public TurnOffCommand(Light light) {
+        this.light = light;
+    }
+
+    public void execute() {
+        light.turnOff();
+    }
+}
+
+class RemoteControl {
+    private Command command;
+
+    public void setCommand(Command command) {
+        this.command = command;
+    }
+
+    public void pressButton() {
+        command.execute();
+    }
+}
+
+// Usage
+public class CommandPatternExample {
+    public static void main(String[] args) {
+        Light light = new Light();
+        Command turnOn = new TurnOnCommand(light);
+        Command turnOff = new TurnOffCommand(light);
+
+        RemoteControl remote = new RemoteControl();
+        
+        remote.setCommand(turnOn);
+        remote.pressButton(); // Outputs: Light is ON
+
+        remote.setCommand(turnOff);
+        remote.pressButton(); // Outputs: Light is OFF
+    }
+}
+```
+
+### Conclusion
+
+Polymorphism is a powerful feature of object-oriented programming that enhances code flexibility, reusability, and maintainability. It is foundational to various design patterns that further streamline software design and implementation. Understanding and applying polymorphism can significantly improve the architecture of your Java applications.
+
 ## executeQuery() Vs executeUpdate() Vs execute() In JDBC			
 			
 executeQuery() Vs executeUpdate() Vs execute()
