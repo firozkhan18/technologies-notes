@@ -1954,6 +1954,42 @@ Here's a simplified diagram of the JVM architecture:
 
 This architecture allows Java applications to run seamlessly across different environments, making Java a versatile and powerful programming language.
 
+Here’s a Mermaid diagram representing the Java Virtual Machine (JVM) architecture, including its key components:
+
+```mermaid
+graph TD;
+    A[JVM] --> B[Execution Engine]
+    B --> C[JIT]
+    B --> D[Interpreter]
+    A --> E[Class Loader]
+    A --> F[Garbage Collector]
+    A --> G[Runtime Data Areas]
+    G --> H[Heap]
+    G --> I[Stack]
+    G --> J[Method Area]
+    G --> K[PC Register]
+    G --> L[Native Method Stack]
+```
+
+### Explanation of the Diagram
+
+- **JVM**: The Java Virtual Machine, which executes Java bytecode.
+- **Execution Engine**: Responsible for executing the bytecode. It includes:
+  - **JIT (Just-In-Time Compiler)**: Compiles bytecode into native machine code at runtime for performance.
+  - **Interpreter**: Executes bytecode line-by-line for quick execution but generally slower than JIT.
+- **Class Loader**: Loads class files into memory for execution.
+- **Garbage Collector**: Manages memory by automatically reclaiming memory that is no longer in use.
+- **Runtime Data Areas**: Memory areas used during the execution of a Java program, including:
+  - **Heap**: Where all objects are stored.
+  - **Stack**: Contains frames for method calls, including local variables and partial results.
+  - **Method Area**: Stores class structures such as metadata, constant pool, and static variables.
+  - **PC Register**: Stores the address of the currently executing instruction.
+  - **Native Method Stack**: Used for native methods written in languages like C or C++.
+
+This diagram and explanation provide a high-level overview of the JVM's architecture and its components. If you have any further questions or need more details, feel free to ask!
+
+## Abstract Class & Inheritance
+
 In Java, both abstract classes and interfaces are used to define abstract types that can be implemented or extended by other classes. However, they have distinct differences in terms of design, usage, and features. Here’s a detailed comparison:
 
 ### 1. **Definition**
