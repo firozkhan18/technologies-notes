@@ -3722,3 +3722,832 @@ Java 8 introduced several enhancements to the Collections Framework and the Map 
 ### Summary
 
 Java 8 introduced substantial improvements to the Collections Framework and the Map interface, making them more powerful and easier to use. The addition of default methods and the Stream API promotes a more functional programming style, enhancing the expressiveness of Java code. These changes help developers write cleaner, more efficient, and more maintainable code. If you have specific questions about any features or need further examples, feel free to ask!
+
+In concurrent programming, especially in Java, issues like **deadlock**, **race condition**, and **starvation** can lead to unpredictable behavior and bugs. Here’s an in-depth explanation of each concept and strategies to prevent them.
+
+### 1. Deadlock
+
+#### Definition
+Deadlock occurs when two or more threads are blocked forever, each waiting for a resource that the other holds. In other words, it's a situation where threads are stuck in a cycle of dependencies.
+
+#### Example
+Consider two threads trying to lock two resources (e.g., `Resource A` and `Resource B`):
+
+```java
+class Resource {
+    public synchronized void lockA(Resource other) {
+        System.out.println(Thread.currentThread().getName() + " locked " + this);
+        try { Thread.sleep(100); } catch (InterruptedException e) {}
+        other.lockB(this);
+    }
+
+    public synchronized void lockB(Resource other) {
+        System.out.println(Thread.currentThread().getName() + " locked " + this);
+    }
+}
+
+Resource resource1 = new Resource();
+Resource resource2 = new Resource();
+
+Thread t1 = new Thread(() -> resource1.lockA(resource2));
+Thread t2 = new Thread(() -> resource2.lockA(resource1));
+
+t1.start();
+t2.start();
+```
+In this example, `t1` locks `resource1` and tries to lock `resource2`, while `t2` locks `resource2` and tries to lock `resource1`. This creates a deadlock.
+
+#### Prevention Strategies
+- **Lock Ordering**: Always acquire locks in a consistent order across threads.
+- **Timeouts**: Use timeouts when trying to acquire a lock. If a thread can't acquire the lock within a specified time, it can back off and try later.
+- **Deadlock Detection**: Implement a mechanism to detect deadlocks and recover from them (e.g., by aborting one of the threads).
+
+### 2. Race Condition
+
+#### Definition
+A race condition occurs when two or more threads can access shared data and try to change it at the same time. The final outcome depends on the timing of thread execution, which can lead to inconsistent or unexpected results.
+
+#### Example
+```java
+class Counter {
+    private int count = 0;
+
+    public void increment() {
+        count++;
+    }
+
+    public int getCount() {
+        return count;
+    }
+}
+
+Counter counter = new Counter();
+
+Thread t1 = new Thread(() -> {
+    for (int i = 0; i < 1000; i++) {
+        counter.increment();
+    }
+});
+
+Thread t2 = new Thread(() -> {
+    for (int i = 0; i < 1000; i++) {
+        counter.increment();
+    }
+});
+
+t1.start();
+t2.start();
+t1.join();
+t2.join();
+
+System.out.println("Final count: " + counter.getCount());
+```
+In this example, if both threads increment the counter simultaneously, the final count may not be 2000 due to the race condition.
+
+#### Prevention Strategies
+- **Synchronization**: Use synchronized blocks or methods to ensure that only one thread can access the critical section of code at a time.
+    ```java
+    public synchronized void increment() {
+        count++;
+    }
+    ```
+- **Locks**: Use explicit locks (e.g., `ReentrantLock`) for more fine-grained control over synchronization.
+- **Atomic Variables**: Use classes from `java.util.concurrent.atomic`, such as `AtomicInteger`, to perform atomic operations without explicit locking.
+    ```java
+    AtomicInteger count = new AtomicInteger(0);
+    count.incrementAndGet();
+    ```
+
+### 3. Starvation
+
+#### Definition
+Starvation occurs when a thread is perpetually denied access to resources it needs to proceed, usually due to resource allocation policies that favor other threads. This can happen if a thread is waiting for a lock that is held by other threads for an extended period.
+
+#### Example
+If a high-priority thread keeps acquiring the lock and low-priority threads are never able to acquire it, the low-priority threads may starve.
+
+#### Prevention Strategies
+- **Fair Locks**: Use fair locks (e.g., `ReentrantLock(true)`) to ensure that threads acquire locks in the order they requested them, thus preventing starvation.
+    ```java
+    ReentrantLock lock = new ReentrantLock(true);
+    ```
+- **Thread Priority**: Avoid relying solely on thread priorities for resource allocation as they are not guaranteed to be effective across different JVM implementations.
+
+### Summary
+
+- **Deadlock**: Threads are blocked forever waiting for each other. Prevent by lock ordering, timeouts, or deadlock detection.
+- **Race Condition**: Incorrect behavior due to simultaneous access to shared data. Prevent by synchronization, locks, or atomic variables.
+- **Starvation**: Threads are perpetually denied resources. Prevent by using fair locks or avoiding dependency on thread priorities.
+
+Understanding these concepts and their prevention strategies is crucial for writing robust multithreaded applications in Java. If you have any more questions or need further clarification, feel free to ask!
+
+In Java, **ThreadLocal** and **ThreadGroup** are two important concepts related to thread management and concurrency. Here's a detailed explanation of each:
+
+### ThreadLocal
+
+#### Definition
+`ThreadLocal` is a Java class that provides thread-local variables. Each thread accessing a `ThreadLocal` variable has its own, independently initialized copy of the variable. This means that changes made to the variable by one thread do not affect the variable's value in other threads.
+
+#### Use Cases
+- **Maintaining User Sessions**: For example, in web applications, you can use `ThreadLocal` to store user session data that is only relevant to the current thread.
+- **Database Connections**: You can maintain a database connection for each thread, avoiding the overhead of passing the connection around.
+
+#### Example
+```java
+public class ThreadLocalExample {
+    private static ThreadLocal<Integer> threadLocalValue = ThreadLocal.withInitial(() -> 0);
+
+    public static void main(String[] args) {
+        Runnable task = () -> {
+            int value = threadLocalValue.get();
+            System.out.println(Thread.currentThread().getName() + " initial value: " + value);
+            threadLocalValue.set(value + 1);
+            System.out.println(Thread.currentThread().getName() + " updated value: " + threadLocalValue.get());
+        };
+
+        Thread t1 = new Thread(task);
+        Thread t2 = new Thread(task);
+
+        t1.start();
+        t2.start();
+    }
+}
+```
+
+#### Key Points
+- Each thread has its own copy of the variable.
+- The `withInitial` method can be used to define an initial value for the variable.
+- It helps in avoiding shared state and provides a simple way to manage thread-local data.
+
+### ThreadGroup
+
+#### Definition
+`ThreadGroup` is a class that allows you to group multiple threads into a single unit. It provides a way to manage multiple threads as a collective group, enabling you to control them together.
+
+#### Use Cases
+- **Managing Related Threads**: When you want to manage or control a set of threads collectively, such as starting, stopping, or interrupting all threads in a group.
+- **Thread Management**: Useful in applications where threads perform similar tasks and can be grouped logically.
+
+#### Example
+```java
+public class ThreadGroupExample {
+    public static void main(String[] args) {
+        ThreadGroup group = new ThreadGroup("My Thread Group");
+
+        Runnable task = () -> {
+            System.out.println(Thread.currentThread().getName() + " is running.");
+        };
+
+        Thread t1 = new Thread(group, task, "Thread-1");
+        Thread t2 = new Thread(group, task, "Thread-2");
+
+        t1.start();
+        t2.start();
+
+        System.out.println("Active Threads in Group: " + group.activeCount());
+        group.list(); // Lists the threads in the group
+    }
+}
+```
+
+#### Key Points
+- You can create a thread group using the `ThreadGroup` constructor and pass a name to it.
+- The `activeCount` method returns the number of active threads in the group.
+- The `list` method displays information about the threads in the group.
+
+### Summary
+
+- **ThreadLocal**:
+  - Provides thread-local variables.
+  - Each thread has its own copy of the variable, preventing interference from other threads.
+  - Useful for storing data that is specific to a thread.
+
+- **ThreadGroup**:
+  - Allows grouping of threads for collective management.
+  - Provides methods to control and manage multiple threads as a unit.
+  - Useful for organizing related threads.
+
+Both `ThreadLocal` and `ThreadGroup` can enhance the management of concurrency in Java applications, but they serve different purposes. If you have any further questions or need examples, feel free to ask!
+
+The Executor Framework in Java, introduced in Java 5, provides a high-level mechanism for managing and controlling thread execution. It abstracts thread management and makes it easier to develop concurrent applications. Here’s an in-depth look at the Executor Framework, its components, and how to use it.
+
+### Key Components of the Executor Framework
+
+1. **Executor Interface**
+   - The core interface that defines a simple way to execute tasks asynchronously. It has a single method:
+     ```java
+     void execute(Runnable command);
+     ```
+   - Implementations of the `Executor` interface handle the thread management and task execution.
+
+2. **ExecutorService Interface**
+   - Extends the `Executor` interface and adds methods to manage the lifecycle of the executor and retrieve results from asynchronous tasks.
+   - Key methods include:
+     - `submit(Callable<T> task)`: Submits a callable task for execution and returns a Future.
+     - `shutdown()`: Initiates an orderly shutdown in which previously submitted tasks are executed, but no new tasks will be accepted.
+     - `invokeAll(Collection<? extends Callable<T>> tasks)`: Executes a collection of tasks and returns a list of Future objects.
+
+3. **ScheduledExecutorService Interface**
+   - Extends `ExecutorService` and adds methods for scheduling tasks to run after a delay or to execute periodically.
+
+4. **ThreadPoolExecutor Class**
+   - A powerful implementation of the `ExecutorService` that can manage a pool of threads.
+   - It allows fine-tuning of thread pool parameters like core pool size, maximum pool size, and keep-alive time.
+
+5. **Executors Utility Class**
+   - Provides factory methods for creating different types of executors, such as:
+     - `newFixedThreadPool(int nThreads)`: Creates a thread pool with a fixed number of threads.
+     - `newCachedThreadPool()`: Creates a thread pool that creates new threads as needed but will reuse previously constructed threads when they are available.
+     - `newSingleThreadExecutor()`: Creates an executor that uses a single worker thread.
+
+### Example Usage
+
+Here’s an example demonstrating how to use the Executor Framework:
+
+```java
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+
+public class ExecutorExample {
+    public static void main(String[] args) {
+        // Create a fixed thread pool with 3 threads
+        ExecutorService executor = Executors.newFixedThreadPool(3);
+
+        // Submit tasks for execution
+        for (int i = 0; i < 10; i++) {
+            final int taskId = i;
+            executor.submit(() -> {
+                System.out.println("Task " + taskId + " is running on thread " + Thread.currentThread().getName());
+                try {
+                    Thread.sleep(1000); // Simulate work
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+            });
+        }
+
+        // Initiate shutdown
+        executor.shutdown();
+        try {
+            // Wait for all tasks to finish
+            if (!executor.awaitTermination(60, TimeUnit.SECONDS)) {
+                executor.shutdownNow(); // Force shutdown if tasks didn't finish
+            }
+        } catch (InterruptedException e) {
+            executor.shutdownNow();
+        }
+    }
+}
+```
+
+### Advantages of the Executor Framework
+
+- **Simplified Thread Management**: It abstracts the complexities of thread creation, management, and scheduling.
+- **Thread Pooling**: It allows reuse of threads, which can lead to performance improvements in applications that require frequent task execution.
+- **Flexible Task Submission**: You can submit `Runnable` or `Callable` tasks, and it can handle both synchronous and asynchronous execution.
+- **Task Scheduling**: With `ScheduledExecutorService`, you can schedule tasks for future execution or periodic execution.
+
+### Summary
+
+The Executor Framework is a powerful tool for managing concurrent tasks in Java. By providing a set of interfaces and classes for executing tasks asynchronously, it simplifies thread management and improves performance through the use of thread pools. This framework is essential for modern Java applications that require concurrency and parallelism.
+
+If you have any further questions or want to explore specific aspects of the Executor Framework, feel free to ask!
+
+The Executor Framework in Java consists of several key interfaces and classes designed to facilitate concurrent programming. Here’s a detailed breakdown of each component along with examples.
+
+### 1. Executor Interface
+
+#### Definition
+The `Executor` interface is the simplest form of the executor framework. It provides a method to execute a `Runnable` task.
+
+#### Key Method
+- **execute(Runnable command)**: Executes the given task asynchronously.
+
+#### Example
+```java
+import java.util.concurrent.Executor;
+
+public class ExecutorExample implements Executor {
+    @Override
+    public void execute(Runnable command) {
+        new Thread(command).start();
+    }
+
+    public static void main(String[] args) {
+        Executor executor = new ExecutorExample();
+        
+        executor.execute(() -> {
+            System.out.println("Task executed in thread: " + Thread.currentThread().getName());
+        });
+    }
+}
+```
+
+### 2. ExecutorService Interface
+
+#### Definition
+The `ExecutorService` interface extends `Executor` and provides additional methods for managing the lifecycle of the executor and retrieving results from tasks.
+
+#### Key Methods
+- **submit(Callable<T> task)**: Submits a Callable task for execution and returns a Future.
+- **shutdown()**: Initiates an orderly shutdown.
+- **invokeAll(Collection<? extends Callable<T>> tasks)**: Executes a collection of tasks and returns a list of Future objects.
+
+#### Example
+```java
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+
+public class ExecutorServiceExample {
+    public static void main(String[] args) throws Exception {
+        ExecutorService executor = Executors.newFixedThreadPool(2);
+        
+        Future<Integer> future = executor.submit(new Callable<Integer>() {
+            @Override
+            public Integer call() {
+                return 42; // Simulate a computation
+            }
+        });
+
+        System.out.println("Result from callable: " + future.get()); // Blocks until result is available
+        executor.shutdown();
+    }
+}
+```
+
+### 3. ScheduledExecutorService Interface
+
+#### Definition
+The `ScheduledExecutorService` interface extends `ExecutorService` and adds methods for scheduling tasks to run after a delay or periodically.
+
+#### Key Methods
+- **schedule(Runnable command, long delay, TimeUnit unit)**: Schedules a command to be executed after a given delay.
+- **scheduleAtFixedRate(Runnable command, long initialDelay, long period, TimeUnit unit)**: Schedules a task for repeated fixed-rate execution.
+
+#### Example
+```java
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+
+public class ScheduledExecutorServiceExample {
+    public static void main(String[] args) {
+        ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+        
+        scheduler.scheduleAtFixedRate(() -> {
+            System.out.println("Task executed at: " + System.currentTimeMillis());
+        }, 0, 2, TimeUnit.SECONDS); // Initial delay: 0, period: 2 seconds
+    }
+}
+```
+
+### 4. ThreadPoolExecutor Class
+
+#### Definition
+`ThreadPoolExecutor` is a concrete implementation of the `ExecutorService` interface. It provides a robust way to manage a pool of threads.
+
+#### Key Constructors
+- **ThreadPoolExecutor(int corePoolSize, int maximumPoolSize, long keepAliveTime, TimeUnit unit, BlockingQueue<Runnable> workQueue)**: Constructs a thread pool with the specified parameters.
+
+#### Example
+```java
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+
+public class ThreadPoolExecutorExample {
+    public static void main(String[] args) {
+        ThreadPoolExecutor executor = new ThreadPoolExecutor(
+                2,  // core pool size
+                4,  // max pool size
+                60, // keep alive time
+                TimeUnit.SECONDS,
+                new ArrayBlockingQueue<>(10) // work queue
+        );
+
+        for (int i = 0; i < 10; i++) {
+            final int taskId = i;
+            executor.execute(() -> {
+                System.out.println("Executing task " + taskId + " in thread " + Thread.currentThread().getName());
+                try {
+                    Thread.sleep(1000); // Simulate work
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+            });
+        }
+
+        executor.shutdown();
+    }
+}
+```
+
+### 5. Executors Utility Class
+
+#### Definition
+The `Executors` utility class provides factory methods to create different types of executors.
+
+#### Key Methods
+- **newFixedThreadPool(int nThreads)**: Creates a thread pool with a fixed number of threads.
+- **newCachedThreadPool()**: Creates a thread pool that creates new threads as needed.
+- **newSingleThreadExecutor()**: Creates an executor that uses a single worker thread.
+
+#### Example
+```java
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+public class ExecutorsExample {
+    public static void main(String[] args) {
+        ExecutorService executor = Executors.newFixedThreadPool(3);
+        
+        for (int i = 0; i < 5; i++) {
+            final int taskId = i;
+            executor.submit(() -> {
+                System.out.println("Task " + taskId + " is executed by " + Thread.currentThread().getName());
+            });
+        }
+
+        executor.shutdown();
+    }
+}
+```
+
+### Summary
+
+The Executor Framework provides a robust set of interfaces and classes for managing and executing tasks concurrently. Here’s a quick recap of the main components:
+
+- **Executor**: Basic interface for executing tasks.
+- **ExecutorService**: Extends Executor with lifecycle management and task submission capabilities.
+- **ScheduledExecutorService**: Adds scheduling capabilities to the ExecutorService.
+- **ThreadPoolExecutor**: A flexible implementation of the ExecutorService that manages a pool of threads.
+- **Executors**: A utility class for creating various types of executors easily.
+
+This framework is crucial for writing efficient and maintainable concurrent applications in Java. If you have more questions or need specific examples, feel free to ask!
+
+The Java Concurrency Framework provides various classes and interfaces to handle multithreading and concurrency effectively. Here’s a detailed explanation of each component you've mentioned, along with examples:
+
+### 1. Callable
+
+**Definition**: `Callable` is a functional interface that represents a task that can be executed by a thread. Unlike `Runnable`, it can return a result and can throw checked exceptions.
+
+**Key Method**:
+- **call()**: Defines the task to be executed.
+
+**Example**:
+```java
+import java.util.concurrent.Callable;
+
+public class CallableExample implements Callable<String> {
+    @Override
+    public String call() {
+        return "Hello from Callable!";
+    }
+}
+```
+
+### 2. Future
+
+**Definition**: `Future` represents the result of an asynchronous computation. It provides methods to check if the computation is complete, wait for its completion, and retrieve the result.
+
+**Key Methods**:
+- **get()**: Retrieves the result of the computation, blocking if necessary.
+- **isDone()**: Returns true if the task is completed.
+
+**Example**:
+```java
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+
+public class FutureExample {
+    public static void main(String[] args) throws InterruptedException, ExecutionException {
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        Future<String> future = executor.submit(new Callable<String>() {
+            @Override
+            public String call() {
+                return "Task completed!";
+            }
+        });
+
+        System.out.println("Future result: " + future.get());
+        executor.shutdown();
+    }
+}
+```
+
+### 3. Semaphore
+
+**Definition**: `Semaphore` is a synchronization aid that controls access to a resource by maintaining a set number of permits. It can be used to limit the number of threads that can access a resource.
+
+**Key Methods**:
+- **acquire()**: Acquires a permit, blocking if necessary.
+- **release()**: Releases a permit, increasing the available permits.
+
+**Example**:
+```java
+import java.util.concurrent.Semaphore;
+
+public class SemaphoreExample {
+    private static final Semaphore semaphore = new Semaphore(2); // Allows 2 concurrent threads
+
+    public static void main(String[] args) {
+        for (int i = 0; i < 5; i++) {
+            new Thread(() -> {
+                try {
+                    semaphore.acquire();
+                    System.out.println(Thread.currentThread().getName() + " acquired the permit.");
+                    Thread.sleep(2000); // Simulate work
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                } finally {
+                    semaphore.release();
+                    System.out.println(Thread.currentThread().getName() + " released the permit.");
+                }
+            }).start();
+        }
+    }
+}
+```
+
+### 4. Executor
+
+**Definition**: The `Executor` interface provides a simple way to execute tasks asynchronously. It has a single method for executing a `Runnable`.
+
+**Key Method**:
+- **execute(Runnable command)**: Executes the given task asynchronously.
+
+**Example**:
+```java
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+
+public class ExecutorExample implements Executor {
+    @Override
+    public void execute(Runnable command) {
+        new Thread(command).start();
+    }
+
+    public static void main(String[] args) {
+        Executor executor = new ExecutorExample();
+        executor.execute(() -> System.out.println("Executing task in thread: " + Thread.currentThread().getName()));
+    }
+}
+```
+
+### 5. ExecutorService
+
+**Definition**: `ExecutorService` extends `Executor` and adds methods for managing the lifecycle of the executor and retrieving results from asynchronous tasks.
+
+**Key Methods**:
+- **submit(Callable<T> task)**: Submits a callable task for execution.
+- **shutdown()**: Initiates an orderly shutdown.
+
+**Example**:
+```java
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+
+public class ExecutorServiceExample {
+    public static void main(String[] args) throws Exception {
+        ExecutorService executor = Executors.newFixedThreadPool(2);
+        Future<String> future = executor.submit(() -> "Hello from ExecutorService!");
+
+        System.out.println(future.get());
+        executor.shutdown();
+    }
+}
+```
+
+### 6. ScheduledExecutorService
+
+**Definition**: This interface extends `ExecutorService` and adds methods for scheduling tasks to run after a delay or periodically.
+
+**Key Methods**:
+- **schedule(Runnable command, long delay, TimeUnit unit)**: Schedules a command to be executed after a given delay.
+
+**Example**:
+```java
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+
+public class ScheduledExecutorServiceExample {
+    public static void main(String[] args) {
+        ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+        
+        scheduler.scheduleAtFixedRate(() -> {
+            System.out.println("Task executed at: " + System.currentTimeMillis());
+        }, 0, 2, TimeUnit.SECONDS); // Initial delay: 0 seconds, period: 2 seconds
+    }
+}
+```
+
+### 7. ThreadPoolExecutor
+
+**Definition**: `ThreadPoolExecutor` is a powerful implementation of the `ExecutorService` that manages a pool of threads.
+
+**Key Constructors**:
+- **ThreadPoolExecutor(int corePoolSize, int maximumPoolSize, long keepAliveTime, TimeUnit unit, BlockingQueue<Runnable> workQueue)**: Creates a thread pool with specified parameters.
+
+**Example**:
+```java
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+
+public class ThreadPoolExecutorExample {
+    public static void main(String[] args) {
+        ThreadPoolExecutor executor = new ThreadPoolExecutor(
+                2,  // core pool size
+                4,  // maximum pool size
+                60, // keep-alive time
+                TimeUnit.SECONDS,
+                new ArrayBlockingQueue<>(10) // work queue
+        );
+
+        for (int i = 0; i < 10; i++) {
+            final int taskId = i;
+            executor.execute(() -> {
+                System.out.println("Executing task " + taskId + " in thread " + Thread.currentThread().getName());
+                try {
+                    Thread.sleep(1000); // Simulate work
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+            });
+        }
+
+        executor.shutdown();
+    }
+}
+```
+
+### 8. Executors Utility Class
+
+**Definition**: The `Executors` utility class provides factory methods for creating different types of executors.
+
+**Key Methods**:
+- **newFixedThreadPool(int nThreads)**: Creates a thread pool with a fixed number of threads.
+- **newCachedThreadPool()**: Creates a thread pool that creates new threads as needed.
+
+**Example**:
+```java
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+public class ExecutorsExample {
+    public static void main(String[] args) {
+        ExecutorService executor = Executors.newCachedThreadPool();
+        
+        for (int i = 0; i < 5; i++) {
+            final int taskId = i;
+            executor.submit(() -> {
+                System.out.println("Task " + taskId + " is executed by " + Thread.currentThread().getName());
+            });
+        }
+
+        executor.shutdown();
+    }
+}
+```
+
+### 9. Lock
+
+**Definition**: The `Lock` interface provides more extensive locking operations than the implicit locking provided by synchronized blocks. It allows more flexibility in handling concurrency.
+
+**Key Methods**:
+- **lock()**: Acquires the lock.
+- **unlock()**: Releases the lock.
+
+**Example**:
+```java
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+
+public class LockExample {
+    private static final Lock lock = new ReentrantLock();
+
+    public static void main(String[] args) {
+        Runnable task = () -> {
+            lock.lock();
+            try {
+                System.out.println(Thread.currentThread().getName() + " acquired the lock.");
+                Thread.sleep(1000); // Simulate work
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            } finally {
+                lock.unlock();
+                System.out.println(Thread.currentThread().getName() + " released the lock.");
+            }
+        };
+
+        new Thread(task).start();
+        new Thread(task).start();
+    }
+}
+```
+
+### 10. ReentrantLock
+
+**Definition**: `ReentrantLock` is a concrete implementation of the `Lock` interface that allows threads to re-acquire the lock that they already hold.
+
+**Key Features**:
+- Provides methods to check if the lock is held by the current thread.
+- Allows for timed and interruptible lock acquisition.
+
+**Example**:
+```java
+import java.util.concurrent.locks.ReentrantLock;
+
+public class ReentrantLockExample {
+    private static final ReentrantLock lock = new ReentrantLock();
+
+    public static void main(String[] args) {
+        Runnable task = () -> {
+            lock.lock();
+            try {
+                System.out.println(Thread.currentThread().getName() + " acquired the lock.");
+                Thread.sleep(1000); // Simulate work
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            } finally {
+                lock.unlock();
+                System.out.println(Thread.currentThread().getName() + " released the lock.");
+            }
+        };
+
+        new Thread(task).start();
+        new Thread(task).start();
+    }
+}
+```
+
+### 11. BlockingQueue
+
+**Definition**: `BlockingQueue` is a type of queue that supports operations that wait
+
+ for the queue to become non-empty when retrieving an element, and wait for space to become available when storing an element.
+
+**Key Implementations**: `ArrayBlockingQueue`, `LinkedBlockingQueue`, `PriorityBlockingQueue`, etc.
+
+**Example**:
+```java
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
+
+public class BlockingQueueExample {
+    public static void main(String[] args) throws InterruptedException {
+        BlockingQueue<String> queue = new ArrayBlockingQueue<>(10);
+        
+        // Producer
+        new Thread(() -> {
+            try {
+                for (int i = 0; i < 5; i++) {
+                    queue.put("Item " + i);
+                    System.out.println("Produced: Item " + i);
+                }
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        }).start();
+
+        // Consumer
+        new Thread(() -> {
+            try {
+                for (int i = 0; i < 5; i++) {
+                    String item = queue.take();
+                    System.out.println("Consumed: " + item);
+                }
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        }).start();
+    }
+}
+```
+
+### Summary
+
+The Java Concurrency Framework provides a robust set of tools for managing multithreading and concurrency. Here’s a quick recap of the key components:
+
+- **Callable**: A task that can return a result and throw exceptions.
+- **Future**: Represents the result of an asynchronous computation.
+- **Semaphore**: Controls access to a resource with a set number of permits.
+- **Executor**: A simple interface for executing tasks.
+- **ExecutorService**: Manages the lifecycle of the executor and task submission.
+- **ScheduledExecutorService**: Schedules tasks for execution.
+- **ThreadPoolExecutor**: Manages a pool of threads for executing tasks.
+- **Executors**: Utility class for creating executors.
+- **Lock**: Provides more extensive locking operations than synchronized blocks.
+- **ReentrantLock**: A lock that can be acquired multiple times by the same thread.
+- **BlockingQueue**: A queue that supports operations that block when the queue is empty or full.
+
+These components work together to simplify the development of concurrent applications in Java. If you have any more questions or need further examples, feel free to ask!
