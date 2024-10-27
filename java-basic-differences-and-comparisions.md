@@ -472,6 +472,149 @@ HashMap Vs HashTable
 | Synchronization | Non-synchronized; not thread-safe.      | Synchronized; thread-safe.                  |
 | Nulls          | Allows null values and keys.             | Does not allow null values or keys.        |
 
+Hashing in Java is a technique used to convert data (like objects or strings) into a fixed-size value, called a hash code. This process is fundamental to data structures like hash tables, which are used in collections such as `HashMap`, `HashSet`, and `Hashtable`. Here’s how it works:
+
+### 1. **Hash Function**
+
+A hash function takes an input (or "key") and produces a fixed-size string of bytes. The output is typically an integer that serves as an index in a hash table.
+
+- **Properties of a Good Hash Function**:
+  - **Deterministic**: The same input always produces the same output.
+  - **Uniform Distribution**: It minimizes collisions (when two different inputs produce the same hash code).
+  - **Efficient**: It computes the hash quickly.
+
+### 2. **Hash Code Calculation**
+
+In Java, every object has a `hashCode()` method that returns an integer representing the object's hash code. When you create a custom object and override `hashCode()`, you define how to calculate the hash code based on the object's attributes.
+
+### 3. **Storing in Hash Tables**
+
+When an object is added to a hash-based collection:
+- The hash code is computed using the `hashCode()` method.
+- The hash code is then converted to an index in the underlying array of the hash table (often using modulo operation).
+- The object is stored in that index.
+
+### 4. **Handling Collisions**
+
+Collisions occur when multiple keys hash to the same index. Java uses a couple of strategies to handle this:
+
+- **Chaining**: Each index of the hash table contains a linked list (or another collection) of entries that hash to the same index.
+- **Open Addressing**: If a collision occurs, the algorithm finds another empty slot based on a probing sequence.
+
+### 5. **Retrieving Values**
+
+To retrieve an object:
+- The hash code of the key is computed.
+- The index in the hash table is determined using this hash code.
+- If there are multiple entries at that index (due to collisions), the collection iterates through the entries to find the one that matches (using the `equals()` method).
+
+### Example: Using `HashMap`
+
+Here's a simple example of how a `HashMap` works in practice:
+
+```java
+import java.util.HashMap;
+
+public class Main {
+    public static void main(String[] args) {
+        HashMap<String, Integer> map = new HashMap<>();
+        
+        map.put("Alice", 25);
+        map.put("Bob", 30);
+        
+        System.out.println(map.get("Alice")); // Outputs: 25
+        System.out.println(map.get("Bob"));   // Outputs: 30
+    }
+}
+```
+
+### 6. **Best Practices**
+
+- **Consistent Implementation**: If you override `equals()`, always override `hashCode()` to maintain consistency.
+- **Use Immutable Objects**: Hash-based collections work best with immutable keys, as changes to the key’s state can affect its hash code and lead to retrieval issues.
+
+A `ConcurrentHashMap` in Java is a thread-safe variant of `HashMap` designed for concurrent access by multiple threads without requiring external synchronization. This allows for high concurrency and performance in multi-threaded environments. Here’s how it works:
+
+### Key Features of `ConcurrentHashMap`
+
+1. **Segmented Locking**: 
+   - The map is divided into segments (or buckets). Each segment can be locked independently, allowing multiple threads to read and write to different segments concurrently.
+   - In Java 8 and later, this is implemented as a combination of a linked list and a tree for better performance in high-collision scenarios.
+
+2. **Lock-Free Reads**:
+   - Reads are generally lock-free, meaning multiple threads can read from the map simultaneously without blocking each other, which significantly improves performance in read-heavy applications.
+
+3. **Atomic Operations**:
+   - Operations such as `putIfAbsent`, `remove`, and `replace` are atomic. This means they ensure that updates are visible to other threads in a consistent way.
+
+4. **Concurrency Level**:
+   - You can specify the concurrency level when creating a `ConcurrentHashMap`. This defines the number of segments it will use and can be tuned based on expected contention.
+
+### How It Works Internally
+
+1. **Data Structure**:
+   - A `ConcurrentHashMap` is structured as an array of segments (or buckets). Each segment is a `HashMap` that holds entries.
+
+2. **Hashing**:
+   - Similar to a regular `HashMap`, it uses hashing to determine where to store each key-value pair. The hash code is computed, and the corresponding index in the array is determined.
+
+3. **Segment Locking**:
+   - When a thread wants to modify a segment, it locks that specific segment. Other segments remain accessible for other threads.
+   - If a thread wants to read from a segment that is currently being modified, it can still read from other segments without blocking.
+
+4. **Handling Collisions**:
+   - In each segment, if a collision occurs (two keys hash to the same index), the `ConcurrentHashMap` uses a linked list or a balanced tree (in Java 8+) to handle multiple entries.
+
+5. **Updates and Iteration**:
+   - When adding or removing entries, the `ConcurrentHashMap` ensures that the operation is atomic within the affected segment.
+   - Iterators provided by `ConcurrentHashMap` are weakly consistent, meaning they reflect the state of the map at some point during the iteration, but they may not reflect all changes made after the iterator was created.
+
+### Example Usage
+
+Here’s a simple example demonstrating how to use a `ConcurrentHashMap`:
+
+```java
+import java.util.concurrent.ConcurrentHashMap;
+
+public class Main {
+    public static void main(String[] args) {
+        ConcurrentHashMap<String, Integer> map = new ConcurrentHashMap<>();
+
+        // Adding entries
+        map.put("Alice", 25);
+        map.put("Bob", 30);
+
+        // Updating an entry atomically
+        map.putIfAbsent("Alice", 26); // Will not change, as "Alice" already exists
+
+        // Retrieving values
+        System.out.println(map.get("Alice")); // Outputs: 25
+
+        // Removing an entry
+        map.remove("Bob");
+
+        // Iterating over the entries
+        map.forEach((key, value) -> {
+            System.out.println(key + ": " + value);
+        });
+    }
+}
+```
+
+### Best Practices
+
+- Use `ConcurrentHashMap` when you need to allow concurrent access to a map without external synchronization.
+- Prefer atomic operations provided by `ConcurrentHashMap` for thread-safe updates.
+- Avoid using `null` as a key or value in `ConcurrentHashMap`, as it does not allow nulls.
+
+### Conclusion
+
+`ConcurrentHashMap` provides an efficient way to handle concurrent access in multi-threaded applications, allowing for high throughput and low contention, making it a preferred choice for scenarios where thread safety is crucial.
+
+### Conclusion
+
+Hashing in Java enables efficient data retrieval, storage, and management through hash tables. Understanding how to implement and utilize hashing effectively is crucial for optimizing performance in your applications.
+
 ## Iterator Vs ListIterator		
 			
 Iterator Vs ListIterator
