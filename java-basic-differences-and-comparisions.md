@@ -146,7 +146,8 @@ Shallow Copy Vs Deep Copy
 | Aspect         | "=="                                         | equals()                                      |
 |----------------|----------------------------------------------|-----------------------------------------------|
 | Comparison Type | Reference equality (memory address).         | Logical equality (content of objects).       |
-| Usage           | Used for primitives and object references.   | Used for comparing object content; needs to be overridden in custom classes. |
+| Usage           | Used for primitives and object references.   | Used for comparing object content; needs to be overridden in custom classes. 
+
 In Java, the `hashCode()` and `equals()` methods are used to define the equality of objects and to support the use of objects in hash-based collections, such as `HashMap` and `HashSet`. Here’s a brief overview of each method and how they relate to each other:
 
 ### `equals()` Method
