@@ -5806,3 +5806,102 @@ Once a deadlock is detected, several strategies can be employed to resolve it:
 ### Summary
 
 Deadlock detection is essential for maintaining system stability in concurrent environments. By monitoring resource states and employing graph-based techniques, systems can identify deadlocks and take necessary actions to resolve them. Implementing effective deadlock detection and resolution mechanisms helps improve overall system reliability and performance. If you have specific scenarios or tools in mind for deadlock detection, feel free to ask!
+
+### Immutability in Java
+
+Immutability is a property of an object that prevents its state from being modified after it has been created. Immutable objects are particularly useful in concurrent programming, as they are inherently thread-safe and can be shared freely without synchronization.
+
+### Creating an Immutable Class
+
+To create an immutable class in Java, follow these guidelines:
+
+1. **Declare the class as `final`**: This prevents subclasses from altering its behavior.
+2. **Make all fields `private`**: This restricts direct access to the fields from outside the class.
+3. **Do not provide "setter" methods**: This prevents modification of the fields.
+4. **Initialize all fields via a constructor**: Ensure all fields are assigned values when the object is created.
+5. **Return a copy of mutable objects**: If the class has fields that refer to mutable objects (like arrays or collections), return a copy instead of the original.
+
+#### Example of an Immutable Class
+
+```java
+public final class ImmutablePerson {
+    private final String name;
+    private final int age;
+
+    public ImmutablePerson(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getAge() {
+        return age;
+    }
+}
+```
+
+### Breaking Immutability
+
+There are several ways to break the immutability of a class, typically by exposing mutable objects or allowing changes to its fields. Here’s how you might inadvertently create a mutable class:
+
+1. **Not Using `final` Fields**: If you do not declare fields as `final`, they can be modified after construction.
+
+   ```java
+   public class MutablePerson {
+       private String name;
+       private int age;
+
+       public MutablePerson(String name, int age) {
+           this.name = name;
+           this.age = age;
+       }
+
+       public void setName(String name) {
+           this.name = name; // This breaks immutability
+       }
+
+       public void setAge(int age) {
+           this.age = age; // This breaks immutability
+       }
+
+       public String getName() {
+           return name;
+       }
+
+       public int getAge() {
+           return age;
+       }
+   }
+   ```
+
+2. **Exposing Mutable Objects**: If your class has a field that references a mutable object, and you expose it directly, the external code can modify it.
+
+   ```java
+   import java.util.ArrayList;
+   import java.util.List;
+
+   public final class ImmutableClass {
+       private final List<String> items;
+
+       public ImmutableClass(List<String> items) {
+           this.items = new ArrayList<>(items); // Make a copy to maintain immutability
+       }
+
+       public List<String> getItems() {
+           return items; // This exposes the internal list, breaking immutability
+       }
+   }
+   ```
+
+3. **Providing Methods That Modify State**: Any method that allows modification of internal fields will break immutability.
+
+### Summary
+
+- **Immutability**: Objects that cannot be modified after creation.
+- **Creating an Immutable Class**: Use `final` fields, no setters, and return copies of mutable fields.
+- **Breaking Immutability**: Avoid exposing mutable objects, allowing modifications through setters, or not using `final` fields.
+
+By adhering to the principles of immutability, you can create robust, thread-safe classes that simplify the design of your Java applications.
