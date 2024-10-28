@@ -9148,3 +9148,321 @@ Creating a complete React application that covers all those questions would be q
 - **More Q&A:** Populate `data.js` with all the questions and answers.
 
 This setup provides a framework for a React application that can serve as a Q&A platform. You can expand it by adding more features like search, filtering, or user authentication as needed!
+
+
+**Hoisting** in JavaScript is a behavior in which variable and function declarations are moved ("hoisted") to the top of their containing scope during the compilation phase. This means that you can use variables and functions before they are declared in the code. However, only the declarations are hoisted, not the initializations.
+
+### How Hoisting Works
+
+1. **Variable Hoisting**: When a variable is declared with `var`, its declaration is hoisted to the top of the function or global scope. However, its initialization remains in the original location.
+
+   **Example**:
+
+   ```javascript
+   console.log(myVar); // undefined
+   var myVar = 5;
+   console.log(myVar); // 5
+   ```
+
+   In this example, `myVar` is hoisted to the top, so when you first log it, it returns `undefined`. The assignment happens afterward.
+
+2. **Function Hoisting**: Function declarations are hoisted entirely, meaning you can call a function before it is defined.
+
+   **Example**:
+
+   ```javascript
+   greet(); // "Hello!"
+
+   function greet() {
+       console.log("Hello!");
+   }
+   ```
+
+   Here, the entire function declaration is hoisted, so you can call `greet()` before it appears in the code.
+
+### Important Notes
+
+- **`let` and `const`**: Variables declared with `let` and `const` are also hoisted, but they cannot be accessed before their declaration due to the **temporal dead zone**. This means that if you try to access them before declaration, you will get a `ReferenceError`.
+
+  **Example**:
+
+  ```javascript
+  console.log(myLet); // ReferenceError: Cannot access 'myLet' before initialization
+  let myLet = 10;
+  ```
+
+- **Function Expressions**: If you declare a function as a variable (function expression), it is not hoisted in the same way as a function declaration.
+
+  **Example**:
+
+  ```javascript
+  console.log(myFunc); // undefined
+  myFunc(); // TypeError: myFunc is not a function
+
+  var myFunc = function() {
+      console.log("Hi!");
+  };
+  ```
+
+  In this case, `myFunc` is hoisted as a variable, so the log returns `undefined`, and calling it results in an error because the function itself is not yet defined.
+
+### Summary
+
+- **Hoisting** allows variables and functions to be used before they are declared.
+- Only declarations are hoisted, not initializations.
+- `var` declarations are hoisted and initialized with `undefined`.
+- `let` and `const` are hoisted but remain uninitialized in the temporal dead zone until their definition.
+- Function declarations are hoisted entirely, while function expressions behave like variables in terms of hoisting.
+
+Understanding hoisting is crucial for avoiding bugs and writing predictable JavaScript code!
+
+In JavaScript, `==` and `===` are both comparison operators used to compare values, but they behave differently in terms of type coercion. Here’s a detailed explanation of each:
+
+### 1. Equality Operator (`==`)
+
+- **Type Coercion**: The `==` operator performs type coercion when comparing two values. This means that if the values being compared are of different types, JavaScript will attempt to convert one or both values to a common type before making the comparison.
+  
+**Example**:
+
+```javascript
+console.log(5 == '5'); // true, because '5' is coerced to a number
+console.log(null == undefined); // true, these are considered equal
+console.log(0 == false); // true, 0 is coerced to false
+```
+
+### 2. Strict Equality Operator (`===`)
+
+- **No Type Coercion**: The `===` operator checks for both value and type equality without performing any type conversion. If the values are of different types, it returns `false`.
+
+**Example**:
+
+```javascript
+console.log(5 === '5'); // false, because the types are different (number vs string)
+console.log(null === undefined); // false, because they are different types
+console.log(0 === false); // false, because 0 is a number and false is a boolean
+console.log(5 === 5); // true, both value and type are the same
+```
+
+### Summary of Differences
+
+| Operator | Type Coercion | Example                | Result |
+|----------|----------------|------------------------|--------|
+| `==`     | Yes            | `5 == '5'`            | true   |
+| `===`    | No             | `5 === '5'`           | false  |
+|          |                | `null == undefined`    | true   |
+|          |                | `null === undefined`   | false  |
+|          |                | `0 == false`          | true   |
+|          |                | `0 === false`         | false  |
+
+### Best Practice
+
+- It is generally recommended to use `===` (strict equality) to avoid unexpected results due to type coercion. This leads to more predictable and maintainable code.
+
+By understanding the differences between `==` and `===`, you can avoid common pitfalls and write cleaner, more reliable JavaScript code.
+
+In JavaScript, `var`, `let`, and `const` are keywords used to declare variables. They have different scopes, hoisting behaviors, and mutability characteristics. Here's a breakdown of each:
+
+### 1. `var`
+
+- **Scope**: `var` has function scope or global scope if declared outside a function. It does not have block scope.
+- **Hoisting**: Declarations are hoisted to the top of their containing function or global context, but initializations are not hoisted.
+- **Re-declaration**: You can re-declare the same variable within the same scope without any error.
+
+**Example**:
+
+```javascript
+function example() {
+    console.log(x); // undefined (hoisted)
+    var x = 5;
+    console.log(x); // 5
+}
+
+example();
+```
+
+### 2. `let`
+
+- **Scope**: `let` has block scope, meaning it is limited to the block in which it is defined (like within `{}`).
+- **Hoisting**: Declarations are hoisted but are not initialized, leading to a temporal dead zone until the declaration is encountered.
+- **Re-declaration**: You cannot re-declare a variable with `let` in the same scope.
+
+**Example**:
+
+```javascript
+function example() {
+    // console.log(y); // ReferenceError: Cannot access 'y' before initialization
+    let y = 10;
+    console.log(y); // 10
+}
+
+example();
+```
+
+### 3. `const`
+
+- **Scope**: `const` has block scope, similar to `let`.
+- **Hoisting**: Like `let`, declarations are hoisted but not initialized, resulting in a temporal dead zone.
+- **Re-declaration**: You cannot re-declare a variable with `const` in the same scope.
+- **Mutability**: Variables declared with `const` cannot be reassigned. However, if the variable holds an object or array, the contents can be mutated.
+
+**Example**:
+
+```javascript
+function example() {
+    const z = 15;
+    console.log(z); // 15
+    // z = 20; // TypeError: Assignment to constant variable.
+    
+    const obj = { name: 'John' };
+    obj.name = 'Jane'; // This is allowed
+    console.log(obj.name); // Jane
+}
+
+example();
+```
+
+### Summary of Differences
+
+| Feature          | `var`                       | `let`                       | `const`                     |
+|------------------|-----------------------------|-----------------------------|-----------------------------|
+| **Scope**        | Function or global scope    | Block scope                 | Block scope                 |
+| **Hoisting**     | Yes (initialized to `undefined`) | Yes (temporal dead zone)  | Yes (temporal dead zone)    |
+| **Re-declaration** | Allowed                   | Not allowed                 | Not allowed                 |
+| **Mutability**   | Can be reassigned           | Can be reassigned           | Cannot be reassigned        |
+
+### Best Practices
+
+- **Use `let` and `const`**: In modern JavaScript development, it's recommended to use `let` and `const` over `var` to avoid issues with scope and hoisting.
+- **Use `const` by default**: Use `const` for variables that won't change, and switch to `let` when you need to reassign a variable. This helps to make your code clearer and more predictable. 
+
+Understanding these differences is crucial for writing clean, maintainable, and error-free JavaScript code!
+
+In the context of JavaScript and particularly within Node.js and frameworks like React, the term **emit** typically refers to the action of triggering or broadcasting an event. This concept is often associated with the **EventEmitter** class in Node.js or event handling in client-side JavaScript. Here's a breakdown of what it means to emit events:
+
+### 1. EventEmitter in Node.js
+
+- **What is EventEmitter?**: The `EventEmitter` class is part of the Node.js standard library. It allows you to create and handle custom events in your application.
+- **Emitting Events**: When you "emit" an event, you are signaling that something has happened in your application. Other parts of the application can listen for these events and respond accordingly.
+
+**Basic Example**:
+
+```javascript
+const EventEmitter = require('events');
+const myEmitter = new EventEmitter();
+
+// Listener for the 'event' event
+myEmitter.on('event', () => {
+    console.log('An event occurred!');
+});
+
+// Emit the 'event' event
+myEmitter.emit('event'); // Output: An event occurred!
+```
+
+In this example, when `myEmitter.emit('event')` is called, it triggers the associated listener, logging the message to the console.
+
+### 2. Emitting Events in Frontend Frameworks (e.g., React)
+
+In the context of frontend frameworks, especially when dealing with components, you might use event handling to communicate between components. For example, in React, you might define custom events and emit them to notify parent components about changes or actions.
+
+**React Example**:
+
+```javascript
+import React from 'react';
+
+const ChildComponent = ({ onButtonClick }) => {
+    return <button onClick={onButtonClick}>Click Me</button>;
+};
+
+const ParentComponent = () => {
+    const handleChildClick = () => {
+        console.log('Child button was clicked!');
+    };
+
+    return <ChildComponent onButtonClick={handleChildClick} />;
+};
+```
+
+Here, the `ParentComponent` passes a callback (`handleChildClick`) to the `ChildComponent`. When the button is clicked, it effectively "emits" an event that the parent can respond to.
+
+### Summary
+
+- **Emit** refers to triggering an event in both Node.js and frontend frameworks.
+- In Node.js, it's primarily about using the `EventEmitter` class to handle custom events.
+- In frameworks like React, it involves calling functions that notify parent components of changes or actions.
+
+Understanding how to use emit in your applications allows for better event-driven programming, leading to more modular and responsive code.
+
+In JavaScript, especially when working with events in the browser, `preventDefault` and `stopPropagation` are two important methods that help manage event behavior. Here's a detailed explanation of each:
+
+### 1. `preventDefault`
+
+- **Purpose**: This method is used to prevent the default action of an event from occurring. For example, when a form is submitted, the default behavior is to refresh the page. Calling `preventDefault` stops that behavior.
+  
+**Common Use Cases**:
+- Preventing form submission when validation fails.
+- Preventing links from navigating to another page.
+- Stopping other default behaviors associated with certain elements.
+
+**Example**:
+
+```javascript
+document.querySelector('form').addEventListener('submit', function(event) {
+    event.preventDefault(); // Prevents the form from submitting
+    console.log('Form submission prevented.');
+});
+```
+
+In this example, when the form is submitted, `preventDefault` stops the form from actually submitting, allowing you to handle the submission with JavaScript instead.
+
+### 2. `stopPropagation`
+
+- **Purpose**: This method is used to stop an event from bubbling up the DOM tree. When an event occurs, it can trigger not just the target element's event handlers but also those of its parent elements. Calling `stopPropagation` prevents this bubbling.
+  
+**Common Use Cases**:
+- Preventing parent event handlers from being executed when an event occurs on a child element.
+- Managing complex event interactions in nested elements.
+
+**Example**:
+
+```javascript
+document.querySelector('.child').addEventListener('click', function(event) {
+    event.stopPropagation(); // Prevents the event from bubbling up to parent elements
+    console.log('Child clicked.');
+});
+
+document.querySelector('.parent').addEventListener('click', function() {
+    console.log('Parent clicked.');
+});
+```
+
+In this example, when the child element is clicked, `stopPropagation` prevents the click event from bubbling up to the parent element. Thus, only the child's click handler executes.
+
+### Combined Use
+
+You can use both methods together to control both the default action and event propagation.
+
+**Example**:
+
+```javascript
+document.querySelector('a').addEventListener('click', function(event) {
+    event.preventDefault();  // Prevent the default link navigation
+    event.stopPropagation();  // Stop the click event from bubbling up
+    console.log('Link clicked, but navigation prevented.');
+});
+
+document.body.addEventListener('click', function() {
+    console.log('Body clicked.');
+});
+```
+
+In this case, when the link is clicked:
+- The default navigation is prevented (`preventDefault`).
+- The click event does not bubble up to the body (`stopPropagation`), so the body click handler does not execute.
+
+### Summary
+
+- **`preventDefault()`**: Stops the default action of an event (e.g., preventing form submission or link navigation).
+- **`stopPropagation()`**: Prevents an event from bubbling up to parent elements, allowing for more controlled event handling in nested structures.
+
+Understanding and using these methods effectively can help you manage user interactions and events in your web applications more precisely!
