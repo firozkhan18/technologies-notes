@@ -761,6 +761,83 @@ public class Main {
 
 Hashing in Java enables efficient data retrieval, storage, and management through hash tables. Understanding how to implement and utilize hashing effectively is crucial for optimizing performance in your applications.
 
+Hashtable stores information by using a mechanism called hashing. in hashing the informational content of a key is used to determine a unique value called its Hashcode. The Hashcode is then used as the index at which the data associated with the key is stored. the transformation of the key into its Hashcode is performed automatically you never see the Hashcode itself also your code cant directly index the Hashcode. The advantages of hashing is that it allows the execution time of add(), remove() containss and size() to remain constant even for large sets.
+
+Hashing is a process that transforms a key into a hash code, which is then used to determine the index for storing the associated value in a hash table. The key benefits of hash tables are that operations like `add()`, `remove()`, and `contains()` can average out to constant time complexity, O(1), even with large data sets.
+
+Here’s a simple example in Python to illustrate a hash table implementation:
+
+### Code Example
+
+```python
+class HashTable:
+    def __init__(self):
+        self.size = 10  # Initial size of the hash table
+        self.table = [[] for _ in range(self.size)]
+
+    def _hash(self, key):
+        return hash(key) % self.size
+
+    def add(self, key, value):
+        index = self._hash(key)
+        for item in self.table[index]:
+            if item[0] == key:
+                item[1] = value  # Update existing key
+                return
+        self.table[index].append([key, value])  # Add new key-value pair
+
+    def remove(self, key):
+        index = self._hash(key)
+        for i, item in enumerate(self.table[index]):
+            if item[0] == key:
+                del self.table[index][i]
+                return
+
+    def contains(self, key):
+        index = self._hash(key)
+        for item in self.table[index]:
+            if item[0] == key:
+                return True
+        return False
+
+    def size(self):
+        return sum(len(bucket) for bucket in self.table)
+
+
+# Example usage
+ht = HashTable()
+ht.add("apple", 1)
+ht.add("banana", 2)
+print(ht.contains("apple"))  # Output: True
+ht.remove("apple")
+print(ht.contains("apple"))  # Output: False
+print("Size of hash table:", ht.size())  # Output: Size of hash table: 2
+```
+
+### Mermaid Diagram
+
+Here’s a simple Mermaid diagram that represents the internal generation of a hash code and how it relates to a hash table:
+
+```mermaid
+graph TD;
+    A[Key] -->|Hash Function| B[Hash Code]
+    B -->|Modulo Operation| C[Index]
+    C -->|Store Data| D[Hash Table]
+    D -->|Retrieve Data| E[Value]
+```
+
+### Explanation
+
+1. **Key**: The input to the hash table (e.g., "apple").
+2. **Hash Function**: A function that converts the key into a hash code.
+3. **Hash Code**: The numerical representation of the key after applying the hash function.
+4. **Modulo Operation**: Used to map the hash code to a valid index within the bounds of the hash table's array size.
+5. **Index**: The position in the hash table where the associated value will be stored.
+6. **Hash Table**: The data structure that stores the key-value pairs.
+7. **Value**: The data retrieved when querying the hash table with the key.
+
+This setup provides a clear understanding of how hashing works internally in a hash table.
+
 ## Iterator Vs ListIterator		
 			
 Iterator Vs ListIterator
