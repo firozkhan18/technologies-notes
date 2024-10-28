@@ -9913,3 +9913,101 @@ myDog.sound();
 ### Conclusion
 
 Java provides various ways to create objects, including using constructors, factory methods, cloning, deserialization, reflection, and anonymous classes. The choice of method depends on the specific requirements of your application and design considerations. Each method has its use cases and benefits, allowing for flexibility in object creation.
+
+Let’s explore **lambda expressions**, **functional interfaces**, and the **Stream API** in Java, along with the concepts of **intermediate** and **terminal operations**.
+
+### 1. Lambda Expressions
+
+Lambda expressions are a way to provide clear and concise syntax for writing anonymous methods (implementing functional interfaces) in Java. They allow you to treat functionality as a method argument or to create a succinct way to express instances of single-method interfaces.
+
+#### Syntax:
+```java
+(parameters) -> expression
+```
+
+#### Example:
+```java
+// A simple lambda expression to print a message
+Runnable runnable = () -> System.out.println("Hello, Lambda!");
+runnable.run();
+```
+
+### 2. Functional Interfaces
+
+A functional interface is an interface that contains exactly one abstract method. They can have multiple default or static methods but must have only one abstract method. Functional interfaces are the foundation for lambda expressions.
+
+#### Example:
+```java
+@FunctionalInterface
+interface Calculator {
+    int add(int a, int b);
+}
+
+// Using lambda with functional interface
+Calculator add = (a, b) -> a + b;
+System.out.println(add.add(5, 3)); // Output: 8
+```
+
+### 3. Stream API
+
+The Stream API provides a functional approach to processing sequences of elements (like collections) in Java. Streams allow for operations on data in a declarative way, enabling operations to be chained together.
+
+#### Creating a Stream:
+You can create a stream from collections or arrays.
+
+```java
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Stream;
+
+List<String> names = Arrays.asList("Alice", "Bob", "Charlie");
+Stream<String> nameStream = names.stream();
+```
+
+### 4. Intermediate Operations
+
+Intermediate operations are those that transform a stream into another stream. They are lazy, meaning they are not executed until a terminal operation is invoked.
+
+#### Common Intermediate Operations:
+- `filter()`: Filters elements based on a predicate.
+- `map()`: Transforms each element using a provided function.
+- `sorted()`: Sorts the elements.
+
+#### Example:
+```java
+List<String> filteredNames = names.stream()
+                                   .filter(name -> name.startsWith("A"))
+                                   .collect(Collectors.toList());
+System.out.println(filteredNames); // Output: [Alice]
+```
+
+### 5. Terminal Operations
+
+Terminal operations are operations that produce a non-stream result, such as a value or a side effect. When a terminal operation is executed, the entire stream pipeline is processed.
+
+#### Common Terminal Operations:
+- `forEach()`: Performs an action for each element.
+- `collect()`: Collects the elements into a collection (like a List).
+- `count()`: Counts the number of elements.
+- `reduce()`: Reduces the elements to a single value.
+
+#### Example:
+```java
+// Printing all names
+names.stream().forEach(System.out::println);
+
+// Counting names starting with 'B'
+long count = names.stream()
+                  .filter(name -> name.startsWith("B"))
+                  .count();
+System.out.println(count); // Output: 1
+```
+
+### Summary
+
+- **Lambda Expressions** simplify the syntax for implementing functional interfaces.
+- **Functional Interfaces** are interfaces with a single abstract method, enabling the use of lambdas.
+- The **Stream API** provides a powerful way to process collections of data with operations that can be combined.
+- **Intermediate Operations** are lazy and return a new stream, while **Terminal Operations** are eager and produce a result or a side effect.
+
+Together, these concepts promote a more functional programming style in Java, making code more expressive and easier to read.
