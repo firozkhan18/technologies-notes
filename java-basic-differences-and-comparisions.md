@@ -761,58 +761,104 @@ public class Main {
 
 Hashing in Java enables efficient data retrieval, storage, and management through hash tables. Understanding how to implement and utilize hashing effectively is crucial for optimizing performance in your applications.
 
-Hashtable stores information by using a mechanism called hashing. in hashing the informational content of a key is used to determine a unique value called its Hashcode. The Hashcode is then used as the index at which the data associated with the key is stored. the transformation of the key into its Hashcode is performed automatically you never see the Hashcode itself also your code cant directly index the Hashcode. The advantages of hashing is that it allows the execution time of add(), remove() containss and size() to remain constant even for large sets.
+Hashtable stores information by using a mechanism called hashing. In hashing the informational content of a key is used to determine a unique value called its Hashcode. The Hashcode is then used as the index at which the data associated with the key is stored. the transformation of the key into its Hashcode is performed automatically you never see the Hashcode itself also your code cant directly index the Hashcode. The advantages of hashing is that it allows the execution time of add(), remove() contains() and size() to remain constant even for large sets.
 
 Hashing is a process that transforms a key into a hash code, which is then used to determine the index for storing the associated value in a hash table. The key benefits of hash tables are that operations like `add()`, `remove()`, and `contains()` can average out to constant time complexity, O(1), even with large data sets.
 
-Here’s a simple example in Python to illustrate a hash table implementation:
+### Java Code Example
 
-### Code Example
+```java
+import java.util.ArrayList;
+import java.util.LinkedList;
 
-```python
-class HashTable:
-    def __init__(self):
-        self.size = 10  # Initial size of the hash table
-        self.table = [[] for _ in range(self.size)]
+class HashTable {
+    private int size;
+    private ArrayList<LinkedList<Entry>> table;
 
-    def _hash(self, key):
-        return hash(key) % self.size
+    // Entry class to hold key-value pairs
+    private class Entry {
+        String key;
+        int value;
 
-    def add(self, key, value):
-        index = self._hash(key)
-        for item in self.table[index]:
-            if item[0] == key:
-                item[1] = value  # Update existing key
-                return
-        self.table[index].append([key, value])  # Add new key-value pair
+        Entry(String key, int value) {
+            this.key = key;
+            this.value = value;
+        }
+    }
 
-    def remove(self, key):
-        index = self._hash(key)
-        for i, item in enumerate(self.table[index]):
-            if item[0] == key:
-                del self.table[index][i]
-                return
+    public HashTable() {
+        this.size = 10;  // Initial size of the hash table
+        this.table = new ArrayList<>(size);
+        for (int i = 0; i < size; i++) {
+            table.add(new LinkedList<>());
+        }
+    }
 
-    def contains(self, key):
-        index = self._hash(key)
-        for item in self.table[index]:
-            if item[0] == key:
-                return True
-        return False
+    private int hash(String key) {
+        return Math.abs(key.hashCode()) % size;
+    }
 
-    def size(self):
-        return sum(len(bucket) for bucket in self.table)
+    public void add(String key, int value) {
+        int index = hash(key);
+        for (Entry entry : table.get(index)) {
+            if (entry.key.equals(key)) {
+                entry.value = value;  // Update existing key
+                return;
+            }
+        }
+        table.get(index).add(new Entry(key, value));  // Add new key-value pair
+    }
 
+    public void remove(String key) {
+        int index = hash(key);
+        LinkedList<Entry> bucket = table.get(index);
+        bucket.removeIf(entry -> entry.key.equals(key));  // Remove entry if it matches the key
+    }
 
-# Example usage
-ht = HashTable()
-ht.add("apple", 1)
-ht.add("banana", 2)
-print(ht.contains("apple"))  # Output: True
-ht.remove("apple")
-print(ht.contains("apple"))  # Output: False
-print("Size of hash table:", ht.size())  # Output: Size of hash table: 2
+    public boolean contains(String key) {
+        int index = hash(key);
+        for (Entry entry : table.get(index)) {
+            if (entry.key.equals(key)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public int size() {
+        int count = 0;
+        for (LinkedList<Entry> bucket : table) {
+            count += bucket.size();
+        }
+        return count;
+    }
+
+    // Example usage
+    public static void main(String[] args) {
+        HashTable ht = new HashTable();
+        ht.add("apple", 1);
+        ht.add("banana", 2);
+        System.out.println(ht.contains("apple"));  // Output: true
+        ht.remove("apple");
+        System.out.println(ht.contains("apple"));  // Output: false
+        System.out.println("Size of hash table: " + ht.size());  // Output: Size of hash table: 1
+    }
+}
 ```
+
+### Explanation
+
+1. **HashTable Class**: Contains the core functionality of the hash table.
+2. **Entry Class**: Represents a key-value pair, encapsulating both.
+3. **Constructor**: Initializes the hash table with a specified size and sets up an array of linked lists.
+4. **hash Method**: Computes the index using the key's hash code.
+5. **add Method**: Adds a new key-value pair or updates an existing key.
+6. **remove Method**: Removes the entry associated with the given key.
+7. **contains Method**: Checks if a key exists in the hash table.
+8. **size Method**: Returns the number of entries in the hash table.
+9. **main Method**: Demonstrates usage of the hash table.
+
+This implementation maintains the same logic as your Python version while adhering to Java's syntax and conventions.
 
 ### Mermaid Diagram
 
