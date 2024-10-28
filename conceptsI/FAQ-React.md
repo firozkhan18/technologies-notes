@@ -10145,3 +10145,56 @@ In this example, the `Input` component destructures `label` and `onChange` from 
 - **`{...rest}`**: Use when you want to selectively handle certain props while passing the remaining ones to another component or element. This approach provides greater flexibility and cleanliness in your component code.
 
 Both patterns improve code readability and maintainability by reducing redundancy when handling props.
+
+WebSocket is primarily a **communication protocol** that facilitates real-time, bidirectional communication between clients (typically web browsers) and servers. While it can be utilized in both the **UI (client-side)** and the **backend (server-side)**, its role is distinct in each context:
+
+### 1. **WebSocket in the UI (Client-Side)**
+
+- **Purpose**: In the UI, WebSocket is used to create a persistent connection to the server, allowing real-time updates without the need for constant polling.
+- **Example Use Cases**:
+  - Real-time notifications (e.g., chat applications, live sports updates).
+  - Collaborative applications where multiple users can see changes immediately (e.g., Google Docs).
+  
+**Example**:
+```javascript
+const socket = new WebSocket('ws://example.com/socket');
+
+socket.onopen = () => {
+    console.log('WebSocket connection established');
+    socket.send('Hello Server!');
+};
+
+socket.onmessage = (event) => {
+    console.log('Message from server:', event.data);
+};
+```
+
+### 2. **WebSocket in the Backend (Server-Side)**
+
+- **Purpose**: On the server side, WebSocket handles incoming connections, manages communication with clients, and processes messages.
+- **Example Use Cases**:
+  - Broadcasting messages to multiple clients (e.g., chat messages).
+  - Handling data streams (e.g., live data feeds).
+  
+**Example** (Node.js with `ws` library):
+```javascript
+const WebSocket = require('ws');
+
+const wss = new WebSocket.Server({ port: 8080 });
+
+wss.on('connection', (ws) => {
+    console.log('Client connected');
+
+    ws.on('message', (message) => {
+        console.log('Received:', message);
+        // Echo the message back to the client
+        ws.send(`Server received: ${message}`);
+    });
+});
+```
+
+### Summary
+
+- **WebSocket is a protocol** that enables real-time communication and is utilized by both client-side (UI) and server-side (backend) components.
+- In the UI, it is used to manage connections and handle messages; in the backend, it listens for connections and processes communication with clients.
+- Both sides work together to enable features like real-time updates and interactive applications.
