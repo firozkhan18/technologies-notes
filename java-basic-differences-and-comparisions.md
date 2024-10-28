@@ -2323,7 +2323,7 @@ graph TD
     A[JVM Memory Management] --> B[Heap]
     A --> C[Stack]
     A --> D[Method Area]
-    A --> E[Program Counter (PC) Register]
+    A --> E[Program Counter - PC Register]
     A --> F[Native Method Stack]
 
     B --> B1[Object Allocation]
