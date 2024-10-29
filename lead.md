@@ -249,6 +249,17 @@ Providing ratings and performance evaluations for junior teammates is a crucial 
 
 By following these steps, you ensure that the evaluation process is fair, transparent, and focused on the development of your junior teammates.
 
+Example Feedback
+Positive Feedback:
+
+"You demonstrated excellent problem-solving skills during the XYZ project. Your quick resolution of issues significantly contributed to the project's success."
+Constructive Feedback:
+
+"While your contributions were valuable, there were instances where deadlines were missed. We need to focus on time management to ensure timely delivery of future tasks."
+Development Goals:
+
+"To enhance your project management skills, consider attending a workshop on time management and scheduling weekly progress check-ins with your mentor."
+
 ---
 As a team lead, my role and responsibilities encompass several key areas, including:
 
