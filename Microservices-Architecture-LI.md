@@ -2638,3 +2638,30 @@ Install LXC, Create a Container, Run & Access, Delete and exit
 Namespace ( PID, NET, MNT, user, UTS) - Cgroups(CPU, memory, I/O, Network) - File Systems (/proc) - Container Run time - System Calls
  
 You can create containers without Docker, but you need to have knowledge of - Processes, Namespaces, cgroups, chroot, syscalls
+
+
+## Authentication within REST APIs ensures only authorized users or applications access the API's resources. Here are several commonly employed methods:
+
+𝐁𝐚𝐬𝐢𝐜 𝐀𝐮𝐭𝐡𝐞𝐧𝐭𝐢𝐜𝐚𝐭𝐢𝐨𝐧:
+- Involves sending a username and password with each request.
+- May be less secure due to lack of encryption.
+
+Use Case: Suitable for simple applications where security and encryption are not primary concerns, or when used over secured connections.
+
+𝐓𝐨𝐤𝐞𝐧 𝐀𝐮𝐭𝐡𝐞𝐧𝐭𝐢𝐜𝐚𝐭𝐢𝐨𝐧
+- Utilizes generated tokens, like JSON Web Tokens (JWT), exchanged between client and server.
+- Enhances security by avoiding transmission of login credentials with each request.
+
+Use Case: Ideal for secure and scalable systems, especially to avoid transmitting login credentials with each request.
+
+𝐎𝐀𝐮𝐭𝐡 𝐀𝐮𝐭𝐡𝐞𝐧𝐭𝐢𝐜𝐚𝐭𝐢𝐨𝐧:
+- Enables third-party limited access to user resources without exposing credentials.
+- Issues access tokens after user authentication.
+
+Use Case: Perfect for controlled access to user resources by third-party applications or services.
+
+𝐀𝐏𝐈 𝐊𝐞𝐲 𝐀𝐮𝐭𝐡𝐞𝐧𝐭𝐢𝐜𝐚𝐭𝐢𝐨𝐧:
+- Assigns unique keys to users or applications, sent in headers or parameters.
+- Straightforward but may lack security features of token-based or OAuth methods.
+
+Use Case: Convenient for straightforward access control in less sensitive environments or for specific functionalities without user-specific permissions.
