@@ -2015,3 +2015,40 @@ Here are the top 5 ways API gateways can elevate your application:
 5. 𝗔𝘂𝘁𝗵𝗲𝗻𝘁𝗶𝗰𝗮𝘁𝗶𝗼𝗻 & 𝗔𝘂𝘁𝗵𝗼𝗿𝗶𝘇𝗮𝘁𝗶𝗼𝗻: Validate user credentials and permissions at the entry point, keeping backend services protected from unauthorized access.
 
 API gateways play a vital role in fortifying security, scalability, and manageability in a microservices ecosystem. If you haven’t implemented one yet, it might be worth exploring.
+
+## 𝐃𝐨𝐜𝐤𝐞𝐫 𝐂𝐨𝐦𝐦𝐚𝐧𝐝𝐬 𝐂𝐡𝐞𝐚𝐭 𝐒𝐡𝐞𝐞𝐭 🐳
+ 
+As Docker gains traction, mastering essential commands becomes crucial for developers and ops engineers alike. This cheat sheet highlights key Docker commands for efficient management:
+ 
+ 𝐈𝐦𝐚𝐠𝐞𝐬:
+ docker build: Create an image from a Dockerfile.
+ docker pull: Fetch an image from a registry.
+ docker push: Upload an image to a registry.
+ 
+ 𝐂𝐨𝐧𝐭𝐚𝐢𝐧𝐞𝐫𝐬:
+ docker run: Start a new container based on an image.
+ docker start: Start one or more stopped containers.
+ docker stop: Stop one or more running containers.
+ docker restart: Restart one or more containers.
+ docker logs: View logs from a container.
+ 
+ 𝐍𝐞𝐭𝐰𝐨𝐫𝐤𝐬:
+ docker network create: Create a new network.
+ docker network connect: Attach a container to a network.
+ 
+ 𝐕𝐨𝐥𝐮𝐦𝐞𝐬: 
+ docker volume create: Create a new volume for persisting data.
+ 
+ 𝐒𝐞𝐫𝐯𝐢𝐜𝐞𝐬: 
+ docker service create: Deploy a new service.
+ docker service logs: Fetch logs of a service.
+ 
+ 𝐂𝐥𝐞𝐚𝐧𝐮𝐩:
+ docker system prune: Remove unused resources from the Docker environment.
+ 
+ With these commands, you can:
+ Build and share container images effortlessly.
+ Manage running containers with ease.
+ Establish networks and persist data using volumes.
+ Define and scale services across multiple containers seamlessly.
+ Keep your Docker environment clean by removing unused resources efficiently.
