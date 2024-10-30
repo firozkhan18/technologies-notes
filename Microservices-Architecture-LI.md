@@ -2200,3 +2200,46 @@ Here's a quick recap of your roadmap:
 3. Implement comprehensive testing.
 4. Design with scalability in mind.
 5. Monitor performance metrics.
+
+## 𝐀𝐩𝐩𝐥𝐢𝐜𝐚𝐭𝐢𝐨𝐧 𝐑𝐞𝐟𝐞𝐫𝐞𝐧𝐜𝐞 𝐀𝐫𝐜𝐡𝐢𝐭𝐞𝐜𝐭𝐮𝐫𝐞 𝐨𝐧 𝐀𝐳𝐮𝐫𝐞❗!
+
+
+This post outlines an architecture for migrating z/OS mainframe OLTP applications to a scalable, highly available system on Azure, focusing on various components and considerations. It's divided into networking and identity, application, storage, and monitoring.
+
+𝐍𝐞𝐭𝐰𝐨𝐫𝐤𝐢𝐧𝐠 𝐚𝐧𝐝 𝐈𝐝𝐞𝐧𝐭𝐢𝐭𝐲:
+
+Azure ExpressRoute: Enables private connections between on-premises infrastructure and Azure datacenters.
+
+Microsoft Entra ID: Manages identities and accesses by synchronizing with an on-premises directory.
+
+Azure Front Door & Traffic Manager: Offer global HTTP load balancing and DNS request routing.
+
+Azure Web Application Firewall & Azure CDN: Protect apps from attacks and enhance content delivery.
+
+Azure Application Gateway & Load Balancer: Provide layer 7 and layer 4 load balancing respectively.
+
+𝐀𝐩𝐩𝐥𝐢𝐜𝐚𝐭𝐢𝐨𝐧:
+
+Azure API Management & App Service: Facilitate API publishing, security, and scalable web app hosting.
+
+Azure Kubernetes Service (AKS) & Azure Spring Apps: Manage containerized applications and run Spring microservices.
+
+Azure Service Bus & Azure Functions: Enable cloud messaging and running small pieces of code, respectively.
+
+Azure Cache for Redis: Offers in-memory caching to improve performance.
+
+𝐒𝐭𝐨𝐫𝐚𝐠𝐞:
+
+Azure Storage: Provides scalable cloud services for data and applications.
+Azure SQL & Azure Cosmos DB: Offer cloud databases for a variety of use cases.
+Azure Database for PostgreSQL & MySQL: Fully managed database services.
+
+𝐌𝐨𝐧𝐢𝐭𝐨𝐫𝐢𝐧𝐠:
+
+Azure Monitor & Log Analytics: Collect, analyze, and act on telemetry data.
+
+Application Insights & Azure Monitor Alerts: Provide application-level monitoring and alerting.
+
+Scenario Details: The architecture supports evolving business needs, offering a scalable and highly available cloud system using Azure's platform as a service (PaaS). It's particularly suited for OLTP workloads that serve an international user base and require flexible scaling.
+
+Source: Azure Architecture Blog
