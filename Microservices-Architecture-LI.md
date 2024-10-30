@@ -2256,3 +2256,23 @@ In today's fast-paced digital world, ensuring your API performs at its best is c
 🔹 Load Balancing: Distribute requests across multiple servers to maintain high availability and even load distribution. Implement health checks to ensure all servers are in top shape.
 
 By implementing these strategies, you can ensure your API is robust, responsive, and ready to meet the demands of your users.
+
+## System Design Master Template 
+
+This template provides a concise overview of essential components for building scalable, reliable systems:
+
+- DNS (Domain Name System): Translates domain names into IP addresses, enabling access to web servers.
+- Load Balancer: Distributes traffic evenly to prevent server overload and ensures high availability.
+- API Gateway: Acts as a central entry point, managing traffic between clients and backend systems.
+- CDN (Content Delivery Network): Reduces latency by serving content from servers closest to the user.
+- Forward Proxy vs. Reverse Proxy: Enhances security and performance through traffic routing.
+- Caching: Speeds up response times by storing frequently accessed data in memory.
+- Data Partitioning: Improves storage efficiency and retrieval performance.
+- Sharding: Increases database scalability by dividing data across multiple nodes.
+- Database Replication: Ensures data availability and fault tolerance by duplicating data.
+- Distributed Messaging Systems: Synchronise components to maintain system-wide functionality.
+- Distributed File Systems: Manage large datasets across multiple servers efficiently.
+- Notification System: Delivers messages via email, SMS, or push notifications.
+- Full-text Search: Enables fast, accurate retrieval of information from documents or databases.
+- Data Warehouse: Supports business intelligence by consolidating and analyzing data.
+- Distributed Coordination Services: Maintain system reliability and consistency.
