@@ -2665,3 +2665,32 @@ Use Case: Perfect for controlled access to user resources by third-party applica
 - Straightforward but may lack security features of token-based or OAuth methods.
 
 Use Case: Convenient for straightforward access control in less sensitive environments or for specific functionalities without user-specific permissions.
+
+## Building a DevOps CI/CD Pipeline Locally: GitHub, Jenkins, Maven, SonarQube, Docker, ArgoCD, Kubernetes 
+blog by Deepak Kumar from medium 
+
+Project Introduction:
+This project implements a complete DevOps CI/CD pipeline in a local environment. The CI part is implemented using Docker and Docker Compose, providing isolated environments for Jenkins, SonarQube, and other necessary tools. DockerHub is used as the container registry for managing Docker images. For code quality analysis and build management, Maven and SonarQube are integrated with Jenkins, ensuring a smooth and efficient continuous integration process.
+
+The CD part is managed with Kubernetes running in Minikube, allowing for local orchestration of containers. Deployment to Kubernetes is automated using ArgoCD, which facilitates smooth rollouts and rollbacks. Monitoring and logging are handled using Prometheus, Grafana, Filebeat, OpenSearch, and Kibana, all installed via Helm charts for ease of configuration. This setup provides comprehensive observability and logging capabilities, making it ideal for testing new features and fixes.
+
+Prerequisites:
+Before getting started with this DevOps CI/CD project, ensure the following tools are installed and properly configured:
+
+Docker: For containerization.
+
+Docker Compose: To manage multi-container applications.
+
+DockerHub: For storing and managing Docker images.
+
+kubectl: For interacting with the Kubernetes cluster.
+
+Minikube: To set up a local Kubernetes environment.
+
+Helm: For managing Kubernetes applications.
+
+Git: For version control.
+
+ArgoCD CLI: (Optional) For managing deployments through the command line.
+
+GitHub Account: For repository management.
