@@ -2276,3 +2276,25 @@ This template provides a concise overview of essential components for building s
 - Full-text Search: Enables fast, accurate retrieval of information from documents or databases.
 - Data Warehouse: Supports business intelligence by consolidating and analyzing data.
 - Distributed Coordination Services: Maintain system reliability and consistency.
+
+## 𝐀𝐖𝐒 𝐖𝐞𝐛 𝐀𝐩𝐩𝐥𝐢𝐜𝐚𝐭𝐢𝐨𝐧 𝐆𝐞𝐧𝐞𝐫𝐚𝐥 𝐑𝐞𝐟𝐞𝐫𝐞𝐧𝐜𝐞 𝐀𝐫𝐜𝐡𝐢𝐭𝐞𝐜𝐭𝐮𝐫𝐞❗
+
+Crafting secure and scalable cloud applications on AWS requires a solid foundation. This post explores the essential building blocks that form a typical AWS end-to-end application architecture.
+
+🔶 𝗘𝘀𝘀𝗲𝗻𝘁𝗶𝗮𝗹 𝗕𝘂𝗶𝗹𝗱𝗶𝗻𝗴 𝗕𝗹𝗼𝗰𝗸𝘀:
+
+✔️ AWS VPC (Virtual Private Cloud): A secure, isolated neighborhood within the cloud is your VPC, housing all your application resources and providing a private network.
+
+✔️ Subnets: These are subdivisions within your VPC. They segment your network further, allowing you to isolate public-facing components from private ones.
+
+✔️ Servers: The workhorses of your application. Web servers handle requests, application servers handle the logic. Run them on EC2 instances (flexible, separate, or combined).
+
+✔️ RDS: This manages service stores your application's data. It offers a variety of database engine options and ensures reliability and scalability.
+
+✔️ Load Balancer: It distributes incoming user requests across multiple EC2 instances, ensuring your application remains available and performs fine under heavy traffic.
+
+✔️ Auto Scaling Group: An Auto Scaling Group scales your EC2 instances up or down based on predefined rules, ensuring your application can handle fluctuating loads with ease.
+
+✔️ Security Groups: These are virtual firewalls for your EC2 instances. They control incoming and outgoing traffic, enforcing security and access restrictions.
+
+✔️ Route 53: This is your domain name manager in the cloud. Route 53 directs users to your application's endpoint (often a Load Balancer) and allows you to register and manage your domain names.
