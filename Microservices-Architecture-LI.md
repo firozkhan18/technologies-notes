@@ -2694,3 +2694,21 @@ Git: For version control.
 ArgoCD CLI: (Optional) For managing deployments through the command line.
 
 GitHub Account: For repository management.
+
+## 𝐨𝐩 𝐌𝐢𝐜𝐫𝐨𝐬𝐞𝐫𝐯𝐢𝐜𝐞𝐬 𝐃𝐞𝐬𝐢𝐠𝐧 𝐏𝐚𝐭𝐭𝐞𝐫𝐧𝐬 with you 😊 
+
+➡ API Gateway Pattern: Centralizes external access to your microservices, simplifying communication and providing a single entry point for client requests.
+
+➡ Backends for Frontends Pattern (BFF): Creates dedicated backend services for each frontend, optimizing performance and user experience tailored to each platform.
+
+➡ Service Discovery Pattern: Enables microservices to dynamically discover and communicate with each other, simplifying service orchestration and enhancing system scalability.
+
+➡ Circuit Breaker Pattern: Implements a fault-tolerant mechanism for microservices, preventing cascading failures by automatically detecting and isolating faulty services.
+
+➡ Retry Pattern: Enhances microservices' resilience by automatically retrying failed operations, increasing the chances of successful execution and minimizing transient issues.
+
+➡ Sidecar Pattern: Attaches additional components to your microservices, providing modular functionality without altering the core service itself.
+
+➡ Saga Pattern: Manages distributed transactions across multiple microservices, ensuring data consistency while maintaining the autonomy of your services.
+
+➡ CQRS (Command Query Responsibility Segregation) Pattern: Separates the read and write operations in a microservice, improving performance, scalability, and maintainability.
