@@ -2298,3 +2298,35 @@ Crafting secure and scalable cloud applications on AWS requires a solid foundati
 ✔️ Security Groups: These are virtual firewalls for your EC2 instances. They control incoming and outgoing traffic, enforcing security and access restrictions.
 
 ✔️ Route 53: This is your domain name manager in the cloud. Route 53 directs users to your application's endpoint (often a Load Balancer) and allows you to register and manage your domain names.
+
+
+## A Cheatsheet to Build Secure APIs
+
+An insecure API can compromise your entire application. Follow these strategies to mitigate the risk:
+
+1 - Using HTTPS
+Encrypts data in transit and protects against man-in-the-middle attacks.
+This ensures that data hasn’t been tampered with during transmission.
+
+2 - Rate Limiting and Throttling
+Rate limiting prevents DoS attacks by limiting requests from a single IP or user.
+The goal is to ensure fairness and prevent abuse.
+
+3 - Validation of Inputs
+Defends against injection attacks and unexpected data format.
+Validate headers, inputs, and payload
+
+4 - Authentication and Authorization
+Don’t use basic auth for authentication. Instead, use a standard authentication approach like JWTs
+Use a random key that is hard to guess as the JWT secret
+Make token expiration short
+For authorization, use OAuth
+
+5 - Using Role-based Access Control
+RBAC simplifies access management for APIs and reduces the risk of unauthorized actions.
+Granular control over user permission based on roles.
+
+6 - Monitoring
+Monitoring the APIs is the key to detecting issues and threats early.
+Use tools like Kibana, Cloudwatch, Datadog, and Slack for monitoring
+Don’t log sensitive data like credit card info, passwords, credentials, etc.
