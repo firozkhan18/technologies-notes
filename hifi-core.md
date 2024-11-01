@@ -124,6 +124,19 @@ JDK, Java Development Kit, is a JRE and a set of tools for developing applicatio
 
 In short: JDK is an environment for developing programs in Java, which includes a JRE environment for running Java programs, which in turn contains a JVM - an interpreter of Java program code.
 
+JRE, JVM, and JDK are key components of the Java ecosystem, each serving a distinct purpose:
+
+1. **JVM (Java Virtual Machine)**: This is the virtual machine that executes Java bytecode. It manages memory, runs code, and interacts with the operating system. The JVM enables platform independence, as bytecode can run on any system with the appropriate JVM installed.
+
+2. **JRE (Java Runtime Environment)**: This is the runtime environment for Java, which includes the JVM and a set of libraries necessary for running Java applications. The JRE does not contain development tools like compilers or debuggers; its purpose is to provide the environment for executing already compiled programs.
+
+3. **JDK (Java Development Kit)**: This is the complete package for developing applications in Java. The JDK includes the JRE along with development tools such as the Java compiler (`javac`), debugger, and other utilities. It is intended for developers who write and compile Java code.
+
+In summary:
+- **JVM**: Executes bytecode.
+- **JRE**: Contains the JVM and libraries for running programs.
+- **JDK**: Includes the JRE and tools for development.
+- 
 to the table of contents
 
 ## What are the different access modifiers?
