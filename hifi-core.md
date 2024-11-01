@@ -1,6 +1,6 @@
-Interview Questions
+[Interview Questions](README.md)
 
-# Core Java
+# Java Core
 
 - [What is the difference between JRE, JVM, and JDK?](#what-is-the-difference-between-jre-jvm-and-jdk)
 - [What are the different access modifiers?](#what-are-the-different-access-modifiers)
