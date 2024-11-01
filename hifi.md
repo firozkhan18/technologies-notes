@@ -40,13 +40,9 @@
 
 [Back to Table of Contents](#Interview-Questions-for-Java-Developer)
 
-Java Core
-Here’s your table of contents with navigation, formatted without numbers:
-
 ---
 
-# **Table of Contents**
-
+## Java Core
 - [What is the difference between JRE, JVM, and JDK?](#what-is-the-difference-between-jre-jvm-and-jdk)
 - [What are the different access modifiers?](#what-are-the-different-access-modifiers)
 - [What does the final keyword mean?](#what-does-the-final-keyword-mean)
@@ -108,9 +104,7 @@ Here’s your table of contents with navigation, formatted without numbers:
 - [What is the Object class? What methods does it have?](#what-is-the-object-class-what-methods-does-it-have)
 - [Tell us about cloning objects.](#tell-us-about-cloning-objects)
 - [What is the difference between shallow and deep cloning?](#what-is-the-difference-between-shallow-and-deep-cloning)
-- [Which cloning method is preferable?](
-
-#which-cloning-method-is-preferable)
+- [Which cloning method is preferable?](#which-cloning-method-is-preferable)
 - [Why is the clone() method declared in the Object class and not in the Cloneable interface?](#why-is-the-clone-method-declared-in-the-object-class-and-not-in-the-cloneable-interface)
 - [Define the concept of "constructor".](#define-the-concept-of-constructor)
 - [What is the "default constructor"?](#what-is-the-default-constructor)
@@ -156,6 +150,8 @@ Here’s your table of contents with navigation, formatted without numbers:
 - [Suppose there is a method that can throw IOException and FileNotFoundException, in what sequence should the catch blocks go? How many catch blocks will be executed?](#suppose-there-is-a-method-that-can-throw-ioexception-and-filenotfoundexception-in-what-sequence-should-the-catch-blocks-go-how-many-catch-blocks-will-be-executed)
 - [What are generics?](#what-are-generics)
 - [What is "internationalization" and "localization"?](#what-is-internationalization-and-localization)
+
+[Back to Table of Contents](#Interview-Questions-for-Java-Developer)
 
 ---
 
@@ -238,9 +234,7 @@ Here’s your table of contents with navigation, formatted without numbers:
 - [What are the ways to iterate through list items?](#ways-to-iterate-list)
 - [How can I get synchronized standard collection objects?](#synchronized-collections)
 - [How do I get a read-only collection?](#readonly-collection)
-- [Write a single-threaded
-
- program that causes the collection to throw a ConcurrentModificationException.](#concurrent-modification-exception)
+- [Write a single-threaded program that causes the collection to throw a ConcurrentModificationException.](#concurrent-modification-exception)
 - [Give an example where a collection throws an UnsupportedOperationException.](#unsupported-operation-exception)
 - [Implement the symmetric difference between the two collections using the Collection methods (addAll(...), removeAll(...), retainAll(...)).](#symmetric-difference)
 - [How do I use LinkedHashMap to make a cache with an "invalidation policy"?](#linkedhashmap-cache)
@@ -251,491 +245,482 @@ Here’s your table of contents with navigation, formatted without numbers:
 - [Make a HashSet from the HashMap keys.](#hashset-from-hashmap-keys)
 - [Make a HashMap from HashSet<Map.Entry<K, V>>.](#hashmap-from-hashset-entries)
 
+[Back to Table of Contents](#Interview-Questions-for-Java-Developer)
+
 ---
 
-Java 8
-What are the new features in Java 8 and JDK 8?
-What is "lambda"? What is the structure and features of using a lambda expression?
-What variables do lambda expressions have access to?
-How do I sort a list of strings using a lambda expression?
-What is a "method reference"?
-What kinds of method references do you know?
-Explain the expression System.out::p rintln.
-What are "functional interfaces"?
-What are the Function<T, R>, DoubleFunction<R>, IntFunction<R>, and LongFunction<R> functional interfaces for?
-What are the functional interfaces UnaryOperator<T>, DoubleUnaryOperator, IntUnaryOperator and LongUnaryOperator for?
-What are the functional interfaces BinaryOperator<T>, DoubleBinaryOperator, IntBinaryOperator and LongBinaryOperator for?
-What are the Predicate<T>, DoublePredicate, IntPredicate, and LongPredicate functional interfaces for?
-What are the Consumer<T>, DoubleConsumer, IntConsumer, and LongConsumer functional interfaces for?
-What are the Supplier<T>, BooleanSupplier, DoubleSupplier, IntSupplier and LongSupplier functional interfaces for?
-What is the functional interface of BiConsumer<T,U>?
-What is the functional interface of BiFunction<T,U,R>?
-What is the functional interface of BiPredicate<T,U>?
-What are functional interfaces of the _To_Function type for?
-What are the ToDoubleBiFunction<T,U>, ToIntBiFunction<T,U> and ToLongBiFunction<T,U> functional interfaces for?
-What are the ToDoubleFunction<T>, ToIntFunction<T>, and ToLongFunction<T> functional interfaces for?
-What are the ObjDoubleConsumer<T>, ObjIntConsumer<T> and ObjLongConsumer<T> functional interfaces for?
-What is a StringJoiner?
-What are default interface methods?
-How do you call the default method of an interface in a class that implements that interface?
-What is a static interface method?
-How do I call a static interface method?
-What is Optional?
-What is Stream?
-What are the different ways to create a stream?
-What is the difference between Collection and Stream?
-What is the collect() method for in streams?
-What are the forEach() and forEachOrdered() methods used for in streams?
-What are the map() and mapToInt(), mapToDouble(), and mapToLong() methods used for in streams?
-What is the purpose of the filter() method in streams?
-What is the limit() method used for in streams?
-What is the sorted() method used for in streams?
-What are the flatMap(), flatMapToInt(), flatMapToDouble(), flatMapToLong() methods used for in streams?
-Talk about parallel processing in Java 8.
-What are the final methods of working with streams?
-What intermediate methods of working with streams do you know?
-How do you display 10 random numbers using forEach()?
-How can I display unique squares of numbers using the map() method?
-How do I display the number of blank lines using the filter() method?
-How do I display 10 random numbers in ascending order?
-How do you find the maximum number in a set?
-How do I find the minimum number in a set?
-How do you get the sum of all the numbers in a set?
-How do you get the average of all numbers?
-What additional methods for working with associative arrays (maps) have been introduced in Java 8?
-What is LocalDateTime?
-What is ZonedDateTime?
-How do I get the current date using the Date Time API from Java 8?
-How do I add 1 week, 1 month, 1 year, 10 years to the current date using the Date Time API?
-How do I get next Tuesday using the Date Time API?
-How do I get the second Saturday of the current month using the Date Time API?
-How do I get the current time to the millisecond using the Date Time API?
-How do I get the current local time to the millisecond using the Date Time API?
-How do I identify repeatable annotation?
-What is Nashorn?
-What is jjs?
-What class did Java 8 introduce for data encoding/decoding?
-How to create a Base64 encoder and decoder?
-Back To Top
+### Java 8
 
-Java I/O Threads
-What is the difference between IO and NIO?
-What features of NIO do you know?
-What are "channels"?
-What are the different types of I/O streams?
-What are the main classes of I/O streams?
-In which packets are the I/O stream classes located?
-Which subclasses of the InputStream class do you know what they are for?
-What is PushbackInputStream used for?
-What is SequenceInputStream used for?
-Which class allows you to read data from the input bytestream in the format of primitive data types?
-Which subclasses of the OutputStream class do you know what they are for?
-Which subclasses of the Reader class do you know what they are for?
-Which subclasses of the Writer class do you know what they do?
-What is the difference between the PrintWriter class and PrintStream?
-What is the difference and what do InputStream, OutputStream, Reader, Writer have in common?
-Which classes allow you to convert byte streams to character streams and vice versa?
-Which classes allow you to speed up read/write by using a buffer?
-Which class is designed to work with file system elements?
-What methods of the File class do you know?
-What do you know about the FileFilter interface?
-How do I select all items in a specific catalog by criterion (for example, with a specific extension)?
-What do you know about RandomAccessFile?
-What file access modes does RandomAccessFile have?
-Which classes support reading and writing compressed streams?
-Is there a way to redirect standard I/O streams?
-Which character is the separator when specifying a path in the file system?
-What is the "absolute path" and the "relative path"?
-What is a "symbolic link"?
-Back To Top
+- [What are the new features in Java 8 and JDK 8?](#new-features-java-8)
+- [What is "lambda"? What is the structure and features of using a lambda expression?](#what-is-lambda)
+- [What variables do lambda expressions have access to?](#lambda-variable-access)
+- [How do I sort a list of strings using a lambda expression?](#sort-list-lambda)
+- [What is a "method reference"?](#what-is-method-reference)
+- [What kinds of method references do you know?](#kinds-of-method-references)
+- [Explain the expression System.out::println.](#system-out-println)
+- [What are "functional interfaces"?](#functional-interfaces)
+- [What are the Function<T, R>, DoubleFunction<R>, IntFunction<R>, and LongFunction<R> functional interfaces for?](#function-interfaces)
+- [What are the functional interfaces UnaryOperator<T>, DoubleUnaryOperator, IntUnaryOperator and LongUnaryOperator for?](#unary-operator-interfaces)
+- [What are the functional interfaces BinaryOperator<T>, DoubleBinaryOperator, IntBinaryOperator and LongBinaryOperator for?](#binary-operator-interfaces)
+- [What are the Predicate<T>, DoublePredicate, IntPredicate, and LongPredicate functional interfaces for?](#predicate-interfaces)
+- [What are the Consumer<T>, DoubleConsumer, IntConsumer, and LongConsumer functional interfaces for?](#consumer-interfaces)
+- [What are the Supplier<T>, BooleanSupplier, DoubleSupplier, IntSupplier and LongSupplier functional interfaces for?](#supplier-interfaces)
+- [What is the functional interface of BiConsumer<T,U>?](#bi-consumer-interface)
+- [What is the functional interface of BiFunction<T,U,R>?](#bi-function-interface)
+- [What is the functional interface of BiPredicate<T,U>?](#bi-predicate-interface)
+- [What are functional interfaces of the _To_Function type for?](#to-function-interfaces)
+- [What are the ToDoubleBiFunction<T,U>, ToIntBiFunction<T,U> and ToLongBiFunction<T,U> functional interfaces for?](#to-bi-function-interfaces)
+- [What are the ToDoubleFunction<T>, ToIntFunction<T>, and ToLongFunction<T> functional interfaces for?](#to-function-interfaces)
+- [What are the ObjDoubleConsumer<T>, ObjIntConsumer<T> and ObjLongConsumer<T> functional interfaces for?](#obj-consumer-interfaces)
+- [What is a StringJoiner?](#stringjoiner)
+- [What are default interface methods?](#default-interface-methods)
+- [How do you call the default method of an interface in a class that implements that interface?](#call-default-method)
+- [What is a static interface method?](#static-interface-method)
+- [How do I call a static interface method?](#call-static-method)
+- [What is Optional?](#what-is-optional)
+- [What is Stream?](#what-is-stream)
+- [What are the different ways to create a stream?](#creating-streams)
+- [What is the difference between Collection and Stream?](#collection-vs-stream)
+- [What is the collect() method for in streams?](#collect-method)
+- [What are the forEach() and forEachOrdered() methods used for in streams?](#foreach-and-foreachordered)
+- [What are the map() and mapToInt(), mapToDouble(), and mapToLong() methods used for in streams?](#map-methods)
+- [What is the purpose of the filter() method in streams?](#filter-method)
+- [What is the limit() method used for in streams?](#limit-method)
+- [What is the sorted() method used for in streams?](#sorted-method)
+- [What are the flatMap(), flatMapToInt(), flatMapToDouble(), flatMapToLong() methods used for in streams?](#flatmap-methods)
+- [Talk about parallel processing in Java 8.](#parallel-processing)
+- [What are the final methods of working with streams?](#final-methods-streams)
+- [What intermediate methods of working with streams do you know?](#intermediate-methods-streams)
+- [How do you display 10 random numbers using forEach()?](#display-random-numbers)
+- [How can I display unique squares of numbers using the map() method?](#unique-squares)
+- [How do I display the number of blank lines using the filter() method?](#blank-lines-filter)
+- [How do I display 10 random numbers in ascending order?](#ascending-random-numbers)
+- [How do you find the maximum number in a set?](#find-maximum)
+- [How do I find the minimum number in a set?](#find-minimum)
+- [How do you get the sum of all the numbers in a set?](#sum-of-numbers)
+- [How do you get the average of all numbers?](#average-of-numbers)
+- [What additional methods for working with associative arrays (maps) have been introduced in Java 8?](#map-methods-java-8)
+- [What is LocalDateTime?](#localdatetime)
+- [What is ZonedDateTime?](#zoneddatetime)
+- [How do I get the current date using the Date Time API from Java 8?](#current-date)
+- [How do I add 1 week, 1 month, 1 year, 10 years to the current date using the Date Time API?](#add-to-date)
+- [How do I get next Tuesday using the Date Time API?](#get-next-tuesday)
+- [How do I get the second Saturday of the current month using the Date Time API?](#get-second-saturday)
+- [How do I get the current time to the millisecond using the Date Time API?](#current-time-millisecond)
+- [How do I get the current local time to the millisecond using the Date Time API?](#current-local-time)
+- [How do I identify repeatable annotation?](#repeatable-annotation)
+- [What is Nashorn?](#nashorn)
+- [What is jjs?](#jjs)
+- [What class did Java 8 introduce for data encoding/decoding?](#data-encoding-class)
+- [How to create a Base64 encoder and decoder?](#base64-encoder-decoder)
 
-Serialization
-What is "serialization"?
-Describe the serialization/deserialization process using Serializable.
-How do I change the default serialization/deserialization behavior?
-How do I exclude fields from serialization?
-What does the keyword transient mean?
-How do static and final field modifiers affect serializability?
-How to prevent serialization?
-How do I create my own serialization protocol?
-What is the role of the serialVersionUID field in serialization?
-When should I change the value of the serialVersionUID field?
-What is the problem with serialization of Singleton?
-What are the ways to control the values of a deserialized object?
-Back To Top
+[Back to Table of Contents](#Interview-Questions-for-Java-Developer)
 
-Multithreading
-Tell us about the Java memory model?
-What is "thread safety"?
-What is the difference between "competition" and "parallelism"?
-What is "cooperative multitasking"? What type of multitasking does Java use? What is the reason for this choice?
-What is ordering, as-if-serial semantics, sequential consistency, visibility, atomicity, happens-before, mutual exclusion, safe publication?
-What is the difference between a process and a flow?
-What are "green streams" and are they in Java?
-How can I create a flow?
-What is the difference between Thread and Runnable?
-What is the difference between the start() and run() methods?
-How do I force a flow to start?
-What is a "monitor" in Java?
-Define the concept of "synchronization".
-What are the different ways to synchronize in Java?
-What states can a thread be in?
-Can I create new instances of a class while the static synchronized method is running?
-Why do you need a private mutex?
-How do the wait() and notify()/notifyAll() methods work?
-What is the difference between notify() and notifyAll()?
-Why are the wait() and notify() methods called only in a synchronized block?
-What is the difference between the wait() method with and without the parameter?
-What is the difference between the Thread.sleep() and Thread.yield() methods?
-How does the Thread.join() method work?
-What is deadlock?
-What is livelock?
-How do I check if a thread is holding a monitor for a specific resource?
-On which object does synchronization occur when the static synchronized method is called?
-What is the keyword volatile, synchronized, transient, native used for?
-What are the differences between volatile and atomic variables?
-What are the differences between java.util.concurrent.Atomic*.compareAndSwap() and java.util.concurrent.Atomic*.weakCompareAndSwap().
-What does "flow priority" mean?
-What are "demon flows"?
-Can I make the main thread of a program a daemon?
-What does it mean to "put to sleep" the stream?
-What is the difference between the two Runnable and Callable interfaces?
-What is FutureTask?
-What are the differences between CyclicBarrier and CountDownLatch?
-What is a race condition?
-Is there a way to solve the race condition problem?
-How to stop the flow?
-Why is it not recommended to use the Thread.stop() method?
-What happens when an exception is thrown in a thread?
-What is the difference between interrupted() and isInterrupted()?
-What is a "thread pool"?
-What size should a thread pool be?
-What happens if the thread pool queue is already full, but a new task is submitted?
-What is the difference between the submit() and execute() methods of a thread pool?
-What are the differences between a stack and a heap in terms of multithreading?
-How do I share data between two streams?
-What JVM startup option is used to control the size of a thread's stack?
-How do I get a stream dump?
-What is a ThreadLocal variable?
-What are the differences between synchronized and ReentrantLock?
-What is ReadWriteLock?
-What is the "blocking method"?
-What is a "Fork/Join framework"?
-What is Semaphore?
-What is a double checked locking Singleton?
-How do I create a thread-safe Singleton?
-Why are immutable objects useful?
-What is a busy spin?
-List the principles you follow in multithreaded programming?
-Which of the following statements about flows is incorrect?
-Are there 3 streams T1, T2 and T3? How to implement execution in the sequence T1, T2, T3?
-Write a minimum non-blocking stack (there are only two methods, push() and pop()).
-Write a minimal non-blocking stack (there are only two methods, push() and pop()) using Semaphore.
-Write a minimal non-blocking ArrayList (there are four methods in total: add(), get(), remove(), size()).
-Write a thread-safe implementation of the class with a non-blocking BigInteger next() method that returns sequence elements: [1, 2, 4, 8, 16, ...].
-Write the simplest multithreaded bounded buffer using synchronized.
-Write the simplest multithreaded bounded buffer using ReentrantLock.
-Back To Top
+---
 
-Servlets, JSP, JSTL
-What is a "servlet"?
-What are the advantages of servlet technology over CGI (Common Gateway Interface)?
-What is the structure of a web project?
-What is a "servlet container"?
-Why do I need application servers if I have servlet containers?
-How does the servlet container manage the servlet lifecycle, when and what methods are called?
-What is a "deployment descriptor"?
-What steps do I need to do when creating servlets?
-When do you want to override the service() method?
-Does it make sense to define a constructor for the servlet? What is the best way to initialize data?
-Why is it necessary to override only the init() method with no arguments?
-What are the most common tasks performed in a servlet container?
-What do you know about servlet filters?
-Why do servlets use different listeners?
-When should you use servlet filters and when should you use listeners?
-How to implement the launch of the servlet at the same time as the launch of the application?
-How do I handle exceptions thrown by another servlet in my application?
-What is ServletConfig?
-What is ServletContext?
-What's the difference between ServletContext and ServletConfig?
-What is the ServletResponse interface for?
-What is the ServletRequest interface for?
-What is a Request Dispatcher?
-How do you call another servlet from one servlet?
-What is the difference between sendRedirect() and forward()?
-What are servlet attributes used for and how do you work with them?
-How can you allow deadlock in the servlet?
-How do I get the real location of the servlet on the server?
-How do I get server information from a servlet?
-How do I get the client's IP address on the server?
-What servlet wrapper classes do you know?
-What is the difference between GenericServlet and HttpServlet?
-Why is the HttpServlet class declared as abstract?
-What are the main methods in the HttpServlet class?
-Should I worry about multithreaded security when working with servlets?
-Which HTTP method is not immutable?
-What are the methods for sending data from the client to the server?
-What is the difference between the GET and POST methods?
-What is the difference between PrintWriter and ServletOutputStream?
-Can I use PrintWriter and ServletOutputStream in a servlet at the same time?
-Talk about the SingleThreadModel interface.
-What does URL encoding mean? How do you do this in Java?
-What are the different methods of session management in servlets that you know?
-What are cookies?
-What are the methods for working with cookies in servlets?
-What is URL Rewriting?
-Why are encodeURL() and encodeRedirectURL() methods needed and what is the difference?
-What is a "session"?
-How do I notify an object in a session that the session is invalid or has ended?
-What is an effective way to make sure that all servlets are available only to the user with the correct session?
-How can we provide transport layer security for our web application?
-How to organize a connection to the database, provide logging in the servlet?
-What are the main features of the Servlet 3 specification?
-What authentication methods are available to the servlet?
-What is Java Server Pages (JSP)?
-Why do you need a JSP?
-Describe how JSP pages are processed, from the request to the server to the response to the user.
-Tell us about the stages (phases) of the JSP life cycle.
-Talk about JSP lifecycle methods.
-Which JSP lifecycle methods can be overridden?
-How can I prevent direct access to a JSP page from a browser?
-What is the difference between dynamic and static JSP content?
-How do I comment out code in JSP?
-What are the main types of JSP tags?
-What do you know about JSP actions (Action tag and JSP Action Elements).
-JSP - servlet - JSP interaction.
-What variable scopes exist in JSP?
-What implicit, internal objects and methods are there on a JSP page?
-What implicit objects are not available in a regular JSP page?
-What do you know about PageContext and what are the benefits of using it?
-How do I configure the initialization parameters for JSP?
-Why is it not recommended to use scripts in JSP?
-Is it possible to define a class inside a JSP page?
-What do you know about the JSP Expression Language (EL)?
-What types of EL operators do you know?
-Name implicit, internal JSP EL objects and how they differ from JSP objects.
-How do I disable the ability to use EL in JSP?
-How do I find out the type of HTTP method using JSP EL?
-What is JSTL (JSP Standard tag library)?
-What are the tag groups that make up the JSTL library?
-What's the difference between <c:set> and <jsp:useBean>?
-What's the difference between <c:import> and <jsp:include> and the <%@include%> directive?
-How can I extend the functionality of JSP?
-How much do you know about writing custom JSP tags?
-Give an example of using custom tags.
-How do I break a line in HTML using JSP?
-Why don't I need to configure standard JSP tags in web.xml?
-How can JSP page errors be handled?
-How does JSTL handle errors?
-How JSP is configured in the deployment descriptor.
-Can I use Javascript on a JSP page?
-Is a session object always created on a JSP page, is it possible to disable its creation?
-What is the difference between JSPWriter and Servlet PrintWriter?
-Describe general JSP best practices.
-Back To Top
+### Java I/O and Threads
 
-Database
-What is a "database"?
-What is a "database management system"?
-What is a "relational data model"?
-Define the terms "simple," "composite," "candidate," and "alternate."
-What is a "primary key"? What are the criteria for choosing him?
-What is a "foreign key"?
-What is "normalization"?
-What are the normal forms?
-What is "denormalization"? What is it used for?
-What are the different types of relationships in a database? Give examples.
-What are "indices"? What are they used for? What are their advantages and disadvantages?
-What types of indices are there?
-What is the difference between clustered and non-clustered indexes?
-Does it make sense to index data that has a small number of possible values?
-When is a full dataset scan more cost-effective than index access?
-What is a "transaction"?
-What are the main properties of the transaction?
-What are the levels of transaction isolation?
-What are the problems with transactional concurrent access?
-Back To Top
+- [What is the difference between IO and NIO?](#io-vs-nio)
+- [What features of NIO do you know?](#features-of-nio)
+- [What are "channels"?](#what-are-channels)
+- [What are the different types of I/O streams?](#types-of-io-streams)
+- [What are the main classes of I/O streams?](#main-classes-io-streams)
+- [In which packages are the I/O stream classes located?](#io-packages)
+- [Which subclasses of the InputStream class do you know? What are they for?](#inputstream-subclasses)
+- [What is PushbackInputStream used for?](#pushbackinputstream)
+- [What is SequenceInputStream used for?](#sequenceinputstream)
+- [Which class allows you to read data from the input byte stream in the format of primitive data types?](#primitive-data-input)
+- [Which subclasses of the OutputStream class do you know? What are they for?](#outputstream-subclasses)
+- [Which subclasses of the Reader class do you know? What are they for?](#reader-subclasses)
+- [Which subclasses of the Writer class do you know? What do they do?](#writer-subclasses)
+- [What is the difference between the PrintWriter class and PrintStream?](#printwriter-vs-printstream)
+- [What is the difference, and what do InputStream, OutputStream, Reader, and Writer have in common?](#commonality-io-classes)
+- [Which classes allow you to convert byte streams to character streams and vice versa?](#byte-char-stream-conversion)
+- [Which classes allow you to speed up read/write by using a buffer?](#buffered-io-classes)
+- [Which class is designed to work with file system elements?](#file-system-class)
+- [What methods of the File class do you know?](#file-class-methods)
+- [What do you know about the FileFilter interface?](#filefilter-interface)
+- [How do I select all items in a specific catalog by criterion (for example, with a specific extension)?](#select-items-by-criterion)
+- [What do you know about RandomAccessFile?](#randomaccessfile)
+- [What file access modes does RandomAccessFile have?](#randomaccessfile-modes)
+- [Which classes support reading and writing compressed streams?](#compressed-stream-classes)
+- [Is there a way to redirect standard I/O streams?](#redirect-standard-io)
+- [Which character is the separator when specifying a path in the file system?](#path-separator)
+- [What is the "absolute path" and the "relative path"?](#absolute-vs-relative-path)
+- [What is a "symbolic link"?](#symbolic-link)
 
-SQL
-What is SQL?
-What are the different types of SQL statements?
-What does NULL mean in SQL?
-What is a "temporary table"? What is it used for?
-What is a "view" and what is it used for?
-What is the general syntax of the SELECT statement?
-What is JOIN?
-What are the different types of JOINs?
-Is it better to use JOINs or subqueries?
-What is the HAVING operator used for?
-What's the difference between HAVING and WHERE statements?
-What is the ORDER BY operator used for?
-What is the GROUP BY operator used for?
-How does GROUP BY handle null?
-What is the difference between GROUP BY and DISTINCT operators?
-List the main aggregate functions.
-What is the difference between COUNT(*) and COUNT({column})?
-What does the EXISTS operator do?
-What are the IN, BETWEEN, LIKE operators used for?
-What is the UNION keyword used for?
-What are the integrity constraints in SQL?
-What are the differences between the PRIMARY and UNIQUE limits?
-Can a value in a column that has a FOREIGN KEY constraint be null?
-How do I create an index?
-What does the MERGE statement do?
-What's the difference between DELETE and TRUNCATE?
-What is a "stored procedure"?
-What is a "trigger"?
-What is a "cursor"?
-Describe the difference between the DATETIME and TIMESTAMP data types.
-For which numeric types is it unacceptable to use addition/subtraction operations?
-What is the purpose of the PIVOT and UNPIVOT operators in Transact-SQL?
-Tell us about the main ranking functions in Transact-SQL.
-What are the INTERSECT and EXCEPT statements used for in Transact-SQL?
-Write a request...
-Back To Top
+[Back to Table of Contents](#Interview-Questions-for-Java-Developer)
 
-JDBC
-What is JDBC?
-What are the benefits of using JDBC?
-What is a JDBC URL?
-What are the parts of JDBC?
-List the main data types used in JDBC. How are they related to Java types?
-Describe the main steps in working with a database using JDBC.
-How do I register a JDBC driver?
-How do I establish a database connection?
-What levels of transaction isolation are supported in JDBC?
-How are database queries generated?
-What is the difference between a Statement and a PreparedStatement?
-How is the database queried and the results processed?
-How do I call a stored procedure?
-How do I close the database connection?
-Back To Top
+---
 
-Testing
-What is "unit testing"?
-What is "integration testing"?
-How is integration testing different from unit testing?
-What are the different types of test objects?
-How is stub different from mock?
-What are "fixtures"?
-What fixture annotations are there at JUnit?
-What does JUnit use @Ignore annotation for?
-Back To Top
+### Serialization
 
-Logging
-What are the different types of logs?
-What are the parts of a log4j logging system?
-What is Logger in log4j?
-What is Appender in log4j?
-What is Layout in log4j?
-List logging levels in log4j? Name the order of their priority.
-What are the different ways to configure log4j?
-Back To Top
+- [What is "serialization"?](#what-is-serialization)
+- [Describe the serialization/deserialization process using Serializable.](#serialization-deserialization-process)
+- [How do I change the default serialization/deserialization behavior?](#change-default-serialization)
+- [How do I exclude fields from serialization?](#exclude-fields-from-serialization)
+- [What does the keyword transient mean?](#transient-keyword)
+- [How do static and final field modifiers affect serializability?](#static-final-field-modifiers)
+- [How to prevent serialization?](#prevent-serialization)
+- [How do I create my own serialization protocol?](#create-own-serialization-protocol)
+- [What is the role of the serialVersionUID field in serialization?](#serialversionuid)
+- [When should I change the value of the serialVersionUID field?](#change-serialversionuid)
+- [What is the problem with serialization of Singleton?](#serialization-of-singleton)
+- [What are the ways to control the values of a deserialized object?](#control-deserialized-object-values)
 
-UML
-What is UML?
-What are "diagram", "notation" and "metamodel" in UML?
-What are the different types of charts?
-What kinds of relationships exist in a structural class diagram?
-Back To Top
+[Back to Table of Contents](#Interview-Questions-for-Java-Developer)
 
-XML
-What is XML?
-What is a DTD?
-How is well-formed XML different from valid XML?
-What is a "namespace" in XML?
-What is XSD? What are its advantages over the XML DTD?
-What types are there in XSD?
-What methods of reading XML do you know? Describe the strengths and weaknesses of each method.
-When should you use DOM and when should you use SAX, StAX analyzers?
-What ways do you know how to write XML?
-What is JAXP?
-What is XSLT?
-Back To Top
+---
 
-Design patterns
-What is a "design pattern"?
-What are the main characteristics of templates?
-Types of design patterns.
-Give examples of key design patterns.
-Give examples of generative design patterns.
-Give examples of structural design patterns.
-Give examples of behavioral design patterns.
-What is an "anti-pattern"? What anti-patterns do you know?
-What is Dependency Injection?
-Back To Top
+### Multithreading
 
-HTML Basics
-What is "HTML"?
-What is "XHTML"?
-What is DOCTYPE and why do I need it?
-What is the <head> tag for?
-What is the difference between <div> and <span>?
-How are comments labeled in HTML?
-How do I set the address of the document to which I should go?
-How do I link to an email address?
-What is the <em> tag for?
-What are <ol>, <ul>, <li> tags for?
-What are <dl>, <dt>, <dd> tags for?
-What are <tr>, <th>, <td> tags for?
-Is it necessary to write the alt attribute in the <img> tag?
-What is the best case to write HTML code in?
-What is an "entity"?
-Back To Top
+- [Tell us about the Java memory model?](#java-memory-model)
+- [What is "thread safety"?](#thread-safety)
+- [What is the difference between "competition" and "parallelism"?](#competition-vs-parallelism)
+- [What is "cooperative multitasking"? What type of multitasking does Java use? What is the reason for this choice?](#cooperative-multitasking)
+- [What is ordering, as-if-serial semantics, sequential consistency, visibility, atomicity, happens-before, mutual exclusion, safe publication?](#java-concurrency-terms)
+- [What is the difference between a process and a thread?](#process-vs-thread)
+- [What are "green threads" and are they in Java?](#green-threads)
+- [How can I create a thread?](#create-thread)
+- [What is the difference between Thread and Runnable?](#thread-vs-runnable)
+- [What is the difference between the start() and run() methods?](#start-vs-run)
+- [How do I force a thread to start?](#force-thread-start)
+- [What is a "monitor" in Java?](#monitor-in-java)
+- [Define the concept of "synchronization".](#synchronization)
+- [What are the different ways to synchronize in Java?](#ways-to-synchronize)
+- [What states can a thread be in?](#thread-states)
+- [Can I create new instances of a class while the static synchronized method is running?](#new-instances-static-synchronized)
+- [Why do you need a private mutex?](#private-mutex)
+- [How do the wait() and notify()/notifyAll() methods work?](#wait-notify-notifyall)
+- [What is the difference between notify() and notifyAll()?](#notify-vs-notifyall)
+- [Why are the wait() and notify() methods called only in a synchronized block?](#wait-notify-synchronized)
+- [What is the difference between the wait() method with and without the parameter?](#wait-with-without-parameter)
+- [What is the difference between the Thread.sleep() and Thread.yield() methods?](#sleep-vs-yield)
+- [How does the Thread.join() method work?](#thread-join)
+- [What is deadlock?](#deadlock)
+- [What is livelock?](#livelock)
+- [How do I check if a thread is holding a monitor for a specific resource?](#check-thread-monitor)
+- [On which object does synchronization occur when the static synchronized method is called?](#synchronization-static)
+- [What is the keyword volatile, synchronized, transient, native used for?](#volatile-synchronized-transient-native)
+- [What are the differences between volatile and atomic variables?](#volatile-vs-atomic)
+- [What are the differences between java.util.concurrent.Atomic*.compareAndSwap() and java.util.concurrent.Atomic*.weakCompareAndSwap()?](#compare-and-swap)
+- [What does "thread priority" mean?](#thread-priority)
+- [What are "daemon threads"?](#daemon-threads)
+- [Can I make the main thread of a program a daemon?](#main-thread-daemon)
+- [What does it mean to "put to sleep" a thread?](#put-thread-to-sleep)
+- [What is the difference between the Runnable and Callable interfaces?](#runnable-vs-callable)
+- [What is FutureTask?](#futuretask)
+- [What are the differences between CyclicBarrier and CountDownLatch?](#cyclicbarrier-vs-countdownlatch)
+- [What is a race condition?](#race-condition)
+- [Is there a way to solve the race condition problem?](#solve-race-condition)
+- [How to stop a thread?](#stop-thread)
+- [Why is it not recommended to use the Thread.stop() method?](#thread-stop)
+- [What happens when an exception is thrown in a thread?](#exception-in-thread)
+- [What is the difference between interrupted() and isInterrupted()?](#interrupted-vs-isinterrupted)
+- [What is a "thread pool"?](#thread-pool)
+- [What size should a thread pool be?](#thread-pool-size)
+- [What happens if the thread pool queue is already full, but a new task is submitted?](#thread-pool-full)
+- [What is the difference between the submit() and execute() methods of a thread pool?](#submit-vs-execute)
+- [What are the differences between a stack and a heap in terms of multithreading?](#stack-vs-heap)
+- [How do I share data between two threads?](#share-data-between-threads)
+- [What JVM startup option is used to control the size of a thread's stack?](#jvm-thread-stack-size)
+- [How do I get a thread dump?](#thread-dump)
+- [What is a ThreadLocal variable?](#threadlocal-variable)
+- [What are the differences between synchronized and ReentrantLock?](#synchronized-vs-reentrantlock)
+- [What is ReadWriteLock?](#readwritelock)
+- [What is a "blocking method"?](#blocking-method)
+- [What is a "Fork/Join framework"?](#fork-join-framework)
+- [What is Semaphore?](#semaphore)
+- [What is a double-checked locking Singleton?](#double-checked-locking-singleton)
+- [How do I create a thread-safe Singleton?](#thread-safe-singleton)
+- [Why are immutable objects useful?](#immutable-objects)
+- [What is a busy spin?](#busy-spin)
+- [List the principles you follow in multithreaded programming.](#principles-of-multithreading)
+- [Which of the following statements about threads is incorrect?](#incorrect-thread-statements)
+- [Are there 3 threads T1, T2, and T3? How to implement execution in the sequence T1, T2, T3?](#execute-t1-t2-t3)
+- [Write a minimum non-blocking stack (there are only two methods, push() and pop()).](#non-blocking-stack)
+- [Write a minimal non-blocking stack using Semaphore.](#non-blocking-stack-semaphore)
+- [Write a minimal non-blocking ArrayList (there are four methods in total: add(), get(), remove(), size()).](#non-blocking-arraylist)
+- [Write a thread-safe implementation of the class with a non-blocking BigInteger next() method that returns sequence elements: [1, 2, 4, 8, 16, ...].](#non-blocking-biginteger)
+- [Write the simplest multithreaded bounded buffer using synchronized.](#bounded-buffer-synchronized)
+- [Write the simplest multithreaded bounded buffer using ReentrantLock.](#bounded-buffer-reentrantlock)
 
-CSS Basics
-What is "CSS"?
-How are comments labeled in CSS?
-What is a "selector"?
-List the main types of selectors.
-What is a pseudoclass?
-What are the attribute selectors?
-What is the difference between #my and .my?
-What is the difference between margin and padding?
-What is the difference between the values of 0 and auto in the margin property?
-What property sets the background color?
-How do I remove underscores for all links on a page?
-What is the clear property used for?
-How do I make text bold in all elements <p>?
-How do I set the red color for all elements that have the red class?
-Back To Top
+---
 
-Basics WEB
-What is WWW?
-What is W3C?
-What are the different layers of the OSI model?
-What is TCP/IP?
-What is UDP?
-What is the difference between TCP and UDP?
-What is a data transfer protocol? What protocols do you know?
-What are HTTP and HTTPS? How do they differ?
-What is FTP?
-What is the difference between the GET and POST methods?
-What is a MIME type?
-What is a Web server?
-What is Web application?
-What is Application server?
-What is the difference between Web server and Application server?
-What is AJAX? How does this technology work in principle?
-What is WebSocket?
-What is JSON?
-What is a JSON schema?
-What are cookies?
-What is a "session"?
-What are "authorization" and "authentication"? How do they differ?
-Back To Top
+## Servlets, JSP, JSTL
+- **[What is a "servlet"?](#what-is-a-servlet)**
+- **[Advantages of Servlet Technology Over CGI](#advantages-of-servlet-technology-over-cgi)**
+- **[Structure of a Web Project](#structure-of-a-web-project)**
+- **[What is a "servlet container"?](#what-is-a-servlet-container)**
+- **[Need for Application Servers](#need-for-application-servers)**
+- **[Servlet Lifecycle Management](#servlet-lifecycle-management)**
+- **[What is a "deployment descriptor"?](#what-is-a-deployment-descriptor)**
+- **[Steps to Create Servlets](#steps-to-create-servlets)**
+- **[Overriding the service() Method](#overriding-the-service-method)**
+- **[Defining a Constructor for the Servlet](#defining-a-constructor-for-the-servlet)**
+- **[Why Override init() with No Arguments?](#why-override-init-with-no-arguments)**
+- **[Common Tasks in a Servlet Container](#common-tasks-in-a-servlet-container)**
+- **[Servlet Filters](#servlet-filters)**
+- **[Use of Listeners in Servlets](#use-of-listeners-in-servlets)**
+- **[Using Servlet Filters vs. Listeners](#using-servlet-filters-vs-listeners)**
+- **[Launching a Servlet with the Application](#launching-a-servlet-with-the-application)**
+- **[Handling Exceptions from Another Servlet](#handling-exceptions-from-another-servlet)**
+- **[What is ServletConfig?](#what-is-servletconfig)**
+- **[What is ServletContext?](#what-is-servletcontext)**
+- **[Difference Between ServletContext and ServletConfig](#difference-between-servletcontext-and-servletconfig)**
+- **[ServletResponse Interface](#servletresponse-interface)**
+- **[ServletRequest Interface](#servletrequest-interface)**
+- **[What is a Request Dispatcher?](#what-is-a-request-dispatcher)**
+- **[Calling Another Servlet](#calling-another-servlet)**
+- **[Difference Between sendRedirect() and forward()](#difference-between-sendredirect-and-forward)**
+- **[Servlet Attributes](#servlet-attributes)**
+- **[Allowing Deadlock in a Servlet](#allowing-deadlock-in-a-servlet)**
+- **[Getting the Real Location of the Servlet](#getting-the-real-location-of-the-servlet)**
+- **[Getting Server Information from a Servlet](#getting-server-information-from-a-servlet)**
+- **[Getting Client's IP Address](#getting-clients-ip-address)**
+- **[Servlet Wrapper Classes](#servlet-wrapper-classes)**
+- **[Difference Between GenericServlet and HttpServlet](#difference-between-genericservlet-and-httpservlet)**
+- **[Why is HttpServlet Abstract?](#why-is-httpservlet-abstract)**
+- **[Main Methods in HttpServlet](#main-methods-in-httpservlet)**
+- **[Multithreaded Security Concerns](#multithreaded-security-concerns)**
+- **[Immutable HTTP Methods](#immutable-http-methods)**
+- **[Methods for Sending Data from Client to Server](#methods-for-sending-data-from-client-to-server)**
+- **[Difference Between GET and POST Methods](#difference-between-get-and-post-methods)**
+- **[Difference Between PrintWriter and ServletOutputStream](#difference-between-printwriter-and-servletoutputstream)**
+- **[Using PrintWriter and ServletOutputStream Together](#using-printwriter-and-servletoutputstream-together)**
+- **[SingleThreadModel Interface](#singlethreadmodel-interface)**
+- **[URL Encoding in Java](#url-encoding-in-java)**
+- **[Session Management Methods](#session-management-methods)**
+- **[What are Cookies?](#what-are-cookies)**
+- **[Working with Cookies in Servlets](#working-with-cookies-in-servlets)**
+- **[What is URL Rewriting?](#what-is-url-rewriting)**
+- **[encodeURL() and encodeRedirectURL() Methods](#encodeurl-and-encoderedirecturl-methods)**
+- **[What is a "session"?](#what-is-a-session)**
 
-Further reading
-4 sensible Youtube channels about technical interviews
-A list of fancy questions I've been asked during the interviews I had
-Job interview in English: how to prepare and what to answer
-Senior Engineer in search of a job. About tasks at technical interviews and theoretical questions
-What to ask an interviewer during a tech interview
-Spring Boot Interview Questions
-Top Spring Framework Interview Questions
-Back To Top
+[Back to Table of Contents](#Interview-Questions-for-Java-Developer)
 
-Sources
-Junior Java Developer Interview Questions
+---
+
+## Database
+- **[What is a "database"?](#what-is-a-database)**
+- **[What is a "database management system"?](#what-is-a-database-management-system)**
+- **[What is a "relational data model"?](#what-is-a-relational-data-model)**
+- **[Define Simple, Composite, Candidate, and Alternate Keys](#define-simple-composite-candidate-and-alternate-keys)**
+- **[What is a "primary key"?](#what-is-a-primary-key)**
+- **[What is a "foreign key"?](#what-is-a-foreign-key)**
+- **[What is "normalization"?](#what-is-normalization)**
+- **[Normal Forms](#normal-forms)**
+- **[What is "denormalization"?](#what-is-denormalization)**
+- **[Types of Relationships in a Database](#types-of-relationships-in-a-database)**
+- **[What are "indices"?](#what-are-indices)**
+- **[Types of Indices](#types-of-indices)**
+- **[Difference Between Clustered and Non-Clustered Indexes](#difference-between-clustered-and-non-clustered-indexes)**
+- **[Cost-Effectiveness of Full Dataset Scan vs. Index Access](#cost-effectiveness-of-full-dataset-scan-vs-index-access)**
+- **[What is a "transaction"?](#what-is-a-transaction)**
+- **[Main Properties of Transactions](#main-properties-of-transactions)**
+- **[Levels of Transaction Isolation](#levels-of-transaction-isolation)**
+- **[Problems with Transactional Concurrent Access](#problems-with-transactional-concurrent-access)**
+
+[Back to Table of Contents](#Interview-Questions-for-Java-Developer)
+
+---
+
+#### SQL
+- **[What is SQL?](#what-is-sql)**
+- **[Different Types of SQL Statements](#different-types-of-sql-statements)**
+- **[What Does NULL Mean in SQL?](#what-does-null-mean-in-sql)**
+- **[What is a "temporary table"?](#what-is-a-temporary-table)**
+- **[What is a "view"?](#what-is-a-view)**
+- **[General Syntax of the SELECT Statement](#general-syntax-of-the-select-statement)**
+- **[What is JOIN?](#what-is-join)**
+- **[Different Types of JOINs](#different-types-of-joins)**
+- **[JOINs vs. Subqueries](#joins-vs-subqueries)**
+- **[What is the HAVING Operator?](#what-is-the-having-operator)**
+- **[Difference Between HAVING and WHERE](#difference-between-having-and-where)**
+- **[What is the ORDER BY Operator?](#what-is-the-order-by-operator)**
+- **[What is the GROUP BY Operator?](#what-is-the-group-by-operator)**
+- **[GROUP BY Handling NULL](#group-by-handling-null)**
+- **[Difference Between GROUP BY and DISTINCT](#difference-between-group-by-and-distinct)**
+- **[Main Aggregate Functions](#main-aggregate-functions)**
+- **[Difference Between COUNT(*) and COUNT({column})](#difference-between-count-and-count-column)**
+- **[What Does the EXISTS Operator Do?](#what-does-the-exists-operator-do)**
+- **[IN, BETWEEN, LIKE Operators](#in-between-like-operators)**
+- **[What is the UNION Keyword?](#what-is-the-union-keyword)**
+- **[Integrity Constraints in SQL](#integrity-constraints-in-sql)**
+- **[Difference Between PRIMARY and UNIQUE Constraints](#difference-between-primary-and-unique-constraints)**
+- **[NULL Values with FOREIGN KEY Constraints](#null-values-with-foreign-key-constraints)**
+- **[Creating an Index](#creating-an-index)**
+- **[What Does the MERGE Statement Do?](#what-does-the-merge-statement-do)**
+- **[Difference Between DELETE and TRUNCATE](#difference-between-delete-and-truncate)**
+- **[What is a "stored procedure"?](#what-is-a-stored-procedure)**
+- **[What is a "trigger"?](#what-is-a-trigger)**
+- **[What is a "cursor"?](#what-is-a-cursor)**
+- **[Difference Between DATETIME and TIMESTAMP](#difference-between-datetime-and-timestamp)**
+- **[Numeric Types and Operations](#numeric-types-and-operations)**
+- **[Purpose of PIVOT and UNPIVOT](#purpose-of-pivot-and-unpivot)**
+- **[Main Ranking Functions in Transact-SQL](#main-ranking-functions-in-transact-sql)**
+- **[What are the INTERSECT and EXCEPT statements used for in Transact-SQL?](#what-are-intersect-and-except)**
+- **[Write a request](#write-a-request)**
+---
+
+[Back to Table of Contents](#Interview-Questions-for-Java-Developer)
+
+#### JDBC
+- **[What is JDBC?](#what-is-jdbc)**
+- **[Benefits of Using JDBC](#benefits-of-using-jdbc)**
+- **[What is a JDBC URL?](#what-is-a-jdbc-url)**
+- **[Parts of JDBC](#parts-of-jdbc)**
+- **[Main Data Types Used in JDBC](#main-data-types-used-in-jdbc)**
+- **[Main Steps in Working with a Database Using JDBC](#main-steps-in-working-with-a-database-using-jdbc)**
+- **[How to Register a JDBC Driver](#how-to-register-a-jdbc-driver)**
+- **[Establishing a Database Connection](#establishing-a-database-connection)**
+- **[Levels of Transaction Isolation Supported in JDBC](#levels-of-transaction-isolation-supported-in-jdbc)**
+- **[How Database Queries are Generated](#how-database-queries-are-generated)**
+- **[Difference Between Statement and PreparedStatement](#difference-between-statement-and-preparedstatement)**
+- **[Querying the Database and Processing Results](#querying-the-database-and-processing-results)**
+- **[How to Call a Stored Procedure](#how-to-call-a-stored-procedure)**
+- **[Closing the Database Connection](#closing-the-database-connection)**
+
+[Back to Table of Contents](#Interview-Questions-for-Java-Developer)
+
+#### Testing
+- **[What is "unit testing"?](#what-is-unit-testing)**
+- **[What is "integration testing"?](#what-is-integration-testing)**
+- **[Differences Between Integration Testing and Unit Testing](#differences-between-integration-testing-and-unit-testing)**
+- **[Different Types of Test Objects](#different-types-of-test-objects)**
+- **[Difference Between Stub and Mock](#difference-between-stub-and-mock)**
+- **[What are "fixtures"?](#what-are-fixtures)**
+- **[Fixture Annotations in JUnit](#fixture-annotations-in-junit)**
+- **[Purpose of @Ignore Annotation in JUnit](#purpose-of-ignore-annotation-in-junit)**
+
+[Back to Table of Contents](#Interview-Questions-for-Java-Developer)
+
+#### Logging
+- **[Different Types of Logs](#different-types-of-logs)**
+- **[Parts of a log4j Logging System](#parts-of-a-log4j-logging-system)**
+- **[What is Logger in log4j?](#what-is-logger-in-log4j)**
+- **[What is Appender in log4j?](#what-is-appender-in-log4j)**
+- **[What is Layout in log4j?](#what-is-layout-in-log4j)**
+- **[Logging Levels in log4j](#logging-levels-in-log4j)**
+- **[Ways to Configure log4j](#ways-to-configure-log4j)**
+
+[Back to Table of Contents](#Interview-Questions-for-Java-Developer)
+
+#### UML
+- **[What is UML?](#what-is-uml)**
+- **[Diagram, Notation, and Metamodel in UML](#diagram-notation-and-metamodel-in-uml)**
+- **[Different Types of Charts in UML](#different-types-of-charts-in-uml)**
+- **[Relationships in a Structural Class Diagram](#relationships-in-a-structural-class-diagram)**
+
+[Back to Table of Contents](#Interview-Questions-for-Java-Developer)
+
+#### XML
+- **[What is XML?](#what-is-xml)**
+- **[What is a DTD?](#what-is-a-dtd)**
+- **[Well-Formed vs. Valid XML](#well-formed-vs-valid-xml)**
+- **[What is a "namespace" in XML?](#what-is-a-namespace-in-xml)**
+- **[What is XSD?](#what-is-xsd)**
+- **[Types in XSD](#types-in-xsd)**
+- **[Methods of Reading XML](#methods-of-reading-xml)**
+- **[Using DOM vs. SAX and StAX](#using-dom-vs-sax-and-stax)**
+- **[Ways to Write XML](#ways-to-write-xml)**
+- **[What is JAXP?](#what-is-jaxp)**
+- **[What is XSLT?](#what-is-xslt)**
+
+[Back to Table of Contents](#Interview-Questions-for-Java-Developer)
+
+#### Design Patterns
+- **[What is a "design pattern"?](#what-is-a-design-pattern)**
+- **[Main Characteristics of Templates](#main-characteristics-of-templates)**
+- **[Types of Design Patterns](#types-of-design-patterns)**
+- **[Examples of Key Design Patterns](#examples-of-key-design-patterns)**
+- **[Examples of Generative Design Patterns](#examples-of-generative-design-patterns)**
+- **[Examples of Structural Design Patterns](#examples-of-structural-design-patterns)**
+- **[Examples of Behavioral Design Patterns](#examples-of-behavioral-design-patterns)**
+- **[What is an "anti-pattern"?](#what-is-an-anti-pattern)**
+- **[What is Dependency Injection?](#what-is-dependency-injection)**
+
+[Back to Table of Contents](#Interview-Questions-for-Java-Developer)
+
+#### HTML Basics
+- **[What is "HTML"?](#what-is-html)**
+- **[What is "XHTML"?](#what-is-xhtml)**
+- **[What is DOCTYPE?](#what-is-doctype)**
+- **[What is the <head> Tag for?](#what-is-the-head-tag-for)**
+- **[Difference Between <div> and <span>](#difference-between-div-and-span)**
+- **[Comments in HTML](#comments-in-html)**
+- **[Setting Document Address](#setting-document-address)**
+- **[Linking to an Email Address](#linking-to-an-email-address)**
+- **[What is the <em> Tag for?](#what-is-the-em-tag-for)**
+- **[Tags for Lists](#tags-for-lists)**
+- **[Tags for Definition Lists](#tags-for-definition-lists)**
+- **[Tags for Tables](#tags-for-tables)**
+- **[Is alt Attribute Necessary in <img>?](#is-alt-attribute-necessary-in-img)**
+- **[Best Practices for Writing HTML Code](#best-practices-for-writing-html-code)**
+- **[What is an "entity"?](#what-is-an-entity)**
+
+[Back to Table of Contents](#Interview-Questions-for-Java-Developer)
+
+#### CSS Basics
+- **[What is "CSS"?](#what-is-css)**
+- **[Comments in CSS](#comments-in-css)**
+- **[What is a "selector"?](#what-is-a-selector)**
+- **[Main Types of Selectors](#main-types-of-selectors)**
+- **[What is a Pseudoclass?](#what-is-a-pseudoclass)**
+- **[Attribute Selectors](#attribute-selectors)**
+- **[Difference Between #my and .my](#difference-between-my-and-my)**
+- **[Difference Between Margin and Padding](#difference-between-margin-and-padding)**
+- **[Margin Property Values](#margin-property-values)**
+- **[Property for Background Color](#property-for-background-color)**
+- **[Removing Underlines from Links](#removing-underlines-from-links)**
+- **[Purpose of the Clear Property](#purpose-of-the-clear-property)**
+- **[Making Text Bold in <p> Elements](#making-text-bold-in-p-elements)**
+- **[Setting Red Color for Elements with a Class](#setting-red-color-for-elements-with-a-class)**
+
+[Back to Table of Contents](#Interview-Questions-for-Java-Developer)
+
+#### Basics of Web
+- **[What is WWW?](#what-is-www)**
+- **[What is W3C?](#what-is-w3c)**
+- **[Different Layers of the OSI Model](#different-layers-of-the-osi-model)**
+- **[What is TCP/IP?](#what-is-tcpip)**
+- **[What is UDP?](#what-is-udp)**
+- **[Difference Between TCP and UDP](#difference-between-tcp-and-udp)**
+- **[What is a Data Transfer Protocol?](#what-is-a-data-transfer-protocol)**
+- **[What are HTTP and HTTPS?](#what-are-http-and-https)**
+- **[What is FTP?](#what-is-ftp)**
+- **[Difference Between GET and POST Methods](#difference-between-get-and-post-methods)**
+- **[What is a MIME Type?](#what-is-a-mime-type)**
+- **[What is a Web Server?](#what-is-a-web-server)**
+- **[What is a Web Application?](#what-is-a-web-application)**
+- **[What is an Application Server?](#what-is-an-application-server)**
+- **[Difference Between Web Server and Application Server](#difference-between-web-server-and-application-server)**
+- **[What is AJAX?](#what-is-ajax)**
+- **[What is WebSocket?](#what-is-websocket)**
+- **[What is JSON?](#what-is-json)**
+- **[What is a JSON Schema?](#what-is-a-json-schema)**
+- **[What are Cookies?](#what-are-cookies)**
+- **[What is a "session"?](#what-is-a-session)**
+- **[Difference Between Authorization and Authentication](#difference-between-authorization-and-authentication)**
+
+[Back to Table of Contents](#Interview-Questions-for-Java-Developer)
+
+#### Further Reading
+- **[YouTube Channels for Technical Interviews](#youtube-channels-for-technical-interviews)**
+- **[List of Fancy Questions from Interviews](#list-of-fancy-questions-from-interviews)**
+- **[Job Interview Preparation Tips](#job-interview-preparation-tips)**
+- **[Tasks at Technical Interviews](#tasks-at-technical-interviews)**
+- **[Questions to Ask an Interviewer](#questions-to-ask-an-interviewer)**
+- **[Spring Boot Interview Questions](#spring-boot-interview-questions)**
+- **[Top Spring Framework Interview Questions](#top-spring-framework-interview-questions)**
+
+[Back to Table of Contents](#Interview-Questions-for-Java-Developer)
+
+#### Sources
+- **[Junior Java Developer Interview Questions](#junior-java-developer-interview-questions)**
+
+[Back to Table of Contents](#Interview-Questions-for-Java-Developer)
+
+---
 
 
