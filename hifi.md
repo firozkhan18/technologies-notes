@@ -41,204 +41,217 @@
 [Back to Table of Contents](#Interview-Questions-for-Java-Developer)
 
 Java Core
-What is the difference between JRE, JVM, and JDK?
-What are the different access modifiers?
-What does the final keyword mean?
-What are the default variable initialization values?
-What do you know about the main() function?
-What logical operations and operators do you know?
-What is a ternary selection operator?
-What bitwise operations do you know?
-Where and why is the abstract modifier used?
-Define the concept of "interface". What default modifiers do interface fields and methods have?
-How is an abstract class different from an interface? When should you use an abstract class and when should you use an interface?
-Why don't some interfaces define methods at all?
-Why can't I declare an interface method with a final modifier?
-Which has a higher level of abstraction – a class, an abstract class, or an interface?
-Can an object access a class private variable? If so, how?
-What is the order in which constructors and initialization blocks are invoked based on the class hierarchy?
-Why are initialization blocks needed and what are the types?
-To which Java constructs does the static modifier apply?
-Why do Java use static initialization blocks?
-What happens if an exception occurs in the initialization block?
-What exception is thrown when an error occurs in the class initialization block?
-Can a static method be overridden or overloaded?
-Can non-static methods overwhelm static methods?
-Is it possible to narrow the access level/return type when overriding a method?
-Is it possible to change the following when overriding a method: access modifier; Return type the type of argument or their number; arguments names or their order, remove, add, change the order of the elements of the throws section?
-How do I access the overridden methods of the parent class?
-Is it possible to declare a method abstract and static at the same time?
-What is the difference between an instance member of a class and a static member of a class?
-Where is initialization of static/non-static fields allowed?
-What types of classes are there in java?
-Tell us about nested classes. In what cases are they used?
-What is a "static class"?
-What are the features of using nested classes: static and internal? What is the difference between them?
-What is a "local class"? What are its features?
-What are "anonymous classes"? Where are they used?
-How do I access an external class field from a nested class?
-What is the assert operator used for?
-What is a garbage collector for?
-How does the garbage collector work?
-What types of garbage collectors are implemented in the HotSpot virtual machine?
-Describe the algorithm of some garbage collector implemented in the HotSpot virtual machine.
-What is finalize()? Why is it needed?
-What happens to the garbage collector if the finalize() method takes a significant amount of time to run, or if an exception is thrown during execution?
-What is the difference between final, finally, and finalize()?
-What is Heap and Stack memory in Java? What is the difference between them?
-Is it true that primitive data types are always stored on the stack and instances of reference data types are on the heap?
-How are variables passed to methods, by value or by reference?
-Tell us about type conversion. What is Downgrade and Type Upgrade?
-When can a ClassCastException be thrown in an application?
-What is autoboxing in Java and what are the rules for wrapping primitive types into wrapper classes?
-What are the features of the String class?
-What is a "string pool"?
-Why is String an immutable and finalized class?
-Why is char[] preferable to String for storing a password?
-Why is a string a popular key in a HashMap in Java?
-What does the intern() method do in the String class?.
-Can strings be used in a switch construct?
-What is the main difference between String, StringBuffer, StringBuilder?
-What is the Object class? What methods does it have?
-Tell us about cloning objects.
-What is the difference between surface and deep cloning?
-Which cloning method is preferable?
-Why is the clone() method declared in the Object class and not in the Cloneable interface?
-Define the concept of "constructor".
-What is the "default constructor"?
-What is the difference between the default constructors, the copy constructor, and the parameter constructor?
-Where and how can you use a private builder?
-Tell us about loader classes and dynamic class loading.
-What is Reflection?
-Why do we need equals(). How is it different from surgery ==?
-equals() gives rise to an equivalence relation. What are the properties of such an attitude?
-If you want to override equals(), what conditions should be met for the overridden method?
-Rules for overriding the Object.equals() method.
-What is the relationship between hashCode() and equals()?
-If equals() is overridden, are there any other methods that should be overridden?
-What happens if I override equals() without overriding hashCode()? What problems can arise?
-How are the hashCode() and equals() methods implemented in the Object class?
-What is the hashCode() method for?
-Rules for overriding the Object.hashCode() method.
-Are there any guidelines on which fields should be used when calculating hashCode()?
-Can different objects have the same hashCode()?
-If the Point{int x, y;} class implements the equals(Object that) {(return this.x == that.x && this.y == that.y)} method, but makes the hash code in the form of int hashCode() {return x;}, will such points be placed and retrieved from the HashSet correctly?
-Can different objects (ref0 != ref1) have ref0.equals(ref1) == true?
-Can different references to the same object (ref0 == ref1) have ref0.equals(ref1) == false?
-Is it possible to implement the equals(Object that) method {return this.hashCode() == that.hashCode()}?
-In equals(), you need to check that the equals(Object that) argument is of the same type as the object itself. What's the difference between this.getClass() == that.getClass() and that instanceof MyClass?
-Is it possible to implement the equals() method of the MyClass class like this: class MyClass {public boolean equals(MyClass that) {return this == that;}}?
-There is a class called Point{int x, y;}. Why is a hash code of 31 * x + y preferable to x + y?
-Describe the hierarchy of exceptions.
-What types of exceptions do you know in Java, how do they differ?
-What is a checked and unchecked exception?
-Which operator allows you to force an exception to be thrown?
-What does the throws keyword mean?
-How do you write your own ("user") exception?
-What are the unchecked exceptions?
-What is Error?
-What do you know about OutOfMemoryError?
-Describe how the try-catch-finally block works.
-What is the try-with-resources mechanism?
-Is it possible to use a try-finally block (without catch)?
-Can a single catch block catch multiple exceptions at once?
-Is the finally block always executed?
-Are there situations where a finally block will fail?
-Can the main method throw an exception outside and, if so, where will the exception be handled?
-Suppose there is a method that can throw IOException and FileNotFoundException, in what sequence should the catch blocks go? How many catch blocks will be executed?
-What are generics?
-What is "internationalization" and "localization"?
-Back To Top
+Here’s your table of contents with navigation, formatted without numbers:
 
-Java Collections
-What is a "collection"?
-Name the main JCF interfaces and their implementations.
-Arrange the following interfaces in a hierarchy: List, Set, Map, SortedSet, SortedMap, Collection, Iterable, Iterator, NavigableSet, NavigableMap.
-Why is Map not Collection while List and Set are Collection?
-What is the difference between the java.util.Collection and java.util.Collections classes?
-What is "fail-fast behavior"?
-What is the difference between fail-fast and fail-safe?
-Give examples of iterators that implement fail-safe behavior
-What is the difference between Enumeration and Iterator?
-How are Iterable and Iterator related?
-How are Iterable, Iterator and "for-each" related?
-Compare Iterator and ListIterator.
-What happens if I call Iterator.next() without first calling Iterator.hasNext()?
-How many elements will be skipped if Iterator.next() is called after 10 calls to Iterator.hasNext()?
-How will the collection behave if you call iterator.remove()?
-How will an already instantiated iterator for collection behave if collection.remove() is called?
-How do I avoid a ConcurrentModificationException during a collection iteration?
-Which collection implements the FIFO service discipline?
-Which collection implements the FILO service discipline?
-What is the difference between ArrayList and Vector?
-Why did you add an ArrayList if you already had a Vector?
-What is the difference between ArrayList and LinkedList? In which cases is it better to use the first and in which the second?
-Which is faster than ArrayList or LinkedList?
-What is the worst run time of the contains() method for an item that is on the LinkedList?
-What's the worst run time of the contains() method for an item that's in the ArrayList?
-What is the worst add() method run time for LinkedList?
-What is the worst time to use the add() method for ArrayList?
-You need to add 1 million elements, what structure do you use?
-How do I remove items from the ArrayList? How does the size of the ArrayList change in this case?
-Propose an efficient algorithm for removing multiple adjacent items from the middle of the list implemented by the ArrayList.
-How much additional memory do I need when calling ArrayList.add()?
-How much additional memory is allocated when calling LinkedList.add()?
-Estimate the amount of memory to store a single byte primitive in LinkedList?
-Estimate the amount of memory to store a single byte primitive in the ArrayList?
-For ArrayList or for LinkedList, is the add element to the middle operation (list.add(list.size()/2, newElement)) slower?
-The implementation of the ArrayList class has the following fields: Object[] elementData, int size. Explain why store a separate size when you can always take elementData.length?
-Compare the Queue and Deque interfaces.
-Who extends whom: Queue extends Deque, or Deque extends Queue?
-Why does LinkedList implement both List and Deque?
-Is a LinkedList a single-linked, double-linked, or four-linked list?
-How do I iterate over LinkedList items in reverse order without using slow get(index)?
-What does PriorityQueue do?
-Stack is considered "deprecated." What is recommended to replace it with? Why?
-Why do I need a HashMap if I have a Hashtable?
-What is the difference between a HashMap and an IdentityHashMap? What is IdentityHashMap for?
-What is the difference between a HashMap and a WeakHashMap? What is WeakHashMap used for?
-WeakHashMap uses WeakReferences. Why not create a SoftHashMap on SoftReferences?
-WeakHashMap uses WeakReferences. Why not create a PhantomHashMap on PhantomReferences?
-LinkedHashMap - what's in it from LinkedList and what's from HashMap?
-How does the "sorting" of SortedMap manifest itself, except that toString() prints all the elements in order?
-How does the HashMap work?
-According to Knuth and Corman, there are two main implementations of the hash table: open-addressing and chain-based. How is the HashMap implemented? Why do you think this particular implementation was chosen? What are the pros and cons of each approach?
-How does a HashMap work when trying to store two elements in it by keys with the same hashCode(), but for which equals() == false?
-What is the initial number of buckets in the HashMap?
-What is the estimate of the temporal complexity of operations on elements from the HashMap? Does the HashMap guarantee the specified sampling complexity of the item?
-Is it possible that the HashMap will degenerate into a list even with keys that have different hashCode()?
-In what case can an element be lost in the HashMap?
-Why can't byte[] be used as a key in the HashMap?
-What is the role of equals() and hashCode() in a HashMap?
-What is the maximum number of hashCode() values?
-What is the worst get(key) method run time for a key that is not in the HashMap?
-What is the worst get(key) method time for a key that is in the HashMap?
-How many hops occur when HashMap.get(key) is called on a key that is in the table?
-How many new features are created when you add a new item to the HashMap?
-How and when does the increase in the number of buckets in the HashMap occur?
-Explain the meaning of the parameters in the HashMap constructor(int initialCapacity, float loadFactor).
-Will the HashMap work if all the keys you add have the same hashCode()?
-How do I iterate over all Map keys?
-How do you iterate over all Map values?
-How do you iterate over all key-value pairs in Map?
-What is the difference between TreeSet and HashSet?
-What happens if I add elements to a TreeSet in ascending order?
-How is LinkedHashSet different from HashSet?
-There is a special java.util.EnumSet class for Enum. What for? Why were the authors not satisfied with HashSet or TreeSet?
-What are the ways to iterate through list items?
-How can I get synchronized standard collection objects?
-How do I get a read-only collection?
-Write a single-threaded program that causes the collection to throw a ConcurrentModificationException.
-Give an example where a collection throws an UnsupportedOperationException.
-Implement the symmetric difference between the two collections using the Collection methods (addAll(...), removeAll(...), retainAll(...)).
-How do I use LinkedHashMap to make a cache with an "invalidation policy"?
-How do you copy the elements of any collection into an array with a single line?
-How to get a List with all elements except the first and last 3 with one call from List?
-How do I convert a HashSet to an ArrayList in a single line?
-How do I convert an ArrayList to a HashSet in a single line?
-Make a HashSet from the HashMap keys.
-Make a HashMap from HashSet<Map.Entry<K, V>>.
-Back To Top
+---
+
+# **Table of Contents**
+
+- [What is the difference between JRE, JVM, and JDK?](#what-is-the-difference-between-jre-jvm-and-jdk)
+- [What are the different access modifiers?](#what-are-the-different-access-modifiers)
+- [What does the final keyword mean?](#what-does-the-final-keyword-mean)
+- [What are the default variable initialization values?](#what-are-the-default-variable-initialization-values)
+- [What do you know about the main() function?](#what-do-you-know-about-the-main-function)
+- [What logical operations and operators do you know?](#what-logical-operations-and-operators-do-you-know)
+- [What is a ternary selection operator?](#what-is-a-ternary-selection-operator)
+- [What bitwise operations do you know?](#what-bitwise-operations-do-you-know)
+- [Where and why is the abstract modifier used?](#where-and-why-is-the-abstract-modifier-used)
+- [Define the concept of "interface". What default modifiers do interface fields and methods have?](#define-the-concept-of-interface-what-default-modifiers-do-interface-fields-and-methods-have)
+- [How is an abstract class different from an interface? When should you use an abstract class and when should you use an interface?](#how-is-an-abstract-class-different-from-an-interface-when-should-you-use-an-abstract-class-and-when-should-you-use-an-interface)
+- [Why don't some interfaces define methods at all?](#why-dont-some-interfaces-define-methods-at-all)
+- [Why can't I declare an interface method with a final modifier?](#why-cant-i-declare-an-interface-method-with-a-final-modifier)
+- [Which has a higher level of abstraction – a class, an abstract class, or an interface?](#which-has-a-higher-level-of-abstraction-a-class-an-abstract-class-or-an-interface)
+- [Can an object access a class private variable? If so, how?](#can-an-object-access-a-class-private-variable-if-so-how)
+- [What is the order in which constructors and initialization blocks are invoked based on the class hierarchy?](#what-is-the-order-in-which-constructors-and-initialization-blocks-are-invoked-based-on-the-class-hierarchy)
+- [Why are initialization blocks needed and what are the types?](#why-are-initialization-blocks-needed-and-what-are-the-types)
+- [To which Java constructs does the static modifier apply?](#to-which-java-constructs-does-the-static-modifier-apply)
+- [Why does Java use static initialization blocks?](#why-does-java-use-static-initialization-blocks)
+- [What happens if an exception occurs in the initialization block?](#what-happens-if-an-exception-occurs-in-the-initialization-block)
+- [What exception is thrown when an error occurs in the class initialization block?](#what-exception-is-thrown-when-an-error-occurs-in-the-class-initialization-block)
+- [Can a static method be overridden or overloaded?](#can-a-static-method-be-overridden-or-overloaded)
+- [Can non-static methods overwhelm static methods?](#can-non-static-methods-overwhelm-static-methods)
+- [Is it possible to narrow the access level/return type when overriding a method?](#is-it-possible-to-narrow-the-access-levelreturn-type-when-overriding-a-method)
+- [Is it possible to change the following when overriding a method: access modifier; return type; the type of argument or their number; argument names or their order; remove, add, or change the order of the elements in the throws section?](#is-it-possible-to-change-the-following-when-overriding-a-method-access-modifier-return-type-the-type-of-argument-or-their-number-argument-names-or-their-order-remove-add-or-change-the-order-of-the-elements-in-the-throws-section)
+- [How do I access the overridden methods of the parent class?](#how-do-i-access-the-overridden-methods-of-the-parent-class)
+- [Is it possible to declare a method abstract and static at the same time?](#is-it-possible-to-declare-a-method-abstract-and-static-at-the-same-time)
+- [What is the difference between an instance member of a class and a static member of a class?](#what-is-the-difference-between-an-instance-member-of-a-class-and-a-static-member-of-a-class)
+- [Where is initialization of static/non-static fields allowed?](#where-is-initialization-of-staticnon-static-fields-allowed)
+- [What types of classes are there in Java?](#what-types-of-classes-are-there-in-java)
+- [Tell us about nested classes. In what cases are they used?](#tell-us-about-nested-classes-in-what-cases-are-they-used)
+- [What is a "static class"?](#what-is-a-static-class)
+- [What are the features of using nested classes: static and internal? What is the difference between them?](#what-are-the-features-of-using-nested-classes-static-and-internal-what-is-the-difference-between-them)
+- [What is a "local class"? What are its features?](#what-is-a-local-class-what-are-its-features)
+- [What are "anonymous classes"? Where are they used?](#what-are-anonymous-classes-where-are-they-used)
+- [How do I access an external class field from a nested class?](#how-do-i-access-an-external-class-field-from-a-nested-class)
+- [What is the assert operator used for?](#what-is-the-assert-operator-used-for)
+- [What is a garbage collector for?](#what-is-a-garbage-collector-for)
+- [How does the garbage collector work?](#how-does-the-garbage-collector-work)
+- [What types of garbage collectors are implemented in the HotSpot virtual machine?](#what-types-of-garbage-collectors-are-implemented-in-the-hotspot-virtual-machine)
+- [Describe the algorithm of some garbage collector implemented in the HotSpot virtual machine.](#describe-the-algorithm-of-some-garbage-collector-implemented-in-the-hotspot-virtual-machine)
+- [What is finalize()? Why is it needed?](#what-is-finalize-why-is-it-needed)
+- [What happens to the garbage collector if the finalize() method takes a significant amount of time to run, or if an exception is thrown during execution?](#what-happens-to-the-garbage-collector-if-the-finalize-method-takes-a-significant-amount-of-time-to-run-or-if-an-exception-is-thrown-during-execution)
+- [What is the difference between final, finally, and finalize()?](#what-is-the-difference-between-final-finally-and-finalize)
+- [What is Heap and Stack memory in Java? What is the difference between them?](#what-is-heap-and-stack-memory-in-java-what-is-the-difference-between-them)
+- [Is it true that primitive data types are always stored on the stack and instances of reference data types are on the heap?](#is-it-true-that-primitive-data-types-are-always-stored-on-the-stack-and-instances-of-reference-data-types-are-on-the-heap)
+- [How are variables passed to methods, by value or by reference?](#how-are-variables-passed-to-methods-by-value-or-by-reference)
+- [Tell us about type conversion. What is Downgrade and Type Upgrade?](#tell-us-about-type-conversion-what-is-downgrade-and-type-upgrade)
+- [When can a ClassCastException be thrown in an application?](#when-can-a-classcastexception-be-thrown-in-an-application)
+- [What is autoboxing in Java and what are the rules for wrapping primitive types into wrapper classes?](#what-is-autoboxing-in-java-and-what-are-the-rules-for-wrapping-primitive-types-into-wrapper-classes)
+- [What are the features of the String class?](#what-are-the-features-of-the-string-class)
+- [What is a "string pool"?](#what-is-a-string-pool)
+- [Why is String an immutable and finalized class?](#why-is-string-an-immutable-and-finalized-class)
+- [Why is char[] preferable to String for storing a password?](#why-is-char-preferable-to-string-for-storing-a-password)
+- [Why is a string a popular key in a HashMap in Java?](#why-is-a-string-a-popular-key-in-a-hashmap-in-java)
+- [What does the intern() method do in the String class?](#what-does-the-intern-method-do-in-the-string-class)
+- [Can strings be used in a switch construct?](#can-strings-be-used-in-a-switch-construct)
+- [What is the main difference between String, StringBuffer, StringBuilder?](#what-is-the-main-difference-between-string-stringbuffer-stringbuilder)
+- [What is the Object class? What methods does it have?](#what-is-the-object-class-what-methods-does-it-have)
+- [Tell us about cloning objects.](#tell-us-about-cloning-objects)
+- [What is the difference between shallow and deep cloning?](#what-is-the-difference-between-shallow-and-deep-cloning)
+- [Which cloning method is preferable?](
+
+#which-cloning-method-is-preferable)
+- [Why is the clone() method declared in the Object class and not in the Cloneable interface?](#why-is-the-clone-method-declared-in-the-object-class-and-not-in-the-cloneable-interface)
+- [Define the concept of "constructor".](#define-the-concept-of-constructor)
+- [What is the "default constructor"?](#what-is-the-default-constructor)
+- [What is the difference between the default constructors, the copy constructor, and the parameter constructor?](#what-is-the-difference-between-the-default-constructors-the-copy-constructor-and-the-parameter-constructor)
+- [Where and how can you use a private builder?](#where-and-how-can-you-use-a-private-builder)
+- [Tell us about loader classes and dynamic class loading.](#tell-us-about-loader-classes-and-dynamic-class-loading)
+- [What is Reflection?](#what-is-reflection)
+- [Why do we need equals(). How is it different from ==?](#why-do-we-need-equals-how-is-it-different-from)
+- [equals() gives rise to an equivalence relation. What are the properties of such a relation?](#equals-gives-rise-to-an-equivalence-relation-what-are-the-properties-of-such-a-relation)
+- [If you want to override equals(), what conditions should be met for the overridden method?](#if-you-want-to-override-equals-what-conditions-should-be-met-for-the-overridden-method)
+- [Rules for overriding the Object.equals() method.](#rules-for-overriding-the-objectequals-method)
+- [What is the relationship between hashCode() and equals()?](#what-is-the-relationship-between-hashcode-and-equals)
+- [If equals() is overridden, are there any other methods that should be overridden?](#if-equals-is-overridden-are-there-any-other-methods-that-should-be-overridden)
+- [What happens if I override equals() without overriding hashCode()? What problems can arise?](#what-happens-if-i-override-equals-without-overriding-hashcode-what-problems-can-arise)
+- [How are the hashCode() and equals() methods implemented in the Object class?](#how-are-the-hashcode-and-equals-methods-implemented-in-the-object-class)
+- [What is the hashCode() method for?](#what-is-the-hashcode-method-for)
+- [Rules for overriding the Object.hashCode() method.](#rules-for-overriding-the-objecthashcode-method)
+- [Are there any guidelines on which fields should be used when calculating hashCode()?](#are-there-any-guidelines-on-which-fields-should-be-used-when-calculating-hashcode)
+- [Can different objects have the same hashCode()?](#can-different-objects-have-the-same-hashcode)
+- [If the Point{int x, y;} class implements the equals(Object that) {(return this.x == that.x && this.y == that.y)} method, but makes the hash code in the form of int hashCode() {return x;}, will such points be placed and retrieved from the HashSet correctly?](#if-the-pointint-x-y-class-implements-the-equalsobject-that-return-thisx--thatx--thisy--thaty-method-but-makes-the-hash-code-in-the-form-of-int-hashcode-return-x-will-such-points-be-placed-and-retrieved-from-the-hashset-correctly)
+- [Can different objects (ref0 != ref1) have ref0.equals(ref1) == true?](#can-different-objects-ref0-ref1-have-ref0equalsref1--true)
+- [Can different references to the same object (ref0 == ref1) have ref0.equals(ref1) == false?](#can-different-references-to-the-same-object-ref0-ref1-have-ref0equalsref1--false)
+- [Is it possible to implement the equals(Object that) method {return this.hashCode() == that.hashCode()}?](#is-it-possible-to-implement-the-equalsobject-that-method-return-this-hashcode--that-hashcode)
+- [In equals(), you need to check that the equals(Object that) argument is of the same type as the object itself. What's the difference between this.getClass() == that.getClass() and that instanceof MyClass?](#in-equals-you-need-to-check-that-the-equalsobject-that-argument-is-of-the-same-type-as-the-object-itself-whats-the-difference-between-thisgetclass--thatgetclass-and-that-instanceof-myclass)
+- [Is it possible to implement the equals() method of the MyClass class like this: class MyClass {public boolean equals(MyClass that) {return this == that;}}?](#is-it-possible-to-implement-the-equals-method-of-the-myclass-class-like-this-class-myclass-public-boolean-equalsmyclass-that-return-this--that)
+- [There is a class called Point{int x, y;}. Why is a hash code of 31 * x + y preferable to x + y?](#there-is-a-class-called-pointint-x-y-why-is-a-hash-code-of-31--x--y-preferable-to-x--y)
+- [Describe the hierarchy of exceptions.](#describe-the-hierarchy-of-exceptions)
+- [What types of exceptions do you know in Java, how do they differ?](#what-types-of-exceptions-do-you-know-in-java-how-do-they-differ)
+- [What is a checked and unchecked exception?](#what-is-a-checked-and-unchecked-exception)
+- [Which operator allows you to force an exception to be thrown?](#which-operator-allows-you-to-force-an-exception-to-be-thrown)
+- [What does the throws keyword mean?](#what-does-the-throws-keyword-mean)
+- [How do you write your own ("user") exception?](#how-do-you-write-your-own-user-exception)
+- [What are the unchecked exceptions?](#what-are-the-unchecked-exceptions)
+- [What is Error?](#what-is-error)
+- [What do you know about OutOfMemoryError?](#what-do-you-know-about-outofmemoryerror)
+- [Describe how the try-catch-finally block works.](#describe-how-the-try-catch-finally-block-works)
+- [What is the try-with-resources mechanism?](#what-is-the-try-with-resources-mechanism)
+- [Is it possible to use a try-finally block (without catch)?](#is-it-possible-to-use-a-try-finally-block-without-catch)
+- [Can a single catch block catch multiple exceptions at once?](#can-a-single-catch-block-catch-multiple-exceptions-at-once)
+- [Is the finally block always executed?](#is-the-finally-block-always-executed)
+- [Are there situations where a finally block will fail?](#are-there-situations-where-a-finally-block-will-fail)
+- [Can the main method throw an exception outside and, if so, where will the exception be handled?](#can-the-main-method-throw-an-exception-outside-and-if-so-where-will-the-exception-be-handled)
+- [Suppose there is a method that can throw IOException and FileNotFoundException, in what sequence should the catch blocks go? How many catch blocks will be executed?](#suppose-there-is-a-method-that-can-throw-ioexception-and-filenotfoundexception-in-what-sequence-should-the-catch-blocks-go-how-many-catch-blocks-will-be-executed)
+- [What are generics?](#what-are-generics)
+- [What is "internationalization" and "localization"?](#what-is-internationalization-and-localization)
+
+---
+
+### Java Collections
+
+- [What is a "collection"?](#what-is-a-collection)
+- [Name the main JCF interfaces and their implementations.](#main-jcf-interfaces)
+- [Arrange the following interfaces in a hierarchy: List, Set, Map, SortedSet, SortedMap, Collection, Iterable, Iterator, NavigableSet, NavigableMap.](#interface-hierarchy)
+- [Why is Map not Collection while List and Set are Collection?](#map-vs-collection)
+- [What is the difference between the java.util.Collection and java.util.Collections classes?](#collection-vs-collections)
+- [What is "fail-fast behavior"?](#fail-fast-behavior)
+- [What is the difference between fail-fast and fail-safe?](#fail-fast-vs-fail-safe)
+- [Give examples of iterators that implement fail-safe behavior.](#fail-safe-iterators)
+- [What is the difference between Enumeration and Iterator?](#enumeration-vs-iterator)
+- [How are Iterable and Iterator related?](#iterable-and-iterator)
+- [How are Iterable, Iterator and "for-each" related?](#iterable-iterator-for-each)
+- [Compare Iterator and ListIterator.](#iterator-vs-listiterator)
+- [What happens if I call Iterator.next() without first calling Iterator.hasNext()?](#iterator-next-without-hasnext)
+- [How many elements will be skipped if Iterator.next() is called after 10 calls to Iterator.hasNext()?](#elements-skipped)
+- [How will the collection behave if you call iterator.remove()?](#iterator-remove)
+- [How will an already instantiated iterator for collection behave if collection.remove() is called?](#instantiated-iterator)
+- [How do I avoid a ConcurrentModificationException during a collection iteration?](#avoiding-concurrent-modification-exception)
+- [Which collection implements the FIFO service discipline?](#fifo-collection)
+- [Which collection implements the FILO service discipline?](#filo-collection)
+- [What is the difference between ArrayList and Vector?](#arraylist-vs-vector)
+- [Why did you add an ArrayList if you already had a Vector?](#reason-for-arraylist)
+- [What is the difference between ArrayList and LinkedList? In which cases is it better to use the first and in which the second?](#arraylist-vs-linkedlist)
+- [Which is faster, ArrayList or LinkedList?](#faster-arraylist-or-linkedlist)
+- [What is the worst run time of the contains() method for an item that is on the LinkedList?](#contains-worst-time-linkedlist)
+- [What's the worst run time of the contains() method for an item that's in the ArrayList?](#contains-worst-time-arraylist)
+- [What is the worst add() method run time for LinkedList?](#add-worst-time-linkedlist)
+- [What is the worst time to use the add() method for ArrayList?](#add-worst-time-arraylist)
+- [You need to add 1 million elements, what structure do you use?](#adding-1-million-elements)
+- [How do I remove items from the ArrayList? How does the size of the ArrayList change in this case?](#removing-items-arraylist)
+- [Propose an efficient algorithm for removing multiple adjacent items from the middle of the list implemented by the ArrayList.](#removing-adjacent-items)
+- [How much additional memory do I need when calling ArrayList.add()?](#memory-add-arraylist)
+- [How much additional memory is allocated when calling LinkedList.add()?](#memory-add-linkedlist)
+- [Estimate the amount of memory to store a single byte primitive in LinkedList?](#memory-byte-primitive-linkedlist)
+- [Estimate the amount of memory to store a single byte primitive in the ArrayList?](#memory-byte-primitive-arraylist)
+- [For ArrayList or for LinkedList, is the add element to the middle operation (list.add(list.size()/2, newElement)) slower?](#add-to-middle)
+- [The implementation of the ArrayList class has the following fields: Object[] elementData, int size. Explain why store a separate size when you can always take elementData.length?](#separate-size)
+- [Compare the Queue and Deque interfaces.](#queue-vs-deque)
+- [Who extends whom: Queue extends Deque, or Deque extends Queue?](#queue-vs-deque-extends)
+- [Why does LinkedList implement both List and Deque?](#linkedlist-implements-list-deque)
+- [Is a LinkedList a single-linked, double-linked, or four-linked list?](#linkedlist-type)
+- [How do I iterate over LinkedList items in reverse order without using slow get(index)?](#reverse-iteration-linkedlist)
+- [What does PriorityQueue do?](#priorityqueue)
+- [Stack is considered "deprecated." What is recommended to replace it with? Why?](#stack-deprecation)
+- [Why do I need a HashMap if I have a Hashtable?](#hashmap-vs-hashtable)
+- [What is the difference between a HashMap and an IdentityHashMap? What is IdentityHashMap for?](#hashmap-vs-identityhashmap)
+- [What is the difference between a HashMap and a WeakHashMap? What is WeakHashMap used for?](#hashmap-vs-weakhashmap)
+- [WeakHashMap uses WeakReferences. Why not create a SoftHashMap on SoftReferences?](#weakhashmap-vs-softhashmap)
+- [WeakHashMap uses WeakReferences. Why not create a PhantomHashMap on PhantomReferences?](#weakhashmap-vs-phantomhashmap)
+- [LinkedHashMap - what's in it from LinkedList and what's from HashMap?](#linkedhashmap)
+- [How does the "sorting" of SortedMap manifest itself, except that toString() prints all the elements in order?](#sortedmap-sorting)
+- [How does the HashMap work?](#how-hashmap-works)
+- [According to Knuth and Corman, there are two main implementations of the hash table: open-addressing and chain-based. How is the HashMap implemented? Why do you think this particular implementation was chosen? What are the pros and cons of each approach?](#hashmap-implementation)
+- [How does a HashMap work when trying to store two elements in it by keys with the same hashCode(), but for which equals() == false?](#hashmap-same-hashcode)
+- [What is the initial number of buckets in the HashMap?](#initial-buckets-hashmap)
+- [What is the estimate of the temporal complexity of operations on elements from the HashMap? Does the HashMap guarantee the specified sampling complexity of the item?](#temporal-complexity-hashmap)
+- [Is it possible that the HashMap will degenerate into a list even with keys that have different hashCode()?](#hashmap-degenerate)
+- [In what case can an element be lost in the HashMap?](#element-loss-hashmap)
+- [Why can't byte[] be used as a key in the HashMap?](#byte-key-hashmap)
+- [What is the role of equals() and hashCode() in a HashMap?](#equals-hashcode-hashmap)
+- [What is the maximum number of hashCode() values?](#maximum-hashcode-values)
+- [What is the worst get(key) method run time for a key that is not in the HashMap?](#worst-get-not-in-hashmap)
+- [What is the worst get(key) method time for a key that is in the HashMap?](#worst-get-in-hashmap)
+- [How many hops occur when HashMap.get(key) is called on a key that is in the table?](#hops-hashmap)
+- [How many new features are created when you add a new item to the HashMap?](#new-features-hashmap)
+- [How and when does the increase in the number of buckets in the HashMap occur?](#increase-buckets-hashmap)
+- [Explain the meaning of the parameters in the HashMap constructor(int initialCapacity, float loadFactor).](#hashmap-parameters)
+- [Will the HashMap work if all the keys you add have the same hashCode()?](#same-hashcode-hashmap)
+- [How do I iterate over all Map keys?](#iterate-map-keys)
+- [How do you iterate over all Map values?](#iterate-map-values)
+- [How do you iterate over all key-value pairs in Map?](#iterate-map-key-value)
+- [What is the difference between TreeSet and HashSet?](#treeset-vs-hashset)
+- [What happens if I add elements to a TreeSet in ascending order?](#adding-to-treeset)
+- [How is LinkedHashSet different from HashSet?](#linkedhashset-vs-hashset)
+- [There is a special java.util.EnumSet class for Enum. What for? Why were the authors not satisfied with HashSet or TreeSet?](#enumset)
+- [What are the ways to iterate through list items?](#ways-to-iterate-list)
+- [How can I get synchronized standard collection objects?](#synchronized-collections)
+- [How do I get a read-only collection?](#readonly-collection)
+- [Write a single-threaded
+
+ program that causes the collection to throw a ConcurrentModificationException.](#concurrent-modification-exception)
+- [Give an example where a collection throws an UnsupportedOperationException.](#unsupported-operation-exception)
+- [Implement the symmetric difference between the two collections using the Collection methods (addAll(...), removeAll(...), retainAll(...)).](#symmetric-difference)
+- [How do I use LinkedHashMap to make a cache with an "invalidation policy"?](#linkedhashmap-cache)
+- [How do you copy the elements of any collection into an array with a single line?](#copy-collection-to-array)
+- [How to get a List with all elements except the first and last 3 with one call from List?](#list-except-first-last)
+- [How do I convert a HashSet to an ArrayList in a single line?](#convert-hashset-to-arraylist)
+- [How do I convert an ArrayList to a HashSet in a single line?](#convert-arraylist-to-hashset)
+- [Make a HashSet from the HashMap keys.](#hashset-from-hashmap-keys)
+- [Make a HashMap from HashSet<Map.Entry<K, V>>.](#hashmap-from-hashset-entries)
+
+---
 
 Java 8
 What are the new features in Java 8 and JDK 8?
