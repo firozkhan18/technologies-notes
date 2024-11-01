@@ -140,13 +140,13 @@ In summary:
 [⬆️ Back to Top](#java-core) 
 
 ## What are the different access modifiers?
-Private: Class members are only available within the class. A function word is used for designation.private
+**Private**: Class members are only available within the class. A function word is used for designation.private
 
-default, package-private, package level: Visibility of the class/class members only within the package. Is a default access modifier - special No designation required.
+**default, package-private, package level**: Visibility of the class/class members only within the package. Is a default access modifier - special No designation required.
 
-protected: Class members are available within the package and in the descendants. A function word is used for designation.protected
+**protected**: Class members are available within the package and in the descendants. A function word is used for designation.protected
 
-public: The class/class members are available to everyone. A function word is used for designation.public
+**public**: The class/class members are available to everyone. A function word is used for designation.public
 
 The sequence of modifiers in ascending order of the level of closure: public, protected, default, private.
 
