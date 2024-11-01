@@ -445,6 +445,8 @@
 - [Write the simplest multithreaded bounded buffer using synchronized.](#bounded-buffer-synchronized)
 - [Write the simplest multithreaded bounded buffer using ReentrantLock.](#bounded-buffer-reentrantlock)
 
+[Back to Table of Contents](#Interview-Questions-for-Java-Developer)
+
 ---
 
 ## Servlets, JSP, JSTL
