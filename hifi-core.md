@@ -137,7 +137,7 @@ In summary:
 - **JRE**: Contains the JVM and libraries for running programs.
 - **JDK**: Includes the JRE and tools for development.
 - 
-to the table of contents
+[⬆️ Back to Top](#java-core) 
 
 ## What are the different access modifiers?
 Private: Class members are only available within the class. A function word is used for designation.private
@@ -152,7 +152,7 @@ The sequence of modifiers in ascending order of the level of closure: public, pr
 
 During inheritance, it is possible to change access modifiers towards greater visibility (to maintain compliance with Barbara Liskov's substitution principle).
 
-to the table of contents
+[⬆️ Back to Top](#java-core) 
 
 ## What does the keyword say?final
 A modifier can be applied to variables, method parameters, fields and methods of a class, or to the classes themselves.final
@@ -162,20 +162,20 @@ A method cannot be overridden in descendant classes;
 A field cannot change its value after initialization;
 Method parameters cannot change their value within a method;
 Local variables cannot be changed after they have been assigned a value.
-to the table of contents
+[⬆️ Back to Top](#java-core) 
 
 ## What are the default variable initialization values?
 Numbers are initialized or 00.0;
 char — \u0000;
 boolean — false;
 Objects (including ) are .Stringnull
-to the table of contents
+[⬆️ Back to Top](#java-core) 
 
 ## What do you know about the feature?main()
 The method is the entry point into the program. An application can have several such methods. If the method is missing, then compilation is possible, but the error 'Error: Main method not found' will be received on startup.main()
 
 public static void main(String[] args) {}
-to the table of contents
+[⬆️ Back to Top](#java-core) 
 
 What logical operations and operators do you know?
 &: Boolean AND (AND);
@@ -190,7 +190,7 @@ What logical operations and operators do you know?
 ==:Equally;
 !=: Not equal;
 ?:: Ternary (ternary) conditional operator.
-to the table of contents
+[⬆️ Back to Top](#java-core) 
 
 ## What is a ternary selection operator?
 A ternary conditional operator is an operator that can replace some constructs of operators.?:if-then-else
@@ -201,7 +201,7 @@ condition? Expression1 : Expression2
 
 If it is executed, it is evaluated and its result becomes the result of the execution of the entire statement. If it is , then its value is calculated and becomes the result of the operator's work. Both operands and must return a value of the same (or compatible) type.условиевыражение1условиеfalseвыражение2выражение1выражение2
 
-to the table of contents
+[⬆️ Back to Top](#java-core) 
 
 ## What bitwise operations do you know?
 ~: Bitwise unary operator NOT;
@@ -217,7 +217,7 @@ to the table of contents
 >>>=: Shift to the right without taking into account the sign with assignment;
 <<: Shift to the left (multiply by 2 in the degree of shift);
 <<=: Shift left with assignment.
-to the table of contents
+[⬆️ Back to Top](#java-core) 
 
 ## Where and for what is the modifier used?abstract
 A class marked with a modifier is called an abstract class. Such classes can only act as ancestors for other classes. You are not allowed to create instances of the abstract class itself. At the same time, the heirs of an abstract class can be both other abstract classes and classes that allow the creation of objects.abstract
@@ -226,7 +226,7 @@ A method marked with a keyword is an abstract method, i.e. a method that does no
 
 Using abstract classes and methods allows you to describe a pattern of an object that needs to be implemented in other classes. They themselves describe only a certain behavior common to all descendants.
 
-to the table of contents
+[⬆️ Back to Top](#java-core) 
 
 ## Define the concept of "interface". What default modifiers do interface fields and methods have?
 The keyword is used to create fully abstract classes. The main purpose of an interface is to define how we can use the class that implements it. The interface creator defines method names, argument lists, and return types, but does not implement their behavior. All methods are implicitly declared as .interfacepublic
@@ -235,7 +235,7 @@ Starting with Java 8, interfaces are allowed to host implementations of default 
 
 The interface can also contain fields. In this case, they are automatically public, static, and immutable.publicstaticfinal
 
-to the table of contents
+[⬆️ Back to Top](#java-core) 
 
 ## How is an abstract class different from an interface? When should you use an abstract class and when should you use an interface?
 In Java, a class can implement multiple interfaces at the same time, but inherit from only one class.
@@ -245,22 +245,22 @@ Interfaces allow you to create type structures without hierarchy.
 Inheriting from the abstract, class "dissolves" its own individuality. By implementing the interface, it extends its own functionality.
 Abstract classes contain a partial implementation that is augmented or extended in subclasses. At the same time, all subclasses are similar to each other in the part of the implementation inherited from the abstract class and differ only in the part of their own implementation of the abstract methods of the parent. Therefore, abstract classes are used in the case of building a hierarchy of classes of the same type, very similar to each other. In this case, inheriting from an abstract class that implements the default behavior of the object can be useful because it avoids writing repetitive code. In all other cases, it is better to use interfaces.
 
-to the table of contents
+[⬆️ Back to Top](#java-core) 
 
 ## Why don't some interfaces define methods at all?
 These are the so-called token interfaces. They simply indicate that the class is of a certain type. An example would be an interface that indicates that a class supports a cloning mechanism.Clonable
 
-to the table of contents
+[⬆️ Back to Top](#java-core) 
 
 ## Why can't I declare an interface method with a modifier?final
 In the case of interfaces, specifying a modifier is meaningless, because all methods of interfaces are implicitly declared as abstract, i.e. they cannot be executed without being implemented elsewhere, and this cannot be done if the method has the identifier .finalfinal
 
-to the table of contents
+[⬆️ Back to Top](#java-core) 
 
 ## Which has a higher level of abstraction – a class, an abstract class, or an interface?
 Interface.
 
-to the table of contents
+[⬆️ Back to Top](#java-core) 
 
 ## Can an object access a class member declared as ? If so, how?private
 Inside the class, access to a private variable is open without restrictions;
@@ -276,7 +276,7 @@ Field field = Victim.class.getDeclaredField("field");
 field.setAccessible(true); 
 int fieldValue = (int) field.get(victim);
 //...
-to the table of contents
+[⬆️ Back to Top](#java-core) 
 
 ## What is the order in which constructors and initialization blocks are invoked based on the class hierarchy?
 First, all static blocks are called in order from the first static block of the root ancestor and up the chain of the hierarchy to the static blocks of the class itself.
@@ -291,7 +291,7 @@ Parent static block(s) → Child static block(s) → Grandchild static block(s)
 
 → Grandchild non-static block(s) → Grandchild constructor
 
-to the table of contents
+[⬆️ Back to Top](#java-core) 
 
 ## Why are initialization blocks needed and what are the types?
 Initialization blocks are code enclosed in curly braces and placed inside a class outside of a method or constructor declaration.
@@ -301,26 +301,26 @@ The initialization block is executed before the class is initialized by the clas
 Multiple initialization blocks are executed in order in the class code.
 The initialization block is capable of throwing exceptions if their declarations are listed in all class constructors.throws
 An initialization block can also be created in an anonymous class.
-to the table of contents
+[⬆️ Back to Top](#java-core) 
 
 To which Java constructs does the modifier apply?static
 Fields;
 Methods;
 nested classes;
 members of the section.import
-to the table of contents
+[⬆️ Back to Top](#java-core) 
 
 ## Why do Java use static initialization blocks?
 Static initialization blocks are used to execute code that must run once when a class is initialized by the class loader, at the time before the class objects are created by the constructor. Such a block (as opposed to non-static blocks belonging to a particular class object) belongs only to the class itself (the metaclass object).Class
 
-to the table of contents
+[⬆️ Back to Top](#java-core) 
 
 ## What happens if an exception occurs in the initialization block?
 For non-static initialization blocks, if the throw of an exception is explicitly specified, it is required that the declarations of those exceptions be listed in all constructors of the class. Otherwise, there will be a compilation error. For a static block, throwing an exception explicitly results in a compilation error.throws
 
 In other cases, the interaction with exceptions will take place in the same way as in any other place. The class will not be initialized if the error occurs in a static block and the class object will not be created if the error occurs in a non-static block.
 
-to the table of contents
+[⬆️ Back to Top](#java-core) 
 
 ## What exception is thrown when an error occurs in the class initialization block?
 If the exception that has arisen is the heir:RuntimeException
@@ -329,7 +329,7 @@ for static initialization blocks will be discarded java.lang.ExceptionInInitiali
 For non-static ones, a source exception will be thrown.
 If the exception that has arisen is the heir, then in both cases it will be thrown out. Exception: - Thread death. In this case, no exception will be thrown.Errorjava.lang.Errorjava.lang.ThreadDeath
 
-to the table of contents
+[⬆️ Back to Top](#java-core) 
 
 ## Can a static method be overridden or overloaded?
 Overloaded - yes. Everything works exactly the same as with regular methods - 2 static methods can have the same name if the number of their parameters or types is different.
@@ -338,12 +338,12 @@ Overridden - no. The choice of the static method to be called occurs early in bi
 
 In general, it is recommended that static fields and methods be accessed through the class name rather than the object.
 
-to the table of contents
+[⬆️ Back to Top](#java-core) 
 
 ## Can non-static methods overwhelm static methods?
 Yes. As a result, you will get two different methods. Static will belong to a class and will be accessible through its name, and non-static will belong to a specific object and will be accessible through a method call to that object.
 
-to the table of contents
+[⬆️ Back to Top](#java-core) 
 
 ## Is it possible to narrow the access level/return type when overriding a method?
 Is it possible to change: the access modifier, the return type, the type of argument or their number, the names of arguments or their order when overriding a method; remove, add, change the order of section elements?throws
@@ -354,18 +354,18 @@ You can change anything that doesn't prevent the compiler from understanding whi
 Changing the type of the return value when overriding a method is allowed only in the direction of narrowing the type (instead of the parent class - the descendant).
 If you change the type, number, and order of arguments, instead of overriding, the method will be overloaded.
 You don't have to specify a section of a method, but it's worth remembering that it remains valid if it's already defined on the method of the parent class. It is also possible to add new exceptions that are heirs to those already announced or exclusions. The order of such elements does not matter when overriding.throwsRuntimeException
-to the table of contents
+[⬆️ Back to Top](#java-core) 
 
 ## How do I access the overridden methods of the parent class?
 With a keyword, we can access any member of the parent class - a method or a field, as long as they are not defined with a modifier.superprivate
 
 super.method();
-to the table of contents
+[⬆️ Back to Top](#java-core) 
 
 ## Is it possible to declare a method abstract and static at the same time?
 No. In this case, the compiler will throw an error: "Illegal combination of modifiers: 'abstract' and 'static'". The modifier says that the method will be implemented in another class, but instead indicates that this method will be available by the class name.abstractstatic
 
-to the table of contents
+[⬆️ Back to Top](#java-core) 
 
 ## What is the difference between an instance member of a class and a static member of a class?
 The modifier tells you that the method or field belongs to the class itself and can be accessed even without creating an instance of the class. Marked fields are initialized when the class is initialized. Methods declared as , have a number of limitations:staticstaticstatic
@@ -375,12 +375,12 @@ They should only access static variables.
 They cannot refer to members of the or .thissuper
 Unlike static fields, class instance fields belong to a specific object and can have different values for each. An instance method can only be called after the class object has been created first.
 
-to the table of contents
+[⬆️ Back to Top](#java-core) 
 
 ## Where is initialization of static/non-static fields allowed?
 Static fields can be initialized at declaration, in a static or non-static initialization block.
 Non-static fields can be initialized at declaration, in a non-static initialization block, or in a constructor.
-to the table of contents
+[⬆️ Back to Top](#java-core) 
 
 ## What types of classes are there in java?
 Top level class:
@@ -393,7 +393,7 @@ Static nested class;
 Member inner class;
 Local inner class;
 Anonymous inner class.
-to the table of contents
+[⬆️ Back to Top](#java-core) 
 
 ## Tell us about nested classes. In what cases are they used?
 A class is called a nested class if it is defined within another class. A nested class should be created only to serve the class that surrounds it. If a nested class is useful in some other context, it should become the top-level class. Nested classes have access to all (including private) fields and methods of an external class, but not vice versa. Because of this permission, the use of nested classes results in some encapsulation violation.
@@ -404,12 +404,12 @@ Such class categories, with the exception of the first class, are also called In
 
 Each of the categories has recommendations for its use. If a nested class needs to be visible outside of a single method, or if it is too long to fit comfortably within the boundaries of a single method, and if each instance of that class needs a reference to the instance that includes it, then a non-static inner class is used. In case a reference to a framing class is not required, it is better to make such a class static. If a class is only needed within a method and you want to instantiate that class only in that method, then the local class is used. If, in addition, the use of a class is limited to use only in one place and there is already a type that characterizes this class, then it is recommended to make it an anonymous class.
 
-to the table of contents
+[⬆️ Back to Top](#java-core) 
 
 ## What is a "static class"?
 It is a nested class declared using the . The modifier is not applicable to top-level classes.staticstatic
 
-to the table of contents
+[⬆️ Back to Top](#java-core) 
 
 ## What are the features of using nested classes: static and internal? What is the difference between them?
 Nested classes can access all members of the framing class, including private ones.
@@ -417,7 +417,7 @@ You do not need an external class object to create a static nested class object.
 From a static nested class object, you cannot access non-static members of a framing class directly, but only by referencing an instance of an outer class.
 Regular nested classes cannot contain static methods, initialization blocks, or classes. Static nested classes can.
 A regular nested class object stores a reference to an external class object. There is no such link inside the static one. An instance of a framing class is accessed by specifying it after its name. For example:..thisOuter.this
-to the table of contents
+[⬆️ Back to Top](#java-core) 
 
 ## What is a "local class"? What are its features?
 A local inner class is a nested class that can be declared in any block where variables are allowed. Like simple Member inner classes, local classes have names and can be reused. Like anonymous classes, they have an instance surrounding them only when used in a non-static context.
@@ -429,7 +429,7 @@ Cannot be declared as // or privatepublicprotectedstatic;
 Cannot have static declarations (fields, methods, classes) inside them;
 Have access to the fields and methods of the framing class;
 Can access local variables and method parameters if they are declared with the .final
-to the table of contents
+[⬆️ Back to Top](#java-core) 
 
 ## What are "anonymous classes"? Where are they used?
 This is a nested local class with no name that can be declared anywhere in the enclosing class that allows the placement of expressions. An anonymous class is instantiated at the same time as it is declared. Depending on the location, an anonymous class behaves as either a static or non-static nested class—an instance of the surrounding class appears in a non-static context.
@@ -445,14 +445,14 @@ creating a function object, such as implementing an interface Comparator;
 creating a process object, such as instances of the , and similar classes;ThreadRunnable
 in the static generation method;
 initialization of an open static field that corresponds to a complex type enumeration where a separate subclass is required for each instance in the enumeration.final
-to the table of contents
+[⬆️ Back to Top](#java-core) 
 
 ## How do I access an external class field from a nested class?
 A static nested class has direct access only to the static fields of the enclosing class.
 
 A simple inner class can access any field in an outer class directly. If a nested class already has a field with the same literal, then such a field should be accessed through a reference to its copy. For example:.Outer.this.field
 
-to the table of contents
+[⬆️ Back to Top](#java-core) 
 
 ## What is the operator used for?assert
 Assert is a special construct that allows you to test assumptions about the values of arbitrary data at any point in the program. The assertion can automatically signal that invalid data has been detected, which usually causes the program to crash and indicate where the invalid data was detected.
@@ -469,7 +469,7 @@ assert [Выражение типа boolean]; or assert [Выражение ти
 
 At runtime, if assertion verification is enabled, the value of the Boolean expression is evaluated, and if its result is , an exception is thrown. In the case of the second form of the operator, the expression after the colon specifies a detailed message about the error that occurred (the evaluated expression will be converted to a string and passed to the constructor).falsejava.lang.AssertionErrorassertAssertionError
 
-to the table of contents
+[⬆️ Back to Top](#java-core) 
 
 ## What is Heap and Stack memory in Java? What is the difference between them?
 Heap is used by the Java Runtime to allocate memory for objects and classes. The creation of a new object also occurs on the heap. This is also the area of work of the garbage collector. Any object created on the heap has global access and can be referenced from anywhere in the application.
@@ -487,17 +487,17 @@ The stack memory size is much smaller than the memory on the heap.
 Because of the ease of memory allocation, stack memory is much faster than heap.
 JVM options are also used to determine the initial and maximum memory size on the heap. For the stack, you can determine the memory size using the .-Xms-Xmx-Xss
 
-to the table of contents
+[⬆️ Back to Top](#java-core) 
 
 ## Is it true that primitive data types are always stored on the stack and instances of reference data types are on the heap?
 Not really. The primitive field of a class instance is not stored on the stack, but on the heap. Any object (anything that is explicitly or implicitly created using the operator) is stored on the heap.new
 
-to the table of contents
+[⬆️ Back to Top](#java-core) 
 
 ## How are variables passed to methods, by value or by reference?
 In Java, parameters are always passed only by value, which is defined as "copy the value and pass a copy". With primitives, this will be a copy of the content. With links - also a copy of the content, i.e. a copy of the link. At the same time, it is possible to change the internal members of reference types through such a copy, but the reference itself pointing to the instance is not.
 
-to the table of contents
+[⬆️ Back to Top](#java-core) 
 
 ## What is a garbage collector for?
 The Garbage Collector only needs to do two things:
@@ -556,7 +556,7 @@ HotSpot VM garbage collectors use a combined Generational Garbage Collection app
 
 most of the objects you create quickly become garbage;
 There are few relationships between objects that were created in the past and newly created objects.
-to the table of contents
+[⬆️ Back to Top](#java-core) 
 
 ## How does the garbage collector work?
 The garbage collection mechanism is the process of freeing up space on the heap so that new objects can be added.
@@ -569,7 +569,7 @@ Memory is freed by the garbage collector at its own "discretion". A program can 
 
 Garbage is collected automatically by the system, without user or programmer intervention, but that doesn't mean the process doesn't require attention at all. The need to create and delete a large number of objects has a significant impact on the performance of applications, and if program performance is an important factor, you should carefully consider decisions related to the creation of objects, which, in turn, will reduce the amount of garbage to be disposed of.
 
-to the table of contents
+[⬆️ Back to Top](#java-core) 
 
 ## What types of garbage collectors are implemented in the HotSpot virtual machine?
 The Java HotSpot VM provides developers with four different garbage collectors to choose from:
@@ -578,7 +578,7 @@ Serial is the simplest option for low-data, low-latency applications. At the mom
 Parallel - Inherits assembly approaches from the sequential collector, but adds parallelism to some operations, as well as the ability to automatically adjust to the required performance parameters. The parallel collector is enabled by the option.-XX:+UseParallelGC
 Concurrent Mark Sweep (CMS) aims to reduce maximum latency by performing some of the garbage collection work in parallel with the main threads of the application. Suitable for handling relatively large amounts of data in memory. The use of CMS GC is enabled by the option.-XX:+UseConcMarkSweepGC
 Garbage-First (G1) is designed to replace CMS, especially in server applications running on multiprocessor servers and operating large amounts of data. G1 is enabled by the Java option.-XX:+UseG1GC
-to the table of contents
+[⬆️ Back to Top](#java-core) 
 
 ## Describe the algorithm of some garbage collector implemented in the HotSpot virtual machine.
 Serial Garbage Collector was one of the first garbage collectors in HotSpot VM. While this collector is running, the application is suspended and continues to run only after the garbage collection stops.
@@ -604,7 +604,7 @@ When free memory is a contiguous area, then a very fast bump-the-pointer algorit
 
 A sequential garbage collector is ideal for most applications that use up to 200 megabytes of heap, run on client-type machines, and do not have strict requirements for the amount of garbage collection time spent on garbage collection. At the same time, the stop-the-world model can cause long pauses in the application when using large amounts of memory. In addition, the sequential algorithm does not allow optimal use of the computer's computing resources, and the sequential garbage collector can become a bottleneck when running an application on multiprocessor machines.
 
-to the table of contents
+[⬆️ Back to Top](#java-core) 
 
 ## What is a "string pool"?
 A string pool is a set of rows stored in Heap.
@@ -614,7 +614,7 @@ String pooling helps save memory, but for the same reason, it takes longer to cr
 When you use to create a row, then first you look for a row in the pool with the same value, if it is found, then just return a reference, otherwise a new row in the pool is created, and then a reference to it is returned;"
 When you use the operator, a new object is created. You can then use the method to pool that row, or you can get a reference from the pool to another object with the same value;newStringintern()String
 A string pool is an example of a Flyweight pattern.
-to the table of contents
+[⬆️ Back to Top](#java-core) 
 
 ## What the? Why is it needed?finalize()
 Calling the JVM method implements functionality similar to that of the C++ destructors used to clean up memory before returning to the operating system. This method is called when an object is destroyed by the garbage collector, and by overriding it is possible to program the actions necessary to correctly delete an instance of the class - for example, closing network connections, database connections, releasing locks on files, etc.finalize()finalize()
@@ -623,14 +623,14 @@ After this method is executed, the object must be recollected by the garbage col
 
 The object will not necessarily be available for assembly right away - the method can save a reference to the object somewhere. Such a situation is called the "rebirth" of the object and is considered an anti-pattern. The main problem with this trick is that you can "revive" the object only 1 time.finalize()
 
-to the table of contents
+[⬆️ Back to Top](#java-core) 
 
 ## What happens to the garbage collector if the method takes a significant amount of time to execute, or if an exception is thrown during execution?finalize()
 The call itself takes place in a separate thread called Finalizer(), which is created when the virtual machine is started (in a static partition when the class is loaded). Methods are called sequentially in the order in which they were added to the list by the garbage collector. Accordingly, if one hangs, it will hang the Finalizer thread, but not the garbage collector. This means, in particular, that objects that do not have a method will be properly deleted, but objects that do will be added to the queue until the Finalizer thread is freed, the application is terminated, or memory runs out.finalize()java.lang.ref.Finalizer.FinalizerThreadFinalizerfinalize()finalize()finalize()
 
 The same applies to in-process thrown exceptions: the Finalizer method on the thread ignores all exceptions thrown at runtime. Therefore, the occurrence of an exception will not affect the health of the garbage collector in any way.finalize()runFinalizer()finalize()
 
-to the table of contents
+[⬆️ Back to Top](#java-core) 
 
 ## What is the difference between , and ?finalfinallyfinalize()
 Modifier:final
@@ -644,7 +644,7 @@ The operator guarantees that the code fragment defined in it will be executed re
 
 The method is called before the garbage collector performs the object deletion.finalize()
 
-to the table of contents
+[⬆️ Back to Top](#java-core) 
 
 ## Tell us about type conversion. What is Downgrade and Type Upgrade?
 Java is a strongly typed programming language, which means that every expression and every variable has a well-defined type at the time of compilation. However, a casting mechanism has been defined - a way to convert the value of a variable of one type into the value of another type.
@@ -666,12 +666,12 @@ Parent parent = new Child();
 if (parent instanceof Child) {
     Child child = (Child) parent;
 }
-to the table of contents
+[⬆️ Back to Top](#java-core) 
 
 When can an exception be thrown in an application?ClassCastException
 ClassCastException (descendant) - an exception that will be thrown on a type conversion error.RuntimeException
 
-to the table of contents
+[⬆️ Back to Top](#java-core) 
 
 ## What is autoboxing in Java and what are the rules for wrapping primitive types into wrapper classes?
 Autopackaging is a mechanism for implicitly initializing objects of wrapper classes (, , , , , ) with the values of their corresponding original primitive types (, , ...), without explicitly using the class constructor.ByteShortIntegerLongFloatDoubleCharacterBooleanbyteshortint
@@ -688,7 +688,7 @@ implicitly expanding/narrowing the original primitive type to the primitive type
 Autopackage the primitive into the appropriate wrapper class. However, in this case, there are two additional restrictions: a) Assigning a primitive to a wrapper can only be done by an operator (you cannot pass such a primitive to method parameters without explicit casting) b) the type of the left operand must not be older than , the type of the right operand must not be older than: it is permissible to expand/contract in/from , to /from , to and only to contract from , from , from . All other options require explicit type conversion).=Characterintbyteshortbytecharshortcharbyteintshortintcharint
 An additional feature of integer wrapper classes created by autopackaging constants in the range is that they are cached by the JVM. Therefore, such wrappers with the same values will be references to the same object.-128 ... +127
 
-to the table of contents
+[⬆️ Back to Top](#java-core) 
 
 ## What are the features of the class?String
 It is an immutable and finalized data type;
@@ -696,7 +696,7 @@ The JVM stores all objects in a row pool;String
 A class object can be retrieved using double quotes;String
 You can use the operator to concatenation strings;+
 Starting with Java 7, strings can be used in the .switch
-to the table of contents
+[⬆️ Back to Top](#java-core) 
 
 ## Why an immutable and finalized class?String
 There are several advantages to string immutability:
@@ -706,22 +706,22 @@ If the string is mutable, then it will become a serious threat to the security o
 Immutability avoids synchronization: strings are thread-safe and a single string instance can be shared by different threads.
 Strings are used by classloader, and immutability ensures that the class is loaded correctly.
 Because the string is immutable, it is cached at the time of creation and there is no need to recalculate it. This makes the string a great candidate for the key, as it is faster to process.hashCode()HashMap
-to the table of contents
+[⬆️ Back to Top](#java-core) 
 
 ## Why is it preferable to store a password?char[]String
 From the moment of creation, the row remains in the pool until it is garbage collected. Therefore, even after the end of using the password, it continues to remain available in memory for some time and there is no way to avoid it. This poses a security risk, as anyone with access to the memory will be able to find the password in text. If you are using an array of characters to store a password, you can clear it as soon as you are done with the password, avoiding the security risk inherent in the string.
 
-to the table of contents
+[⬆️ Back to Top](#java-core) 
 
 ## Why is a string a popular key in Java?HashMap
 Because strings are immutable, their hash code is calculated and cached at the time of creation, without requiring recalculation in future use. Therefore, as a key, they will be processed faster.HashMap
 
-to the table of contents
+[⬆️ Back to Top](#java-core) 
 
 ## What does the method do in the classroom?.intern()String
 The method is used to store a row in a row pool or to retrieve a reference if such a row is already in the row.intern()
 
-to the table of contents
+[⬆️ Back to Top](#java-core) 
 
 ## Is it possible to use strings in the construction?switch
 Yes, starting with Java 7, strings can be used in the statement, earlier versions of Java do not support this. Herewith:switch
@@ -729,7 +729,7 @@ Yes, starting with Java 7, strings can be used in the statement, earlier version
 the strings involved are case-sensitive;
 A method is used to compare the obtained value with the values, so to avoid it, it is worth considering checking on .equals()caseNullPointerExceptionnull
 According to the Java 7 documentation for strings in , the Java compiler generates more efficient bytecode for strings in the construct than for concatenated - conditions.switchswitchifelse
-to the table of contents
+[⬆️ Back to Top](#java-core) 
 
 ## What is the main difference between , , ?StringStringBufferStringBuilder
 A class is immutable—you can't modify an object of such a class, you can only replace it with the creation of a new instance.String
@@ -738,19 +738,19 @@ The class is mutable - you should use it when you need to modify the content fre
 
 The class was added in Java 5 and is identical to the class in every way, except that it is out of sync and therefore its methods are much faster.StringBuilderStringBuffer
 
-to the table of contents
+[⬆️ Back to Top](#java-core) 
 
 ## What is a class? What methods does it have?Object
 Object it is the base class for all other objects in Java. Any class inherits from and accordingly inherits its methods:Object
 
 public boolean equals(Object obj) – serves to compare objects by meaning; – returns the hash code for the object; —Returns a string representation of the feature. - Returns the feature class at runtime. - Creates and returns a copy of the object. - resumes the thread waiting for the monitor; - resumes all threads waiting for the monitor; - Stopping the thread that called the method until another thread calls the method or for this object. - Stopping the thread that called the method for a certain amount of time or until another thread calls the method or for that object. - Stopping the thread that called the method for a certain amount of time or until another thread calls the method or for that object. - Can be called by the garbage collector when an object is garbage collected.int hashCode()String toString()Class getClass()protected Object clone()void notify()void notifyAll()void wait()notify()notifyAll()void wait(long timeout)notify()notifyAll()void wait(long timeout, int nanos)notify()notifyAll()protected void finalize()
 
-to the table of contents
+[⬆️ Back to Top](#java-core) 
 
 ## Define the concept of "constructor".
 A constructor is a special method that does not have a return type and has the same name as the class in which it is used. The constructor is called when a new class object is created and defines the steps required to initialize it.
 
-to the table of contents
+[⬆️ Back to Top](#java-core) 
 
 ## What is the "default constructor"?
 If a class does not have a constructor defined, the compiler will generate a constructor without arguments, the so-called "default constructor".
@@ -758,17 +758,17 @@ If a class does not have a constructor defined, the compiler will generate a con
 public class ClassName() {}
 If a class already has a constructor defined, the default constructor will not be created, and if it is needed, it must be explicitly described.
 
-to the table of contents
+[⬆️ Back to Top](#java-core) 
 
 ## What is the difference between the default constructor, the copy constructor, and the parameter constructor?
 The default constructor is missing any arguments. The copy constructor takes a pre-existing class object as an argument to create a clone of it. A parameter constructor has arguments in its signature (usually needed to initialize class fields).
 
-to the table of contents
+[⬆️ Back to Top](#java-core) 
 
 ## Where and how can you use a private builder?
 A private (keyword, hidden) constructor can be used by a public static method of generating objects of a given class. It is also allowed to be accessed by nested classes and can be used for their needs.private
 
-to the table of contents
+[⬆️ Back to Top](#java-core) 
 
 ## Tell us about loader classes and dynamic class loading.
 The basis of working with classes in Java is loader classes, which are regular Java objects that provide an interface for finding and creating a class object by its name while the application is running.
@@ -798,7 +798,7 @@ There are several ways to trigger the loading of the required class:
 
 explicit: call or (by default, the loader that created the current class is used, but it is also possible to explicitly specify the loader);ClassLoader.loadClass()Class.forName()
 Implicit: When an application requires a class that has not been used before, the JVM initiates its loading.
-to the table of contents
+[⬆️ Back to Top](#java-core) 
 
 ## What is Reflection?
 Reflection is a mechanism for obtaining data about a program at runtime. In Java, Reflection is implemented using the Java Reflection API, which consists of the and .java.langjava.lang.reflect
@@ -812,14 +812,14 @@ Creating an instance of a class;
 Obtaining and setting the values of the object fields;
 Calling object methods;
 Create a new array.
-to the table of contents
+[⬆️ Back to Top](#java-core) 
 
 ## Why do you need . How is it different from surgery?equals()==
 Method - defines the equivalence relation of objects.equals()
 
 When comparing objects using the references, the comparison occurs only between references. When comparing by overridden by the developer - by the internal state of the objects.==equals()
 
-to the table of contents
+[⬆️ Back to Top](#java-core) 
 
 ## If you want to override what conditions must be met?equals()
 What properties does the generated equivalence relation have?equals()
@@ -829,7 +829,7 @@ Transitivity: for any references to values , and , if and return , then and retu
 Consistency: For any references to values and , if called multiple times, a value will be returned continuously, or a value will be returned continuously, provided that no information used in the object comparison has changed.хух.equals(y)truefalse
 For any non-null value reference, the expression must return .хх.equals(null)false
 
-to the table of contents
+[⬆️ Back to Top](#java-core) 
 
 ## Rules for overriding the .Object.equals()
 
@@ -900,19 +900,19 @@ public boolean equals(Object obj) {
 
 By following these steps, your `equals()` method will be robust and conform to Java's standards for equality checking.
 
-to the table of contents
+[⬆️ Back to Top](#java-core) 
 
 ## What is the relationship between hashCode() and equals()?
 
 If overridden, are there any other methods that should be overridden?equals()
 Equal objects must return the same hash codes. When overriding, you must also override the .equals()hashCode()
 
-to the table of contents
+[⬆️ Back to Top](#java-core) 
 
 ## What happens if I override without overriding ? What problems can arise?equals()hashCode()
 Classes and methods that use the rules of this contract may not work correctly. This can cause the key-value pair that was placed in it when using a new instance of the key not to be found in it.HashMap
 
-to the table of contents
+[⬆️ Back to Top](#java-core) 
 
 How are the methods implemented in the classroom as well?hashCode()equals()Object
 The implementation of the method boils down to checking for the equality of two references:Object.equals()
@@ -923,25 +923,25 @@ public boolean equals(Object obj) {
 The implementation of the method is described as , i.e. defined by non-Java code and usually returns the address of the object in memory:Object.hashCode()native
 
 public native int hashCode();
-to the table of contents
+[⬆️ Back to Top](#java-core) 
 
 ## What is the method for?hashCode()
 The method is required to compute the hash code passed as an input parameter to an object. In Java, it is an integer, in a broader sense, it is a fixed-length bit string obtained from an array of arbitrary length. This method is implemented in such a way that for the same input object, the hash code will always be the same. It should be understood that in Java, the set of possible hash codes is limited by the type , and the set of objects is unlimited. Because of this, it is quite possible that the hash codes of different objects may match:hashCode()int
 
 if the hash codes are different, then the objects are guaranteed to be different;
 If the hash codes are equal, then the objects may not necessarily be equal.
-to the table of contents
+[⬆️ Back to Top](#java-core) 
 
 ## What are the rules for overriding a method?Object.hashCode()
 Are there any guidelines on which fields should be used when counting?hashCode()
 General advice: choose fields that are likely to differ. To do this, you need to use unique, preferably primitive fields, such as , . At the same time, you need to follow the rule, if the fields are involved in the calculation , then they must also be involved in the execution of .iduuidhashCode()equals()
 
-to the table of contents
+[⬆️ Back to Top](#java-core) 
 
 ## Can different objects have the same ?hashCode()
 Yes, they can. The method does not guarantee the uniqueness of the return value. A situation where different objects have the same hash codes is called a collision. The probability of a collision depends on the hash code generation algorithm used.hashCode()
 
-to the table of contents
+[⬆️ Back to Top](#java-core) 
 
 ## If a class implements the method , but makes the hash code in the form , then will such points be correctly placed and retrieved from ?
 
@@ -951,41 +951,41 @@ HashSet uses to store items. When you add an element to it, a hash code is calcu
 
 In the event of a collision in the list, it is checked for the presence of an element in the list: . If an item is found, its value is overwritten. In our case, for different objects, the method will return . Accordingly, the new element will be successfully added to . The item will also be checked out successfully. However, the performance of such code will be low, and the benefits of table hashes will not be used.HashMape.hash == hash && ((k = e.key) == key || key.equals(k))equals()falseHashSet
 
-to the table of contents
+[⬆️ Back to Top](#java-core) 
 
 ## Can different objects have ?(ref0 != ref1)ref0.equals(ref1) == true
 Yes, they can. To do this, the .equals()
 
 If the method is used, then for two references and the method will return if and only if both references point to the same object (i.e. returns).Object.equals()xytruex == ytrue
 
-to the table of contents
+[⬆️ Back to Top](#java-core) 
 
 ## Can different references to the same object have ?(ref0 == ref1)ref0.equals(ref1) == false
 In general, they can, if the method is implemented incorrectly and does not fulfill the reflexivity property: for any non-null references, the method must return .equals()xx.equals(x)true
 
-to the table of contents
+[⬆️ Back to Top](#java-core) 
 
 Is it possible to implement the method in this way?equals(Object that) {return this.hashCode() == that.hashCode()}
 Strictly speaking, it is impossible, since the method does not guarantee the uniqueness of the value for each object. However, for comparing instances of a class, such code is acceptable, since the method in the class returns unique values for different objects (its calculation is based on the use of the object's address in memory).hashCode()ObjecthashCode()Object
 
-to the table of contents
+[⬆️ Back to Top](#java-core) 
 
 ## B requires that the argument is of the same type as the object itself. What is the difference between and ?equals()equals(Object that)this.getClass() == that.getClass()that instanceof MyClass
 The operator compares the object and the specified type. It can be used to check whether a given object is an instance of a class, or an instance of a child class, or an instance of a class that implements a specified interface.instanceof
 
 this.getClass() == that.getClass() checks two classes for identity, so for the correct implementation of the method contract, you must use an exact comparison using the .equals()getClass()
 
-to the table of contents
+[⬆️ Back to Top](#java-core) 
 
 ## Is it possible to implement a class method like this: ?equals()MyClassclass MyClass {public boolean equals(MyClass that) {return this == that;}}
 You can implement it, but this method does not override the class method, but overloads it.equals()Object
 
-to the table of contents
+[⬆️ Back to Top](#java-core) 
 
 ## There is a class. Why is a hash code in the form preferable to ?Point{int x, y;}31 * x + yx + y
 The multiplier creates a dependence of the hash code value on the order of processing the fields, which ultimately generates a better hash function.
 
-to the table of contents
+[⬆️ Back to Top](#java-core) 
 
 ## Tell us about cloning objects.
 Using the assignment operator does not create a new object, but only copies the reference to the object. Thus, two references point to the same area of memory, to the same object. Object cloning is used to create a new object with the same state.
@@ -1003,7 +1003,7 @@ In addition to the built-in cloning mechanism in Java, you can use the following
 Specialized copy constructor—A class describes a constructor that takes an object of the same class and initializes the fields of the created object with the field values of the passed object.
 Factory method, which is a static method that returns an instance of its class.
 Serialization mechanism - saving and subsequent restoration of an object to/from a byte stream.
-to the table of contents
+[⬆️ Back to Top](#java-core) 
 
 ## What is the difference between surface and deep cloning?
 Shallow copying copies as little information about an object as possible. By default, cloning in Java is superficial, i.e. the class is unaware of the structure of the class it is copying. This type of cloning is performed by the JVM according to the following rules:Object
@@ -1015,7 +1015,7 @@ Deep copying duplicates absolutely all the information of the object:
 There is no need to copy primitive data separately;
 All members of a reference type in the original class must support cloning. For each such member, when an override of a method, the clone()super.clone();
 If a class member does not support cloning, the clone method must create a new instance of that class and copy each class member with all its attributes to a new class object, one at a time.
-to the table of contents
+[⬆️ Back to Top](#java-core) 
 
 ## Which cloning method is preferable?
 The safest, and therefore preferred, method of cloning is to use a specialized copy constructor:
@@ -1023,12 +1023,12 @@ The safest, and therefore preferred, method of cloning is to use a specialized c
 No inheritance errors (no need to worry that heirs will have new fields that will not be cloned via the clone());
 The fields to be cloned are specified explicitly;
 Ability to clone even fields.final
-to the table of contents
+[⬆️ Back to Top](#java-core) 
 
 Why is the method declared in the class and not in the interface?clone()ObjectCloneable
 The method is declared in a class with a modifier specified to provide access to the standard mechanism for surface copying of objects. At the same time, it is also declared as , so that you cannot call this method on objects that do not override it. The interface itself is token (does not contain method declarations) and is only needed to indicate the very fact that this object is ready to be cloned. Calling an overridden method on a non-object will cause a .clone()ObjectnativeprotectedCloneableclone()CloneableCloneNotSupportedException
 
-to the table of contents
+[⬆️ Back to Top](#java-core) 
 
 ## Describe the hierarchy of exceptions.
 Exceptions are divided into several classes, but they all have a common ancestor, the class , whose descendants are the classes and .ThrowableExceptionError
@@ -1037,25 +1037,25 @@ Errors are more serious problems that, according to the Java specification, shou
 
 Exceptions are the result of problems in a program that are in principle solvable, predictable, and can be eliminated within the program. For example, an integer has been divided by zero.
 
-to the table of contents
+[⬆️ Back to Top](#java-core) 
 
 ## What types of exceptions do you know in Java, how do they differ? What is a checked and unchecked exception?
 In Java, all exceptions are divided into two types:
 
 checked exceptions must be handled as a block or described in a method signature (e.g. ). The presence of such a signature handler/modifier is checked at the time of compilation;catchIOException
 unchecked, which include errors (e.g., ) that are not recommended to handle, and run-time exceptions represented by the class and its descendants (e.g., ), which may not be handled by the block and may not be described in the method signature.ErrorOutOfMemoryErrorRuntimeExceptionNullPointerExceptioncatch
-to the table of contents
+[⬆️ Back to Top](#java-core) 
 
 ## Which operator allows you to force an exception to be thrown?
 This is the operator:throw
 
 throw new Exception();
-to the table of contents
+[⬆️ Back to Top](#java-core) 
 
 ## What does the keyword say?throws
 The modifier is written into the method signature and indicates that the method can potentially throw an exception with the specified type.throws
 
-to the table of contents
+[⬆️ Back to Top](#java-core) 
 
 ## How do you write your own ("user") exception?
 You must inherit from the base class of the required exception type (for example, from or ).ExceptionRuntimeException
@@ -1073,17 +1073,17 @@ class CustomException extends Exception {
         super(cause);
     }
 }
-to the table of contents
+[⬆️ Back to Top](#java-core) 
 
 ## What are the unchecked exceptions?
 The most common are: , , , , , , , , , .ArithmeticExceptionClassCastExceptionConcurrentModificationExceptionIllegalArgumentExceptionIllegalStateExceptionIndexOutOfBoundsExceptionNoSuchElementExceptionNullPointerExceptionUnsupportedOperationException
 
-to the table of contents
+[⬆️ Back to Top](#java-core) 
 
 ## What are class errors?Error
 Class errors are the most serious problems at the JVM level. For example, exceptions of this kind occur when the memory available to the virtual machine runs out. It is not forbidden to handle such errors, but it is not recommended to do so.Error
 
-to the table of contents
+[⬆️ Back to Top](#java-core) 
 
 What do you know about ?OutOfMemoryError
 OutOfMemoryError is discarded when the Java virtual machine cannot create (place) an object due to lack of memory, and the garbage collector cannot free enough memory.
@@ -1094,7 +1094,7 @@ java.lang.OutOfMemoryError: Java heap space: There is not enough space in the he
 java.lang.OutOfMemoryError: PermGen space: (prior to Java 8) This error occurs when there is not enough space in the Permanent region, the size of which is specified by the and .-XX:PermSize-XX:MaxPermSize
 java.lang.OutOfMemoryError: GC overhead limit exceeded: This error can occur when both the first and second regions are full. It is due to the fact that there is not much memory left and the garbage collector is constantly working, trying to free up some space. This error can be disabled by using the .-XX:-UseGCOverheadLimit
 java.lang.OutOfMemoryError: unable to create new native thread: Discarded when no new threads can be created.
-to the table of contents
+[⬆️ Back to Top](#java-core) 
 
 ## Describe how the try-catch-finally block works.
 try - This keyword is used to mark the beginning of a block of code that could potentially lead to an error. is a keyword to mark the beginning of a block of code designed to catch and handle exceptions when they occur. is a keyword to mark the beginning of a block of code that is optional. This block is placed after the last block. Control is passed to the block in any case, whether the exception was thrown or not.catchfinallycatchfinally
@@ -1110,7 +1110,7 @@ catch(SomeException e ) { //в скобках указывается класс 
 finally {
     //необязательный блок, код которого выполняется в любом случае
 }
-to the table of contents
+[⬆️ Back to Top](#java-core) 
 
 ## What is the try-with-resources mechanism?
 This construct, which was introduced in Java 7, allows you to use the try-catch block without worrying about closing the resources used in this segment of code. Resources are declared in parentheses immediately after , and the compiler itself implicitly creates a partition in which the resources used in the block are released. Resources refer to entities that implement the .tryfinallyjava.lang.Autocloseable
@@ -1126,12 +1126,12 @@ try(/*объявление ресурсов*/) {
 }
 It is worth noting that blocks and explicit are executed after the resources in the implicit .catchfinallyfinally
 
-to the table of contents
+[⬆️ Back to Top](#java-core) 
 
 ## Is it possible to use the try-finally block (without)?catch
 Such a record is acceptable, but there is not much point in such a record, it is still better to have a block in which the necessary exception will be handled.catch
 
-to the table of contents
+[⬆️ Back to Top](#java-core) 
 
 ## Can a single block catch multiple exceptions at once?catch
 In Java 7, a new language construct is available that allows you to catch multiple exceptions in a single block:catch
@@ -1141,12 +1141,12 @@ try {
 } catch(IOException | SQLException ex) {
     //...
 }
-to the table of contents
+[⬆️ Back to Top](#java-core) 
 
 Is the block always executed?finally
 The code in the block will always be executed, regardless of whether the exception is thrown or not.finally
 
-to the table of contents
+[⬆️ Back to Top](#java-core) 
 
 ## Are there situations where a block will not be executed?finally
 For example, when the JVM "dies" - in such a situation is unreachable and will not be executed, since there is a forced system exit from the program:finally
@@ -1156,12 +1156,12 @@ try {
 } catch(Exception e) { 
     e.printStackTrace(); 
 } finally { }
-to the table of contents
+[⬆️ Back to Top](#java-core) 
 
 ## Can the main() method throw an exception outside and, if so, where will the exception be handled?
 It may also be uploaded to the Java Virtual Machine (JVM).
 
-to the table of contents
+[⬆️ Back to Top](#java-core) 
 
 ## Suppose there is a method that can throw and in what sequence should the blocks go? How many blocks will be completed?IOExceptionFileNotFoundExceptioncatchcatch
 As a general rule, you need to handle exceptions from "junior" to senior. That is, it cannot be put in the first block, otherwise all further blocks will not be able to process anything, because any exception will correspond to the handler.catch(Exception ex) {}catch()catch(Exception ex)
@@ -1177,20 +1177,20 @@ void method() {
         //...
     }
 }
-to the table of contents
+[⬆️ Back to Top](#java-core) 
 
 ## What are generics?
 Generics is a technical term that refers to a set of language properties that allow generic types and methods to be defined and used. Generalized types or methods differ from conventional ones in that they have typed parameters.
 
 An example of using generic types is the Java Collection Framework. Thus, a class is a typical generalized type. It contains a parameter that represents the type of items that will be stored in the collection. Generic type objects are created by replacing parameterized types with real data types. Instead of just using , saying nothing about the type of item in the list, it is suggested to use an exact type indication, and so on.LinkedList<E>ELinkedListLinkedList<String>LinkedList<Integer>
 
-to the table of contents
+[⬆️ Back to Top](#java-core) 
 
 ## What is "internationalization" and "localization"?
 Internationalization is a way of creating applications in which they can be easily adapted for different audiences speaking different languages.
 
 Localization is the adaptation of the application interface to several languages. Adding a new language can introduce certain difficulties in the localization of the interface.
 
-to the table of contents
+[⬆️ Back to Top](#java-core) 
 
 Interview Questions
