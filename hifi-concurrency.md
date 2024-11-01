@@ -1,10 +1,9 @@
 Interview Questions
 
-# Interview Questions
+# Multithreading
 
 ## Table of Contents
 
-- [Multithreading](#multithreading)
   - [Tell us about the Java memory model?](#tell-us-about-the-java-memory-model)
   - [What is "thread safety"?](#what-is-thread-safety)
   - [What is the difference between "competition" and "parallelism"?](#what-is-the-difference-between-competition-and-parallelism)
@@ -72,9 +71,7 @@ Interview Questions
   - [Write a minimum non-blocking stack (there are only two methods, push() and pop()).](#write-a-minimum-non-blocking-stack-there-are-only-two-methods-push-and-pop)
   - [Write a minimal non-blocking stack (there are only two methods, push() and pop()) using Semaphore.](#write-a-minimal-non-blocking-stack-there-are-only-two-methods-push-and-pop-using-semaphore)
   - [Write a minimal non-blocking ArrayList (there are four methods in total: add(), get(), remove(), size()).](#write-a-minimal-non-blocking-arraylist-there-are-four-methods-in-total-add-get-remove-size)
-  - [Write a thread-safe implementation of the
-
- class with a non-blocking BigInteger next() method that returns sequence elements: [1, 2, 4, 8, 16, ...].](#write-a-thread-safe-implementation-of-the-class-with-a-non-blocking-biginteger-next-method-that-returns-sequence-elements-1-2-4-8-16)
+  - [Write a thread-safe implementation of the class with a non-blocking BigInteger next() method that returns sequence elements: `[1, 2, 4, 8, 16, ...]`](#write-a-thread-safe-implementation-of-the-class-with-a-non-blocking-biginteger-next-method-that-returns-sequence-elements-1-2-4-8-16)
   - [Write the simplest multithreaded bounded buffer using synchronized.](#write-the-simplest-multithreaded-bounded-buffer-using-synchronized)
   - [Write the simplest multithreaded bounded buffer using ReentrantLock.](#write-the-simplest-multithreaded-bounded-buffer-using-reentrantlock)
 
