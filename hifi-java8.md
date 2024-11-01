@@ -1,7 +1,6 @@
 # Java 8 Features
 
 ## Table of Contents
-- [Java 8 Features](#java-8-features)
   - [What are the new features in Java 8 and JDK 8?](#what-are-the-new-features-in-java-8-and-jdk-8)
   - [What is "lambda"? What is the structure and features of using a lambda expression?](#what-is-lambda-what-is-the-structure-and-features-of-using-a-lambda-expression)
   - [What variables do lambda expressions have access to?](#what-variables-do-lambda-expressions-have-access-to)
