@@ -1,76 +1,595 @@
 Interview Questions
 
-Multithreading
-Tell us about the Java memory model?
-What is "thread safety"?
-What is the difference between "competition" and "parallelism"?
-What is "cooperative multitasking"? What type of multitasking does Java use? What is the reason for this choice?
-What is ordering, as-if-serial semantics, sequential consistency, visibility, atomicity, happens-before, mutual exclusion, safe publication?
-What is the difference between a process and a flow?
-What are "green streams" and are they in Java?
-How can I create a flow?
-What is the difference between Thread and Runnable?
-What is the difference between the start() and run() methods?
-How do I force a flow to start?
-What is a "monitor" in Java?
-Define the concept of "synchronization".
-What are the different ways to synchronize in Java?
-What states can a thread be in?
-Can I create new instances of a class while the static synchronized method is running?
-Why do you need a private mutex?
-How do the wait() and notify()/notifyAll() methods work?
-What is the difference between notify() and notifyAll()?
-Why are the wait() and notify() methods called only in a synchronized block?
-What is the difference between the wait() method with and without the parameter?
-What is the difference between the Thread.sleep() and Thread.yield() methods?
-How does the Thread.join() method work?
-What is deadlock?
-What is livelock?
-How do I check if a thread is holding a monitor for a specific resource?
-On which object does synchronization occur when the static synchronized method is called?
-What is the keyword volatile, synchronized, transient, native used for?
-What are the differences between volatile and atomic variables?
-What are the differences between java.util.concurrent.Atomic*.compareAndSwap() and java.util.concurrent.Atomic*.weakCompareAndSwap().
-What does "flow priority" mean?
-What are "demon flows"?
-Can I make the main thread of a program a daemon?
-What does it mean to "put to sleep" the stream?
-What is the difference between the two Runnable and Callable interfaces?
-What is FutureTask?
-What are the differences between CyclicBarrier and CountDownLatch?
-What is a race condition?
-Is there a way to solve the race condition problem?
-How to stop the flow?
-Why is it not recommended to use the Thread.stop() method?
-What happens when an exception is thrown in a thread?
-What is the difference between interrupted() and isInterrupted()?
-What is a "thread pool"?
-What size should a thread pool be?
-What happens if the thread pool queue is already full, but a new task is submitted?
-What is the difference between the submit() and execute() methods of a thread pool?
-What are the differences between a stack and a heap in terms of multithreading?
-How do I share data between two streams?
-What JVM startup option is used to control the size of a thread's stack?
-How do I get a stream dump?
-What is a ThreadLocal variable?
-What are the differences between synchronized and ReentrantLock?
-What is ReadWriteLock?
-What is the "blocking method"?
-What is a "Fork/Join framework"?
-What is Semaphore?
-What is a double checked locking Singleton?
-How do I create a thread-safe Singleton?
-Why are immutable objects useful?
-What is a busy spin?
-List the principles you follow in multithreaded programming?
-Which of the following statements about flows is incorrect?
-Are there 3 streams T1, T2 and T3? How to implement execution in the sequence T1, T2, T3?
-Write a minimum non-blocking stack (there are only two methods, push() and pop()).
-Write a minimal non-blocking stack (there are only two methods, push() and pop()) using Semaphore.
-Write a minimal non-blocking ArrayList (there are four methods in total: add(), get(), remove(), size()).
-Write a thread-safe implementation of the class with a non-blocking BigInteger next() method that returns sequence elements: [1, 2, 4, 8, 16, ...].
-Write the simplest multithreaded bounded buffer using synchronized.
-Write the simplest multithreaded bounded buffer using ReentrantLock.
+# Interview Questions
+
+## Table of Contents
+
+- [Multithreading](#multithreading)
+  - [Tell us about the Java memory model?](#tell-us-about-the-java-memory-model)
+  - [What is "thread safety"?](#what-is-thread-safety)
+  - [What is the difference between "competition" and "parallelism"?](#what-is-the-difference-between-competition-and-parallelism)
+  - [What is "cooperative multitasking"? What type of multitasking does Java use? What is the reason for this choice?](#what-is-cooperative-multitasking)
+  - [What is ordering, as-if-serial semantics, sequential consistency, visibility, atomicity, happens-before, mutual exclusion, safe publication?](#what-is-ordering-as-if-serial-semantics-sequential-consistency-visibility-atomicity-happens-before-mutual-exclusion-safe-publication)
+  - [What is the difference between a process and a flow?](#what-is-the-difference-between-a-process-and-a-flow)
+  - [What are "green streams" and are they in Java?](#what-are-green-streams-and-are-they-in-java)
+  - [How can I create a flow?](#how-can-i-create-a-flow)
+  - [What is the difference between Thread and Runnable?](#what-is-the-difference-between-thread-and-runnable)
+  - [What is the difference between the start() and run() methods?](#what-is-the-difference-between-the-start-and-run-methods)
+  - [How do I force a flow to start?](#how-do-i-force-a-flow-to-start)
+  - [What is a "monitor" in Java?](#what-is-a-monitor-in-java)
+  - [Define the concept of "synchronization".](#define-the-concept-of-synchronization)
+  - [What are the different ways to synchronize in Java?](#what-are-the-different-ways-to-synchronize-in-java)
+  - [What states can a thread be in?](#what-states-can-a-thread-be-in)
+  - [Can I create new instances of a class while the static synchronized method is running?](#can-i-create-new-instances-of-a-class-while-the-static-synchronized-method-is-running)
+  - [Why do you need a private mutex?](#why-do-you-need-a-private-mutex)
+  - [How do the wait() and notify()/notifyAll() methods work?](#how-do-the-wait-and-notifynotifyall-methods-work)
+  - [What is the difference between notify() and notifyAll()?](#what-is-the-difference-between-notify-and-notifyall)
+  - [Why are the wait() and notify() methods called only in a synchronized block?](#why-are-the-wait-and-notify-methods-called-only-in-a-synchronized-block)
+  - [What is the difference between the wait() method with and without the parameter?](#what-is-the-difference-between-the-wait-method-with-and-without-the-parameter)
+  - [What is the difference between the Thread.sleep() and Thread.yield() methods?](#what-is-the-difference-between-the-threadsleep-and-threadyield-methods)
+  - [How does the Thread.join() method work?](#how-does-the-threadjoin-method-work)
+  - [What is deadlock?](#what-is-deadlock)
+  - [What is livelock?](#what-is-livelock)
+  - [How do I check if a thread is holding a monitor for a specific resource?](#how-do-i-check-if-a-thread-is-holding-a-monitor-for-a-specific-resource)
+  - [On which object does synchronization occur when the static synchronized method is called?](#on-which-object-does-synchronization-occur-when-the-static-synchronized-method-is-called)
+  - [What is the keyword volatile, synchronized, transient, native used for?](#what-is-the-keyword-volatile-synchronized-transient-native-used-for)
+  - [What are the differences between volatile and atomic variables?](#what-are-the-differences-between-volatile-and-atomic-variables)
+  - [What are the differences between java.util.concurrent.Atomic*.compareAndSwap() and java.util.concurrent.Atomic*.weakCompareAndSwap()?](#what-are-the-differences-between-javautilconcurrentatomiccompareandswap-and-javautilconcurrentatomicweakcompareandswap)
+  - [What does "flow priority" mean?](#what-does-flow-priority-mean)
+  - [What are "daemon threads"?](#what-are-daemon-threads)
+  - [Can I make the main thread of a program a daemon?](#can-i-make-the-main-thread-of-a-program-a-daemon)
+  - [What does it mean to "put to sleep" the thread?](#what-does-it-mean-to-put-to-sleep-the-thread)
+  - [What is the difference between the Runnable and Callable interfaces?](#what-is-the-difference-between-the-runnable-and-callable-interfaces)
+  - [What is FutureTask?](#what-is-futuretask)
+  - [What are the differences between CyclicBarrier and CountDownLatch?](#what-are-the-differences-between-cyclicbarrier-and-countdownlatch)
+  - [What is a race condition?](#what-is-a-race-condition)
+  - [Is there a way to solve the race condition problem?](#is-there-a-way-to-solve-the-race-condition-problem)
+  - [How to stop the thread?](#how-to-stop-the-thread)
+  - [Why is it not recommended to use the Thread.stop() method?](#why-is-it-not-recommended-to-use-the-threadstop-method)
+  - [What happens when an exception is thrown in a thread?](#what-happens-when-an-exception-is-thrown-in-a-thread)
+  - [What is the difference between interrupted() and isInterrupted()?](#what-is-the-difference-between-interrupted-and-isinterrupted)
+  - [What is a "thread pool"?](#what-is-a-thread-pool)
+  - [What size should a thread pool be?](#what-size-should-a-thread-pool-be)
+  - [What happens if the thread pool queue is already full, but a new task is submitted?](#what-happens-if-the-thread-pool-queue-is-already-full-but-a-new-task-is-submitted)
+  - [What is the difference between the submit() and execute() methods of a thread pool?](#what-is-the-difference-between-the-submit-and-execute-methods-of-a-thread-pool)
+  - [What are the differences between a stack and a heap in terms of multithreading?](#what-are-the-differences-between-a-stack-and-a-heap-in-terms-of-multithreading)
+  - [How do I share data between two threads?](#how-do-i-share-data-between-two-threads)
+  - [What JVM startup option is used to control the size of a thread's stack?](#what-jvm-startup-option-is-used-to-control-the-size-of-a-threads-stack)
+  - [How do I get a thread dump?](#how-do-i-get-a-thread-dump)
+  - [What is a ThreadLocal variable?](#what-is-a-threadlocal-variable)
+  - [What are the differences between synchronized and ReentrantLock?](#what-are-the-differences-between-synchronized-and-reentrantlock)
+  - [What is ReadWriteLock?](#what-is-readwritelock)
+  - [What is the "blocking method"?](#what-is-the-blocking-method)
+  - [What is a "Fork/Join framework"?](#what-is-a-forkjoin-framework)
+  - [What is Semaphore?](#what-is-semaphore)
+  - [What is a double-checked locking Singleton?](#what-is-a-double-checked-locking-singleton)
+  - [How do I create a thread-safe Singleton?](#how-do-i-create-a-thread-safe-singleton)
+  - [Why are immutable objects useful?](#why-are-immutable-objects-useful)
+  - [What is a busy spin?](#what-is-a-busy-spin)
+  - [List the principles you follow in multithreaded programming?](#list-the-principles-you-follow-in-multithreaded-programming)
+  - [Which of the following statements about threads is incorrect?](#which-of-the-following-statements-about-threads-is-incorrect)
+  - [Are there 3 threads T1, T2, and T3? How to implement execution in the sequence T1, T2, T3?](#are-there-3-threads-t1-t2-and-t3-how-to-implement-execution-in-the-sequence-t1-t2-t3)
+  - [Write a minimum non-blocking stack (there are only two methods, push() and pop()).](#write-a-minimum-non-blocking-stack-there-are-only-two-methods-push-and-pop)
+  - [Write a minimal non-blocking stack (there are only two methods, push() and pop()) using Semaphore.](#write-a-minimal-non-blocking-stack-there-are-only-two-methods-push-and-pop-using-semaphore)
+  - [Write a minimal non-blocking ArrayList (there are four methods in total: add(), get(), remove(), size()).](#write-a-minimal-non-blocking-arraylist-there-are-four-methods-in-total-add-get-remove-size)
+  - [Write a thread-safe implementation of the
+
+ class with a non-blocking BigInteger next() method that returns sequence elements: [1, 2, 4, 8, 16, ...].](#write-a-thread-safe-implementation-of-the-class-with-a-non-blocking-biginteger-next-method-that-returns-sequence-elements-1-2-4-8-16)
+  - [Write the simplest multithreaded bounded buffer using synchronized.](#write-the-simplest-multithreaded-bounded-buffer-using-synchronized)
+  - [Write the simplest multithreaded bounded buffer using ReentrantLock.](#write-the-simplest-multithreaded-bounded-buffer-using-reentrantlock)
+
+
+
+### Tell us about the Java memory model?
+The Java Memory Model (JMM) defines how threads interact through memory and establishes rules for visibility and ordering of operations. It specifies how and when changes made by one thread become visible to others. Key concepts include:
+
+- **Visibility**: Ensures that changes made by one thread are visible to others, which can be achieved using synchronized blocks or the `volatile` keyword.
+- **Atomicity**: Ensures that a series of operations appear to be instantaneous to other threads. Certain operations (like reading or writing a single variable) are atomic, while others are not.
+- **Ordering**: JMM allows compilers and processors to reorder instructions for optimization. However, the "happens-before" relationship is critical for establishing a predictable order of execution.
+
+### What is "thread safety"?
+Thread safety is a property of a program or a data structure that guarantees safe execution by multiple threads. In a thread-safe environment, shared data is accessed in a way that prevents race conditions and ensures consistency. Techniques to achieve thread safety include:
+
+- **Synchronization**: Using `synchronized` blocks or methods.
+- **Locking**: Employing classes like `ReentrantLock`.
+- **Immutable Objects**: Creating objects whose state cannot change after construction.
+- **Concurrent Collections**: Utilizing Java's built-in classes like `ConcurrentHashMap`.
+
+### What is the difference between "competition" and "parallelism"?
+- **Competition**: Refers to multiple threads attempting to access shared resources, which can lead to issues like race conditions if not managed properly.
+- **Parallelism**: Involves running multiple threads simultaneously to perform tasks, often on different cores of a CPU, improving performance for computationally intensive tasks.
+
+### What is "cooperative multitasking"? What type of multitasking does Java use? What is the reason for this choice?
+- **Cooperative Multitasking**: Threads voluntarily yield control periodically or when idle, allowing other threads to run.
+- **Java's Approach**: Java primarily uses preemptive multitasking, where the scheduler can interrupt and switch threads as needed. This choice enhances responsiveness and better resource utilization but requires careful management of shared resources to avoid issues like deadlock.
+
+### What is ordering, as-if-serial semantics, sequential consistency, visibility, atomicity, happens-before, mutual exclusion, safe publication?
+- **Ordering**: Refers to the sequence in which operations are executed and observed by threads.
+- **As-if-serial Semantics**: The results of executing concurrent programs should be the same as if they were executed in some sequential order.
+- **Sequential Consistency**: A stronger condition where the result of execution is as if all operations were executed in a sequential order.
+- **Visibility**: Ensures that changes made by one thread are seen by others.
+- **Atomicity**: Ensures that operations are completed without interruption.
+- **Happens-before Relationship**: Guarantees that memory writes by one specific statement are visible to another specific statement.
+- **Mutual Exclusion**: Ensures that only one thread can access a resource at a time.
+- **Safe Publication**: The process of ensuring that an object is safely visible to other threads after being published.
+
+### What is the difference between a process and a thread?
+- **Process**: A process is an independent program in execution with its own memory space. Processes do not share memory, which provides protection but incurs overhead for inter-process communication.
+- **Thread**: A thread is a lightweight sub-process that shares the same memory space as other threads in the same process. This makes context switching between threads faster but raises issues around synchronization and data consistency.
+
+### What are "green threads" and are they in Java?
+- **Green Threads**: These are threads that are scheduled by the Java Virtual Machine (JVM) rather than the operating system. They are primarily used in environments where the OS does not support native threads.
+- **Java's Current Implementation**: Modern versions of Java utilize native threads provided by the operating system for thread management, which allows better performance and resource utilization.
+
+### How can I create a flow?
+In Java, a flow can be created using the `Thread` class or implementing the `Runnable` interface. Example:
+
+```java
+class MyRunnable implements Runnable {
+    public void run() {
+        System.out.println("Thread is running.");
+    }
+}
+
+// Creating a thread
+Thread thread = new Thread(new MyRunnable());
+thread.start();
+```
+
+### What is the difference between Thread and Runnable?
+- **Thread**: A class that represents a thread of execution. It can be instantiated directly, and it has methods like `start()` and `run()`.
+- **Runnable**: An interface that can be implemented by any class. It allows for the separation of thread execution logic from the thread management. Using `Runnable` is often preferred for better flexibility.
+
+### What is the difference between the start() and run() methods?
+- **start()**: This method creates a new thread and invokes the `run()` method in that new thread.
+- **run()**: This method contains the code that defines what the thread will do. If `run()` is called directly (instead of through `start()`), it will execute in the current thread, not in a new one.
+
+### How do I force a flow to start?
+You cannot force a thread to start; you must call the `start()` method on the `Thread` instance. The thread's state will change from NEW to RUNNABLE, allowing the scheduler to pick it up.
+
+### What is a "monitor" in Java?
+A monitor is a synchronization construct that allows threads to safely access shared resources. Every object in Java can be a monitor. When a thread enters a synchronized block or method, it acquires the monitor lock associated with that object, preventing other threads from entering synchronized blocks on the same object.
+
+### Define the concept of "synchronization".
+Synchronization is a mechanism to control access to shared resources by multiple threads. It ensures that only one thread can access a resource at a time, preventing data corruption and ensuring thread safety. In Java, synchronization can be achieved using synchronized methods, synchronized blocks, or explicit locks.
+
+### What are the different ways to synchronize in Java?
+- **Synchronized methods**: Methods declared with the `synchronized` keyword.
+- **Synchronized blocks**: Blocks of code that require synchronization, allowing for finer control over locking.
+- **ReentrantLock**: A class that provides more flexible locking mechanisms than synchronized blocks.
+- **ReadWriteLock**: Allows concurrent read access while still enforcing exclusive write access.
+- **Semaphore**: Controls access to a resource by maintaining a set number of permits.
+
+### What states can a thread be in?
+A thread can be in several states:
+- **NEW**: The thread is created but not yet started.
+- **RUNNABLE**: The thread is ready to run and waiting for CPU time.
+- **BLOCKED**: The thread is blocked waiting for a monitor lock to enter a synchronized block/method.
+- **WAITING**: The thread is waiting indefinitely for another thread to perform a particular action.
+- **TIMED_WAITING**: The thread is waiting for another thread to perform an action for up to a specified waiting time.
+- **TERMINATED**: The thread has completed its execution.
+
+### Can I create new instances of a class while the static synchronized method is running?
+Yes, you can create new instances of a class while a static synchronized method is running, provided those instances are not using the same lock. However, operations that require synchronization on the same class or instance will be blocked until the synchronized method completes.
+
+### Why do you need a private mutex?
+A private mutex (or lock) is used to restrict access to a resource to only the threads that need it. By using a private mutex, you can ensure that the resource is only accessed by intended threads, preventing unintended interference and enhancing thread safety.
+
+### How do the wait() and notify()/notifyAll() methods work?
+- **wait()**: Causes the current thread to release the lock it holds and enter a waiting state until another thread invokes notify or notifyAll on the same object.
+- **notify()**: Wakes up a single thread that is waiting on the object's monitor.
+- **notifyAll()**: Wakes up all threads waiting on the object's monitor. 
+
+These methods must be called from within a synchronized block.
+
+### What is the difference between notify() and notifyAll()?
+- **notify()**: Wakes up one waiting thread. If multiple threads are waiting, the choice of which thread to wake is non-deterministic.
+- **notifyAll()**: Wakes up all waiting threads. This can lead to contention as multiple threads may compete for the monitor.
+
+### Why are the wait() and notify() methods called only in a synchronized block?
+These methods need to be called while holding the object's monitor to ensure that the thread has exclusive access to the object's state. This prevents inconsistencies that could arise from other threads modifying the state while the current thread is waiting or being notified.
+
+### What is the difference between the wait() method with and without the parameter?
+- **wait()**: Causes the thread to wait indefinitely until notified.
+- **wait(long timeout)**: Causes the thread to wait for a specified period. If the thread is not notified within that time, it will automatically wake up.
+
+### What is the difference between the Thread.sleep() and Thread.yield() methods?
+- **Thread.sleep(millis)**: Causes the current thread to pause execution for a specified time, releasing the CPU but not releasing any locks it holds.
+- **Thread.yield()**: Suggests to the thread scheduler that the current thread is willing to yield its current use of the CPU. This may allow other threads to run, but it does not
+
+ guarantee that they will.
+
+### How does the Thread.join() method work?
+The `join()` method allows one thread to wait for the completion of another thread. When `join()` is called on a thread, the calling thread will block until the specified thread completes its execution.
+
+### What is deadlock?
+Deadlock occurs when two or more threads are blocked forever, each waiting for a resource held by another thread. To avoid deadlocks, you can use techniques like:
+
+- **Lock ordering**: Always acquire locks in a consistent order.
+- **Timeouts**: Set timeouts on lock attempts to avoid waiting indefinitely.
+- **Deadlock detection**: Implement mechanisms to detect deadlocks and recover.
+
+### What is livelock?
+Livelock is a situation where threads are not blocked but are continuously changing states in response to each other without making progress. Unlike deadlock, threads are active but unable to complete their tasks.
+
+### How do I check if a thread is holding a monitor for a specific resource?
+You can use the `Thread.getState()` method to check the state of a thread, but there's no direct way in Java to check if a specific thread holds a monitor. However, using tools like JVisualVM or profilers can help analyze thread states and monitor locks.
+
+### On which object does synchronization occur when the static synchronized method is called?
+When a static synchronized method is called, synchronization occurs on the Class object itself (i.e., `ClassName.class`). This means that all static synchronized methods of a class are synchronized on the same monitor.
+
+### What is the keyword volatile, synchronized, transient, native used for?
+- **volatile**: Indicates that a variable's value will be modified by different threads. It ensures visibility of changes to variables across threads.
+- **synchronized**: Used to declare synchronized methods or blocks to prevent concurrent access.
+- **transient**: Prevents serialization of a variable, meaning it will not be saved when the object is serialized.
+- **native**: Indicates that a method is implemented in native code (e.g., C or C++) and not in Java.
+
+### What are the differences between volatile and atomic variables?
+- **volatile**: Ensures visibility of changes to variables across threads but does not guarantee atomicity for compound actions (e.g., incrementing).
+- **Atomic variables** (like `AtomicInteger`): Provide methods that are thread-safe and atomic, ensuring both visibility and atomicity for compound actions.
+
+### What are the differences between `java.util.concurrent.Atomic*.compareAndSwap()` and `java.util.concurrent.Atomic*.weakCompareAndSwap()`?
+- **compareAndSwap**: A strong compare-and-swap operation that updates the variable only if it matches the expected value.
+- **weakCompareAndSwap**: A more relaxed version that may succeed even if the expected value is not strictly followed. It may be less efficient but can offer better performance in certain cases.
+
+### What does "thread priority" mean?
+Thread priority is a hint to the thread scheduler about the relative importance of threads. A higher priority thread is generally executed before lower priority threads, but actual behavior may vary across different JVM implementations and operating systems.
+
+### What are "daemon threads"?
+Daemon threads are low-priority threads that run in the background and do not prevent the JVM from exiting when the program finishes. They are typically used for background tasks, such as garbage collection.
+
+### Can I make the main thread of a program a daemon?
+No, the main thread cannot be set as a daemon thread. Once the main thread is started, it is treated as a user thread, and daemon threads are only threads that run in the background.
+
+### What does it mean to "put to sleep" the thread?
+"Putting to sleep" a thread means pausing its execution for a specified duration. This can be achieved using the `Thread.sleep(milliseconds)` method, which releases the CPU but keeps the thread alive.
+
+### What is the difference between the Runnable and Callable interfaces?
+- **Runnable**: Represents a task that does not return a result and cannot throw a checked exception.
+- **Callable**: Represents a task that can return a result and can throw checked exceptions. It is used with the `Future` interface to retrieve results asynchronously.
+
+### What is FutureTask?
+`FutureTask` is a class that implements `Runnable` and `Future`. It represents a cancellable asynchronous computation. It can be used to manage the lifecycle of a task, including checking if it’s completed, cancelling it, and retrieving the result.
+
+### What are the differences between CyclicBarrier and CountDownLatch?
+- **CyclicBarrier**: A synchronization aid that allows a set of threads to all wait for each other to reach a common barrier point. It can be reused after the waiting threads have been released.
+- **CountDownLatch**: A synchronization aid that allows one or more threads to wait until a set of operations being performed in other threads completes. It cannot be reused once the count reaches zero.
+
+### What is a race condition?
+A race condition occurs when two or more threads access shared data and try to change it at the same time. The final outcome depends on the timing of how the threads are scheduled, leading to unpredictable results.
+
+### Is there a way to solve the race condition problem?
+Race conditions can be solved using various synchronization techniques, such as:
+- **Locks**: Use `ReentrantLock` or other locking mechanisms.
+- **Synchronized blocks/methods**: Ensure that only one thread can access critical sections at a time.
+- **Atomic variables**: Use atomic classes that ensure operations are performed atomically.
+
+### How to stop the thread?
+To stop a thread safely:
+- Use a flag: Set a boolean variable that the thread checks periodically to determine if it should terminate.
+- Avoid using `Thread.stop()`, as it can lead to inconsistent states.
+
+### Why is it not recommended to use the Thread.stop() method?
+`Thread.stop()` is deprecated because it forcibly terminates a thread, leading to potential issues like resource leaks and data corruption. It does not give the thread a chance to release resources or perform cleanup.
+
+### What happens when an exception is thrown in a thread?
+When an uncaught exception is thrown in a thread, it terminates that thread and invokes the `uncaughtException()` method of the `Thread.UncaughtExceptionHandler` if set. If not handled, the exception may not affect other threads.
+
+### What is the difference between interrupted() and isInterrupted()?
+- **interrupt()**: Used to signal a thread that it should stop what it's doing and handle the interrupt. It sets the interrupt flag.
+- **isInterrupted()**: Checks whether the thread has been interrupted without clearing the interrupt status. It returns true if the thread was interrupted.
+
+### What is a "thread pool"?
+A thread pool is a collection of pre-initialized threads that are ready to execute tasks. It helps manage thread creation and resource usage, reducing the overhead of creating and destroying threads.
+
+### What size should a thread pool be?
+The optimal size of a thread pool depends on the application's nature, the number of available CPU cores, and the types of tasks being executed. A common rule is to set the pool size to the number of available processors multiplied by a factor based on the task's workload.
+
+### What happens if the thread pool queue is already full, but a new task is submitted?
+If the thread pool's queue is full and a new task is submitted, the behavior depends on the rejection policy configured for the thread pool. Common policies include:
+- **AbortPolicy**: Throws a `RejectedExecutionException`.
+- **CallerRunsPolicy**: Executes the task in the calling thread.
+- **DiscardPolicy**: Silently discards the task.
+
+### What is the difference between the submit() and execute() methods of a thread pool?
+- **execute()**: Accepts a `Runnable` task for execution but does not return a result or allow for exceptions to be caught.
+- **submit()**: Accepts a `Callable` or `Runnable` task and returns a `Future` object, allowing the caller to retrieve the result or handle exceptions.
+
+### What are the differences between a stack and a heap in terms of multithreading?
+- **Stack**: Each thread has its own stack for storing method calls, local variables, and return addresses. The stack is thread-safe since each thread has its own.
+- **Heap**: The heap is shared among all threads and is where objects are allocated. Proper synchronization is required to prevent concurrent access issues.
+
+### How do I share data between two threads?
+Data can be shared between threads using:
+- **Shared variables**: Declared as `volatile` or managed with synchronization.
+- **Data structures**: Use concurrent collections like `ConcurrentHashMap`.
+- **Thread-safe classes**: Use classes that ensure thread-safe operations.
+
+### What JVM startup option is used to control the size of a thread's stack?
+The `-Xss` option can be used to set the thread stack size. For example, `-Xss512k` sets the stack size to 512 kilobytes.
+
+### How do I get a thread dump?
+A thread dump can be obtained using:
+- **jstack**: A command-line utility that comes with the JDK, used to generate thread dumps of a running Java application.
+- **JVisualVM**: A graphical tool for monitoring and profiling Java applications that can also capture thread dumps.
+
+### What is a ThreadLocal variable?
+`ThreadLocal` is a class that provides thread-local variables. Each thread accessing a `ThreadLocal` variable has its own, independently initialized copy of the variable. This is useful for maintaining user sessions or database connections.
+
+### What are the differences between synchronized and ReentrantLock?
+- **Synchronized**: Built-in Java synchronization mechanism that is simpler to use but less flexible. It automatically releases locks when a thread exits the synchronized block.
+- **ReentrantLock**: A more flexible locking mechanism that allows features like try-lock
+
+, timed lock attempts, and interruptible lock acquisition.
+
+### What is ReadWriteLock?
+`ReadWriteLock` is an interface that allows multiple threads to read a shared resource concurrently while ensuring exclusive access for write operations. It has two locks: one for reading and one for writing.
+
+### What is the "blocking method"?
+A blocking method is a method that causes the calling thread to wait until a condition is met or a resource becomes available. Examples include `Object.wait()`, `Thread.join()`, and methods that involve acquiring a lock.
+
+### What is a "Fork/Join framework"?
+The Fork/Join framework is a Java concurrency framework designed to take advantage of multiple processors by dividing tasks into smaller sub-tasks that can be processed in parallel. It uses the `ForkJoinPool` class, which manages a pool of worker threads.
+
+### What is Semaphore?
+A `Semaphore` is a synchronization aid that maintains a set number of permits, allowing threads to acquire or release permits. It is used to control access to a limited number of resources.
+
+### What is a double-checked locking Singleton?
+Double-checked locking is a design pattern used to implement the Singleton pattern in a thread-safe manner. It checks if the instance is null twice—once before acquiring the lock and once after—to minimize synchronization overhead.
+
+### How do I create a thread-safe Singleton?
+To create a thread-safe Singleton:
+1. Use a private static instance.
+2. Create a private constructor.
+3. Use synchronized methods or blocks or utilize the Bill Pugh Singleton design (using an inner static helper class).
+
+### Why are immutable objects useful?
+Immutable objects are beneficial in multithreading because their state cannot change after creation. This makes them inherently thread-safe, preventing issues related to shared mutable state.
+
+### What is a busy spin?
+A busy spin is a loop that continuously checks for a condition to become true, effectively consuming CPU cycles while waiting. It is generally inefficient and can lead to performance issues.
+
+### List the principles you follow in multithreaded programming?
+- Minimize shared mutable state.
+- Use proper synchronization.
+- Favor immutability when possible.
+- Prefer higher-level concurrency abstractions (like `ExecutorService`) over manual thread management.
+- Avoid deadlocks through careful lock ordering and timeout policies.
+- Test thoroughly for concurrency issues.
+
+### Which of the following statements about threads is incorrect?
+This question is subjective and would require specific statements to evaluate their correctness.
+
+### Are there 3 threads T1, T2, and T3? How to implement execution in the sequence T1, T2, T3?
+You can use `Thread.join()` to ensure that T1 completes before T2 starts, and T2 completes before T3 starts:
+
+```java
+Thread t1 = new Thread(() -> { /* T1 logic */ });
+Thread t2 = new Thread(() -> { /* T2 logic */ });
+Thread t3 = new Thread(() -> { /* T3 logic */ });
+
+t1.start();
+t1.join(); // Wait for T1 to finish
+
+t2.start();
+t2.join(); // Wait for T2 to finish
+
+t3.start();
+```
+
+### Write a minimum non-blocking stack (there are only two methods, push() and pop()).
+Here’s a simple implementation using `AtomicReference`:
+
+```java
+import java.util.concurrent.atomic.AtomicReference;
+
+class NonBlockingStack<T> {
+    private final AtomicReference<Node<T>> head = new AtomicReference<>();
+
+    private static class Node<T> {
+        final T value;
+        final Node<T> next;
+
+        Node(T value, Node<T> next) {
+            this.value = value;
+            this.next = next;
+        }
+    }
+
+    public void push(T value) {
+        Node<T> newHead = new Node<>(value, head.get());
+        while (!head.compareAndSet(newHead.next, newHead)) {
+            newHead = new Node<>(value, head.get());
+        }
+    }
+
+    public T pop() {
+        Node<T> currentHead;
+        do {
+            currentHead = head.get();
+            if (currentHead == null) return null; // Stack is empty
+        } while (!head.compareAndSet(currentHead, currentHead.next));
+        return currentHead.value;
+    }
+}
+```
+
+### Write a minimal non-blocking stack (there are only two methods, push() and pop()) using Semaphore.
+Using `Semaphore` to limit access can be implemented but is not typical for a stack. A simple example is as follows:
+
+```java
+import java.util.concurrent.Semaphore;
+
+class SemaphoreStack<T> {
+    private final Object[] stack;
+    private int top = -1;
+    private final Semaphore semaphore;
+
+    public SemaphoreStack(int size) {
+        stack = new Object[size];
+        semaphore = new Semaphore(size);
+    }
+
+    public void push(T value) throws InterruptedException {
+        semaphore.acquire();
+        stack[++top] = value;
+    }
+
+    public T pop() {
+        if (top < 0) return null; // Stack is empty
+        T value = (T) stack[top--];
+        semaphore.release();
+        return value;
+    }
+}
+```
+
+### Write a minimal non-blocking ArrayList (there are four methods in total: add(), get(), remove(), size()).
+Here’s a simple non-blocking implementation using `AtomicInteger`:
+
+```java
+import java.util.concurrent.atomic.AtomicInteger;
+
+class NonBlockingArrayList<T> {
+    private Object[] array = new Object[10];
+    private final AtomicInteger size = new AtomicInteger(0);
+
+    public void add(T value) {
+        int index = size.get();
+        if (index >= array.length) {
+            // Resize logic can be added
+            return;
+        }
+        array[index] = value;
+        size.incrementAndGet();
+    }
+
+    public T get(int index) {
+        if (index < 0 || index >= size.get()) return null;
+        return (T) array[index];
+    }
+
+    public T remove(int index) {
+        if (index < 0 || index >= size.get()) return null;
+        T value = (T) array[index];
+        // Shift elements left
+        System.arraycopy(array, index + 1, array, index, size.get() - index - 1);
+        size.decrementAndGet();
+        return value;
+    }
+
+    public int size() {
+        return size.get();
+    }
+}
+```
+
+### Write a thread-safe implementation of the class with a non-blocking BigInteger next() method that returns sequence elements: [1, 2, 4, 8, 16, ...].
+This implementation uses `AtomicLong` for thread safety:
+
+```java
+import java.math.BigInteger;
+import java.util.concurrent.atomic.AtomicLong;
+
+class NonBlockingSequence {
+    private final AtomicLong current = new AtomicLong(1);
+
+    public BigInteger next() {
+        return BigInteger.valueOf(current.getAndUpdate(n -> n * 2));
+    }
+}
+```
+
+### Write the simplest multithreaded bounded buffer using synchronized.
+Here’s a simple bounded buffer using synchronized methods:
+
+```java
+class BoundedBuffer<T> {
+    private final Object[] buffer;
+    private int count, in, out;
+
+    public BoundedBuffer(int size) {
+        buffer = new Object[size];
+        count = in = out = 0;
+    }
+
+    public synchronized void put(T value) throws InterruptedException {
+        while (count == buffer.length) {
+            wait(); // Buffer is full
+        }
+        buffer[in] = value;
+        in = (in + 1) % buffer.length;
+        count++;
+        notifyAll(); // Notify consumers
+    }
+
+    public synchronized T take() throws InterruptedException {
+        while (count == 0) {
+            wait(); // Buffer is empty
+        }
+        T value = (T) buffer[out];
+        out = (out + 1) % buffer.length;
+        count--;
+        notifyAll(); // Notify producers
+        return value;
+    }
+}
+```
+
+### Write the simplest multithreaded bounded buffer using ReentrantLock.
+Here’s a bounded buffer using `ReentrantLock`:
+
+```java
+import java.util.concurrent.locks.ReentrantLock;
+import java.util.concurrent.locks.Condition;
+
+class BoundedBufferLock<T> {
+    private final Object[] buffer;
+    private int count, in, out;
+    private final ReentrantLock lock = new ReentrantLock();
+    private final Condition notEmpty = lock.newCondition();
+    private final Condition notFull = lock.newCondition();
+
+    public BoundedBufferLock(int size) {
+        buffer = new Object[size];
+        count = in = out = 0;
+    }
+
+    public void put(T value) throws InterruptedException {
+        lock.lock();
+        try {
+            while (count == buffer.length) {
+                notFull.await(); // Buffer is full
+            }
+            buffer[in] = value;
+            in = (in + 1) % buffer.length;
+            count++;
+            notEmpty.signal(); // Notify consumers
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    public T take() throws InterruptedException {
+        lock.lock();
+        try {
+            while (count == 0) {
+                notEmpty.await(); // Buffer is empty
+            }
+            T value = (T) buffer[out];
+            out = (out + 1) % buffer.length;
+            count--;
+            notFull.signal(); // Notify producers
+            return value;
+        } finally {
+            lock.unlock();
+        }
+    }
+}
+```
+
+
+
 Tell us about the Java memory model?
 The Java Memory Model (JMM) describes the behavior of threads in the Java runtime. It is part of the semantics of the Java language, a set of rules that describe the execution of multithreaded programs and rules by which threads can communicate with each other through main memory.
 
