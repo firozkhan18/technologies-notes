@@ -738,10 +738,7 @@ MyStaticInterface.myStaticMethod(); // Output: Static Method
 ```java
 Optional<String> optional = Optional.ofNullable(getValue());
 optional.ifPresent(System.out::println);
-``
-
-`
-
+```
 ---
 
 ## What is Stream?
