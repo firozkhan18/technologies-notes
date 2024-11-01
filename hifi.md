@@ -676,7 +676,7 @@
 - [Property for Background Color](#property-for-background-color)
 - [Removing Underlines from Links](#removing-underlines-from-links)
 - [Purpose of the Clear Property](#purpose-of-the-clear-property)
-- [Making Text Bold in <p> Elements](#making-text-bold-in-p-elements)
+- [Making Text Bold in `<p>`Elements](#making-text-bold-in-p-elements)
 - [Setting Red Color for Elements with a Class](#setting-red-color-for-elements-with-a-class)
 
 [Back to Table of Contents](#Interview-Questions-for-Java-Developer)
