@@ -448,276 +448,276 @@
 ---
 
 ## Servlets, JSP, JSTL
-- **[What is a "servlet"?](#what-is-a-servlet)**
-- **[Advantages of Servlet Technology Over CGI](#advantages-of-servlet-technology-over-cgi)**
-- **[Structure of a Web Project](#structure-of-a-web-project)**
-- **[What is a "servlet container"?](#what-is-a-servlet-container)**
-- **[Need for Application Servers](#need-for-application-servers)**
-- **[Servlet Lifecycle Management](#servlet-lifecycle-management)**
-- **[What is a "deployment descriptor"?](#what-is-a-deployment-descriptor)**
-- **[Steps to Create Servlets](#steps-to-create-servlets)**
-- **[Overriding the service() Method](#overriding-the-service-method)**
-- **[Defining a Constructor for the Servlet](#defining-a-constructor-for-the-servlet)**
-- **[Why Override init() with No Arguments?](#why-override-init-with-no-arguments)**
-- **[Common Tasks in a Servlet Container](#common-tasks-in-a-servlet-container)**
-- **[Servlet Filters](#servlet-filters)**
-- **[Use of Listeners in Servlets](#use-of-listeners-in-servlets)**
-- **[Using Servlet Filters vs. Listeners](#using-servlet-filters-vs-listeners)**
-- **[Launching a Servlet with the Application](#launching-a-servlet-with-the-application)**
-- **[Handling Exceptions from Another Servlet](#handling-exceptions-from-another-servlet)**
-- **[What is ServletConfig?](#what-is-servletconfig)**
-- **[What is ServletContext?](#what-is-servletcontext)**
-- **[Difference Between ServletContext and ServletConfig](#difference-between-servletcontext-and-servletconfig)**
-- **[ServletResponse Interface](#servletresponse-interface)**
-- **[ServletRequest Interface](#servletrequest-interface)**
-- **[What is a Request Dispatcher?](#what-is-a-request-dispatcher)**
-- **[Calling Another Servlet](#calling-another-servlet)**
-- **[Difference Between sendRedirect() and forward()](#difference-between-sendredirect-and-forward)**
-- **[Servlet Attributes](#servlet-attributes)**
-- **[Allowing Deadlock in a Servlet](#allowing-deadlock-in-a-servlet)**
-- **[Getting the Real Location of the Servlet](#getting-the-real-location-of-the-servlet)**
-- **[Getting Server Information from a Servlet](#getting-server-information-from-a-servlet)**
-- **[Getting Client's IP Address](#getting-clients-ip-address)**
-- **[Servlet Wrapper Classes](#servlet-wrapper-classes)**
-- **[Difference Between GenericServlet and HttpServlet](#difference-between-genericservlet-and-httpservlet)**
-- **[Why is HttpServlet Abstract?](#why-is-httpservlet-abstract)**
-- **[Main Methods in HttpServlet](#main-methods-in-httpservlet)**
-- **[Multithreaded Security Concerns](#multithreaded-security-concerns)**
-- **[Immutable HTTP Methods](#immutable-http-methods)**
-- **[Methods for Sending Data from Client to Server](#methods-for-sending-data-from-client-to-server)**
-- **[Difference Between GET and POST Methods](#difference-between-get-and-post-methods)**
-- **[Difference Between PrintWriter and ServletOutputStream](#difference-between-printwriter-and-servletoutputstream)**
-- **[Using PrintWriter and ServletOutputStream Together](#using-printwriter-and-servletoutputstream-together)**
-- **[SingleThreadModel Interface](#singlethreadmodel-interface)**
-- **[URL Encoding in Java](#url-encoding-in-java)**
-- **[Session Management Methods](#session-management-methods)**
-- **[What are Cookies?](#what-are-cookies)**
-- **[Working with Cookies in Servlets](#working-with-cookies-in-servlets)**
-- **[What is URL Rewriting?](#what-is-url-rewriting)**
-- **[encodeURL() and encodeRedirectURL() Methods](#encodeurl-and-encoderedirecturl-methods)**
-- **[What is a "session"?](#what-is-a-session)**
+- [What is a "servlet"?](#what-is-a-servlet)
+- [Advantages of Servlet Technology Over CGI](#advantages-of-servlet-technology-over-cgi)
+- [Structure of a Web Project](#structure-of-a-web-project)
+- [What is a "servlet container"?](#what-is-a-servlet-container)
+- [Need for Application Servers](#need-for-application-servers)
+- [Servlet Lifecycle Management](#servlet-lifecycle-management)
+- [What is a "deployment descriptor"?](#what-is-a-deployment-descriptor)
+- [Steps to Create Servlets](#steps-to-create-servlets)
+- [Overriding the service() Method](#overriding-the-service-method)
+- [Defining a Constructor for the Servlet](#defining-a-constructor-for-the-servlet)
+- [Why Override init() with No Arguments?](#why-override-init-with-no-arguments)
+- [Common Tasks in a Servlet Container](#common-tasks-in-a-servlet-container)
+- [Servlet Filters](#servlet-filters)
+- [Use of Listeners in Servlets](#use-of-listeners-in-servlets)
+- [Using Servlet Filters vs. Listeners](#using-servlet-filters-vs-listeners)
+- [Launching a Servlet with the Application](#launching-a-servlet-with-the-application)
+- [Handling Exceptions from Another Servlet](#handling-exceptions-from-another-servlet)
+- [What is ServletConfig?](#what-is-servletconfig)
+- [What is ServletContext?](#what-is-servletcontext)
+- [Difference Between ServletContext and ServletConfig](#difference-between-servletcontext-and-servletconfig)
+- [ServletResponse Interface](#servletresponse-interface)
+- [ServletRequest Interface](#servletrequest-interface)
+- [What is a Request Dispatcher?](#what-is-a-request-dispatcher)
+- [Calling Another Servlet](#calling-another-servlet)
+- [Difference Between sendRedirect() and forward()](#difference-between-sendredirect-and-forward)
+- [Servlet Attributes](#servlet-attributes)
+- [Allowing Deadlock in a Servlet](#allowing-deadlock-in-a-servlet)
+- [Getting the Real Location of the Servlet](#getting-the-real-location-of-the-servlet)
+- [Getting Server Information from a Servlet](#getting-server-information-from-a-servlet)
+- [Getting Client's IP Address](#getting-clients-ip-address)
+- [Servlet Wrapper Classes](#servlet-wrapper-classes)
+- [Difference Between GenericServlet and HttpServlet](#difference-between-genericservlet-and-httpservlet)
+- [Why is HttpServlet Abstract?](#why-is-httpservlet-abstract)
+- [Main Methods in HttpServlet](#main-methods-in-httpservlet)
+- [Multithreaded Security Concerns](#multithreaded-security-concerns)
+- [Immutable HTTP Methods](#immutable-http-methods)
+- [Methods for Sending Data from Client to Server](#methods-for-sending-data-from-client-to-server)
+- [Difference Between GET and POST Methods](#difference-between-get-and-post-methods)
+- [Difference Between PrintWriter and ServletOutputStream](#difference-between-printwriter-and-servletoutputstream)
+- [Using PrintWriter and ServletOutputStream Together](#using-printwriter-and-servletoutputstream-together)
+- [SingleThreadModel Interface](#singlethreadmodel-interface)
+- [URL Encoding in Java](#url-encoding-in-java)
+- [Session Management Methods](#session-management-methods)
+- [What are Cookies?](#what-are-cookies)
+- [Working with Cookies in Servlets](#working-with-cookies-in-servlets)
+- [What is URL Rewriting?](#what-is-url-rewriting)
+- [encodeURL() and encodeRedirectURL() Methods](#encodeurl-and-encoderedirecturl-methods)
+- [What is a "session"?](#what-is-a-session)
 
 [Back to Table of Contents](#Interview-Questions-for-Java-Developer)
 
 ---
 
 ## Database
-- **[What is a "database"?](#what-is-a-database)**
-- **[What is a "database management system"?](#what-is-a-database-management-system)**
-- **[What is a "relational data model"?](#what-is-a-relational-data-model)**
-- **[Define Simple, Composite, Candidate, and Alternate Keys](#define-simple-composite-candidate-and-alternate-keys)**
-- **[What is a "primary key"?](#what-is-a-primary-key)**
-- **[What is a "foreign key"?](#what-is-a-foreign-key)**
-- **[What is "normalization"?](#what-is-normalization)**
-- **[Normal Forms](#normal-forms)**
-- **[What is "denormalization"?](#what-is-denormalization)**
-- **[Types of Relationships in a Database](#types-of-relationships-in-a-database)**
-- **[What are "indices"?](#what-are-indices)**
-- **[Types of Indices](#types-of-indices)**
-- **[Difference Between Clustered and Non-Clustered Indexes](#difference-between-clustered-and-non-clustered-indexes)**
-- **[Cost-Effectiveness of Full Dataset Scan vs. Index Access](#cost-effectiveness-of-full-dataset-scan-vs-index-access)**
-- **[What is a "transaction"?](#what-is-a-transaction)**
-- **[Main Properties of Transactions](#main-properties-of-transactions)**
-- **[Levels of Transaction Isolation](#levels-of-transaction-isolation)**
-- **[Problems with Transactional Concurrent Access](#problems-with-transactional-concurrent-access)**
+- [What is a "database"?](#what-is-a-database)
+- [What is a "database management system"?](#what-is-a-database-management-system)
+- [What is a "relational data model"?](#what-is-a-relational-data-model)
+- [Define Simple, Composite, Candidate, and Alternate Keys](#define-simple-composite-candidate-and-alternate-keys)
+- [What is a "primary key"?](#what-is-a-primary-key)
+- [What is a "foreign key"?](#what-is-a-foreign-key)
+- [What is "normalization"?](#what-is-normalization)
+- [Normal Forms](#normal-forms)
+- [What is "denormalization"?](#what-is-denormalization)
+- [Types of Relationships in a Database](#types-of-relationships-in-a-database)
+- [What are "indices"?](#what-are-indices)
+- [Types of Indices](#types-of-indices)
+- [Difference Between Clustered and Non-Clustered Indexes](#difference-between-clustered-and-non-clustered-indexes)
+- [Cost-Effectiveness of Full Dataset Scan vs. Index Access](#cost-effectiveness-of-full-dataset-scan-vs-index-access)
+- [What is a "transaction"?](#what-is-a-transaction)
+- [Main Properties of Transactions](#main-properties-of-transactions)
+- [Levels of Transaction Isolation](#levels-of-transaction-isolation)
+- [Problems with Transactional Concurrent Access](#problems-with-transactional-concurrent-access)
 
 [Back to Table of Contents](#Interview-Questions-for-Java-Developer)
 
 ---
 
 #### SQL
-- **[What is SQL?](#what-is-sql)**
-- **[Different Types of SQL Statements](#different-types-of-sql-statements)**
-- **[What Does NULL Mean in SQL?](#what-does-null-mean-in-sql)**
-- **[What is a "temporary table"?](#what-is-a-temporary-table)**
-- **[What is a "view"?](#what-is-a-view)**
-- **[General Syntax of the SELECT Statement](#general-syntax-of-the-select-statement)**
-- **[What is JOIN?](#what-is-join)**
-- **[Different Types of JOINs](#different-types-of-joins)**
-- **[JOINs vs. Subqueries](#joins-vs-subqueries)**
-- **[What is the HAVING Operator?](#what-is-the-having-operator)**
-- **[Difference Between HAVING and WHERE](#difference-between-having-and-where)**
-- **[What is the ORDER BY Operator?](#what-is-the-order-by-operator)**
-- **[What is the GROUP BY Operator?](#what-is-the-group-by-operator)**
-- **[GROUP BY Handling NULL](#group-by-handling-null)**
-- **[Difference Between GROUP BY and DISTINCT](#difference-between-group-by-and-distinct)**
-- **[Main Aggregate Functions](#main-aggregate-functions)**
-- **[Difference Between COUNT(*) and COUNT({column})](#difference-between-count-and-count-column)**
-- **[What Does the EXISTS Operator Do?](#what-does-the-exists-operator-do)**
-- **[IN, BETWEEN, LIKE Operators](#in-between-like-operators)**
-- **[What is the UNION Keyword?](#what-is-the-union-keyword)**
-- **[Integrity Constraints in SQL](#integrity-constraints-in-sql)**
-- **[Difference Between PRIMARY and UNIQUE Constraints](#difference-between-primary-and-unique-constraints)**
-- **[NULL Values with FOREIGN KEY Constraints](#null-values-with-foreign-key-constraints)**
-- **[Creating an Index](#creating-an-index)**
-- **[What Does the MERGE Statement Do?](#what-does-the-merge-statement-do)**
-- **[Difference Between DELETE and TRUNCATE](#difference-between-delete-and-truncate)**
-- **[What is a "stored procedure"?](#what-is-a-stored-procedure)**
-- **[What is a "trigger"?](#what-is-a-trigger)**
-- **[What is a "cursor"?](#what-is-a-cursor)**
-- **[Difference Between DATETIME and TIMESTAMP](#difference-between-datetime-and-timestamp)**
-- **[Numeric Types and Operations](#numeric-types-and-operations)**
-- **[Purpose of PIVOT and UNPIVOT](#purpose-of-pivot-and-unpivot)**
-- **[Main Ranking Functions in Transact-SQL](#main-ranking-functions-in-transact-sql)**
-- **[What are the INTERSECT and EXCEPT statements used for in Transact-SQL?](#what-are-intersect-and-except)**
-- **[Write a request](#write-a-request)**
+- [What is SQL?](#what-is-sql)
+- [Different Types of SQL Statements](#different-types-of-sql-statements)
+- [What Does NULL Mean in SQL?](#what-does-null-mean-in-sql)
+- [What is a "temporary table"?](#what-is-a-temporary-table)
+- [What is a "view"?](#what-is-a-view)
+- [General Syntax of the SELECT Statement](#general-syntax-of-the-select-statement)
+- [What is JOIN?](#what-is-join)
+- [Different Types of JOINs](#different-types-of-joins)
+- [JOINs vs. Subqueries](#joins-vs-subqueries)
+- [What is the HAVING Operator?](#what-is-the-having-operator)
+- [Difference Between HAVING and WHERE](#difference-between-having-and-where)
+- [What is the ORDER BY Operator?](#what-is-the-order-by-operator)
+- [What is the GROUP BY Operator?](#what-is-the-group-by-operator)
+- [GROUP BY Handling NULL](#group-by-handling-null)
+- [Difference Between GROUP BY and DISTINCT](#difference-between-group-by-and-distinct)
+- [Main Aggregate Functions](#main-aggregate-functions)
+- [Difference Between COUNT(*) and COUNT({column})](#difference-between-count-and-count-column)
+- [What Does the EXISTS Operator Do?](#what-does-the-exists-operator-do)
+- [IN, BETWEEN, LIKE Operators](#in-between-like-operators)
+- [What is the UNION Keyword?](#what-is-the-union-keyword)
+- [Integrity Constraints in SQL](#integrity-constraints-in-sql)
+- [Difference Between PRIMARY and UNIQUE Constraints](#difference-between-primary-and-unique-constraints)
+- [NULL Values with FOREIGN KEY Constraints](#null-values-with-foreign-key-constraints)
+- [Creating an Index](#creating-an-index)
+- [What Does the MERGE Statement Do?](#what-does-the-merge-statement-do)
+- [Difference Between DELETE and TRUNCATE](#difference-between-delete-and-truncate)
+- [What is a "stored procedure"?](#what-is-a-stored-procedure)
+- [What is a "trigger"?](#what-is-a-trigger)
+- [What is a "cursor"?](#what-is-a-cursor)
+- [Difference Between DATETIME and TIMESTAMP](#difference-between-datetime-and-timestamp)
+- [Numeric Types and Operations](#numeric-types-and-operations)
+- [Purpose of PIVOT and UNPIVOT](#purpose-of-pivot-and-unpivot)
+- [Main Ranking Functions in Transact-SQL](#main-ranking-functions-in-transact-sql)
+- [What are the INTERSECT and EXCEPT statements used for in Transact-SQL?](#what-are-intersect-and-except)
+- [Write a request](#write-a-request)
 ---
 
 [Back to Table of Contents](#Interview-Questions-for-Java-Developer)
 
 #### JDBC
-- **[What is JDBC?](#what-is-jdbc)**
-- **[Benefits of Using JDBC](#benefits-of-using-jdbc)**
-- **[What is a JDBC URL?](#what-is-a-jdbc-url)**
-- **[Parts of JDBC](#parts-of-jdbc)**
-- **[Main Data Types Used in JDBC](#main-data-types-used-in-jdbc)**
-- **[Main Steps in Working with a Database Using JDBC](#main-steps-in-working-with-a-database-using-jdbc)**
-- **[How to Register a JDBC Driver](#how-to-register-a-jdbc-driver)**
-- **[Establishing a Database Connection](#establishing-a-database-connection)**
-- **[Levels of Transaction Isolation Supported in JDBC](#levels-of-transaction-isolation-supported-in-jdbc)**
-- **[How Database Queries are Generated](#how-database-queries-are-generated)**
-- **[Difference Between Statement and PreparedStatement](#difference-between-statement-and-preparedstatement)**
-- **[Querying the Database and Processing Results](#querying-the-database-and-processing-results)**
-- **[How to Call a Stored Procedure](#how-to-call-a-stored-procedure)**
-- **[Closing the Database Connection](#closing-the-database-connection)**
+- [What is JDBC?](#what-is-jdbc)
+- [Benefits of Using JDBC](#benefits-of-using-jdbc)
+- [What is a JDBC URL?](#what-is-a-jdbc-url)
+- [Parts of JDBC](#parts-of-jdbc)
+- [Main Data Types Used in JDBC](#main-data-types-used-in-jdbc)
+- [Main Steps in Working with a Database Using JDBC](#main-steps-in-working-with-a-database-using-jdbc)
+- [How to Register a JDBC Driver](#how-to-register-a-jdbc-driver)
+- [Establishing a Database Connection](#establishing-a-database-connection)
+- [Levels of Transaction Isolation Supported in JDBC](#levels-of-transaction-isolation-supported-in-jdbc)
+- [How Database Queries are Generated](#how-database-queries-are-generated)
+- [Difference Between Statement and PreparedStatement](#difference-between-statement-and-preparedstatement)
+- [Querying the Database and Processing Results](#querying-the-database-and-processing-results)
+- [How to Call a Stored Procedure](#how-to-call-a-stored-procedure)
+- [Closing the Database Connection](#closing-the-database-connection)
 
 [Back to Table of Contents](#Interview-Questions-for-Java-Developer)
 
 #### Testing
-- **[What is "unit testing"?](#what-is-unit-testing)**
-- **[What is "integration testing"?](#what-is-integration-testing)**
-- **[Differences Between Integration Testing and Unit Testing](#differences-between-integration-testing-and-unit-testing)**
-- **[Different Types of Test Objects](#different-types-of-test-objects)**
-- **[Difference Between Stub and Mock](#difference-between-stub-and-mock)**
-- **[What are "fixtures"?](#what-are-fixtures)**
-- **[Fixture Annotations in JUnit](#fixture-annotations-in-junit)**
-- **[Purpose of @Ignore Annotation in JUnit](#purpose-of-ignore-annotation-in-junit)**
+- [What is "unit testing"?](#what-is-unit-testing)
+- [What is "integration testing"?](#what-is-integration-testing)
+- [Differences Between Integration Testing and Unit Testing](#differences-between-integration-testing-and-unit-testing)
+- [Different Types of Test Objects](#different-types-of-test-objects)
+- [Difference Between Stub and Mock](#difference-between-stub-and-mock)
+- [What are "fixtures"?](#what-are-fixtures)
+- [Fixture Annotations in JUnit](#fixture-annotations-in-junit)
+- [Purpose of @Ignore Annotation in JUnit](#purpose-of-ignore-annotation-in-junit)
 
 [Back to Table of Contents](#Interview-Questions-for-Java-Developer)
 
 #### Logging
-- **[Different Types of Logs](#different-types-of-logs)**
-- **[Parts of a log4j Logging System](#parts-of-a-log4j-logging-system)**
-- **[What is Logger in log4j?](#what-is-logger-in-log4j)**
-- **[What is Appender in log4j?](#what-is-appender-in-log4j)**
-- **[What is Layout in log4j?](#what-is-layout-in-log4j)**
-- **[Logging Levels in log4j](#logging-levels-in-log4j)**
-- **[Ways to Configure log4j](#ways-to-configure-log4j)**
+- [Different Types of Logs](#different-types-of-logs)
+- [Parts of a log4j Logging System](#parts-of-a-log4j-logging-system)
+- [What is Logger in log4j?](#what-is-logger-in-log4j)
+- [What is Appender in log4j?](#what-is-appender-in-log4j)
+- [What is Layout in log4j?](#what-is-layout-in-log4j)
+- [Logging Levels in log4j](#logging-levels-in-log4j)
+- [Ways to Configure log4j](#ways-to-configure-log4j)
 
 [Back to Table of Contents](#Interview-Questions-for-Java-Developer)
 
 #### UML
-- **[What is UML?](#what-is-uml)**
-- **[Diagram, Notation, and Metamodel in UML](#diagram-notation-and-metamodel-in-uml)**
-- **[Different Types of Charts in UML](#different-types-of-charts-in-uml)**
-- **[Relationships in a Structural Class Diagram](#relationships-in-a-structural-class-diagram)**
+- [What is UML?](#what-is-uml)
+- [Diagram, Notation, and Metamodel in UML](#diagram-notation-and-metamodel-in-uml)
+- [Different Types of Charts in UML](#different-types-of-charts-in-uml)
+- [Relationships in a Structural Class Diagram](#relationships-in-a-structural-class-diagram)
 
 [Back to Table of Contents](#Interview-Questions-for-Java-Developer)
 
 #### XML
-- **[What is XML?](#what-is-xml)**
-- **[What is a DTD?](#what-is-a-dtd)**
-- **[Well-Formed vs. Valid XML](#well-formed-vs-valid-xml)**
-- **[What is a "namespace" in XML?](#what-is-a-namespace-in-xml)**
-- **[What is XSD?](#what-is-xsd)**
-- **[Types in XSD](#types-in-xsd)**
-- **[Methods of Reading XML](#methods-of-reading-xml)**
-- **[Using DOM vs. SAX and StAX](#using-dom-vs-sax-and-stax)**
-- **[Ways to Write XML](#ways-to-write-xml)**
-- **[What is JAXP?](#what-is-jaxp)**
-- **[What is XSLT?](#what-is-xslt)**
+- [What is XML?](#what-is-xml)
+- [What is a DTD?](#what-is-a-dtd)
+- [Well-Formed vs. Valid XML](#well-formed-vs-valid-xml)
+- [What is a "namespace" in XML?](#what-is-a-namespace-in-xml)
+- [What is XSD?](#what-is-xsd)
+- [Types in XSD](#types-in-xsd)
+- [Methods of Reading XML](#methods-of-reading-xml)
+- [Using DOM vs. SAX and StAX](#using-dom-vs-sax-and-stax)
+- [Ways to Write XML](#ways-to-write-xml)
+- [What is JAXP?](#what-is-jaxp)
+- [What is XSLT?](#what-is-xslt)
 
 [Back to Table of Contents](#Interview-Questions-for-Java-Developer)
 
 #### Design Patterns
-- **[What is a "design pattern"?](#what-is-a-design-pattern)**
-- **[Main Characteristics of Templates](#main-characteristics-of-templates)**
-- **[Types of Design Patterns](#types-of-design-patterns)**
-- **[Examples of Key Design Patterns](#examples-of-key-design-patterns)**
-- **[Examples of Generative Design Patterns](#examples-of-generative-design-patterns)**
-- **[Examples of Structural Design Patterns](#examples-of-structural-design-patterns)**
-- **[Examples of Behavioral Design Patterns](#examples-of-behavioral-design-patterns)**
-- **[What is an "anti-pattern"?](#what-is-an-anti-pattern)**
-- **[What is Dependency Injection?](#what-is-dependency-injection)**
+- [What is a "design pattern"?](#what-is-a-design-pattern)
+- [Main Characteristics of Templates](#main-characteristics-of-templates)
+- [Types of Design Patterns](#types-of-design-patterns)
+- [Examples of Key Design Patterns](#examples-of-key-design-patterns)
+- [Examples of Generative Design Patterns](#examples-of-generative-design-patterns)
+- [Examples of Structural Design Patterns](#examples-of-structural-design-patterns)
+- [Examples of Behavioral Design Patterns](#examples-of-behavioral-design-patterns)
+- [What is an "anti-pattern"?](#what-is-an-anti-pattern)
+- [What is Dependency Injection?](#what-is-dependency-injection)
 
 [Back to Table of Contents](#Interview-Questions-for-Java-Developer)
 
 #### HTML Basics
-- **[What is "HTML"?](#what-is-html)**
-- **[What is "XHTML"?](#what-is-xhtml)**
-- **[What is DOCTYPE?](#what-is-doctype)**
-- **[What is the <head> Tag for?](#what-is-the-head-tag-for)**
-- **[Difference Between <div> and <span>](#difference-between-div-and-span)**
-- **[Comments in HTML](#comments-in-html)**
-- **[Setting Document Address](#setting-document-address)**
-- **[Linking to an Email Address](#linking-to-an-email-address)**
-- **[What is the <em> Tag for?](#what-is-the-em-tag-for)**
-- **[Tags for Lists](#tags-for-lists)**
-- **[Tags for Definition Lists](#tags-for-definition-lists)**
-- **[Tags for Tables](#tags-for-tables)**
-- **[Is alt Attribute Necessary in <img>?](#is-alt-attribute-necessary-in-img)**
-- **[Best Practices for Writing HTML Code](#best-practices-for-writing-html-code)**
-- **[What is an "entity"?](#what-is-an-entity)**
+- [What is "HTML"?](#what-is-html)
+- [What is "XHTML"?](#what-is-xhtml)
+- [What is DOCTYPE?](#what-is-doctype)
+- [What is the <head> Tag for?](#what-is-the-head-tag-for)
+- [Difference Between <div> and <span>](#difference-between-div-and-span)
+- [Comments in HTML](#comments-in-html)
+- [Setting Document Address](#setting-document-address)
+- [Linking to an Email Address](#linking-to-an-email-address)
+- [What is the <em> Tag for?](#what-is-the-em-tag-for)
+- [Tags for Lists](#tags-for-lists)
+- [Tags for Definition Lists](#tags-for-definition-lists)
+- [Tags for Tables](#tags-for-tables)
+- [Is alt Attribute Necessary in <img>?](#is-alt-attribute-necessary-in-img)
+- [Best Practices for Writing HTML Code](#best-practices-for-writing-html-code)
+- [What is an "entity"?](#what-is-an-entity)
 
 [Back to Table of Contents](#Interview-Questions-for-Java-Developer)
 
 #### CSS Basics
-- **[What is "CSS"?](#what-is-css)**
-- **[Comments in CSS](#comments-in-css)**
-- **[What is a "selector"?](#what-is-a-selector)**
-- **[Main Types of Selectors](#main-types-of-selectors)**
-- **[What is a Pseudoclass?](#what-is-a-pseudoclass)**
-- **[Attribute Selectors](#attribute-selectors)**
-- **[Difference Between #my and .my](#difference-between-my-and-my)**
-- **[Difference Between Margin and Padding](#difference-between-margin-and-padding)**
-- **[Margin Property Values](#margin-property-values)**
-- **[Property for Background Color](#property-for-background-color)**
-- **[Removing Underlines from Links](#removing-underlines-from-links)**
-- **[Purpose of the Clear Property](#purpose-of-the-clear-property)**
-- **[Making Text Bold in <p> Elements](#making-text-bold-in-p-elements)**
-- **[Setting Red Color for Elements with a Class](#setting-red-color-for-elements-with-a-class)**
+- [What is "CSS"?](#what-is-css)
+- [Comments in CSS](#comments-in-css)
+- [What is a "selector"?](#what-is-a-selector)
+- [Main Types of Selectors](#main-types-of-selectors)
+- [What is a Pseudoclass?](#what-is-a-pseudoclass)
+- [Attribute Selectors](#attribute-selectors)
+- [Difference Between #my and .my](#difference-between-my-and-my)
+- [Difference Between Margin and Padding](#difference-between-margin-and-padding)
+- [Margin Property Values](#margin-property-values)
+- [Property for Background Color](#property-for-background-color)
+- [Removing Underlines from Links](#removing-underlines-from-links)
+- [Purpose of the Clear Property](#purpose-of-the-clear-property)
+- [Making Text Bold in <p> Elements](#making-text-bold-in-p-elements)
+- [Setting Red Color for Elements with a Class](#setting-red-color-for-elements-with-a-class)
 
 [Back to Table of Contents](#Interview-Questions-for-Java-Developer)
 
 #### Basics of Web
-- **[What is WWW?](#what-is-www)**
-- **[What is W3C?](#what-is-w3c)**
-- **[Different Layers of the OSI Model](#different-layers-of-the-osi-model)**
-- **[What is TCP/IP?](#what-is-tcpip)**
-- **[What is UDP?](#what-is-udp)**
-- **[Difference Between TCP and UDP](#difference-between-tcp-and-udp)**
-- **[What is a Data Transfer Protocol?](#what-is-a-data-transfer-protocol)**
-- **[What are HTTP and HTTPS?](#what-are-http-and-https)**
-- **[What is FTP?](#what-is-ftp)**
-- **[Difference Between GET and POST Methods](#difference-between-get-and-post-methods)**
-- **[What is a MIME Type?](#what-is-a-mime-type)**
-- **[What is a Web Server?](#what-is-a-web-server)**
-- **[What is a Web Application?](#what-is-a-web-application)**
-- **[What is an Application Server?](#what-is-an-application-server)**
-- **[Difference Between Web Server and Application Server](#difference-between-web-server-and-application-server)**
-- **[What is AJAX?](#what-is-ajax)**
-- **[What is WebSocket?](#what-is-websocket)**
-- **[What is JSON?](#what-is-json)**
-- **[What is a JSON Schema?](#what-is-a-json-schema)**
-- **[What are Cookies?](#what-are-cookies)**
-- **[What is a "session"?](#what-is-a-session)**
-- **[Difference Between Authorization and Authentication](#difference-between-authorization-and-authentication)**
+- [What is WWW?](#what-is-www)
+- [What is W3C?](#what-is-w3c)
+- [Different Layers of the OSI Model](#different-layers-of-the-osi-model)
+- [What is TCP/IP?](#what-is-tcpip)
+- [What is UDP?](#what-is-udp)
+- [Difference Between TCP and UDP](#difference-between-tcp-and-udp)
+- [What is a Data Transfer Protocol?](#what-is-a-data-transfer-protocol)
+- [What are HTTP and HTTPS?](#what-are-http-and-https)
+- [What is FTP?](#what-is-ftp)
+- [Difference Between GET and POST Methods](#difference-between-get-and-post-methods)
+- [What is a MIME Type?](#what-is-a-mime-type)
+- [What is a Web Server?](#what-is-a-web-server)
+- [What is a Web Application?](#what-is-a-web-application)
+- [What is an Application Server?](#what-is-an-application-server)
+- [Difference Between Web Server and Application Server](#difference-between-web-server-and-application-server)
+- [What is AJAX?](#what-is-ajax)
+- [What is WebSocket?](#what-is-websocket)
+- [What is JSON?](#what-is-json)
+- [What is a JSON Schema?](#what-is-a-json-schema)
+- [What are Cookies?](#what-are-cookies)
+- [What is a "session"?](#what-is-a-session)
+- [Difference Between Authorization and Authentication](#difference-between-authorization-and-authentication)
 
 [Back to Table of Contents](#Interview-Questions-for-Java-Developer)
 
 #### Further Reading
-- **[YouTube Channels for Technical Interviews](#youtube-channels-for-technical-interviews)**
-- **[List of Fancy Questions from Interviews](#list-of-fancy-questions-from-interviews)**
-- **[Job Interview Preparation Tips](#job-interview-preparation-tips)**
-- **[Tasks at Technical Interviews](#tasks-at-technical-interviews)**
-- **[Questions to Ask an Interviewer](#questions-to-ask-an-interviewer)**
-- **[Spring Boot Interview Questions](#spring-boot-interview-questions)**
-- **[Top Spring Framework Interview Questions](#top-spring-framework-interview-questions)**
+- [YouTube Channels for Technical Interviews](#youtube-channels-for-technical-interviews)
+- [List of Fancy Questions from Interviews](#list-of-fancy-questions-from-interviews)
+- [Job Interview Preparation Tips](#job-interview-preparation-tips)
+- [Tasks at Technical Interviews](#tasks-at-technical-interviews)
+- [Questions to Ask an Interviewer](#questions-to-ask-an-interviewer)
+- [Spring Boot Interview Questions](#spring-boot-interview-questions)
+- [Top Spring Framework Interview Questions](#top-spring-framework-interview-questions)
 
 [Back to Table of Contents](#Interview-Questions-for-Java-Developer)
 
 #### Sources
-- **[Junior Java Developer Interview Questions](#junior-java-developer-interview-questions)**
+- [Junior Java Developer Interview Questions](#junior-java-developer-interview-questions)
 
 [Back to Table of Contents](#Interview-Questions-for-Java-Developer)
 
