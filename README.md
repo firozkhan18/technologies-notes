@@ -4357,3 +4357,31 @@ http://localhost:8080/swagger-ui/index.html
 
 ### Summary
 This setup provides a basic authentication service with OpenFeign for calling external services, Swagger for API documentation, and Spring Cloud features for service discovery and communication. You can further expand this by adding security, handling exceptions, and implementing user authentication logic as needed.
+
+In the `@FeignClient` annotation, the `name` attribute specifies the name of the Feign client. This name serves several purposes:
+
+### 1. **Identification**
+The `name` attribute acts as an identifier for the Feign client. It's particularly useful when you have multiple Feign clients in your application, as it helps differentiate between them. 
+
+### 2. **Service Discovery**
+If you're using a service discovery tool like Eureka, the `name` can be used to register the Feign client with the discovery service. It allows the client to look up the service using the name instead of a hardcoded URL.
+
+### 3. **Configuration**
+The name can be used in your application configuration (like `application.yml` or `application.properties`) to refer to this specific Feign client. For example, you might have different configurations for different environments, and using the `name` attribute helps manage that.
+
+### Example
+In the annotation you provided:
+
+```java
+@FeignClient(name = "customer-service", url = "${customer.service.url}")
+```
+
+- **`name = "customer-service"`**: This indicates that this Feign client is for a service named "customer-service". If you're using service discovery, this is how the service will be identified.
+
+- **`url = "${customer.service.url}"`**: This tells the Feign client where to send requests. The URL is fetched from the application's configuration file, allowing for flexibility in pointing to different environments (e.g., development, staging, production) without changing the code.
+
+### Use Cases
+- **Flexibility**: You can change the `customer.service.url` in your configuration file to point to different instances or endpoints without altering the code.
+- **Easier Management**: When you refer to services by name, it simplifies your codebase and makes it easier to manage different microservices within a larger system.
+
+By using the `name` attribute effectively, you can create a robust and flexible architecture that adapts well to changes in your microservice environment.
