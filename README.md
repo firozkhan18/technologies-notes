@@ -4103,3 +4103,257 @@ public class AuthenticationServiceTest {
 
 ### Summary
 This complete file structure provides a fully functional authentication service using Spring Boot. It covers the application entry point, configuration, controllers, services, JWT handling, and basic testing. You can modify and extend this implementation to meet your application's specific needs, such as user registration, password encryption, and more complex security configurations.
+
+Creating a Spring Boot microservice using Feign, Swagger, and Spring Cloud with Java 22 involves several steps. Below, I'll outline a complete example, including the necessary dependencies, configurations, and basic code snippets to get you started.
+
+### 1. Project Structure
+Here's the suggested project structure for your authentication service:
+
+```
+/auth-service
+│
+├── /src
+│   ├── /main
+│   │   ├── /java
+│   │   │   └── /com
+│   │   │       └── example
+│   │   │           ├── AuthServiceApplication.java
+│   │   │           ├── config
+│   │   │           │   └── SwaggerConfig.java
+│   │   │           ├── controller
+│   │   │           │   └── AuthenticationController.java
+│   │   │           ├── dto
+│   │   │           │   └── LoginRequest.java
+│   │   │           ├── feign
+│   │   │           │   └── CustomerClient.java
+│   │   │           └── service
+│   │   │               └── AuthenticationService.java
+│   │   └── /resources
+│   │       └── application.yml
+├── pom.xml
+└── README.md
+```
+
+### 2. Dependencies (`pom.xml`)
+You'll need the following dependencies in your `pom.xml`:
+
+```xml
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.example</groupId>
+    <artifactId>auth-service</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
+
+    <properties>
+        <java.version>22</java.version>
+        <spring.boot.version>3.3.5</spring.boot.version>
+        <spring.cloud.version>2023.0.1</spring.cloud.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-openfeign</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-ui</artifactId>
+            <version>1.6.14</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+</project>
+```
+
+### 3. Application Configuration
+
+#### `application.yml`
+```yaml
+spring:
+  application:
+    name: auth-service
+  cloud:
+    discovery:
+      client:
+        simple:
+          instance:
+            auth-service:
+              uri: http://localhost:8080
+  feign:
+    hystrix:
+      enabled: false # Disable if not using Hystrix
+```
+
+### 4. Main Application Class
+
+#### `AuthServiceApplication.java`
+```java
+package com.example;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.openfeign.EnableFeignClients;
+
+@SpringBootApplication
+@EnableFeignClients
+public class AuthServiceApplication {
+    public static void main(String[] args) {
+        SpringApplication.run(AuthServiceApplication.class, args);
+    }
+}
+```
+
+### 5. Swagger Configuration
+
+#### `SwaggerConfig.java`
+```java
+package com.example.config;
+
+import org.springdoc.core.annotations.RouterOperation;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+
+import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.info.Info;
+
+@Configuration
+@EnableWebMvc
+public class SwaggerConfig {
+    @Bean
+    public OpenAPI customOpenAPI() {
+        return new OpenAPI()
+                .info(new Info()
+                        .title("Auth Service API")
+                        .version("1.0")
+                        .description("API for authentication services"));
+    }
+}
+```
+
+### 6. DTO Class
+
+#### `LoginRequest.java`
+```java
+package com.example.dto;
+
+import lombok.Data;
+
+@Data
+public class LoginRequest {
+    private String username;
+    private String password;
+}
+```
+
+### 7. Feign Client
+
+#### `CustomerClient.java`
+```java
+package com.example.feign;
+
+import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+@FeignClient(name = "customer-service", url = "${customer.service.url}")
+public interface CustomerClient {
+    @GetMapping("/customers")
+    String getCustomerById(@RequestParam("id") Long id);
+}
+```
+
+### 8. Service Class
+
+#### `AuthenticationService.java`
+```java
+package com.example.service;
+
+import com.example.dto.LoginRequest;
+import com.example.feign.CustomerClient;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+@Service
+public class AuthenticationService {
+
+    @Autowired
+    private CustomerClient customerClient;
+
+    public String authenticate(LoginRequest loginRequest) {
+        // Implement authentication logic here (e.g., validating credentials)
+        // Call the CustomerService via Feign client
+        return customerClient.getCustomerById(1L); // Example usage
+    }
+}
+```
+
+### 9. Controller Class
+
+#### `AuthenticationController.java`
+```java
+package com.example.controller;
+
+import com.example.dto.LoginRequest;
+import com.example.service.AuthenticationService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("/auth")
+public class AuthenticationController {
+
+    @Autowired
+    private AuthenticationService authenticationService;
+
+    @PostMapping("/login")
+    public ResponseEntity<String> login(@RequestBody LoginRequest loginRequest) {
+        String response = authenticationService.authenticate(loginRequest);
+        return ResponseEntity.ok(response);
+    }
+}
+```
+
+### 10. Testing
+For testing, you can use JUnit and Mockito to create unit tests for your services and controllers.
+
+### 11. Running the Application
+Make sure to run the service with:
+```bash
+./mvnw spring-boot:run
+```
+
+### Accessing Swagger UI
+Once your application is running, you can access the Swagger UI at:
+```
+http://localhost:8080/swagger-ui/index.html
+```
+
+### Summary
+This setup provides a basic authentication service with OpenFeign for calling external services, Swagger for API documentation, and Spring Cloud features for service discovery and communication. You can further expand this by adding security, handling exceptions, and implementing user authentication logic as needed.
