@@ -1490,3 +1490,364 @@ Converting a Figma design into a React application involves a series of steps to
 ### Conclusion
 
 By following these steps, you can effectively convert a Figma design into a React application. The key is to pay close attention to the details in the design and to structure your React components in a way that promotes reusability and maintainability. Make sure to test your application thoroughly to ensure it matches the design and works well across different devices.
+
+## React Hooks
+
+Here's a comprehensive explanation of various React hooks, including detailed examples for each:
+
+### 1. `useState`
+**Purpose**: Manages state in functional components.
+
+**Usage**: Returns an array with the current state and a function to update it.
+
+**Example**:
+```javascript
+import React, { useState } from 'react';
+
+function Counter() {
+  const [count, setCount] = useState(0);
+
+  return (
+    <div>
+      <p>Count: {count}</p>
+      <button onClick={() => setCount(count + 1)}>Increment</button>
+    </div>
+  );
+}
+```
+
+### 2. `useReducer`
+**Purpose**: An alternative to `useState` for managing complex state logic.
+
+**Usage**: Similar to Redux, it uses a reducer function to update state.
+
+**Example**:
+```javascript
+import React, { useReducer } from 'react';
+
+const initialState = { count: 0 };
+
+function reducer(state, action) {
+  switch (action.type) {
+    case 'increment':
+      return { count: state.count + 1 };
+    case 'decrement':
+      return { count: state.count - 1 };
+    default:
+      throw new Error();
+  }
+}
+
+function Counter() {
+  const [state, dispatch] = useReducer(reducer, initialState);
+
+  return (
+    <div>
+      <p>Count: {state.count}</p>
+      <button onClick={() => dispatch({ type: 'increment' })}>+</button>
+      <button onClick={() => dispatch({ type: 'decrement' })}>-</button>
+    </div>
+  );
+}
+```
+
+### 3. `useSyncExternalStore`
+**Purpose**: Manages subscriptions to external stores, ensuring components re-render when the store changes.
+
+**Usage**: Takes a subscribe function, an initial state, and a function to get the current value.
+
+**Example**:
+```javascript
+import { useSyncExternalStore } from 'react';
+
+function useStore() {
+  const subscribe = (callback) => {
+    // Subscribe to store changes
+  };
+
+  const getSnapshot = () => {
+    // Return current value from store
+  };
+
+  return useSyncExternalStore(subscribe, getSnapshot);
+}
+```
+
+### 4. `useEffect`
+**Purpose**: Manages side effects in functional components (e.g., data fetching, subscriptions).
+
+**Usage**: Runs after every render or when specified dependencies change.
+
+**Example**:
+```javascript
+import React, { useEffect, useState } from 'react';
+
+function FetchData() {
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    fetch('https://api.example.com/data')
+      .then(response => response.json())
+      .then(data => setData(data));
+  }, []); // Empty array means it runs once on mount
+
+  return (
+    <ul>
+      {data.map(item => (
+        <li key={item.id}>{item.name}</li>
+      ))}
+    </ul>
+  );
+}
+```
+
+### 5. `useLayoutEffect`
+**Purpose**: Similar to `useEffect`, but runs synchronously after DOM updates. Useful for reading layout and synchronously re-rendering.
+
+**Example**:
+```javascript
+import React, { useLayoutEffect, useRef } from 'react';
+
+function LayoutComponent() {
+  const divRef = useRef();
+
+  useLayoutEffect(() => {
+    const { height } = divRef.current.getBoundingClientRect();
+    console.log('Height:', height);
+  }, []);
+
+  return <div ref={divRef}>Content</div>;
+}
+```
+
+### 6. `useInsertionEffect`
+**Purpose**: Used for injecting styles before the browser paints. This is useful in libraries that need to ensure styles are applied before the user sees them.
+
+**Example**:
+```javascript
+import { useInsertionEffect } from 'react';
+
+function StyleInjector() {
+  useInsertionEffect(() => {
+    const style = document.createElement('style');
+    style.textContent = '.new-class { color: red; }';
+    document.head.appendChild(style);
+    return () => {
+      document.head.removeChild(style);
+    };
+  }, []);
+
+  return <div className="new-class">Hello World</div>;
+}
+```
+
+### 7. `useRef`
+**Purpose**: Creates a mutable object that persists for the full lifetime of the component. Useful for accessing DOM elements directly.
+
+**Example**:
+```javascript
+import React, { useRef } from 'react';
+
+function FocusInput() {
+  const inputRef = useRef();
+
+  const focusInput = () => {
+    inputRef.current.focus();
+  };
+
+  return (
+    <div>
+      <input ref={inputRef} type="text" />
+      <button onClick={focusInput}>Focus Input</button>
+    </div>
+  );
+}
+```
+
+### 8. `useImperativeHandle`
+**Purpose**: Customizes the instance value that is exposed when using `ref`. Useful in controlled components.
+
+**Example**:
+```javascript
+import React, { forwardRef, useImperativeHandle, useRef } from 'react';
+
+const CustomInput = forwardRef((props, ref) => {
+  const inputRef = useRef();
+
+  useImperativeHandle(ref, () => ({
+    focus: () => {
+      inputRef.current.focus();
+    },
+  }));
+
+  return <input ref={inputRef} type="text" />;
+});
+
+function Parent() {
+  const inputRef = useRef();
+
+  return (
+    <div>
+      <CustomInput ref={inputRef} />
+      <button onClick={() => inputRef.current.focus()}>Focus Input</button>
+    </div>
+  );
+}
+```
+
+### 9. `useMemo`
+**Purpose**: Memoizes a value to optimize performance, preventing expensive calculations on every render.
+
+**Example**:
+```javascript
+import React, { useMemo, useState } from 'react';
+
+function ExpensiveComponent({ number }) {
+  const computeExpensiveValue = (num) => {
+    // Simulate expensive computation
+    let sum = 0;
+    for (let i = 0; i < 1000000000; i++) {
+      sum += i;
+    }
+    return sum + num;
+  };
+
+  const expensiveValue = useMemo(() => computeExpensiveValue(number), [number]);
+
+  return <div>Computed Value: {expensiveValue}</div>;
+}
+```
+
+### 10. `useCallback`
+**Purpose**: Returns a memoized version of a callback function, preventing unnecessary re-creations of functions on every render.
+
+**Example**:
+```javascript
+import React, { useCallback, useState } from 'react';
+
+function Button({ onClick, children }) {
+  return <button onClick={onClick}>{children}</button>;
+}
+
+function Counter() {
+  const [count, setCount] = useState(0);
+
+  const increment = useCallback(() => {
+    setCount(c => c + 1);
+  }, []);
+
+  return (
+    <div>
+      <p>Count: {count}</p>
+      <Button onClick={increment}>Increment</Button>
+    </div>
+  );
+}
+```
+
+### 11. `useContext`
+**Purpose**: Consumes values from a React context, allowing you to share values globally across components without prop drilling.
+
+**Example**:
+```javascript
+import React, { createContext, useContext } from 'react';
+
+const ThemeContext = createContext('light');
+
+function ThemedComponent() {
+  const theme = useContext(ThemeContext);
+  return <div className={theme}>Current Theme: {theme}</div>;
+}
+
+function App() {
+  return (
+    <ThemeContext.Provider value="dark">
+      <ThemedComponent />
+    </ThemeContext.Provider>
+  );
+}
+```
+
+### 12. `useTransition`
+**Purpose**: Manages state transitions that can be interrupted. Useful for managing loading states while updating UI.
+
+**Example**:
+```javascript
+import React, { useState, useTransition } from 'react';
+
+function App() {
+  const [isPending, startTransition] = useTransition();
+  const [input, setInput] = useState('');
+
+  const handleChange = (e) => {
+    startTransition(() => {
+      setInput(e.target.value);
+    });
+  };
+
+  return (
+    <div>
+      <input type="text" onChange={handleChange} />
+      {isPending ? <p>Loading...</p> : <p>{input}</p>}
+    </div>
+  );
+}
+```
+
+### 13. `useDeferredValue`
+**Purpose**: Defers a value update to avoid blocking the main thread. Useful in complex UIs to improve responsiveness.
+
+**Example**:
+```javascript
+import React, { useState, useDeferredValue } from 'react';
+
+function App() {
+  const [input, setInput] = useState('');
+  const deferredInput = useDeferredValue(input);
+
+  return (
+    <div>
+      <input type="text" onChange={(e) => setInput(e.target.value)} />
+      <p>Deferred Input: {deferredInput}</p>
+    </div>
+  );
+}
+```
+
+### 14. `useDebugValue`
+**Purpose**: Used to display a label for custom hooks in React DevTools.
+
+**Example**:
+```javascript
+import { useDebugValue } from 'react';
+
+function useCustomHook(value) {
+  useDebugValue(value ? 'Value is present' : 'No value');
+  return value;
+}
+```
+
+### 15. `useId`
+**Purpose**: Generates unique IDs that persist across server and client renders, useful for accessibility attributes.
+
+**Example**:
+```javascript
+import React, { useId } from 'react';
+
+function InputWithLabel
+
+() {
+  const id = useId();
+
+  return (
+    <div>
+      <label htmlFor={id}>Label</label>
+      <input id={id} type="text" />
+    </div>
+  );
+}
+```
+
+### Conclusion
+
+These hooks provide powerful ways to manage state, handle side effects, optimize performance, and share functionality in React applications. By using them appropriately, you can create clean, efficient, and maintainable code in your functional components. If you have any further questions or need deeper examples, feel free to ask!
