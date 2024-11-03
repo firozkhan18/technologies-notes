@@ -3517,3 +3517,153 @@ function ChatApp() {
 # Conclusion
 
 That is React 18 in a nutshell. If you want to dive deeper into everything in React, I’ve created a complete guide that covers all concepts, including a cheat sheet with code examples you can use right now. You can grab all of that for free at React Boot Camp.
+
+
+## Execution flow of the authentication service file structure:
+
+```mermaid
+flowchart TD
+    A[AuthServiceApplication] --> B[ApplicationConfig]
+    A --> C[CorsConfig]
+    A --> D[SecurityConfig]
+    A --> E[AuthenticationController]
+    
+    E --> F[AuthenticationService]
+    F --> G[AuthenticationServiceImpl]
+    G --> H[UserDetailsServiceImpl]
+    
+    F --> I[JwtService]
+    I --> J[JwtServiceImpl]
+
+    E --> K[CustomerResponse]
+    E --> L[CustomerClient]
+
+    A --> M[JwtRequestFilter]
+    M --> |"Intercepts Requests"| N[Check JWT Token]
+    N --> |"Valid Token"| O[Proceed Request]
+    N --> |"Invalid Token"| P[Return Access Denied]
+
+    Q[CustomerRole] --> R[Roles & Permissions]
+    
+    S[EncryptorDecryptor] --> |"Encrypts/Decrypts Data"| T[Secure Data Handling]
+
+    style A fill:#f9f,stroke:#333,stroke-width:2px
+    style B fill:#bbf
+    style C fill:#bbf
+    style D fill:#bbf
+    style E fill:#bbf
+    style F fill:#bbf
+    style G fill:#bbf
+    style H fill:#bbf
+    style I fill:#bbf
+    style J fill:#bbf
+    style K fill:#bbf
+    style L fill:#bbf
+    style M fill:#bbf
+    style N fill:#fb0
+    style O fill:#0f0
+    style P fill:#f00
+    style Q fill:#bbf
+    style R fill:#bbf
+    style S fill:#bbf
+    style T fill:#bbf
+```
+
+### Explanation of the Diagram
+
+- **AuthServiceApplication:** The entry point of the application that initializes the Spring Boot context.
+- **Configuration Classes:** These set up application-wide configurations (CORS, security, etc.).
+- **AuthenticationController:** Handles incoming requests related to authentication.
+- **AuthenticationService:** Contains business logic for authentication, implemented in `AuthenticationServiceImpl`.
+- **JWT Handling:** Services that generate and validate JWT tokens.
+- **Filters:** The `JwtRequestFilter` intercepts requests to check JWT tokens for validity.
+- **Response Handling:** Customer responses are prepared and sent back to the client.
+- **Encryption/Decryption:** Handles secure data operations.
+
+To outline the execution flow of the given authentication service file structure in a Spring Boot application, we can break down the components based on their roles and interactions. Here's an overview of how various parts of the service work together:
+
+### Execution Flow Overview
+
+1. **Application Entry Point**
+   - **File:** `AuthServiceApplication.java`
+   - **Description:** The application starts here. This class is annotated with `@SpringBootApplication`, which enables component scanning and configuration of Spring Boot features.
+
+2. **Configuration**
+   - **Files:** 
+     - `ApplicationConfig.java`
+     - `CorsConfig.java`
+     - `SecurityConfig.java`
+   - **Description:** These configuration classes set up application-level configurations, including beans, CORS settings, and security configurations (like JWT authentication).
+
+3. **Controller Layer**
+   - **File:** `AuthenticationController.java`
+   - **Description:** This controller handles incoming HTTP requests related to authentication (e.g., login, registration). It maps the requests to service methods and returns appropriate responses.
+
+4. **Service Layer**
+   - **Files:**
+     - `AuthenticationService.java`
+     - `AuthenticationServiceImpl.java`
+     - `JwtService.java`
+     - `JwtServiceImpl.java`
+     - `UserDetailsServiceImpl.java`
+   - **Description:** 
+     - `AuthenticationService` defines the business logic for authentication.
+     - `AuthenticationServiceImpl` implements this logic, interacting with the database and other services.
+     - `JwtService` handles JWT creation and validation.
+     - `JwtServiceImpl` implements the JWT-related methods.
+     - `UserDetailsServiceImpl` provides user details for authentication.
+
+5. **Model Layer**
+   - **File:** `UserDetailsImpl.java`
+   - **Description:** This class implements the `UserDetails` interface and represents user-specific data used in authentication and authorization processes.
+
+6. **DTO Layer**
+   - **File:** `CustomerResponse.java`
+   - **Description:** This Data Transfer Object (DTO) is used to send user-related responses back to the client, ensuring data encapsulation and separation of concerns.
+
+7. **Enum Layer**
+   - **File:** `CustomerRole.java`
+   - **Description:** This enum defines user roles (e.g., ADMIN, USER) to manage authorization within the application.
+
+8. **Feign Client**
+   - **File:** `CustomerClient.java`
+   - **Description:** This class acts as a Feign client to communicate with other microservices (e.g., user services) for tasks like fetching customer details.
+
+9. **JWT Filter**
+   - **File:** `JwtRequestFilter.java`
+   - **Description:** This filter intercepts requests to validate the JWT token present in the request headers. It ensures that only authenticated users can access secured endpoints.
+
+10. **Security Utilities**
+    - **Files:** 
+      - `EncryptorDecryptor.java`
+    - **Description:** This utility class handles encryption and decryption of sensitive data (like passwords) to enhance security.
+
+### Execution Flow Steps
+
+1. **Startup:**
+   - The application starts, initializing the Spring context. Beans are created based on the configurations in `ApplicationConfig`, `CorsConfig`, and `SecurityConfig`.
+
+2. **Incoming Request:**
+   - A client makes a request to the `AuthenticationController`, for example, a POST request to `/login`.
+
+3. **Controller Handling:**
+   - The `AuthenticationController` receives the request and calls the appropriate method in `AuthenticationService`.
+
+4. **Authentication Logic:**
+   - The `AuthenticationServiceImpl` processes the authentication logic, validating user credentials and using `UserDetailsServiceImpl` to load user details.
+
+5. **JWT Generation:**
+   - If authentication is successful, the `JwtServiceImpl` generates a JWT token, which is returned to the client in the `CustomerResponse`.
+
+6. **JWT Filtering:**
+   - For subsequent requests, `JwtRequestFilter` intercepts each request to check for a JWT token. If the token is valid, it allows the request to proceed; otherwise, it denies access.
+
+7. **Inter-service Communication:**
+   - If needed, the `CustomerClient` uses Feign to call other services, for instance, to fetch additional user details.
+
+8. **Response to Client:**
+   - After processing, the controller sends a response back to the client, either confirming successful login or providing error messages.
+
+### Conclusion
+
+This execution flow describes how the components of the authentication service interact, starting from the application entry point, through configuration, handling requests, performing business logic, and returning responses to the client. Each layer (controller, service, model, etc.) plays a distinct role in the overall architecture, promoting separation of concerns and making the application modular and maintainable.
