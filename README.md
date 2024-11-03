@@ -3022,3 +3022,262 @@ export default App;
 
 
 ```
+
+## React Concept 
+
+React is a JavaScript library full of fancy terms like reconciliation, composition, and error boundaries. What do all these terms actually mean? Let's start from the beginning with components.
+
+## Components
+
+Components are the building blocks of every React app. They allow us to make all the visible parts of our applications like buttons, inputs, or even entire pages. Just like Legos, you can use components as many times as you want. Every React component is a JavaScript function that returns markup.
+
+### JSX
+
+React components don't return HTML markup; they actually return something called JSX, which is JavaScript in disguise. JSX is optional, but the alternative way to make user interfaces is with the `createElement` function, which gets annoying to write pretty fast. So everyone just uses JSX. 
+
+Since JSX is JavaScript, you can't write attributes like you would in HTML; you have to write them in camel case. This means HTML attributes like `class` become `className`.
+
+## Curly Braces
+
+Unlike HTML, which is static and unchanging, the benefit of using React is that you can use dynamic JavaScript values in your JSX. If you have data, you can display it in your JSX using curly braces. Curly braces accept values like strings and numbers directly. You can use them to make your attributes dynamic and you can style React elements using a JavaScript object within the curly braces.
+
+## Fragments
+
+JavaScript functions can only return one thing, and in React, you can only return one parent element from a component. So you can't do this without getting a big error:
+
+```jsx
+return (
+    <h1>Hello</h1>
+    <h2>World</h2>
+); // This will cause an error
+```
+
+We could fix this by wrapping these components in a `div`, but maybe you don’t want to add another element to the page. Instead, you can use an empty component called a React fragment:
+
+```jsx
+return (
+    <>
+        <h1>Hello</h1>
+        <h2>World</h2>
+    </>
+);
+```
+
+## Props
+
+But what if I want to pass data into another component? For that, you use something called props. To make a prop, create a name on the component you want to pass data to and set it equal to some value. That's it! You can then use that prop in the component you passed it to.
+
+Props refer to properties on an object, which is what you get in the parameters of each component. To use the prop, take it from the object like a normal JavaScript property. Think of them like custom attributes you can add to any component.
+
+## Children
+
+Can you pass anything as a prop? Yes, you can! You can even pass other components as props using the `children` prop. If you make opening and closing tags for a component, you can pass other components in between them. These passed components are called children, and you can access them on the `children` prop of the parent component.
+
+```jsx
+function ParentComponent({ children }) {
+    return <div>{children}</div>;
+}
+
+// Usage
+<ParentComponent>
+    <ChildComponent />
+</ParentComponent>
+```
+
+## Keys
+
+The `key` prop is another built-in prop to React, and no, unlike the name implies, it doesn't unlock anything interesting. The key prop is used so React can tell one component apart from another. Usually, when you're creating a list with the `map` function, a key is just a unique string or number to identify a component.
+
+```jsx
+const items = ['Apple', 'Banana', 'Cherry'];
+
+return (
+    <ul>
+        {items.map((item, index) => (
+            <li key={index}>{item}</li>
+        ))}
+    </ul>
+);
+```
+
+## Rendering
+
+React takes all my amazing code and makes it display something in the browser. That process is called rendering. React does this for us, but it's important to know how it works because sometimes we can do a bad thing and cause it to infinitely re-render, which crashes our app.
+
+The way React knows how and when to render our application is using something called the virtual DOM, also known as the vDOM. DOM stands for Document Object Model, which is what every browser uses to model all the HTML elements on a web page. 
+
+### The Complete Rendering Process
+
+1. If the state of our React app changes, then React updates the virtual DOM, which is quicker to update than the real DOM.
+2. React uses a process called diffing to compare the updated virtual DOM to a previous version to see what's changed.
+3. Once it sees what's different, React uses a process called reconciliation to update the real DOM with the changes that it found.
+
+## Event Handling
+
+Whenever someone uses our app, tons of events take place like clicks, mouse movements, and key presses, many of which we need to detect. Event handling is how we take those user events and do something with them. React has a lot of built-in events such as `onClick`, `onChange`, and `onSubmit`.
+
+Here's an example of alerting users when a button is clicked:
+
+```jsx
+function AlertButton() {
+    const handleClick = () => {
+        alert('Button clicked!');
+    };
+
+    return <button onClick={handleClick}>Click Me!</button>;
+}
+```
+
+## State
+
+To manage data in our React apps, we need to use state. Not that kind of state, though! State is like a snapshot from a camera; it's a picture of our app at any given time. 
+
+We use special functions like `useState` and `useReducer` to manage state. `useState` takes an argument that serves as the starting value of the state variable and returns an array containing the state variable and a function to update that state.
+
+```jsx
+const [count, setCount] = useState(0);
+
+// Usage
+<button onClick={() => setCount(count + 1)}>Increment</button>
+```
+
+## Controlled Components
+
+Controlled components use state values to have more predictable behavior. Here’s an example of a controlled component where the value typed into the input is being put into state and controlled by the state variable value:
+
+```jsx
+function ControlledInput() {
+    const [value, setValue] = useState('');
+
+    return (
+        <input 
+            type="text" 
+            value={value} 
+            onChange={(e) => setValue(e.target.value)} 
+        />
+    );
+}
+```
+
+## Hooks
+
+React hooks allow us to hook into features such as state within function components. There are five main types of hooks:
+
+1. **State Hooks**: `useState`, `useReducer` help you manage state within React components.
+2. **Context Hooks**: `useContext` lets you pass data through React context.
+3. **Ref Hooks**: `useRef` lets you reference things like HTML elements.
+4. **Effect Hooks**: `useEffect` lets you connect with external systems like browser APIs.
+5. **Performance Hooks**: `useMemo` and `useCallback` can improve performance by preventing unnecessary work.
+
+You'll use all of these hooks at some point, but the majority of the time you'll likely use just three hooks in your React components: `useState`, `useEffect`, and `useRef`.
+
+## Purity
+
+The word purity might make you think of something like purified water. Purity in React components means that the same input should always return the same output. To keep a React component pure, they should only return their JSX and not change any objects or variables that existed before rendering.
+
+## Strict Mode
+
+To avoid errors, we can use something called Strict Mode. Strict Mode is a special component that tells us about mistakes as we develop our React apps. It's really convenient because it's just a component we usually wrap around our app component.
+
+```jsx
+import React from 'react';
+
+function App() {
+    return (
+        <StrictMode>
+            <MyComponent />
+        </StrictMode>
+    );
+}
+```
+
+## Effects
+
+If you need to do something outside of your React app, such as communicating with the browser API or making a request to a server, you'll need a way to step outside of React. Effects are code that reach outside of our React application. You can run them using the `useEffect` hook.
+
+```jsx
+useEffect(() => {
+    fetchData();
+}, []); // Fetch data when component mounts
+```
+
+## Refs
+
+Sometimes you want to step outside React and work directly with the DOM. To reference a DOM element, you can use what's called a ref. You can create a ref with the `useRef` hook and use the `ref` prop on any React element.
+
+```jsx
+const inputRef = useRef(null);
+
+const focusInput = () => {
+    inputRef.current.focus();
+};
+
+return (
+    <>
+        <input ref={inputRef} />
+        <button onClick={focusInput}>Focus Input</button>
+    </>
+);
+```
+
+## Context
+
+Context is a powerful way to pass prop data through your app's components. Most React apps have tons of nested components, and to get data down multiple levels involves passing the same props through components that don’t actually need it. 
+
+To use context, you first create context in a parent component, then wrap your parent component in a special context component called a context provider. You can put the data you want to pass down on the provider and access that data in any child component with the `useContext` hook.
+
+## Portals
+
+Portals are kind of like context but for components. They let you move React components into any HTML element you select. Portals are great for components that can't be displayed properly because of their parent's component styles, such as displaying modals, drop-down menus, and tooltips.
+
+To create a portal, just use the
+
+ `createPortal` function:
+
+```jsx
+import ReactDOM from 'react-dom';
+
+const MyPortal = () => {
+    return ReactDOM.createPortal(
+        <div>I am a portal!</div>,
+        document.getElementById('portal-root')
+    );
+};
+```
+
+## Suspense
+
+Suspense is a special component that helps you handle loading a component or its data. It provides a better user experience to show a fallback component like a loading spinner until the data is available instead of nothing. 
+
+Suspense is also useful if you're lazily loading a component, which lets us load a component only when it's needed.
+
+## Error Boundaries
+
+React apps can break due to JavaScript errors during rendering. Error boundaries are components that let you catch app-breaking errors and show a fallback component to tell the user about what happened.
+
+For example, our app will crash if we run this code because it throws an error when there's no user. To prevent our app from crashing, we can add an error boundary to display a fallback component with a helpful error message.
+
+```jsx
+class ErrorBoundary extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = { hasError: false };
+    }
+
+    static getDerivedStateFromError(error) {
+        return { hasError: true };
+    }
+
+    componentDidCatch(error, info) {
+        // Log error to an error reporting service
+    }
+
+    render() {
+        if (this.state.hasError) {
+            return <h1>Something went wrong.</h1>;
+        }
+
+        return this.props.children;
+    }
+}
+```
