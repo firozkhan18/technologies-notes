@@ -2522,3 +2522,503 @@ As of my last knowledge update, React 19 includes enhancements and potentially n
 ### Summary
 
 This categorization helps to understand when and why to use specific hooks based on your application’s needs. If you have further questions about specific hooks or want more examples, feel free to ask!
+
+
+## working example: 
+
+```javascript
+
+// import logo from './logo.svg';
+// import './App.css';
+
+// function App() {
+//   return (
+//     <div className="App">
+//       <header className="App-header">
+//         <img src={logo} className="App-logo" alt="logo" />
+//         <p>
+//           Edit <code>src/App.js</code> and save to reload.
+//         </p>
+//         <a
+//           className="App-link"
+//           href="https://reactjs.org"
+//           target="_blank"
+//           rel="noopener noreferrer"
+//         >
+//           Learn React
+//         </a>
+//       </header>
+//     </div>
+//   );
+// }
+
+// export default App;
+
+import React, { useState, useEffect, useLayoutEffect, useRef, useReducer, useContext, useMemo, useCallback, useTransition, useDeferredValue, useDebugValue, useId, createContext } from 'react';
+
+// Context for ContextExample
+const MyContext = createContext();
+
+// 1. Counter using useState
+function Counter() {
+    const [count, setCount] = useState(0);
+    return (
+        <div>
+            <h2>Counter</h2>
+            <p>You clicked {count} times</p>
+            <button onClick={() => setCount(count + 1)}>Click me</button>
+        </div>
+    );
+}
+
+function ManageFormInput() {
+  const [value, setValue] = useState(0);
+
+  const handleChange=(e)=>{
+   setValue(e.target.value);
+  }
+  
+  return (
+      <div>
+          <h2>ManageFormInput</h2>
+          <input type="text" value={value} onChange={handleChange} /> 
+      </div>
+  );
+}
+
+function ToggleVisibility() {
+  const [isVisible, setIsVisible] = useState(false); // Initialize as false
+
+  return (
+      <div>
+          <h2>Toggle</h2>
+          <button className={!isVisible?'active':'inactive'} onClick={() => setIsVisible(!isVisible)}>Click Me</button>
+          <button onClick={() => setIsVisible(prev => !prev)}>Toggle</button>
+          {isVisible && <div>Show/Hide Content</div>} {/* Use a fragment or just return the div */}
+      </div>
+  );
+}
+
+// 2. ReducerCounter using useReducer
+function reducer(state, action) {
+    switch (action.type) {
+        case 'increment':
+            return { count: state.count + 1 };
+        case 'decrement':
+            return { count: state.count - 1 };
+        default:
+            throw new Error();
+    }
+}
+
+function ReducerCounter() {
+    const [state, dispatch] = useReducer(reducer, { count: 0 });
+    return (
+        <div>
+            <h2>Reducer Counter</h2>
+            Count: {state.count}
+            <button onClick={() => dispatch({ type: 'increment' })}>+</button>
+            <button onClick={() => dispatch({ type: 'decrement' })}>-</button>
+        </div>
+    );
+}
+
+// 3. TitleUpdater using useEffect
+function TitleUpdater() {
+    const [count, setCount] = useState(0);
+    useEffect(() => {
+        document.title = `Count: ${count}`;
+    }, [count]);
+
+    return (
+        <div>
+            <h2>Title Updater</h2>
+            <button onClick={() => setCount(count + 1)}>Increment</button>
+        </div>
+    );
+}
+
+// 4. Measurement using useLayoutEffect
+function Measurement() {
+    const ref = useRef(null);
+    useLayoutEffect(() => {
+        console.log(`Height: ${ref.current.getBoundingClientRect().height}`);
+    }, []);
+
+    return (
+        <div ref={ref}>
+            <h2>Measurement</h2>
+            Measure my height
+        </div>
+    );
+}
+
+// 5. Timer using useRef
+function Timer() {
+    const intervalRef = useRef();
+
+    const startTimer = () => {
+        intervalRef.current = setInterval(() => {
+            console.log('Tick');
+        }, 1000);
+    };
+
+    const stopTimer = () => {
+        clearInterval(intervalRef.current);
+    };
+
+    return (
+        <div>
+            <h2>Timer</h2>
+            <button onClick={startTimer}>Start</button>
+            <button onClick={stopTimer}>Stop</button>
+        </div>
+    );
+}
+
+// correction
+
+function TimerCorrected() {
+  const intervalRef = useRef(null);
+  const [ticks, setTicks] = useState(0);
+
+  const startTimer = () => {
+      if (!intervalRef.current) { // Prevent starting multiple intervals
+          intervalRef.current = setInterval(() => {
+              setTicks(prevTicks => prevTicks + 1);
+              console.log('Tick'); // Logs every second
+          }, 1000);
+      }
+  };
+
+  const stopTimer = () => {
+      clearInterval(intervalRef.current);
+      intervalRef.current = null; // Clear the reference when stopped
+  };
+
+  // Cleanup the interval on component unmount
+  useEffect(() => {
+      return () => stopTimer(); // Ensures timer stops when component unmounts
+  }, []);
+
+  return (
+      <div>
+          <h2>Timer</h2>
+          <p>Ticks: {ticks}</p>
+          <button onClick={startTimer}>Start</button>
+          <button onClick={stopTimer}>Stop</button>
+      </div>
+  );
+}
+
+// 6. ContextExample using useContext
+function Component() {
+    const value = useContext(MyContext);
+    return <div>The context value is: {value}</div>;
+}
+
+function ContextExample() {
+    return (
+        <MyContext.Provider value="Hello, World!">
+            <h2>Context Example</h2>
+            <Component />
+        </MyContext.Provider>
+    );
+}
+
+// 7. ExpensiveCalculation using useMemo
+function ExpensiveCalculation() {
+    const [count, setCount] = useState(0);
+    const computedValue = useMemo(() => {
+        return count * 2;
+    }, [count]);
+
+    return (
+        <div>
+            <h2>Expensive Calculation</h2>
+            <p>Computed Value: {computedValue}</p>
+            <button onClick={() => setCount(count + 1)}>Increment</button>
+        </div>
+    );
+}
+
+// 8. CallbackExample using useCallback
+function Button({ onClick }) {
+    return <button onClick={onClick}>Click Me</button>;
+}
+
+function CallbackExample() {
+    const [count, setCount] = useState(0);
+    const handleClick = useCallback(() => {
+        setCount(count + 1);
+    }, [count]);
+
+    return (
+        <div>
+            <h2>Callback Example</h2>
+            <Button onClick={handleClick} />
+            <p>Count: {count}</p>
+        </div>
+    );
+}
+
+// 9. FilterComponent using useTransition
+function FilterComponent() {
+    const [inputValue, setInputValue] = useState('');
+    const [isPending, startTransition] = useTransition();
+
+    const handleChange = (e) => {
+        startTransition(() => {
+            setInputValue(e.target.value);
+        });
+    };
+
+    return (
+        <div>
+            <h2>Filter Component</h2>
+            <input type="text" value={inputValue} onChange={handleChange} />
+            {isPending && <span>Loading...</span>}
+        </div>
+    );
+}
+
+// 10. DeferredValueExample using useDeferredValue
+function DeferredValueExample() {
+    const [filter, setFilter] = useState('');
+    const deferredFilter = useDeferredValue(filter);
+
+    const items = ['apple', 'banana', 'orange', 'grape', 'kiwi'];
+    const filteredItems = items.filter(item => item.includes(deferredFilter));
+
+    return (
+        <div>
+            <h2>Deferred Value Example</h2>
+            <input type="text" value={filter} onChange={(e) => setFilter(e.target.value)} />
+            <ul>
+                {filteredItems.map(item => (
+                    <li key={item}>{item}</li>
+                ))}
+            </ul>
+        </div>
+    );
+}
+
+// 11. DebugValueExample using useDebugValue
+function useCustomHook(value) {
+    useDebugValue(value ? 'Value exists' : 'No value');
+    return value;
+}
+
+function DebugValueExample() {
+    const value = useCustomHook(true);
+    return (
+        <div>
+            <h2>Debug Value Example</h2>
+            <p>{value}</p>
+        </div>
+    );
+}
+
+// 12. Form using useId
+function Form() {
+    const emailId = useId();
+    const passwordId = useId();
+
+    return (
+        <form>
+            <h2>Form Example</h2>
+            <label htmlFor={emailId}>Email:</label>
+            <input type="email" id={emailId} />
+
+            <label htmlFor={passwordId}>Password:</label>
+            <input type="password" id={passwordId} />
+        </form>
+    );
+}
+
+// React application that demonstrates various components and lifecycle methods, using both class components and functional components with hooks. This application covers all major lifecycle methods in class components, along with corresponding hooks that can be used in functional components.
+
+// App Structure
+// The application consists of the following components:
+
+// ClassComponentExample (demonstrating class lifecycle methods)
+// FunctionalComponentExample (demonstrating equivalent lifecycle using hooks)
+// Timer (using a class component to manage state)
+// EffectDemo (using hooks for side effects)
+// Counter (showing state updates)
+// UnmountDemo (showing cleanup with unmounting)
+
+// 1. ClassComponentExample demonstrating lifecycle methods
+class ClassComponentExample extends React.Component {
+  constructor(props) {
+      super(props);
+      this.state = { count: 0 };
+      console.log('Constructor: initializing state');
+  }
+
+  componentDidMount() {
+      console.log('componentDidMount: Component is mounted');
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+      console.log('componentDidUpdate: Component updated', { prevState, currentState: this.state });
+  }
+
+  componentWillUnmount() {
+      console.log('componentWillUnmount: Cleanup before component is removed');
+  }
+
+  incrementCount = () => {
+      this.setState(prevState => ({ count: prevState.count + 1 }));
+  };
+
+  render() {
+      console.log('Render: Rendering component');
+      return (
+          <div>
+              <h2>Class Component Lifecycle</h2>
+              <p>Count: {this.state.count}</p>
+              <button onClick={this.incrementCount}>Increment Count</button>
+          </div>
+      );
+  }
+}
+
+// 2. FunctionalComponentExample demonstrating hooks equivalent to lifecycle methods
+function FunctionalComponentExample() {
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+      console.log('useEffect: Component mounted');
+
+      return () => {
+          console.log('Cleanup in useEffect: Component will unmount');
+      };
+  }, []); // Run once on mount
+
+  useEffect(() => {
+      console.log('useEffect: Component updated', { count });
+  }, [count]); // Run on count change
+
+  return (
+      <div>
+          <h2>Functional Component with Hooks</h2>
+          <p>Count: {count}</p>
+          <button onClick={() => setCount(count + 1)}>Increment Count</button>
+      </div>
+  );
+}
+
+// 3. Timer using a class component
+class Timer1 extends React.Component {
+  constructor(props) {
+      super(props);
+      this.state = { seconds: 0 };
+  }
+
+  componentDidMount() {
+      this.interval = setInterval(() => {
+          this.setState(prevState => ({ seconds: prevState.seconds + 1 }));
+      }, 1000);
+  }
+
+  componentWillUnmount() {
+      clearInterval(this.interval);
+  }
+
+  render() {
+      return (
+          <div>
+              <h2>Timer</h2>
+              <p>Seconds: {this.state.seconds}</p>
+          </div>
+      );
+  }
+}
+
+// 4. EffectDemo using hooks for side effects
+function EffectDemo() {
+  const [value, setValue] = useState('');
+
+  useEffect(() => {
+      console.log('EffectDemo: Value changed:', value);
+  }, [value]); // Runs when 'value' changes
+
+  return (
+      <div>
+          <h2>Effect Demo</h2>
+          <input
+              type="text"
+              value={value}
+              onChange={(e) => setValue(e.target.value)}
+          />
+          <p>Current Value: {value}</p>
+      </div>
+  );
+}
+
+// 5. Counter to show state updates
+function Counter1() {
+  const [count, setCount] = useState(0);
+
+  return (
+      <div>
+          <h2>Counter</h2>
+          <p>Count: {count}</p>
+          <button onClick={() => setCount(count + 1)}>Increment Count</button>
+      </div>
+  );
+}
+
+// 6. UnmountDemo to show cleanup with unmounting
+function UnmountDemo() {
+  const [isVisible, setIsVisible] = useState(true);
+
+  return (
+      <div>
+          <h2>Unmount Demo</h2>
+          <button onClick={() => setIsVisible(!isVisible)}>
+              {isVisible ? 'Hide' : 'Show'} Component
+          </button>
+          {isVisible && <ClassComponentExample />}
+      </div>
+  );
+}
+
+
+// Main App component
+function App() {
+    return (
+        <div>
+            <h1>React Hooks Example</h1>
+            <Counter />
+            <ManageFormInput />
+            <ToggleVisibility/>
+            <ReducerCounter />
+            <TitleUpdater />
+            <Measurement />
+            <Timer />
+            <TimerCorrected/>
+            <ContextExample />
+            <ExpensiveCalculation />
+            <CallbackExample />
+            <FilterComponent />
+            <DeferredValueExample />
+            <DebugValueExample />
+            <Form />
+            <h1>React Components and Lifecycle</h1>
+            <ClassComponentExample />
+            <FunctionalComponentExample />
+            <Timer1 />
+            <EffectDemo />
+            <Counter1 />
+            <UnmountDemo />
+        </div>
+    );
+}
+
+export default App;
+//ReactDOM.render(<App />, document.getElementById('root'));
+
+
+```
