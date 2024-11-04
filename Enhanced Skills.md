@@ -1,4 +1,4 @@
-## Skills:
+# Enhanced Skills:
 
 - Java programming
 - Spring 
@@ -31,7 +31,7 @@ Here are 60 unique and varied responsibilities that align with my skills:
 
 ---
 
-# Table of Contents
+## Table of Contents
 
 1. [Develop and Maintain Java-Based Applications](#develop-and-maintain-java-based-applications)
 2. [Design Robust and Scalable Applications Using the Spring Framework](#design-robust-and-scalable-applications-using-the-spring-framework)
