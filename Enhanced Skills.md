@@ -20300,3 +20300,148 @@ It combines:
 - `@ComponentScan`: scans the current package and its sub-packages for Spring components.
 
 By using `@SpringBootApplication`, developers can focus on writing business logic and building features, rather than worrying about boilerplate configuration.
+
+By default, **Spring Boot** uses an embedded server like **Tomcat**, **Jetty**, or **Undertow** to run your web application. However, in certain scenarios, you might want to deploy your Spring Boot application to an **external server** (e.g., Apache Tomcat, JBoss, or WebLogic) instead of using the embedded server.
+
+To achieve this, you'll need to make some configuration changes, disable the embedded server, and package your application as a **WAR (Web Archive)** file instead of a **JAR** file.
+
+Here’s a step-by-step guide on how to deploy a Spring Boot application to an external server:
+
+### 1. **Change Packaging Type to WAR**
+
+By default, Spring Boot uses **JAR** packaging for standalone applications. To deploy your application to an external server, you need to change the packaging to **WAR**.
+
+In the `pom.xml` (if you are using Maven), change the packaging type:
+
+```xml
+<packaging>war</packaging>
+```
+
+For Gradle, update the build file (`build.gradle` or `build.gradle.kts`) as follows:
+
+```groovy
+apply plugin: 'war'
+```
+
+This will make the Spring Boot application a **WAR** file, which can be deployed to external servlet containers.
+
+### 2. **Disable Embedded Server**
+
+You need to disable the embedded server (e.g., Tomcat) because you’ll be using an external server. To do this, you need to configure your application to exclude the embedded server dependency.
+
+In the `pom.xml`, you can exclude the embedded **Tomcat** dependency:
+
+```xml
+<dependencies>
+    <!-- Exclude the embedded Tomcat server -->
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-web</artifactId>
+        <exclusions>
+            <exclusion>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-tomcat</artifactId>
+            </exclusion>
+        </exclusions>
+    </dependency>
+    <!-- Add your external server dependency (e.g., Tomcat, JBoss) -->
+    <dependency>
+        <groupId>org.apache.tomcat</groupId>
+        <artifactId>tomcat-embed-jasper</artifactId>
+        <version>9.0.0.M13</version> <!-- Use the correct version -->
+        <scope>provided</scope>
+    </dependency>
+</dependencies>
+```
+
+For **Gradle**, you would exclude the embedded server and include the required one:
+
+```groovy
+dependencies {
+    implementation('org.springframework.boot:spring-boot-starter-web') {
+        exclude group: 'org.springframework.boot', module: 'spring-boot-starter-tomcat'
+    }
+    providedRuntime 'org.apache.tomcat.embed:tomcat-embed-jasper' // or another external server
+}
+```
+
+The `<scope>provided</scope>` ensures that the external server (Tomcat, Jetty, etc.) is available during deployment but is not bundled into the WAR.
+
+### 3. **Modify Your Main Application Class**
+
+When you’re deploying to an external server, you typically don’t need the `SpringApplication.run()` method for bootstrapping your application. Instead, you’ll extend `SpringBootServletInitializer` and override the `configure()` method.
+
+Here’s an example of how to modify your `@SpringBootApplication` main class:
+
+```java
+package com.example.demo;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
+
+@SpringBootApplication
+public class DemoApplication extends SpringBootServletInitializer {
+
+    public static void main(String[] args) {
+        // This method is not necessary for external servers, but can be kept if you still want to run the app as a standalone jar
+        SpringApplication.run(DemoApplication.class, args);
+    }
+
+    @Override
+    protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
+        // Configure the Spring Boot application to use the WAR file in an external container
+        return application.sources(DemoApplication.class);
+    }
+}
+```
+
+- **`SpringBootServletInitializer`**: This class is used to configure the Spring Boot application when it’s deployed as a WAR file to an external servlet container.
+- **`configure(SpringApplicationBuilder)`**: The `configure()` method overrides the default Spring Boot configuration to specify which class should be used to initialize the application when it’s running in an external servlet container.
+
+### 4. **Build the WAR File**
+
+After updating the packaging type to WAR and modifying your main class, you can now build the WAR file.
+
+#### Using Maven:
+```sh
+mvn clean install
+```
+This command will generate a WAR file in the `target` directory of your project.
+
+#### Using Gradle:
+```sh
+gradle build
+```
+This will generate a WAR file in the `build/libs` directory.
+
+### 5. **Deploy the WAR to an External Server**
+
+After building the WAR file, you can deploy it to your preferred external servlet container, such as Apache Tomcat, JBoss, or any other Java EE server.
+
+- **Apache Tomcat**: Simply copy the generated WAR file to the `webapps` directory of your Tomcat server.
+- **JBoss/Wildfly**: Deploy the WAR file to the `deployments` directory.
+
+For **Apache Tomcat**, here are the steps:
+1. Copy the generated `demo.war` file to the `webapps` folder of your Tomcat installation.
+2. Start the Tomcat server by running `bin/startup.sh` (Linux/macOS) or `bin/startup.bat` (Windows).
+3. Access your application in the browser at `http://localhost:8080/demo`.
+
+### 6. **Verify the Application**
+
+After deploying the WAR file to the external server and starting the server, you can access your Spring Boot application at the server’s URL. 
+
+For example:
+- If you are using Tomcat: `http://localhost:8080/your-app-name`
+
+---
+
+### **Summary**
+
+1. **Change Packaging to WAR**: Modify the `pom.xml` (or `build.gradle`) to package the application as a WAR file.
+2. **Exclude the Embedded Server**: Exclude the embedded server (e.g., Tomcat) and mark the external server dependency with `provided` scope.
+3. **Extend `SpringBootServletInitializer`**: Modify the main application class to extend `SpringBootServletInitializer` and override the `configure()` method.
+4. **Build and Deploy**: Build the WAR file and deploy it to your external server (e.g., Apache Tomcat, JBoss).
+5. **Run the Application**: Access the application through the external server’s URL.
+
+This approach ensures that you can run your Spring Boot application within a traditional Java EE servlet container while still benefiting from Spring Boot's configuration and dependency management.
