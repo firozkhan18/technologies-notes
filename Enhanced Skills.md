@@ -1127,6 +1127,437 @@ The **ACID** properties are crucial for maintaining the reliability and consiste
 
 These principles protect the integrity of the database and ensure that users can depend on it for accurate and reliable data storage, even in cases of failure or errors.
 
+## Transaction Isolation Levels
+
+In relational database management systems (RDBMS), **transaction isolation levels** define the degree to which the operations in one transaction are isolated from the operations in other concurrent transactions. The isolation level determines how and when the changes made by one transaction are visible to others, and it directly impacts the potential for anomalies like **dirty reads**, **non-repeatable reads**, and **phantom reads**.
+
+There are **four standard isolation levels**, each offering a trade-off between consistency (isolation) and performance (concurrency). These levels are defined by the **SQL standard**, and different databases may implement them with slight variations. Here's an overview of the isolation levels:
+
+### 1. **Read Uncommitted**
+- **Definition**: In the **Read Uncommitted** isolation level, a transaction can read data that has been modified by another transaction but not yet committed. This can lead to **dirty reads**, where one transaction sees uncommitted data that might later be rolled back.
+- **Anomalies**: **Dirty Reads**.
+
+#### Example of Dirty Read:
+Imagine two transactions running concurrently:
+- **Transaction 1** updates the balance of `Account A` from $100 to $200 but hasn’t committed yet.
+- **Transaction 2** reads the balance of `Account A`, and sees $200, even though **Transaction 1** might later roll back.
+
+```sql
+-- Transaction 1: Update balance (but not commit)
+BEGIN TRANSACTION;
+UPDATE accounts SET balance = 200 WHERE account_id = 'A';
+
+-- Transaction 2: Read balance (dirty read)
+SELECT balance FROM accounts WHERE account_id = 'A';  -- Will see 200 (even though not committed)
+```
+
+- **Pros**: High concurrency and fast performance.
+- **Cons**: Very low data consistency, as other transactions might see uncommitted, inconsistent data.
+
+---
+
+### 2. **Read Committed**
+- **Definition**: In the **Read Committed** isolation level, a transaction can only read data that has been committed by other transactions. It does not allow dirty reads, but it can allow **non-repeatable reads**. This means that if you read a value in one transaction and then read it again, it might have changed due to another committed transaction.
+- **Anomalies**: **Non-repeatable Reads**.
+
+#### Example of Non-repeatable Read:
+- **Transaction 1** reads the balance of `Account A` (e.g., $100).
+- **Transaction 2** updates the balance of `Account A` (e.g., to $150) and commits.
+- **Transaction 1** reads the balance again and sees $150, even though it previously saw $100.
+
+```sql
+-- Transaction 1: Read balance
+SELECT balance FROM accounts WHERE account_id = 'A';  -- Sees $100
+
+-- Transaction 2: Update balance and commit
+UPDATE accounts SET balance = 150 WHERE account_id = 'A';
+COMMIT;
+
+-- Transaction 1: Read balance again
+SELECT balance FROM accounts WHERE account_id = 'A';  -- Sees $150 now (non-repeatable read)
+```
+
+- **Pros**: No dirty reads, better data consistency than Read Uncommitted.
+- **Cons**: Non-repeatable reads can still occur, which can lead to issues in some applications.
+
+---
+
+### 3. **Repeatable Read**
+- **Definition**: In the **Repeatable Read** isolation level, once a transaction reads a value, it will see the same value for that data throughout the rest of the transaction, even if other transactions modify that data. This prevents **non-repeatable reads** but can still allow **phantom reads**, where new rows might appear or disappear if other transactions insert or delete rows that match the query criteria.
+- **Anomalies**: **Phantom Reads**.
+
+#### Example of Phantom Read:
+- **Transaction 1** selects all rows in the `accounts` table where the balance is greater than $100.
+- **Transaction 2** inserts a new row with a balance of $150 and commits.
+- **Transaction 1** re-runs the same query and sees the newly inserted row.
+
+```sql
+-- Transaction 1: Select accounts with balance > 100
+SELECT * FROM accounts WHERE balance > 100;
+
+-- Transaction 2: Insert new account and commit
+INSERT INTO accounts (account_id, balance) VALUES ('D', 150);
+COMMIT;
+
+-- Transaction 1: Select accounts again (new row appears)
+SELECT * FROM accounts WHERE balance > 100;
+```
+
+- **Pros**: No dirty reads or non-repeatable reads.
+- **Cons**: Phantom reads can occur, which can be a problem for certain types of queries.
+
+---
+
+### 4. **Serializable**
+- **Definition**: The **Serializable** isolation level ensures the highest level of isolation by making sure that transactions are executed in such a way that the outcome is as if the transactions were executed serially (one after another), without any overlap. This prevents **dirty reads**, **non-repeatable reads**, and **phantom reads**.
+- **Anomalies**: None. All potential anomalies are prevented.
+
+#### Example of Serializable:
+- **Transaction 1** selects all rows where the balance is greater than $100.
+- **Transaction 2** tries to insert a new row with a balance of $150, but it must wait until **Transaction 1** completes before it can insert the new row.
+
+```sql
+-- Transaction 1: Select accounts with balance > 100
+SELECT * FROM accounts WHERE balance > 100;
+
+-- Transaction 2: Try to insert a new account (but must wait for Transaction 1 to finish)
+INSERT INTO accounts (account_id, balance) VALUES ('D', 150);
+```
+
+- **Pros**: Complete isolation between transactions, guaranteeing no anomalies.
+- **Cons**: Low concurrency and potential performance bottlenecks, as transactions must execute serially, one at a time.
+
+---
+
+### Isolation Level Summary:
+
+| Isolation Level       | Dirty Read | Non-repeatable Read | Phantom Read | Description                                                 |
+|-----------------------|------------|---------------------|--------------|-------------------------------------------------------------|
+| **Read Uncommitted**   | Yes        | Yes                 | Yes          | Allows the highest concurrency, but the lowest consistency. |
+| **Read Committed**     | No         | Yes                 | Yes          | Prevents dirty reads but allows non-repeatable and phantom reads. |
+| **Repeatable Read**    | No         | No                  | Yes          | Prevents dirty and non-repeatable reads, but allows phantom reads. |
+| **Serializable**       | No         | No                  | No           | Prevents all anomalies, ensuring the highest consistency, but lowest concurrency. |
+
+---
+
+### Example: Impact of Isolation Levels
+
+Consider a scenario with two transactions:
+1. **Transaction 1**: Reads a row and updates a field.
+2. **Transaction 2**: Attempts to update the same row at the same time.
+
+#### Using **Read Uncommitted**:
+- **Transaction 2** may read a value that is still being modified by **Transaction 1**, leading to dirty reads.
+  
+#### Using **Read Committed**:
+- **Transaction 2** will not see uncommitted data, but if **Transaction 1** updates the row and commits before **Transaction 2** finishes, **Transaction 2** will see the final committed value, but **Transaction 2** might see a different value if it re-reads the row.
+
+#### Using **Repeatable Read**:
+- **Transaction 2** will be prevented from modifying the row while **Transaction 1** is still working, but if **Transaction 2** inserts a new row that **Transaction 1**'s query criteria would match, **Transaction 1** may see new rows after it has already read data (phantom reads).
+
+#### Using **Serializable**:
+- **Transaction 2** must wait for **Transaction 1** to complete before making any changes to the data, ensuring no overlap or inconsistency.
+
+---
+
+### Conclusion
+
+The choice of transaction isolation level depends on the trade-off between **data consistency** and **performance**. Higher isolation levels (such as **Serializable**) provide more consistency but at the cost of concurrency and performance. Lower isolation levels (like **Read Uncommitted**) allow higher concurrency but risk inconsistencies in the data. When designing a system, it's important to choose the appropriate isolation level based on the application's specific requirements for data accuracy and performance.
+
+## Default transaction isolation level
+The **default transaction isolation level** depends on the **database management system (DBMS)** being used. Most relational databases have a default isolation level that balances performance and data consistency. However, each DBMS may use a different default isolation level. Let's explore the default isolation levels for some of the most popular database systems.
+
+### 1. **MySQL**
+- **Default Isolation Level**: **REPEATABLE READ**
+- **Explanation**: MySQL's default isolation level is **Repeatable Read**. This means that once a transaction reads a value, it will see the same value throughout the transaction, preventing **non-repeatable reads**. However, **phantom reads** can still occur in MySQL, depending on the storage engine (for example, with the **InnoDB** storage engine).
+
+#### Example (in MySQL):
+```sql
+SET TRANSACTION ISOLATION LEVEL REPEATABLE READ;
+```
+
+---
+
+### 2. **PostgreSQL**
+- **Default Isolation Level**: **READ COMMITTED**
+- **Explanation**: PostgreSQL uses **Read Committed** as the default isolation level. This means a transaction will only see committed data, preventing **dirty reads** but allowing **non-repeatable reads** and **phantom reads**. To achieve higher isolation, you can set it to **Repeatable Read** or **Serializable**.
+
+#### Example (in PostgreSQL):
+```sql
+SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
+```
+
+---
+
+### 3. **SQL Server**
+- **Default Isolation Level**: **READ COMMITTED**
+- **Explanation**: SQL Server also defaults to **Read Committed** isolation level. This ensures that a transaction will only read data that has been committed by other transactions, preventing **dirty reads** but still allowing **non-repeatable reads** and **phantom reads**. 
+
+#### Example (in SQL Server):
+```sql
+SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
+```
+
+---
+
+### 4. **Oracle**
+- **Default Isolation Level**: **READ COMMITTED**
+- **Explanation**: Oracle's default isolation level is **Read Committed**, similar to SQL Server and PostgreSQL. It guarantees that a transaction will only see committed data from other transactions, preventing **dirty reads**. However, **non-repeatable reads** and **phantom reads** can still occur.
+
+#### Example (in Oracle):
+```sql
+SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
+```
+
+---
+
+### 5. **SQLite**
+- **Default Isolation Level**: **SERIALIZABLE**
+- **Explanation**: SQLite uses **Serializable** isolation level as the default, which is the highest level of isolation. It prevents **dirty reads**, **non-repeatable reads**, and **phantom reads**. However, SQLite may exhibit a behavior closer to **Read Committed** under certain conditions depending on the locking mechanism.
+
+#### Example (in SQLite):
+```sql
+PRAGMA read_uncommitted = false;  -- Enforces the default SERIALIZABLE isolation level
+```
+
+---
+
+### Summary of Default Isolation Levels by DBMS:
+
+| Database System      | Default Isolation Level  | Description                                          |
+|----------------------|--------------------------|------------------------------------------------------|
+| **MySQL**            | REPEATABLE READ          | Prevents dirty and non-repeatable reads, but allows phantom reads. |
+| **PostgreSQL**       | READ COMMITTED           | Prevents dirty reads, but allows non-repeatable and phantom reads. |
+| **SQL Server**       | READ COMMITTED           | Prevents dirty reads, but allows non-repeatable and phantom reads. |
+| **Oracle**           | READ COMMITTED           | Prevents dirty reads, but allows non-repeatable and phantom reads. |
+| **SQLite**           | SERIALIZABLE             | Prevents all types of read anomalies (dirty, non-repeatable, phantom). |
+
+---
+
+### Key Differences in Default Isolation Levels:
+- **Read Committed** (PostgreSQL, SQL Server, Oracle) allows higher concurrency, but **non-repeatable reads** and **phantom reads** can still occur.
+- **Repeatable Read** (MySQL) offers a stricter level of isolation by preventing **non-repeatable reads**, but it still allows **phantom reads**.
+- **Serializable** (SQLite) offers the highest level of isolation, where transactions are executed serially, one after the other, which completely eliminates **dirty reads**, **non-repeatable reads**, and **phantom reads**.
+
+### Changing Isolation Levels
+You can always change the isolation level in most DBMS systems to suit the needs of your specific transaction. However, remember that higher isolation levels (like **Serializable**) can reduce concurrency and degrade performance, while lower isolation levels (like **Read Uncommitted**) may lead to inconsistencies in the data.
+
+For example, you can set the isolation level for a transaction in SQL using:
+
+```sql
+SET TRANSACTION ISOLATION LEVEL <desired_level>;
+```
+
+Where `<desired_level>` can be one of the following:
+
+- **READ UNCOMMITTED**
+- **READ COMMITTED**
+- **REPEATABLE READ**
+- **SERIALIZABLE**
+
+It's essential to choose the appropriate isolation level based on the specific requirements for **data consistency** and **concurrency** in your application.
+
+## Hibernate** and JPA (Java Persistence API), transaction isolation levels
+
+In **Hibernate** and **JPA (Java Persistence API)**, transaction isolation levels can be configured either at the **JPA** level (using `@Transactional` or `EntityManager`) or at the **database** level (via JDBC connection). Since **JPA** and **Hibernate** interact with the underlying database, you can manage isolation levels through both **JPA annotations** and **Hibernate configuration**. Here’s how you can configure transaction isolation levels in both frameworks.
+
+---
+
+### **1. Using JPA with Transaction Isolation Levels**
+
+In **JPA**, transaction management is typically done with annotations or programmatically with the `EntityManager`. The isolation level can be set either via the **`@Transactional`** annotation or by specifying the transaction isolation at the **JPA Provider (like Hibernate)** level.
+
+#### A. **Using `@Transactional` Annotation in Spring (for Spring Data JPA)**
+
+If you're using **Spring Data JPA** or **Spring Transaction Management**, you can set the isolation level using the `@Transactional` annotation. This is the most common way to manage transaction isolation levels.
+
+- `@Transactional` provides an easy way to specify isolation levels in Spring-based JPA applications.
+- The `isolation` parameter of `@Transactional` is used to define the isolation level.
+
+#### Example:
+
+```java
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.annotation.Isolation;
+
+public class BankService {
+
+    // Set isolation level to SERIALIZABLE for this method
+    @Transactional(isolation = Isolation.SERIALIZABLE)
+    public void transferMoney(Account from, Account to, double amount) {
+        // Perform the money transfer logic here
+        from.debit(amount);
+        to.credit(amount);
+    }
+}
+```
+
+**Explanation**:
+- **Isolation Levels** can be set using the `Isolation` enum in `@Transactional`:
+  - `Isolation.DEFAULT`: The default isolation level of the underlying database.
+  - `Isolation.READ_UNCOMMITTED`: Allows dirty reads.
+  - `Isolation.READ_COMMITTED`: Prevents dirty reads but allows non-repeatable reads.
+  - `Isolation.REPEATABLE_READ`: Prevents dirty reads and non-repeatable reads, but allows phantom reads.
+  - `Isolation.SERIALIZABLE`: Provides the highest isolation level, ensuring no dirty reads, non-repeatable reads, or phantom reads.
+
+#### B. **Setting Isolation Levels in EntityManager (JPA)**
+
+In **JPA**, if you're using `EntityManager`, you can configure the isolation level at the **JPA provider level** (like **Hibernate**).
+
+For instance, in **Hibernate**, you can control the transaction isolation using the **`hibernate.transaction.isolation`** property in the `hibernate.cfg.xml` or programmatically in a JPA `EntityManager` transaction.
+
+##### **Using Hibernate's `hibernate.transaction.isolation`**
+
+You can set the transaction isolation level globally by configuring the `hibernate.transaction.isolation` property in your `hibernate.cfg.xml` or `persistence.xml`.
+
+##### Example: `hibernate.cfg.xml`
+```xml
+<hibernate-configuration>
+    <session-factory>
+        <!-- Other configurations -->
+
+        <!-- Set transaction isolation level globally -->
+        <property name="hibernate.transaction.isolation">2</property> <!-- 2 corresponds to READ_COMMITTED -->
+
+    </session-factory>
+</hibernate-configuration>
+```
+
+Here, `hibernate.transaction.isolation` corresponds to JDBC isolation levels, where:
+- `2` = `READ_COMMITTED`
+- `4` = `REPEATABLE_READ`
+- `8` = `SERIALIZABLE`
+- `1` = `READ_UNCOMMITTED`
+
+### **2. Using Hibernate Programmatically for Transaction Isolation Levels**
+
+If you're using **Hibernate** without Spring, you can configure the transaction isolation level programmatically using Hibernate's `Session` or `SessionFactory`.
+
+#### Example: Set Transaction Isolation in Hibernate Session
+
+```java
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+
+public class BankService {
+
+    public void transferMoney(Session session, Account from, Account to, double amount) {
+        Transaction tx = session.beginTransaction();
+        
+        try {
+            // Set isolation level to SERIALIZABLE
+            session.doWork(connection -> {
+                connection.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
+            });
+            
+            // Perform the money transfer logic here
+            from.debit(amount);
+            to.credit(amount);
+
+            tx.commit();  // Commit the transaction
+        } catch (Exception e) {
+            if (tx != null) tx.rollback();
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+**Explanation**:
+- The `session.doWork(connection)` method allows you to configure the JDBC connection settings directly, including the transaction isolation level.
+- `connection.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE)` sets the isolation level to **SERIALIZABLE**.
+
+#### Isolation Levels in JDBC:
+- **Connection.TRANSACTION_READ_UNCOMMITTED**: Allows dirty reads.
+- **Connection.TRANSACTION_READ_COMMITTED**: Prevents dirty reads, but allows non-repeatable reads.
+- **Connection.TRANSACTION_REPEATABLE_READ**: Prevents dirty and non-repeatable reads.
+- **Connection.TRANSACTION_SERIALIZABLE**: Ensures the highest level of isolation, where transactions are executed in a serializable manner.
+
+### **3. Using JPA with `@Query` and Isolation Levels**
+
+For custom queries, especially when using **Spring Data JPA**, you can specify isolation levels at the query level using the `@Query` annotation.
+
+#### Example with Spring Data JPA:
+
+```java
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.annotation.Isolation;
+
+public interface AccountRepository extends JpaRepository<Account, Long> {
+
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
+    @Query("SELECT a FROM Account a WHERE a.balance > :balance")
+    List<Account> findAccountsWithBalanceGreaterThan(@Param("balance") double balance);
+}
+```
+
+**Explanation**:
+- The `@Transactional(isolation = Isolation.REPEATABLE_READ)` annotation on the method ensures that the query runs under the **Repeatable Read** isolation level, preventing **non-repeatable reads**.
+
+---
+
+### **4. Using `@EntityManager` and `EntityTransaction` in JPA**
+
+For more fine-grained control over transactions in JPA, you can use the `EntityManager` and `EntityTransaction` objects. While JPA itself doesn’t provide direct methods to set isolation levels, Hibernate (as the JPA provider) allows setting isolation levels via the `EntityTransaction` object.
+
+#### Example with `EntityManager`:
+
+```java
+import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
+
+public class BankService {
+
+    private EntityManager entityManager;
+
+    public void transferMoney(Account from, Account to, double amount) {
+        EntityTransaction transaction = entityManager.getTransaction();
+        
+        try {
+            transaction.begin();
+
+            // Set isolation level for the transaction
+            entityManager.unwrap(Session.class).doWork(connection -> {
+                connection.setTransactionIsolation(Connection.TRANSACTION_REPEATABLE_READ);
+            });
+            
+            // Perform the money transfer
+            from.debit(amount);
+            to.credit(amount);
+            
+            transaction.commit();  // Commit the transaction
+        } catch (Exception e) {
+            if (transaction.isActive()) {
+                transaction.rollback();  // Rollback in case of error
+            }
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+**Explanation**:
+- `entityManager.unwrap(Session.class)` provides access to the Hibernate `Session` and allows setting the JDBC isolation level for the transaction.
+
+---
+
+### **Best Practices and Considerations**:
+- **Global vs. Local Isolation**: It’s often better to configure isolation levels at the **transaction** level rather than globally, as it allows for more granular control over performance and consistency.
+- **Default Isolation Level**: If you don’t set an isolation level, it will be determined by the underlying database or JDBC configuration. Common default isolation levels are `READ_COMMITTED` or `REPEATABLE_READ`.
+- **Performance vs. Consistency**: Higher isolation levels like `SERIALIZABLE` can cause **performance overhead** due to reduced concurrency. Typically, applications that require **strong consistency** (e.g., financial applications) should use higher isolation levels, while others can work with lower isolation levels (e.g., `READ_COMMITTED`).
+
+---
+
+### **Summary of Isolation Levels in JPA and Hibernate**:
+
+- **READ UNCOMMITTED**: Allows dirty reads.
+- **READ COMMITTED**: Prevents dirty reads, but allows non-repeatable reads.
+- **REPEATABLE READ**: Prevents dirty and non-repeatable reads, but allows phantom reads.
+- **SERIALIZABLE**: Prevents all anomalies (dirty reads, non-repeatable reads, and phantom reads), but reduces concurrency.
+
+By configuring isolation levels appropriately in **Hibernate** or **JPA**, you can achieve a good balance between **data consistency** and **performance** based on your application's needs.
+
 ### 4. **Use Design Patterns**
    - Familiarize yourself with common design patterns (e.g., Singleton, Factory, Observer) to solve recurring design problems effectively.
 
