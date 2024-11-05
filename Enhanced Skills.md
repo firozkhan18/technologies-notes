@@ -20178,3 +20178,125 @@ To provide a **task sheet using Agile development methodology** for **frontend (
 ---
 
 This **Agile task sheet** provides a clear roadmap for your full-stack development process, allowing you to plan, execute, and track the progress of both **frontend (React/Angular)** and **backend (Spring Boot Microservices)** tasks while maintaining flexibility and focus on delivering high-quality software iteratively.
+
+The `@SpringBootApplication` annotation is the primary annotation used to mark a Spring Boot application’s main class. It is a **composite annotation** that combines several other important annotations to set up and configure a Spring Boot application with minimal effort.
+
+### **Purpose of `@SpringBootApplication`**
+This annotation simplifies the configuration of a Spring Boot application. It is equivalent to the following three annotations:
+- **`@Configuration`**: Indicates that the class is a source of bean definitions for the application context.
+- **`@EnableAutoConfiguration`**: Tells Spring Boot to automatically configure the application based on the classpath settings, beans, and various properties.
+- **`@ComponentScan`**: Enables component scanning to automatically detect and register beans in the Spring context.
+
+---
+
+### **Explanation of Components in `@SpringBootApplication`**
+
+1. **`@Configuration`**:
+   - Marks the class as a configuration class, which can define beans using `@Bean` methods.
+   - Essentially tells Spring that this class can be used to configure the application context.
+
+2. **`@EnableAutoConfiguration`**:
+   - Automatically configures Spring application based on the classpath. 
+   - For example, if `spring-boot-starter-web` is on the classpath, Spring Boot will configure embedded Tomcat, a web environment, and various other necessary beans.
+   - You typically do not need to specify `@EnableAutoConfiguration` manually because `@SpringBootApplication` already includes it.
+
+3. **`@ComponentScan`**:
+   - Tells Spring where to search for components, configurations, and services.
+   - By default, it scans the package of the annotated class and its sub-packages for Spring components.
+   - Components are classes annotated with `@Component`, `@Service`, `@Repository`, `@Controller`, and other such annotations.
+
+---
+
+### **Usage Example of `@SpringBootApplication`**
+
+Here’s a typical structure of a Spring Boot application using `@SpringBootApplication`:
+
+```java
+package com.example.demo;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication  // This annotation enables auto-configuration, component scanning, and configuration
+public class DemoApplication {
+
+    public static void main(String[] args) {
+        // Launches the Spring Boot application
+        SpringApplication.run(DemoApplication.class, args);
+    }
+}
+```
+
+### **Explanation of the Example**:
+- **`@SpringBootApplication`** is placed on the main class `DemoApplication`, which is the entry point of the Spring Boot application.
+- **`SpringApplication.run()`** is used to launch the application. It bootstraps the Spring context, which starts the application and automatically configures beans based on the environment and dependencies.
+
+### **Behind the Scenes:**
+
+- When you run this application (e.g., with `mvn spring-boot:run` or using an IDE), Spring Boot will:
+  - Automatically configure beans like a data source, web server (e.g., embedded Tomcat), etc., depending on the dependencies present in the project.
+  - Scan the package `com.example.demo` (and its sub-packages) for any components, such as `@RestController`, `@Service`, `@Repository`, and other Spring beans.
+  - If the application is a web application, it will also configure a web server, such as Tomcat, Jetty, or Undertow, as an embedded server.
+
+---
+
+### **Key Features and Benefits of `@SpringBootApplication`**
+
+1. **Simplifies Configuration**:
+   - **Automatic Configuration**: Spring Boot automatically configures application components based on your environment and dependencies. For instance, if a database driver is on the classpath, Spring Boot will configure a DataSource for you.
+   
+2. **Component Scanning**:
+   - By default, Spring Boot scans the package where the `@SpringBootApplication` annotation is applied and all its sub-packages for Spring-managed beans (`@Component`, `@Service`, `@Repository`, etc.). This is a critical feature for automatically wiring dependencies.
+
+3. **Easy to Use**:
+   - Spring Boot applications use convention-over-configuration, so developers don’t need to explicitly define configurations unless required. This leads to fewer XML configurations and faster development.
+
+4. **Quick Start for New Projects**:
+   - The `@SpringBootApplication` annotation serves as an easy-to-use entry point for Spring Boot applications. By using this single annotation, you quickly set up the application’s main configuration.
+
+---
+
+### **How `@SpringBootApplication` Affects the Application Startup**
+
+When you run the Spring Boot application, Spring Boot performs the following steps automatically:
+
+1. **Component Scanning**: It scans the specified package and sub-packages for Spring beans (like `@Component`, `@Service`, `@Repository`, `@Controller`, etc.). These beans are then registered in the application context.
+  
+2. **Auto-Configuration**: Based on the classpath and environment, Spring Boot applies the appropriate configurations. For example:
+   - If `spring-boot-starter-web` is present, it configures a web environment with an embedded server.
+   - If `spring-boot-starter-data-jpa` is present, it automatically configures the data source, JPA, and transaction management beans.
+
+3. **Running the Application**: The application is started by invoking `SpringApplication.run()`.
+
+---
+
+### **Customizing Component Scanning**
+
+Although `@SpringBootApplication` automatically scans the package of the main application class and its sub-packages, you can customize this behavior by specifying specific base packages to scan.
+
+For example, if you want to scan only certain packages or exclude certain packages, you can use `@ComponentScan` along with `@SpringBootApplication`:
+
+```java
+@SpringBootApplication
+@ComponentScan(basePackages = "com.example.custom")
+public class CustomApplication {
+    public static void main(String[] args) {
+        SpringApplication.run(CustomApplication.class, args);
+    }
+}
+```
+
+This will scan only `com.example.custom` and its sub-packages for Spring components.
+
+---
+
+### **Conclusion**
+
+The `@SpringBootApplication` annotation is a cornerstone of Spring Boot’s philosophy of **convention over configuration**. By using this annotation, you get automatic configuration, component scanning, and simplified setup for your Spring Boot applications.
+
+It combines:
+- `@Configuration`: marks the class as a configuration class.
+- `@EnableAutoConfiguration`: enables Spring Boot’s automatic configuration of the application based on the classpath and environment.
+- `@ComponentScan`: scans the current package and its sub-packages for Spring components.
+
+By using `@SpringBootApplication`, developers can focus on writing business logic and building features, rather than worrying about boilerplate configuration.
