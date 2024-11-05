@@ -6966,10 +6966,469 @@ Implementing the Model-View-Controller (MVC) architecture is essential for creat
 ### 7. **Routing and URL Mapping**
    Use annotations (like `@RequestMapping` and `@GetMapping`) to define URL routes that map to controller methods. This enables clear navigation between views.
 
+In **Spring Boot**, routing and URL mapping are handled using annotations like `@RequestMapping`, `@GetMapping`, `@PostMapping`, `@PutMapping`, `@DeleteMapping`, etc. These annotations map HTTP requests to specific controller methods, allowing for clear and manageable routing in your application.
+
+### 1. **Basic Routing with Annotations**
+   Spring provides several HTTP method-specific annotations (like `@GetMapping`, `@PostMapping`, etc.) to map requests to controller methods.
+
+   Here’s how you can set up basic routing and URL mapping in Spring Boot:
+
+### **1.1. @RequestMapping (General Mapping)**
+   - `@RequestMapping` is the most general-purpose annotation that can be used to handle all HTTP methods (GET, POST, PUT, DELETE, etc.) at once.
+   - It allows you to specify a path and an HTTP method (optional).
+
+   **Example of `@RequestMapping`:**
+
+   ```java
+   import org.springframework.web.bind.annotation.RequestMapping;
+   import org.springframework.web.bind.annotation.RestController;
+
+   @RestController
+   @RequestMapping("/api")  // Base URL for all routes in this controller
+   public class MyController {
+
+       @RequestMapping("/hello")  // Matches GET requests to /api/hello
+       public String sayHello() {
+           return "Hello, World!";
+       }
+
+       @RequestMapping("/goodbye")  // Matches GET requests to /api/goodbye
+       public String sayGoodbye() {
+           return "Goodbye, World!";
+       }
+   }
+   ```
+
+   In the above example, we define two routes:
+   - `GET /api/hello` → returns `"Hello, World!"`
+   - `GET /api/goodbye` → returns `"Goodbye, World!"`
+
+### **1.2. HTTP Method-Specific Mapping Annotations**
+
+Spring Boot simplifies mapping for specific HTTP methods by using method-specific annotations:
+
+#### **@GetMapping** (GET requests)
+   - Used to handle HTTP GET requests.
+   - Commonly used to retrieve resources.
+
+   **Example:**
+
+   ```java
+   import org.springframework.web.bind.annotation.GetMapping;
+   import org.springframework.web.bind.annotation.RestController;
+
+   @RestController
+   public class MyController {
+
+       @GetMapping("/greet")  // Maps GET requests to /greet
+       public String greet() {
+           return "Hello from GET!";
+       }
+   }
+   ```
+
+   **URL**: `GET /greet`  
+   **Response**: `"Hello from GET!"`
+
+#### **@PostMapping** (POST requests)
+   - Used to handle HTTP POST requests.
+   - Commonly used to submit data to the server.
+
+   **Example:**
+
+   ```java
+   import org.springframework.web.bind.annotation.PostMapping;
+   import org.springframework.web.bind.annotation.RequestBody;
+   import org.springframework.web.bind.annotation.RestController;
+
+   @RestController
+   public class MyController {
+
+       @PostMapping("/create")  // Maps POST requests to /create
+       public String createEntity(@RequestBody String entity) {
+           // Assume entity is a simple string for demonstration
+           return "Entity " + entity + " created!";
+       }
+   }
+   ```
+
+   **URL**: `POST /create`  
+   **Request Body**: `"NewEntity"`  
+   **Response**: `"Entity NewEntity created!"`
+
+#### **@PutMapping** (PUT requests)
+   - Used to handle HTTP PUT requests.
+   - Commonly used to update an existing resource.
+
+   **Example:**
+
+   ```java
+   import org.springframework.web.bind.annotation.PutMapping;
+   import org.springframework.web.bind.annotation.PathVariable;
+   import org.springframework.web.bind.annotation.RestController;
+
+   @RestController
+   public class MyController {
+
+       @PutMapping("/update/{id}")  // Maps PUT requests to /update/{id}
+       public String updateEntity(@PathVariable String id) {
+           return "Entity with ID " + id + " updated!";
+       }
+   }
+   ```
+
+   **URL**: `PUT /update/{id}`  
+   **Path Variable**: `id=1`  
+   **Response**: `"Entity with ID 1 updated!"`
+
+#### **@DeleteMapping** (DELETE requests)
+   - Used to handle HTTP DELETE requests.
+   - Commonly used to delete a resource.
+
+   **Example:**
+
+   ```java
+   import org.springframework.web.bind.annotation.DeleteMapping;
+   import org.springframework.web.bind.annotation.PathVariable;
+   import org.springframework.web.bind.annotation.RestController;
+
+   @RestController
+   public class MyController {
+
+       @DeleteMapping("/delete/{id}")  // Maps DELETE requests to /delete/{id}
+       public String deleteEntity(@PathVariable String id) {
+           return "Entity with ID " + id + " deleted!";
+       }
+   }
+   ```
+
+   **URL**: `DELETE /delete/{id}`  
+   **Path Variable**: `id=1`  
+   **Response**: `"Entity with ID 1 deleted!"`
+
+### **1.3. Path Variables & Query Parameters**
+   Spring provides a way to handle dynamic values in URLs through **Path Variables** (`{}`) and **Request Parameters** (`?key=value`).
+
+#### **Path Variables**
+
+Path variables are dynamic parts of the URL and are denoted by curly braces `{}`.
+
+```java
+@GetMapping("/greet/{name}")
+public String greet(@PathVariable String name) {
+    return "Hello, " + name + "!";
+}
+```
+
+**URL**: `GET /greet/John`  
+**Response**: `"Hello, John!"`
+
+#### **Request Parameters**
+
+Query parameters are included in the URL after the `?` symbol, like `?key=value`.
+
+```java
+@GetMapping("/greet")
+public String greet(@RequestParam String name) {
+    return "Hello, " + name + "!";
+}
+```
+
+**URL**: `GET /greet?name=John`  
+**Response**: `"Hello, John!"`
+
+### 2. **Handling Multiple HTTP Methods in One Method (Optional)**
+   If you want to handle different HTTP methods (e.g., GET, POST) for the same URL, you can use `@RequestMapping` with the `method` attribute, or simply use method-specific annotations.
+
+```java
+@RequestMapping(value = "/greet", method = RequestMethod.GET)
+public String getGreeting() {
+    return "Hello, GET!";
+}
+
+@RequestMapping(value = "/greet", method = RequestMethod.POST)
+public String postGreeting(@RequestBody String name) {
+    return "Hello, " + name + " from POST!";
+}
+```
+
+### 3. **Wildcard Mapping**
+   You can also use wildcards for URL mappings if you need to map multiple routes with similar patterns.
+
+```java
+@GetMapping("/api/**")
+public String handleWildCard(@RequestParam String id) {
+    return "Request received with ID: " + id;
+}
+```
+
+This matches requests like `/api/abc`, `/api/xyz`, etc.
+
+### 4. **Combining Annotations with @ControllerAdvice for Global Handling**
+   You can combine routing with **global exception handling** via `@ControllerAdvice`, which is useful for centralized error handling.
+
+For instance, you might want to handle a `404` error globally:
+
+```java
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
+
+@ControllerAdvice
+public class GlobalExceptionHandler {
+
+    @ExceptionHandler(ResourceNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public String handleResourceNotFound() {
+        return "Resource not found!";
+    }
+}
+```
+
+### 5. **Combining All URL Mappings in One Controller**
+
+Here is an example of how you can map different types of HTTP methods in a Spring controller:
+
+```java
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("/api")
+public class MyController {
+
+    @GetMapping("/greet")
+    public String greet(@RequestParam String name) {
+        return "Hello, " + name + "!";
+    }
+
+    @PostMapping("/create")
+    public String createEntity(@RequestBody String entity) {
+        return "Entity " + entity + " created!";
+    }
+
+    @PutMapping("/update/{id}")
+    public String updateEntity(@PathVariable String id) {
+        return "Entity with ID " + id + " updated!";
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public String deleteEntity(@PathVariable String id) {
+        return "Entity with ID " + id + " deleted!";
+    }
+}
+```
+
+### Summary
+
+- **`@RequestMapping`**: The most general-purpose annotation to map requests to handler methods (supports all HTTP methods).
+- **`@GetMapping`, `@PostMapping`, `@PutMapping`, `@DeleteMapping`**: Specific annotations for the respective HTTP methods.
+- **Path Variables**: Use `@PathVariable` to extract values from the URL path.
+- **Query Parameters**: Use `@RequestParam` to access query parameters.
+- **`@ControllerAdvice`**: Used to handle global exceptions across all controllers.
+
+These annotations allow you to cleanly define routes and handle various HTTP request types in a Spring Boot application, enabling clear and maintainable navigation and routing logic.
+
 ### 8. **Validation and Error Handling**
    Implement validation in the model or controller to ensure that user input meets the required criteria. Use `@Valid` for validation annotations in Spring MVC.
 
    Also, implement global exception handling using `@ControllerAdvice` to manage errors gracefully.
+
+In Spring Boot applications, it's common to use **validation** to ensure user input is correct and meets predefined constraints. Additionally, handling **errors** globally is an important aspect of maintaining clean and consistent error messages across the application. Here's how you can achieve **validation** and **error handling** in a Spring Boot application.
+
+### 1. **Validation in Spring Boot**
+
+Spring provides built-in support for validation using **Java Bean Validation (JSR 303/JSR 380)** annotations, such as `@NotNull`, `@Size`, `@Email`, `@Min`, `@Max`, etc. These annotations can be applied directly on model classes or request bodies to validate user inputs.
+
+#### **Example: Validation in Model (DTO)**
+
+Let’s say you have a `User` model (DTO) for which you want to validate incoming data.
+
+```java
+import javax.validation.constraints.Email;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
+
+public class UserDTO {
+
+    @NotEmpty(message = "Name cannot be empty")
+    @Size(min = 2, max = 50, message = "Name must be between 2 and 50 characters")
+    private String name;
+
+    @NotEmpty(message = "Email cannot be empty")
+    @Email(message = "Invalid email format")
+    private String email;
+
+    @Min(value = 18, message = "Age must be greater than or equal to 18")
+    private int age;
+
+    // Getters and setters
+}
+```
+
+In the above example:
+- `@NotEmpty` is used to ensure the field is not null or empty.
+- `@Size` is used to define the valid size for the name.
+- `@Email` ensures the email is valid.
+- `@Min` ensures the user's age is at least 18.
+
+#### **Using @Valid in the Controller**
+
+Now, in the controller, you use `@Valid` to trigger validation on the incoming request body. Additionally, you can handle the validation errors using `BindingResult`.
+
+```java
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import javax.validation.Valid;
+
+@RestController
+@RequestMapping("/users")
+public class UserController {
+
+    @PostMapping("/create")
+    public ResponseEntity<String> createUser(@Valid @RequestBody UserDTO userDTO, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            // Handle validation errors
+            StringBuilder errorMessage = new StringBuilder("Validation failed: ");
+            bindingResult.getAllErrors().forEach(error -> errorMessage.append(error.getDefaultMessage()).append(" "));
+            return ResponseEntity.badRequest().body(errorMessage.toString());
+        }
+        
+        // Proceed with creating user if no validation errors
+        return ResponseEntity.ok("User created successfully");
+    }
+}
+```
+
+In this example:
+- `@Valid` ensures that `userDTO` is validated against the constraints defined in the `UserDTO` class.
+- `BindingResult` captures the validation errors. If any errors are found, they can be accessed and processed (e.g., sending a detailed error message to the user).
+
+### 2. **Global Exception Handling with @ControllerAdvice**
+
+To handle errors globally, you can create a class annotated with `@ControllerAdvice`. This will allow you to catch and handle exceptions across the entire application, providing a centralized way to manage errors.
+
+#### **Example: Global Exception Handling**
+
+```java
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+@RestControllerAdvice
+public class GlobalExceptionHandler {
+
+    // Handle validation exceptions globally
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<String> handleValidationException(MethodArgumentNotValidException ex) {
+        StringBuilder errorMessage = new StringBuilder("Validation failed: ");
+        ex.getBindingResult().getAllErrors().forEach(error -> errorMessage.append(error.getDefaultMessage()).append(" "));
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage.toString());
+    }
+
+    // Handle other exceptions globally (e.g., 404, 500)
+    @ExceptionHandler(Exception.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ResponseEntity<String> handleGenericException(Exception ex) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An unexpected error occurred: " + ex.getMessage());
+    }
+}
+```
+
+In this example:
+- **`@RestControllerAdvice`** is used to create global exception handling in Spring.
+- **`MethodArgumentNotValidException`** is caught when validation fails. We extract the validation errors from `BindingResult` and return a custom error message.
+- **`@ExceptionHandler`** allows you to specify different exception types. You can handle any other exceptions like `NullPointerException`, `ResourceNotFoundException`, etc., in a similar way.
+- If no specific exception matches, the generic `Exception` handler catches it and returns a server error (`500`).
+
+### 3. **Custom Exception Handling**
+
+You can define your own custom exceptions to provide more granular control over specific types of errors.
+
+#### **Example: Custom Exception for Resource Not Found**
+
+```java
+public class ResourceNotFoundException extends RuntimeException {
+    public ResourceNotFoundException(String message) {
+        super(message);
+    }
+}
+```
+
+Then, modify your global exception handler to handle `ResourceNotFoundException`.
+
+```java
+@ExceptionHandler(ResourceNotFoundException.class)
+@ResponseStatus(HttpStatus.NOT_FOUND)
+public ResponseEntity<String> handleResourceNotFoundException(ResourceNotFoundException ex) {
+    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+}
+```
+
+### 4. **Response Format**
+
+You can also standardize the response for errors by creating a custom response body. Here’s an example of a standard error response format.
+
+#### **ErrorResponse Class**
+
+```java
+public class ErrorResponse {
+    private String message;
+    private String details;
+
+    public ErrorResponse(String message, String details) {
+        this.message = message;
+        this.details = details;
+    }
+
+    // Getters and setters
+}
+```
+
+Then modify the exception handler to return this error response.
+
+```java
+@ExceptionHandler(MethodArgumentNotValidException.class)
+public ResponseEntity<ErrorResponse> handleValidationException(MethodArgumentNotValidException ex) {
+    StringBuilder errorMessage = new StringBuilder("Validation failed: ");
+    ex.getBindingResult().getAllErrors().forEach(error -> errorMessage.append(error.getDefaultMessage()).append(" "));
+    ErrorResponse errorResponse = new ErrorResponse("Validation Error", errorMessage.toString());
+    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+}
+```
+
+### 5. **Validation Example with Controller**
+
+```java
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+
+@RestController
+@RequestMapping("/api")
+public class ExampleController {
+
+    @PostMapping("/create")
+    public ResponseEntity<String> createEntity(@Valid @RequestBody UserDTO userDTO) {
+        // The validation will be automatically performed
+        return ResponseEntity.ok("User created successfully");
+    }
+}
+```
+
+### Summary:
+
+- **Validation**: Use annotations like `@NotEmpty`, `@Email`, `@Size`, etc., to validate input fields in the model (DTO) class. Apply `@Valid` in controllers to trigger validation, and handle errors with `BindingResult`.
+- **Global Error Handling**: Use `@ControllerAdvice` to handle exceptions globally. You can create custom exception handlers and return custom error messages or formats (e.g., JSON) based on the exception type.
+- **Custom Error Responses**: Standardize error responses using an `ErrorResponse` class to ensure consistency in the error format across your API.
+
+By implementing these practices, you can ensure your application properly validates inputs and handles errors gracefully, making it more robust and user-friendly.
 
 ### 9. **Testing**
    Write unit tests for your models, controllers, and services to ensure that each component behaves as expected. Use tools like JUnit and Mockito.
