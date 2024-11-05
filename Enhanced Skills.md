@@ -1558,6 +1558,304 @@ public class BankService {
 
 By configuring isolation levels appropriately in **Hibernate** or **JPA**, you can achieve a good balance between **data consistency** and **performance** based on your application's needs.
 
+## Hibernate and JPA, a composite primary key
+
+In **Hibernate** and **JPA**, a **composite primary key** is used when a single field is not sufficient to uniquely identify an entity, and instead, a combination of multiple fields is used. There are two common ways to represent a composite primary key:
+
+1. **Using an `@Embeddable` class** with `@EmbeddedId`
+2. **Using `@IdClass`**
+
+Both methods are supported by **Hibernate** and **JPA** and allow you to create composite primary keys in your entity classes. Here's a detailed explanation of each approach.
+
+---
+
+### **1. Using `@EmbeddedId` and `@Embeddable`**
+
+This is the more common approach. You create a separate class to represent the composite key, marked with the `@Embeddable` annotation, and then use it as the primary key in the entity class with the `@EmbeddedId` annotation.
+
+#### Steps:
+1. Create an `@Embeddable` class to represent the composite key.
+2. Use `@EmbeddedId` in your entity class to specify the composite key.
+
+#### Example:
+
+##### 1. **Create the Composite Key Class (`@Embeddable`)**:
+
+```java
+import javax.persistence.Embeddable;
+import java.io.Serializable;
+import java.util.Objects;
+
+@Embeddable
+public class OrderItemId implements Serializable {
+
+    private Long orderId;
+    private Long productId;
+
+    // Default constructor
+    public OrderItemId() {}
+
+    public OrderItemId(Long orderId, Long productId) {
+        this.orderId = orderId;
+        this.productId = productId;
+    }
+
+    // Getters and Setters
+    public Long getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(Long orderId) {
+        this.orderId = orderId;
+    }
+
+    public Long getProductId() {
+        return productId;
+    }
+
+    public void setProductId(Long productId) {
+        this.productId = productId;
+    }
+
+    // equals() and hashCode() should be implemented based on the composite key fields
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        OrderItemId that = (OrderItemId) o;
+        return Objects.equals(orderId, that.orderId) && Objects.equals(productId, that.productId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(orderId, productId);
+    }
+}
+```
+
+- The `OrderItemId` class is marked with `@Embeddable`, indicating that it will be used as a composite key.
+- It's `Serializable` to ensure compatibility with JPA.
+- The `equals()` and `hashCode()` methods are essential to ensure that the composite key is correctly used in collections and comparisons.
+
+##### 2. **Create the Entity Class Using `@EmbeddedId`**:
+
+```java
+import javax.persistence.Entity;
+import javax.persistence.EmbeddedId;
+
+@Entity
+public class OrderItem {
+
+    @EmbeddedId
+    private OrderItemId id;  // Composite key
+
+    private int quantity;
+    private double price;
+
+    // Default constructor
+    public OrderItem() {}
+
+    public OrderItem(OrderItemId id, int quantity, double price) {
+        this.id = id;
+        this.quantity = quantity;
+        this.price = price;
+    }
+
+    // Getters and Setters
+    public OrderItemId getId() {
+        return id;
+    }
+
+    public void setId(OrderItemId id) {
+        this.id = id;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+}
+```
+
+- `@EmbeddedId` is used in the `OrderItem` entity to specify the composite primary key.
+- The `OrderItemId` class, which represents the composite key, is embedded into the `OrderItem` entity.
+
+##### Key Points:
+- **`@Embeddable`** class is a simple Java class that contains the fields for the composite primary key.
+- **`@EmbeddedId`** in the entity class refers to the embedded composite key object.
+
+---
+
+### **2. Using `@IdClass`**
+
+Another way to define a composite primary key is by using the `@IdClass` annotation. In this approach, the composite key is specified as a separate class, and you use the individual fields of that class in the entity class.
+
+#### Steps:
+1. Create an `@IdClass` to represent the composite key.
+2. Define the individual fields of the composite key in the entity class and annotate them with `@Id`.
+
+#### Example:
+
+##### 1. **Create the Composite Key Class (`@IdClass`)**:
+
+```java
+import java.io.Serializable;
+import java.util.Objects;
+
+public class OrderItemId implements Serializable {
+
+    private Long orderId;
+    private Long productId;
+
+    // Default constructor
+    public OrderItemId() {}
+
+    public OrderItemId(Long orderId, Long productId) {
+        this.orderId = orderId;
+        this.productId = productId;
+    }
+
+    // Getters and Setters
+    public Long getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(Long orderId) {
+        this.orderId = orderId;
+    }
+
+    public Long getProductId() {
+        return productId;
+    }
+
+    public void setProductId(Long productId) {
+        this.productId = productId;
+    }
+
+    // equals() and hashCode() should be implemented based on the composite key fields
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        OrderItemId that = (OrderItemId) o;
+        return Objects.equals(orderId, that.orderId) && Objects.equals(productId, that.productId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(orderId, productId);
+    }
+}
+```
+
+- This class is a simple POJO with `orderId` and `productId` as the fields forming the composite key.
+- The `OrderItemId` class is **not annotated with `@Embeddable`**, instead it's used in conjunction with `@IdClass` on the entity class.
+
+##### 2. **Create the Entity Class Using `@IdClass`**:
+
+```java
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.IdClass;
+
+@Entity
+@IdClass(OrderItemId.class)  // Associate the composite key class
+public class OrderItem {
+
+    @Id
+    private Long orderId;
+
+    @Id
+    private Long productId;
+
+    private int quantity;
+    private double price;
+
+    // Default constructor
+    public OrderItem() {}
+
+    public OrderItem(Long orderId, Long productId, int quantity, double price) {
+        this.orderId = orderId;
+        this.productId = productId;
+        this.quantity = quantity;
+        this.price = price;
+    }
+
+    // Getters and Setters
+    public Long getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(Long orderId) {
+        this.orderId = orderId;
+    }
+
+    public Long getProductId() {
+        return productId;
+    }
+
+    public void setProductId(Long productId) {
+        this.productId = productId;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+}
+```
+
+- In the `OrderItem` entity class, `@Id` annotations are applied to the individual fields that make up the composite key.
+- The `@IdClass` annotation links the entity to the composite key class (`OrderItemId`), which contains the primary key fields.
+
+##### Key Points:
+- **`@IdClass`** is used to specify that the entity class uses a composite primary key.
+- Each field that is part of the composite key is annotated with `@Id` in the entity class.
+- The `OrderItemId` class must implement `Serializable` and override `equals()` and `hashCode()` methods to ensure proper behavior in collections.
+
+---
+
+### **Comparison of `@EmbeddedId` vs `@IdClass`**
+
+| Feature               | `@EmbeddedId`                                       | `@IdClass`                                          |
+|-----------------------|-----------------------------------------------------|----------------------------------------------------|
+| **Composite Key Class**| Created using `@Embeddable` and embedded into the entity class with `@EmbeddedId` | Simple POJO class with `@IdClass` and `@Id` annotations in the entity |
+| **Use Case**           | Best when the composite key is used across multiple entities | Used when you want to refer to the key class without embedding it |
+| **Performance**        | Slightly better performance due to object embedding | Requires additional join between the key class and the entity class |
+| **Readability**        | Makes the code more readable by directly embedding the key | More explicit and might be easier to understand when looking at the entity class |
+
+---
+
+### **Conclusion**
+
+Both `@EmbeddedId` and `@IdClass` allow you to create a composite primary key in Hibernate and JPA. However:
+- **`@EmbeddedId`** is generally considered more elegant and is commonly used when the composite key is part of the entity and its
+
+ structure is relatively simple.
+- **`@IdClass`** provides more flexibility, allowing for explicit mapping of the composite key in the entity but requiring more boilerplate.
+
 ### 4. **Use Design Patterns**
    - Familiarize yourself with common design patterns (e.g., Singleton, Factory, Observer) to solve recurring design problems effectively.
 
