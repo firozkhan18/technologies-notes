@@ -3496,7 +3496,458 @@ Car is driving.
 - **IoC** is the overall principle that shifts the control of object management from the application code to an external container or framework.
 - **DI** is the implementation of IoC where the framework injects the required dependencies into objects rather than the objects creating those dependencies themselves.
 - Using **IoC** and **DI** promotes **loose coupling**, **modularization**, and **testability**, making it easier to maintain and extend the application.
-- 
+
+### Dependency Injection (DI) and Inversion of Control (IoC) in Spring Framework
+
+In the Spring Framework, **Dependency Injection (DI)** and **Inversion of Control (IoC)** are two key concepts that enable loose coupling between components and facilitate easier testing, maintenance, and development. Here's an in-depth explanation of both concepts:
+
+---
+
+### **1. Inversion of Control (IoC)**
+
+**Inversion of Control** refers to the design principle where the flow of control in a system is inverted compared to traditional procedural programming. In a typical application, you have objects or classes that manage their own dependencies (i.e., they create or find the required components). With IoC, this control is "inverted"—the framework (Spring, in this case) is responsible for managing object creation and lifecycle, rather than the objects themselves.
+
+In simpler terms:
+- In regular programming, a class is responsible for creating its own dependencies.
+- In IoC, the framework (Spring) is responsible for injecting those dependencies, meaning it takes control of object creation and lifecycle management.
+
+### **2. Dependency Injection (DI)**
+
+**Dependency Injection (DI)** is a design pattern that allows a class to receive (or "inject") its dependencies from an external source, rather than creating them itself. It is a specific form of IoC.
+
+In Spring, DI is achieved through various methods:
+- **Constructor Injection**
+- **Setter Injection**
+- **Field Injection**
+
+By injecting dependencies into classes, Spring helps to achieve loose coupling, making the system more modular and easier to test.
+
+#### How DI works:
+- **Constructor Injection**: Dependencies are provided through the constructor of the class.
+- **Setter Injection**: Dependencies are provided via setter methods after the object is constructed.
+- **Field Injection**: Dependencies are injected directly into fields of a class (this is typically done using annotations like `@Autowired`).
+
+The DI allows Spring to manage and inject the appropriate dependencies into your objects without you having to manually handle them.
+
+---
+
+### **How IoC and DI work together in Spring**
+
+In Spring, IoC and DI work together to manage the lifecycle of beans (objects). Spring's **IoC container** is responsible for:
+1. **Managing beans**: Objects are called "beans" in Spring terminology. The container is responsible for creating, configuring, and managing the lifecycle of these beans.
+2. **Injecting dependencies**: When a class needs a dependency, Spring automatically injects it via DI.
+
+### **Spring IoC Container**
+
+The core of the Spring IoC container is a factory that manages beans and their lifecycle. There are two main types of IoC containers in Spring:
+1. **BeanFactory**: The simplest container, used for lightweight applications.
+2. **ApplicationContext**: A more advanced and feature-rich container, which includes additional functionality like event propagation, internationalization support, and more.
+
+Beans in Spring are typically defined in one of two ways:
+- **XML Configuration**: Traditional way to define beans (less common in modern Spring applications).
+- **Annotation-based Configuration**: The modern and most commonly used way (e.g., `@Component`, `@Service`, `@Repository`, `@Autowired`).
+
+---
+
+### **DI in Spring with Example**
+
+Let’s break down how Dependency Injection works in Spring using annotations.
+
+#### 1. Define the dependencies (beans)
+In this example, we’ll create two beans: `Car` and `Engine`, where `Car` depends on `Engine`.
+
+```java
+@Component
+public class Engine {
+    public void start() {
+        System.out.println("Engine is starting...");
+    }
+}
+
+@Component
+public class Car {
+    private Engine engine;
+
+    @Autowired  // Automatically inject the Engine bean
+    public Car(Engine engine) {
+        this.engine = engine;
+    }
+
+    public void drive() {
+        engine.start();
+        System.out.println("Car is driving...");
+    }
+}
+```
+
+#### 2. Create a Spring configuration class to run the application
+
+```java
+@Configuration
+@ComponentScan(basePackages = "com.example")  // Tell Spring to scan the package for beans
+public class AppConfig {
+}
+```
+
+#### 3. The Spring Boot Application or main class to run the context:
+
+```java
+@SpringBootApplication
+public class Application {
+
+    public static void main(String[] args) {
+        ApplicationContext context = SpringApplication.run(Application.class, args);
+        Car car = context.getBean(Car.class);  // Get the Car bean from Spring context
+        car.drive();
+    }
+}
+```
+
+In this example:
+- The `@Autowired` annotation on the constructor of the `Car` class tells Spring to inject the `Engine` dependency automatically.
+- The `@Component` annotations mark `Engine` and `Car` as beans to be managed by Spring’s IoC container.
+- `@SpringBootApplication` and `@ComponentScan` ensure that Spring Boot scans the relevant classes and wires them together.
+
+### **Advantages of DI and IoC in Spring**
+
+- **Loose coupling**: Objects don't need to create or manage their dependencies. Instead, dependencies are injected from the outside, reducing the dependencies between classes.
+- **Easier to test**: Since dependencies are injected, it's easy to replace them with mock objects or stubs for unit testing.
+- **Flexibility**: You can easily change the configuration (e.g., switching implementations of a dependency) without altering the dependent classes.
+- **Centralized configuration**: Spring provides a centralized way to configure the application's components (beans), leading to cleaner code.
+
+### **Types of DI in Spring**
+
+1. **Constructor Injection**: The dependencies are provided through the constructor of the class. It's the most preferred and recommended way of DI because it's immutable and enforces the availability of required dependencies.
+   
+   ```java
+   @Component
+   public class Car {
+       private final Engine engine;
+
+       @Autowired
+       public Car(Engine engine) {
+           this.engine = engine;
+       }
+   }
+   ```
+
+2. **Setter Injection**: The dependencies are injected via setter methods after the bean is created. This allows optional dependencies and can be useful for certain scenarios, though it's not as strongly recommended as constructor injection.
+
+   ```java
+   @Component
+   public class Car {
+       private Engine engine;
+
+       @Autowired
+       public void setEngine(Engine engine) {
+           this.engine = engine;
+       }
+   }
+   ```
+
+3. **Field Injection**: Spring injects dependencies directly into the fields using reflection, which can be convenient but is less transparent than constructor injection. It's typically used with `@Autowired` or other annotations.
+   
+   ```java
+   @Component
+   public class Car {
+       @Autowired
+       private Engine engine;
+   }
+   ```
+
+### **Conclusion**
+
+- **Inversion of Control (IoC)**: A design principle where control of object creation and dependency management is inverted from the application to a container or framework.
+- **Dependency Injection (DI)**: A technique used in IoC where dependencies are injected into a class rather than the class creating them.
+- **Spring Framework**: Implements IoC and DI through its IoC container, which manages the creation, configuration, and lifecycle of beans in a Spring application.
+
+By using IoC and DI, Spring encourages a more modular, maintainable, and testable application structure.
+
+### **Types of Dependency Injection (DI) in Spring Boot**
+
+In Spring, Dependency Injection (DI) is a core feature that enables loose coupling and allows Spring to manage the injection of dependencies into objects (or beans). Spring supports several types of DI:
+
+1. **Constructor Injection**  
+2. **Setter Injection**  
+3. **Field Injection**
+
+Each type of DI has its use cases and benefits. 
+
+---
+
+### **1. Constructor Injection**
+
+**Constructor Injection** is the most recommended and preferred method in Spring for DI. In this method, the dependencies are provided to a bean via its constructor. It ensures that all required dependencies are available when the bean is created, which makes the bean immutable and ensures that the object is always in a valid state.
+
+- **Advantages**: 
+  - It ensures that all dependencies are provided at the time of object creation.
+  - It makes the bean immutable (i.e., once the object is created, its dependencies cannot be changed).
+  - It's great for **required dependencies**, as they are injected during object creation.
+
+- **Example**:
+  ```java
+  @Component
+  public class Car {
+      private final Engine engine;
+
+      @Autowired
+      public Car(Engine engine) {  // Constructor injection
+          this.engine = engine;
+      }
+
+      public void drive() {
+          engine.start();
+          System.out.println("Car is driving...");
+      }
+  }
+  ```
+
+In this example:
+- `@Autowired` is used to automatically inject the `Engine` dependency via the constructor.
+
+---
+
+### **2. Setter Injection**
+
+**Setter Injection** involves providing dependencies via setter methods after the object has been instantiated. This approach allows for optional dependencies and is useful when you want to inject dependencies after the bean is created, or when some dependencies may not be required for the bean to function.
+
+- **Advantages**: 
+  - Allows for optional dependencies.
+  - Makes the object mutable.
+  - Can be useful when the dependency is not required for the object to function correctly.
+
+- **Example**:
+  ```java
+  @Component
+  public class Car {
+      private Engine engine;
+
+      @Autowired
+      public void setEngine(Engine engine) {  // Setter injection
+          this.engine = engine;
+      }
+
+      public void drive() {
+          engine.start();
+          System.out.println("Car is driving...");
+      }
+  }
+  ```
+
+In this example:
+- The `Engine` dependency is injected via the `setEngine()` method.
+
+---
+
+### **3. Field Injection**
+
+**Field Injection** involves directly injecting dependencies into the fields of the class. This is done using the `@Autowired` annotation on fields, and Spring will inject the dependencies at runtime.
+
+- **Advantages**:
+  - Very convenient and less verbose.
+  - Dependencies are injected directly into the class fields.
+
+- **Disadvantages**:
+  - Makes unit testing more difficult, as the dependencies cannot be easily injected or mocked during testing (because the fields are private).
+  - Tends to make the code harder to maintain as it hides the dependencies.
+
+- **Example**:
+  ```java
+  @Component
+  public class Car {
+      @Autowired  // Field injection
+      private Engine engine;
+
+      public void drive() {
+          engine.start();
+          System.out.println("Car is driving...");
+      }
+  }
+  ```
+
+In this example:
+- The `Engine` dependency is injected directly into the `engine` field via the `@Autowired` annotation.
+
+---
+
+### **Autowiring in Spring Boot**
+
+Spring provides the `@Autowired` annotation to automatically inject beans into Spring-managed components (such as `@Component`, `@Service`, `@Repository`, etc.). Autowiring can be done by constructor, setter, or field injection.
+
+**Autowiring** works by resolving the bean dependency based on type. Spring automatically searches for a bean of the matching type and injects it into the target bean. If there is more than one candidate, Spring will throw an exception unless you provide further instructions (such as using `@Qualifier` to specify the exact bean).
+
+#### **Autowiring Modes**
+
+1. **Autowiring by Type (`@Autowired`)**  
+   By default, Spring uses autowiring by type. It looks for a bean of the required type and injects it.
+
+   - **Example**:
+     ```java
+     @Autowired
+     private Engine engine;
+     ```
+
+2. **Autowiring by Name**  
+   This is less common in Spring but can be used with XML configuration or by specifying a bean name explicitly using the `@Qualifier` annotation.
+
+   - **Example** (using `@Qualifier`):
+     ```java
+     @Autowired
+     @Qualifier("specificEngine")  // Qualifies which Engine to inject
+     private Engine engine;
+     ```
+
+3. **Autowiring by Constructor**  
+   When using constructor injection with `@Autowired`, Spring will automatically inject the dependencies that match the constructor’s parameter types.
+
+   - **Example**:
+     ```java
+     @Autowired
+     public Car(Engine engine) {  // Constructor injection
+         this.engine = engine;
+     }
+     ```
+
+4. **Autowiring by Setter**  
+   When using setter injection, you can annotate the setter method with `@Autowired`.
+
+   - **Example**:
+     ```java
+     @Autowired
+     public void setEngine(Engine engine) {  // Setter injection
+         this.engine = engine;
+     }
+     ```
+
+---
+
+### **Scopes in Spring Boot**
+
+In Spring, **scope** defines the lifecycle of a bean, determining how and when the bean is created and destroyed. Spring provides several types of bean scopes.
+
+#### **1. Singleton (default)**
+
+- **Scope**: A single instance of the bean is created for the entire Spring container. The same instance is shared across all components that depend on this bean.
+- **Use Case**: This is the default scope, and it is most commonly used. It is appropriate when you want to have only one instance of a bean in the entire application.
+
+- **Example**:
+  ```java
+  @Component
+  public class Engine {
+      public void start() {
+          System.out.println("Engine started");
+      }
+  }
+  ```
+  By default, the `Engine` bean will have the singleton scope.
+
+#### **2. Prototype**
+
+- **Scope**: A new instance of the bean is created each time it is requested from the Spring container.
+- **Use Case**: Useful when you want a fresh instance of the bean every time it’s used.
+
+- **Example**:
+  ```java
+  @Scope("prototype")
+  @Component
+  public class Engine {
+      public void start() {
+          System.out.println("Engine started");
+      }
+  }
+  ```
+
+In this example, every time you request the `Engine` bean, a new instance is created.
+
+#### **3. Request**
+
+- **Scope**: The bean is created once per HTTP request. It is typically used for web applications.
+- **Use Case**: Useful for beans that should be created and used only within the scope of a single HTTP request (e.g., web controllers, request-handling beans).
+
+- **Example**:
+  ```java
+  @Scope("request")
+  @Component
+  public class RequestService {
+      public String processRequest() {
+          return "Processing request...";
+      }
+  }
+  ```
+
+#### **4. Session**
+
+- **Scope**: The bean is created once per HTTP session. This means that the bean instance is shared across all requests within the same session but not across sessions.
+- **Use Case**: Useful for storing user-specific data (e.g., session-related data).
+
+- **Example**:
+  ```java
+  @Scope("session")
+  @Component
+  public class UserSessionService {
+      public String getSessionDetails() {
+          return "User session details...";
+      }
+  }
+  ```
+
+#### **5. Application**
+
+- **Scope**: The bean is created once for the entire application context and is shared across multiple servlet contexts (in a multi-tenant application). This scope is primarily used in Spring's context for shared services that are global to the application.
+- **Use Case**: Used for application-wide services or beans that should live for the entire lifecycle of the application.
+
+- **Example**:
+  ```java
+  @Scope("application")
+  @Component
+  public class AppConfig {
+      public String getAppConfigDetails() {
+          return "Application-level configuration details";
+      }
+  }
+  ```
+
+#### **6. Websocket**
+
+- **Scope**: The bean is tied to the lifecycle of a WebSocket connection. This is a special scope used for WebSocket connections.
+- **Use Case**: Useful for maintaining state specific to a WebSocket session.
+
+- **Example**:
+  ```java
+  @Scope("websocket")
+  @Component
+  public class WebSocketService {
+      public String getWebSocketDetails() {
+          return "WebSocket session details...";
+      }
+  }
+  ```
+
+---
+
+### **Summary**
+
+1. **Types of Dependency Injection in Spring Boot**:
+   - **Constructor Injection**: Dependencies are injected through the constructor.
+   - **Setter Injection**: Dependencies are injected via setter methods.
+   - **Field Injection**: Dependencies are injected directly into fields.
+
+2. **Autowiring**:
+   - Spring's `@Autowired` annotation is used to automatically inject beans by type, and optionally by name (using `@Qualifier`).
+   - You can autowire by constructor, setter, or field.
+
+3. **Bean Scopes in Spring Boot**:
+   - **Singleton** (default): One instance per Spring container.
+   - **Prototype**: A new instance every time it is requested.
+   - **Request**: A new instance for each HTTP request.
+   - **Session**: A new instance for each HTTP session.
+   - **Application**:
+
+ One instance for the entire application.
+   - **WebSocket**: Tied to the lifecycle of a WebSocket connection.
+
+By understanding DI types, autowiring, and bean scopes, you can better manage the lifecycle and dependencies of your components in a Spring Boot application.
+
 
 ### 7. **Write Unit Tests**
    - Use testing frameworks like JUnit or TestNG to write unit tests for your code. Aim for high test coverage to ensure your code behaves as expected.
