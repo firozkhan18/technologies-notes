@@ -106,7 +106,7 @@ Developing and maintaining Java-based applications requires adherence to best pr
 
 Object-Oriented Programming (OOP) concepts — **Encapsulation**, **Inheritance**, and **Polymorphism** — with Java examples. These principles help you design modular and reusable code by organizing your program around objects.
 
-Object-Oriented Programming (OOP) is a paradigm that helps organize software design around objects, which can contain both data (attributes) and methods (functions) that operate on the data. It promotes modularity, reusability, and maintainability by encouraging concepts like encapsulation, inheritance, and polymorphism. Let's go through these principles with examples to better understand how they can be used to design modular and reusable code.
+Object-Oriented Programming (OOP) is a paradigm that helps organize software design around objects, which can contain both data (attributes) and methods (functions) that operate on the data. It promotes modularity, reusability, and maintainability by encouraging concepts like **Encapsulation**, **Inheritance**, and **Polymorphism**. Let's go through these principles with examples to better understand how they can be used to design modular and reusable code.
 
 ### 1. Encapsulation in Java
 **Encapsulation** is the bundling of data (attributes) and methods (functions) that operate on the data into a single unit (i.e., a class). It also involves restricting access to some of an object's components, which helps protect the internal state of the object from unintended modification. This is typically done through access modifiers**access modifiers** like `private`, `protected`, and `public`.
