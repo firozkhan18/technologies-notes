@@ -554,6 +554,579 @@ These principles work together to promote cleaner, more modular, and flexible co
    - **DRY (Don't Repeat Yourself)**: Avoid code duplication by creating reusable methods or classes.
    - **KISS (Keep It Simple, Stupid)**: Write simple and straightforward code to enhance readability.
 
+## SOLID Principles
+
+The **SOLID** principles are a set of five design principles that help in creating more understandable, flexible, and maintainable software. They are often used in Object-Oriented Programming (OOP) to guide developers in writing clean, scalable, and robust code. The SOLID acronym stands for:
+
+1. **S** - **Single Responsibility Principle (SRP)**
+2. **O** - **Open/Closed Principle (OCP)**
+3. **L** - **Liskov Substitution Principle (LSP)**
+4. **I** - **Interface Segregation Principle (ISP)**
+5. **D** - **Dependency Inversion Principle (DIP)**
+
+Let's go through each principle with examples in **Java** to better understand their importance.
+
+---
+
+### 1. **Single Responsibility Principle (SRP)**
+A class should have **one** reason to change, meaning it should have only one job or responsibility. This principle ensures that each class has a clear, focused role, making the system easier to understand and modify.
+
+#### Example:
+
+```java
+// Violating SRP: This class handles both employee data and payroll logic.
+class Employee {
+    private String name;
+    private double salary;
+
+    public Employee(String name, double salary) {
+        this.name = name;
+        this.salary = salary;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public double getSalary() {
+        return salary;
+    }
+
+    // This method violates SRP because it deals with payroll calculations, which should be handled elsewhere.
+    public void processPayroll() {
+        // Payroll logic...
+        System.out.println("Processing payroll for: " + name + " with salary: " + salary);
+    }
+}
+
+// Correcting the violation by splitting responsibilities:
+class Employee {
+    private String name;
+    private double salary;
+
+    public Employee(String name, double salary) {
+        this.name = name;
+        this.salary = salary;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public double getSalary() {
+        return salary;
+    }
+}
+
+class PayrollProcessor {
+    public void processPayroll(Employee employee) {
+        // Payroll logic...
+        System.out.println("Processing payroll for: " + employee.getName() + " with salary: " + employee.getSalary());
+    }
+}
+```
+
+**Explanation**:
+- In the **violating** example, the `Employee` class is responsible for both storing employee data and processing payroll. This violates SRP because the class has more than one reason to change.
+- The **corrected** example splits the responsibilities. The `Employee` class only handles employee data, while the `PayrollProcessor` class handles payroll processing. This ensures each class has only one reason to change.
+
+---
+
+### 2. **Open/Closed Principle (OCP)**
+A class should be **open for extension** but **closed for modification**. This means you should be able to extend a class's behavior without modifying its existing code. Typically, this is achieved through inheritance and polymorphism.
+
+#### Example:
+
+```java
+// Violating OCP: We need to modify this class every time we add a new shape.
+class AreaCalculator {
+    public double calculateArea(Rectangle rectangle) {
+        return rectangle.getLength() * rectangle.getWidth();
+    }
+
+    public double calculateArea(Circle circle) {
+        return Math.PI * Math.pow(circle.getRadius(), 2);
+    }
+}
+
+class Rectangle {
+    private double length;
+    private double width;
+
+    public Rectangle(double length, double width) {
+        this.length = length;
+        this.width = width;
+    }
+
+    public double getLength() {
+        return length;
+    }
+
+    public double getWidth() {
+        return width;
+    }
+}
+
+class Circle {
+    private double radius;
+
+    public Circle(double radius) {
+        this.radius = radius;
+    }
+
+    public double getRadius() {
+        return radius;
+    }
+}
+```
+
+In the above code, every time we add a new shape, we have to modify the `AreaCalculator` class. This violates the **Open/Closed Principle**.
+
+#### Corrected Example Using Polymorphism:
+
+```java
+// Correctly following OCP: Add new shapes by extending Shape without modifying existing code.
+abstract class Shape {
+    public abstract double calculateArea();
+}
+
+class Rectangle extends Shape {
+    private double length;
+    private double width;
+
+    public Rectangle(double length, double width) {
+        this.length = length;
+        this.width = width;
+    }
+
+    @Override
+    public double calculateArea() {
+        return length * width;
+    }
+}
+
+class Circle extends Shape {
+    private double radius;
+
+    public Circle(double radius) {
+        this.radius = radius;
+    }
+
+    @Override
+    public double calculateArea() {
+        return Math.PI * Math.pow(radius, 2);
+    }
+}
+
+class AreaCalculator {
+    public double calculateArea(Shape shape) {
+        return shape.calculateArea();
+    }
+}
+```
+
+**Explanation**:
+- In the **corrected** version, the `Shape` class is **open for extension** (you can add new shapes like `Triangle`, `Square`, etc.) but **closed for modification** (you don't need to change the `AreaCalculator` class).
+- Each shape implements the `calculateArea()` method, and `AreaCalculator` uses polymorphism to calculate the area.
+
+---
+
+### 3. **Liskov Substitution Principle (LSP)**
+Objects of a **subclass** should be able to **replace** objects of the **superclass** without affecting the correctness of the program. This means the subclass should extend the functionality of the superclass without changing its behavior in a way that breaks expectations.
+
+#### Example:
+
+```java
+class Bird {
+    public void fly() {
+        System.out.println("Bird is flying");
+    }
+}
+
+class Ostrich extends Bird {
+    @Override
+    public void fly() {
+        // Ostriches can't fly, but we're overriding the method anyway, which breaks LSP.
+        throw new UnsupportedOperationException("Ostriches can't fly!");
+    }
+}
+```
+
+In the above code, `Ostrich` inherits from `Bird`, but it can't fly, which causes an issue if we try to use an `Ostrich` where a `Bird` is expected.
+
+#### Corrected Example:
+
+```java
+abstract class Bird {
+    public abstract void move();
+}
+
+class Sparrow extends Bird {
+    @Override
+    public void move() {
+        System.out.println("Sparrow is flying");
+    }
+}
+
+class Ostrich extends Bird {
+    @Override
+    public void move() {
+        System.out.println("Ostrich is running");
+    }
+}
+```
+
+**Explanation**:
+- In the **corrected** example, both `Sparrow` and `Ostrich` extend `Bird` and override the `move()` method appropriately without violating the expectations of the superclass. This way, any `Bird` can be replaced with `Sparrow` or `Ostrich` without breaking the program's behavior.
+
+---
+
+### 4. **Interface Segregation Principle (ISP)**
+No client should be forced to depend on methods it does not use. Instead of creating large interfaces with many methods, break them into smaller, more specific interfaces.
+
+#### Example:
+
+```java
+// Violating ISP: A single large interface for all types of machines.
+interface Machine {
+    void print();
+    void scan();
+    void fax();
+}
+
+class Printer implements Machine {
+    public void print() {
+        System.out.println("Printing...");
+    }
+
+    public void scan() {
+        // Printer doesn't need scan, but must implement it due to ISP violation.
+        throw new UnsupportedOperationException("This machine can't scan");
+    }
+
+    public void fax() {
+        // Printer doesn't need fax, but must implement it due to ISP violation.
+        throw new UnsupportedOperationException("This machine can't fax");
+    }
+}
+```
+
+#### Corrected Example Using Multiple Interfaces:
+
+```java
+// Correcting ISP by creating smaller, more specific interfaces.
+interface Printer {
+    void print();
+}
+
+interface Scanner {
+    void scan();
+}
+
+interface Fax {
+    void fax();
+}
+
+class SimplePrinter implements Printer {
+    @Override
+    public void print() {
+        System.out.println("Printing...");
+    }
+}
+
+class MultifunctionPrinter implements Printer, Scanner, Fax {
+    @Override
+    public void print() {
+        System.out.println("Printing...");
+    }
+
+    @Override
+    public void scan() {
+        System.out.println("Scanning...");
+    }
+
+    @Override
+    public void fax() {
+        System.out.println("Faxing...");
+    }
+}
+```
+
+**Explanation**:
+- In the **violating** example, the `Printer` class is forced to implement methods it doesn't need, like `scan()` and `fax()`.
+- In the **corrected** example, we split the large `Machine` interface into smaller, more specific interfaces (`Printer`, `Scanner`, and `Fax`), so each class only implements the methods it actually uses.
+
+---
+
+### 5. **Dependency Inversion Principle (DIP)**
+High-level modules should not depend on low-level modules. Both should depend on abstractions. Additionally, abstractions should not depend on details. Details should depend on abstractions.
+
+#### Example:
+
+```java
+// Violating DIP: High-level class directly depends on low-level class.
+class LightBulb {
+    public void turnOn() {
+        System.out.println("LightBulb turned on");
+    }
+
+    public void turnOff() {
+        System.out.println("LightBulb turned off");
+    }
+}
+
+class Switch {
+    private LightBulb bulb;
+
+    public Switch(LightBulb bulb) {
+        this.bulb = bulb;
+    }
+
+    public void operate() {
+        // The Switch depends on LightBulb directly.
+        bulb.turnOn();
+    }
+}
+```
+
+#### Corrected Example Using Abstraction:
+
+```java
+interface Switchable {
+    void turnOn();
+    void turn
+
+Off();
+}
+
+class LightBulb implements Switchable {
+    @Override
+    public void turnOn() {
+        System.out.println("LightBulb turned on");
+    }
+
+    @Override
+    public void turnOff() {
+        System.out.println("LightBulb turned off");
+    }
+}
+
+class Fan implements Switchable {
+    @Override
+    public void turnOn() {
+        System.out.println("Fan turned on");
+    }
+
+    @Override
+    public void turnOff() {
+        System.out.println("Fan turned off");
+    }
+}
+
+class Switch {
+    private Switchable device;
+
+    public Switch(Switchable device) {
+        this.device = device;
+    }
+
+    public void operate() {
+        device.turnOn();
+    }
+}
+```
+
+**Explanation**:
+- In the **violating** example, the `Switch` class directly depends on `LightBulb`, making it difficult to change or extend.
+- In the **corrected** example, the `Switch` class depends on the `Switchable` interface, which decouples the high-level module (`Switch`) from the low-level modules (`LightBulb`, `Fan`). This allows the `Switch` to work with any device that implements the `Switchable` interface.
+
+---
+
+### Summary of SOLID Principles:
+
+1. **Single Responsibility Principle (SRP)**: A class should have only one reason to change.
+2. **Open/Closed Principle (OCP)**: A class should be open for extension but closed for modification.
+3. **Liskov Substitution Principle (LSP)**: Subtypes must be substitutable for their base types without altering the correctness of the program.
+4. **Interface Segregation Principle (ISP)**: Clients should not be forced to implement interfaces they do not use.
+5. **Dependency Inversion Principle (DIP)**: High-level modules should not depend on low-level modules. Both should depend on abstractions.
+
+By adhering to these SOLID principles, you can create more maintainable, flexible, and scalable software.
+
+## ACID properties:
+
+The **ACID** properties are a set of principles that ensure that database transactions are processed reliably. They are crucial in the context of relational databases to guarantee that the database remains in a consistent state even in the presence of errors, power outages, or crashes.
+
+### ACID stands for:
+
+1. **A** - **Atomicity**
+2. **C** - **Consistency**
+3. **I** - **Isolation**
+4. **D** - **Durability**
+
+Let's explore each of these properties with examples to better understand them.
+
+---
+
+### 1. **Atomicity**
+**Atomicity** ensures that a transaction is treated as a single "unit", meaning that either all of its operations are executed, or none of them are. If any part of the transaction fails, the whole transaction is rolled back, leaving the database unchanged.
+
+#### Example:
+Let's say we have two operations within a bank transaction: transferring money from Account A to Account B. The transaction will have two steps:
+- **Step 1**: Subtract an amount from Account A.
+- **Step 2**: Add the same amount to Account B.
+
+If the system crashes after Step 1 but before Step 2 is executed, we don't want Account A to lose money without it being credited to Account B. This is where **atomicity** comes in — the transaction will either complete both steps or roll back all changes if an error occurs.
+
+```java
+public void transferMoney(Account from, Account to, double amount) {
+    try {
+        // Step 1: Debit from account A
+        from.debit(amount);
+
+        // Step 2: Credit to account B
+        to.credit(amount);
+
+        // Commit the transaction if both steps succeed
+    } catch (Exception e) {
+        // Rollback if any step fails
+        rollbackTransaction();
+    }
+}
+```
+
+**Explanation**:  
+In this example, if there's an error in the second step (crediting Account B), the entire transaction is rolled back, so Account A won't lose any money.
+
+---
+
+### 2. **Consistency**
+**Consistency** ensures that a transaction always leaves the database in a valid state, adhering to all predefined rules, constraints, and triggers. It ensures that the database moves from one consistent state to another.
+
+#### Example:
+Consider a rule that says a bank account's balance cannot be negative. If a transaction tries to withdraw money from an account that would result in a negative balance, the transaction should fail and roll back to maintain consistency.
+
+```java
+public void withdraw(Account account, double amount) {
+    if (account.getBalance() - amount < 0) {
+        throw new IllegalStateException("Insufficient funds");
+    }
+    account.debit(amount);
+}
+```
+
+**Explanation**:  
+The **consistency** property ensures that no transaction can violate the database's integrity rules (like account balances going negative). If a withdrawal attempt violates the balance rule, the transaction is canceled, and the database remains consistent.
+
+---
+
+### 3. **Isolation**
+**Isolation** ensures that concurrent transactions do not interfere with each other. The results of one transaction should not be visible to other transactions until the transaction is committed. This prevents anomalies like **dirty reads**, **non-repeatable reads**, and **phantom reads** in multi-user environments.
+
+#### Example:
+Consider two transactions running concurrently:
+- **Transaction 1**: Transfers money from Account A to Account B.
+- **Transaction 2**: Reads the balance of Account A during Transaction 1.
+
+Without isolation, **Transaction 2** might see an intermediate state of Account A's balance (before the transfer is completed), which could lead to incorrect results. The isolation property ensures that **Transaction 2** sees either the original or the final state, but not an intermediate state.
+
+```java
+// Transaction 1: Transfer
+BEGIN TRANSACTION;
+UPDATE account SET balance = balance - 100 WHERE id = 'A';  -- Debit 100 from Account A
+UPDATE account SET balance = balance + 100 WHERE id = 'B';  -- Credit 100 to Account B
+COMMIT;
+
+// Transaction 2: Read Account A balance
+BEGIN TRANSACTION;
+SELECT balance FROM account WHERE id = 'A';  // Should not see an inconsistent balance
+COMMIT;
+```
+
+**Explanation**:  
+The isolation property ensures that **Transaction 2** will either see the balance before **Transaction 1** or after **Transaction 1** is committed, but not an intermediate state where the balance is partially updated. Different levels of isolation can be used (e.g., **Read Committed**, **Serializable**) to control this behavior.
+
+---
+
+### 4. **Durability**
+**Durability** ensures that once a transaction is committed, its changes are permanent, even in the event of a system crash or power failure. This means that after a commit, the changes made by a transaction will persist in the database, and no data will be lost.
+
+#### Example:
+After transferring money from Account A to Account B, if the system crashes, **Durability** guarantees that the changes (debit from Account A and credit to Account B) will still be applied when the system recovers.
+
+```java
+// Transaction: Transfer money
+BEGIN TRANSACTION;
+UPDATE account SET balance = balance - 100 WHERE id = 'A';  // Debit 100 from Account A
+UPDATE account SET balance = balance + 100 WHERE id = 'B';  // Credit 100 to Account B
+COMMIT;  // Changes are now permanent
+
+// If the system crashes after the commit, upon recovery, the changes will be persisted
+```
+
+**Explanation**:  
+Once the **COMMIT** statement is executed, the changes are made permanent and will survive even if the system crashes immediately after the commit. When the system restarts, the transaction will have been successfully applied to the database.
+
+---
+
+### ACID in Action: Example of Bank Transfer
+
+Let’s consider an example of a bank transferring money between two accounts while applying the ACID principles.
+
+#### Example Scenario:
+- **Account A** has a balance of $500.
+- **Account B** has a balance of $300.
+- A transaction is initiated to transfer $200 from Account A to Account B.
+
+```java
+public void transferMoney(Account from, Account to, double amount) {
+    try {
+        // Begin transaction
+        beginTransaction();
+
+        // Step 1: Debit from Account A (Atomicity)
+        if (from.getBalance() < amount) {
+            throw new IllegalStateException("Insufficient funds");
+        }
+        from.debit(amount);  // Debit $200 from Account A
+
+        // Step 2: Credit to Account B (Atomicity)
+        to.credit(amount);  // Credit $200 to Account B
+
+        // Ensure no constraints are violated (Consistency)
+        if (from.getBalance() < 0) {
+            throw new IllegalStateException("Negative balance is not allowed");
+        }
+
+        // Commit the transaction (Durability)
+        commitTransaction();
+
+    } catch (Exception e) {
+        // Rollback in case of failure (Atomicity)
+        rollbackTransaction();
+        System.out.println("Transaction failed: " + e.getMessage());
+    }
+}
+```
+
+**ACID Breakdown**:
+- **Atomicity**: Either both the debit and credit are completed, or none of them are (if an error occurs).
+- **Consistency**: The bank’s rule of not allowing negative balances is enforced.
+- **Isolation**: If multiple users are making transfers at the same time, the transaction ensures they don’t see each other’s intermediate states (like Account A being partially debited).
+- **Durability**: Once the transaction is committed, the changes to both Account A and Account B are permanent, even if the system crashes afterward.
+
+---
+
+### Conclusion
+
+The **ACID** properties are crucial for maintaining the reliability and consistency of a relational database system. By ensuring that each transaction is:
+
+1. **Atomic**: All or nothing.
+2. **Consistent**: The database remains in a valid state.
+3. **Isolated**: Transactions do not interfere with each other.
+4. **Durable**: Changes are permanent once committed.
+
+These principles protect the integrity of the database and ensure that users can depend on it for accurate and reliable data storage, even in cases of failure or errors.
+
 ### 4. **Use Design Patterns**
    - Familiarize yourself with common design patterns (e.g., Singleton, Factory, Observer) to solve recurring design problems effectively.
 
