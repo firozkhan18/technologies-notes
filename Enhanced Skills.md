@@ -104,6 +104,447 @@ Developing and maintaining Java-based applications requires adherence to best pr
    - **Core Java Concepts**: Master the fundamentals, including data types, control structures, collections, exception handling, and concurrency.
    - **Object-Oriented Programming (OOP)**: Use OOP principles like encapsulation, inheritance, and polymorphism to design modular and reusable code.
 
+Object-Oriented Programming (OOP) concepts — **Encapsulation**, **Inheritance**, and **Polymorphism** — with Java examples. These principles help you design modular and reusable code by organizing your program around objects.
+
+Object-Oriented Programming (OOP) is a paradigm that helps organize software design around objects, which can contain both data (attributes) and methods (functions) that operate on the data. It promotes modularity, reusability, and maintainability by encouraging concepts like encapsulation, inheritance, and polymorphism. Let's go through these principles with examples to better understand how they can be used to design modular and reusable code.
+
+### 1. Encapsulation in Java
+**Encapsulation** is the bundling of data (attributes) and methods (functions) that operate on the data into a single unit (i.e., a class). It also involves restricting access to some of an object's components, which helps protect the internal state of the object from unintended modification. This is typically done through access modifiers**access modifiers** like `private`, `protected`, and `public`.
+
+**Benefits**: 
+- Protects object integrity by preventing outside interference.
+- Makes the code more modular and easier to maintain.
+
+#### Example:
+
+```java
+class Car {
+    // Private attributes (encapsulation)
+    private String make;
+    private String model;
+    private int year;
+
+    // Constructor to initialize the Car object
+    public Car(String make, String model, int year) {
+        this.make = make;
+        this.model = model;
+        this.year = year;
+    }
+
+    // Getter methods (accessors) for encapsulation
+    public String getMake() {
+        return make;
+    }
+
+    public String getModel() {
+        return model;
+    }
+
+    public int getYear() {
+        return year;
+    }
+
+    // Setter methods (mutators) for encapsulation
+    public void setYear(int year) {
+        if (year > 1885) {  // Ensure the year is realistic
+            this.year = year;
+        } else {
+            System.out.println("Invalid year");
+        }
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Car car = new Car("Toyota", "Camry", 2020);
+        System.out.println("Make: " + car.getMake());
+        car.setYear(2025); // Modify the year using the setter method
+        System.out.println("Updated Year: " + car.getYear());
+    }
+}
+```
+
+**Explanation**:
+- The attributes `make`, `model`, and `year` are **private**, meaning they cannot be directly accessed from outside the `Car` class.
+- **Getter** and **Setter** methods are used to access and modify these private attributes, ensuring data encapsulation.
+
+**Example:**
+
+```python
+class Car:
+    def __init__(self, make, model, year):
+        self.__make = make  # private attribute
+        self.__model = model  # private attribute
+        self.__year = year  # private attribute
+    
+    # Getter methods for encapsulation
+    def get_make(self):
+        return self.__make
+    
+    def get_model(self):
+        return self.__model
+    
+    def get_year(self):
+        return self.__year
+    
+    # Setter methods for encapsulation
+    def set_year(self, year):
+        if year > 1885:  # Ensures the car's year is realistic
+            self.__year = year
+        else:
+            print("Invalid year")
+
+# Usage:
+car = Car("Toyota", "Camry", 2020)
+print(car.get_make())  # Accessing encapsulated data
+car.set_year(2025)  # Modifying encapsulated data
+```
+
+In the example above, `__make`, `__model`, and `__year` are private attributes (denoted by the double underscore). The `get_` and `set_` methods allow controlled access to these private attributes.
+
+### 2. Inheritance in Java
+**Inheritance** is a mechanism that allows one class (the **child class**) to inherit attributes and methods from another class (the **parent class**). This helps in creating a hierarchical relationship between classes and promotes code reusability.
+
+**Benefits**:
+- Promotes reusability by allowing new classes to reuse the existing functionality of parent classes.
+- Helps create logical relationships between different classes.
+  
+#### Example:
+
+```java
+class Vehicle {
+    protected String make;
+    protected String model;
+
+    public Vehicle(String make, String model) {
+        this.make = make;
+        this.model = model;
+    }
+
+    public void startEngine() {
+        System.out.println("The engine is starting...");
+    }
+
+    public void stopEngine() {
+        System.out.println("The engine is stopping...");
+    }
+}
+
+class ElectricCar extends Vehicle {
+    private int batteryCapacity;
+
+    public ElectricCar(String make, String model, int batteryCapacity) {
+        super(make, model); // Call the parent class constructor
+        this.batteryCapacity = batteryCapacity;
+    }
+
+    public void charge() {
+        System.out.println("Charging the " + batteryCapacity + "kWh battery...");
+    }
+
+    // Override the startEngine method
+    @Override
+    public void startEngine() {
+        System.out.println("Electric engine starting silently...");
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        ElectricCar tesla = new ElectricCar("Tesla", "Model S", 85);
+        tesla.startEngine();  // Calls the overridden method
+        tesla.charge();
+    }
+}
+```
+
+**Explanation**:
+- The `ElectricCar` class **inherits** from the `Vehicle` class, meaning it gains all the properties and methods of `Vehicle`.
+- The `ElectricCar` class **overrides** the `startEngine()` method to provide its own specific implementation.
+- The `super()` keyword is used in the child class constructor to call the parent class constructor.
+
+**Example:**
+
+```python
+class Vehicle:
+    def __init__(self, make, model):
+        self.make = make
+        self.model = model
+    
+    def start_engine(self):
+        print("The engine is starting...")
+    
+    def stop_engine(self):
+        print("The engine is stopping...")
+    
+class ElectricCar(Vehicle):
+    def __init__(self, make, model, battery_capacity):
+        super().__init__(make, model)  # Calls the parent class constructor
+        self.battery_capacity = battery_capacity
+    
+    def charge(self):
+        print(f"Charging the {self.battery_capacity}kWh battery...")
+
+# Usage:
+car = ElectricCar("Tesla", "Model 3", 75)
+car.start_engine()  # Inherited method
+car.charge()  # Method specific to ElectricCar
+```
+
+In the example, the `ElectricCar` class inherits from the `Vehicle` class. The `ElectricCar` class inherits the `start_engine()` and `stop_engine()` methods from `Vehicle`, and also introduces its own `charge()` method specific to electric vehicles.
+
+### 3. Polymorphism in Java
+**Polymorphism** allows objects of different classes to be treated as objects of a common superclass. It also enables the ability to call the same method on different objects, with each object responding in its own way. 
+ (i.e. It also allows the same method to behave differently based on the object that invokes it.)
+ 
+There are two types of polymorphism:
+- **Method Overloading** - **Compile-time polymorphism** : Multiple methods with the same name but different parameters (not supported directly in Python, but can be achieved through default parameters or variable-length arguments).
+- **Method Overriding** - **Runtime polymorphism**: A child class provides its own implementation of a method that is already defined in its parent class.
+
+**Benefits**:
+- Enables flexibility and scalability by allowing the same method to behave differently based on the object type.
+- Makes code more extensible and easy to maintain.
+
+#### Example of Method Overriding (Runtime Polymorphism):
+
+```java
+class Animal {
+    public void sound() {
+        System.out.println("Animal makes a sound");
+    }
+}
+
+class Dog extends Animal {
+    @Override
+    public void sound() {
+        System.out.println("Woof! Woof!");
+    }
+}
+
+class Cat extends Animal {
+    @Override
+    public void sound() {
+        System.out.println("Meow! Meow!");
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Animal myDog = new Dog();
+        Animal myCat = new Cat();
+
+        // Polymorphic behavior: method overridden in subclasses
+        myDog.sound();  // Output: Woof! Woof!
+        myCat.sound();  // Output: Meow! Meow!
+    }
+}
+```
+
+**Explanation**:
+- `Dog` and `Cat` are subclasses of `Animal` and **override** the `sound()` method.
+- The method `sound()` is called polymorphically, meaning the method executed depends on the **actual object type** (either `Dog` or `Cat`), not the reference type (`Animal`).
+
+#### Example of Method Overloading (Compile-time Polymorphism):
+
+```java
+class Printer {
+    // Method to print a single integer
+    public void print(int number) {
+        System.out.println("Printing integer: " + number);
+    }
+
+    // Overloaded method to print a string
+    public void print(String text) {
+        System.out.println("Printing string: " + text);
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Printer printer = new Printer();
+        printer.print(123);        // Calls print(int)
+        printer.print("Hello!");   // Calls print(String)
+    }
+}
+```
+
+**Explanation**:
+- The `Printer` class has **two `print()` methods** with the same name but different parameters. This is an example of **method overloading** (compile-time polymorphism).
+- The appropriate method is selected based on the number and type of arguments passed.
+
+**Example:**
+
+```python
+class Animal:
+    def speak(self):
+        raise NotImplementedError("Subclass must implement abstract method")
+
+class Dog(Animal):
+    def speak(self):
+        return "Woof!"
+
+class Cat(Animal):
+    def speak(self):
+        return "Meow!"
+
+# Usage:
+def animal_sound(animal: Animal):
+    print(animal.speak())
+
+dog = Dog()
+cat = Cat()
+
+animal_sound(dog)  # Output: Woof!
+animal_sound(cat)  # Output: Meow!
+```
+
+In this example, both `Dog` and `Cat` classes override the `speak()` method from the `Animal` class. The function `animal_sound()` can call the `speak()` method on any object of type `Animal`, and the correct method is called based on the actual class of the object, thanks to polymorphism.
+
+---
+
+### Putting it all Together: A Library System Example
+
+Let's combine encapsulation, inheritance, and polymorphism into a library management system example where we handle different types of books:
+
+```java
+// Base class
+class Book {
+    private String title;
+    private String author;
+    private int pages;
+
+    public Book(String title, String author, int pages) {
+        this.title = title;
+        this.author = author;
+        this.pages = pages;
+    }
+
+    public void read() {
+        System.out.println("Reading " + title + "...");
+    }
+
+    public String getInfo() {
+        return "Title: " + title + ", Author: " + author + ", Pages: " + pages;
+    }
+}
+
+// Subclass for EBook
+class EBook extends Book {
+    private String fileFormat;
+
+    public EBook(String title, String author, int pages, String fileFormat) {
+        super(title, author, pages);
+        this.fileFormat = fileFormat;
+    }
+
+    @Override
+    public void read() {
+        System.out.println("Reading " + getInfo() + " in " + fileFormat + " format...");
+    }
+
+    @Override
+    public String getInfo() {
+        return super.getInfo() + ", File Format: " + fileFormat;
+    }
+}
+
+// Subclass for PrintedBook
+class PrintedBook extends Book {
+    private double weight;
+
+    public PrintedBook(String title, String author, int pages, double weight) {
+        super(title, author, pages);
+        this.weight = weight;
+    }
+
+    @Override
+    public void read() {
+        System.out.println("Reading the printed book " + getInfo() + "...");
+    }
+
+    @Override
+    public String getInfo() {
+        return super.getInfo() + ", Weight: " + weight + "kg";
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Book ebook = new EBook("Java Programming", "John Doe", 500, "PDF");
+        Book printedBook = new PrintedBook("Clean Code", "Robert C. Martin", 450, 0.8);
+
+        // Polymorphism in action
+        System.out.println(ebook.getInfo());
+        ebook.read();
+
+        System.out.println(printedBook.getInfo());
+        printedBook.read();
+    }
+}
+```
+
+**Explanation**:
+- **Encapsulation**: The `Book` class encapsulates attributes like `title`, `author`, and `pages` with private access, exposing them only through getter methods.
+- **Inheritance**: `EBook` and `PrintedBook` inherit from `Book`, allowing them to reuse common functionality while adding specific behaviors.
+- **Polymorphism**: The `read()` method is overridden in both `EBook` and `PrintedBook`. When calling `read()` on a `Book` reference, the appropriate method is executed based on the actual object type.
+
+```python
+class Book:
+    def __init__(self, title, author, pages):
+        self.title = title
+        self.author = author
+        self.pages = pages
+    
+    def get_info(self):
+        return f"Title: {self.title}, Author: {self.author}, Pages: {self.pages}"
+    
+    def read(self):
+        print(f"Reading {self.title}...")
+
+class EBook(Book):
+    def __init__(self, title, author, pages, file_format):
+        super().__init__(title, author, pages)
+        self.file_format = file_format
+    
+    def get_info(self):
+        return f"{super().get_info()}, Format: {self.file_format}"
+
+    def read(self):
+        print(f"Opening {self.title} in {self.file_format} format...")
+
+class PrintedBook(Book):
+    def __init__(self, title, author, pages, weight):
+        super().__init__(title, author, pages)
+        self.weight = weight
+    
+    def get_info(self):
+        return f"{super().get_info()}, Weight: {self.weight}kg"
+
+    def read(self):
+        print(f"Opening the printed book: {self.title}...")
+
+# Usage:
+ebooks = [EBook("Python Programming", "John Doe", 200, "PDF"), 
+          PrintedBook("C++ Basics", "Jane Smith", 300, 0.5)]
+
+for ebook in ebooks:
+    print(ebook.get_info())
+    ebook.read()
+```
+**Explanation**:
+- **Encapsulation**: The `Book` class encapsulates the `title`, `author`, and `pages` attributes, as well as methods like `get_info()` and `read()`.
+- **Inheritance**: `EBook` and `PrintedBook` inherit from the `Book` class and extend or override functionality.
+- **Polymorphism**: The `read()` method is overridden in both `EBook` and `PrintedBook` to provide different implementations, and we can treat both types as `Book` objects and call `read()` on them without knowing which type it is at runtime.
+- 
+### Summary
+
+In Java, OOP principles are essential for designing scalable, reusable, and maintainable code:
+- **Encapsulation** ensures that data is protected and can only be accessed or modified through controlled methods.(to protect and manage data.)
+- **Inheritance** allows classes to reuse and extend functionality from other classes, reducing redundancy.(to create a hierarchy of classes and reuse common functionality.)
+- **Polymorphism** enables different objects to be treated the same way but behave differently based on their actual type.(to allow objects of different types to be treated in a common way, enabling flexibility.)
+
+These principles work together to promote cleaner, more modular, and flexible code in Java applications.
+
 ### 2. **Follow Coding Standards**
    - **Naming Conventions**: Use clear and consistent naming conventions for classes, methods, variables, and constants (e.g., `CamelCase` for classes, `camelCase` for methods and variables).
    - **Code Formatting**: Use an IDE or formatter to maintain consistent code formatting (indentation, line length, etc.).
