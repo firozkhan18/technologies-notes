@@ -1,3 +1,6 @@
+## REACT
+
+---
 
 In JavaScript (and by extension, React), **`var`**, **`let`**, and **`const`** are all used to declare variables, but they differ in their **scoping**, **hoisting behavior**, and **mutability**. Understanding these differences is crucial when writing React components or any JavaScript code to ensure your variables behave as expected.
 
@@ -1271,6 +1274,11 @@ Now, `ChildA` and `ChildB` no longer need to handle the `message` prop. They can
 
 In larger React applications, using **React Context** or **Redux** helps manage shared state more efficiently and avoids the drawbacks of prop drilling.
 
+
+## SQL
+
+---
+
 In most relational databases, an **Employee** and **Department** are typically represented as two separate tables with a relationship between them. Typically, the **Employee** table contains employee-specific details, and the **Department** table contains department-specific details. Each employee is usually associated with a department.
 
 Here's an example schema for both **Employee** and **Department** tables:
@@ -1734,6 +1742,11 @@ To make a database **scalable** and improve its **performance** when dealing wit
 ### Conclusion
 
 To improve the scalability and performance of your database when handling large amounts of data, you need to focus on a combination of **optimized database design**, **efficient querying**, **caching**, **indexing**, **sharding**, and **scaling infrastructure**. The specific strategies you choose will depend on the type of workload, data access patterns, and the scale of your system. Regular monitoring, periodic maintenance, and careful optimization are key to ensuring that your database continues to perform well as it grows.
+
+
+## SPRING BOOT & MicroService
+
+---
 
 Performing a **load test** for RESTful services is essential to understand how well your API performs under varying levels of traffic and load. A load test helps identify performance bottlenecks, measure the system's scalability, and ensure that it can handle expected user volumes. 
 
