@@ -4,9 +4,6 @@
 
 ---
 
-<details>
-
-
 ### **Object-Oriented Programming (OOP) Concepts**
 
 Object-Oriented Programming (OOP) is a programming paradigm based on the concept of **objects**, which are instances of **classes**. OOP focuses on using objects and their interactions to design and implement software. It helps in organizing and structuring code efficiently, making it more maintainable, reusable, and scalable.
@@ -23147,5 +23144,3 @@ public class MyClass implements FunctionalA, FunctionalB {
 
 By understanding how to use default and static methods in functional interfaces, you can leverage the flexibility of Java interfaces while maintaining clean and effective code architecture.
 
-
-</details>
