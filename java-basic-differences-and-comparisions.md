@@ -10571,4 +10571,4 @@ System.out.println(count); // Output: 1
 - The **Stream API** provides a powerful way to process collections of data with operations that can be combined.
 - **Intermediate Operations** are lazy and return a new stream, while **Terminal Operations** are eager and produce a result or a side effect.
 
-Together, these concepts promote a more functional programming style in Java, making code more expressive and easier to read.
+
