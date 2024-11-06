@@ -1301,3 +1301,241 @@ public class ApiController {
 ### **Conclusion**
 
 Implementing region-based rate limiting in a microservice architecture ensures fair use of resources, protects against abuse, and allows you to scale services in different regions with varying capacities. By using Redis for tracking user requests, you can efficiently implement rate limiting with minimal performance overhead. This approach can be extended to include more sophisticated strategies like token buckets or sliding windows as needed.
+
+Sure! Below is a complete **Spring Boot microservice** example that implements:
+
+- **Rate Limiting**: Using Redis for rate limiting (region-based).
+- **Retry**: Automatically retry failed operations a configurable number of times.
+- **Circuit Breaker**: Open circuit breaker when failures exceed a certain threshold.
+- **Bulkhead**: Isolate critical parts of the system to avoid cascading failures (using `@Bulkhead` annotation from **Resilience4j**).
+
+### **Key Dependencies**
+
+To implement this, we’ll need the following dependencies in `pom.xml`:
+
+```xml
+<dependencies>
+    <!-- Spring Boot Web for REST APIs -->
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-web</artifactId>
+    </dependency>
+
+    <!-- Redis support for Rate Limiting -->
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-data-redis</artifactId>
+    </dependency>
+
+    <!-- Resilience4j for Circuit Breaker, Retry, Bulkhead -->
+    <dependency>
+        <groupId>io.github.resilience4j</groupId>
+        <artifactId>resilience4j-spring-boot2</artifactId>
+        <version>1.7.0</version>
+    </dependency>
+
+    <!-- Spring Boot Actuator for monitoring health checks -->
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-actuator</artifactId>
+    </dependency>
+
+    <!-- Spring Boot AOP for retry handling -->
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-aop</artifactId>
+    </dependency>
+</dependencies>
+```
+
+### **1. Redis Configuration (Rate Limiting)**
+
+In your `application.properties` or `application.yml`, configure Redis:
+
+```properties
+# Redis Configuration
+spring.redis.host=localhost
+spring.redis.port=6379
+spring.redis.password=
+spring.redis.database=0
+```
+
+### **2. Rate Limiting Service**
+
+This service checks if the request count from a user (based on their `region` and `userId`) exceeds the allowed limit using Redis. We'll track request counts with keys like `rate_limit:{region}:{userId}`.
+
+#### `RateLimiterService.java`:
+
+```java
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.stereotype.Service;
+import java.util.concurrent.TimeUnit;
+
+@Service
+public class RateLimiterService {
+
+    private static final String RATE_LIMIT_KEY_PREFIX = "rate_limit:";
+    private static final int MAX_REQUESTS = 100;  // Max requests per minute
+    private static final long WINDOW_DURATION = 1L;  // 1 minute window in seconds
+
+    @Autowired
+    private StringRedisTemplate redisTemplate;
+
+    // Method to perform rate limiting
+    public boolean isRequestAllowed(String region, String userId) {
+        String key = RATE_LIMIT_KEY_PREFIX + region + ":" + userId;
+
+        // Get current request count and timestamp
+        String currentCount = redisTemplate.opsForValue().get(key);
+        if (currentCount != null) {
+            int count = Integer.parseInt(currentCount);
+            if (count >= MAX_REQUESTS) {
+                // If the user has exceeded the limit, deny the request
+                return false;
+            }
+        }
+
+        // Increment request count and set expiration time (1 minute)
+        redisTemplate.opsForValue().increment(key, 1);
+        redisTemplate.expire(key, WINDOW_DURATION, TimeUnit.MINUTES);
+
+        return true; // Allow the request
+    }
+}
+```
+
+### **3. Resilience4j Configuration for Retry, Circuit Breaker, and Bulkhead**
+
+We will use **Resilience4j** for:
+- **Circuit Breaker**: Prevent system overload by cutting off calls when failures exceed a threshold.
+- **Retry**: Retry failed operations for a configured number of attempts.
+- **Bulkhead**: Isolate critical components to prevent cascading failures.
+
+#### `application.yml` (Resilience4j Configurations):
+
+```yaml
+resilience4j:
+  retry:
+    instances:
+      default:
+        maxAttempts: 3
+        waitDuration: 500ms
+        enabled: true
+
+  circuitbreaker:
+    instances:
+      default:
+        registerHealthIndicator: true
+        failureRateThreshold: 50  # 50% failure rate to trigger the circuit breaker
+        slidingWindowSize: 10
+        minimumNumberOfCalls: 5
+        waitDurationInOpenState: 10s
+        permittedNumberOfCallsInHalfOpenState: 5
+
+  bulkhead:
+    instances:
+      default:
+        maxConcurrentCalls: 5
+        maxWaitDuration: 500ms
+        enabled: true
+```
+
+### **4. Controller with Rate Limiting, Retry, Circuit Breaker, and Bulkhead**
+
+#### `ApiController.java`:
+
+```java
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.retry.annotation.Retry;
+import io.github.resilience4j.bulkhead.annotation.Bulkhead;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+public class ApiController {
+
+    @Autowired
+    private RateLimiterService rateLimiterService;
+
+    @GetMapping("/api/v1/resource")
+    @Retry(name = "default")  // Apply Retry logic
+    @CircuitBreaker(name = "default", fallbackMethod = "fallback")  // Apply Circuit Breaker
+    @Bulkhead(name = "default")  // Apply Bulkhead
+    public String getResource(@RequestParam String userId, @RequestParam String region) {
+        // Apply Rate Limiting
+        boolean isAllowed = rateLimiterService.isRequestAllowed(region, userId);
+        if (!isAllowed) {
+            return "Rate limit exceeded. Please try again later.";
+        }
+
+        // Simulate some processing or external API call
+        return processRequest(userId, region);
+    }
+
+    // Fallback method for Circuit Breaker
+    public String fallback(String userId, String region, Throwable throwable) {
+        return "Circuit breaker is open. Service is temporarily unavailable.";
+    }
+
+    // Simulate processing the request (can be an external API or complex logic)
+    public String processRequest(String userId, String region) {
+        // Simulating a random failure (e.g., external API failure)
+        if (Math.random() > 0.7) {
+            throw new RuntimeException("Simulated failure");
+        }
+        return "Request processed successfully for user: " + userId + " in region: " + region;
+    }
+}
+```
+
+### **5. Main Application Class**
+
+#### `Application.java`:
+
+```java
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class Application {
+
+    public static void main(String[] args) {
+        SpringApplication.run(Application.class, args);
+    }
+}
+```
+
+### **6. Testing the Microservice**
+
+You can now test the application with a tool like **Postman** or **curl**:
+
+- **Rate Limiting**: To simulate rate limiting, try making multiple requests with the same userId and region. You should get a "Rate limit exceeded" response once you exceed the configured limit.
+- **Retry**: To simulate retry, introduce failures in the `processRequest()` method (which has a simulated failure with `Math.random()`).
+- **Circuit Breaker**: If there are too many failures, the circuit breaker will open, and you will see the fallback message: `"Circuit breaker is open. Service is temporarily unavailable."`.
+- **Bulkhead**: If too many concurrent requests hit the microservice, the `@Bulkhead` annotation will limit the concurrent executions to 5 and queue additional requests (or reject them based on configuration).
+
+---
+
+### **7. Monitoring and Observability (Optional)**
+
+To monitor the health of your system and get insights into rate limiting, circuit breaking, retries, and bulkheading:
+
+1. **Spring Boot Actuator** provides health endpoints (`/actuator/health`) and metrics.
+2. **Resilience4j Metrics**: Resilience4j also exposes metrics that you can use to monitor circuit breaker states, retries, and bulkhead statistics.
+3. **Prometheus & Grafana**: You can integrate Spring Boot with Prometheus and Grafana to visualize metrics, such as the number of failed retries, circuit breaker status, and bulkhead usage.
+
+---
+
+### **Conclusion**
+
+This Spring Boot microservice demonstrates a complete setup for handling:
+
+1. **Rate Limiting**: To prevent excessive requests from specific regions or users using Redis.
+2. **Retry Logic**: Automatically retry failed operations a configurable number of times.
+3. **Circuit Breaker**: To gracefully handle failures by opening the circuit when too many requests fail.
+4. **Bulkhead**: Isolate critical services to avoid cascading failures across the system.
+
+This architecture can help your microservices handle high load and fail gracefully under stress.
