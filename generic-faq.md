@@ -2329,3 +2329,81 @@ export default WithdrawForm;
 - **Security**: Ensure proper authentication and authorization are in place to allow users to access only their own accounts.
 
 By combining **Spring Boot's transactional capabilities** and **React's user interface**, you can create a robust and consistent banking application that maintains account balance integrity.
+
+In a Spring Boot application, the embedded server (such as Tomcat, Jetty, or Undertow) is started by default when you run the application. However, there are cases where you might want to disable the embedded server—for example, if you're using Spring Boot as a backend for a non-web service or if you want to run it as a command-line application.
+
+To disable the embedded server in Spring Boot, you can configure your application to not start the embedded server. This can be done in a few different ways.
+
+### 1. **Disable Embedded Server via `application.properties` or `application.yml`**
+
+You can disable the embedded server by setting the `server.port` property to `-1` in your `application.properties` or `application.yml` file. When you set the port to `-1`, Spring Boot won't start the embedded server.
+
+#### `application.properties`
+```properties
+server.port=-1
+```
+
+#### `application.yml`
+```yaml
+server:
+  port: -1
+```
+
+### 2. **Disable Embedded Server Programmatically**
+
+If you need to disable the embedded server programmatically (e.g., based on some condition), you can do so by creating a `SpringApplication` instance and using the `setWebApplicationType` method.
+
+Here's how you can do it in your `main` method or `@SpringBootApplication` class:
+
+```java
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.WebApplicationType;
+
+@SpringBootApplication
+public class MyApplication {
+
+    public static void main(String[] args) {
+        SpringApplication app = new SpringApplication(MyApplication.class);
+        app.setWebApplicationType(WebApplicationType.NONE);  // Disable the embedded server
+        app.run(args);
+    }
+}
+```
+
+In this approach:
+- **`WebApplicationType.NONE`**: This disables the embedded web server (e.g., Tomcat, Jetty, or Undertow). This is useful for running Spring Boot applications in a non-web context (e.g., a batch job or command-line application).
+
+### 3. **Disabling Web Environment via `@SpringBootApplication` Annotation**
+
+Another way to disable the embedded server is to use the `@SpringBootApplication` annotation with `exclude` to exclude the `EmbeddedWebApplicationContext`. This approach is useful if you need to control the environment setup.
+
+```java
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.web.servlet.ServletWebServerFactoryAutoConfiguration;
+
+@SpringBootApplication(exclude = ServletWebServerFactoryAutoConfiguration.class)
+public class MyApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(MyApplication.class, args);
+    }
+}
+```
+
+In this example:
+- The **`exclude`** attribute of `@SpringBootApplication` allows you to exclude the auto-configuration of the embedded web server (`ServletWebServerFactoryAutoConfiguration`).
+- This is equivalent to telling Spring Boot that you don't need a web server, and it won't initialize one.
+
+### 4. **Use Spring Boot with Non-Web Applications (CLI, Console, etc.)**
+
+If you're using Spring Boot for non-web purposes (like batch processing, CLI, or background services), you can run Spring Boot without an embedded server by using the **`@SpringBootApplication`** annotation combined with the **`WebApplicationType.NONE`** setting as mentioned above.
+
+### Summary:
+
+- **Disable via `application.properties` or `application.yml`**: Set `server.port=-1` to prevent the embedded server from starting.
+- **Disable programmatically**: Use `SpringApplication.setWebApplicationType(WebApplicationType.NONE)` to prevent the server from being initialized.
+- **Exclude the embedded server with `@SpringBootApplication(exclude = ServletWebServerFactoryAutoConfiguration.class)`**: Exclude the embedded server in the application's main class.
+
+Any of these methods will allow you to run a Spring Boot application without the embedded server, making it suitable for non-web tasks like batch jobs, command-line applications, or other types of background processing.
