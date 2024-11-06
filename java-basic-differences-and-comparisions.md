@@ -464,6 +464,47 @@ Let’s walk through a simple example to visualize how these states can change d
 
 Understanding these thread states and their transitions is important for developing thread-safe applications and ensuring proper synchronization and management of threads in a multi-threaded Java program.
 
+### flowcharts and diagrams with text.
+
+```mermaid
+stateDiagram-v2
+    [*] --> NEW: Thread Created
+    NEW --> RUNNABLE: start() called
+    RUNNABLE --> BLOCKED: waiting for a lock
+    RUNNABLE --> WAITING: wait() or join() called
+    RUNNABLE --> TIMED_WAITING: sleep() or timed wait() called
+    RUNNABLE --> TERMINATED: run() completes
+
+    BLOCKED --> RUNNABLE: lock acquired
+    WAITING --> RUNNABLE: notified by notify() or notifyAll()
+    TIMED_WAITING --> RUNNABLE: time expires or notified
+
+    TERMINATED --> [*]: Thread finished
+```
+
+### Explanation:
+
+- **`[*]`**: Initial state (when the thread is created).
+- **`NEW`**: Thread is created but not yet started.
+- **`RUNNABLE`**: Thread is ready and running or waiting for the CPU.
+- **`BLOCKED`**: Thread is waiting for a lock.
+- **`WAITING`**: Thread is waiting indefinitely (e.g., `wait()` or `join()`).
+- **`TIMED_WAITING`**: Thread is waiting for a specified time (e.g., `sleep()` or `wait(time)`).
+- **`TERMINATED`**: Thread has completed its execution.
+
+### State Transitions:
+1. From **NEW** to **RUNNABLE** when the `start()` method is called.
+2. From **RUNNABLE** to **BLOCKED** when the thread waits for a lock.
+3. From **RUNNABLE** to **WAITING** when `wait()` or `join()` is invoked.
+4. From **RUNNABLE** to **TIMED_WAITING** when `sleep()` or `wait(time)` is called.
+5. From **RUNNABLE** to **TERMINATED** when the `run()` method finishes execution.
+
+Additionally:
+- **BLOCKED** threads move to **RUNNABLE** when the lock is acquired.
+- **WAITING** and **TIMED_WAITING** threads move to **RUNNABLE** when they are notified or when the specified wait time expires.
+
+You can use this Mermaid code in tools that support Mermaid diagrams, like Markdown editors, online Mermaid live editors, or other diagram tools that support Mermaid syntax.
+
 ## Array Vs ArrayList
 
 Array Vs ArrayList
