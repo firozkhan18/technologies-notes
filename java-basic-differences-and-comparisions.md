@@ -184,6 +184,138 @@ In Java, the `Thread` class provides several methods that are used for controlli
 
 These methods are fundamental for thread synchronization and coordination in Java.
 
+The `sleep()` and `wait()` methods in Java have multiple versions, offering flexibility in how you use them, particularly in terms of specifying how long to pause the thread or how much precision you want.
+
+### 1. **`Thread.sleep(long millis)`**  
+This is the most commonly used version of the `sleep()` method. It puts the current thread to sleep for a specified amount of time (in milliseconds).
+
+- **Signature**: 
+  ```java
+  public static void sleep(long millis) throws InterruptedException
+  ```
+
+- **Parameters**:
+  - `millis`: The length of time to sleep in milliseconds.
+
+- **Usage**:
+  - Puts the current thread to sleep for the specified number of milliseconds.
+  - If the thread is interrupted while sleeping, an `InterruptedException` is thrown.
+
+- **Example**:
+  ```java
+  Thread.sleep(2000);  // Sleep for 2 seconds
+  ```
+
+### 2. **`Thread.sleep(long millis, int nanos)`**  
+This version of the `sleep()` method is used when you want to specify sleep time with more precision — down to nanoseconds. The `nanos` parameter allows you to specify additional time beyond the millisecond level.
+
+- **Signature**:  
+  ```java
+  public static void sleep(long millis, int nanos) throws InterruptedException
+  ```
+
+- **Parameters**:
+  - `millis`: The number of milliseconds to sleep.
+  - `nanos`: The additional time (in nanoseconds) to sleep beyond the `millis` value. This must be in the range of 0 to 999,999.
+
+- **Usage**:
+  - This method provides more precise control over how long the thread sleeps by allowing a nanosecond-level precision for the sleep duration.
+  - Again, if the thread is interrupted, it throws `InterruptedException`.
+
+- **Example**:
+  ```java
+  // Sleep for 1 second and 500,000,000 nanoseconds (i.e., 1.5 seconds)
+  Thread.sleep(1000, 500000000);  
+  ```
+
+### `wait()` Method Versions
+
+The `wait()` method is used in synchronization contexts where a thread needs to wait until it is notified by another thread. There are two versions of the `wait()` method.
+
+### 1. **`Object.wait()`**  
+This is the simplest form of the `wait()` method. It causes the current thread to wait indefinitely until another thread calls `notify()` or `notifyAll()` on the same object.
+
+- **Signature**:
+  ```java
+  public final void wait() throws InterruptedException
+  ```
+
+- **Usage**:
+  - This version causes the current thread to wait indefinitely until another thread sends a signal via `notify()` or `notifyAll()`.
+  - Must be called from within a `synchronized` block or method.
+  - Throws `InterruptedException` if the thread is interrupted while waiting.
+
+- **Example**:
+  ```java
+  synchronized (lock) {
+      lock.wait();  // Wait indefinitely for a notification
+  }
+  ```
+
+### 2. **`Object.wait(long millis)`**  
+This version of the `wait()` method allows you to specify a time limit. The current thread will wait for the specified time (in milliseconds) or until it is notified, whichever happens first.
+
+- **Signature**:
+  ```java
+  public final void wait(long millis) throws InterruptedException
+  ```
+
+- **Parameters**:
+  - `millis`: The number of milliseconds to wait.
+
+- **Usage**:
+  - The thread will wait for the specified number of milliseconds or until it is notified, whichever comes first.
+  - Throws `InterruptedException` if the thread is interrupted while waiting.
+
+- **Example**:
+  ```java
+  synchronized (lock) {
+      lock.wait(1000);  // Wait for up to 1 second
+  }
+  ```
+
+### 3. **`Object.wait(long millis, int nanos)`**  
+This version provides even finer granularity. It allows you to specify the wait time in milliseconds and also provide an additional nanoseconds parameter for more precise control over the wait duration.
+
+- **Signature**:
+  ```java
+  public final void wait(long millis, int nanos) throws InterruptedException
+  ```
+
+- **Parameters**:
+  - `millis`: The number of milliseconds to wait.
+  - `nanos`: The additional nanoseconds to wait beyond the `millis` value. This must be in the range of 0 to 999,999.
+
+- **Usage**:
+  - The thread will wait for the specified number of milliseconds and nanoseconds or until it is notified, whichever comes first.
+  - Throws `InterruptedException` if the thread is interrupted while waiting.
+
+- **Example**:
+  ```java
+  synchronized (lock) {
+      lock.wait(1000, 500000000);  // Wait for 1 second and 500 milliseconds
+  }
+  ```
+
+### Summary of Method Signatures
+
+- **`Thread.sleep(long millis)`**  
+  Pauses the current thread for a specified number of milliseconds.
+
+- **`Thread.sleep(long millis, int nanos)`**  
+  Pauses the current thread for a specified number of milliseconds and nanoseconds.
+
+- **`Object.wait()`**  
+  Makes the current thread wait indefinitely until notified.
+
+- **`Object.wait(long millis)`**  
+  Makes the current thread wait for the specified number of milliseconds or until notified.
+
+- **`Object.wait(long millis, int nanos)`**  
+  Makes the current thread wait for the specified number of milliseconds and nanoseconds, or until notified.
+
+These various versions of `sleep()` and `wait()` give you flexibility in how you manage thread timing and synchronization in Java, with increasing levels of precision for sleep/wait times.
+
 ## Wait() Vs Sleep()	
 					
 wait() Vs sleep() 
@@ -210,6 +342,127 @@ wait() Vs sleep()
 | Interruptible  | Can be interrupted by another thread.         | Can throw `InterruptedException` if interrupted. |
 | Usage          | Used for inter-thread communication.          | Used for timing control.                     |
 
+In Java, a thread can exist in one of several states during its lifecycle. The state of a thread defines its current activity in the lifecycle of a thread. These states are defined by the `Thread.State` enum in Java.
+
+### **Thread States**
+
+There are **five main thread states** defined in the `Thread.State` enum, along with some additional details regarding the transitions between them. Here’s an overview of these states:
+
+1. **NEW**: A thread is in this state when it is **created** but not yet started.
+2. **RUNNABLE**: A thread is in this state when it is **ready to run** and the thread scheduler has selected it for execution.
+3. **BLOCKED**: A thread is in this state when it is **waiting for a lock** (monitor) to be available to enter a synchronized block or method.
+4. **WAITING**: A thread is in this state when it is **waiting indefinitely** for another thread to perform a particular action (such as `notify()` or `notifyAll()`).
+5. **TIMED_WAITING**: A thread is in this state when it is **waiting for a specified amount of time** (such as using `sleep()`, `join()`, or `wait()` with a timeout).
+6. **TERMINATED**: A thread is in this state once its `run()` method has completed, meaning it has **finished executing**.
+
+### **Thread State Diagram**
+
+Here’s a simple state diagram that represents the various states and transitions between them:
+
+```
+ +---------------------+
+ |        NEW          |
+ |---------------------|
+ |  - Thread created   |
+ +---------------------+
+         |
+         | start()
+         v
+ +---------------------+
+ |      RUNNABLE       |
+ |---------------------|
+ |  - Ready to run     |
+ |  - Waiting for CPU  |
+ +---------------------+
+       /    \
+      /      \ 
+    block    interrupt
+    /         \
+   v           v
++------------+ +------------------+
+|  BLOCKED   | |     WAITING      |
+|------------| |------------------|
+|  - Waiting | |  - wait() called |
+|    for a   | |  - notify() or   |
+|    lock    | |    notifyAll()   |
++------------+ +------------------+
+     |               |
+     |               | notify()
+     |               v
+     v           +------------------+
+ +------------------+  TIMED_WAITING  |
+ |  TIMED_WAITING   | --------------- |
+ |------------------|  - sleep()      |
+ | - waiting with   |  - join()       |
+ |   timeout (eg.   |  - wait(time)   |
+ |   sleep(), wait())| --------------- |
+ +------------------+       |
+     |                     |
+     v                     |
+ +---------------------+   |
+ |   TERMINATED        | <----+
+ |---------------------|
+ | - run() completed   |
+ +---------------------+
+```
+
+### **Explanation of Each State**
+
+1. **NEW**:  
+   - A thread enters the `NEW` state when it is instantiated but not yet started.  
+   - In this state, the thread has not yet been scheduled for execution.
+
+2. **RUNNABLE**:  
+   - A thread enters the `RUNNABLE` state when it has been started using the `start()` method.
+   - A thread remains in this state while it is eligible for execution by the thread scheduler. The actual execution is determined by the thread scheduler, so a thread can be in the `RUNNABLE` state even if it is not currently executing.
+   - A thread can move from `RUNNABLE` to `BLOCKED`, `WAITING`, or `TIMED_WAITING`, depending on the context.
+
+3. **BLOCKED**:  
+   - A thread enters the `BLOCKED` state when it is trying to acquire a lock (monitor) for a synchronized block or method but cannot, because the lock is held by another thread.
+   - Once the lock becomes available, the thread will return to the `RUNNABLE` state.
+
+4. **WAITING**:  
+   - A thread enters the `WAITING` state when it calls methods like `Object.wait()`, `Thread.join()`, or `Condition.await()` without a timeout.
+   - The thread will remain in this state until another thread calls `notify()` or `notifyAll()` on the object it's waiting on.
+
+5. **TIMED_WAITING**:  
+   - A thread enters the `TIMED_WAITING` state when it is waiting for a specified amount of time.
+   - This happens when the thread calls methods like `Thread.sleep(millis)`, `Thread.join(millis)`, or `Object.wait(millis)`.
+   - After the specified time elapses or the thread is notified, it returns to the `RUNNABLE` state.
+
+6. **TERMINATED**:  
+   - A thread enters the `TERMINATED` state once it has finished executing its `run()` method. This happens when the thread completes execution (either normally or through an exception).
+   - Once a thread has reached the `TERMINATED` state, it cannot be restarted.
+
+### **Thread Lifecycle Example**
+
+Let’s walk through a simple example to visualize how these states can change during the lifecycle of a thread:
+
+1. **NEW**:  
+   - A thread is created using `Thread t = new Thread()`. At this point, it is in the `NEW` state.
+
+2. **RUNNABLE**:  
+   - Calling `t.start()` moves the thread from the `NEW` state to the `RUNNABLE` state. The thread scheduler will pick it up for execution.
+
+3. **BLOCKED**:  
+   - If the thread tries to enter a synchronized method and another thread already holds the lock, the thread will transition to the `BLOCKED` state until the lock is released.
+
+4. **WAITING**:  
+   - If the thread calls `t.join()` or `Object.wait()`, it enters the `WAITING` state and waits for the specified action (like another thread calling `notify()` or `notifyAll()`).
+
+5. **TIMED_WAITING**:  
+   - If the thread calls `Thread.sleep(1000)` or `Thread.join(1000)`, it enters the `TIMED_WAITING` state and will wait for the specified time to elapse or for a notification.
+
+6. **TERMINATED**:  
+   - Once the thread has finished executing its `run()` method, it moves to the `TERMINATED` state. After this, the thread cannot be restarted.
+
+### **Summary of Thread States and Transitions**
+- Threads start in the `NEW` state.
+- Once started with `start()`, they move to the `RUNNABLE` state.
+- A thread may be `BLOCKED` waiting for a lock, `WAITING` for a notification, or `TIMED_WAITING` when waiting for a specific amount of time.
+- After completing its task, a thread moves to the `TERMINATED` state and cannot be reused.
+
+Understanding these thread states and their transitions is important for developing thread-safe applications and ensuring proper synchronization and management of threads in a multi-threaded Java program.
 
 ## Array Vs ArrayList
 
