@@ -2,6 +2,7 @@
 
 ---
 
+<details>
 In JavaScript (and by extension, React), **`var`**, **`let`**, and **`const`** are all used to declare variables, but they differ in their **scoping**, **hoisting behavior**, and **mutability**. Understanding these differences is crucial when writing React components or any JavaScript code to ensure your variables behave as expected.
 
 Let’s break down the differences between them:
@@ -1274,11 +1275,13 @@ Now, `ChildA` and `ChildB` no longer need to handle the `message` prop. They can
 
 In larger React applications, using **React Context** or **Redux** helps manage shared state more efficiently and avoids the drawbacks of prop drilling.
 
+</details>
 
 ## SQL
 
 ---
 
+<details>
 In most relational databases, an **Employee** and **Department** are typically represented as two separate tables with a relationship between them. Typically, the **Employee** table contains employee-specific details, and the **Department** table contains department-specific details. Each employee is usually associated with a department.
 
 Here's an example schema for both **Employee** and **Department** tables:
@@ -1742,12 +1745,13 @@ To make a database **scalable** and improve its **performance** when dealing wit
 ### Conclusion
 
 To improve the scalability and performance of your database when handling large amounts of data, you need to focus on a combination of **optimized database design**, **efficient querying**, **caching**, **indexing**, **sharding**, and **scaling infrastructure**. The specific strategies you choose will depend on the type of workload, data access patterns, and the scale of your system. Regular monitoring, periodic maintenance, and careful optimization are key to ensuring that your database continues to perform well as it grows.
-
+</details>
 
 ## SPRING BOOT & MicroService
 
 ---
 
+<details>
 Performing a **load test** for RESTful services is essential to understand how well your API performs under varying levels of traffic and load. A load test helps identify performance bottlenecks, measure the system's scalability, and ensure that it can handle expected user volumes. 
 
 There are several tools and techniques available to perform load testing of REST APIs, but I'll walk you through a general process and introduce some popular tools you can use.
@@ -2421,9 +2425,13 @@ If you're using Spring Boot for non-web purposes (like batch processing, CLI, or
 
 Any of these methods will allow you to run a Spring Boot application without the embedded server, making it suitable for non-web tasks like batch jobs, command-line applications, or other types of background processing.
 
+</details>
+
 ## JAVA
 
 ---
+
+<details>
 
 ## Immutable Classes in Java
 
@@ -2585,10 +2593,12 @@ make good Map keys and Set elements (these objects must not change state while i
 have their class invariant established once upon construction, and it never needs to be checked again
 always have “failure atomicity” (a term used by Joshua Bloch) : if an immutable object throws an exception, it’s never left in an undesirable or indeterminate state
 We also saw the benefits which immutable classes bring in an application. As a design best practice, always aim to make your application Java classes to be immutable. In this way, you can always worry less about concurrency related defects in your program.
-
+</details>
 ## HIBERNATE
 
 ---
+
+<details>
 
 ## How to Save Child Entities using Hibernate?
 
@@ -2908,3 +2918,4 @@ how to define the relationships and establish parent-child association.
 the appropriate use of annotations like @JoinColumn and cascade settings.
 the importance of using the mappedBy attribute to indicate the owned side of the relationship.
 common causes of LazyInitializationException and how to handle it.
+</details>
