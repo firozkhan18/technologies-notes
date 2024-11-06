@@ -39,6 +39,150 @@
 - [Servlet Vs GenericServlet Vs HttpServlet](#servlet-vs-genericservlet-vs-httpservlet)
 
 
+In Java, the `Thread` class provides several methods that are used for controlling the flow of execution in multi-threaded programs. Four of the key methods related to thread synchronization and thread state management are `sleep()`, `wait()`, `join()`, and `isAlive()`. Let's go through each of these methods in detail.
+
+### 1. `sleep(long millis)`
+- **Purpose**: Pauses the execution of the current thread for a specified amount of time.
+- **Usage**: The `sleep()` method causes the currently executing thread to sleep (i.e., pause its execution) for a given period, specified in milliseconds (with an optional nanoseconds precision). The thread will then wake up and resume execution after the specified duration.
+- **Important Notes**:
+  - This method is a static method of the `Thread` class.
+  - The thread does not lose its lock when it sleeps. Other threads can continue to execute, depending on their priority and other factors.
+  - It can throw `InterruptedException` if another thread interrupts the sleeping thread.
+  
+  **Example**:
+  ```java
+  public class MyThread extends Thread {
+      @Override
+      public void run() {
+          try {
+              System.out.println("Thread is sleeping...");
+              Thread.sleep(1000);  // Sleep for 1 second
+              System.out.println("Thread has woken up.");
+          } catch (InterruptedException e) {
+              System.out.println("Thread was interrupted.");
+          }
+      }
+
+      public static void main(String[] args) {
+          MyThread thread = new MyThread();
+          thread.start();
+      }
+  }
+  ```
+
+### 2. `wait()`
+- **Purpose**: Causes the current thread to wait until another thread sends a signal (via `notify()` or `notifyAll()`).
+- **Usage**: The `wait()` method is used to pause the execution of the current thread until it's notified by another thread. This is typically used in synchronization blocks (like `synchronized` methods or `synchronized` blocks).
+- **Important Notes**:
+  - `wait()` must be called from within a synchronized block or method. Otherwise, it will throw an `IllegalMonitorStateException`.
+  - The thread goes into a "waiting" state, and it will not proceed until some other thread calls `notify()` or `notifyAll()` on the same object.
+  - Can throw `InterruptedException`.
+  
+  **Example**:
+  ```java
+  class MyThread extends Thread {
+      private final Object lock = new Object();
+      
+      public void run() {
+          synchronized (lock) {
+              try {
+                  System.out.println("Thread is waiting...");
+                  lock.wait();  // Wait until notified
+                  System.out.println("Thread has been notified and is resuming.");
+              } catch (InterruptedException e) {
+                  e.printStackTrace();
+              }
+          }
+      }
+
+      public static void main(String[] args) throws InterruptedException {
+          MyThread thread = new MyThread();
+          thread.start();
+          
+          // Simulate some work in the main thread
+          Thread.sleep(2000);
+          
+          synchronized (thread.lock) {
+              thread.lock.notify();  // Notify the waiting thread
+          }
+      }
+  }
+  ```
+
+### 3. `join()`
+- **Purpose**: Causes the current thread to wait until the thread on which `join()` is called has finished its execution.
+- **Usage**: The `join()` method is used to make one thread wait for the completion of another thread. If `join()` is called on thread `t`, the current thread will be paused until `t` completes execution.
+- **Important Notes**:
+  - It is often used to ensure that one thread completes its execution before the main thread or another thread proceeds.
+  - You can specify a time limit (in milliseconds) for how long to wait for the thread to complete, or call it with no arguments to wait indefinitely.
+  - Can throw `InterruptedException`.
+
+  **Example**:
+  ```java
+  public class MyThread extends Thread {
+      @Override
+      public void run() {
+          System.out.println("Thread is running...");
+          try {
+              Thread.sleep(2000);  // Simulate work
+          } catch (InterruptedException e) {
+              e.printStackTrace();
+          }
+          System.out.println("Thread has finished.");
+      }
+
+      public static void main(String[] args) throws InterruptedException {
+          MyThread thread = new MyThread();
+          thread.start();
+          
+          // Main thread waits for the child thread to finish
+          thread.join();  // Waits until thread has completed
+          
+          System.out.println("Main thread has finished.");
+      }
+  }
+  ```
+
+### 4. `isAlive()`
+- **Purpose**: Checks if a thread is alive (i.e., has been started and has not yet completed).
+- **Usage**: The `isAlive()` method returns a boolean indicating whether the thread has started and has not yet completed its execution.
+- **Important Notes**:
+  - It returns `true` if the thread is still executing (in the `RUNNING` or `WAITING` state) or has been started but has not yet finished. It returns `false` if the thread has either not started or has finished.
+  - It does not indicate whether the thread is blocked, sleeping, or waiting.
+
+  **Example**:
+  ```java
+  public class MyThread extends Thread {
+      @Override
+      public void run() {
+          try {
+              Thread.sleep(1000);  // Simulate work
+          } catch (InterruptedException e) {
+              e.printStackTrace();
+          }
+      }
+
+      public static void main(String[] args) throws InterruptedException {
+          MyThread thread = new MyThread();
+          thread.start();
+          
+          // Check if thread is alive
+          System.out.println("Is thread alive? " + thread.isAlive());
+          
+          thread.join();  // Wait for the thread to finish
+          
+          System.out.println("Is thread alive? " + thread.isAlive());
+      }
+  }
+  ```
+
+### Summary of the Methods:
+- **`sleep(long millis)`**: Makes the current thread sleep for a specified duration.
+- **`wait()`**: Causes the current thread to wait until another thread notifies it.
+- **`join()`**: Makes the current thread wait for the thread on which `join()` is called to finish.
+- **`isAlive()`**: Checks if the thread is still alive (i.e., running or has been started but not completed).
+
+These methods are fundamental for thread synchronization and coordination in Java.
 
 ## Wait() Vs Sleep()	
 					
