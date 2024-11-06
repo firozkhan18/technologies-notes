@@ -1751,3 +1751,220 @@ To implement **geo-location-based rate limiting** in a Spring Boot microservice:
 3. Return appropriate HTTP status codes (like `429 Too Many Requests`) when the rate limit is exceeded.
 
 By integrating rate limiting with geo-location, you can manage traffic and ensure fair use of resources across different regions, while also protecting your service from abuse.
+
+To maintain consistency and ensure that a bank account's balance never becomes negative in a system built with **React** (for the frontend) and **Spring Boot** (for the backend), we need to implement transaction validation and rollback mechanisms in both layers. Below is an approach to handle this situation effectively:
+
+### Key Concepts:
+1. **Validation**: Before performing a withdrawal, we need to validate that the balance will not become negative after the transaction.
+2. **Rollback**: If an invalid withdrawal request (e.g., that would result in a negative balance) is attempted, the system should reject the transaction and ensure that no changes are made to the account balance.
+3. **Atomic Transactions**: Ensure that all operations (e.g., balance check and update) are atomic, meaning they are completed fully or not at all.
+
+### Steps:
+
+#### 1. **Spring Boot - Backend (Microservice)**
+
+In Spring Boot, the key is to implement the logic for **transaction management** and **validation**. Here, we will use **Spring's `@Transactional`** annotation to handle the transaction and ensure that operations are atomic.
+
+##### 1.1. **Account Service in Spring Boot**
+
+Let's assume we have an `Account` entity with a `balance` field.
+
+1. **Define the Account Entity**:
+```java
+@Entity
+public class Account {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    
+    private Double balance; // Account balance
+    
+    // Getters and setters
+}
+```
+
+2. **Create the Account Repository**:
+
+```java
+@Repository
+public interface AccountRepository extends JpaRepository<Account, Long> {
+    Optional<Account> findById(Long id);
+}
+```
+
+3. **Create the Service Layer with Transaction Management**:
+
+```java
+@Service
+public class AccountService {
+
+    @Autowired
+    private AccountRepository accountRepository;
+
+    @Transactional
+    public boolean withdraw(Long accountId, Double amount) throws InsufficientBalanceException {
+        // Fetch the account by ID
+        Account account = accountRepository.findById(accountId)
+                .orElseThrow(() -> new IllegalArgumentException("Account not found"));
+        
+        // Validate that the withdrawal does not make the balance negative
+        if (account.getBalance() < amount) {
+            throw new InsufficientBalanceException("Insufficient balance to complete the withdrawal.");
+        }
+
+        // Perform the withdrawal (subtraction)
+        account.setBalance(account.getBalance() - amount);
+
+        // The transaction will commit if no exception occurs
+        accountRepository.save(account);
+        
+        return true;
+    }
+}
+```
+
+4. **Create a Custom Exception**:
+
+This exception will be thrown if a withdrawal request results in a negative balance.
+
+```java
+public class InsufficientBalanceException extends RuntimeException {
+    public InsufficientBalanceException(String message) {
+        super(message);
+    }
+}
+```
+
+##### 1.2. **Controller to Handle Requests**
+
+Now, create a REST controller that exposes an endpoint for withdrawing money from an account.
+
+```java
+@RestController
+@RequestMapping("/api/accounts")
+public class AccountController {
+
+    @Autowired
+    private AccountService accountService;
+
+    @PostMapping("/{accountId}/withdraw")
+    public ResponseEntity<String> withdraw(@PathVariable Long accountId, @RequestParam Double amount) {
+        try {
+            boolean result = accountService.withdraw(accountId, amount);
+            return ResponseEntity.ok("Withdrawal successful");
+        } catch (InsufficientBalanceException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred");
+        }
+    }
+}
+```
+
+In this setup:
+- The **`withdraw`** method in the service layer checks if the withdrawal amount exceeds the current balance.
+- If the transaction would result in a negative balance, an exception (`InsufficientBalanceException`) is thrown, and the transaction is rolled back.
+- If the withdrawal is successful, the balance is updated in the database.
+
+##### 1.3. **Transaction Management**:
+The `@Transactional` annotation ensures that the transaction is managed correctly:
+- If no exception occurs, the transaction is committed.
+- If an exception like `InsufficientBalanceException` is thrown, the transaction is automatically rolled back, leaving the balance unchanged.
+
+#### 2. **React - Frontend (UI)**
+
+On the frontend, React will interact with the Spring Boot backend to handle user requests and display appropriate responses.
+
+##### 2.1. **React Component for Withdrawal**
+
+In React, you will create a component that allows users to input the withdrawal amount and then make a request to the backend to process the transaction.
+
+```jsx
+import React, { useState } from 'react';
+import axios from 'axios';
+
+const WithdrawForm = () => {
+  const [accountId, setAccountId] = useState('');
+  const [amount, setAmount] = useState('');
+  const [message, setMessage] = useState('');
+
+  const handleWithdraw = async (event) => {
+    event.preventDefault();
+
+    try {
+      // Send withdrawal request to backend
+      const response = await axios.post(`/api/accounts/${accountId}/withdraw`, null, {
+        params: { amount: parseFloat(amount) },
+      });
+
+      // Show success message
+      setMessage(response.data); // "Withdrawal successful"
+    } catch (error) {
+      if (error.response) {
+        // Handle expected error (like insufficient balance)
+        setMessage(error.response.data); // Error message from backend
+      } else {
+        // Handle unexpected error
+        setMessage('An unexpected error occurred.');
+      }
+    }
+  };
+
+  return (
+    <div>
+      <h2>Withdraw Money</h2>
+      <form onSubmit={handleWithdraw}>
+        <div>
+          <label htmlFor="accountId">Account ID:</label>
+          <input
+            type="text"
+            id="accountId"
+            value={accountId}
+            onChange={(e) => setAccountId(e.target.value)}
+          />
+        </div>
+        <div>
+          <label htmlFor="amount">Amount:</label>
+          <input
+            type="number"
+            id="amount"
+            value={amount}
+            onChange={(e) => setAmount(e.target.value)}
+          />
+        </div>
+        <button type="submit">Withdraw</button>
+      </form>
+      <p>{message}</p>
+    </div>
+  );
+};
+
+export default WithdrawForm;
+```
+
+##### 2.2. **Handling Errors and Displaying Responses**
+
+- When the user attempts to withdraw money, React sends the request to the Spring Boot backend.
+- If the transaction fails (e.g., insufficient balance), the backend will respond with an error message, which React will display to the user.
+- If the withdrawal is successful, a success message will be displayed.
+
+#### 3. **Integrating the System**:
+- Ensure the React frontend makes HTTP requests to the correct Spring Boot backend endpoint (e.g., `/api/accounts/{accountId}/withdraw`).
+- The Spring Boot application should be properly configured to handle CORS requests from the frontend (if hosted on a different domain).
+
+### Summary of the Solution:
+1. **Backend (Spring Boot)**:
+   - A service layer handles withdrawals and ensures that the transaction doesn't make the account balance negative.
+   - If the withdrawal would cause a negative balance, an exception is thrown, and the transaction is rolled back automatically using Spring's `@Transactional` annotation.
+   - The exception is caught in the controller and an appropriate response (error message) is sent back to the frontend.
+
+2. **Frontend (React)**:
+   - A form allows users to request a withdrawal by entering an account ID and an amount.
+   - The frontend communicates with the backend using an HTTP request and displays the appropriate message based on the result (success or failure).
+
+### Additional Considerations:
+- **Concurrency Handling**: If multiple withdrawal requests are made simultaneously, ensure that you handle concurrency properly to avoid issues like race conditions. This can be managed by using database locks or optimistic concurrency control.
+- **Validation**: You might also want to validate the withdrawal amount on the frontend before sending it to the backend, though backend validation is crucial for security.
+- **Security**: Ensure proper authentication and authorization are in place to allow users to access only their own accounts.
+
+By combining **Spring Boot's transactional capabilities** and **React's user interface**, you can create a robust and consistent banking application that maintains account balance integrity.
