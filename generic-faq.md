@@ -2420,3 +2420,324 @@ If you're using Spring Boot for non-web purposes (like batch processing, CLI, or
 - **Exclude the embedded server with `@SpringBootApplication(exclude = ServletWebServerFactoryAutoConfiguration.class)`**: Exclude the embedded server in the application's main class.
 
 Any of these methods will allow you to run a Spring Boot application without the embedded server, making it suitable for non-web tasks like batch jobs, command-line applications, or other types of background processing.
+
+## HIBERNATE
+
+---
+
+One of the most essential concepts in Hibernate is working with parent-child entity relationships, where a parent entity contains references to one or more child entities. To ensure that we are saving/updating the child entities (along with the parent entity), we depend on the correct usage of annotations like @OneToOne, @OneToMany, @ManyToMany, @JoinColumn, and cascade types (CascadeType.ALL, CascadeType.PERSIST, etc.).
+
+This hibernate tutorial discusses saving child entities in a unidirectional or bidirectional relationship, using examples for different mappings, and observing the generated SQL.
+
+See also: How to persist an Entity?
+
+### 1. Use Cascade Type to Propogate Persiste Operation
+In Hibernate, cascading allows operations (like persist, merge, remove, refresh, detach) to propagate from a parent entity to its associated child entities. For instance, when we use CascadeType.PERSIST and save a parent entity; the associated child entities will be saved automatically without requiring separate save calls.
+
+The following table summarizes the different cascade types available in Hibernate and JPA:
+
+|Cascade Type	|Description|
+|------------------|-----------------------------------|
+|CascadeType.PERSIST|	When the parent entity is persisted (saved), all associated child entities will also be persisted.|
+|CascadeType.MERGE|	When the parent entity is merged (updated), all associated child entities will also be merged.|
+|CascadeType.REMOVE|	When the parent entity is removed (deleted), all associated child entities will also be removed.|
+|CascadeType.REFRESH|	All associated child entities will be removed when the parent entity is removed (deleted).|
+|CascadeType.DETACH|	When the parent entity is detached, all associated child entities will also be detached from the current session.|
+|CascadeType.ALL|	All of the above operations (PERSIST, MERGE, REMOVE, REFRESH, DETACH) will cascade to associated child entities.|
+|CascadeType.NONE|	No cascading will occur for any operations; this is the default behavior if no cascade type is specified.|
+
+The cascade type is specified on the parent entity (owner entity) using the ‘cascade‘ attribute on the mapping annotation:
+
+```java
+@Entity
+public class User {
+
+  //...
+
+  @OneToOne(cascade = CascadeType.ALL) // Defines the cascade operations
+  @JoinColumn(name = "profile_id")  // Defines the foreign key in the User table
+  private Profile profile;
+}
+```
+### 2. Saving Child Entity in Unidirectional Relationship
+In a unidirectional relationship, only the parent entity holds the reference to the child entity(s). This means the relation is only accessible from one side. We can have such relationships in one-to-one, one-to-many, and many-to-many relationships. Let us discuss in detail.
+
+### 2.1. How to correctly define the relationship?
+To correctly define a unidirectional relationship in Hibernate, follow these steps:
+
+Determine which entity is the parent and which is the child. Conceptually, the parent entity contains the reference to the child entity and “owns” the relationship. For example, in a User-Profile relationship, a User is the parent, and the Profile is the child.
+Add @OneToOne, @OneToMany, or @ManyToMany annotation to the parent entity.
+Optionally, define the foreign key column using @JoinColumn. There are other possible ways to define the relationships you can explore in one-to-one mapping example.
+Add ‘cascade‘ attribute in the parent entity to control how operations on the parent entity (such as save, delete, etc.) propagate to the child entity.
+### 2.2. One-to-one Mapping Example
+The following example demonstrates how to define a parent-child relationship in one-to-one mapping such that the child entity is saved automatically when a parent entity is saved.
+```java
+import jakarta.persistence.*;
+import lombok.Data;
+
+@Entity
+@Data
+public class User {
+
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
+
+  private String name;
+
+  @OneToOne(cascade = CascadeType.ALL) // Defines the cascade operations
+  @JoinColumn(name = "profile_id")  // Defines the foreign key in the User table
+  private Profile profile;
+}
+```
+For unidirectional relationships, there is no need to add any annotation to the child entity, as it is managed through the parent’s reference.
+```java
+import jakarta.persistence.*;
+import lombok.Data;
+
+@Entity
+@Data
+public class Profile {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String bio;
+}
+```
+Let’s see how we save the relationship in the database.
+```java
+try {
+    transaction = session.beginTransaction();
+
+    // Create a new Profile (Child entity)
+    Profile profile = new Profile();
+    profile.setBio("Software Engineer with 10 years of experience");
+
+    // Create a new User (Parent entity)
+    User user = new User();
+    user.setName("John Doe");
+    user.setProfile(profile);  // Set the profile for the user (update relationship)
+
+    // Save the parent entity (which also saves the child entity due to CascadeType.ALL)
+    session.persist(user);
+
+    transaction.commit();
+}
+//...
+```
+Verify the generated SQL statements:
+```sql
+insert into Profile (bio) values ('Software Engineer with 10 years of experience');
+insert into User (name, profile_id) values ('John Doe', 1);
+```
+
+### 2.2. One-to-Many Mapping Example
+In a one-to-many relationship, such as a Department (parent entity) and an Employee (child entity), a parent entity is associated with multiple child entities.
+
+Let us understand with an example.
+```java
+import jakarta.persistence.*;
+import lombok.Data;
+import java.util.List;
+
+@Entity
+@Data
+public class Department {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String name;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "department_id") // Foreign key column in the Employee table
+    private List<Employee> employees;
+}
+
+import jakarta.persistence.*;
+import lombok.Data;
+
+@Entity
+@Data
+public class Employee {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String name;
+    private String position;
+}
+````
+
+The @OneToMany(cascade = CascadeType.ALL) ensures that all associated Employee entities are saved when a Department entity is saved.
+```java
+// Create Employees (child entities)
+Employee emp1 = new Employee();
+emp1.setName("Alice");
+emp1.setPosition("Developer");
+
+Employee emp2 = new Employee();
+emp2.setName("Bob");
+emp2.setPosition("Tester");
+
+// Create a Department (Parent entities)
+Department department = new Department();
+department.setName("IT Department");
+department.setEmployees(Arrays.asList(emp1, emp2)); // Associate employees with the department (relationship)
+
+// Save the parent (which also saves the children due to CascadeType.ALL)
+session.persist(department);
+```
+Verify the save operation in the executed SQL statements.
+```sql
+insert into Employee (name, position) values ('Alice', 'Developer');
+insert into Employee (name, position) values ('Bob', 'Tester');
+
+insert into Department (name) values ('IT Department');
+
+update Employee set department_id = 1 where id = 1;
+update Employee set department_id = 1 where id = 2;
+```
+### 3. Saving Child Entity in Bidirectional Relationship
+In a bidirectional relationship, each entity has a reference to the other. This means that there is a “owner” side of the relationship and an “inverse” side.
+
+### 3.1. How to correctly define the relationship?
+To correctly define the relationship and cascase effect, determine which is parent entity. In our case, User is parent and Profile is child entity.
+
+The parent entity is called owner entity, and contains the appropriate @OneToOne, @OneToMany, or @ManyToMany annotation and appropitae CascadeType attribute.
+```java
+@Entity
+@Data
+public class User {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String name;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "profile_id") // Foreign key in User table pointing to Profile
+    private Profile profile;
+}
+```
+On the inverse side, use the same relationship annotation but add the mappedBy attribute, referencing the owning entity’s field name. The mappedBy attribute marks the Profile as the inverse side of the relationship, meaning it doesn’t own the foreign key.
+```java
+@Entity
+@Data
+public class Profile {
+
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
+
+  private String address;
+
+  @OneToOne(mappedBy = "profile") // Inverse side of the relationship
+  private User user;
+}
+```
+Lets save a User and Profile, and verify the SQL statements.
+```java
+User user = new User();
+user.setName("John Doe");
+
+Profile profile = new Profile();
+profile.setAddress("123 Main St");
+user.setProfile(profile); // Setting the profile to the user
+
+// Saving the user, which cascades and saves the profile
+session.persist(user);
+```
+```sql
+insert into Profile (address) values ('123 Main St');
+insert into User (name, profile_id) values ('John Doe', 1);
+```
+### 3.2. Avoiding infinite loops with @JsonIgnore
+When working with bidirectional relationships, we may encounter an infinite loop when both entities reference each other. The root cause is that the serializer keeps traversing back and forth between both entities, leading to a StackOverflowError.
+
+To avoid this, we can use the @JsonIgnore annotation. When applied to a field, it tells Jackson to ignore that field during serialization and deserialization. By ignoring one side of a bidirectional relationship, we can prevent infinite recursion.
+
+Typically, we place @JsonIgnore on the inverse side of the relationship because we don’t want the serialization process to traverse back to parent. For example, in a User and Profile relationship, we might want to ignore the User reference in the Profile class during serialization.
+```java
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+@Entity
+@Data
+public class Profile {
+    
+  //...
+
+  @OneToOne(mappedBy = "profile") // Inverse side of the relationship
+  @JsonIgnore // This will prevent infinite loops during serialization
+  private User user;
+}
+```
+### 4. FAQs
+### 4.1. Why do I get LazyInitializationException when accessing a child entity?
+The LazyInitializationException is thrown when we try to access a lazily loaded association (like a child entity) outside of an active Hibernate session or transaction.
+
+In User and Profile example, when we try to access user.getProfile() after the session is closed then hibernate cannot perform the database query. This causes LazyInitializationException.
+
+To fix LazyInitializationException issues, we should keep the session open while accessing lazy-loaded entities.
+Another possible solution, when we know that we will defitetly access the child entity, we should set the fetching strategy to eager.
+@OneToOne(fetch = FetchType.EAGER)
+private Profile profile;
+
+Another solution is to explicitely fecth the child entity before closing the session.
+Hibernate.initialize(user.getProfile());
+
+### 4.2. Can I save child entities without cascading?
+Yes, we can save child entities separately by managing each persist operation manually. Although it is not recomeneded, but it is possible.
+
+During explicitly saving the entities, we must save each and every parent and child entity in correct order.
+
+For example, in Employee and Department entities example, if we do not use cascading the we must save the entities as follows:
+```java
+transaction = session.beginTransaction();
+
+Department department = new Department();	//Parent
+department.setName("IT Department");
+
+Employee employee1 = new Employee();	//Child 1
+employee1.setName("Alice");
+
+Employee employee2 = new Employee();	//Child 2
+employee2.setName("Bob");
+
+department.setEmployees(List.of(employee1, employee2));
+
+// Save the department first
+session.persist(department);  // This saves the department but not the employees yet
+
+// Now save each employee separately
+session.persist(employee1); // Explicitly saving employee1
+session.persist(employee2); // Explicitly saving employee2
+
+transaction.commit();
+```
+Verify the generated SQL statements:
+```sql
+INSERT INTO department (name) VALUES ('IT Department'); 
+
+INSERT INTO employee (name, department_id) VALUES ('Alice', 1); 
+INSERT INTO employee (name, department_id) VALUES ('Bob', 1); 
+```
+The department_id in the Employee table acts as a foreign key referencing the Department entity.
+
+### 4.3. What is ‘mappedBy’ and why is it important?
+The ‘mappedBy‘ defines the inverse relationship. This ensures that only one side of the relationship is responsible for persistence. It helps maintain a clear mapping of how entities relate to each other in the database.
+
+When using mappedBy, the non-owning side does not create a foreign key in the database.
+
+### 5. Summary
+This article the following concepts around saving child entities in a unidirectional or bidirectional relationship in Hibernate:
+
+how to define the relationships and establish parent-child association.
+the appropriate use of annotations like @JoinColumn and cascade settings.
+the importance of using the mappedBy attribute to indicate the owned side of the relationship.
+common causes of LazyInitializationException and how to handle it.
