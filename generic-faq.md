@@ -2593,7 +2593,9 @@ make good Map keys and Set elements (these objects must not change state while i
 have their class invariant established once upon construction, and it never needs to be checked again
 always have “failure atomicity” (a term used by Joshua Bloch) : if an immutable object throws an exception, it’s never left in an undesirable or indeterminate state
 We also saw the benefits which immutable classes bring in an application. As a design best practice, always aim to make your application Java classes to be immutable. In this way, you can always worry less about concurrency related defects in your program.
+
 </details>
+
 ## HIBERNATE
 
 ---
