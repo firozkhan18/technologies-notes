@@ -17843,10 +17843,10 @@ Java Memory Management structure within the JVM. This diagram represents the dif
 ```mermaid
 graph TB
     A[JVM Memory Structure]
-    A1[Method Area (Metaspace)]
+    A1[Method Area - Metaspace]
     A2[Heap Memory]
-    A3[Stack Memory (Thread-specific)]
-    A4[Program Counter (PC) Register]
+    A3[Stack Memory - Thread-specific]
+    A4[Program Counter - PC Register]
     A5[Native Method Stack]
 
     subgraph Method Area
