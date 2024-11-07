@@ -1485,6 +1485,59 @@ Non-access modifiers are used to define the **behavior** of classes, methods, an
      }
      ```
 
+The code you provided demonstrates the behavior of a **`volatile`** variable in a multithreaded context. The difference between having the `volatile` keyword or not on the `MY_INT` variable is critical when understanding how Java handles visibility of shared variables in multithreaded environments.
+
+### **Explanation of `volatile` Keyword in Java**:
+
+The `volatile` keyword is used in Java to ensure that a variable's value is always read from and written to **main memory** (not from a thread's local cache). When a variable is marked as `volatile`:
+- **Visibility Guarantee**: Changes to the variable are immediately visible to all threads.
+- **No Caching**: The value is not cached in CPU registers or thread-local caches, which ensures that all threads see the latest value.
+- **No Reordering**: It prevents certain kinds of instruction reordering that could lead to unpredictable results.
+
+### **Key Points of Difference with and without `volatile`**:
+
+1. **Without `volatile`**:
+   - If you remove the `volatile` keyword and use a regular field (i.e., `private static long MY_INT = 0;`), the Java memory model allows thread-local caching of the value of `MY_INT`. Each thread can hold a local copy of the `MY_INT` value in its cache, and these values are not immediately visible to other threads.
+   - This means that even though the `ChangeMaker` thread updates the value of `MY_INT`, the `ChangeListener` thread may not see those updates if it is accessing a cached value. The changes may not be "visible" across threads in a timely manner.
+   - In some cases, this could cause the `ChangeListener` thread to never see the updated value of `MY_INT`, and the `while` loop may hang indefinitely.
+
+2. **With `volatile`**:
+   - If you mark `MY_INT` as `volatile`, any write to `MY_INT` by one thread will be immediately visible to all other threads. There will be no thread-local caching or reordering of operations concerning the variable.
+   - This ensures that when the `ChangeMaker` thread increments `MY_INT`, the `ChangeListener` thread will see the updated value as soon as it is modified by `ChangeMaker`, allowing the program to behave as expected.
+   
+### **Expected Behavior with and without `volatile`**:
+
+1. **Without `volatile`**:
+   - The `ChangeListener` thread might not immediately see the updates made by the `ChangeMaker` thread. As a result, the log in the `ChangeListener` thread might not appear at the correct times, or it may even hang indefinitely if the `ChangeListener` thread never detects a change.
+   - The `while` loop in the `ChangeListener` thread could run forever, because it might continue to use its stale local copy of `MY_INT` due to local thread caching, which means the condition `if (local_value != MY_INT)` may never be satisfied, even though `MY_INT` is being updated by `ChangeMaker`.
+
+2. **With `volatile`**:
+   - The `ChangeListener` thread will always see the updated value of `MY_INT` from `ChangeMaker`. It will log a message each time the value of `MY_INT` is changed, and the program will behave as expected — the `ChangeListener` will eventually log that it saw a change when `MY_INT` is incremented to `5`.
+
+### **Why You Might Get the Same Results in Your Case**:
+
+If you're seeing the **same results** with and without `volatile` in your example, it might be due to a few factors:
+
+- **CPU and JVM optimizations**: Some modern JVM implementations (like HotSpot) use **optimistic** strategies to handle visibility and synchronization, and in simple cases like this (with a very small number of threads and limited contention), the JVM might ensure visibility even without `volatile`. This could give you the expected behavior in certain scenarios even without `volatile`.
+  
+- **Thread Scheduling**: Depending on the timing of thread scheduling and the speed at which the threads execute, the behavior you're expecting might still appear to work even if there is no `volatile`. However, this behavior is **not guaranteed** and could break with higher thread counts, or if the workload becomes more complex.
+
+- **Small Timing Window**: Since your code doesn't run for very long (the loop in `ChangeMaker` sleeps only for 500 ms), the issue with caching might not become visible within the small window of time that your test runs. With longer-running threads or more threads, the lack of `volatile` would likely cause issues.
+
+### **Best Practice**:
+
+- **Always use `volatile`** for shared variables that are updated by one thread and read by others, if synchronization is not required for operations on that variable. This ensures **visibility** of the changes to all threads.
+- **Use synchronization (`synchronized` keyword) or other concurrency mechanisms** (like `AtomicLong`) when you need both visibility **and** atomicity (i.e., when you need to guarantee that operations on a variable are thread-safe, not just visible).
+
+---
+
+### **Final Note**: 
+
+In summary:
+- **With `volatile`**: The `MY_INT` variable is updated and immediately visible to all threads.
+- **Without `volatile`**: Changes made by one thread may not be visible to others, leading to potential issues like infinite loops or stale data, depending on the timing of thread execution.
+
+
 ---
 
 ### **Summary of Modifiers**
