@@ -18120,7 +18120,7 @@ graph LR
     H --> I[Monitor Application - Prometheus/Grafana]
     I --> J[Rollback if Failure - Helm]
 
-    B -.-> K[Git Commit Trigger]
+    B --> K[Git Commit Trigger]
     G --> L[Scaling Pod - Horizontal Pod Autoscaler]
 
     %% Class Definitions
