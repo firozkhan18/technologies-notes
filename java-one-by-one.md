@@ -22008,3 +22008,333 @@ If you need to keep secrets secure, consider storing them server-side and using 
    - Restart the development server if you add new variables.
 
 This way, you can easily manage and access environment-specific values in your React app.
+
+### What is Redux?
+
+Redux is a predictable state container for JavaScript applications. It helps you manage the state of your application in a consistent way, making it easier to reason about the behavior of your app and manage its data flow. Redux is often used with libraries like React, but it can also be used with other libraries or frameworks.
+
+The core principles of Redux are:
+1. **Single Source of Truth**: The state of your entire application is stored in a single JavaScript object called the "store."
+2. **State is Read-Only**: The only way to change the state is by dispatching an action.
+3. **Changes are Made with Pure Functions**: To specify how the state is transformed by actions, you write pure functions called "reducers."
+
+### How Redux Works?
+
+The Redux flow works in the following way:
+
+1. **Action**: An action is dispatched to indicate that something has happened in the app.
+2. **Reducer**: The reducer is a pure function that takes the current state and the action and returns a new state based on the action type.
+3. **Store**: The store is where the state of the application is kept. It holds the current state and allows you to subscribe to state updates.
+4. **View**: The UI is updated based on the new state in the store.
+
+### Example of Redux Flow
+
+Let's create a simple Redux example with actions, reducers, and a store.
+
+```js
+// Actions
+const increment = () => ({
+  type: 'INCREMENT'
+});
+
+const decrement = () => ({
+  type: 'DECREMENT'
+});
+
+// Reducer
+const counter = (state = 0, action) => {
+  switch (action.type) {
+    case 'INCREMENT':
+      return state + 1;
+    case 'DECREMENT':
+      return state - 1;
+    default:
+      return state;
+  }
+};
+
+// Store
+const { createStore } = require('redux');
+const store = createStore(counter);
+
+// Subscribe to store updates
+store.subscribe(() => {
+  console.log('State after dispatch: ', store.getState());
+});
+
+// Dispatch actions
+store.dispatch(increment()); // State after dispatch:  1
+store.dispatch(increment()); // State after dispatch:  2
+store.dispatch(decrement()); // State after dispatch:  1
+```
+
+### Mermaid Diagram for Redux Flow
+
+```mermaid
+sequenceDiagram
+    participant View
+    participant Store
+    participant Reducer
+    participant Action
+    
+    View->>Action: Dispatch Action
+    Action->>Store: Send Action to Store
+    Store->>Reducer: Call Reducer with current state and action
+    Reducer->>Store: Return new state
+    Store->>View: Notify View of updated state
+```
+
+This diagram shows the basic flow of data in Redux:
+1. The **View** dispatches an **Action** (like "INCREMENT").
+2. The **Store** receives the action and passes it to the **Reducer**.
+3. The **Reducer** processes the action and returns the updated state.
+4. The **Store** updates and notifies the **View** of the new state.
+
+---
+
+### Redux-Saga and Redux-Thunk
+
+Redux-Saga and Redux-Thunk are middleware for handling side effects in Redux. They allow you to deal with asynchronous actions such as API calls, delays, and more.
+
+#### Redux-Thunk
+
+Redux-Thunk allows you to write action creators that return a function instead of an action. The function receives the `dispatch` and `getState` methods as arguments, so you can dispatch multiple actions or perform asynchronous operations.
+
+**Example of Redux-Thunk:**
+
+```js
+// Action creator with Thunk
+const fetchData = () => {
+  return (dispatch) => {
+    dispatch({ type: 'FETCH_REQUEST' });
+    
+    fetch('https://api.example.com/data')
+      .then(response => response.json())
+      .then(data => {
+        dispatch({ type: 'FETCH_SUCCESS', payload: data });
+      })
+      .catch(error => {
+        dispatch({ type: 'FETCH_FAILURE', error: error });
+      });
+  };
+};
+
+// Reducer
+const dataReducer = (state = { loading: false, data: [], error: null }, action) => {
+  switch (action.type) {
+    case 'FETCH_REQUEST':
+      return { ...state, loading: true };
+    case 'FETCH_SUCCESS':
+      return { ...state, loading: false, data: action.payload };
+    case 'FETCH_FAILURE':
+      return { ...state, loading: false, error: action.error };
+    default:
+      return state;
+  }
+};
+
+// Store with Thunk middleware
+const { createStore, applyMiddleware } = require('redux');
+const thunk = require('redux-thunk').default;
+const store = createStore(dataReducer, applyMiddleware(thunk));
+
+// Dispatch Thunk action
+store.dispatch(fetchData());
+```
+
+#### Redux-Saga
+
+Redux-Saga is a more complex middleware designed for managing side effects in a more declarative way using ES6 generators. It helps you handle complex asynchronous workflows in a cleaner, non-blocking way. It’s particularly useful when you have multiple dependent actions or need to cancel, retry, or debounce actions.
+
+**Example of Redux-Saga:**
+
+```js
+// Saga middleware
+import { takeEvery, put, call } from 'redux-saga/effects';
+
+function* fetchDataSaga(action) {
+  try {
+    const data = yield call(fetch, 'https://api.example.com/data');
+    const jsonData = yield call([data, 'json']);
+    yield put({ type: 'FETCH_SUCCESS', payload: jsonData });
+  } catch (error) {
+    yield put({ type: 'FETCH_FAILURE', error });
+  }
+}
+
+function* watchFetchData() {
+  yield takeEvery('FETCH_REQUEST', fetchDataSaga);
+}
+
+// Reducer
+const dataReducer = (state = { loading: false, data: [], error: null }, action) => {
+  switch (action.type) {
+    case 'FETCH_REQUEST':
+      return { ...state, loading: true };
+    case 'FETCH_SUCCESS':
+      return { ...state, loading: false, data: action.payload };
+    case 'FETCH_FAILURE':
+      return { ...state, loading: false, error: action.error };
+    default:
+      return state;
+  }
+};
+
+// Store with Saga middleware
+import { createStore, applyMiddleware } from 'redux';
+import createSagaMiddleware from 'redux-saga';
+
+const sagaMiddleware = createSagaMiddleware();
+const store = createStore(dataReducer, applyMiddleware(sagaMiddleware));
+
+sagaMiddleware.run(watchFetchData);
+
+// Dispatch action
+store.dispatch({ type: 'FETCH_REQUEST' });
+```
+
+### When to Use Redux-Thunk vs Redux-Saga
+
+- **Redux-Thunk**: Use Redux-Thunk for simple side effects such as fetching data from an API or performing basic asynchronous actions. It’s easy to set up and doesn’t require a lot of boilerplate code.
+  
+- **Redux-Saga**: Use Redux-Saga when you have complex side effects, such as waiting for multiple asynchronous operations, handling retries, cancellations, or sequencing of actions. It’s more powerful and flexible, but it comes with a steeper learning curve and more boilerplate code.
+
+In summary:
+- **Redux-Thunk**: Simple, great for basic async actions like fetching data.
+- **Redux-Saga**: Complex, useful for handling complicated async workflows or side effects that require more control and flexibility.
+
+### What is Strict Mode in React?
+
+React's **Strict Mode** is a development tool that helps developers write better and more predictable code by identifying potential problems in an application. It is not a feature that affects the production build of your app; rather, it’s only active in development mode. When enabled, it adds additional checks and warnings to help catch bugs and promote best practices.
+
+Strict Mode can help you identify:
+- Potential problems with the app's lifecycle methods.
+- Usage of unsafe methods or deprecated features.
+- Improper patterns in component rendering or usage.
+
+### Features and Benefits of Strict Mode
+
+1. **Identifying Unsafe Lifecycle Methods**:
+   React will warn you if you are using deprecated lifecycle methods like `componentWillMount`, `componentWillUpdate`, and `componentWillReceiveProps`, which can lead to bugs in future versions of React.
+
+2. **Detecting Unexpected Side Effects**:
+   React will intentionally run certain lifecycle methods twice to help you detect side effects that might cause unexpected behavior. This helps ensure that components and their effects are idempotent (i.e., they don’t produce unintended side effects if invoked multiple times).
+
+3. **Identifying Legacy String Refs**:
+   React checks for the usage of legacy string refs (e.g., `ref="myRef"`) and suggests using the newer `useRef` or callback refs.
+
+4. **Detecting Deprecated APIs**:
+   Strict Mode will warn if you're using deprecated APIs or features like `findDOMNode`, which can be removed in future versions of React.
+
+5. **Highlighting Potential Problems with React Concurrent Mode**:
+   While React's Concurrent Mode is experimental, Strict Mode can help highlight issues that might be exacerbated in concurrent rendering.
+
+### How to Enable Strict Mode?
+
+Strict Mode is enabled by wrapping your application (or a part of it) with the `<React.StrictMode>` component. You can use it at any level of your app, typically at the root level to apply it globally across your application.
+
+```js
+import React from 'react';
+import ReactDOM from 'react-dom';
+import App from './App';
+
+// Wrap the root component with React.StrictMode
+ReactDOM.render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>,
+  document.getElementById('root')
+);
+```
+
+### How Strict Mode Works
+
+Strict Mode activates additional checks for the following in development:
+
+1. **Double Invocations**: It double-invokes certain lifecycle methods and functions like `render`, `componentDidMount`, and `componentDidUpdate`. This is done to simulate future behavior and ensure that code is resilient to future updates (especially when Concurrent Mode is eventually enabled). However, React will never invoke these methods twice in production.
+
+2. **Detecting Deprecated Methods**: It will log warnings in the console if it detects usage of outdated lifecycle methods or deprecated APIs.
+
+3. **React DevTools Enhancements**: React’s development tools are often enhanced when Strict Mode is enabled, providing even more useful feedback for developers.
+
+### Example of Strict Mode in Action
+
+Let's consider a simple component that uses a deprecated lifecycle method (`componentWillMount`), which is no longer safe for use in modern React:
+
+```js
+import React from 'react';
+
+class MyComponent extends React.Component {
+  // This method is unsafe in modern React and will cause a warning in Strict Mode
+  componentWillMount() {
+    console.log("componentWillMount is called");
+  }
+
+  render() {
+    return <div>Hello, World!</div>;
+  }
+}
+
+export default MyComponent;
+```
+
+When the above code is run inside `<React.StrictMode>`, React will issue a warning in the browser's console like this:
+
+```
+Warning: componentWillMount has been renamed, and is not recommended for use.
+```
+
+If you want to safely migrate away from this deprecated method, you should replace it with `componentDidMount` or move logic into a hook (if using functional components).
+
+### Example of Strict Mode and Double Rendering
+
+Another common use of Strict Mode is to help identify side effects. Here's an example of a side effect in a `useEffect` hook that might cause issues in certain situations:
+
+```js
+import React, { useEffect, useState } from 'react';
+
+const Counter = () => {
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    console.log("useEffect is called");
+    return () => {
+      console.log("Cleanup function");
+    };
+  }, [count]);
+
+  return (
+    <div>
+      <p>Count: {count}</p>
+      <button onClick={() => setCount(count + 1)}>Increment</button>
+    </div>
+  );
+};
+
+export default Counter;
+```
+
+If this component is wrapped in `<React.StrictMode>`, React will intentionally run the `useEffect` cleanup and re-run the effect method twice in development to simulate how the component might behave in concurrent rendering mode. You will see the console log print twice, indicating that the effect is being invoked twice to check for any unintended side effects.
+
+### When Should You Use Strict Mode?
+
+1. **Development Environment**: Strict Mode is only active in development, so you can use it throughout your development process without worrying about performance impact in production.
+
+2. **Refactoring Code**: When refactoring old code or migrating to newer React features (like hooks), Strict Mode can help catch potential issues early by highlighting unsafe patterns or deprecated APIs.
+
+3. **Adopting New Features**: If you plan to experiment with features like **Concurrent Mode** or **Suspense**, Strict Mode can help highlight code that might break when these features are enabled.
+
+### Strict Mode and Performance
+
+Since Strict Mode only adds development-time checks and does not affect production builds, there is no performance impact in production. However, during development, it may slightly affect performance because of the double invocation of certain lifecycle methods.
+
+### Summary of What Strict Mode Checks:
+
+1. **Deprecated lifecycle methods** (`componentWillMount`, `componentWillUpdate`, `componentWillReceiveProps`)
+2. **Legacy string refs**
+3. **Side effects in render methods** (Double rendering to detect unsafe side effects)
+4. **Detects unsafe lifecycle methods in class components**
+
+### Conclusion
+
+React's Strict Mode is a useful tool that helps you write cleaner, more reliable, and forward-compatible code. It encourages the use of best practices and helps you catch common problems before they become bugs. However, it should only be enabled in the development environment, as it adds additional checks and rendering behavior meant for debugging purposes.
