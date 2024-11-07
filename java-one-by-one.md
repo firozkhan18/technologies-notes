@@ -252,9 +252,7 @@ Aggregation is a special form of association that represents a "whole-part" rela
 
 ### **Conclusion**
 
-Object-Oriented Programming (OOP) is a paradigm
-
- that helps in organizing software around the concept of **objects** and **classes**, making it more modular, maintainable, and reusable. Understanding the four pillars of OOP (Encapsulation, Abstraction, Inheritance, and Polymorphism) is essential for designing and building robust systems. By applying these principles, developers can create software that is easier to extend, debug, and maintain over time.
+Object-Oriented Programming (OOP) is a paradigm that helps in organizing software around the concept of **objects** and **classes**, making it more modular, maintainable, and reusable. Understanding the four pillars of OOP (Encapsulation, Abstraction, Inheritance, and Polymorphism) is essential for designing and building robust systems. By applying these principles, developers can create software that is easier to extend, debug, and maintain over time.
 
 ### **Composition, Aggregation, and Association in Java**
 
