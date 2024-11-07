@@ -19876,3 +19876,188 @@ function Form() {
 ---
 
 These are some of the most commonly used React hooks with examples of when and how to use them. Each hook serves a specific purpose, making it easier to manage side effects, state, and performance optimizations in your React components.
+
+
+# So You've Decided to Make a React App
+
+Which means you're going to build it with the help of React hooks. The only problem is, there are a lot of different hooks. So, which ones should you use? Let's answer that question by looking at all the hooks and see what each one does, the best ways to use each hook, and how often you'll need to use them — a lot, rarely, or almost never.
+
+## Map of React Hooks
+
+Here's a neat trick to make learning hooks much easier because there's actually a convenient pattern to how all the hooks fit together. I've created a complete map of React hooks to show you all eight major categories that each one falls into:
+
+1. **State Management Hooks** – To work with React state.
+2. **Effect Hooks** – To perform side effects.
+3. **Ref Hooks** – To reference JavaScript values or DOM elements.
+4. **Performance Hooks** – To improve app performance with memoization.
+5. **Context Hooks** – To read from React context.
+6. **Transition Hooks** – To use transitions for better user experiences.
+7. **Random Hooks** – And some powerful new hooks introduced in React.
+
+---
+
+## `useState`
+
+We begin with the hook you'll likely use the most. `useState` is probably the bread and butter of any React developer. Unless you're using a framework, you'll use it a lot. A big reason why React exists is to help us manage state and render components when state changes.
+
+- **Best for**: Client components that need their own simple, specific state.
+- **Use case**: Capturing user input in form fields, showing or hiding components (e.g., modals, tooltips), conditionally applying classes/styles, working with number values like in shopping carts or counters.
+
+### Example:
+
+```jsx
+const [count, setCount] = useState(0);
+```
+
+---
+
+## `useReducer`
+
+`useReducer` is another state hook that's useful for more complex state management than `useState`. You won't need to use it often, but it's worth adding if you have a lot of related state.
+
+- **Best for**: Managing multiple related state values (e.g., form inputs).
+- **Use case**: Simplifying components with multiple related state values, especially when state depends on other values.
+
+---
+
+## `useSyncExternalStore`
+
+`useSyncExternalStore` is a state hook you might not have heard of. It's primarily used to add non-React state stores into React components, so you won't need it unless you're making your own state management library from scratch.
+
+---
+
+## Effect Hooks
+
+### `useEffect`
+
+Effect hooks allow us to perform side effects, but what is a side effect? It's a way to interact outside of React and synchronize with an external system. A basic example is setting the document title.
+
+- **Best for**: Synchronizing React code with browser APIs, fetching data (though, more sophisticated tools like React Query are better for this).
+- **Use case**: Updating the document title, performing side effects after renders (like fetching data).
+
+### Example:
+
+```jsx
+useEffect(() => {
+  document.title = `You clicked ${count} times`;
+}, [count]); // Runs whenever `count` changes
+```
+
+---
+
+### `useLayoutEffect`
+
+`useLayoutEffect` is a specialized version of `useEffect`. It runs just before React paints the UI. This is good for synchronous operations you want to do right before rendering content (like measuring the size of a DOM element).
+
+- **Best for**: Operations that need to happen before the browser repaints the UI.
+- **Use case**: Measuring elements' sizes (e.g., tooltips) before rendering.
+
+---
+
+### `useInsertionEffect`
+
+`useInsertionEffect` is an even more niche effect hook, made primarily for CSS-in-JS libraries (like styled-components or Framer Motion). It ensures that any styles are inserted before other effect hooks run.
+
+---
+
+## Ref Hooks
+
+### `useRef`
+
+Refs allow us to access values outside React's state system without triggering a render.
+
+- **Best for**: Storing mutable data or accessing DOM elements.
+- **Use case**: Storing timer IDs, focusing on DOM elements, accessing DOM nodes.
+
+### Example:
+
+```jsx
+const timerId = useRef();
+```
+
+---
+
+### `useImperativeHandle`
+
+`useImperativeHandle` is a type of ref hook used when you need to forward refs to child components and expose methods to parent components.
+
+- **Best for**: Exposing methods to the parent component.
+- **Use case**: Allowing a parent component to trigger functions in a child component.
+
+---
+
+## Performance Hooks
+
+### `useMemo`
+
+`useMemo` improves performance by memoizing results, so it doesn't re-run expensive computations unless one of its dependencies changes.
+
+- **Best for**: Memoizing expensive computations.
+- **Use case**: Calculating the sum of numbers in an array or any other expensive computation.
+
+---
+
+### `useCallback`
+
+`useCallback` is similar to `useMemo`, but it's specifically used for memoizing callback functions passed down to child components.
+
+- **Best for**: Memoizing callback functions to prevent unnecessary re-renders.
+- **Use case**: Preventing the recreation of functions on every render.
+
+---
+
+## Context Hooks
+
+### `useContext`
+
+`useContext` is a simple hook to read context values in React. It works in any component that's nested inside a provider.
+
+- **Best for**: Accessing context values.
+- **Use case**: Reading values passed down through React context.
+
+---
+
+## Transition Hooks
+
+### `useTransition`
+
+`useTransition` is used for marking certain state updates as non-urgent. This helps in avoiding UI freezes or sluggishness during heavy computations.
+
+- **Best for**: Non-urgent state updates.
+- **Use case**: Filtering a list without freezing the UI.
+
+---
+
+### `useDeferredValue`
+
+`useDeferredValue` is another transition hook that allows you to defer or pause an update to keep your app responsive.
+
+- **Best for**: Deferring state updates without manually handling the transition.
+- **Use case**: Filtering lists or similar use cases where updates can be scheduled at an optimal time.
+
+---
+
+## Random Hooks
+
+### `useDebugValue`
+
+`useDebugValue` is useful if you're regularly using React DevTools. It allows you to label your custom hooks, making them easier to find in the DevTools.
+
+---
+
+### `useId`
+
+`useId` generates a unique ID that can be used for creating dynamic IDs shared between form inputs and labels.
+
+- **Best for**: Creating unique IDs for dynamic form inputs.
+- **Use case**: Ensuring unique IDs for form fields that may be reused in the component.
+
+---
+
+## Conclusion
+
+There's so much more to learn about React hooks to truly master them. To help you do that — plus every other React topic — I've created a complete bootcamp with tons of interactive challenges, fun videos, and super helpful cheat sheets with all the code and examples we've covered here. 
+
+And as for React hooks, here I have a complete video that covers them all in depth: what they do and how to start using them today. Just click here to watch that now.
+
+```
