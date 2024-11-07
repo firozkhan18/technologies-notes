@@ -11859,3 +11859,265 @@ function DisplayMessage({ message }) {
 | **Stateless Components**       | Components that do not manage any internal state. They only use `props` to render UI.                          | Simple components that render UI based on props, no internal state.     |
 
 Understanding the differences between these component types and knowing when to use each one will help you write more efficient, maintainable, and scalable React applications.
+
+React lifecycle methods are specific functions that allow you to hook into certain points in a component’s life cycle (from its creation to its destruction). These methods are primarily used in **class components**, although with the introduction of **Hooks** in React 16.8, the same behavior can now be achieved in **functional components** using hooks like `useEffect`.
+
+### **Lifecycle Methods in Class Components**
+
+Class components in React have three main phases during their life cycle:
+
+1. **Mounting** (when the component is being created and inserted into the DOM)
+2. **Updating** (when the component is being re-rendered due to state/props changes)
+3. **Unmounting** (when the component is being removed from the DOM)
+
+Each of these phases has its own set of lifecycle methods.
+
+---
+
+### **1. Mounting Phase**
+
+When a component is being created and inserted into the DOM, the following lifecycle methods are invoked:
+
+#### - `constructor(props)`
+- **Description**: The constructor is called when a component is being created. It's the first method called when an instance of the component is created.
+- **Use case**: Initialize state, bind methods, or perform any setup work that requires the component to have an initial state or props.
+- **Example**:
+  ```jsx
+  class MyComponent extends React.Component {
+    constructor(props) {
+      super(props);
+      this.state = { count: 0 };
+    }
+  }
+  ```
+
+#### - `static getDerivedStateFromProps(props, state)`
+- **Description**: Called before every render, both when the component is mounted and when it is updated. It’s used to modify the component's state based on changes in `props`.
+- **Use case**: Synchronize state with `props` or modify state in response to prop changes.
+- **Example**:
+  ```jsx
+  class MyComponent extends React.Component {
+    static getDerivedStateFromProps(nextProps, nextState) {
+      if (nextProps.value !== nextState.value) {
+        return { value: nextProps.value };
+      }
+      return null;
+    }
+  }
+  ```
+
+#### - `render()`
+- **Description**: The `render` method is required in every class component. It is the method that returns JSX and is used to render the component's UI.
+- **Use case**: The core function of the component that renders the UI based on state and props.
+- **Example**:
+  ```jsx
+  class MyComponent extends React.Component {
+    render() {
+      return <h1>Hello, {this.props.name}!</h1>;
+    }
+  }
+  ```
+
+#### - `componentDidMount()`
+- **Description**: Called immediately after a component is mounted (i.e., inserted into the tree).
+- **Use case**: This is typically used for triggering **AJAX requests** or **subscriptions** to events or external data (like fetching data from an API).
+- **Example**:
+  ```jsx
+  class MyComponent extends React.Component {
+    componentDidMount() {
+      console.log("Component did mount!");
+    }
+
+    render() {
+      return <div>Welcome!</div>;
+    }
+  }
+  ```
+
+---
+
+### **2. Updating Phase**
+
+When a component is re-rendered due to state or prop changes, the following lifecycle methods are invoked:
+
+#### - `static getDerivedStateFromProps(props, state)`
+- **Description**: Called before every render, this method is invoked when either `props` or `state` changes, even after the initial mount.
+- **Use case**: Modify or update state based on changes to `props`.
+
+#### - `shouldComponentUpdate(nextProps, nextState)`
+- **Description**: Called before rendering when new `props` or `state` are being received. It allows you to **optimize performance** by preventing unnecessary renders.
+- **Use case**: If you don't want the component to re-render unless certain `props` or `state` change.
+- **Example**:
+  ```jsx
+  class MyComponent extends React.Component {
+    shouldComponentUpdate(nextProps, nextState) {
+      return nextProps.value !== this.props.value;
+    }
+  }
+  ```
+
+#### - `render()`
+- **Description**: As in the mounting phase, `render()` is called during every update to return JSX.
+- **Use case**: Render the updated UI when `state` or `props` change.
+
+#### - `getSnapshotBeforeUpdate(prevProps, prevState)`
+- **Description**: This method is called right before the changes from `render()` are **committed to the DOM**. It allows you to capture some information (like scroll position) from the DOM before it changes.
+- **Use case**: Useful for capturing the DOM's current state before React makes changes, such as scrolling positions or other layout-related calculations.
+- **Example**:
+  ```jsx
+  class MyComponent extends React.Component {
+    getSnapshotBeforeUpdate(prevProps, prevState) {
+      if (prevState.count !== this.state.count) {
+        return document.getElementById('counter').scrollTop;
+      }
+      return null;
+    }
+  }
+  ```
+
+#### - `componentDidUpdate(prevProps, prevState, snapshot)`
+- **Description**: Called after the component has re-rendered and the changes have been committed to the DOM.
+- **Use case**: Perform side effects in response to prop or state changes (e.g., network requests, DOM updates).
+- **Example**:
+  ```jsx
+  class MyComponent extends React.Component {
+    componentDidUpdate(prevProps, prevState) {
+      console.log("Component did update");
+    }
+  }
+  ```
+
+---
+
+### **3. Unmounting Phase**
+
+When a component is being removed from the DOM, the following lifecycle method is invoked:
+
+#### - `componentWillUnmount()`
+- **Description**: Called just before the component is unmounted and destroyed.
+- **Use case**: Cleanup any resources (like **canceling subscriptions**, **clearing timers**, **cleaning up side effects**, etc.) to avoid memory leaks.
+- **Example**:
+  ```jsx
+  class MyComponent extends React.Component {
+    componentWillUnmount() {
+      console.log("Component will unmount!");
+    }
+  }
+  ```
+
+---
+
+### **4. Error Handling Lifecycle Methods**
+
+These lifecycle methods allow you to handle JavaScript errors in the component tree:
+
+#### - `static getDerivedStateFromError(error)`
+- **Description**: This method is invoked when an error is thrown inside the component or its children. It allows you to render a fallback UI after an error occurs.
+- **Use case**: Display a fallback UI after an error occurs in the component tree.
+- **Example**:
+  ```jsx
+  class ErrorBoundary extends React.Component {
+    static getDerivedStateFromError(error) {
+      return { hasError: true };
+    }
+
+    render() {
+      if (this.state.hasError) {
+        return <h1>Something went wrong.</h1>;
+      }
+      return this.props.children;
+    }
+  }
+  ```
+
+#### - `componentDidCatch(error, info)`
+- **Description**: This method is invoked after an error has been caught, providing information about the error (e.g., the error object and a stack trace).
+- **Use case**: Log error details or send error reports to external services.
+- **Example**:
+  ```jsx
+  class ErrorBoundary extends React.Component {
+    componentDidCatch(error, info) {
+      console.log("Error caught:", error);
+      console.log("Error info:", info);
+    }
+
+    render() {
+      return this.props.children;
+    }
+  }
+  ```
+
+---
+
+### **React Hooks and Functional Components**
+
+With the introduction of **React Hooks** in version 16.8, many of the lifecycle features previously available in class components are now available in **functional components** via hooks such as `useState`, `useEffect`, and `useLayoutEffect`.
+
+#### Commonly Used Hooks in Functional Components:
+
+- **`useEffect()`**: Can be used to replicate many lifecycle methods such as `componentDidMount`, `componentDidUpdate`, and `componentWillUnmount`.
+  - For side effects like fetching data or interacting with the DOM.
+  
+  ```jsx
+  import React, { useState, useEffect } from 'react';
+
+  function Counter() {
+    const [count, setCount] = useState(0);
+
+    useEffect(() => {
+      console.log('Component mounted or updated!');
+      return () => {
+        console.log('Component will unmount!');
+      };
+    }, [count]);  // Only re-run effect if count changes
+
+    return (
+      <div>
+        <h1>{count}</h1>
+        <button onClick={() => setCount(count + 1)}>Increment</button>
+      </div>
+    );
+  }
+  ```
+
+- **`useLayoutEffect()`**: Similar to `useEffect` but it runs synchronously **after the DOM has been painted**. It can be used for measuring DOM elements or manipulating layout before the browser paints.
+  
+  ```jsx
+  import React, { useLayoutEffect, useState } from 'react';
+
+  function Example() {
+    const [count, setCount] = useState(0);
+
+    useLayoutEffect(() => {
+      console.log('Layout effect triggered!');
+    }, [count]);
+
+    return (
+      <div>
+        <h1>{count}</h1>
+        <button onClick={() => setCount(count + 1)}>Increment</button>
+      </div>
+    );
+  }
+  ```
+
+---
+
+### **Summary of Key Lifecycle Methods:**
+
+| Phase        | Lifecycle Method             | Description |
+|--------------|------------------------------|-------------|
+| **Mounting** | `constructor`                | Initialize state and bind methods. |
+|              | `getDerivedStateFromProps`    | Sync state with `props` before every render. |
+|              | `render()`                    | Renders UI based on state and props. |
+|              | `componentDidMount()`         | Executes after component mounts, for example, API calls. |
+| **Updating** | `getDerivedStateFromProps`    | Sync state with updated `props`. |
+|              | `shouldComponentUpdate()`     | Control if the component should update. |
+|              | `render()`                    | Renders updated UI based on state and props. |
+|              | `getSnapshotBeforeUpdate()`   | Capture DOM info before updates (e.g., scroll position). |
+|              | `componentDidUpdate()`        | Executes after the component has updated. |
+| **Unmounting** | `componentWillUnmount()`    | Cleanup before the component is removed. |
+| **Error Handling** | `getDerivedStateFromError()` | Update state after error occurs. |
+|               | `componentDidCatch()`         | Log or handle errors in the component tree. |
+
+Understanding these lifecycle methods will allow you to properly manage state, side-effects, and resources in your React components.
