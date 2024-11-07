@@ -13424,3 +13424,8 @@ public class UserServiceTest {
 
 ### **Conclusion**
 This setup gives you a full-stack system with **Java Spring Boot**, **MongoDB**, **Kafka**, and a **React.js** frontend. You have CRUD functionality for users, Kafka integration for messaging, and CI/CD pipelines for continuous integration and deployment. You can add authentication, security, and other features as needed, such as **JWT authentication**, **Role-based access control**, etc.
+
+
+No file chosen
+Attach files by dragging & dropping, selecting or pasting them.
+
