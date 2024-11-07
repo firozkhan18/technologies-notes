@@ -4051,6 +4051,129 @@ By using the proper memory management techniques and utilizing the right tools, 
 
 ---
 
+### **Virtual Threads in Java**
+
+Virtual threads are a new concurrency primitive introduced in **Java 19** as part of Project Loom. They aim to provide an efficient, lightweight mechanism for handling massive numbers of concurrent tasks without the overhead of traditional threads.
+
+#### **What are Virtual Threads?**
+- **Virtual threads** are lightweight threads that are managed by the **Java Virtual Machine (JVM)**, rather than by the operating system (OS). This makes them significantly more resource-efficient than traditional threads, as they consume much less memory and are more scalable.
+- Unlike **platform threads** (traditional threads managed by the OS), virtual threads are multiplexed onto a smaller number of platform threads. This allows you to handle millions of tasks concurrently without consuming a huge amount of memory.
+- Virtual threads allow developers to write code in a synchronous style (blocking code), but the JVM will efficiently manage the execution to prevent blocking the platform thread.
+
+### **Key Features of Virtual Threads:**
+1. **Lightweight**: Virtual threads are much lighter than platform threads because the JVM handles scheduling and management.
+2. **Massive Scalability**: You can create millions of virtual threads without running into resource limits that traditional threads face.
+3. **Non-blocking I/O**: Virtual threads are useful for I/O-bound tasks because while one virtual thread might be blocked waiting for I/O, the JVM can switch to another virtual thread, allowing better resource utilization.
+4. **Same APIs as platform threads**: Virtual threads work with the same `Thread` API that developers are used to, making it easier to adopt.
+
+#### **Creating Virtual Threads in Java**
+
+Virtual threads can be created using the new `Thread.ofVirtual()` API.
+
+**Example**:
+
+```java
+public class VirtualThreadExample {
+    public static void main(String[] args) {
+        // Creating a virtual thread
+        Thread virtualThread = Thread.ofVirtual().start(() -> {
+            System.out.println("This is a virtual thread");
+        });
+
+        // Wait for virtual thread to finish
+        try {
+            virtualThread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+- In this example, a virtual thread is created using `Thread.ofVirtual()`. The code inside the `start()` method runs in the context of the virtual thread.
+
+### **Virtual Threads vs Traditional Threads**
+| **Aspect**              | **Virtual Threads**                                 | **Traditional Threads**                              |
+|-------------------------|-----------------------------------------------------|------------------------------------------------------|
+| **Creation Overhead**    | Very low, lightweight.                             | High, as each thread is managed by the OS.           |
+| **Memory Usage**         | Minimal (a few KB).                                | Relatively high (a few MB).                          |
+| **Scaling**              | Can scale to millions of threads.                  | Typically limited to thousands of threads due to resource constraints. |
+| **Scheduling**           | Managed by the JVM, multiplexed onto a few OS threads. | Managed by the OS, with each thread mapped to an OS thread. |
+| **Blocking**             | Virtual threads can block but do not block platform threads. The JVM schedules other virtual threads. | Blocking threads can block OS threads, causing inefficiency. |
+| **Use Case**             | Ideal for handling many concurrent I/O-bound tasks. | Ideal for CPU-bound tasks that need real parallelism. |
+
+### **Virtual Thread Concept in Memory Management**
+
+The main advantage of virtual threads comes from the **lightweight nature** of these threads, which allows a large number of threads to run concurrently without consuming excessive resources. The JVM takes on the responsibility of efficiently managing the execution of these threads. Below is a breakdown of how memory management works with virtual threads.
+
+- **Memory Usage**: Virtual threads consume significantly less memory compared to traditional threads. Traditional threads each require their own stack space (typically around 1MB or more), whereas virtual threads share a much smaller amount of memory because their execution is handled by the JVM.
+  
+- **Scheduler**: Virtual threads are multiplexed onto a smaller number of platform threads by the JVM. This multiplexing means that the number of platform threads (OS-level threads) can be much smaller than the number of virtual threads, allowing Java applications to scale better with many concurrent tasks.
+
+- **Context Switching**: Traditional threads rely on OS-level context switching, which is relatively expensive. Virtual threads, on the other hand, have lower context switching overhead since they are managed by the JVM.
+
+- **Memory Allocation**: Virtual threads don’t allocate separate memory stacks for each thread. Instead, they share a smaller pool of resources, making them far more efficient in terms of memory allocation and management.
+
+---
+
+### **Mermaid Diagram: Memory Management and Virtual Thread Concept**
+
+Below is a **Mermaid diagram** that visualizes the memory management concepts and the virtual thread model in Java.
+
+```mermaid
+graph LR
+    A[Virtual Thread] --> B[Lightweight Stack]
+    A[Virtual Thread] --> C[Managed by JVM]
+    B --> D[Low Memory Usage]
+    C --> E[Multiplexed onto Platform Threads]
+    E --> F[Platform Thread (OS Level)]
+    F --> G[Traditional Thread Scheduler]
+    
+    F[Platform Thread (OS Level)] --> H[Memory Stack Allocation]
+    G[Traditional Thread Scheduler] --> I[OS-Level Context Switching]
+    I --> J[High Overhead]
+    
+    subgraph JVM
+        D[Lightweight Memory Model]
+        E[Multiplexed Scheduler]
+    end
+
+    classDef green fill:#b3e0b3,stroke:#006400;
+    class A,B,C green;
+    class F,G,H,I blue;
+```
+
+### **Explanation of the Diagram**:
+- **Virtual Thread**:
+  - Virtual threads are lightweight with minimal stack allocation.
+  - They are managed by the **JVM**, and their execution is multiplexed onto a few **platform threads**.
+  - Virtual threads share resources more efficiently and are well-suited for handling many concurrent I/O-bound tasks.
+  
+- **Platform Thread**:
+  - Traditional platform threads require a separate memory stack for each thread.
+  - **Context switching** between threads is managed by the OS-level scheduler, which can be inefficient and lead to high overhead.
+  
+- **Memory Model**:
+  - **Virtual threads** have a **lightweight memory model**, allowing for more threads to run simultaneously without consuming excessive memory.
+  - **Platform threads** use a traditional model where each thread has its own memory stack, and switching between them can be resource-intensive.
+
+### **Key Benefits of Virtual Threads**:
+1. **Scalability**: Virtual threads allow you to create millions of concurrent tasks with a fraction of the memory overhead compared to traditional threads.
+2. **Efficient I/O Handling**: Virtual threads are particularly beneficial for applications with many I/O-bound tasks, where the thread might be blocked waiting for data from a network, disk, or other I/O operations.
+3. **Simplicity**: You can write code using blocking operations (like waiting for I/O), and the JVM will efficiently manage the threads behind the scenes.
+
+---
+
+### **Conclusion**
+
+- **Virtual threads** offer a new way to manage concurrency in Java, particularly useful for applications that need to handle a large number of I/O-bound tasks concurrently without overburdening the system.
+- They provide **massive scalability** by consuming less memory, reducing context-switching overhead, and allowing millions of tasks to be executed concurrently.
+- The **JVM scheduler** multiplexes virtual threads onto a smaller number of **platform threads**, making them highly efficient.
+  
+This makes **virtual threads** a powerful tool for handling modern concurrency patterns in Java. Whether it's for web servers, microservices, or high-performance applications with many concurrent tasks, virtual threads are a promising advancement for Java developers.
+
+---
+
 ## 1. **Functional Interface in Java**
 
 ### What is a Functional Interface?
