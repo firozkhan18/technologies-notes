@@ -21904,4 +21904,107 @@ export default App;
 
 This example app demonstrates each of these hooks in different components for different use cases. The goal is to give you a clear view of how each hook works and how they interact in a React application.
 
+In React, you can access environment variables in your application by creating a `.env` file in the root directory of your project and prefixing the variable names with `REACT_APP_`. This is a security measure to ensure that only variables with this prefix are exposed to the React app.
 
+Here's how you can set up and access environment variables in a React app:
+
+### 1. **Create a `.env` File**
+
+At the root of your React project, create a `.env` file if it doesn't already exist.
+
+```bash
+touch .env
+```
+
+### 2. **Add Environment Variables in the `.env` File**
+
+Inside the `.env` file, define environment variables using the `REACT_APP_` prefix. For example:
+
+```env
+REACT_APP_API_URL=https://api.example.com
+REACT_APP_GOOGLE_ANALYTICS_KEY=your-google-analytics-key
+REACT_APP_ENV=development
+```
+
+**Important:** 
+- The `REACT_APP_` prefix is required for the variable to be accessible in your React app.
+- Any variable that does not have the `REACT_APP_` prefix will **not** be exposed to your React application.
+
+### 3. **Access Environment Variables in Your React Code**
+
+In your React components, you can access these variables using `process.env.REACT_APP_[VARIABLE_NAME]`. Here's an example:
+
+```javascript
+import React from 'react';
+
+function App() {
+  const apiUrl = process.env.REACT_APP_API_URL; // Access the API URL from environment variable
+  const googleAnalyticsKey = process.env.REACT_APP_GOOGLE_ANALYTICS_KEY;
+
+  return (
+    <div>
+      <h1>React Environment Variables Example</h1>
+      <p>API URL: {apiUrl}</p>
+      <p>Google Analytics Key: {googleAnalyticsKey}</p>
+    </div>
+  );
+}
+
+export default App;
+```
+
+In this example, `process.env.REACT_APP_API_URL` will return the value defined in your `.env` file (`https://api.example.com`), and similarly, other variables will be accessed.
+
+### 4. **Restart the Development Server**
+
+After adding or modifying environment variables, **restart your development server** to ensure that React properly loads the new values. Run:
+
+```bash
+npm start
+```
+
+### 5. **Access Environment Variables in Production**
+
+When you build your React app for production using `npm run build`, the environment variables will be embedded into the production build. You can then use these variables in your production environment by setting them at build time (e.g., with a tool like Netlify, Vercel, or Docker).
+
+For example, you can specify environment variables while building:
+
+```bash
+REACT_APP_API_URL=https://prod-api.example.com npm run build
+```
+
+This would replace `process.env.REACT_APP_API_URL` with the production URL in the final build.
+
+### 6. **Environment-Specific Variables**
+
+React also allows you to create different `.env` files for different environments:
+
+- `.env` — Default environment file (used for all environments unless overridden).
+- `.env.local` — Local-specific variables (should be ignored by version control like Git).
+- `.env.development` — Variables specific to development environment.
+- `.env.production` — Variables specific to production environment.
+
+For example, you can define a production-specific API URL in `.env.production`:
+
+```env
+REACT_APP_API_URL=https://prod-api.example.com
+```
+
+### 7. **Security Considerations**
+
+Be aware that **environment variables are not secrets** in a React app. They are bundled with your JavaScript code and can be accessed by anyone who inspects the app in the browser's developer tools. So **never store sensitive information (like API keys or passwords) directly in environment variables in a React app** unless you're using server-side authentication or an API proxy.
+
+If you need to keep secrets secure, consider storing them server-side and using an API to fetch them in your React app securely.
+
+### Example Workflow
+
+1. **Create `.env`**:
+   - Create a `.env` file with necessary environment variables.
+
+2. **Access Variables**:
+   - Use `process.env.REACT_APP_[VARIABLE_NAME]` to access these variables in your code.
+
+3. **Restart App**:
+   - Restart the development server if you add new variables.
+
+This way, you can easily manage and access environment-specific values in your React app.
