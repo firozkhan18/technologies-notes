@@ -16233,4 +16233,732 @@ In conclusion:
 - **Method Overloading** enables methods with the same name to perform different tasks depending on their arguments.
 - **Method Overriding** allows subclasses to provide their specific implementation for a method defined in the superclass, ensuring dynamic method dispatch at runtime.
 
-- 
+### `super` Keyword in Java
+
+The `super` keyword in Java refers to the immediate **parent class** (superclass) of a class. It is used to access the superclass's methods, constructors, and fields. It is most commonly used in the context of inheritance to refer to the parent class directly from the subclass.
+
+#### **Main Uses of `super` in Java**:
+
+1. **Accessing Superclass Constructor**:
+   - The `super()` keyword is used to invoke the constructor of the superclass. This can be done explicitly using `super()` or implicitly if no constructor is defined in the subclass.
+   - It must be the first statement in the subclass constructor.
+
+   **Example**:
+   ```java
+   class Animal {
+       Animal() {
+           System.out.println("Animal constructor");
+       }
+   }
+
+   class Dog extends Animal {
+       Dog() {
+           super(); // Calls the Animal constructor
+           System.out.println("Dog constructor");
+       }
+   }
+
+   public class Test {
+       public static void main(String[] args) {
+           Dog dog = new Dog(); // Output: Animal constructor, Dog constructor
+       }
+   }
+   ```
+
+2. **Accessing Superclass Method**:
+   - You can use `super` to access a method that has been **overridden** in the subclass but needs to call the parent class version of that method.
+
+   **Example**:
+   ```java
+   class Animal {
+       void sound() {
+           System.out.println("Animal makes a sound");
+       }
+   }
+
+   class Dog extends Animal {
+       @Override
+       void sound() {
+           super.sound(); // Calls the sound method in Animal class
+           System.out.println("Dog barks");
+       }
+   }
+
+   public class Test {
+       public static void main(String[] args) {
+           Dog dog = new Dog();
+           dog.sound();
+           // Output: Animal makes a sound
+           //         Dog barks
+       }
+   }
+   ```
+
+3. **Accessing Superclass Fields**:
+   - You can use `super` to refer to fields in the parent class, especially if the field is hidden by a subclass.
+
+   **Example**:
+   ```java
+   class Animal {
+       String name = "Animal";
+   }
+
+   class Dog extends Animal {
+       String name = "Dog";
+
+       void printNames() {
+           System.out.println(name);        // Prints "Dog" (this class's field)
+           System.out.println(super.name);  // Prints "Animal" (parent class's field)
+       }
+   }
+
+   public class Test {
+       public static void main(String[] args) {
+           Dog dog = new Dog();
+           dog.printNames();
+           // Output: Dog
+           //         Animal
+       }
+   }
+   ```
+
+---
+
+### Exception Handling in Java
+
+Exception handling in Java is a mechanism to handle runtime errors, allowing the normal flow of execution to continue even when an error occurs.
+
+Java provides a powerful and flexible way of handling exceptions through the **try-catch** block. Exceptions in Java can be categorized into two types:
+1. **Checked exceptions**: Exceptions that the compiler requires to be handled or declared, like `IOException`, `SQLException`, etc.
+2. **Unchecked exceptions**: Exceptions that are not checked at compile time, like `NullPointerException`, `ArithmeticException`, etc. These are subclasses of `RuntimeException`.
+
+#### **Basic Exception Handling with Try-Catch**
+
+The basic syntax for exception handling in Java involves the use of `try`, `catch`, `finally`, and sometimes `throw` and `throws`.
+
+1. **`try` block**: The code that might throw an exception is placed in the `try` block.
+2. **`catch` block**: The code that handles the exception is placed in the `catch` block. You can have multiple `catch` blocks to handle different types of exceptions.
+3. **`finally` block**: A block of code that always runs after the `try` block, regardless of whether an exception is thrown or not. It's used for cleanup, like closing file streams or database connections.
+
+#### **Syntax**:
+```java
+try {
+    // Code that may throw an exception
+} catch (ExceptionType e) {
+    // Handling the exception
+} finally {
+    // Cleanup code (optional)
+}
+```
+
+**Example**:
+```java
+public class ExceptionHandlingExample {
+    public static void main(String[] args) {
+        try {
+            int result = 10 / 0;  // This will throw ArithmeticException
+        } catch (ArithmeticException e) {
+            System.out.println("Error: Division by zero is not allowed.");
+        } finally {
+            System.out.println("This will always be executed.");
+        }
+    }
+}
+```
+
+**Output**:
+```
+Error: Division by zero is not allowed.
+This will always be executed.
+```
+
+---
+
+### **Different Types of Exceptions** in Java:
+
+1. **Checked Exceptions**:
+   - Checked exceptions are exceptions that are checked at compile-time. These exceptions must be either caught or declared in the method signature using the `throws` keyword. 
+   - Examples: `IOException`, `SQLException`, `ClassNotFoundException`
+
+   **Example**:
+   ```java
+   import java.io.*;
+
+   public class CheckedExceptionExample {
+       public static void main(String[] args) {
+           try {
+               FileReader file = new FileReader("nonexistentfile.txt"); // IOException
+           } catch (IOException e) {
+               System.out.println("File not found!");
+           }
+       }
+   }
+   ```
+
+2. **Unchecked Exceptions**:
+   - Unchecked exceptions are exceptions that are not checked at compile-time. These exceptions are subclasses of `RuntimeException`.
+   - Examples: `NullPointerException`, `ArrayIndexOutOfBoundsException`, `ArithmeticException`
+
+   **Example**:
+   ```java
+   public class UncheckedExceptionExample {
+       public static void main(String[] args) {
+           String str = null;
+           try {
+               System.out.println(str.length()); // Throws NullPointerException
+           } catch (NullPointerException e) {
+               System.out.println("Cannot call length on a null string.");
+           }
+       }
+   }
+   ```
+
+---
+
+### **Throws Keyword in Java**
+
+The `throws` keyword is used in a method signature to indicate that the method might throw one or more exceptions. It does not handle the exceptions but **declares** them, so the calling method is aware of them and can handle them appropriately.
+
+#### **Syntax**:
+```java
+public void someMethod() throws IOException, SQLException {
+    // Code that might throw exceptions
+}
+```
+
+**Example**:
+```java
+import java.io.*;
+
+public class ThrowsExample {
+    public static void main(String[] args) {
+        try {
+            readFile();  // This method might throw an IOException
+        } catch (IOException e) {
+            System.out.println("Error reading the file.");
+        }
+    }
+
+    // Declaring that readFile() might throw IOException
+    public static void readFile() throws IOException {
+        FileReader file = new FileReader("nonexistentfile.txt");
+    }
+}
+```
+
+---
+
+### **Throw Keyword in Java**
+
+The `throw` keyword is used to explicitly **throw an exception** from a method or block of code. It can be used to throw both checked and unchecked exceptions.
+
+#### **Syntax**:
+```java
+throw new ExceptionType("Error message");
+```
+
+**Example**:
+```java
+public class ThrowExample {
+    public static void main(String[] args) {
+        try {
+            validateAge(15);  // Throws custom exception because age < 18
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public static void validateAge(int age) {
+        if (age < 18) {
+            throw new IllegalArgumentException("Age must be 18 or older.");
+        } else {
+            System.out.println("Age is valid.");
+        }
+    }
+}
+```
+
+---
+
+### **Custom Exception in Java**
+
+You can create your own exceptions by extending the `Exception` class. This is useful when you want to define specific error conditions for your application.
+
+#### **Example**:
+```java
+class InvalidAgeException extends Exception {
+    public InvalidAgeException(String message) {
+        super(message);
+    }
+}
+
+public class CustomExceptionExample {
+    public static void main(String[] args) {
+        try {
+            checkAge(15);  // This will throw an InvalidAgeException
+        } catch (InvalidAgeException e) {
+            System.out.println("Caught Exception: " + e.getMessage());
+        }
+    }
+
+    public static void checkAge(int age) throws InvalidAgeException {
+        if (age < 18) {
+            throw new InvalidAgeException("Age must be 18 or older.");
+        }
+    }
+}
+```
+
+---
+
+### **Summary:**
+
+- **`super` keyword**:
+  - Used to access members (fields, methods, constructors) of the parent class from the child class.
+  - Commonly used to call the superclass constructor or method.
+  
+- **Exception Handling**:
+  - **`try-catch`** blocks allow you to handle exceptions gracefully, providing a mechanism to recover from runtime errors.
+  - **`throws`** declares exceptions that a method might throw, while **`throw`** explicitly throws an exception.
+  - Exceptions are divided into **checked** (compile-time) and **unchecked** (runtime) exceptions.
+  - **`finally`** block is used for cleanup operations, and it runs whether or not an exception occurs.
+
+### Interthread Communication in Java
+
+**Interthread communication** refers to the mechanism by which two or more threads in a Java program can communicate with each other. This is typically done by sharing some resources (e.g., variables, buffers) and coordinating actions such as waiting for a particular condition to be met before proceeding.
+
+Java provides a few basic mechanisms to handle interthread communication:
+- **`wait()`**
+- **`notify()`**
+- **`notifyAll()`**
+
+These methods are defined in the `Object` class, meaning they are available to every Java object. Interthread communication relies on synchronizing access to shared resources and ensuring that threads interact in a controlled and predictable way.
+
+### Key Concepts
+
+1. **Waiting for Condition** (`wait()`):
+   - A thread can **pause** its execution and release the monitor lock on an object. This thread will be put into the **waiting** state until it is notified by another thread.
+   - It must be used within a synchronized block (synchronized on the object whose lock the thread holds).
+   - **`wait()`** can be called with a timeout, but it will release the lock and wait for a signal.
+
+2. **Notifying a Waiting Thread** (`notify()` and `notifyAll()`):
+   - `notify()` wakes up one of the threads that is waiting on the object's monitor (if any).
+   - `notifyAll()` wakes up all threads that are waiting on the object's monitor.
+   - Both `notify()` and `notifyAll()` must be used within a synchronized block as well.
+   - **`notify()`** doesn't guarantee which waiting thread will be notified, while **`notifyAll()`** wakes up all waiting threads, but they will need to recheck the condition (as they can enter the waiting state again).
+
+3. **Synchronization**:
+   - Thread communication happens in a synchronized context to avoid **race conditions** (multiple threads modifying shared resources at the same time) and to ensure that threads do not interrupt each other while reading or writing to shared variables.
+
+### Basic Example of Interthread Communication
+
+Here’s a simple example where one thread (the producer) generates data and another thread (the consumer) consumes it. The consumer waits until there is data to consume, and the producer signals when new data is available.
+
+```java
+class SharedResource {
+    private int data = -1; // Shared data that producer will set and consumer will get
+
+    // Producer produces data
+    public synchronized void produce(int value) throws InterruptedException {
+        while (data != -1) { // Wait if data is already produced
+            wait();
+        }
+        data = value; // Produce data
+        System.out.println("Produced: " + value);
+        notify(); // Notify the consumer that data is available
+    }
+
+    // Consumer consumes data
+    public synchronized void consume() throws InterruptedException {
+        while (data == -1) { // Wait if no data is available
+            wait();
+        }
+        System.out.println("Consumed: " + data);
+        data = -1; // Consume data (set to -1)
+        notify(); // Notify the producer that the slot is empty
+    }
+}
+
+class Producer extends Thread {
+    private final SharedResource sharedResource;
+
+    public Producer(SharedResource sharedResource) {
+        this.sharedResource = sharedResource;
+    }
+
+    @Override
+    public void run() {
+        try {
+            for (int i = 1; i <= 5; i++) {
+                sharedResource.produce(i);
+                Thread.sleep(500); // Simulate time taken to produce data
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+}
+
+class Consumer extends Thread {
+    private final SharedResource sharedResource;
+
+    public Consumer(SharedResource sharedResource) {
+        this.sharedResource = sharedResource;
+    }
+
+    @Override
+    public void run() {
+        try {
+            for (int i = 1; i <= 5; i++) {
+                sharedResource.consume();
+                Thread.sleep(1000); // Simulate time taken to consume data
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+}
+
+public class InterThreadCommunicationExample {
+    public static void main(String[] args) {
+        SharedResource sharedResource = new SharedResource();
+        Producer producer = new Producer(sharedResource);
+        Consumer consumer = new Consumer(sharedResource);
+
+        producer.start();
+        consumer.start();
+    }
+}
+```
+
+### Output:
+```
+Produced: 1
+Consumed: 1
+Produced: 2
+Consumed: 2
+Produced: 3
+Consumed: 3
+Produced: 4
+Consumed: 4
+Produced: 5
+Consumed: 5
+```
+
+### Explanation:
+
+1. **Producer thread** produces data and places it into the shared resource. After producing the data, it notifies the consumer that data is available by calling `notify()`.
+2. **Consumer thread** consumes data from the shared resource. It waits if there is no data to consume. After consuming, it notifies the producer that it can produce new data by calling `notify()`.
+
+### Concepts in Detail
+
+#### 1. **`wait()` Method**:
+- The `wait()` method is used by a thread to temporarily release the lock on the object and give other threads a chance to run. The thread will remain in the **waiting state** until another thread invokes the `notify()` or `notifyAll()` method on the same object.
+- `wait()` can also be called with a **timeout**, which means the thread will wait for the specified time and then automatically resume.
+
+#### 2. **`notify()` and `notifyAll()` Methods**:
+- **`notify()`**: Wakes up a single thread that is waiting on the object. If there are multiple threads waiting, it selects one thread, but which one is not guaranteed.
+- **`notifyAll()`**: Wakes up all the threads that are waiting on the object.
+
+#### 3. **Synchronization**:
+- Synchronization ensures that only one thread can access a synchronized block of code at a time. This prevents **race conditions** where two threads could modify shared resources simultaneously.
+- In this example, `synchronized` is used to ensure that the producer and consumer do not interfere with each other when producing or consuming the data.
+
+### Advanced Usage of Interthread Communication
+
+1. **Using `wait()` and `notify()` with Multiple Conditions**:
+   - Sometimes, you might need to handle more complex conditions where multiple threads are waiting for different events. You can use flags or conditions within the `wait()` and `notify()` mechanism.
+
+2. **Using `Condition` Interface (Java 5 and Above)**:
+   - In Java 5 and beyond, you can use the **`java.util.concurrent.locks.Condition`** interface in combination with `ReentrantLock`. This provides more flexibility than `wait()`/`notify()` for more complex synchronization scenarios.
+   
+   Example using `Condition`:
+   ```java
+   import java.util.concurrent.locks.Lock;
+   import java.util.concurrent.locks.ReentrantLock;
+   import java.util.concurrent.locks.Condition;
+
+   class SharedResource {
+       private int data = -1;
+       private final Lock lock = new ReentrantLock();
+       private final Condition condition = lock.newCondition();
+
+       public void produce(int value) throws InterruptedException {
+           lock.lock(); // Lock before accessing the shared resource
+           try {
+               while (data != -1) { // Wait if data is already produced
+                   condition.await(); // Wait until notified
+               }
+               data = value;
+               System.out.println("Produced: " + value);
+               condition.signal(); // Notify consumer that data is available
+           } finally {
+               lock.unlock(); // Always unlock after critical section
+           }
+       }
+
+       public void consume() throws InterruptedException {
+           lock.lock();
+           try {
+               while (data == -1) { // Wait if no data is available
+                   condition.await();
+               }
+               System.out.println("Consumed: " + data);
+               data = -1; // Reset the shared data
+               condition.signal(); // Notify producer that space is available
+           } finally {
+               lock.unlock();
+           }
+       }
+   }
+   ```
+
+### Conclusion
+
+Interthread communication in Java is an essential part of handling concurrent programs, especially when threads need to coordinate their actions or share data. By using the `wait()`, `notify()`, and `notifyAll()` methods (or `Condition` in more advanced cases), Java allows for effective thread synchronization and communication, which prevents issues like race conditions and ensures that threads operate in a predictable manner.
+
+### Consumer-Producer Problem in Multithreading
+
+The **Consumer-Producer Problem** is a classic example of **synchronization** in multithreading where:
+- **Producers** generate data and place it in a shared buffer.
+- **Consumers** take data from the buffer and process it.
+- There are issues like:
+  - A consumer tries to consume when there is no data (empty buffer).
+  - A producer tries to produce data when the buffer is full.
+
+### Problem Breakdown
+The main issues in the **Producer-Consumer** problem are:
+1. **Buffer Overflow**: When producers are producing items faster than consumers can consume, and the buffer becomes full.
+2. **Buffer Underflow**: When consumers are consuming items faster than producers can produce, and the buffer becomes empty.
+
+### Key Concepts:
+- **Synchronization**: Ensures that only one thread can access the shared resource (buffer) at a time.
+- **Communication**: Producers must signal consumers when there is data to consume, and consumers must signal producers when there is space to produce data.
+
+### Solution Strategy
+
+The most common solution involves:
+- **Using the `wait()` and `notify()` methods** for thread communication.
+- **Synchronized access** to shared resources (e.g., the buffer).
+
+Here is how the producer and consumer can communicate and avoid problems:
+
+1. **Producer** should wait if the buffer is full.
+2. **Consumer** should wait if the buffer is empty.
+3. Both should notify the other when they complete their actions.
+
+### Solution with `wait()` and `notify()`
+
+Let’s assume a **fixed-size buffer** and use **synchronized blocks** to handle thread communication between the producer and consumer.
+
+#### Code Example
+
+```java
+class SharedBuffer {
+    private final int[] buffer = new int[5]; // A buffer of size 5
+    private int count = 0; // Tracks the number of items in the buffer
+
+    // Producer produces an item
+    public synchronized void produce(int value) throws InterruptedException {
+        while (count == buffer.length) {
+            wait(); // Wait if the buffer is full
+        }
+        buffer[count] = value; // Produce data
+        System.out.println("Produced: " + value);
+        count++;
+        notify(); // Notify consumer that data is available
+    }
+
+    // Consumer consumes an item
+    public synchronized void consume() throws InterruptedException {
+        while (count == 0) {
+            wait(); // Wait if the buffer is empty
+        }
+        int consumedValue = buffer[--count]; // Consume data
+        System.out.println("Consumed: " + consumedValue);
+        notify(); // Notify producer that space is available
+    }
+}
+
+class Producer extends Thread {
+    private final SharedBuffer sharedBuffer;
+
+    public Producer(SharedBuffer sharedBuffer) {
+        this.sharedBuffer = sharedBuffer;
+    }
+
+    @Override
+    public void run() {
+        try {
+            for (int i = 1; i <= 10; i++) {
+                sharedBuffer.produce(i); // Produce items
+                Thread.sleep(500); // Simulate time taken to produce
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+}
+
+class Consumer extends Thread {
+    private final SharedBuffer sharedBuffer;
+
+    public Consumer(SharedBuffer sharedBuffer) {
+        this.sharedBuffer = sharedBuffer;
+    }
+
+    @Override
+    public void run() {
+        try {
+            for (int i = 1; i <= 10; i++) {
+                sharedBuffer.consume(); // Consume items
+                Thread.sleep(1000); // Simulate time taken to consume
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+}
+
+public class ProducerConsumerExample {
+    public static void main(String[] args) {
+        SharedBuffer buffer = new SharedBuffer();
+        Producer producer = new Producer(buffer);
+        Consumer consumer = new Consumer(buffer);
+
+        producer.start();
+        consumer.start();
+    }
+}
+```
+
+### Explanation:
+
+1. **SharedBuffer Class**:
+   - This class contains the buffer (an array of integers) where items are stored temporarily.
+   - The `produce()` method inserts data into the buffer and notifies the consumer when new data is available.
+   - The `consume()` method retrieves data from the buffer and notifies the producer when space is available.
+
+2. **Producer Class**:
+   - The `Producer` thread continuously produces items (from 1 to 10 in this case).
+   - It sleeps for 500 ms between producing each item to simulate production time.
+   - If the buffer is full, it waits (`wait()`), and once space is available, it proceeds.
+
+3. **Consumer Class**:
+   - The `Consumer` thread continuously consumes items from the buffer.
+   - It sleeps for 1000 ms between consuming each item to simulate consumption time.
+   - If the buffer is empty, it waits (`wait()`), and once data is available, it proceeds.
+
+4. **Synchronized Blocks**:
+   - The `synchronized` keyword ensures that only one thread (either producer or consumer) can access the shared buffer at any given time, preventing data corruption.
+
+5. **`wait()` and `notify()`**:
+   - When the producer cannot produce (because the buffer is full), it calls `wait()`. This causes the producer to release the lock on the shared buffer and wait until it is notified by the consumer.
+   - Similarly, the consumer waits when the buffer is empty.
+   - `notify()` is used to signal the waiting thread when the buffer has space (producer) or has data (consumer).
+
+### Output Example:
+
+```
+Produced: 1
+Consumed: 1
+Produced: 2
+Consumed: 2
+Produced: 3
+Consumed: 3
+Produced: 4
+Consumed: 4
+Produced: 5
+Consumed: 5
+Produced: 6
+Consumed: 6
+Produced: 7
+Consumed: 7
+Produced: 8
+Consumed: 8
+Produced: 9
+Consumed: 9
+Produced: 10
+Consumed: 10
+```
+
+### Key Points:
+- **Producer waits** when the buffer is full and notifies the consumer when data is consumed.
+- **Consumer waits** when the buffer is empty and notifies the producer when space becomes available.
+- This approach prevents **deadlock**, **buffer overflow**, and **buffer underflow** by ensuring that the producer and consumer are synchronized appropriately.
+
+### Potential Issues and Advanced Solutions:
+1. **Deadlock**: Deadlock can occur if threads are waiting for each other and neither proceeds. For example, if both producer and consumer are waiting on each other indefinitely. This solution avoids it because `wait()` is always followed by a `notify()`, ensuring at least one thread can proceed.
+   
+2. **Starvation**: If one thread constantly hogs the shared resource, the other thread may never get a chance to execute. This solution balances the load by alternating between the producer and consumer via the `wait()` and `notify()` mechanism.
+
+3. **Multiple Producers/Consumers**: If you have multiple producers and consumers, you can still use the same `wait()`/`notify()` approach, as long as access to the shared buffer is synchronized. You can scale it by ensuring proper synchronization or using higher-level concurrency utilities like `ExecutorService`.
+
+4. **`BlockingQueue` (Java 5 and above)**: 
+   - If you are using Java 5 or later, you can use the **`BlockingQueue`** interface, which simplifies the producer-consumer model. Classes like **`ArrayBlockingQueue`** and **`LinkedBlockingQueue`** provide built-in thread-safe operations like `take()` (for consumers) and `put()` (for producers), which automatically handle synchronization and waiting.
+
+   Example with `BlockingQueue`:
+   ```java
+   import java.util.concurrent.*;
+
+   public class BlockingQueueExample {
+       public static void main(String[] args) throws InterruptedException {
+           BlockingQueue<Integer> queue = new ArrayBlockingQueue<>(5);
+           Producer producer = new Producer(queue);
+           Consumer consumer = new Consumer(queue);
+
+           producer.start();
+           consumer.start();
+       }
+   }
+
+   class Producer extends Thread {
+       private final BlockingQueue<Integer> queue;
+
+       public Producer(BlockingQueue<Integer> queue) {
+           this.queue = queue;
+       }
+
+       @Override
+       public void run() {
+           try {
+               for (int i = 1; i <= 10; i++) {
+                   queue.put(i); // Add item to queue, wait if full
+                   System.out.println("Produced: " + i);
+                   Thread.sleep(500);
+               }
+           } catch (InterruptedException e) {
+               e.printStackTrace();
+           }
+       }
+   }
+
+   class Consumer extends Thread {
+       private final BlockingQueue<Integer> queue;
+
+       public Consumer(BlockingQueue<Integer> queue) {
+           this.queue = queue;
+       }
+
+       @Override
+       public void run() {
+           try {
+               for (int i = 1; i <= 10; i++) {
+                   Integer item = queue.take(); // Take item from queue, wait if empty
+                   System.out.println("Consumed: " + item);
+                   Thread.sleep(1000);
+               }
+           } catch (InterruptedException e) {
+               e.printStackTrace();
+           }
+       }
+   }
+   ```
+
+Using **`BlockingQueue`** is a simpler and more efficient way to implement the producer-consumer problem as it handles synchronization and waiting automatically.
+
+### Conclusion:
+
+- The **Producer-Consumer Problem** can be effectively solved using synchronization and inter-thread communication in Java.
+- By using **`wait()`** and **`notify()`**, we ensure that threads can safely share resources without race conditions or deadlocks.
+- For easier implementation in modern Java, consider using the **`BlockingQueue`** interface, which handles synchronization and waiting for you.
