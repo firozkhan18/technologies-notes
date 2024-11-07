@@ -17924,3 +17924,132 @@ graph TB
    - Used for handling native methods written in languages like C or C++.
 
 ---
+
+To visually represent how memory management works in Java with respect to **objects**, **values**, **methods**, **classes**, **threads**, and **references**. The diagram will highlight the different memory areas where these components reside and how they interact within the JVM memory model.
+
+### **Diagram for Java Memory Management (Objects, Values, Methods, Classes, Threads, References)**
+
+```mermaid
+graph TB
+    A[JVM Memory Management]
+
+    subgraph Method Area (Metaspace)
+        direction TB
+        B1[Class Definitions] --> B2[Method Definitions]
+        B3[Static Variables] --> B4[Runtime Constant Pool]
+        B5[Class-level References]
+    end
+
+    subgraph Heap Memory
+        direction LR
+        C1[Young Generation (Eden Space)] --> C2[Survivor Space]
+        C2 --> C3[Old Generation (Tenured)]
+        C4[Objects in Heap] --> C5[Values in Objects]
+        C4 --> C6[Reference Variables]
+        C7[Garbage Collection (GC)]
+    end
+
+    subgraph Stack Memory
+        direction TB
+        D1[Thread 1 Stack]
+        D2[Thread 2 Stack]
+        D3[Thread N Stack]
+        D4[Local Variables]
+        D5[Method Calls]
+    end
+
+    subgraph Program Counter (PC)
+        direction TB
+        E1[Thread-specific PC Register]
+    end
+
+    subgraph Native Method Stack
+        direction TB
+        F1[Native Method Calls (C/C++)]
+    end
+
+    A --> B1
+    A --> C1
+    A --> D1
+    A --> E1
+    A --> F1
+
+    C1 --> C4
+    C2 --> C4
+    C3 --> C4
+
+    D1 --> D4
+    D1 --> D5
+
+    C4 --> C5
+    C4 --> C6
+    C5 --> D4
+    C6 --> D5
+
+    C4 --> C7
+    C7 --> B1
+    C7 --> C1
+    C7 --> C2
+    C7 --> C3
+```
+
+### **Explanation of the Diagram:**
+
+#### **1. Method Area (Metaspace)** (`Method Area`):
+- **Class Definitions** (`B1`): Contains class-level information, like the name of the class, fields, and methods.
+- **Method Definitions** (`B2`): Stores the method-level data, including method signatures and bytecode.
+- **Static Variables** (`B3`): Static variables defined at the class level.
+- **Runtime Constant Pool** (`B4`): Stores constants (like string literals) and references to methods and fields.
+- **Class-level References** (`B5`): Holds references to class objects.
+
+#### **2. Heap Memory** (`Heap Memory`):
+- **Young Generation (Eden Space)** (`C1`): Objects are initially allocated in the Eden space. The new objects are created here.
+- **Survivor Space** (`C2`): Objects that survive the minor garbage collection from Eden space are moved to the Survivor space.
+- **Old Generation (Tenured)** (`C3`): Objects that have survived multiple rounds of garbage collection are moved to the Old Generation.
+- **Objects in Heap** (`C4`): Represents all objects residing in the heap area.
+- **Values in Objects** (`C5`): The actual values (fields) inside the objects.
+- **Reference Variables** (`C6`): Variables holding references to the objects in heap memory.
+- **Garbage Collection** (`C7`): The process of reclaiming memory from objects that are no longer referenced. The garbage collector cleans the heap memory, which includes all regions (Young, Survivor, Old).
+
+#### **3. Stack Memory** (`Stack Memory`):
+- **Thread Stacks** (`D1`, `D2`, `D3`): Each thread has its own stack. Each thread has its own stack frame that holds method calls and local variables.
+- **Local Variables** (`D4`): Local variables within a method are stored in the thread’s stack.
+- **Method Calls** (`D5`): The call stack, which contains method calls and their parameters.
+  
+#### **4. Program Counter (PC) Register** (`Program Counter (PC)`):
+- **Thread-specific PC Register** (`E1`): Each thread has its own program counter (PC) register that keeps track of the next instruction to execute.
+
+#### **5. Native Method Stack** (`Native Method Stack`):
+- **Native Method Calls (C/C++)** (`F1`): This area is used for managing calls to native methods written in languages like C or C++.
+
+---
+
+### **Key Concepts in Java Memory Management:**
+
+1. **Objects & Values in the Heap**:
+   - All **objects** are stored in the **Heap** memory, specifically in the **Young Generation** initially, and if they survive multiple garbage collections, they are moved to the **Old Generation**.
+   - Objects have **values** (fields) and **references** (reference variables) in the heap.
+
+2. **Stack Memory**:
+   - Each thread has its own **stack** where **local variables** and **method calls** are stored.
+   - **Method calls** create new stack frames. A new stack frame is created each time a method is invoked, and the frame is destroyed once the method completes.
+
+3. **Method Area (Metaspace)**:
+   - The **Method Area** stores **class-level information**: class definitions, method definitions, static variables, and runtime constant pools.
+   - It is where all the metadata related to the classes in your program resides.
+
+4. **Program Counter (PC) Register**:
+   - Each thread has a **Program Counter (PC)** that keeps track of the execution address of the current thread's instruction.
+
+5. **Native Method Stack**:
+   - **Native methods** are methods that are implemented in non-Java programming languages like **C/C++**. They are managed in the **Native Method Stack**.
+
+---
+
+### **How This Diagram Helps:**
+- This diagram helps understand **how Java handles memory** for different components such as objects, method calls, class-level data, thread-specific information, and native method calls.
+- It also gives insights into how **garbage collection** works in the heap area, how **references** to objects are managed, and the division of memory into different areas for better performance and isolation of threads.
+
+---
+
+By understanding the management of **objects**, **values**, **methods**, **classes**, **threads**, and **references** in memory, you can optimize memory usage, manage garbage collection more effectively, and avoid memory leaks or stack overflow issues in large-scale Java applications.
