@@ -18062,7 +18062,7 @@ Here is a **Mermaid diagram** illustrating a CI/CD pipeline workflow with **Kube
 graph LR
     A[Source Code Repository - Git] --> B[CI/CD Pipeline - Jenkins/GitLab CI]
     B --> C[Build Image - Docker]
-    C --> D[Test Application (Unit Tests, Integration Tests)]
+    C --> D[Test Application - Unit Tests, Integration Tests]
     D --> E[Push Image to Docker Registry - DockerHub/Harbor]
     E --> F[Deploy to Kubernetes Cluster]
 
