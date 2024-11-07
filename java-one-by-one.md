@@ -12439,3 +12439,988 @@ public class BlockingThreadExample {
 | **Blocking Threads** | Threads that are paused waiting for some resource, input, or event, using methods like `sleep()`. |
 
 In Java, threads can be categorized based on their creation method, purpose, and behavior during execution. Understanding these different types of threads helps in effectively managing concurrency and ensuring the optimal performance of multithreaded applications.
+
+
+Here's a **Mermaid diagram** that illustrates the concepts of **Threads** and **Thread Concurrency** in a Java program. Mermaid is a syntax that allows for easy diagram creation and can be used to visualize the behavior of threads and concurrency models in software.
+
+### Thread and Thread Concurrency Mermaid Diagram
+
+#### 1. **Basic Thread Lifecycle**
+
+The basic lifecycle of a thread can be illustrated as a flowchart, showing the major states a thread goes through during its execution.
+
+```mermaid
+stateDiagram-v2
+    [*] --> New: Thread Created
+    New --> Runnable: Thread is started
+    Runnable --> Running: Thread is executing
+    Running --> Blocked: Thread is blocked waiting for resource
+    Running --> Waiting: Thread is waiting for a signal
+    Waiting --> Runnable: Thread gets signal
+    Running --> Terminated: Thread finishes execution
+    Blocked --> Runnable: Resource becomes available
+    Waiting --> Running: Signal received
+```
+
+#### Explanation of States:
+- **New**: The thread is created, but not yet started.
+- **Runnable**: The thread is ready to run, and the system is ready to execute it when it gets CPU time.
+- **Running**: The thread is currently executing its code.
+- **Blocked**: The thread is blocked (e.g., waiting for I/O or a resource like a lock).
+- **Waiting**: The thread is waiting (e.g., waiting for a signal or event to occur).
+- **Terminated**: The thread has completed its execution.
+
+---
+
+#### 2. **Thread Concurrency: Multi-threading Model**
+
+This diagram visualizes how multiple threads interact in a concurrent system, where several threads are running in parallel but might need synchronization or blocking when accessing shared resources.
+
+```mermaid
+graph TD
+    A[Thread 1: Task 1] -->|Runs in parallel| B[Thread 2: Task 2]
+    A -->|Runs in parallel| C[Thread 3: Task 3]
+    B --> D{Shared Resource}
+    C --> D
+    D -->|Synchronized| E[Accessing Resource]
+    D -->|Waiting for lock| F[Blocked (Thread 3)]
+    E --> G[Finished Task 1]
+    F --> G
+    D --> H[Thread 1 completes Task]
+    G --> I[Terminate]
+    H --> I
+```
+
+#### Explanation:
+- **Thread 1**, **Thread 2**, and **Thread 3** execute their respective tasks in parallel.
+- **Shared Resource** is accessed by multiple threads concurrently. Thread 3 is blocked because it's waiting for the resource to be free.
+- **Synchronized Access**: When a thread accesses a shared resource, it might be synchronized to avoid race conditions. If one thread is holding the lock (e.g., for database access), other threads must wait until the resource becomes available.
+- **Blocking**: If a thread can't proceed because it’s waiting for a shared resource (like a lock), it gets blocked until the resource is free.
+- Finally, after finishing tasks, the threads terminate.
+
+---
+
+#### 3. **Thread Pooling and Concurrency with Executor Service**
+
+This diagram illustrates how **ExecutorService** in Java manages a thread pool and delegates tasks to threads in a concurrent system.
+
+```mermaid
+graph TD
+    A[Main Thread] -->|Submits Task 1| B[Task 1: ExecutorService]
+    A -->|Submits Task 2| C[Task 2: ExecutorService]
+    B -->|Thread from Pool| D[Thread 1]
+    C -->|Thread from Pool| E[Thread 2]
+    D --> F[Task 1 completes]
+    E --> G[Task 2 completes]
+    F --> H[Task 1 Result]
+    G --> I[Task 2 Result]
+    H --> J[Complete]
+    I --> J
+    D -->|Returns to Pool| K[Thread Pool]
+    E -->|Returns to Pool| K
+    K -->|Ready for new Task| L[New Task]
+```
+
+#### Explanation:
+- The **Main Thread** submits tasks to the **ExecutorService**.
+- The **ExecutorService** assigns these tasks to threads from a pre-defined **Thread Pool**.
+- **Thread 1** and **Thread 2** execute the tasks concurrently.
+- After completing their tasks, the threads return to the pool, ready to take on new tasks.
+
+---
+
+### Usage of Mermaid Diagrams
+
+You can use these Mermaid diagrams in documentation or for explaining thread lifecycle and concurrency concepts. Tools like **Markdown**, **GitHub**, and **GitLab** support Mermaid syntax for creating visual representations. Additionally, **Mermaid Live Editor** allows you to visualize and tweak diagrams interactively.
+
+---
+
+### Key Concepts:
+
+1. **Thread Lifecycle**: Describes the states that a thread can go through from creation to termination.
+2. **Concurrency**: Shows how multiple threads interact with shared resources, which may lead to blocking or synchronization.
+3. **Executor Service & Thread Pool**: Demonstrates how Java manages multiple threads efficiently using thread pools and task delegation.
+
+These diagrams help in visualizing the complex behavior of threads and concurrency mechanisms in Java and provide a clear understanding of how multi-threaded systems work.
+
+### **Concurrency in Java & Executor Framework**
+
+Java provides a rich set of classes for concurrent programming through the **`java.util.concurrent`** package. This includes features for creating and managing threads, handling synchronization, and managing concurrency. One of the most important aspects of concurrent programming in Java is the **Executor Framework**, which abstracts away the low-level details of thread management and simplifies concurrency.
+
+---
+
+### **1. Concurrency in Java: Introduction**
+
+Concurrency refers to the ability of a program to perform multiple tasks simultaneously, using multiple threads. This is important for improving performance and responsiveness, especially in applications that require a lot of I/O operations or CPU-bound tasks.
+
+#### **Key Concepts in Java Concurrency:**
+- **Thread**: The smallest unit of execution in a program.
+- **Runnable**: A functional interface representing a task that can be executed by a thread.
+- **Executor Service**: A higher-level replacement for manually managing threads.
+- **Callable**: Similar to `Runnable`, but can return a result or throw an exception.
+- **Synchronization**: Mechanism to ensure that only one thread can access a resource at a time.
+
+### **2. Executor Framework**
+
+The **Executor Framework** provides a higher-level replacement for manually managing threads. It decouples task submission from the mechanics of how each task will be executed.
+
+#### **Key Components of Executor Framework:**
+1. **Executor**: The simplest interface with a `void execute(Runnable command)` method to execute tasks.
+2. **ExecutorService**: A more feature-rich interface extending `Executor` that provides lifecycle management and task submission for both `Runnable` and `Callable` tasks.
+3. **ScheduledExecutorService**: An interface for scheduling tasks with a fixed-rate or fixed-delay policy.
+
+#### **Common Executor Implementations:**
+- **ThreadPoolExecutor**: A versatile thread pool implementation that provides efficient thread management.
+- **ScheduledThreadPoolExecutor**: An executor designed for scheduling tasks with delay or fixed-rate execution.
+- **SingleThreadExecutor**: A pool with only one thread that executes tasks sequentially.
+
+---
+
+### **3. Executor Framework Example Code**
+
+Here’s an example demonstrating how to use the **Executor Framework** to manage threads and tasks.
+
+#### **Example: Basic ExecutorService with Runnable Tasks**
+
+```java
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+public class ExecutorExample {
+    public static void main(String[] args) {
+        // Create an ExecutorService with a fixed thread pool of 3 threads
+        ExecutorService executorService = Executors.newFixedThreadPool(3);
+
+        // Submit multiple tasks to be executed concurrently
+        executorService.submit(new RunnableTask("Task 1"));
+        executorService.submit(new RunnableTask("Task 2"));
+        executorService.submit(new RunnableTask("Task 3"));
+        executorService.submit(new RunnableTask("Task 4"));
+
+        // Shut down the ExecutorService
+        executorService.shutdown();
+    }
+
+    // Runnable task that prints out the thread name and task name
+    static class RunnableTask implements Runnable {
+        private final String taskName;
+
+        RunnableTask(String taskName) {
+            this.taskName = taskName;
+        }
+
+        @Override
+        public void run() {
+            System.out.println(Thread.currentThread().getName() + " executing " + taskName);
+        }
+    }
+}
+```
+
+#### **Output:**
+```
+pool-1-thread-1 executing Task 1
+pool-1-thread-2 executing Task 2
+pool-1-thread-3 executing Task 3
+pool-1-thread-1 executing Task 4
+```
+
+- **`Executors.newFixedThreadPool(3)`** creates a thread pool with 3 threads. Tasks are submitted to the pool and executed concurrently, with at most 3 threads running at the same time.
+
+#### **Example: ExecutorService with Callable and Future**
+
+You can use the **`Callable`** interface for tasks that return results, and **`Future`** for handling the result or any exception thrown by the task.
+
+```java
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+
+public class ExecutorWithCallable {
+    public static void main(String[] args) throws Exception {
+        ExecutorService executorService = Executors.newFixedThreadPool(2);
+
+        // Submit a Callable task to the executor
+        Future<Integer> futureResult = executorService.submit(new CallableTask(5));
+
+        // Wait for the result and print it
+        System.out.println("Result: " + futureResult.get());
+
+        // Shutdown the executor
+        executorService.shutdown();
+    }
+
+    // Callable task that returns a result
+    static class CallableTask implements Callable<Integer> {
+        private final int input;
+
+        CallableTask(int input) {
+            this.input = input;
+        }
+
+        @Override
+        public Integer call() throws Exception {
+            return input * input;
+        }
+    }
+}
+```
+
+#### **Explanation:**
+- **`CallableTask`** implements **`Callable<Integer>`**, which allows the task to return a result.
+- The **`Future.get()`** method blocks until the result is available.
+
+---
+
+### **4. Scheduled Executor Service Example**
+
+You can also use the **`ScheduledExecutorService`** for scheduling tasks with delays or fixed-rate execution.
+
+```java
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+
+public class ScheduledExecutorServiceExample {
+    public static void main(String[] args) {
+        // Create a ScheduledExecutorService with 1 thread
+        var scheduledExecutor = Executors.newSingleThreadScheduledExecutor();
+
+        // Schedule a task to run after a delay of 2 seconds
+        scheduledExecutor.schedule(new RunnableTask(), 2, TimeUnit.SECONDS);
+
+        // Schedule a task to run repeatedly with a fixed delay of 1 second
+        scheduledExecutor.scheduleWithFixedDelay(new RunnableTask(), 1, 1, TimeUnit.SECONDS);
+    }
+
+    static class RunnableTask implements Runnable {
+        @Override
+        public void run() {
+            System.out.println(Thread.currentThread().getName() + " executing task at " + System.currentTimeMillis());
+        }
+    }
+}
+```
+
+#### **Explanation:**
+- **`schedule()`**: Schedules a task to run once after a delay.
+- **`scheduleWithFixedDelay()`**: Schedules the task to run repeatedly with a fixed delay between the end of one execution and the start of the next.
+
+---
+
+### **5. Common Interview Questions on Executor Framework**
+
+#### **1. What is the difference between `Executor` and `ExecutorService`?**
+- **Executor**: A simple interface with a method `execute(Runnable command)` to submit tasks for execution. It does not return results and has no lifecycle management methods.
+- **ExecutorService**: Extends `Executor` and adds methods for task lifecycle management (`submit()`, `shutdown()`, `invokeAll()`, etc.), and allows the execution of both `Runnable` and `Callable` tasks.
+
+#### **2. What is the difference between `Runnable` and `Callable`?**
+- **Runnable**: A functional interface that represents a task that can be executed by a thread. It does not return a result and cannot throw checked exceptions.
+- **Callable**: Similar to `Runnable`, but it can return a result (of type `V`) and can throw checked exceptions.
+
+#### **3. How does `ExecutorService` manage a thread pool?**
+- **Thread Pool**: The `ExecutorService` uses a pool of worker threads to execute submitted tasks. It reuses threads to avoid the overhead of creating new threads every time a task is submitted.
+- The size of the pool is configurable (e.g., via `newFixedThreadPool()`), and tasks can be queued if all threads are busy.
+
+#### **4. How can you shut down an `ExecutorService`?**
+- Use **`shutdown()`** to initiate an orderly shutdown of the `ExecutorService` where previously submitted tasks are executed, but no new tasks will be accepted.
+- Use **`shutdownNow()`** to attempt an immediate shutdown, attempting to stop all actively executing tasks.
+
+#### **5. What happens if a task throws an exception in an Executor framework?**
+- If an exception is thrown by a task submitted to an `ExecutorService`, it is wrapped in a `ExecutionException` and is accessible via the **`Future.get()`** method. If `Runnable` tasks throw an exception, the exception is silently ignored, but if `Callable` tasks throw an exception, the exception is propagated.
+
+#### **6. What is a `ScheduledExecutorService`?**
+- It is an extension of the `ExecutorService` that can schedule tasks for one-time or repeated execution with fixed-rate or fixed-delay execution policies.
+
+#### **7. Can you explain the difference between `scheduleAtFixedRate()` and `scheduleWithFixedDelay()` in `ScheduledExecutorService`?**
+- **`scheduleAtFixedRate()`**: Executes the task at a fixed rate, ensuring that the task starts at regular intervals, regardless of how long the previous task took to execute.
+- **`scheduleWithFixedDelay()`**: Executes the task after a fixed delay from the completion of the previous execution. The delay starts after the task finishes.
+
+---
+
+### **6. Conclusion**
+
+The **Executor Framework** in Java simplifies concurrency by abstracting thread management and provides a high-level interface for executing tasks asynchronously. It allows you to manage thread pools efficiently, execute tasks with or without results, and schedule tasks for future execution. The **ExecutorService** is a powerful tool for handling multithreading in Java applications, making it easier to work with concurrent programming.
+
+Understanding the Executor Framework, `Callable`, `Future`, and scheduling tasks using `ScheduledExecutorService` is essential for anyone working on large-scale multi-threaded applications.
+
+
+Here's a breakdown of whether **GitLab CI**, **Jenkins**, **JMeter**, **JProfiler**, and **VisualVM** are open-source or not:
+
+### 1. **GitLab CI**:
+- **Open Source**: Yes, **GitLab CI** is open-source.
+- **License**: GitLab CI is part of the **GitLab Community Edition (CE)**, which is open-source and free to use. GitLab also offers an enterprise version (**GitLab EE**) with additional features, but the core CI/CD functionality in GitLab is open-source.
+  
+  **Official GitLab GitHub Repository**: [https://gitlab.com/gitlab-org/gitlab](https://gitlab.com/gitlab-org/gitlab)
+
+  **Features**:
+  - GitLab CI is tightly integrated with GitLab's version control system (GitLab CE).
+  - Free to use, with paid versions offering enterprise-level support and additional features.
+  
+### 2. **Jenkins**:
+- **Open Source**: Yes, **Jenkins** is open-source.
+- **License**: Jenkins is released under the **MIT License**, which is permissive and allows free usage, modification, and redistribution.
+
+  **Official Jenkins GitHub Repository**: [https://github.com/jenkinsci/jenkins](https://github.com/jenkinsci/jenkins)
+
+  **Features**:
+  - Jenkins is one of the most widely used open-source automation servers for continuous integration and continuous delivery (CI/CD).
+  - Plugins extend Jenkins' functionality, with the vast majority of them being open-source as well.
+
+### 3. **JMeter**:
+- **Open Source**: Yes, **JMeter** is open-source.
+- **License**: Apache 2.0 License (open-source).
+
+  **Official JMeter GitHub Repository**: [https://github.com/apache/jmeter](https://github.com/apache/jmeter)
+
+  **Features**:
+  - JMeter is an open-source tool for performance and load testing web applications.
+  - It can be used for testing the functional behavior and performance of both static and dynamic resources (such as web servers, databases, etc.).
+
+### 4. **JProfiler**:
+- **Open Source**: No, **JProfiler** is **not open-source**.
+- **License**: Commercial (paid, with a trial version available).
+
+  **Official JProfiler Website**: [https://www.ej-technologies.com/products/jprofiler/overview.html](https://www.ej-technologies.com/products/jprofiler/overview.html)
+
+  **Features**:
+  - JProfiler is a Java profiler used for monitoring the performance of Java applications.
+  - It is a commercial tool, though a free trial version is available for evaluation purposes.
+  - JProfiler provides detailed insights into memory usage, CPU usage, thread profiling, and more.
+
+### 5. **VisualVM**:
+- **Open Source**: Yes, **VisualVM** is open-source.
+- **License**: **GNU General Public License (GPL)** v2.
+
+  **Official VisualVM GitHub Repository**: [https://github.com/oracle/visualvm](https://github.com/oracle/visualvm)
+
+  **Features**:
+  - VisualVM is a tool for monitoring, troubleshooting, and profiling Java applications.
+  - It provides real-time data on memory usage, CPU profiling, thread monitoring, and much more.
+  - It is free and open-source, although it was originally developed by Sun Microsystems (now Oracle).
+
+---
+
+### **Summary Table**
+
+| **Tool**      | **Open Source** | **License**            | **Details**                                                     |
+|---------------|-----------------|------------------------|-----------------------------------------------------------------|
+| **GitLab CI** | Yes             | MIT License (CE)       | Open-source CI/CD integrated with GitLab's Git repository.      |
+| **Jenkins**   | Yes             | MIT License            | Widely-used open-source CI/CD automation tool.                   |
+| **JMeter**    | Yes             | Apache 2.0 License     | Open-source performance and load testing tool.                  |
+| **JProfiler** | No              | Commercial License    | Commercial Java profiler with a trial version.                  |
+| **VisualVM**  | Yes             | GPL v2 License        | Open-source Java profiling and monitoring tool.                 |
+
+---
+
+### Conclusion:
+- **GitLab CI**, **Jenkins**, **JMeter**, and **VisualVM** are all open-source.
+- **JProfiler** is the only one in this list that is **not open-source** and requires a commercial license (though it offers a free trial).
+
+Yes, you can install **GitLab CI**, **Jenkins**, **JMeter**, **JProfiler**, and **VisualVM** in Docker containers. Docker provides a flexible environment for running applications, and many of these tools have official Docker images or can be set up in a containerized environment. Below is a brief guide on how to run each of these tools in Docker.
+
+---
+
+### **1. Running GitLab CI in Docker**
+
+You can run **GitLab CI** (or GitLab Runner) in Docker by using the official GitLab Runner Docker image.
+
+#### Steps:
+1. **Pull the GitLab Runner Docker image:**
+
+   ```bash
+   docker pull gitlab/gitlab-runner
+   ```
+
+2. **Run the GitLab Runner container:**
+
+   ```bash
+   docker run -d --name gitlab-runner --restart always \
+     -v /var/run/docker.sock:/var/run/docker.sock \
+     -v /srv/gitlab-runner:/etc/gitlab-runner \
+     gitlab/gitlab-runner:latest
+   ```
+
+3. **Register the Runner:**
+   After the runner is running, you can register it with your GitLab instance (GitLab CI) using:
+
+   ```bash
+   docker exec -it gitlab-runner gitlab-runner register
+   ```
+
+   You will be prompted to provide your GitLab URL, registration token, and a few other configurations.
+
+4. **Verify the GitLab Runner:**
+
+   To verify that the GitLab runner is successfully installed and running, go to your GitLab project settings and check under **CI/CD** > **Runners**.
+
+---
+
+### **2. Running Jenkins in Docker**
+
+**Jenkins** has an official Docker image that you can use to spin up a Jenkins instance in no time.
+
+#### Steps:
+1. **Pull the official Jenkins Docker image:**
+
+   ```bash
+   docker pull jenkins/jenkins:lts
+   ```
+
+2. **Run the Jenkins container:**
+
+   ```bash
+   docker run -d --name jenkins \
+     -p 8080:8080 \
+     -p 50000:50000 \
+     -v jenkins_home:/var/jenkins_home \
+     --restart always \
+     jenkins/jenkins:lts
+   ```
+
+   - **8080**: Jenkins web UI port.
+   - **50000**: Port for Jenkins agent communication.
+   - **jenkins_home**: A Docker volume where Jenkins stores its configuration and build data.
+
+3. **Access Jenkins UI**:
+   After the container starts, access Jenkins at `http://localhost:8080` in your web browser. The first time you access Jenkins, it will ask for an unlock key that you can retrieve from the container logs.
+
+   ```bash
+   docker logs jenkins
+   ```
+
+4. **Complete the setup**:
+   After unlocking Jenkins, you can install the necessary plugins and configure Jenkins pipelines.
+
+---
+
+### **3. Running JMeter in Docker**
+
+**Apache JMeter** also has an official Docker image, which you can use to run performance and load tests.
+
+#### Steps:
+1. **Pull the official JMeter Docker image:**
+
+   ```bash
+   docker pull justb4/jmeter
+   ```
+
+2. **Run JMeter container:**
+
+   ```bash
+   docker run --rm -v $(pwd):/mnt/results justb4/jmeter -n -t /mnt/results/test_plan.jmx -l /mnt/results/result.jtl
+   ```
+
+   This command will run JMeter in non-GUI mode (`-n`), execute a test plan located at `test_plan.jmx`, and output the results to `result.jtl` in your local directory.
+
+   You can adjust the command as needed, such as mounting specific directories for your test plan and result files.
+
+---
+
+### **4. Running JProfiler in Docker**
+
+**JProfiler** doesn't have an official Docker image, but you can run JProfiler in Docker using a custom image and exposing its GUI.
+
+#### Steps:
+
+1. **Create a custom Dockerfile for JProfiler**:
+   
+   You will need to install JProfiler inside a container. Here's a basic example of how you can create a Dockerfile to install JProfiler.
+
+   **Dockerfile**:
+
+   ```Dockerfile
+   FROM openjdk:11-jre-slim
+
+   # Install JProfiler (download the latest .tar.gz from JProfiler website)
+   RUN apt-get update && \
+       apt-get install -y wget && \
+       wget https://download.ej-technologies.com/jprofiler/download/JProfiler_13_1_3_Linux.tar.gz && \
+       tar -xzf JProfiler_13_1_3_Linux.tar.gz && \
+       rm JProfiler_13_1_3_Linux.tar.gz && \
+       mv JProfiler_* /opt/jprofiler
+
+   # Expose port for JProfiler GUI (default 8849)
+   EXPOSE 8849
+
+   CMD ["/opt/jprofiler/bin/jprofiler"]
+   ```
+
+2. **Build and run the Docker container**:
+
+   ```bash
+   docker build -t jprofiler .
+   docker run -d -p 8849:8849 jprofiler
+   ```
+
+   You can then access JProfiler via the GUI through the exposed port. However, JProfiler is a GUI tool, and running it inside Docker requires the use of a VNC server or X11 forwarding, which may be challenging in a headless environment.
+
+   Alternatively, you can run JProfiler locally and attach it to remote applications running in Docker.
+
+---
+
+### **5. Running VisualVM in Docker**
+
+**VisualVM** can be run in Docker as well, though it is typically used for connecting to Java processes locally or remotely.
+
+#### Steps:
+1. **Pull the official VisualVM Docker image** (if available):
+
+   There is no official VisualVM Docker image. However, you can run a **JDK** container and install VisualVM manually.
+
+2. **Create a custom Dockerfile for VisualVM**:
+
+   Example of a Dockerfile for running VisualVM:
+
+   ```Dockerfile
+   FROM openjdk:11-jdk-slim
+
+   # Install dependencies
+   RUN apt-get update && \
+       apt-get install -y wget && \
+       wget https://download.java.net/openjdk/jdk11/ri/jdk-11+28_linux-x64_bin.tar.gz && \
+       tar -xzf jdk-11+28_linux-x64_bin.tar.gz && \
+       mv jdk-11+28 /opt/jdk11
+
+   # Install VisualVM
+   RUN wget https://github.com/oracle/visualvm/releases/download/2.0.6/visualvm_2.0.6_linux.tar.gz && \
+       tar -xzf visualvm_2.0.6_linux.tar.gz && \
+       mv visualvm /opt/visualvm
+
+   CMD ["/opt/visualvm/bin/visualvm"]
+   ```
+
+3. **Build and run VisualVM container**:
+
+   ```bash
+   docker build -t visualvm .
+   docker run -d -p 1099:1099 visualvm
+   ```
+
+   In most cases, you'll want to access VisualVM locally and connect it to remote JVM processes running in Docker containers. This can be done by specifying the JVM process to monitor in the **VisualVM** interface, typically through JMX.
+
+---
+
+### **Summary of Running These Tools in Docker**
+
+| Tool             | Docker Availability         | Notes                                                                                                                                 |
+|------------------|-----------------------------|---------------------------------------------------------------------------------------------------------------------------------------|
+| **GitLab CI**    | Official Docker Image       | Use GitLab Runner for CI/CD pipelines.                                                                                                  |
+| **Jenkins**      | Official Docker Image       | Easily deploy Jenkins CI server and use Docker for Jenkins builds and pipelines.                                                      |
+| **JMeter**       | Official Docker Image       | Ideal for running load and performance tests in non-GUI mode.                                                                         |
+| **JProfiler**    | No Official Image           | Use a custom Docker image or run locally and connect to Docker containers via the remote profiler.                                      |
+| **VisualVM**     | No Official Image           | Use a custom Docker image or run locally, then connect to Java processes in Docker containers via JMX.                                 |
+
+In Docker, it's generally easier to run **headless** applications or tools like **Jenkins**, **JMeter**, and **GitLab CI**. Tools that require a GUI (such as **JProfiler** and **VisualVM**) are more complex to run within Docker and often require additional configuration for remote access (e.g., through X11 forwarding, VNC, or JMX connections). 
+
+Creating a complete full-stack example with **Java 8**, **Spring Boot Microservices**, **MongoDB**, **Kafka**, **ReactJS**, and integrating the various tools mentioned requires a significant amount of code and project structure. I'll provide you with a high-level architecture, directory structure, and example code snippets for both the **backend (Java/Spring Boot)** and **frontend (React)**, as well as how to integrate these technologies.
+
+This will include:
+
+1. **Backend**: Java 8, Spring Boot, MongoDB, Kafka
+2. **Frontend**: React.js
+3. **CI/CD**: Pipelines (using GitLab CI or Jenkins), Artifactory, Git, Unit Testing, and Mocking.
+
+### **Backend (Java + Spring Boot + MongoDB + Kafka)**
+
+#### 1. **Project Structure**
+
+```
+backend/
+│
+├── src/
+│   ├── main/
+│   │   ├── java/
+│   │   │   └── com/
+│   │   │       └── example/
+│   │   │           ├── controller/
+│   │   │           ├── model/
+│   │   │           ├── service/
+│   │   │           ├── repository/
+│   │   │           ├── config/
+│   │   └── resources/
+│   │       └── application.yml
+│
+├── pom.xml  // Maven dependencies for Spring Boot, MongoDB, Kafka, JUnit, etc.
+```
+
+#### 2. **pom.xml**
+This is the `pom.xml` for managing dependencies in your Spring Boot project:
+
+```xml
+<dependencies>
+    <!-- Spring Boot and Kafka dependencies -->
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-web</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-data-mongodb</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>org.springframework.kafka</groupId>
+        <artifactId>spring-kafka</artifactId>
+    </dependency>
+
+    <!-- Testing dependencies -->
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-test</artifactId>
+        <scope>test</scope>
+    </dependency>
+
+    <!-- Mocking libraries -->
+    <dependency>
+        <groupId>org.mockito</groupId>
+        <artifactId>mockito-core</artifactId>
+        <version>4.0.0</version>
+        <scope>test</scope>
+    </dependency>
+</dependencies>
+```
+
+#### 3. **MongoDB Configuration (application.yml)**
+
+```yaml
+spring:
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/exampledb
+  kafka:
+    consumer:
+      group-id: example-group
+      bootstrap-servers: localhost:9092
+    producer:
+      bootstrap-servers: localhost:9092
+```
+
+#### 4. **Model (MongoDB Document)**
+
+Create a simple MongoDB document for your data:
+
+```java
+package com.example.model;
+
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.annotation.Id;
+
+@Document(collection = "users")
+public class User {
+    @Id
+    private String id;
+    private String name;
+    private String email;
+
+    // Getters and Setters
+}
+```
+
+#### 5. **Repository (MongoDB CRUD)**
+
+```java
+package com.example.repository;
+
+import com.example.model.User;
+import org.springframework.data.mongodb.repository.MongoRepository;
+
+public interface UserRepository extends MongoRepository<User, String> {
+    // Custom Mongo queries can be added here
+}
+```
+
+#### 6. **Kafka Producer and Consumer**
+
+Kafka producer and consumer for sending and receiving messages:
+
+**KafkaConfig.java** - Configure Kafka producer and consumer:
+
+```java
+package com.example.config;
+
+import org.apache.kafka.clients.producer.ProducerConfig;
+import org.apache.kafka.common.serialization.StringSerializer;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.kafka.annotation.EnableKafka;
+import org.springframework.kafka.core.DefaultKafkaProducerFactory;
+import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.kafka.core.ProducerFactory;
+import org.springframework.kafka.producer.ProducerRecord;
+
+@Configuration
+@EnableKafka
+public class KafkaConfig {
+
+    @Bean
+    public KafkaTemplate<String, String> kafkaTemplate() {
+        Map<String, Object> producerProps = new HashMap<>();
+        producerProps.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
+        producerProps.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+        producerProps.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+        ProducerFactory<String, String> producerFactory = new DefaultKafkaProducerFactory<>(producerProps);
+        return new KafkaTemplate<>(producerFactory);
+    }
+}
+```
+
+**KafkaProducer.java** - Example producer:
+
+```java
+package com.example.service;
+
+import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.stereotype.Service;
+
+@Service
+public class KafkaProducer {
+
+    private final KafkaTemplate<String, String> kafkaTemplate;
+
+    public KafkaProducer(KafkaTemplate<String, String> kafkaTemplate) {
+        this.kafkaTemplate = kafkaTemplate;
+    }
+
+    public void sendMessage(String message) {
+        kafkaTemplate.send("user_topic", message);
+    }
+}
+```
+
+**KafkaConsumer.java** - Example consumer:
+
+```java
+package com.example.service;
+
+import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.stereotype.Service;
+
+@Service
+public class KafkaConsumer {
+
+    @KafkaListener(topics = "user_topic", groupId = "example-group")
+    public void listen(String message) {
+        System.out.println("Received message: " + message);
+    }
+}
+```
+
+#### 7. **Controller**
+
+Create a simple REST API controller for handling CRUD operations:
+
+```java
+package com.example.controller;
+
+import com.example.model.User;
+import com.example.service.KafkaProducer;
+import com.example.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/users")
+public class UserController {
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private KafkaProducer kafkaProducer;
+
+    @PostMapping
+    public void addUser(@RequestBody User user) {
+        userRepository.save(user);
+        kafkaProducer.sendMessage("New user added: " + user.getName());
+    }
+
+    @GetMapping
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
+    }
+
+    @GetMapping("/{id}")
+    public User getUserById(@PathVariable String id) {
+        return userRepository.findById(id).orElse(null);
+    }
+}
+```
+
+---
+
+### **Frontend (React.js)**
+
+#### 1. **React Project Setup**
+
+Create a React app using `create-react-app` or configure manually if needed:
+
+```bash
+npx create-react-app frontend
+cd frontend
+npm start
+```
+
+#### 2. **Dependencies in `package.json`**
+
+Add the necessary dependencies:
+
+```json
+"dependencies": {
+  "axios": "^0.21.1",
+  "react-router-dom": "^5.2.0",
+  "react-redux": "^7.2.3",
+  "redux": "^4.0.5"
+}
+```
+
+#### 3. **App Component (React)**
+
+Create a simple form for adding users and displaying the list of users:
+
+```jsx
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+
+function App() {
+  const [users, setUsers] = useState([]);
+  const [userName, setUserName] = useState('');
+  const [userEmail, setUserEmail] = useState('');
+
+  useEffect(() => {
+    axios.get('http://localhost:8080/users')
+      .then(response => setUsers(response.data))
+      .catch(error => console.error('Error fetching users:', error));
+  }, []);
+
+  const handleAddUser = () => {
+    const user = { name: userName, email: userEmail };
+    axios.post('http://localhost:8080/users', user)
+      .then(() => {
+        setUsers([...users, user]);
+        setUserName('');
+        setUserEmail('');
+      })
+      .catch(error => console.error('Error adding user:', error));
+  };
+
+  return (
+    <div>
+      <h1>Users</h1>
+      <div>
+        <input 
+          type="text" 
+          placeholder="Name" 
+          value={userName} 
+          onChange={e => setUserName(e.target.value)} 
+        />
+        <input 
+          type="email" 
+          placeholder="Email" 
+          value={userEmail} 
+          onChange={e => setUserEmail(e.target.value)} 
+        />
+        <button onClick={handleAddUser}>Add User</button>
+      </div>
+      <ul>
+        {users.map((user, index) => (
+          <li key={index}>{user.name} - {user.email}</li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+export default App;
+```
+
+---
+
+### **CI/CD and Pipelines**
+
+You can set up **GitLab CI**, **Jenkins**, or **GitHub Actions** to automate your builds and deployments.
+
+- **GitLab CI Example**:
+
+```yaml
+stages:
+  - build
+  - test
+  - deploy
+
+build:
+  stage: build
+  script:
+    - mvn clean install
+
+test:
+  stage: test
+  script:
+    - mvn test
+
+deploy:
+  stage: deploy
+  script:
+    - docker
+
+ build -t example-app .
+    - docker run -p 8080:8080 example-app
+```
+
+- **Jenkins Pipeline**: 
+```groovy
+pipeline {
+    agent any
+    stages {
+        stage('Build') {
+            steps {
+                sh 'mvn clean install'
+            }
+        }
+        stage('Test') {
+            steps {
+                sh 'mvn test'
+            }
+        }
+        stage('Deploy') {
+            steps {
+                sh 'docker-compose up -d'
+            }
+        }
+    }
+}
+```
+
+### **Testing with Unit Tests and Mocking**
+
+- **JUnit and Mockito for testing**:
+```java
+import static org.mockito.Mockito.*;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+
+@SpringBootTest
+public class UserServiceTest {
+
+    @Autowired
+    private UserService userService;
+
+    @Mock
+    private UserRepository userRepository;
+
+    @Test
+    public void testGetAllUsers() {
+        List<User> users = Arrays.asList(new User("John", "john@example.com"));
+        when(userRepository.findAll()).thenReturn(users);
+
+        List<User> result = userService.getAllUsers();
+        assertEquals(1, result.size());
+    }
+}
+```
+
+### **Conclusion**
+This setup gives you a full-stack system with **Java Spring Boot**, **MongoDB**, **Kafka**, and a **React.js** frontend. You have CRUD functionality for users, Kafka integration for messaging, and CI/CD pipelines for continuous integration and deployment. You can add authentication, security, and other features as needed, such as **JWT authentication**, **Role-based access control**, etc.
