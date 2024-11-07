@@ -10094,4 +10094,172 @@ Spring Boot provides a variety of options for interservice communication in a mi
 - **Service Discovery**: Tools like **Eureka** help services dynamically discover each other in the system, which is especially useful in scalable, cloud-based environments.
 
 The choice of communication method depends on factors such as performance requirements, scalability, fault tolerance, and service decoupling. Each method has its advantages and trade-offs, and often a combination of them is used in a microservice ecosystem.
- 
+
+ In Java, the terms **blocking** and **non-blocking** refer to how operations handle threads during execution, particularly when dealing with tasks like I/O, network communication, or waiting for responses from other systems.
+
+### **Blocking vs Non-Blocking**
+
+#### **1. Blocking**
+In a **blocking operation**, the thread that performs the operation is **blocked** or **halted** until the operation completes. The thread cannot perform any other work during this time. It waits for the operation to finish, and once the operation completes (e.g., data is read or written), the thread resumes its execution.
+
+- **Example**: A traditional method like reading from a file or making a network request blocks the current thread until the operation is finished.
+
+**Example of Blocking I/O (Synchronous I/O)**:
+
+```java
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+
+public class BlockingExample {
+
+    public static void main(String[] args) throws IOException {
+        // Blocking operation
+        File file = new File("example.txt");
+        FileReader reader = new FileReader(file);
+        char[] buffer = new char[1024];
+        int readCount = reader.read(buffer);  // Blocking until data is read
+        System.out.println("Data Read: " + readCount);
+        reader.close();
+    }
+}
+```
+
+In the example above, the `read()` method will block the current thread until it has finished reading from the file.
+
+**Blocking behavior**:
+- The thread is **not available** to do other tasks while waiting.
+- Typically used in synchronous, imperative-style programming.
+- **I/O Bound** operations often tend to be blocking.
+
+---
+
+#### **2. Non-Blocking**
+In a **non-blocking operation**, the thread does not **wait** for the operation to complete. Instead, it **returns immediately** and the result of the operation will be available once the operation is complete. Non-blocking operations are often performed asynchronously, allowing the thread to continue working on other tasks while waiting for the operation to finish.
+
+Non-blocking operations are often associated with **asynchronous programming**, where you can continue doing other work (like handling multiple I/O requests) without waiting for each one to complete individually.
+
+**Example of Non-Blocking I/O (Asynchronous I/O)**:
+
+In Java, non-blocking I/O can be implemented using the **NIO (New I/O)** package or by using **CompletableFuture** for asynchronous tasks.
+
+Here’s a simple example using **`CompletableFuture`** (which is part of Java 8 and newer):
+
+```java
+import java.util.concurrent.CompletableFuture;
+
+public class NonBlockingExample {
+
+    public static void main(String[] args) {
+        // Non-blocking operation using CompletableFuture
+        CompletableFuture.supplyAsync(() -> {
+            try {
+                Thread.sleep(2000); // Simulate a long-running operation
+                return "Operation Finished";
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }).thenAccept(result -> {
+            // Do something with the result
+            System.out.println(result); // This will run after the operation is complete
+        });
+
+        // Other tasks can be performed while the above operation is running
+        System.out.println("Doing other work...");
+    }
+}
+```
+
+**Non-blocking behavior**:
+- The thread **does not wait** for the result of the operation.
+- It **returns immediately** and continues execution while the operation completes in the background.
+- Often used in **I/O-bound** and **CPU-bound** tasks where parallel execution can increase throughput and responsiveness.
+
+---
+
+### **Blocking vs Non-Blocking I/O in Java**
+
+Java offers several ways to implement both **blocking** and **non-blocking** operations, particularly for I/O tasks such as file handling, network communication, etc.
+
+#### **Blocking I/O (Traditional I/O)**
+
+- Uses `java.io` (e.g., `FileReader`, `BufferedReader`, `InputStreamReader`).
+- A blocking method **waits** for data to be read from disk, or a network resource, or for a socket connection to complete before returning.
+- The thread is **blocked** during this waiting time.
+
+#### **Non-Blocking I/O (NIO)**
+
+- Introduced in Java **1.4** as part of the **java.nio** package.
+- It provides **non-blocking I/O** using buffers and selectors, enabling the thread to perform other tasks while waiting for data to be available.
+- Common classes: `FileChannel`, `SocketChannel`, `Selector`, `ByteBuffer`.
+  
+**Example using Java NIO for Non-Blocking I/O**:
+
+```java
+import java.nio.channels.*;
+import java.nio.*;
+import java.io.*;
+import java.net.*;
+
+public class NonBlockingIOExample {
+    public static void main(String[] args) throws IOException {
+        ServerSocketChannel serverSocketChannel = ServerSocketChannel.open();
+        serverSocketChannel.configureBlocking(false);  // Set non-blocking mode
+        serverSocketChannel.bind(new InetSocketAddress(8080));
+
+        Selector selector = Selector.open();
+        serverSocketChannel.register(selector, SelectionKey.OP_ACCEPT);
+
+        while (true) {
+            // Blocking call until there is a channel ready for I/O operations
+            if (selector.select() > 0) {
+                var selectedKeys = selector.selectedKeys();
+                var iterator = selectedKeys.iterator();
+
+                while (iterator.hasNext()) {
+                    SelectionKey key = iterator.next();
+                    iterator.remove();
+
+                    if (key.isAcceptable()) {
+                        // Handle new incoming connection
+                        ServerSocketChannel serverChannel = (ServerSocketChannel) key.channel();
+                        SocketChannel clientChannel = serverChannel.accept();
+                        clientChannel.configureBlocking(false);  // Non-blocking mode
+                        System.out.println("New connection accepted: " + clientChannel.getRemoteAddress());
+                    }
+                }
+            }
+        }
+    }
+}
+```
+
+In this example, we use **`Selector`** to manage multiple channels (like sockets) in a non-blocking manner. The `select()` method is blocking, but it only blocks until at least one channel is ready for I/O operations (read, write, etc.). The rest of the time, the thread can perform other tasks.
+
+---
+
+### **Blocking vs Non-Blocking: Pros and Cons**
+
+| **Aspect**             | **Blocking**                               | **Non-Blocking**                             |
+|------------------------|--------------------------------------------|---------------------------------------------|
+| **Thread usage**       | Blocks the current thread until the task completes. | Doesn't block the thread; allows other tasks to execute concurrently. |
+| **I/O performance**    | Less efficient for I/O-bound tasks as threads are idle while waiting. | More efficient for handling I/O-bound tasks since threads aren't waiting idly. |
+| **Complexity**         | Simpler to implement.                     | More complex; requires managing callbacks, futures, or event loops. |
+| **Scalability**        | Less scalable; each thread can handle only one task at a time. | More scalable; a single thread can handle multiple tasks concurrently. |
+| **Example use cases**  | Simple file reads/writes, small applications, batch processing. | High-throughput systems, microservices, network servers, real-time applications. |
+
+---
+
+### **When to Use Blocking vs Non-Blocking**
+
+- **Blocking** is typically easier to implement and suitable for **simple, synchronous tasks** where latency isn't a concern, or where the application doesn't need to handle high concurrency efficiently.
+  
+- **Non-Blocking** is better suited for **high-performance**, **scalable applications**, such as **web servers** or **networked applications** that need to handle many concurrent connections without spawning new threads for each connection (as this could be resource-intensive).
+
+---
+
+### **Summary**
+- **Blocking**: A thread waits for a resource or operation to complete (e.g., file read, network I/O). It halts execution until the operation finishes.
+- **Non-blocking**: A thread doesn't wait for the operation to complete. It returns immediately and may continue other work or handle the result later (often used with asynchronous programming patterns like `CompletableFuture` or event-driven systems).
+  
+Non-blocking behavior is essential in **high-concurrency applications** like web servers, databases, and microservices, while blocking is still common in many traditional applications and simpler use cases.
