@@ -727,9 +727,7 @@ Non-access modifiers are used to define the **behavior** of classes, methods, an
 ### **Summary of Modifiers**
 
 | **Modifier**        | **Type**            | **Purpose**                                                            | **Use Case**                                      |
-|---------------------|---------------------|------------------------------------------------------------------------|--------------------------------------------------
-
-|
+|---------------------|---------------------|------------------------------------------------------------------------|--------------------------------------------------|
 | **`public`**         | Access Specifier    | Makes the member accessible from anywhere.                             | For commonly accessible elements.               |
 | **`private`**        | Access Specifier    | Restricts the member to be accessible within the same class.           | For encapsulation and hiding internal details.  |
 | **`protected`**      | Access Specifier    | Allows access within the same package and by subclasses.               | For inheritance scenarios.                      |
