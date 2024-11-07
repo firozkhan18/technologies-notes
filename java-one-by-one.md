@@ -1487,6 +1487,54 @@ Non-access modifiers are used to define the **behavior** of classes, methods, an
 
 The code you provided demonstrates the behavior of a **`volatile`** variable in a multithreaded context. The difference between having the `volatile` keyword or not on the `MY_INT` variable is critical when understanding how Java handles visibility of shared variables in multithreaded environments.
 
+```java
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+public class VolatileBehaviour {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(VolatileBehaviour.class);
+
+    private static long MY_INT = 0;// without volatile
+    private static volatile long MY_INT = 0;// with volatile
+
+    public static void main(String[] args) {
+        new ChangeListener().start();
+        new ChangeMaker().start();
+    }
+    static class ChangeListener extends Thread {
+
+        @Override
+        public void run() {
+            long local_value = MY_INT;
+            while (local_value < 5) {
+                if (local_value != MY_INT) {
+                    LOGGER.info("Got Change for MY_INT : " + MY_INT);
+                    local_value = MY_INT;
+                }
+            }
+        }
+    }
+
+    static class ChangeMaker extends Thread {
+
+        @Override
+        public void run() {
+
+            long local_value = MY_INT;
+            while (MY_INT < 5) {
+                LOGGER.info("Incrementing MY_INT to " + (local_value + 1));
+                MY_INT = ++local_value;
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+}
+```
 ### **Explanation of `volatile` Keyword in Java**:
 
 The `volatile` keyword is used in Java to ensure that a variable's value is always read from and written to **main memory** (not from a thread's local cache). When a variable is marked as `volatile`:
