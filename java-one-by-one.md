@@ -18066,7 +18066,7 @@ graph LR
     D --> E[Push Image to Docker Registry - DockerHub/Harbor]
     E --> F[Deploy to Kubernetes Cluster]
 
-    F --> G[Pod Creation & Deployment]
+    F --> G[Pod Creation and Deployment]
     G --> H[Verify Deployment - Health Checks]
     H --> I[Monitor Application - Prometheus/Grafana]
     I --> J[Rollback if Failure - Helm]
@@ -18088,7 +18088,7 @@ graph LR
     D --> E[Push Image to Docker Registry - DockerHub/Harbor]
     E --> F[Deploy to Kubernetes Cluster]
 
-    F --> G[Pod Creation & Deployment]
+    F --> G[Pod Creation and Deployment]
     G --> H[Verify Deployment - Health Checks]
     H --> I[Monitor Application - Prometheus/Grafana]
     I --> J[Rollback if Failure - Helm]
@@ -18115,7 +18115,7 @@ graph LR
     D --> E[Push Image to Docker Registry - DockerHub/Harbor]
     E --> F[Deploy to Kubernetes Cluster]
 
-    F --> G[Pod Creation & Deployment]
+    F --> G[Pod Creation and Deployment]
     G --> H[Verify Deployment - Health Checks]
     H --> I[Monitor Application - Prometheus/Grafana]
     I --> J[Rollback if Failure - Helm]
