@@ -19480,3 +19480,399 @@ sudo service apache2 restart
 - **Web Servers**: Nginx and Apache require certificates and private keys to enable SSL/TLS for secure communication.
 
 Using these methods and understanding these formats, you can effectively manage certificates, secure your applications, and establish trust between clients and servers.
+
+Here’s a detailed explanation of each of the React hooks you mentioned, along with examples for each one:
+
+---
+
+### **useState**
+`useState` is one of the most commonly used React hooks. It allows functional components to have internal state.
+
+- **Usage**: It returns a pair: the current state value and a function to update it.
+  
+```javascript
+import React, { useState } from 'react';
+
+function Counter() {
+  const [count, setCount] = useState(0);
+
+  return (
+    <div>
+      <p>Current Count: {count}</p>
+      <button onClick={() => setCount(count + 1)}>Increment</button>
+    </div>
+  );
+}
+```
+
+---
+
+### **useReducer**
+`useReducer` is an alternative to `useState` and is used for more complex state logic where the next state depends on the previous one. It is particularly useful when you have multiple state variables or when state updates depend on previous state values.
+
+- **Usage**: It requires a reducer function and an initial state. The `dispatch` function triggers actions that are processed by the reducer.
+
+```javascript
+import React, { useReducer } from 'react';
+
+const initialState = { count: 0 };
+
+function reducer(state, action) {
+  switch (action.type) {
+    case 'increment':
+      return { count: state.count + 1 };
+    case 'decrement':
+      return { count: state.count - 1 };
+    default:
+      return state;
+  }
+}
+
+function Counter() {
+  const [state, dispatch] = useReducer(reducer, initialState);
+
+  return (
+    <div>
+      <p>Current Count: {state.count}</p>
+      <button onClick={() => dispatch({ type: 'increment' })}>Increment</button>
+      <button onClick={() => dispatch({ type: 'decrement' })}>Decrement</button>
+    </div>
+  );
+}
+```
+
+---
+
+### **useSyncExternalStore**
+`useSyncExternalStore` is a new React hook designed to subscribe to an external store (such as Redux or custom stores) and reflect changes to your component synchronously.
+
+- **Usage**: This is typically used for integrating external state management libraries with React.
+
+```javascript
+import React, { useSyncExternalStore } from 'react';
+
+function useExternalStore(store) {
+  return useSyncExternalStore(store.subscribe, store.getSnapshot);
+}
+
+function App() {
+  const store = {
+    subscribe: (callback) => { /* subscribe logic */ },
+    getSnapshot: () => { /* return store snapshot */ }
+  };
+
+  const value = useExternalStore(store);
+
+  return <div>{value}</div>;
+}
+```
+
+---
+
+### **useEffect**
+`useEffect` allows you to perform side effects in function components. It runs after every render (by default) or only when certain dependencies change.
+
+- **Usage**: It is commonly used for data fetching, subscribing to events, or manually changing the DOM.
+
+```javascript
+import React, { useEffect, useState } from 'react';
+
+function DataFetcher() {
+  const [data, setData] = useState(null);
+
+  useEffect(() => {
+    fetch('https://api.example.com/data')
+      .then(response => response.json())
+      .then(data => setData(data));
+  }, []); // Empty dependency array means it runs once after the initial render
+
+  return <div>{data ? JSON.stringify(data) : 'Loading...'}</div>;
+}
+```
+
+---
+
+### **useLayoutEffect**
+`useLayoutEffect` is similar to `useEffect`, but it fires synchronously after all DOM mutations but before the browser paints. Use it when you need to read or modify the DOM immediately before the paint.
+
+- **Usage**: Useful for layout calculations like measuring elements before they are painted on the screen.
+
+```javascript
+import React, { useLayoutEffect, useState, useRef } from 'react';
+
+function LayoutEffectExample() {
+  const [height, setHeight] = useState(0);
+  const divRef = useRef(null);
+
+  useLayoutEffect(() => {
+    setHeight(divRef.current.clientHeight);
+  }, []);
+
+  return (
+    <div>
+      <div ref={divRef}>This is a measured div.</div>
+      <p>Height: {height}</p>
+    </div>
+  );
+}
+```
+
+---
+
+### **useInsertionEffect**
+`useInsertionEffect` is an experimental hook used in CSS-in-JS libraries like styled-components. It is run before other effects (i.e., before rendering), making it ideal for injecting styles into the DOM.
+
+- **Usage**: Mostly used in libraries to insert CSS rules before the DOM is painted.
+
+```javascript
+import { useInsertionEffect } from 'react';
+
+function StyleInjector() {
+  useInsertionEffect(() => {
+    // Add custom styles or CSS-in-JS logic
+  }, []);
+  
+  return <div>Injected styles are now ready.</div>;
+}
+```
+
+---
+
+### **useRef**
+`useRef` allows you to persist values across renders without causing a re-render. It can store mutable values, and it is commonly used for accessing DOM elements directly.
+
+- **Usage**: Useful for storing values that don’t trigger re-renders, such as interval IDs or DOM elements.
+
+```javascript
+import React, { useRef } from 'react';
+
+function Timer() {
+  const timerId = useRef(null);
+
+  const startTimer = () => {
+    timerId.current = setInterval(() => console.log('Timer tick'), 1000);
+  };
+
+  const stopTimer = () => {
+    clearInterval(timerId.current);
+  };
+
+  return (
+    <div>
+      <button onClick={startTimer}>Start Timer</button>
+      <button onClick={stopTimer}>Stop Timer</button>
+    </div>
+  );
+}
+```
+
+---
+
+### **useImperativeHandle**
+`useImperativeHandle` is used with `forwardRef` to customize the instance value that is exposed to parent components. It allows you to expose certain methods from a child component to its parent.
+
+- **Usage**: Allows child components to expose specific methods to their parent.
+
+```javascript
+import React, { useRef, useImperativeHandle, forwardRef } from 'react';
+
+const Child = forwardRef((props, ref) => {
+  const localInputRef = useRef();
+
+  useImperativeHandle(ref, () => ({
+    focusInput: () => {
+      localInputRef.current.focus();
+    }
+  }));
+
+  return <input ref={localInputRef} />;
+});
+
+function Parent() {
+  const childRef = useRef();
+
+  return (
+    <div>
+      <Child ref={childRef} />
+      <button onClick={() => childRef.current.focusInput()}>Focus Input</button>
+    </div>
+  );
+}
+```
+
+---
+
+### **useMemo**
+`useMemo` is used to memoize expensive calculations, which helps in improving performance by avoiding unnecessary recalculations.
+
+- **Usage**: Good for caching computationally expensive functions.
+
+```javascript
+import React, { useMemo, useState } from 'react';
+
+function ExpensiveComponent({ value }) {
+  const computeExpensiveValue = (value) => {
+    console.log('Computing...');
+    return value * 2;
+  };
+
+  const memoizedValue = useMemo(() => computeExpensiveValue(value), [value]);
+
+  return <div>Memoized Value: {memoizedValue}</div>;
+}
+```
+
+---
+
+### **useCallback**
+`useCallback` is similar to `useMemo` but is specifically for memoizing callback functions. It helps prevent unnecessary re-creations of functions when they are passed as props.
+
+- **Usage**: Useful when passing callbacks to child components that could trigger re-renders unnecessarily.
+
+```javascript
+import React, { useCallback, useState } from 'react';
+
+function Button({ onClick }) {
+  return <button onClick={onClick}>Click Me</button>;
+}
+
+function Parent() {
+  const [count, setCount] = useState(0);
+
+  const increment = useCallback(() => setCount(count + 1), [count]);
+
+  return (
+    <div>
+      <p>Count: {count}</p>
+      <Button onClick={increment} />
+    </div>
+  );
+}
+```
+
+---
+
+### **useContext**
+`useContext` allows you to consume values from the React Context API, providing a way to pass data down the component tree without having to prop-drill.
+
+- **Usage**: Best for sharing global data like user authentication status or theme settings across many components.
+
+```javascript
+import React, { useContext } from 'react';
+
+const ThemeContext = React.createContext('light');
+
+function ThemedComponent() {
+  const theme = useContext(ThemeContext);
+
+  return <div>Current theme is {theme}</div>;
+}
+
+function App() {
+  return (
+    <ThemeContext.Provider value="dark">
+      <ThemedComponent />
+    </ThemeContext.Provider>
+  );
+}
+```
+
+---
+
+### **useTransition**
+`useTransition` allows you to mark certain state updates as non-urgent, making your UI more responsive by prioritizing more urgent updates.
+
+- **Usage**: Useful when performing slow tasks that don't need to block user interactions, like filtering a large list.
+
+```javascript
+import React, { useState, useTransition } from 'react';
+
+function FilterList() {
+  const [isPending, startTransition] = useTransition();
+  const [filter, setFilter] = useState('');
+
+  const items = [...]; // A large list of items
+
+  const filteredItems = items.filter(item => item.includes(filter));
+
+  return (
+    <div>
+      <input 
+        value={filter}
+        onChange={(e) => startTransition(() => setFilter(e.target.value))}
+      />
+      {isPending ? '
+
+Loading...' : filteredItems.map(item => <div key={item}>{item}</div>)}
+    </div>
+  );
+}
+```
+
+---
+
+### **useDeferredValue**
+`useDeferredValue` is similar to `useTransition`, but it automatically schedules updates at the most optimal time.
+
+- **Usage**: It's ideal for cases like filtering a list where you don't need to update the UI immediately after every keystroke.
+
+```javascript
+import React, { useState, useDeferredValue } from 'react';
+
+function FilterList() {
+  const [filter, setFilter] = useState('');
+  const deferredFilter = useDeferredValue(filter);
+
+  const items = [...]; // A large list of items
+
+  const filteredItems = items.filter(item => item.includes(deferredFilter));
+
+  return (
+    <div>
+      <input 
+        value={filter}
+        onChange={(e) => setFilter(e.target.value)}
+      />
+      <div>{filteredItems.map(item => <div key={item}>{item}</div>)}</div>
+    </div>
+  );
+}
+```
+
+---
+
+### **useDebugValue**
+`useDebugValue` is used to display a label for custom hooks in React DevTools. It’s mostly used for debugging and is rarely needed for production code.
+
+```javascript
+import { useDebugValue } from 'react';
+
+function useCustomHook(value) {
+  useDebugValue(value ? 'Has Value' : 'No Value');
+  return value;
+}
+```
+
+---
+
+### **useId**
+`useId` is used to generate unique IDs for accessible components, such as form elements. This is helpful when you need to avoid ID collisions in your components.
+
+```javascript
+import React, { useId } from 'react';
+
+function Form() {
+  const id = useId();
+
+  return (
+    <div>
+      <label htmlFor={id}>Name</label>
+      <input id={id} type="text" />
+    </div>
+  );
+}
+```
+
+---
+
+These are some of the most commonly used React hooks with examples of when and how to use them. Each hook serves a specific purpose, making it easier to manage side effects, state, and performance optimizations in your React components.
