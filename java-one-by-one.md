@@ -18081,7 +18081,7 @@ graph LR
     class A,K fill:#cfe,stroke:#333,stroke-width:2px;
 ```
 ```mermaid
-graph LR
+graph TB
     A[Source Code Repository - Git] --> B[CI/CD Pipeline - Jenkins/GitLab CI]
     B --> C[Build Image - Docker]
     C --> D[Test Application - Unit Tests, Integration Tests]
@@ -18093,18 +18093,18 @@ graph LR
     H --> I[Monitor Application - Prometheus/Grafana]
     I --> J[Rollback if Failure - Helm]
 
-    B -.-> K[Git Commit Trigger]
+    B --> K[Git Commit Trigger]
     G --> L[Scaling Pod - Horizontal Pod Autoscaler]
 
-    %% Class Definitions
-    classDef ciCdPipeline fill:#f9f,stroke:#333,stroke-width:2px;
-    class B, C, D, E, F, G, H, I, J, L ciCdPipeline;
-    
-    classDef trigger fill:#cfc,stroke:#333,stroke-width:2px;
+    %% Class Assignments (for styling)
+    class B,C,D,E,F,G,H,I,J,L ciCdPipeline;
     class K trigger;
-    
-    classDef repo fill:#cfe,stroke:#333,stroke-width:2px;
     class A repo;
+
+    %% Class Definitions (for styling)
+    classDef ciCdPipeline fill:#f9f,stroke:#333,stroke-width:2px;
+    classDef trigger fill:#cfc,stroke:#333,stroke-width:2px;
+    classDef repo fill:#cfe,stroke:#333,stroke-width:2px;
 ```
 
 ```mermaid
