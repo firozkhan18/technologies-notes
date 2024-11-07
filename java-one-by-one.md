@@ -18053,3 +18053,82 @@ graph TB
 ---
 
 By understanding the management of **objects**, **values**, **methods**, **classes**, **threads**, and **references** in memory, you can optimize memory usage, manage garbage collection more effectively, and avoid memory leaks or stack overflow issues in large-scale Java applications.
+
+Here is a **Mermaid diagram** illustrating a CI/CD pipeline workflow with **Kubernetes**. The diagram covers the typical stages such as **Source Control**, **Build**, **Test**, **Deploy**, and how Kubernetes interacts within the deployment process.
+
+### **Mermaid Diagram for CI/CD Pipeline with Kubernetes**
+
+```mermaid
+graph LR
+    A[Source Code Repository - Git] --> B[CI/CD Pipeline - Jenkins/GitLab CI]
+    B --> C[Build Image - Docker]
+    C --> D[Test Application (Unit Tests, Integration Tests)]
+    D --> E[Push Image to Docker Registry - DockerHub/Harbor]
+    E --> F[Deploy to Kubernetes Cluster]
+
+    F --> G[Pod Creation & Deployment]
+    G --> H[Verify Deployment - Health Checks]
+    H --> I[Monitor Application - Prometheus/Grafana]
+    I --> J[Rollback if Failure - Helm]
+
+    B -.-> K[Git Commit Trigger]
+    G --> L[Scaling Pod - Horizontal Pod Autoscaler]
+
+    classDef ciCdPipeline fill:#f9f,stroke:#333,stroke-width:2px;
+    class B, C, D, E, F, G, H, I, J, L ciCdPipeline;
+    
+    class K fill:#cfc,stroke:#333,stroke-width:2px;
+    class A,K fill:#cfe,stroke:#333,stroke-width:2px;
+```
+
+### **Explanation of the Diagram:**
+
+1. **Source Code Repository (Git)** (`A`):
+   - The pipeline is triggered when new code is committed to a **Git** repository (like **GitHub**, **GitLab**, or **Bitbucket**).
+   
+2. **CI/CD Pipeline (Jenkins/GitLab CI)** (`B`):
+   - The **CI/CD tool** (e.g., **Jenkins**, **GitLab CI**, or **CircleCI**) detects changes to the source repository and begins the CI/CD process.
+   
+3. **Build Image (Docker)** (`C`):
+   - The code is built and packaged, usually as a **Docker image**. This step includes compiling the code and ensuring dependencies are correctly included.
+   
+4. **Test Application (Unit Tests, Integration Tests)** (`D`):
+   - Automated tests are run against the newly built code to ensure that it passes **unit tests**, **integration tests**, etc.
+   
+5. **Push Image to Docker Registry (DockerHub/Harbor)** (`E`):
+   - After successful tests, the built Docker image is pushed to a **Docker registry** like **DockerHub**, **Harbor**, or **AWS ECR**. The registry serves as a centralized storage for the Docker images.
+   
+6. **Deploy to Kubernetes Cluster** (`F`):
+   - The pipeline deploys the newly built Docker image into the **Kubernetes cluster** using tools like **Helm**, **kubectl**, or **Kubernetes Deployments**.
+
+7. **Pod Creation & Deployment** (`G`):
+   - Kubernetes creates a **Pod** to run the application inside the cluster. The Pod is the smallest deployable unit in Kubernetes that can contain one or more containers.
+   
+8. **Verify Deployment (Health Checks)** (`H`):
+   - Kubernetes performs health checks, such as **liveness probes** and **readiness probes**, to verify that the application is running correctly.
+   
+9. **Monitor Application (Prometheus/Grafana)** (`I`):
+   - Once the application is deployed and running, **Prometheus** and **Grafana** are used to monitor the application’s health and performance metrics.
+   
+10. **Rollback if Failure (Helm)** (`J`):
+    - If there are any issues in the deployed application, **Helm** can be used to roll back to a previous stable version of the application.
+   
+11. **Scaling Pod (Horizontal Pod Autoscaler)** (`L`):
+    - Kubernetes can automatically **scale the Pods** based on resource utilization, using the **Horizontal Pod Autoscaler**.
+
+12. **Git Commit Trigger** (`K`):
+    - The workflow begins automatically when a developer commits new code to the source repository. This triggers the CI/CD pipeline to start the process.
+
+---
+
+### **How this Diagram Helps:**
+
+- The diagram helps to visualize the **end-to-end CI/CD process** with **Kubernetes** and how the various components interact:
+  - **Source Code Repository** triggers the pipeline.
+  - **Docker** is used for building images.
+  - The pipeline handles **testing** and **pushing** to a **Docker registry**.
+  - The **Kubernetes Cluster** deploys and manages containers (using **Pods**).
+  - **Health checks**, **monitoring**, and **scaling** are handled by Kubernetes and tools like **Prometheus** and **Grafana**.
+  - **Rollback** capabilities allow for recovery if the deployment fails.
+
+By using this approach, organizations can **automate** their deployment processes and maintain consistent, reliable releases. Kubernetes provides the scalability, while CI/CD ensures faster and more efficient deployment cycles.
