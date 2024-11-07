@@ -16962,3 +16962,193 @@ Using **`BlockingQueue`** is a simpler and more efficient way to implement the p
 - The **Producer-Consumer Problem** can be effectively solved using synchronization and inter-thread communication in Java.
 - By using **`wait()`** and **`notify()`**, we ensure that threads can safely share resources without race conditions or deadlocks.
 - For easier implementation in modern Java, consider using the **`BlockingQueue`** interface, which handles synchronization and waiting for you.
+
+### Upcasting and Downcasting in Java
+
+**Upcasting** and **Downcasting** refer to casting between different types, typically when dealing with objects in an inheritance hierarchy (e.g., parent-child classes). These concepts are fundamental in **Object-Oriented Programming (OOP)** and play an important role in polymorphism.
+
+#### 1. **Upcasting**:
+- **Upcasting** is the process of converting a subclass reference to a superclass reference.
+- It is **implicit**, meaning Java will automatically do this for you.
+- Upcasting is always **safe** because a subclass object is a type of its superclass, so a reference of the subclass can be safely treated as a reference of its superclass.
+  
+Example:
+
+```java
+class Animal {
+    public void makeSound() {
+        System.out.println("Animal sound");
+    }
+}
+
+class Dog extends Animal {
+    public void makeSound() {
+        System.out.println("Bark");
+    }
+}
+
+public class UpcastingExample {
+    public static void main(String[] args) {
+        Dog dog = new Dog();
+        
+        // Upcasting: Dog -> Animal
+        Animal animal = dog;
+        animal.makeSound();  // Output: Bark (polymorphism in action)
+    }
+}
+```
+
+**Explanation**:
+- The `dog` object (which is of type `Dog`) is upcast to the `Animal` reference `animal`.
+- Even though the reference is of type `Animal`, it still points to a `Dog` object, so the `makeSound()` method of `Dog` is called, demonstrating **polymorphism**.
+
+#### 2. **Downcasting**:
+- **Downcasting** is the process of converting a superclass reference back to a subclass reference.
+- It is **explicit** (requires a cast) and can be **unsafe**, so you should use it cautiously.
+- If the object being downcast is not actually an instance of the target class or subclass, a `ClassCastException` will occur at runtime.
+
+Example:
+
+```java
+class Animal {
+    public void makeSound() {
+        System.out.println("Animal sound");
+    }
+}
+
+class Dog extends Animal {
+    public void makeSound() {
+        System.out.println("Bark");
+    }
+}
+
+public class DowncastingExample {
+    public static void main(String[] args) {
+        Animal animal = new Dog();  // Upcasting
+        
+        // Downcasting
+        Dog dog = (Dog) animal;  // Safe downcast because 'animal' points to a Dog object
+        dog.makeSound();  // Output: Bark
+    }
+}
+```
+
+**Explanation**:
+- The `animal` reference points to a `Dog` object (after upcasting).
+- The downcast `(Dog) animal` is valid because `animal` actually refers to a `Dog` object.
+- If the object was not a `Dog` (e.g., `new Animal()`), a `ClassCastException` would occur at runtime.
+
+#### Downcasting with `instanceof` Check:
+
+To prevent `ClassCastException`, always check the object's type before downcasting using `instanceof`:
+
+```java
+class Animal {}
+class Dog extends Animal {}
+class Cat extends Animal {}
+
+public class SafeDowncasting {
+    public static void main(String[] args) {
+        Animal animal = new Dog();
+        
+        if (animal instanceof Dog) {
+            Dog dog = (Dog) animal;
+            System.out.println("Downcasting to Dog is safe.");
+        } else {
+            System.out.println("Not a Dog object.");
+        }
+    }
+}
+```
+
+### Boxing and Unboxing in Java
+
+**Boxing** and **Unboxing** are concepts related to converting **primitive types** to **wrapper objects** and vice versa. This is useful in Java when working with collections (e.g., `ArrayList`, `HashMap`) since collections can only store **objects**, not primitive types.
+
+#### 1. **Autoboxing** (Converting Primitive to Wrapper Object)
+- **Autoboxing** is the automatic conversion of a **primitive type** into its corresponding **wrapper class** (e.g., `int` to `Integer`, `char` to `Character`).
+- This happens automatically in Java when assigning a primitive value to a wrapper class.
+
+Example of **Autoboxing**:
+
+```java
+public class AutoboxingExample {
+    public static void main(String[] args) {
+        int primitiveInt = 10;
+        
+        // Autoboxing: primitive int to Integer object
+        Integer integerObject = primitiveInt;
+        
+        System.out.println(integerObject);  // Output: 10
+    }
+}
+```
+
+#### 2. **Unboxing** (Converting Wrapper Object to Primitive)
+- **Unboxing** is the automatic conversion of a **wrapper class** object into its corresponding **primitive type**.
+- This happens automatically when you assign a wrapper object to a primitive variable.
+
+Example of **Unboxing**:
+
+```java
+public class UnboxingExample {
+    public static void main(String[] args) {
+        Integer integerObject = 10;  // Autoboxing
+        
+        // Unboxing: Integer object to primitive int
+        int primitiveInt = integerObject;
+        
+        System.out.println(primitiveInt);  // Output: 10
+    }
+}
+```
+
+### Summary of Autoboxing and Unboxing
+
+| Primitive Type | Wrapper Class  |
+|----------------|----------------|
+| `int`          | `Integer`      |
+| `double`       | `Double`       |
+| `char`         | `Character`    |
+| `boolean`      | `Boolean`      |
+| `float`        | `Float`        |
+| `long`         | `Long`         |
+| `byte`         | `Byte`         |
+| `short`        | `Short`        |
+
+**Autoboxing**:
+- Java automatically converts primitive types to wrapper objects when needed.
+  
+**Unboxing**:
+- Java automatically converts wrapper objects back to primitive types when needed.
+
+### Example: Autoboxing and Unboxing with Collections
+
+In this example, an `ArrayList` cannot hold primitive types directly, so we rely on **autoboxing** and **unboxing**.
+
+```java
+import java.util.ArrayList;
+
+public class BoxingUnboxingWithList {
+    public static void main(String[] args) {
+        // Autoboxing: Adding primitives to ArrayList
+        ArrayList<Integer> list = new ArrayList<>();
+        list.add(10);  // int is automatically converted to Integer
+        
+        // Unboxing: Retrieving from ArrayList
+        int value = list.get(0);  // Integer is automatically converted to int
+        
+        System.out.println("The value is: " + value);  // Output: The value is: 10
+    }
+}
+```
+
+### Key Points:
+- **Autoboxing**: The automatic conversion from primitive types to wrapper objects.
+- **Unboxing**: The automatic conversion from wrapper objects to primitive types.
+- **Wrapper classes** allow you to treat primitive types as objects, which is useful for working with generic types in collections.
+  
+### Conclusion
+
+- **Upcasting** and **Downcasting** are used for converting objects between a superclass and subclass in an inheritance hierarchy.
+- **Boxing** and **Unboxing** are techniques used to convert between primitive types and their corresponding wrapper classes, enabling you to work with objects in places where primitives cannot be used (such as collections).
