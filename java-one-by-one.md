@@ -15420,3 +15420,171 @@ Here are the **12 Rules of Microservices** based on the **12-Factor App** princi
 12. **Admin Processes**: Run admin tasks as one-off processes.
 
 By adhering to these principles, you can build microservices that are **resilient**, **scalable**, and **easy to maintain**.
+
+### String Permutation
+
+```java
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
+public class StringPermutation {
+
+    public static void main(String[] args) {
+        String str = "ABC";
+        List<String> permutations = getPermutations(str);
+        permutations.forEach(System.out::println);
+    }
+
+    public static List<String> getPermutations(String str) {
+        // Create a list of indices for the string
+        List<Integer> indices = IntStream.range(0, str.length())
+                .boxed()
+                .collect(Collectors.toList());
+
+        // Generate permutations based on the indices
+        return permute(indices, str);
+    }
+
+    private static List<String> permute(List<Integer> indices, String str) {
+        // Base case: if no indices left, return an empty list
+        if (indices.isEmpty()) {
+            return List.of(""); // Start with an empty permutation
+        }
+
+        // Generate permutations by picking each index
+        return indices.stream()
+                .flatMap(i -> {
+                    List<Integer> remainingIndices = new ArrayList<>(indices);
+                    remainingIndices.remove(i); // Remove the chosen index
+                    // Recursive call to get permutations of the remaining indices
+                    List<String> subPermutations = permute(remainingIndices, str);
+                    // Prepend the current index's character to each permutation
+                    return subPermutations.stream()
+                            .map(subPerm -> str.charAt(i) + subPerm);
+                })
+                .collect(Collectors.toList());
+    }
+}
+```
+
+```java
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
+public class IntStreamPermutation {
+
+    public static void main(String[] args) {
+        int[] array = {1, 2, 3};
+        List<List<Integer>> permutations = getPermutations(array);
+        permutations.forEach(System.out::println);
+    }
+
+    public static List<List<Integer>> getPermutations(int[] array) {
+        // Create a list of indices for the array
+        List<Integer> indices = IntStream.range(0, array.length)
+                .boxed()
+                .collect(Collectors.toList());
+        
+        // Generate permutations based on the indices
+        return permute(indices, array);
+    }
+
+    private static List<List<Integer>> permute(List<Integer> indices, int[] array) {
+        // Base case: if no indices left, return an empty list
+        if (indices.isEmpty()) {
+            return List.of(new ArrayList<>());
+        }
+        
+        // Generate permutations by picking each index
+        return indices.stream()
+                .flatMap(i -> {
+                    List<Integer> remainingIndices = new ArrayList<>(indices);
+                    remainingIndices.remove(i); // Remove the chosen index
+                    // Recursive call to get permutations of the remaining indices
+                    List<List<Integer>> subPermutations = permute(remainingIndices, array);
+                    // Prepend the current index's value to each permutation
+                    return subPermutations.stream()
+                            .map(subPerm -> {
+                                List<Integer> perm = new ArrayList<>();
+                                perm.add(array[i]); // Add current element
+                                perm.addAll(subPerm); // Add the rest
+                                return perm;
+                            });
+                })
+                .collect(Collectors.toList());
+    }
+}
+```
+
+```java
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
+public class GenericPermutation {
+
+    public static void main(String[] args) {
+        // Example with String
+        String str = "ABC";
+        List<List<String>> stringPermutations = getPermutations(str.chars()
+                .mapToObj(c -> String.valueOf((char) c))
+                .collect(Collectors.toList()));
+        System.out.println("String permutations:");
+        
+        stringPermutations.forEach(x -> System.out.println(x));
+
+//        List<String> flat = stringPermutations.stream()
+//        	        .flatMap(List::stream)
+//        	        .collect(Collectors.toList());
+//        flat.forEach(x -> System.out.println(x));
+
+        // Example with Integer
+        Integer[] array = {1, 2, 3};
+        List<List<Integer>> intPermutations = getPermutations(List.of(array));
+        System.out.println("\nInteger permutations:");
+        intPermutations.forEach(System.out::println);
+    }
+
+    public static <T> List<List<T>> getPermutations(List<T> list) {
+        // Create a list of indices for the input list
+        List<Integer> indices = IntStream.range(0, list.size())
+                .boxed()
+                .collect(Collectors.toList());
+        
+        // Generate permutations based on the indices
+        return permute(indices, list);
+    }
+
+    private static <T> List<List<T>> permute(List<Integer> indices, List<T> list) {
+        // Base case: if no indices left, return a list containing an empty list
+        if (indices.isEmpty()) {
+            return List.of(new ArrayList<>());
+        }
+
+        // Generate permutations by picking each index
+        return indices.stream()
+                .flatMap(i -> {
+                    List<Integer> remainingIndices = new ArrayList<>(indices);
+                    remainingIndices.remove(i); // Remove the chosen index
+                    // Recursive call to get permutations of the remaining indices
+                    List<List<T>> subPermutations = permute(remainingIndices, list);
+                    // Prepend the current index's element to each permutation
+                    return subPermutations.stream()
+                            .map(subPerm -> {
+                                List<T> perm = new ArrayList<>();
+                                perm.add(list.get(i)); // Add current element
+                                perm.addAll(subPerm); // Add the rest
+                                return perm;
+                            });
+                })
+                .collect(Collectors.toList());
+    }
+}
+```
