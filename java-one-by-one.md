@@ -18123,16 +18123,15 @@ graph LR
     B --> K[Git Commit Trigger]
     G --> L[Scaling Pod - Horizontal Pod Autoscaler]
 
-    %% Class Definitions
-    class B, C, D, E, F, G, H, I, J, L ciCdPipeline
-    class K trigger
-    class A repo
-    
+    %% Class Assignments
+    class B, C, D, E, F, G, H, I, J, L ciCdPipeline;
+    class K trigger;
+    class A repo;
+
     %% Class Styling
     classDef ciCdPipeline fill:#f9f,stroke:#333,stroke-width:2px;
     classDef trigger fill:#cfc,stroke:#333,stroke-width:2px;
     classDef repo fill:#cfe,stroke:#333,stroke-width:2px;
-
 ```
 ### **Explanation of the Diagram:**
 
