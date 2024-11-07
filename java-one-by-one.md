@@ -18107,6 +18107,33 @@ graph LR
     class A repo;
 ```
 
+```mermaid
+graph LR
+    A[Source Code Repository - Git] --> B[CI/CD Pipeline - Jenkins/GitLab CI]
+    B --> C[Build Image - Docker]
+    C --> D[Test Application - Unit Tests, Integration Tests]
+    D --> E[Push Image to Docker Registry - DockerHub/Harbor]
+    E --> F[Deploy to Kubernetes Cluster]
+
+    F --> G[Pod Creation & Deployment]
+    G --> H[Verify Deployment - Health Checks]
+    H --> I[Monitor Application - Prometheus/Grafana]
+    I --> J[Rollback if Failure - Helm]
+
+    B -.-> K[Git Commit Trigger]
+    G --> L[Scaling Pod - Horizontal Pod Autoscaler]
+
+    %% Class Definitions
+    class B, C, D, E, F, G, H, I, J, L ciCdPipeline
+    class K trigger
+    class A repo
+    
+    %% Class Styling
+    classDef ciCdPipeline fill:#f9f,stroke:#333,stroke-width:2px;
+    classDef trigger fill:#cfc,stroke:#333,stroke-width:2px;
+    classDef repo fill:#cfe,stroke:#333,stroke-width:2px;
+
+```
 ### **Explanation of the Diagram:**
 
 1. **Source Code Repository (Git)** (`A`):
