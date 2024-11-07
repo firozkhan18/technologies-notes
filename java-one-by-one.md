@@ -15862,3 +15862,375 @@ public class ConnectionPool {
 
 ### **Conclusion**:
 - The original implementation is a good starting point, but adding error handling, connection validation, and proper resource management (like closing connections on shutdown) can significantly improve its reliability and robustness in a production environment.
+
+
+### **Method Overloading** vs **Method Overriding** in Java
+
+Both **method overloading** and **method overriding** are core concepts in object-oriented programming (OOP), particularly in Java, but they differ in their purpose, usage, and behavior. Let's dive into the differences:
+
+---
+
+### **1. Method Overloading**
+
+**Definition:**
+Method overloading occurs when a class has multiple methods with the **same name**, but with different method signatures (i.e., different parameters).
+
+**Key Characteristics of Method Overloading:**
+- **Same Method Name**: The method name remains the same.
+- **Different Parameters**: The methods have different parameters (either in the number, type, or order of parameters).
+- **Compile-Time Polymorphism**: Overloading is resolved at **compile time** (also known as static polymorphism).
+- **Return Type Can Vary**: You can have the same method name with different return types, but the return type alone is not enough to differentiate overloaded methods.
+
+**Usage**:
+Method overloading is used to increase the readability of the program and to perform similar tasks with different inputs.
+
+**Example**:
+```java
+class Calculator {
+
+    // Overloaded method for adding two integers
+    public int add(int a, int b) {
+        return a + b;
+    }
+
+    // Overloaded method for adding three integers
+    public int add(int a, int b, int c) {
+        return a + b + c;
+    }
+
+    // Overloaded method for adding two double values
+    public double add(double a, double b) {
+        return a + b;
+    }
+}
+
+public class Test {
+    public static void main(String[] args) {
+        Calculator calc = new Calculator();
+        System.out.println("Sum of two integers: " + calc.add(5, 10));
+        System.out.println("Sum of three integers: " + calc.add(5, 10, 15));
+        System.out.println("Sum of two doubles: " + calc.add(5.5, 10.5));
+    }
+}
+```
+
+**Output**:
+```
+Sum of two integers: 15
+Sum of three integers: 30
+Sum of two doubles: 16.0
+```
+
+---
+
+### **2. Method Overriding**
+
+**Definition:**
+Method overriding occurs when a subclass provides its own specific implementation for a method that is already defined in its superclass. The method in the subclass **must** have the same name, return type, and parameters as the method in the superclass.
+
+**Key Characteristics of Method Overriding:**
+- **Same Method Signature**: The method name, return type, and parameters in both the parent (superclass) and child (subclass) should be exactly the same.
+- **Runtime Polymorphism**: Overriding is resolved at **runtime** (also known as dynamic polymorphism).
+- **Inheritance**: The method being overridden must be inherited from a superclass or interface.
+- **`@Override` Annotation**: It is recommended to use the `@Override` annotation to explicitly indicate that a method is overriding a superclass method.
+
+**Usage**:
+Method overriding is used to provide specific implementations for methods that are already defined in a superclass, typically to modify or extend the behavior of the inherited method.
+
+**Example**:
+```java
+// Parent Class (Superclass)
+class Animal {
+
+    public void sound() {
+        System.out.println("Animal makes a sound");
+    }
+}
+
+// Child Class (Subclass)
+class Dog extends Animal {
+
+    // Method overriding the superclass method
+    @Override
+    public void sound() {
+        System.out.println("Dog barks");
+    }
+}
+
+public class Test {
+    public static void main(String[] args) {
+        Animal animal = new Animal();
+        Dog dog = new Dog();
+
+        // Calling the sound method of the Animal class
+        animal.sound(); // Output: Animal makes a sound
+
+        // Calling the overridden sound method of the Dog class
+        dog.sound(); // Output: Dog barks
+
+        // Demonstrating runtime polymorphism
+        Animal myDog = new Dog();
+        myDog.sound(); // Output: Dog barks (dynamic dispatch)
+    }
+}
+```
+
+**Output**:
+```
+Animal makes a sound
+Dog barks
+Dog barks
+```
+
+---
+
+### **Key Differences Between Method Overloading and Method Overriding**
+
+| Feature                          | **Method Overloading**                             | **Method Overriding**                              |
+|-----------------------------------|----------------------------------------------------|----------------------------------------------------|
+| **Definition**                    | A method with the same name but different parameters (number/type). | A method in the subclass with the same name, return type, and parameters as in the superclass. |
+| **Purpose**                        | To allow a method to perform similar actions with different parameters. | To provide a specific implementation for an inherited method. |
+| **Method Signature**              | Methods have the same name, but different parameters (number, type, or order). | Methods must have the same name, parameters, and return type. |
+| **Polymorphism Type**             | Compile-time polymorphism (static polymorphism).   | Runtime polymorphism (dynamic polymorphism).       |
+| **Return Type**                   | Return type can be different, but not sufficient for overloading. | Return type must be the same as in the superclass.   |
+| **Access Modifier**               | Overloaded methods can have different access modifiers. | Overridden methods cannot have a more restrictive access modifier. |
+| **Usage**                         | Used for the convenience of performing the same action with different types of data. | Used to alter or extend the behavior of inherited methods in subclasses. |
+| **`@Override` Annotation**        | Not applicable, as it's not related to inheritance. | You should use `@Override` to indicate method overriding. |
+| **Performance Impact**            | Overloading does not have runtime performance overhead. | Overriding introduces slight overhead due to dynamic method dispatch. |
+
+---
+
+### **When to Use Method Overloading**:
+- When you need to perform similar operations on different types or numbers of parameters.
+- When it makes sense to offer multiple variations of a method but you want to keep the method name consistent.
+
+### **When to Use Method Overriding**:
+- When you need to modify or extend the behavior of a method from a superclass in a subclass.
+- When you want to provide a **specific implementation** of an inherited method to customize the behavior of a class.
+
+---
+
+### **Common Interview Questions**:
+
+1. **Explain the difference between method overloading and method overriding in Java.**
+2. **Can we overload a method by changing the return type alone? Why or why not?**
+3. **What is the role of the `@Override` annotation in method overriding?**
+4. **Can we override a `private` or `static` method in Java? Why or why not?**
+5. **What will happen if a superclass method is marked as `final` and we try to override it in a subclass?**
+6. **Can we overload a method in Java without changing its parameter types?**
+7. **What is the significance of method overloading in Java with respect to polymorphism?**
+8. **Explain runtime polymorphism in Java with the help of method overriding.**
+
+### 1. **Explain the difference between method overloading and method overriding in Java.**
+
+#### **Method Overloading:**
+- **Definition**: Method overloading occurs when a class has multiple methods with the **same name** but **different parameters** (either in number, type, or order).
+- **Polymorphism Type**: It is **compile-time polymorphism** (or static polymorphism).
+- **Usage**: Allows the same method to perform different tasks based on the parameters passed.
+- **Key Points**:
+  - Overloaded methods must have the same name but different method signatures (parameter count, type, or order).
+  - Return type can vary (but it’s not a distinguishing factor).
+  - Overloading is resolved at compile-time by the compiler.
+
+#### **Method Overriding:**
+- **Definition**: Method overriding happens when a **subclass** provides its own specific implementation for a method that is already defined in the **superclass**. The method in the subclass must have the same **name**, **return type**, and **parameters**.
+- **Polymorphism Type**: It is **runtime polymorphism** (or dynamic polymorphism).
+- **Usage**: Used when a subclass wants to **change or extend** the behavior of a superclass method.
+- **Key Points**:
+  - Overriding is resolved at runtime by the JVM (method resolution happens dynamically).
+  - The overridden method in the subclass must match the signature of the method in the superclass.
+
+**Example**:
+```java
+class Animal {
+    void sound() { System.out.println("Animal makes a sound"); }
+}
+
+class Dog extends Animal {
+    @Override
+    void sound() { System.out.println("Dog barks"); } // Overriding Animal's sound method
+}
+```
+
+---
+
+### 2. **Can we overload a method by changing the return type alone? Why or why not?**
+
+No, we **cannot overload a method** by changing the return type alone. Method overloading requires the method signature to differ in the **number** or **types** of parameters. 
+
+**Reason**: The return type is not considered part of the method signature for overloading purposes. The method signature is composed of the method name and parameter list only. Changing the return type will not make it a valid overload because it does not change the method's signature.
+
+**Example** (Invalid Overloading):
+```java
+class Calculator {
+    // Invalid overloading
+    public int add(int a, int b) { return a + b; }
+    public double add(int a, int b) { return a + b; } // Error: return type does not differentiate
+}
+```
+
+---
+
+### 3. **What is the role of the `@Override` annotation in method overriding?**
+
+The `@Override` annotation in Java is used to **indicate** that a method is **overriding** a method from its superclass or implementing a method from an interface.
+
+#### **Role of `@Override`:**
+- **Compile-Time Checking**: It helps the compiler check that you are correctly overriding a method from the superclass. If the method does not exist in the superclass, the compiler will throw an error.
+- **Improves Readability**: It makes it explicit that a method is intended to override a superclass method, improving the readability of the code.
+
+**Example**:
+```java
+class Animal {
+    void sound() { System.out.println("Animal makes a sound"); }
+}
+
+class Dog extends Animal {
+    @Override
+    void sound() { System.out.println("Dog barks"); } // @Override ensures this is an override
+}
+```
+
+---
+
+### 4. **Can we override a private or static method in Java? Why or why not?**
+
+#### **Private Methods**:
+- **No**, we cannot override a **private method** because private methods are **not inherited** by the subclass. They are **only accessible within the class** where they are defined, meaning they are not visible to subclasses.
+- If you declare a method as private, it cannot be overridden by a subclass, even if it has the same signature.
+
+**Example**:
+```java
+class Animal {
+    private void makeSound() { System.out.println("Animal makes a sound"); }
+}
+
+class Dog extends Animal {
+    // Error: makeSound() is private in Animal, so it cannot be overridden
+    @Override
+    private void makeSound() { System.out.println("Dog barks"); }
+}
+```
+
+#### **Static Methods**:
+- **No**, we cannot override **static methods** in Java. Static methods are **class-level** methods and are not dispatched through dynamic polymorphism. They are bound at compile time, not runtime.
+- A subclass can **hide** a static method by defining a method with the same name and signature, but this is not considered overriding.
+
+**Example**:
+```java
+class Animal {
+    static void sound() { System.out.println("Animal makes a sound"); }
+}
+
+class Dog extends Animal {
+    // This is method hiding, not overriding
+    static void sound() { System.out.println("Dog barks"); }
+}
+```
+
+---
+
+### 5. **What will happen if a superclass method is marked as `final` and we try to override it in a subclass?**
+
+If a method in a superclass is marked as `final`, **it cannot be overridden** in any subclass.
+
+#### **Reason**:
+- The `final` keyword in Java ensures that the method’s implementation cannot be changed by subclasses.
+- Attempting to override a `final` method results in a **compilation error**.
+
+**Example**:
+```java
+class Animal {
+    final void sound() { System.out.println("Animal makes a sound"); }
+}
+
+class Dog extends Animal {
+    // Error: Cannot override final method sound() in Animal
+    @Override
+    void sound() { System.out.println("Dog barks"); }
+}
+```
+
+---
+
+### 6. **Can we overload a method in Java without changing its parameter types?**
+
+No, we **cannot overload** a method without changing its **parameter types**, **number of parameters**, or **parameter order**. 
+
+**Reason**:
+- Method overloading relies on **differentiating the method signatures**, which is achieved by changing the number, type, or order of parameters.
+- Simply changing the method’s name, return type, or making any other modifications won't be sufficient for overloading.
+
+**Example** (Invalid Overloading):
+```java
+class Calculator {
+    // Invalid: same parameters, same method signature
+    public void add(int a, int b) { System.out.println(a + b); }
+    public void add(int a, int b) { System.out.println(a - b); } // Error: duplicate method
+}
+```
+
+---
+
+### 7. **What is the significance of method overloading in Java with respect to polymorphism?**
+
+- **Compile-Time Polymorphism**: Method overloading is a form of **compile-time polymorphism** (or static polymorphism) in Java.
+- It allows a class to have multiple methods with the same name but different parameter lists, making the code more readable and flexible.
+- The appropriate method is selected by the compiler based on the arguments provided during method invocation.
+
+**Example**:
+```java
+class Printer {
+    void print(String s) { System.out.println(s); }
+    void print(int i) { System.out.println(i); }
+}
+
+public class Test {
+    public static void main(String[] args) {
+        Printer p = new Printer();
+        p.print("Hello, World!"); // Calls print(String)
+        p.print(100);              // Calls print(int)
+    }
+}
+```
+
+---
+
+### 8. **Explain runtime polymorphism in Java with the help of method overriding.**
+
+**Runtime Polymorphism** (or **Dynamic Polymorphism**) is achieved when a method in a subclass overrides a method in the superclass, and the method that gets executed is determined at **runtime** based on the object type.
+
+#### **How it works**:
+- At **runtime**, the **JVM** determines which method to call based on the **actual object** type (not the reference type).
+- This allows you to invoke methods on objects of the subclass even though you may be referring to them using a reference of the superclass type.
+
+**Example**:
+```java
+class Animal {
+    void sound() { System.out.println("Animal makes a sound"); }
+}
+
+class Dog extends Animal {
+    @Override
+    void sound() { System.out.println("Dog barks"); }
+}
+
+public class Test {
+    public static void main(String[] args) {
+        Animal animal = new Dog();  // Reference type is Animal, object type is Dog
+        animal.sound();  // Dog barks (method call resolved at runtime)
+    }
+}
+```
+
+**Explanation**:
+- In this example, **`animal`** is a reference of type `Animal`, but the object it points to is of type `Dog`. 
+- The method `sound()` is **overridden** in `Dog`, so at **runtime**, the JVM calls the `sound()` method in `Dog` instead of `Animal`, demonstrating **runtime polymorphism**.
+
+---
+
+In conclusion:
+- **Method Overloading** enables methods with the same name to perform different tasks depending on their arguments.
+- **Method Overriding** allows subclasses to provide their specific implementation for a method defined in the superclass, ensuring dynamic method dispatch at runtime.
+
+- 
