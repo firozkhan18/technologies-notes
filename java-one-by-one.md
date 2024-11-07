@@ -17933,7 +17933,7 @@ To visually represent how memory management works in Java with respect to **obje
 graph TB
     A[JVM Memory Management]
 
-    subgraph Method Area (Metaspace)
+    subgraph Method Area - Metaspace
         direction TB
         B1[Class Definitions] --> B2[Method Definitions]
         B3[Static Variables] --> B4[Runtime Constant Pool]
@@ -17942,11 +17942,11 @@ graph TB
 
     subgraph Heap Memory
         direction LR
-        C1[Young Generation (Eden Space)] --> C2[Survivor Space]
-        C2 --> C3[Old Generation (Tenured)]
+        C1[Young Generation -Eden Space] --> C2[Survivor Space]
+        C2 --> C3[Old Generation - Tenured]
         C4[Objects in Heap] --> C5[Values in Objects]
         C4 --> C6[Reference Variables]
-        C7[Garbage Collection (GC)]
+        C7[Garbage Collection - GC)]
     end
 
     subgraph Stack Memory
@@ -17958,14 +17958,14 @@ graph TB
         D5[Method Calls]
     end
 
-    subgraph Program Counter (PC)
+    subgraph Program Counter - PC
         direction TB
         E1[Thread-specific PC Register]
     end
 
     subgraph Native Method Stack
         direction TB
-        F1[Native Method Calls (C/C++)]
+        F1[Native Method Calls - C/C++]
     end
 
     A --> B1
