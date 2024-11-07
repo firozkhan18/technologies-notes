@@ -17946,7 +17946,7 @@ graph TB
         C2 --> C3[Old Generation - Tenured]
         C4[Objects in Heap] --> C5[Values in Objects]
         C4 --> C6[Reference Variables]
-        C7[Garbage Collection - GC)]
+        C7[Garbage Collection - GC]
     end
 
     subgraph Stack Memory
