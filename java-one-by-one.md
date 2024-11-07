@@ -450,6 +450,806 @@ public class Main {
 
 In practice, the choice between **composition**, **aggregation**, and **association** depends on the **lifetime** and **ownership** of the objects involved, and how closely related they are in your design.
 
+In Java, **access specifiers** and **non-access modifiers** are keywords used to define the visibility, accessibility, and behavior of classes, methods, variables, and constructors. Understanding how these work is essential for designing robust and maintainable applications. Below, I’ll provide a detailed overview of both access specifiers and non-access modifiers, along with examples.
+
+### **1. Access Specifiers in Java**
+Access specifiers determine the visibility or accessibility of a class, method, or variable to other parts of the program. There are **four** main types of access specifiers:
+
+1. **`public`**  
+   - **Visibility**: The member is accessible from **any other class** in any package.
+   - **Use case**: Used for classes, methods, and fields that need to be accessed universally.
+
+2. **`private`**  
+   - **Visibility**: The member is **accessible only within the same class**.
+   - **Use case**: Used to restrict access to fields and methods to maintain **encapsulation** and hide internal details.
+
+3. **`protected`**  
+   - **Visibility**: The member is accessible within:
+     - The **same package**.
+     - **Subclasses** (even if they are in different packages).
+   - **Use case**: Typically used for inheritance, allowing derived classes to access protected members of their base class.
+
+4. **Default (Package-private)**  
+   - **Visibility**: If no access specifier is provided, the member is accessible only within **the same package**.
+   - **Use case**: Used for members that should be accessible within the package but not outside it.
+
+#### **Example**:
+
+```java
+class AccessSpecifierExample {
+    public String publicVar = "Public"; // Can be accessed from anywhere
+    private String privateVar = "Private"; // Can only be accessed within the class
+    protected String protectedVar = "Protected"; // Can be accessed in subclasses
+    String defaultVar = "Default"; // Package-private: Can only be accessed within the package
+
+    public void show() {
+        System.out.println("Public variable: " + publicVar);
+        System.out.println("Private variable: " + privateVar);
+        System.out.println("Protected variable: " + protectedVar);
+        System.out.println("Default variable: " + defaultVar);
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        AccessSpecifierExample example = new AccessSpecifierExample();
+        System.out.println(example.publicVar);  // Accessible
+        // System.out.println(example.privateVar);  // Not accessible, compile-time error
+        System.out.println(example.protectedVar);  // Accessible within the same package or subclasses
+        System.out.println(example.defaultVar);  // Accessible within the same package
+    }
+}
+```
+
+### **2. Non-Access Modifiers in Java**
+Non-access modifiers are used to define the **behavior** of classes, methods, and variables. These modifiers do not control access but alter how the Java compiler handles the elements.
+
+#### **Common Non-Access Modifiers**:
+
+1. **`static`**
+   - **Use**: Denotes class-level variables or methods, meaning they belong to the class rather than an instance.
+   - **Use Case**: Static variables or methods are shared among all instances of the class.
+   - **Example**:
+
+     ```java
+     class Counter {
+         static int count = 0;  // Static variable shared across all instances
+
+         public Counter() {
+             count++;
+         }
+
+         public static void displayCount() {
+             System.out.println("Count: " + count);
+         }
+     }
+
+     public class Main {
+         public static void main(String[] args) {
+             new Counter();
+             new Counter();
+             Counter.displayCount();  // Output: Count: 2
+         }
+     }
+     ```
+
+2. **`final`**
+   - **Use**: 
+     - Prevents modification (for variables, methods, and classes).
+     - A `final` variable cannot be reassigned.
+     - A `final` method cannot be overridden.
+     - A `final` class cannot be subclassed.
+   - **Use Case**: To create constants, to prevent inheritance or method overriding, and to ensure immutability.
+   - **Example**:
+
+     ```java
+     class Calculator {
+         final double PI = 3.14159;  // Constant value
+
+         public final void showPI() {  // Method cannot be overridden
+             System.out.println("Value of PI: " + PI);
+         }
+     }
+
+     // Error: Cannot subclass final class
+     // class ExtendedCalculator extends Calculator { }
+
+     public class Main {
+         public static void main(String[] args) {
+             Calculator calc = new Calculator();
+             calc.showPI();
+         }
+     }
+     ```
+
+3. **`abstract`**
+   - **Use**: 
+     - For abstract classes: cannot be instantiated directly and may have abstract methods that must be implemented by subclasses.
+     - For abstract methods: a method that has no body and must be implemented by any concrete subclass.
+   - **Use Case**: To create a common template for subclasses that can have their own specific implementations.
+   - **Example**:
+
+     ```java
+     abstract class Animal {
+         abstract void sound();  // Abstract method, no body
+
+         public void eat() {
+             System.out.println("Animal is eating.");
+         }
+     }
+
+     class Dog extends Animal {
+         public void sound() {
+             System.out.println("Woof!");
+         }
+     }
+
+     public class Main {
+         public static void main(String[] args) {
+             Animal dog = new Dog();
+             dog.sound();  // Output: Woof!
+             dog.eat();    // Output: Animal is eating.
+         }
+     }
+     ```
+
+4. **`synchronized`**
+   - **Use**: Used to ensure that only one thread can access a method or block of code at a time.
+   - **Use Case**: Used for thread safety, particularly when accessing shared resources in a multithreaded environment.
+   - **Example**:
+
+     ```java
+     class Counter {
+         private int count = 0;
+
+         public synchronized void increment() {  // Synchronized to ensure thread safety
+             count++;
+         }
+
+         public synchronized int getCount() {
+             return count;
+         }
+     }
+
+     public class Main {
+         public static void main(String[] args) {
+             Counter counter = new Counter();
+
+             // Multiple threads incrementing the counter
+             Runnable task = () -> {
+                 for (int i = 0; i < 1000; i++) {
+                     counter.increment();
+                 }
+             };
+
+             Thread t1 = new Thread(task);
+             Thread t2 = new Thread(task);
+
+             t1.start();
+             t2.start();
+
+             try {
+                 t1.join();
+                 t2.join();
+             } catch (InterruptedException e) {
+                 e.printStackTrace();
+             }
+
+             System.out.println("Final count: " + counter.getCount());  // Ensures thread-safe increment
+         }
+     }
+     ```
+
+5. **`transient`**
+   - **Use**: Marks a member variable not to be serialized. When an object is serialized, transient variables are excluded.
+   - **Use Case**: To exclude sensitive data or data that should not be part of the serialization process.
+   - **Example**:
+
+     ```java
+     import java.io.*;
+
+     class Person implements Serializable {
+         String name;
+         transient String password;  // Will not be serialized
+
+         public Person(String name, String password) {
+             this.name = name;
+             this.password = password;
+         }
+     }
+
+     public class Main {
+         public static void main(String[] args) throws IOException, ClassNotFoundException {
+             Person person = new Person("Alice", "secret123");
+
+             // Serialize the object
+             FileOutputStream fileOut = new FileOutputStream("person.ser");
+             ObjectOutputStream out = new ObjectOutputStream(fileOut);
+             out.writeObject(person);
+             out.close();
+             fileOut.close();
+
+             // Deserialize the object
+             FileInputStream fileIn = new FileInputStream("person.ser");
+             ObjectInputStream in = new ObjectInputStream(fileIn);
+             Person deserializedPerson = (Person) in.readObject();
+             in.close();
+             fileIn.close();
+
+             System.out.println("Name: " + deserializedPerson.name);
+             System.out.println("Password: " + deserializedPerson.password);  // Output will be null because it was transient
+         }
+     }
+     ```
+
+6. **`volatile`**
+   - **Use**: Used for variables to indicate that the value of the variable may be changed by multiple threads.
+   - **Use Case**: Ensures that the most up-to-date value of the variable is always read by threads, especially when there are concurrent modifications.
+   - **Example**:
+
+     ```java
+     class Flag {
+         private volatile boolean flag = false;  // Ensures visibility across threads
+
+         public void setFlag() {
+             flag = true;
+         }
+
+         public boolean getFlag() {
+             return flag;
+         }
+     }
+
+     public class Main {
+         public static void main(String[] args) {
+             Flag flag = new Flag();
+
+             Thread t1 = new Thread(() -> {
+                 while (!flag.getFlag()) {
+                     // Wait for flag to be true
+                 }
+                 System.out.println("Flag is set!");
+             });
+
+             Thread t2 = new Thread(() -> {
+                 flag.setFlag();
+                 System.out.println("Flag has been set.");
+             });
+
+             t1.start();
+             t2.start();
+         }
+     }
+     ```
+
+---
+
+### **Summary of Modifiers**
+
+| **Modifier**        | **Type**            | **Purpose**                                                            | **Use Case**                                      |
+|---------------------|---------------------|------------------------------------------------------------------------|--------------------------------------------------
+
+|
+| **`public`**         | Access Specifier    | Makes the member accessible from anywhere.                             | For commonly accessible elements.               |
+| **`private`**        | Access Specifier    | Restricts the member to be accessible within the same class.           | For encapsulation and hiding internal details.  |
+| **`protected`**      | Access Specifier    | Allows access within the same package and by subclasses.               | For inheritance scenarios.                      |
+| **`default`**        | Access Specifier    | Allows access within the same package.                                 | Package-private members.                        |
+| **`static`**         | Non-Access Modifier | Indicates class-level members shared across instances.                | For shared state or utility methods.            |
+| **`final`**          | Non-Access Modifier | Prevents modification (variables), overriding (methods), or subclassing (classes). | To create constants, immutability, and prevent modification. |
+| **`abstract`**       | Non-Access Modifier | Defines abstract classes or methods that must be implemented by subclasses. | For defining templates or incomplete classes.   |
+| **`synchronized`**   | Non-Access Modifier | Ensures mutual exclusion for methods or blocks in multi-threaded contexts. | For thread safety.                              |
+| **`transient`**      | Non-Access Modifier | Excludes variables from being serialized.                              | For sensitive data or non-serializable fields.  |
+| **`volatile`**       | Non-Access Modifier | Ensures visibility of updated variables across threads.                | For shared variables in multi-threaded programs. |
+
+By using these modifiers appropriately, Java developers can create clean, efficient, and maintainable code, controlling how classes and members are accessed and behave in different contexts.
+
+In Java, **threads** and **concurrency** are key concepts for building applications that can perform multiple tasks simultaneously. Java provides several keywords and classes to work with threads and manage concurrency, making it easier to write efficient, multi-threaded applications. Below is a detailed explanation of **Java thread-related keywords** and **concurrency** concepts, including their uses with examples.
+
+---
+
+### **1. Thread Keywords in Java**
+
+#### **`synchronized`**
+- **Purpose**: The `synchronized` keyword is used to ensure that a method or block of code can only be executed by one thread at a time, providing a mechanism for mutual exclusion and thread safety.
+- **Use case**: When multiple threads need to access a shared resource (e.g., a variable or a method), and you want to ensure that no two threads modify it simultaneously (leading to race conditions).
+- **Example**:
+
+```java
+class Counter {
+    private int count = 0;
+
+    public synchronized void increment() {  // Synchronized method
+        count++;
+    }
+
+    public synchronized int getCount() {  // Synchronized method
+        return count;
+    }
+}
+
+public class Main {
+    public static void main(String[] args) throws InterruptedException {
+        Counter counter = new Counter();
+
+        Runnable task = () -> {
+            for (int i = 0; i < 1000; i++) {
+                counter.increment();
+            }
+        };
+
+        Thread t1 = new Thread(task);
+        Thread t2 = new Thread(task);
+
+        t1.start();
+        t2.start();
+
+        t1.join();
+        t2.join();
+
+        System.out.println("Final Count: " + counter.getCount());  // Ensured thread-safe increment
+    }
+}
+```
+
+- **Explanation**: 
+  - `synchronized` ensures that only one thread can execute the `increment()` method at a time, avoiding race conditions and ensuring the integrity of the `count` variable.
+
+#### **`volatile`**
+- **Purpose**: The `volatile` keyword is used to indicate that a variable's value can be modified by multiple threads, and any update to it must be immediately visible to all threads.
+- **Use case**: It is used for variables that are shared between threads and need to be updated consistently across all threads.
+- **Example**:
+
+```java
+class Flag {
+    private volatile boolean flag = false;  // Ensures the flag is updated across threads
+
+    public void setFlag() {
+        flag = true;
+    }
+
+    public boolean getFlag() {
+        return flag;
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Flag flag = new Flag();
+
+        // Thread to check the flag
+        Thread t1 = new Thread(() -> {
+            while (!flag.getFlag()) {
+                // Wait until the flag is set
+            }
+            System.out.println("Flag is set!");
+        });
+
+        // Thread to set the flag
+        Thread t2 = new Thread(() -> {
+            flag.setFlag();
+            System.out.println("Flag has been set.");
+        });
+
+        t1.start();
+        t2.start();
+    }
+}
+```
+
+- **Explanation**:
+  - The `volatile` keyword ensures that changes made to `flag` by one thread are immediately visible to other threads, preventing caching issues that might occur with normal variables.
+
+#### **`final`**
+- **Purpose**: In the context of multi-threading, the `final` keyword can be used to declare variables that cannot be modified after initialization, thus preventing certain types of concurrency errors.
+- **Use case**: To ensure that a variable or reference is safely initialized and cannot be modified by any thread after construction.
+- **Example**:
+
+```java
+class Example {
+    private final String message;
+
+    public Example(String message) {
+        this.message = message;  // Can only be assigned once
+    }
+
+    public String getMessage() {
+        return message;
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Example example = new Example("Hello, Thread!");
+        System.out.println(example.getMessage());
+    }
+}
+```
+
+- **Explanation**:
+  - The `final` keyword ensures that the `message` variable can only be assigned once, making it immutable after construction. This guarantees thread safety when accessing the `message` variable across multiple threads.
+
+---
+
+### **2. Concurrency Keywords and Concepts in Java**
+
+#### **`extends Thread` vs `implements Runnable`**
+Java provides two primary ways to create and start a new thread: by extending the `Thread` class or by implementing the `Runnable` interface.
+
+1. **`extends Thread`**:
+   - You can create a new thread by extending the `Thread` class and overriding its `run()` method.
+   - This is the simpler approach but is less flexible because Java only allows single inheritance, so if your class extends `Thread`, it cannot extend any other class.
+
+   **Example**:
+
+   ```java
+   class MyThread extends Thread {
+       public void run() {
+           System.out.println("Thread is running");
+       }
+   }
+
+   public class Main {
+       public static void main(String[] args) {
+           MyThread t = new MyThread();
+           t.start();  // Start the thread
+       }
+   }
+   ```
+
+2. **`implements Runnable`**:
+   - Implementing the `Runnable` interface is more flexible because it allows your class to inherit from other classes (since Java supports multiple interfaces).
+   - It also allows passing the `Runnable` instance to the `Thread` constructor, which can be helpful in certain situations like using thread pools.
+
+   **Example**:
+
+   ```java
+   class MyRunnable implements Runnable {
+       public void run() {
+           System.out.println("Thread is running");
+       }
+   }
+
+   public class Main {
+       public static void main(String[] args) {
+           MyRunnable myRunnable = new MyRunnable();
+           Thread t = new Thread(myRunnable);
+           t.start();  // Start the thread
+       }
+   }
+   ```
+
+---
+
+### **3. Concurrency Concepts and Tools in Java**
+
+#### **Thread Pools (`Executor Framework`)**
+Instead of creating new threads for every task, which can be inefficient, Java provides the `Executor` framework to manage a pool of threads. This helps to reuse threads and limit the number of concurrently executing threads.
+
+- **`Executor`**: A simple interface for executing tasks asynchronously.
+- **`ExecutorService`**: A sub-interface of `Executor` that adds methods for managing and controlling the execution of tasks.
+- **`ThreadPoolExecutor`**: A concrete implementation of `ExecutorService` that provides a thread pool.
+
+**Example**:
+
+```java
+import java.util.concurrent.*;
+
+public class Main {
+    public static void main(String[] args) {
+        ExecutorService executor = Executors.newFixedThreadPool(4);  // Thread pool with 4 threads
+
+        Runnable task = () -> {
+            System.out.println(Thread.currentThread().getName() + " is executing task.");
+        };
+
+        for (int i = 0; i < 10; i++) {
+            executor.submit(task);  // Submit tasks to the thread pool
+        }
+
+        executor.shutdown();  // Shut down the executor service
+    }
+}
+```
+
+- **Explanation**:
+  - Here, we use `Executors.newFixedThreadPool(4)` to create a thread pool with a fixed size of 4 threads. Tasks are submitted to the pool, and the threads in the pool handle them.
+
+#### **`CountDownLatch`**
+- **Purpose**: The `CountDownLatch` class is used to synchronize multiple threads. It allows one or more threads to wait until a set of operations in other threads completes.
+- **Use case**: When you want a thread to wait for multiple threads to complete before continuing.
+
+**Example**:
+
+```java
+import java.util.concurrent.*;
+
+public class Main {
+    public static void main(String[] args) throws InterruptedException {
+        CountDownLatch latch = new CountDownLatch(3);  // Wait for 3 threads
+
+        Runnable task = () -> {
+            try {
+                Thread.sleep(1000);  // Simulate some work
+                System.out.println(Thread.currentThread().getName() + " completed task.");
+                latch.countDown();  // Decrement latch count
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        };
+
+        for (int i = 0; i < 3; i++) {
+            new Thread(task).start();
+        }
+
+        latch.await();  // Wait for all threads to finish
+        System.out.println("All tasks are complete.");
+    }
+}
+```
+
+- **Explanation**:
+  - The `CountDownLatch` is initialized with a count of 3. Each of the 3 threads decrements the latch by calling `countDown()`, and the main thread waits for the latch to reach 0 using `await()`. Only when all 3 threads finish will the main thread continue.
+
+#### **`CyclicBarrier`**
+- **Purpose**: Similar to `CountDownLatch`, but more flexible. It allows a set of threads to wait for each other to reach a common barrier point.
+- **Use case**: Used when multiple threads need to wait for each other to reach a certain point before proceeding.
+
+**Example**:
+
+```java
+import java.util.concurrent.*;
+
+public class Main {
+    public static void main(String[] args) throws InterruptedException {
+        CyclicBarrier barrier = new CyclicBarrier(3, () -> {
+            System.out.println("All threads have reached the barrier.");
+        });
+
+        Runnable task = () -> {
+            try {
+                System.out.println(Thread.currentThread().getName() + " is working.");
+                Thread.sleep(1000);  // Simulate work
+                barrier.await();  // Wait at the barrier
+            } catch (InterruptedException | BrokenBarrierException e)
+
+ {
+                e.printStackTrace();
+            }
+        };
+
+        for (int i = 0; i < 3; i++) {
+            new Thread(task).start();
+        }
+    }
+}
+```
+
+- **Explanation**:
+  - The `CyclicBarrier` is initialized with 3 parties. All threads must reach the barrier by calling `await()`. Once all 3 threads arrive, the barrier is triggered, and the `Runnable` passed to the barrier is executed.
+
+---
+
+### **Summary of Key Thread and Concurrency Keywords**
+
+| **Keyword**         | **Purpose**                                             | **Use Case**                                              |
+|---------------------|---------------------------------------------------------|-----------------------------------------------------------|
+| **`synchronized`**   | Ensures mutual exclusion for methods or blocks of code | Used for thread safety when accessing shared resources.   |
+| **`volatile`**       | Ensures visibility of variable across threads          | Used for variables that can be accessed and modified by multiple threads. |
+| **`final`**          | Prevents modification (variables), overriding (methods), or subclassing (classes) | Ensures immutability and safe sharing of data across threads. |
+| **`Thread`**         | A class to represent a thread of execution              | Used to create and manage threads.                        |
+| **`Runnable`**       | An interface for executing code in a thread             | Used for defining tasks that can be executed by a thread. |
+| **`Executor`**       | Interface for executing tasks asynchronously            | Used for thread pool management.                          |
+| **`CountDownLatch`** | Used for thread synchronization (waiting for other threads to complete) | Used to wait for one or more threads to complete their execution. |
+| **`CyclicBarrier`**  | Synchronizes a set of threads to wait for each other    | Used to ensure threads wait at a certain point before proceeding. |
+| **`ExecutorService`**| Extends `Executor` to provide methods for controlling task execution | Manages and controls thread execution in thread pools.    |
+
+---
+
+By understanding and utilizing these keywords, you can effectively manage concurrency in your Java programs, making them more efficient, thread-safe, and responsive.
+
+In Java, `final` and `static` are two important keywords that have distinct roles and uses in the language. They are often used to control the behavior and structure of variables, methods, and classes. Let's break them down in detail.
+
+### **1. `final` Keyword in Java**
+
+The `final` keyword in Java is used to indicate that something cannot be changed or modified once it is assigned or initialized. It can be applied to variables, methods, and classes.
+
+#### **Usage of `final`**
+
+1. **Final Variable**: A variable declared as `final` can only be assigned once, i.e., it can be initialized only once, either directly or in the constructor (in case of instance variables). Once initialized, it cannot be modified.
+
+   - **Final Instance Variable**: The value of the instance variable cannot be changed after the object is created.
+   - **Final Static Variable**: The value of the static variable cannot be changed after it is initialized.
+
+   **Example**:
+   ```java
+   class Example {
+       final int CONSTANT = 100;  // Constant, cannot be changed after initialization
+
+       public Example() {
+           // CONSTANT = 200; // Error: cannot assign a value to final variable
+       }
+
+       public void printConstant() {
+           System.out.println(CONSTANT);
+       }
+   }
+   ```
+
+2. **Final Method**: A method declared as `final` cannot be overridden by subclasses. This is useful when you want to ensure that the implementation of a method remains the same across all subclasses.
+
+   **Example**:
+   ```java
+   class Parent {
+       final void display() {
+           System.out.println("This method cannot be overridden.");
+       }
+   }
+
+   class Child extends Parent {
+       // Error: Cannot override final method from Parent
+       // void display() {
+       //     System.out.println("Trying to override");
+       // }
+   }
+   ```
+
+3. **Final Class**: A class declared as `final` cannot be subclassed. This is used when you want to prevent inheritance and ensure that no other class can extend your class.
+
+   **Example**:
+   ```java
+   final class FinalClass {
+       public void show() {
+           System.out.println("This class cannot be subclassed.");
+       }
+   }
+
+   // Error: Cannot subclass final class
+   // class SubClass extends FinalClass { }
+   ```
+
+#### **Key Points About `final`**
+- **Final Variables**: Once assigned, the value cannot be changed.
+- **Final Methods**: Cannot be overridden by subclasses.
+- **Final Classes**: Cannot be subclassed.
+- **Use Cases**: Immutable objects, preventing modification, and defining constants.
+
+---
+
+### **2. `static` Keyword in Java**
+
+The `static` keyword in Java is used to create class-level members (variables and methods), meaning they belong to the **class** rather than to any specific instance of the class. `static` is often used for class-level variables (also called class fields) and methods that should be shared among all instances of the class.
+
+#### **Usage of `static`**
+
+1. **Static Variable**: A static variable is shared by all instances of the class. It is also known as a **class variable** because it is associated with the class itself, not with individual objects. If you modify the static variable, the change will reflect across all instances of that class.
+
+   **Example**:
+   ```java
+   class Counter {
+       static int count = 0; // Static variable shared by all instances
+
+       public Counter() {
+           count++;
+       }
+
+       public void showCount() {
+           System.out.println("Count: " + count);
+       }
+   }
+
+   public class Test {
+       public static void main(String[] args) {
+           Counter c1 = new Counter();
+           Counter c2 = new Counter();
+           c1.showCount(); // Count: 2
+           c2.showCount(); // Count: 2
+       }
+   }
+   ```
+
+   - In the above example, both `c1` and `c2` share the same static variable `count`. Each time a new `Counter` object is created, `count` is incremented. Both objects show the same value for `count`.
+
+2. **Static Method**: A static method belongs to the class rather than to any specific instance. You can invoke a static method without creating an instance of the class. Static methods can access only static variables and call other static methods. They **cannot** access instance variables or instance methods directly.
+
+   **Example**:
+   ```java
+   class Calculator {
+       static int add(int a, int b) {
+           return a + b;
+       }
+   }
+
+   public class Test {
+       public static void main(String[] args) {
+           // Static method is called without creating an object
+           System.out.println(Calculator.add(5, 10)); // Output: 15
+       }
+   }
+   ```
+
+   - Static methods are often used for utility or helper methods that do not require instance-specific data.
+
+3. **Static Block**: A static block is used for static initialization of a class. It runs only once when the class is first loaded into memory, and it is typically used to initialize static variables or perform one-time setup operations.
+
+   **Example**:
+   ```java
+   class Example {
+       static int value;
+
+       static {
+           value = 10;  // Static block for initializing static variable
+           System.out.println("Static block executed.");
+       }
+
+       public static void main(String[] args) {
+           System.out.println("Value: " + value);
+       }
+   }
+   ```
+
+   - Static blocks are useful for one-time initialization when the class is loaded and when the static fields need complex setup.
+
+4. **Static Class (Nested Class)**: In Java, you can have a static nested class. A static nested class is not associated with an instance of the outer class, and it can only access the **static members** of the outer class.
+
+   **Example**:
+   ```java
+   class Outer {
+       static int outerValue = 100;
+
+       static class Inner {
+           void display() {
+               System.out.println("Outer value: " + outerValue); // Can access static member of outer class
+           }
+       }
+   }
+
+   public class Test {
+       public static void main(String[] args) {
+           Outer.Inner inner = new Outer.Inner();
+           inner.display();  // Output: Outer value: 100
+       }
+   }
+   ```
+
+---
+
+### **Key Differences Between `final` and `static`**
+
+| **Feature**                  | **`final`**                                       | **`static`**                                             |
+|------------------------------|--------------------------------------------------|---------------------------------------------------------|
+| **Purpose**                   | Used to indicate immutability or unchangeable elements (variable, method, or class). | Used to indicate class-level members shared by all instances. |
+| **Scope**                     | Can be used with variables, methods, and classes. | Can be used with variables, methods, blocks, and nested classes. |
+| **Modification**              | Once assigned, a `final` variable cannot be modified. | Static members belong to the class and can be accessed without an instance. |
+| **Inheritance**               | A `final` method cannot be overridden; a `final` class cannot be subclassed. | A static method can be overridden (though it's not commonly done) and can be accessed via the class name or instances. |
+| **Memory**                    | A `final` variable's value is constant. | A `static` variable is shared across all instances of the class. |
+| **Use Cases**                 | Constants, immutability, preventing method overriding or class inheritance. | Class-level methods/variables, utility methods, shared state between objects. |
+
+---
+
+### **Common Use Cases**
+
+1. **`final`**:
+   - **Constants**: Declaring constants using `final` ensures that values cannot be changed.
+   - **Immutable objects**: Used in creating immutable classes where fields cannot be changed after initialization.
+   - **Preventing inheritance or method overriding**: When you want to restrict inheritance or overriding for safety, for example, in the `String` class.
+
+2. **`static`**:
+   - **Utility Methods**: Methods that don’t require instance data (e.g., `Math.max()`, `Collections.sort()`).
+   - **Shared Data**: Static variables allow sharing data among all instances of a class.
+   - **Class Initialization**: Static blocks for one-time initialization of static members.
+   - **Singleton Pattern**: The `static` variable can hold the single instance of the class in a Singleton design.
+
+---
+
+### **Conclusion**
+
+- **`final`** ensures that once a variable, method, or class is defined, it cannot be changed or extended. It is used for constants, immutability, and preventing modification through inheritance.
+- **`static`** is used for class-level variables and methods, allowing them to be accessed without an instance of the class. It helps to share common data or behavior among all instances of the class.
+
+Both `final` and `static` are crucial for writing clean, efficient, and safe Java code, especially when it comes to constants, utility functions, and shared state.
+
+
+
 In Java, **abstract classes**, **regular interfaces**, and **functional interfaces** are important concepts that help define how we model behavior in our programs. They each have specific use cases, and understanding their differences is key to writing effective Java code.
 
 Let's break down these concepts:
@@ -3487,6 +4287,670 @@ These concepts address various key aspects of concurrency and memory management 
 - **Fairness** ensures all threads are treated equitably, and **Fail-Fast vs Fail-Safe** strategies help handle system failures in different ways.
 
 By understanding and applying these concepts correctly, you can build more robust, scalable, and efficient Java applications.
+
+**Fail-Safe** and **Fail-Fast** are two different approaches used to handle errors and failures in systems, particularly in the context of iterating over or modifying collections in Java. Both terms describe how systems (or iterators, collections, etc.) behave when an operation encounters a problem, but they have distinct behaviors and use cases.
+
+Let's explore both concepts in detail:
+
+### 1. **Fail-Fast**
+- **Definition**: A **Fail-Fast** system or approach **detects errors early** and throws an exception as soon as it encounters an issue, usually as a result of concurrent modification or illegal access.
+  
+- **Behavior**: 
+  - Fail-fast systems do not attempt to handle the error silently. Instead, they **fail immediately** when a problem is detected, throwing an exception (like `ConcurrentModificationException` in Java).
+  - Fail-fast is typically used to catch problems early in the execution, providing developers with clear feedback so that the problem can be fixed before it propagates further.
+
+- **Example in Java**:  
+  Java's **`ArrayList`** and **`HashMap`** collections use the fail-fast behavior. If you try to modify a collection while iterating over it (from another thread or from the same thread), it will throw a `ConcurrentModificationException`.
+
+  **Example**:
+  ```java
+  List<String> list = new ArrayList<>();
+  list.add("a");
+  list.add("b");
+  
+  // Fail-fast behavior in the iterator
+  Iterator<String> iterator = list.iterator();
+  while (iterator.hasNext()) {
+      String item = iterator.next();
+      // Modify collection while iterating
+      list.remove(item);  // This will throw ConcurrentModificationException
+  }
+  ```
+
+  **Explanation**:
+  - The `ConcurrentModificationException` occurs because the `ArrayList`'s internal structure was modified while it was being iterated over. The iterator detects this modification and throws the exception, failing fast.
+
+- **Advantages**: 
+  - **Early detection of errors**.
+  - Helps **catch programming mistakes** early in the development process.
+  - Avoids **data corruption** or inconsistent states by stopping as soon as an issue is detected.
+
+- **Disadvantages**:
+  - The program might fail unexpectedly if the issue occurs during iteration or modification.
+  - Not suitable for highly concurrent environments if the goal is to allow safe concurrent modifications.
+
+---
+
+### 2. **Fail-Safe**
+- **Definition**: A **Fail-Safe** system or approach, on the other hand, **does not throw exceptions** when an error occurs. Instead, it attempts to continue operating, often by **returning a default value** or **allowing for safe iteration** even when the underlying collection is modified concurrently.
+
+- **Behavior**:
+  - In a fail-safe system, **modifications to the collection** during iteration do not throw exceptions, and the iteration will proceed safely, sometimes reflecting changes as part of the process.
+  - **Concurrent modifications** might be ignored or handled in a way that allows the iteration to continue without immediate failure.
+  - Fail-safe systems often use **copying the collection** or **locking mechanisms** to prevent concurrent modification issues from causing failures.
+
+- **Example in Java**:  
+  Java's **`CopyOnWriteArrayList`** and **`CopyOnWriteArraySet`** are **fail-safe** collections. They allow safe iteration even when the collection is modified during iteration. They achieve this by creating a copy of the collection during modification.
+
+  **Example**:
+  ```java
+  List<String> list = new CopyOnWriteArrayList<>();
+  list.add("a");
+  list.add("b");
+
+  Iterator<String> iterator = list.iterator();
+  while (iterator.hasNext()) {
+      String item = iterator.next();
+      // Modify collection while iterating
+      list.add("c");  // No exception, it is fail-safe
+  }
+  
+  System.out.println(list);  // Output: [a, b, c]
+  ```
+
+  **Explanation**:
+  - `CopyOnWriteArrayList` creates a **copy** of the list when it is modified. Iterators are not affected by the changes made to the list during iteration because the modifications are made to a copy, not the original list.
+
+- **Advantages**:
+  - **Allows modification during iteration** without throwing exceptions.
+  - Can be useful in **highly concurrent environments** where you want to modify the collection while safely iterating over it.
+  - Provides a more **graceful failure mechanism** where errors don't abruptly stop the program.
+  
+- **Disadvantages**:
+  - Can lead to **higher memory usage** because collections may be copied during modifications (e.g., `CopyOnWriteArrayList`).
+  - **Slower performance** due to copying the collection during modifications.
+  - May **ignore concurrent changes** or present a **stale view** of the collection, as modifications during iteration may not always be reflected immediately.
+
+---
+
+### Key Differences Between Fail-Fast and Fail-Safe
+
+| **Aspect**              | **Fail-Fast**                                       | **Fail-Safe**                                       |
+|-------------------------|-----------------------------------------------------|-----------------------------------------------------|
+| **Behavior**            | Detects errors early and throws an exception.       | Allows continued operation, usually by copying the collection or using locks. |
+| **Concurrent Modifications** | Throws `ConcurrentModificationException` if the collection is modified during iteration. | Allows modifications during iteration, often ignoring changes or reflecting them later. |
+| **Examples in Java**    | `ArrayList`, `HashMap`, `HashSet` (with iterators)   | `CopyOnWriteArrayList`, `CopyOnWriteArraySet`       |
+| **Performance**         | Faster in single-threaded scenarios, but may fail abruptly when modified concurrently. | May have performance overhead due to copying data structures (e.g., `CopyOnWriteArrayList`). |
+| **Use Cases**           | Best for **single-threaded** or **controlled concurrency** where early error detection is important. | Useful in **highly concurrent** systems where modification during iteration is common, but consistency is needed. |
+
+### When to Use Fail-Fast vs. Fail-Safe
+
+- **Use Fail-Fast** when:
+  - You want to detect errors early in the development process, especially related to **concurrent modification**.
+  - You are dealing with **single-threaded** collections or **controlled multi-threaded environments** where data consistency and immediate error detection are crucial.
+  - You are iterating over collections and want the program to fail fast in case of **programming mistakes** (e.g., accidental modification of a collection during iteration).
+
+- **Use Fail-Safe** when:
+  - You are working in a **highly concurrent environment** where multiple threads may be modifying a collection while others are iterating over it.
+  - You need to ensure that **modifications can happen concurrently** without throwing exceptions.
+  - You can tolerate a **slightly stale view** of the collection during iteration or have mechanisms in place to manage concurrency effectively.
+
+### Conclusion
+- **Fail-Fast** ensures **early detection of errors** and is useful in environments where the integrity of data must be maintained and errors need to be detected as soon as they occur.
+- **Fail-Safe** is more suitable for **concurrent systems** that require safe iteration and modification, often at the cost of performance or memory usage.
+
+Each approach has its pros and cons, and the choice between them depends on the requirements of your application and how you handle concurrency and error management.
+
+**Concurrency** and **threads** are fundamental concepts in modern programming, particularly when working with multi-threaded environments in languages like Java. Understanding how concurrency works and how threads are used can significantly improve your ability to write efficient, scalable, and thread-safe applications.
+
+### 1. **What is Concurrency?**
+
+**Concurrency** refers to the ability of a system to manage multiple tasks (or processes) at the same time. It doesn't necessarily mean that tasks are executed **simultaneously** (that would be **parallelism**), but rather that the system allows tasks to be in progress at the same time, by switching between them in a way that makes it seem like they are executing together.
+
+In a **single-core processor** system, concurrency is achieved by **time-slicing**—the CPU switches between tasks rapidly, giving the illusion of simultaneous execution. In **multi-core processors**, concurrency can also involve actual simultaneous execution of tasks across multiple cores.
+
+Concurrency is especially important in applications that need to handle multiple operations, such as:
+- **Web servers** (handling multiple client requests at once)
+- **Database servers** (executing multiple queries concurrently)
+- **GUI applications** (maintaining responsiveness while performing background tasks)
+
+### 2. **What are Threads?**
+
+A **thread** is the smallest unit of execution within a program. A single program can have multiple threads running concurrently, each executing its own code independently. Threads are used to perform **concurrent tasks** within a program.
+
+In Java, **threads** can be used to achieve concurrency by allowing different tasks to be executed in parallel or concurrently. Java provides a built-in mechanism for creating and managing threads, allowing developers to write multi-threaded programs.
+
+There are two primary ways to create threads in Java:
+1. **Extending the `Thread` class**.
+2. **Implementing the `Runnable` interface**.
+
+### 3. **Creating Threads in Java**
+
+#### 1. **Using the `Thread` class**
+```java
+class MyThread extends Thread {
+    @Override
+    public void run() {
+        System.out.println("Thread is running.");
+    }
+
+    public static void main(String[] args) {
+        MyThread t1 = new MyThread();
+        t1.start();  // Starts the thread
+    }
+}
+```
+
+#### 2. **Using the `Runnable` interface**
+```java
+class MyRunnable implements Runnable {
+    @Override
+    public void run() {
+        System.out.println("Thread is running using Runnable.");
+    }
+
+    public static void main(String[] args) {
+        MyRunnable myRunnable = new MyRunnable();
+        Thread t1 = new Thread(myRunnable);
+        t1.start();  // Starts the thread
+    }
+}
+```
+
+In both cases, the **`run()`** method defines the code that will be executed by the thread when it's started. The **`start()`** method is used to initiate the thread, and it calls the `run()` method in a new thread of execution.
+
+### 4. **Concurrency vs Parallelism**
+
+- **Concurrency**: Concurrency refers to the ability to run multiple tasks at the same time, but it doesn't necessarily mean that they are running at exactly the same time (as in a single-core system, where tasks are time-sliced). It's about dealing with lots of tasks at once and managing them efficiently.
+  
+- **Parallelism**: Parallelism involves actually executing multiple tasks **simultaneously**. This is typically possible when you have multiple processors or cores. With parallelism, different tasks are **literally executed at the same time** (on different processors).
+
+In Java, concurrency can be achieved even on single-core processors by switching between tasks (time-slicing), while parallelism requires a multi-core processor to run tasks truly simultaneously.
+
+### 5. **Java Concurrency Basics: Managing Threads**
+
+Managing threads is crucial when writing concurrent applications. Java provides various tools and classes for handling concurrency and managing thread execution.
+
+#### **Thread Lifecycle**
+
+A thread in Java goes through several stages:
+1. **New**: A thread is created but not yet started.
+2. **Runnable**: A thread is ready to run, but the thread scheduler decides when to allocate CPU time to it.
+3. **Blocked**: A thread is waiting for a resource (e.g., waiting to acquire a lock).
+4. **Waiting**: A thread is waiting indefinitely for another thread to perform a particular action.
+5. **Timed Waiting**: A thread is waiting for a specific period before it resumes execution.
+6. **Terminated**: A thread has completed its execution.
+
+#### **Thread Scheduling**
+Java uses the **Thread Scheduler** to decide when each thread gets to run. The scheduler decides which thread to run based on factors like:
+- Thread priority (`Thread.setPriority()`).
+- Availability of CPU time.
+- The state of other threads.
+
+#### **Thread Synchronization**
+
+In multi-threaded environments, multiple threads might try to access shared resources simultaneously, leading to **data inconsistency** or **race conditions**. Synchronization is a mechanism used to ensure that only one thread can access a resource at a time.
+
+In Java, synchronization can be achieved in two main ways:
+
+1. **Synchronized Methods**:
+   ```java
+   synchronized void myMethod() {
+       // thread-safe code
+   }
+   ```
+
+2. **Synchronized Blocks**:
+   ```java
+   void myMethod() {
+       synchronized(this) {
+           // thread-safe code
+       }
+   }
+   ```
+
+The **synchronized** keyword ensures that only one thread can execute the code within the synchronized block or method at a time. If multiple threads attempt to access synchronized code, they will be queued, ensuring that only one thread executes it at a time.
+
+#### **Locks (ReentrantLock)**
+
+In addition to the `synchronized` keyword, Java provides more sophisticated synchronization mechanisms such as **`ReentrantLock`** (from `java.util.concurrent.locks` package). This provides better control over synchronization, including features like try-lock, timed lock, and the ability to interrupt lock acquisition.
+
+```java
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+
+public class MyThreadSafeClass {
+    private Lock lock = new ReentrantLock();
+
+    public void myMethod() {
+        lock.lock();  // Acquires the lock
+        try {
+            // Critical section
+        } finally {
+            lock.unlock();  // Releases the lock
+        }
+    }
+}
+```
+
+#### **Executors and Thread Pools**
+Creating and managing individual threads manually can become complex. Instead, Java provides the **`Executor` framework**, which simplifies thread management by using **thread pools**.
+
+- **Thread pools** allow a fixed number of threads to be reused for executing tasks, reducing the overhead of thread creation and destruction.
+
+Example using `ExecutorService`:
+```java
+import java.util.concurrent.*;
+
+public class ExecutorExample {
+    public static void main(String[] args) {
+        ExecutorService executor = Executors.newFixedThreadPool(2);  // Thread pool with 2 threads
+        executor.submit(() -> System.out.println("Task 1"));
+        executor.submit(() -> System.out.println("Task 2"));
+        executor.shutdown();
+    }
+}
+```
+
+The **Executor framework** abstracts the details of thread management, allowing you to focus on the tasks themselves rather than managing the threads directly.
+
+---
+
+### 6. **Key Concepts in Java Concurrency**
+
+Here are some other important concepts related to concurrency and threading in Java:
+
+- **Thread Safety**: Refers to code that can be safely executed by multiple threads without causing data corruption or inconsistency. It involves using synchronization mechanisms or thread-safe classes like `ConcurrentHashMap`.
+  
+- **Race Conditions**: A situation where the outcome of a program depends on the order in which threads execute. Race conditions can lead to unpredictable and incorrect behavior.
+  
+- **Deadlock**: A situation where two or more threads are blocked forever because they are each waiting for each other to release resources (locks).
+  
+- **Atomicity**: A property where a sequence of operations is completed entirely or not at all. In Java, this can be achieved using atomic classes in the `java.util.concurrent.atomic` package, like `AtomicInteger`, `AtomicBoolean`, etc.
+
+- **Thread Pools**: Thread pools are a collection of threads that can be reused for executing tasks, improving performance by reducing the overhead of thread creation and destruction.
+
+### 7. **Java's `java.util.concurrent` Package**
+Java’s `java.util.concurrent` package provides a rich set of tools for dealing with concurrency, including:
+
+- **`Executor` framework** for managing thread pools.
+- **`CountDownLatch`** and **`CyclicBarrier`** for thread synchronization.
+- **`Semaphore`** for controlling access to a resource pool.
+- **`BlockingQueue`** for safely exchanging data between threads.
+- **`ReentrantLock`** and other lock mechanisms for more advanced synchronization.
+
+### Conclusion
+
+- **Concurrency** allows multiple tasks to make progress in a given period of time, whether simultaneously (parallelism) or by time-slicing on a single core.
+- **Threads** are the fundamental units of execution in a concurrent system. Java allows for easy creation and management of threads using the `Thread` class, `Runnable` interface, and higher-level concurrency utilities in the `java.util.concurrent` package.
+- Managing concurrency properly is crucial to avoid issues like race conditions, deadlocks, and performance bottlenecks, which is why synchronization mechanisms, thread pools, and atomic operations are key to writing safe and efficient multi-threaded applications in Java.
+  
+Java Collections are a set of classes and interfaces that provide a way to store, manipulate, and access data. The Java Collections Framework (JCF) is a unified architecture for representing and manipulating collections, providing a set of interfaces, classes, and algorithms to handle different types of data.
+
+### **Key Components of the Java Collections Framework**
+
+1. **Interfaces**: Define the core structure for collections and their operations.
+2. **Classes**: Provide concrete implementations of the collection interfaces.
+3. **Algorithms**: Static methods in `Collections` class to perform various operations on collections, like sorting, searching, etc.
+
+---
+
+### **1. Core Collection Interfaces**
+
+The Java Collections Framework defines several key **interfaces** that represent different types of collections. The most important interfaces are:
+
+#### **`Collection`**
+- **Purpose**: The root interface of the collection hierarchy. It represents a group of objects.
+- **Subinterfaces**: `Set`, `List`, `Queue`, etc.
+- **Common Methods**: 
+  - `add(E e)`: Adds an element to the collection.
+  - `remove(Object o)`: Removes an element from the collection.
+  - `clear()`: Removes all elements from the collection.
+  - `size()`: Returns the size of the collection.
+  - `isEmpty()`: Returns true if the collection is empty.
+
+#### **`List`** (extends `Collection`)
+- **Purpose**: Represents an ordered collection (sequence). Lists allow duplicates and can access elements via indices.
+- **Common Methods**:
+  - `get(int index)`: Retrieves an element at the specified index.
+  - `set(int index, E element)`: Replaces an element at the specified index.
+  - `add(int index, E element)`: Inserts an element at the specified index.
+  - `remove(int index)`: Removes an element at the specified index.
+- **Classes that implement `List`**: `ArrayList`, `LinkedList`, `Vector`, `Stack`
+
+#### **`Set`** (extends `Collection`)
+- **Purpose**: Represents an unordered collection that does not allow duplicates.
+- **Common Methods**: Inherits methods from `Collection`.
+- **Classes that implement `Set`**: `HashSet`, `LinkedHashSet`, `TreeSet`
+
+#### **`Queue`** (extends `Collection`)
+- **Purpose**: Represents a collection designed for holding elements prior to processing, typically in a FIFO (First-In-First-Out) manner.
+- **Common Methods**: 
+  - `offer(E e)`: Adds an element to the queue.
+  - `poll()`: Retrieves and removes the head of the queue.
+  - `peek()`: Retrieves, but does not remove, the head of the queue.
+- **Classes that implement `Queue`**: `LinkedList`, `PriorityQueue`, `ArrayDeque`
+
+#### **`Deque`** (extends `Queue`)
+- **Purpose**: Represents a double-ended queue, allowing elements to be added or removed from both ends.
+- **Common Methods**: 
+  - `addFirst(E e)`, `addLast(E e)`: Add elements to the front or the end of the deque.
+  - `removeFirst()`, `removeLast()`: Remove elements from the front or end of the deque.
+- **Classes that implement `Deque`**: `LinkedList`, `ArrayDeque`
+
+#### **`Map`** (Not a subtype of `Collection`)
+- **Purpose**: Represents a collection of key-value pairs, where each key is mapped to a value. `Map` does not allow duplicate keys, but values can be duplicated.
+- **Common Methods**: 
+  - `put(K key, V value)`: Adds a key-value pair to the map.
+  - `get(Object key)`: Retrieves the value for the specified key.
+  - `remove(Object key)`: Removes the entry for the specified key.
+  - `containsKey(Object key)`: Checks if the map contains a specific key.
+- **Classes that implement `Map`**: `HashMap`, `LinkedHashMap`, `TreeMap`, `Hashtable`
+
+---
+
+### **2. Common Collection Classes and Their Implementations**
+
+#### **`ArrayList`**
+- **Purpose**: A dynamic array-based implementation of the `List` interface. It provides fast random access but can be slower for insertion/removal from the middle of the list due to array resizing.
+- **Common Operations**:
+  - `get(int index)`: Retrieve an element.
+  - `add(E element)`: Add an element to the end.
+  - `remove(int index)`: Remove an element at the specified index.
+
+**Example**:
+
+```java
+import java.util.*;
+
+public class ArrayListExample {
+    public static void main(String[] args) {
+        List<String> list = new ArrayList<>();
+        list.add("Apple");
+        list.add("Banana");
+        list.add("Orange");
+        
+        System.out.println(list.get(0));  // Output: Apple
+        System.out.println(list.size());  // Output: 3
+    }
+}
+```
+
+#### **`LinkedList`**
+- **Purpose**: A doubly linked list implementation of the `List` and `Deque` interfaces. It allows faster insertion and removal of elements from both ends.
+- **Common Operations**:
+  - `addFirst(E e)`, `addLast(E e)`: Add elements at the beginning or end.
+  - `removeFirst()`, `removeLast()`: Remove elements from the beginning or end.
+
+**Example**:
+
+```java
+import java.util.*;
+
+public class LinkedListExample {
+    public static void main(String[] args) {
+        List<String> list = new LinkedList<>();
+        list.add("Apple");
+        list.add("Banana");
+        
+        System.out.println(list.get(1));  // Output: Banana
+    }
+}
+```
+
+#### **`HashSet`**
+- **Purpose**: A `Set` implementation based on a hash table. It does not allow duplicate elements and does not guarantee any specific order.
+- **Common Operations**:
+  - `add(E element)`: Adds an element to the set.
+  - `remove(Object o)`: Removes an element from the set.
+  - `contains(Object o)`: Checks if an element is present in the set.
+
+**Example**:
+
+```java
+import java.util.*;
+
+public class HashSetExample {
+    public static void main(String[] args) {
+        Set<String> set = new HashSet<>();
+        set.add("Apple");
+        set.add("Banana");
+        set.add("Apple");  // Duplicate, will not be added
+        
+        System.out.println(set.size());  // Output: 2
+    }
+}
+```
+
+#### **`TreeSet`**
+- **Purpose**: A `Set` implementation that uses a tree structure (Red-Black Tree). It stores elements in sorted order.
+- **Common Operations**:
+  - `add(E element)`: Adds an element while maintaining order.
+  - `first()`, `last()`: Retrieve the first or last element.
+  
+**Example**:
+
+```java
+import java.util.*;
+
+public class TreeSetExample {
+    public static void main(String[] args) {
+        Set<Integer> set = new TreeSet<>();
+        set.add(10);
+        set.add(5);
+        set.add(20);
+        
+        System.out.println(set);  // Output: [5, 10, 20]
+    }
+}
+```
+
+#### **`HashMap`**
+- **Purpose**: A `Map` implementation that stores key-value pairs using a hash table. It does not allow duplicate keys but allows duplicate values.
+- **Common Operations**:
+  - `put(K key, V value)`: Adds a key-value pair.
+  - `get(Object key)`: Retrieves the value associated with a key.
+  - `remove(Object key)`: Removes a key-value pair.
+
+**Example**:
+
+```java
+import java.util.*;
+
+public class HashMapExample {
+    public static void main(String[] args) {
+        Map<String, String> map = new HashMap<>();
+        map.put("Name", "Alice");
+        map.put("Country", "USA");
+        
+        System.out.println(map.get("Name"));  // Output: Alice
+    }
+}
+```
+
+#### **`PriorityQueue`**
+- **Purpose**: A `Queue` implementation that orders elements based on their natural ordering or a custom comparator. It does not allow `null` elements.
+- **Common Operations**:
+  - `offer(E e)`: Adds an element to the queue.
+  - `poll()`: Retrieves and removes the highest-priority element.
+  
+**Example**:
+
+```java
+import java.util.*;
+
+public class PriorityQueueExample {
+    public static void main(String[] args) {
+        Queue<Integer> queue = new PriorityQueue<>();
+        queue.add(10);
+        queue.add(5);
+        queue.add(20);
+        
+        System.out.println(queue.poll());  // Output: 5 (since it's the smallest)
+    }
+}
+```
+
+---
+
+### **3. Java Collections Class (Utility Methods)**
+
+- **`Collections`** is a utility class in Java that provides static methods to manipulate or perform operations on collections (e.g., sorting, shuffling, reversing, etc.).
+
+#### **Common Methods in `Collections` class**:
+
+- **`sort(List<T> list)`**: Sorts a list in ascending order.
+- **`shuffle(List<?> list)`**: Shuffles the elements in the list randomly.
+- **`reverse(List<?> list)`**: Reverses the order of elements in the list.
+- **`min(Collection<? extends T> coll)`**: Returns the minimum element in the collection.
+- **`max(Collection<? extends T> coll)`**: Returns the maximum element in the collection.
+
+**Example**:
+
+```java
+import java.util.*;
+
+public class CollectionsExample
+
+ {
+    public static void main(String[] args) {
+        List<Integer> list = new ArrayList<>();
+        list.add(10);
+        list.add(5);
+        list.add(20);
+        
+        Collections.sort(list);  // Sort in ascending order
+        System.out.println(list);  // Output: [5, 10, 20]
+        
+        Collections.shuffle(list);  // Shuffle the list
+        System.out.println(list);  // Output: shuffled order
+    }
+}
+```
+
+---
+
+### **Summary of Key Collection Interfaces and Classes**
+
+| **Interface**         | **Purpose**                                           | **Implementation Classes**                            |
+|-----------------------|-------------------------------------------------------|-------------------------------------------------------|
+| **`Collection`**       | The root interface for all collection types.          | `List`, `Set`, `Queue`, etc.                          |
+| **`List`**             | Ordered collection with duplicates allowed.           | `ArrayList`, `LinkedList`, `Vector`, `Stack`          |
+| **`Set`**              | Unordered collection without duplicates.              | `HashSet`, `TreeSet`, `LinkedHashSet`                 |
+| **`Queue`**            | Collection designed for holding elements before processing, FIFO. | `LinkedList`, `PriorityQueue`, `ArrayDeque` |
+| **`Map`**              | Collection of key-value pairs.                        | `HashMap`, `TreeMap`, `LinkedHashMap`, `Hashtable`     |
+| **`Deque`**            | Double-ended queue, allows adding/removing from both ends. | `LinkedList`, `ArrayDeque`                           |
+
+These interfaces and classes form the foundation of the **Java Collections Framework**, allowing developers to efficiently store, manipulate, and process data in various ways.
+
+The difference between **`HashMap`** and **`ConcurrentHashMap`** in Java is related to how they handle concurrency and thread safety. Both are part of the **Java Collections Framework**, but they are designed for different use cases, especially when working with multi-threaded environments.
+
+### 1. **Thread Safety**
+
+- **`HashMap`**: 
+  - **Not thread-safe**. If multiple threads access a `HashMap` concurrently and at least one of the threads modifies the map (e.g., adding or removing entries), it can lead to **data inconsistency** or **exceptions** (like `ConcurrentModificationException`).
+  - Synchronization has to be manually managed by the developer if thread safety is required, such as wrapping the `HashMap` in `Collections.synchronizedMap()` or using explicit synchronization blocks.
+
+- **`ConcurrentHashMap`**:
+  - **Thread-safe**. It is designed for concurrent access by multiple threads without corrupting the internal structure of the map. It allows **multiple threads** to read and write to the map concurrently without blocking each other.
+  - **Segmented Locking**: Internally, `ConcurrentHashMap` uses **fine-grained locking** (split into segments) to allow multiple threads to operate on different parts of the map concurrently. This reduces contention compared to using a single lock for the entire map.
+  - This makes `ConcurrentHashMap` ideal for **multi-threaded environments**, especially when high concurrency is needed.
+
+### 2. **Performance**
+
+- **`HashMap`**:
+  - In a single-threaded environment or when synchronization is not required, `HashMap` can be more **efficient** because there are no additional overheads for managing thread safety.
+  - However, when synchronization is required, you need to implement your own synchronization mechanisms, which can be error-prone and less efficient.
+
+- **`ConcurrentHashMap`**:
+  - Provides **better performance** in concurrent scenarios due to its **segmented locking**. In situations where multiple threads are accessing different portions of the map, `ConcurrentHashMap` can achieve higher throughput than a synchronized `HashMap`.
+  - Operations like `put`, `get`, and `remove` are **concurrent** and do not block other threads unnecessarily, thus improving performance when many threads are interacting with the map.
+
+### 3. **Blocking Behavior**
+
+- **`HashMap`**: 
+  - Does not provide any built-in mechanisms for managing concurrent access. If you need thread safety, you would have to synchronize the code manually, which can result in **blocking** (when a thread holds the lock, others cannot access the map).
+  - Operations on `HashMap` are **non-blocking** under normal conditions (but that's irrelevant when thread safety is needed).
+
+- **`ConcurrentHashMap`**:
+  - **No global locking**: It supports concurrent reads and writes without blocking other threads (depending on the operation). It achieves this by dividing the map into **segments**, where each segment has its own lock.
+  - For operations like `put()`, `get()`, `replace()`, and `remove()`, `ConcurrentHashMap` allows **non-blocking reads** and **non-blocking writes** to different segments. Writes to the same segment are blocked, but operations on different segments can proceed in parallel.
+  - **Key advantage**: Because it allows for **fine-grained locks**, multiple threads can operate on the map concurrently without waiting for each other, as long as they are working on different parts of the map.
+
+### 4. **Null Keys/Values**
+
+- **`HashMap`**:
+  - **Allows null keys and values**. You can insert a `null` key or a `null` value into a `HashMap`.
+  
+- **`ConcurrentHashMap`**:
+  - **Does not allow null keys or values**. This is to avoid ambiguity in concurrent operations (e.g., distinguishing between a missing key and a key with a `null` value). If you attempt to insert a `null` key or value into a `ConcurrentHashMap`, it will throw a `NullPointerException`.
+
+### 5. **Iteration and Modifications**
+
+- **`HashMap`**:
+  - When iterating over a `HashMap`, if the map is modified structurally (i.e., elements are added or removed) during the iteration, it will throw a `ConcurrentModificationException`. 
+  - You need to use external synchronization (e.g., using `synchronizedMap`) or employ **explicit locks** when iterating over it in a multithreaded environment to avoid this issue.
+
+- **`ConcurrentHashMap`**:
+  - Provides **safe iteration** even when the map is being modified concurrently by other threads. While iterating, changes to the map (like adding or removing entries) do not cause exceptions like `ConcurrentModificationException`.
+  - The map may not reflect the exact state of the map at the time the iteration began (it will show a **snapshot** of the map, not a **consistent view**), but this is an acceptable trade-off for concurrency.
+
+### 6. **Example Code Comparison**
+
+#### Example with `HashMap` (Thread-Safe with Synchronization)
+```java
+Map<String, Integer> map = Collections.synchronizedMap(new HashMap<>());
+map.put("a", 1);
+synchronized (map) {
+    // Safe iteration with explicit synchronization
+    for (String key : map.keySet()) {
+        System.out.println(key);
+    }
+}
+```
+
+#### Example with `ConcurrentHashMap` (Thread-Safe without Explicit Synchronization)
+```java
+Map<String, Integer> map = new ConcurrentHashMap<>();
+map.put("a", 1);
+
+// Safe iteration without explicit synchronization
+for (String key : map.keySet()) {
+    System.out.println(key);
+}
+```
+
+### 7. **Usage Scenarios**
+
+- **Use `HashMap`**:
+  - In **single-threaded** applications or where only **one thread** needs to modify the map at any given time.
+  - When thread safety is not a concern and you want the highest possible performance.
+  
+- **Use `ConcurrentHashMap`**:
+  - In **multi-threaded** applications where **multiple threads** need to read and write to the map concurrently.
+  - When thread safety is crucial and you need to ensure that multiple threads can access different portions of the map without blocking each other.
+
+---
+
+### Key Differences at a Glance:
+
+| Feature                    | **`HashMap`**                            | **`ConcurrentHashMap`**                     |
+|----------------------------|------------------------------------------|--------------------------------------------|
+| **Thread Safety**           | Not thread-safe                          | Thread-safe, designed for concurrent access |
+| **Concurrency Handling**    | Requires external synchronization       | Fine-grained locking (segments) for concurrent access |
+| **Null Keys/Values**        | Allows null keys and values             | Does not allow null keys or values         |
+| **Blocking**                | Can block threads if synchronized       | Allows non-blocking reads and writes (segmented locks) |
+| **Performance in Concurrency**| Can degrade with thread contention      | High performance in concurrent scenarios   |
+| **Iteration**               | Throws `ConcurrentModificationException` if modified during iteration | Safe to iterate during concurrent modifications |
+
+### Conclusion:
+- **`HashMap`** is a general-purpose map that is suitable for single-threaded or controlled multi-threaded environments where thread safety is either not required or is handled manually.
+- **`ConcurrentHashMap`** is specifically designed for **multi-threaded** environments, where multiple threads will access the map concurrently. It provides better performance and thread-safety, with **fine-grained locking** and **non-blocking reads**.
+
+In most modern Java applications, especially those involving multi-threaded access, **`ConcurrentHashMap`** is typically the preferred choice due to its performance and built-in concurrency features.
+
+
+
 In the context of **Hibernate** or **JPA (Java Persistence API)**, **First-level cache** and **Second-level cache** are concepts related to **caching** mechanisms used to optimize database access and improve application performance. Caching is used to store entities in memory so that repeated database queries can be avoided, which improves the overall performance of the application.
 
 ### 1. **First-Level Cache** (L1 Cache)
@@ -4266,6 +5730,59 @@ The **SOLID** principles are key to writing maintainable, flexible, and scalable
 - Make the system easier to **maintain** and **test**.
 
 When applied with the right **design patterns**, SOLID principles allow for effective solutions to common design problems and can help in building robust software architectures.
+
+**Spring** and **Spring Boot** are related but serve different purposes in the Java ecosystem. Let's break down the differences:
+
+### 1. **Spring Framework**
+The **Spring Framework** is a comprehensive framework for building Java applications. It provides a wide range of features, from dependency injection (DI) to aspect-oriented programming (AOP), transaction management, security, and more. It's flexible and can be used to build a variety of Java applications, from standalone apps to web applications.
+
+**Key Features of Spring Framework:**
+- **Inversion of Control (IoC)**: Spring manages the objects in your application through dependency injection.
+- **Aspect-Oriented Programming (AOP)**: Allows for cross-cutting concerns like logging, security, or transaction management to be handled separately from business logic.
+- **Transaction Management**: Integrates with different transaction management models.
+- **Data Access**: Provides abstractions over JDBC, ORM frameworks like Hibernate, JPA, etc.
+- **Spring MVC**: A robust model-view-controller framework for building web applications.
+- **Security**: Provides modules for authentication, authorization, and more.
+
+However, the **Spring Framework** does not provide an out-of-the-box solution for bootstrapping and running an application. You need to configure things manually, including setting up a server, specifying configurations for beans, etc. 
+
+### 2. **Spring Boot**
+**Spring Boot** is a framework built on top of Spring that simplifies the process of setting up and configuring Spring applications. The primary goal of Spring Boot is to make it easy to get a Spring application up and running with minimal configuration.
+
+**Key Features of Spring Boot:**
+- **Auto Configuration**: Spring Boot automatically configures the application based on the dependencies in the classpath. For example, if you add a database dependency, Spring Boot will configure data sources for you.
+- **Embedded Web Servers**: Unlike traditional Spring applications, which require you to set up a web server (like Tomcat or Jetty), Spring Boot can embed a server (like Tomcat or Jetty) directly into the application. This makes it possible to run Spring applications as standalone Java applications.
+- **Starter POMs**: Spring Boot comes with a set of "starter" dependencies (e.g., `spring-boot-starter-web`, `spring-boot-starter-data-jpa`, etc.) that make it easier to include common configurations and libraries.
+- **Opinionated Defaults**: Spring Boot provides sensible defaults for various configurations, allowing you to focus on writing business logic without worrying about infrastructure concerns.
+- **Production Ready**: It comes with features like health checks, metrics, and monitoring via Spring Boot Actuator.
+
+### Comparison: Spring vs Spring Boot
+
+| Feature                     | **Spring Framework**                  | **Spring Boot**                          |
+|-----------------------------|----------------------------------------|------------------------------------------|
+| **Configuration**            | Requires manual configuration of beans and setup. | Auto-configures most things out-of-the-box. |
+| **Setup and Deployment**     | Requires an external server like Tomcat. | Embeds a web server (Tomcat, Jetty, etc.), allowing you to run the app as a standalone JAR. |
+| **Development Speed**        | Can be slower due to extensive setup and configuration. | Faster development with defaults and auto-configuration. |
+| **Learning Curve**           | Steeper, as you need to manually configure many things. | Easier, as it reduces the configuration overhead. |
+| **Flexibility**              | More flexible, as you have full control over configuration. | Opinionated defaults, so less flexibility in certain cases. |
+| **Use Case**                 | Suitable for large, complex applications that require full control. | Ideal for microservices, web apps, and quick prototyping. |
+| **Community and Ecosystem**  | Established, with extensive documentation and support. | Grows quickly, backed by Spring community, with more modern tooling and features. |
+
+### When to Use Spring vs. Spring Boot
+
+- **Use Spring** if:
+  - You need a highly customizable solution and have the time and resources to manage the setup.
+  - You are building large-scale, enterprise-level applications where manual configuration might provide more control.
+  - You need to integrate with legacy systems or have specific architectural needs.
+
+- **Use Spring Boot** if:
+  - You want rapid development and need to reduce configuration overhead.
+  - You are building microservices or web applications and prefer embedded servers (e.g., Tomcat, Jetty).
+  - You want a modern, easy-to-deploy solution with production-ready features like metrics and health checks.
+
+### Conclusion
+Spring Boot is essentially an extension of the Spring Framework that makes it easier to get started with Spring-based applications. While Spring provides all the flexibility and features you need for building robust Java applications, Spring Boot simplifies the development process and focuses on making it easy to create stand-alone, production-grade applications with minimal effort. If you're starting a new project and don't need deep customization, Spring Boot is usually the best choice.
+
 
 ### **Dependency Injection (DI) and Inversion of Control (IoC) in Spring**
 
