@@ -255,7 +255,201 @@ Aggregation is a special form of association that represents a "whole-part" rela
 Object-Oriented Programming (OOP) is a paradigm
 
  that helps in organizing software around the concept of **objects** and **classes**, making it more modular, maintainable, and reusable. Understanding the four pillars of OOP (Encapsulation, Abstraction, Inheritance, and Polymorphism) is essential for designing and building robust systems. By applying these principles, developers can create software that is easier to extend, debug, and maintain over time.
- 
+
+### **Composition, Aggregation, and Association in Java**
+
+In object-oriented programming, relationships between objects are an important concept. Three fundamental types of relationships in OOP are **Composition**, **Aggregation**, and **Association**. These relationships represent how objects interact or are related to one another in a system. Below, I’ll explain each of these relationships in depth, with examples and when to use them.
+
+---
+
+### **1. Composition (Has-A Relationship)**
+
+**Composition** is a type of association where one object **"owns"** or **"contains"** another object, and the contained object cannot exist independently without the parent object. It is also known as a **strong relationship** because if the parent object is destroyed, its contained objects are also destroyed.
+
+In composition:
+- The lifetime of the contained object is dependent on the parent object.
+- It represents a **strong "Has-A"** relationship (i.e., "A House has Rooms").
+- If the parent object is deleted, the contained object is deleted too.
+
+#### **When to Use Composition**
+- Use composition when you want to establish a **strong lifecycle dependency** between objects, where one object is a part of another.
+- Common in real-world systems, like a **Car has an Engine** or a **Library has Books**.
+
+#### **Example: Composition in Java**
+
+```java
+class Engine {
+    private String engineType;
+
+    public Engine(String engineType) {
+        this.engineType = engineType;
+    }
+
+    public void start() {
+        System.out.println("Engine starting...");
+    }
+}
+
+class Car {
+    private Engine engine;  // Car "has-a" Engine (Composition)
+
+    public Car(String engineType) {
+        engine = new Engine(engineType); // Car owns the Engine, hence it is created when Car is created
+    }
+
+    public void startCar() {
+        engine.start();
+        System.out.println("Car is ready to go.");
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Car myCar = new Car("V8");
+        myCar.startCar();  // Engine is created with the Car object and will be destroyed when Car is destroyed.
+    }
+}
+```
+
+**Explanation**:
+- The `Car` class contains an `Engine` object, meaning that an engine cannot exist independently without a car.
+- The engine is created when the car object is created, and the engine is destroyed when the car is destroyed (i.e., the engine's lifecycle is tied to the car).
+  
+### **2. Aggregation**
+
+**Aggregation** is a **special form of Association** where one object **contains** or **references** another object, but the contained object can exist independently of the parent object. This is a **looser** relationship compared to composition.
+
+In aggregation:
+- The lifetime of the contained object does **not depend** on the parent object. It can exist on its own and may be shared across other objects.
+- It represents a **"Has-A"** relationship, but with **independence** for the contained objects (e.g., "A University has Professors" but professors can exist independently of the university).
+
+#### **When to Use Aggregation**
+- Use aggregation when the contained objects have an **independent existence** and are **shared** among multiple parent objects.
+- Common in cases like **A Department has Employees**, **A University has Professors** (Professors can be in multiple Universities).
+
+#### **Example: Aggregation in Java**
+
+```java
+class Professor {
+    private String name;
+
+    public Professor(String name) {
+        this.name = name;
+    }
+
+    public void teach() {
+        System.out.println(name + " is teaching.");
+    }
+}
+
+class University {
+    private String universityName;
+    private List<Professor> professors;  // University "has-a" Professors (Aggregation)
+
+    public University(String universityName) {
+        this.universityName = universityName;
+        this.professors = new ArrayList<>();
+    }
+
+    public void addProfessor(Professor professor) {
+        professors.add(professor);
+    }
+
+    public void showProfessors() {
+        for (Professor professor : professors) {
+            professor.teach();
+        }
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Professor prof1 = new Professor("Dr. Smith");
+        Professor prof2 = new Professor("Dr. Brown");
+
+        University university = new University("Tech University");
+        university.addProfessor(prof1);
+        university.addProfessor(prof2);
+
+        university.showProfessors();
+    }
+}
+```
+
+**Explanation**:
+- In the `University` class, the professors can exist independently and can be added to multiple universities.
+- If a university is destroyed, the professors are not destroyed — they can still exist independently of any university.
+
+### **3. Association**
+
+**Association** is the **most general** relationship between objects. In association, two or more objects are connected, but neither object **owns** or **depends** on the other. This is the weakest form of relationship, meaning that both objects can exist independently of each other.
+
+In association:
+- Objects are related but have no strict lifecycle dependency.
+- The relationship can be **bi-directional** (e.g., "A Teacher teaches a Student", where both Teacher and Student exist independently).
+
+#### **When to Use Association**
+- Use association when objects **interact** with each other, but there is **no ownership** or **dependency**.
+- Common in scenarios like **A Teacher teaches a Student**, **A Car is driven by a Driver**.
+
+#### **Example: Association in Java**
+
+```java
+class Student {
+    private String name;
+
+    public Student(String name) {
+        this.name = name;
+    }
+
+    public void study() {
+        System.out.println(name + " is studying.");
+    }
+}
+
+class Teacher {
+    private String name;
+
+    public Teacher(String name) {
+        this.name = name;
+    }
+
+    public void teach() {
+        System.out.println(name + " is teaching.");
+    }
+
+    public void teachStudent(Student student) {
+        System.out.println(name + " is teaching " + student.name);
+        student.study();  // Interaction between Teacher and Student
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Teacher teacher = new Teacher("Mr. John");
+        Student student = new Student("Alice");
+
+        teacher.teachStudent(student);  // Teacher and Student interact, but neither owns the other
+    }
+}
+```
+
+**Explanation**:
+- The `Teacher` and `Student` objects are **associated** because they interact with each other (the teacher teaches the student), but neither object **owns** the other.
+- Both objects can exist independently, and the teacher could teach multiple students, or the student could study with other teachers.
+
+---
+
+### **Summary of When to Use Each Relationship**
+
+| **Relationship Type** | **Description** | **When to Use** | **Example** |
+|-----------------------|-----------------|-----------------|-------------|
+| **Composition (Has-A)** | A strong **"Has-A"** relationship where the child object **cannot exist independently** of the parent object. | Use when the child object is **part of** the parent object and its lifecycle is tied to the parent object. | A **Car has an Engine**. If the car is destroyed, so is the engine. |
+| **Aggregation**        | A **looser Has-A** relationship where the child object **can exist independently**. | Use when the child object can exist independently and might be **shared** across multiple objects. | A **University has Professors**, but professors can exist without the university. |
+| **Association**        | A **general relationship** where objects are related but have no strict lifecycle dependency. | Use when objects **interact**, but neither is **dependent** on the other. | A **Teacher teaches a Student**, but neither owns the other. |
+
+In practice, the choice between **composition**, **aggregation**, and **association** depends on the **lifetime** and **ownership** of the objects involved, and how closely related they are in your design.
+
 In Java, **abstract classes**, **regular interfaces**, and **functional interfaces** are important concepts that help define how we model behavior in our programs. They each have specific use cases, and understanding their differences is key to writing effective Java code.
 
 Let's break down these concepts:
