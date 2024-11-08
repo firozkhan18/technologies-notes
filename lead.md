@@ -1,45 +1,46 @@
 ## **Table of Contents**
 
 ### **1. Leadership & Team FAQs**
-   - [LEAD FAQ](#1.1-lead-faq)
-   - [TEAm & Tools FAQ](#1.2-team-tools-faq)
-   - [Leadership & Management](#1.3-leadership-management)
-   - [Team Lead, My Role and Responsibilities](#1.4-team-lead-my-role-and-responsibilities)
+   - [LEAD FAQ](#lead-faq)
+   - [TEAm & Tools FAQ](#team-tools-faq)
+   - [Leadership & Management](#leadership-management)
+   - [Team Lead, My Role and Responsibilities](#team-lead-my-role-and-responsibilities)
 
 ### **2. React Development**
-   - [React DevTools Overview](#2.1-react-devtools-overview)
-   - [Best Practices for Managing a React Application](#2.2-best-practices-for-managing-a-react-application)
-   - [Tools for Code Review](#2.3-tools-for-code-review)
-   - [Securing a React Application](#2.4-securing-a-react-application)
-   - [What is React Native?](#2.5-what-is-react-native)
-   - [What is a Mixin in React?](#2.6-what-is-a-mixin-in-react)
-   - [Managing Tokens Between React and a Backend REST Service](#2.7-managing-tokens-between-react-and-a-backend-rest-service)
-   - [Session in React and Spring Boot](#2.8-session-in-react-and-spring-boot)
-   - [How to Disable Copying Content in a React Application](#2.9-how-to-disable-copying-content-in-a-react-application)
-   - [Design Tools and UI Frameworks for React](#2.10-design-tools-and-ui-frameworks-for-react)
-   - [Creating a Real-Time Dashboard in React](#2.11-creating-a-real-time-dashboard-in-react)
-   - [Polling in React](#2.12-polling-in-react)
+   - [React DevTools Overview](#react-devtools-overview)
+   - [Best Practices for Managing a React Application](#best-practices-for-managing-a-react-application)
+   - [Tools for Code Review](#tools-for-code-review)
+   - [Securing a React Application](#securing-a-react-application)
+   - [What is React Native?](#what-is-react-native)
+   - [What is a Mixin in React?](#what-is-a-mixin-in-react)
+   - [Managing Tokens Between React and a Backend REST Service](#managing-tokens-between-react-and-a-backend-rest-service)
+   - [Session in React and Spring Boot](#session-in-react-and-spring-boot)
+   - [How to Disable Copying Content in a React Application](#how-to-disable-copying-content-in-a-react-application)
+   - [Design Tools and UI Frameworks for React](#design-tools-and-ui-frameworks-for-react)
+   - [Creating a Real-Time Dashboard in React](#creating-a-real-time-dashboard-in-react)
+   - [Polling in React](#polling-in-react)
 
 ### **3. Advanced React Concepts**
-   - [Idempotent in React](#3.1-idempotent-in-react)
-   - [Lightweight vs Heavyweight Components in React](#3.2-lightweight-vs-heavyweight-components-in-react)
-   - [Managing Props, State, Refs, Keys, Async/Await, Axios Security, Linting, Mixins, and Types of Hooks](#3.3-managing-props-state-refs-keys-asyncawait-axios-security-linting-mixins-and-types-of-hooks)
+   - [Idempotent in React](#idempotent-in-react)
+   - [Lightweight vs Heavyweight Components in React](#lightweight-vs-heavyweight-components-in-react)
+   - [Managing Props, State, Refs, Keys, Async/Await, Axios Security, Linting, Mixins, and Types of Hooks](#managing-props-state-refs-keys-asyncawait-axios-security-linting-mixins-and-types-of-hooks)
 
 ### **4. Java & Kafka**
-   - [SQL vs NoSQL](#4.1-sql-vs-nosql)
-   - [Kafka: Partitions and Replication Factor](#4.2-kafka-partitions-and-replication-factor)
-   - [Key Components of Apache Kafka](#4.3-key-components-of-apache-kafka)
-   - [In Java, a BlockingQueue](#4.4-in-java-a-blockingqueue)
+   - [SQL vs NoSQL](#sql-vs-nosql)
+   - [Kafka: Partitions and Replication Factor](#kafka-partitions-and-replication-factor)
+   - [Key Components of Apache Kafka](#key-components-of-apache-kafka)
+   - [In Java, a BlockingQueue](#in-java-a-blockingqueue)
 
 ### **5. Microservices & Kafka**
-   - [Microservices Design Patterns](#5.1-microservices-design-patterns)
-   - [12 Rules of Microservices](#5.2-12-rules-of-microservices)
-   - [Kafka in Depth](#5.3-kafka-in-depth)
+   - [Microservices Design Patterns](#microservices-design-patterns)
+   - [12 Rules of Microservices](#12-rules-of-microservices)
+   - [Kafka in Depth](#kafka-in-depth)
 
 ### **6. Containerization & Orchestration**
-   - [Containerization, Orchestration, Load Balancing, and Tracking Requests Across Regions](#6.1-containerization-orchestration-load-balancing-and-tracking-requests-across-regions)
+   - [Containerization, Orchestration, Load Balancing, and Tracking Requests Across Regions](#containerization-orchestration-load-balancing-and-tracking-requests-across-regions)
 
 ---
+
 
 ## LEAD FAQ
 
