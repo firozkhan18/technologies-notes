@@ -18,9 +18,7 @@ Ensuring **code quality and maintainability** involves a few best practices:
 **Answer**: 
 - **Understand the Business**: Collaborate closely with business stakeholders and Subject Matter Experts (SMEs) to understand the requirements thoroughly.
 - **Clear Documentation**: Write clear and concise technical documentation, including design documents, to ensure that everyone is aligned.
-- **
-
-Regular Check-ins**: Hold regular meetings with business teams to ensure that the project is on track and that there are no gaps in understanding.
+- **Regular Check-ins**: Hold regular meetings with business teams to ensure that the project is on track and that there are no gaps in understanding.
 - **Walk-throughs**: Regularly walk through technical designs and solutions with SMEs and QA to ensure everything is understood before proceeding.
 
 --- 
