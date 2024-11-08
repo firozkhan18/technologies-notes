@@ -7774,3 +7774,741 @@ graph TD;
 - **Consumers** (within **consumer groups**) consume these events, and Kafka tracks their position via **offsets**.
 
 This architecture allows for **high scalability**, **resiliency**, and **parallel processing** of events in an event-driven system.
+
+### **1. Deadlock**
+
+A **Deadlock** occurs in concurrent programming when two or more threads are blocked forever because they are waiting for each other to release resources that they need to continue. This situation results in a standstill, where no thread can proceed.
+
+#### **Example of Deadlock:**
+Imagine two threads:
+- **Thread 1** acquires **Resource A** and waits for **Resource B**.
+- **Thread 2** acquires **Resource B** and waits for **Resource A**.
+
+Neither thread can release its resource because it's waiting for the other, causing a **deadlock**.
+
+```java
+public class DeadlockExample {
+    private static final Object ResourceA = new Object();
+    private static final Object ResourceB = new Object();
+
+    public static void main(String[] args) {
+        Thread t1 = new Thread(() -> {
+            synchronized (ResourceA) {
+                System.out.println("Thread 1: Holding Resource A...");
+                try { Thread.sleep(100); } catch (InterruptedException e) {}
+                synchronized (ResourceB) {
+                    System.out.println("Thread 1: Holding Resource A and B...");
+                }
+            }
+        });
+
+        Thread t2 = new Thread(() -> {
+            synchronized (ResourceB) {
+                System.out.println("Thread 2: Holding Resource B...");
+                try { Thread.sleep(100); } catch (InterruptedException e) {}
+                synchronized (ResourceA) {
+                    System.out.println("Thread 2: Holding Resource B and A...");
+                }
+            }
+        });
+
+        t1.start();
+        t2.start();
+    }
+}
+```
+
+#### **Prevention of Deadlocks:**
+- Locking resources in a consistent order (e.g., always acquire **Resource A** before **Resource B**).
+- Using **timeout mechanisms** or **deadlock detection algorithms** to break out of potential deadlocks.
+
+---
+
+### **2. Race Condition**
+
+A **Race Condition** occurs when two or more threads attempt to modify shared data concurrently, and the outcome depends on the order in which the threads execute. This can result in inconsistent or unexpected behavior.
+
+#### **Example of a Race Condition:**
+
+```java
+public class RaceConditionExample {
+    private static int counter = 0;
+
+    public static void main(String[] args) {
+        Runnable incrementTask = () -> {
+            for (int i = 0; i < 1000; i++) {
+                counter++;  // This is not thread-safe
+            }
+        };
+
+        Thread t1 = new Thread(incrementTask);
+        Thread t2 = new Thread(incrementTask);
+
+        t1.start();
+        t2.start();
+    }
+}
+```
+
+In this example, both threads are modifying the shared variable `counter` concurrently. Since the operation is not synchronized, the threads can interfere with each other, causing the final value of `counter` to be less than expected.
+
+#### **Prevention of Race Conditions:**
+- **Synchronization**: Use `synchronized` blocks or methods to ensure that only one thread can access a critical section at a time.
+- **Atomic Variables**: Use atomic classes like `AtomicInteger` which provide thread-safe operations without requiring explicit synchronization.
+
+---
+
+### **3. Fail-Safe vs. Fail-Fast**
+
+- **Fail-Safe**: A fail-safe mechanism is one that prevents a system from failing completely by ensuring it operates in a degraded or alternative mode when an error occurs. It continues to function even if some components fail.
+    - **Example**: A database connection pool that automatically switches to a backup database if the primary one fails.
+
+- **Fail-Fast**: A fail-fast system detects and handles errors as soon as they are encountered, stopping execution immediately. It doesn’t allow the system to continue in an invalid or inconsistent state.
+    - **Example**: In programming, a **`NullPointerException`** is an example of fail-fast behavior, where a method throws an error immediately when it encounters an invalid state (e.g., accessing a null object).
+
+#### **Differences**:
+- **Fail-Safe**: More lenient, tries to continue operating despite the issue.
+- **Fail-Fast**: Immediately halts to prevent further damage.
+
+---
+
+### **4. HashMap vs ConcurrentHashMap**
+
+#### **HashMap**:
+- A **`HashMap`** is not thread-safe. If multiple threads modify the map concurrently, it can lead to inconsistent results and even data corruption.
+- Common use cases for `HashMap` are in single-threaded environments or when you manually control synchronization for concurrency.
+
+#### **ConcurrentHashMap**:
+- A **`ConcurrentHashMap`** is thread-safe and designed for concurrent use. It allows multiple threads to read and write without blocking each other (with the use of **fine-grained locking**).
+- It does not lock the entire map, but instead locks smaller segments or individual buckets, allowing for better performance in multi-threaded environments.
+
+#### **Key Differences**:
+- **Thread-Safety**: `HashMap` is not thread-safe; `ConcurrentHashMap` is thread-safe.
+- **Performance**: `ConcurrentHashMap` generally performs better in multi-threaded environments because it minimizes the need for locks.
+- **Locking**: `HashMap` does not have any internal synchronization mechanisms, whereas `ConcurrentHashMap` uses locks or other techniques to ensure thread safety.
+
+#### **Example** (Thread-safe operation):
+```java
+import java.util.concurrent.ConcurrentHashMap;
+
+public class ConcurrentHashMapExample {
+    public static void main(String[] args) {
+        ConcurrentHashMap<String, Integer> map = new ConcurrentHashMap<>();
+        map.put("A", 1);
+
+        // Multiple threads accessing the ConcurrentHashMap
+        Thread t1 = new Thread(() -> map.put("B", 2));
+        Thread t2 = new Thread(() -> map.put("C", 3));
+
+        t1.start();
+        t2.start();
+    }
+}
+```
+
+In contrast, using `HashMap` with multiple threads without synchronization can lead to **data corruption** or **inconsistent results**.
+
+---
+
+### **5. Default and Static Methods in Functional Interface**
+
+A **Functional Interface** is an interface with exactly one abstract method, typically used to represent a **single operation** or **action**. Examples include `Runnable`, `Callable`, `Comparator`, etc.
+
+#### **Why Use `default` and `static` Methods in a Functional Interface?**
+
+1. **`default` Method**:
+   - Introduced in Java 8, the `default` method allows you to provide a default implementation for methods in an interface.
+   - It provides **behavioral implementation** without affecting the abstract method requirement of a functional interface.
+   - Useful for **backward compatibility**, allowing you to add new methods to an interface without breaking existing implementations.
+
+   **Example**:
+   ```java
+   @FunctionalInterface
+   interface MyInterface {
+       void doSomething();
+
+       // Default method
+       default void defaultMethod() {
+           System.out.println("Default Method");
+       }
+   }
+
+   class MyClass implements MyInterface {
+       @Override
+       public void doSomething() {
+           System.out.println("Doing something!");
+       }
+   }
+
+   public class Main {
+       public static void main(String[] args) {
+           MyInterface obj = new MyClass();
+           obj.doSomething();   // "Doing something!"
+           obj.defaultMethod(); // "Default Method"
+       }
+   }
+   ```
+
+2. **`static` Method**:
+   - Static methods in interfaces are **not inherited** by implementing classes.
+   - They are used for providing **helper methods** or **utility methods** that are not bound to an instance but still belong to the interface.
+
+   **Example**:
+   ```java
+   @FunctionalInterface
+   interface MyInterface {
+       void doSomething();
+
+       // Static method
+       static void staticMethod() {
+           System.out.println("Static Method");
+       }
+   }
+
+   public class Main {
+       public static void main(String[] args) {
+           // Calling static method on the interface itself
+           MyInterface.staticMethod(); // "Static Method"
+       }
+   }
+   ```
+
+#### **Why Use `default` and `static` Methods?**
+- **`default`**: Allows interfaces to have methods with implementation, which makes the interface more flexible. This is especially useful when you want to add new methods to an interface while maintaining backward compatibility with existing implementations.
+- **`static`**: Useful for utility or helper methods that are related to the interface but don't require an instance of the interface to be called.
+
+---
+
+### **Summary**:
+
+- **Deadlock**: Occurs when two or more threads are waiting on each other indefinitely.
+- **Race Condition**: Happens when the outcome depends on the order of thread execution.
+- **Fail-Safe vs. Fail-Fast**: Fail-safe systems continue operating despite failures, while fail-fast systems stop immediately when an error occurs.
+- **HashMap vs ConcurrentHashMap**: `HashMap` is not thread-safe, while `ConcurrentHashMap` is optimized for multi-threaded access.
+- **Functional Interface Methods**:
+  - **`default`** methods allow providing default implementations in interfaces.
+  - **`static`** methods are utility methods that belong to the interface itself and are not inherited by implementing classes.
+
+In Java, a **BlockingQueue** is a type of **queue** that supports operations that wait for the queue to become non-empty when retrieving an element and wait for space to become available in the queue when storing an element. This is particularly useful in concurrent programming when you need to implement producer-consumer scenarios, thread pooling, or similar multi-threaded workflows.
+
+The **BlockingQueue** interface is part of the **`java.util.concurrent`** package and extends the **Queue** interface. It includes methods that handle blocking operations such as waiting for the queue to be empty before performing a retrieval, or waiting for space to become available before inserting an element.
+
+### Key Features of **BlockingQueue**:
+1. **Thread-Safety**: BlockingQueue implementations are designed to be thread-safe, ensuring safe communication between producer and consumer threads.
+2. **Blocking Operations**: The key feature of a `BlockingQueue` is that certain operations block the calling thread if certain conditions are met (e.g., if the queue is empty or full).
+3. **Synchronous Queue**: The `BlockingQueue` can be used for **producer-consumer** patterns, where one thread produces data and another consumes it, and they do so in a synchronized way using the queue.
+
+### Common Implementations of **BlockingQueue**:
+- **ArrayBlockingQueue**: A bounded blocking queue backed by an array.
+- **LinkedBlockingQueue**: A optionally-bounded blocking queue backed by a linked node.
+- **PriorityBlockingQueue**: A blocking queue that orders its elements according to their natural ordering or by a `Comparator` provided at queue construction time.
+- **DelayQueue**: A specialized queue used for scheduling items to be processed after a delay.
+- **SynchronousQueue**: A special type of blocking queue where each insert operation must wait for a corresponding remove operation by another thread.
+
+### Key Methods in **BlockingQueue**:
+Here are some of the methods provided by the **BlockingQueue** interface:
+
+1. **Adding elements**:
+   - `put(E e)`: Inserts the specified element into the queue, waiting if necessary for space to become available.
+   - `offer(E e, long timeout, TimeUnit unit)`: Inserts the specified element into the queue if space is available, waiting for up to the specified time if necessary.
+
+2. **Retrieving elements**:
+   - `take()`: Retrieves and removes the head of the queue, waiting if necessary until an element becomes available.
+   - `poll(long timeout, TimeUnit unit)`: Retrieves and removes the head of the queue if one is available, waiting up to the specified time if necessary.
+
+3. **Peeking**:
+   - `peek()`: Retrieves, but does not remove, the head of the queue, or returns `null` if the queue is empty.
+
+4. **Queue Size**:
+   - `remainingCapacity()`: Returns the number of additional elements that the queue can hold without blocking.
+
+5. **Queue Clearing**:
+   - `clear()`: Removes all elements from the queue.
+
+### Example: Producer-Consumer using **BlockingQueue**
+
+Here’s an example of using `BlockingQueue` to implement a simple **producer-consumer** scenario:
+
+#### **Producer**: Adds elements to the queue.
+#### **Consumer**: Removes elements from the queue.
+
+```java
+import java.util.concurrent.*;
+
+class Producer implements Runnable {
+    private final BlockingQueue<Integer> queue;
+
+    public Producer(BlockingQueue<Integer> queue) {
+        this.queue = queue;
+    }
+
+    @Override
+    public void run() {
+        try {
+            for (int i = 1; i <= 5; i++) {
+                System.out.println("Producer producing: " + i);
+                queue.put(i);  // Blocks if the queue is full
+                Thread.sleep(500);  // Simulating time taken to produce an item
+            }
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+    }
+}
+
+class Consumer implements Runnable {
+    private final BlockingQueue<Integer> queue;
+
+    public Consumer(BlockingQueue<Integer> queue) {
+        this.queue = queue;
+    }
+
+    @Override
+    public void run() {
+        try {
+            while (true) {
+                Integer item = queue.take();  // Blocks if the queue is empty
+                System.out.println("Consumer consumed: " + item);
+                Thread.sleep(1000);  // Simulating time taken to consume an item
+            }
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+    }
+}
+
+public class BlockingQueueExample {
+    public static void main(String[] args) throws InterruptedException {
+        BlockingQueue<Integer> queue = new ArrayBlockingQueue<>(10);
+
+        // Create and start producer and consumer threads
+        Thread producerThread = new Thread(new Producer(queue));
+        Thread consumerThread = new Thread(new Consumer(queue));
+
+        producerThread.start();
+        consumerThread.start();
+
+        producerThread.join();
+        consumerThread.join();
+    }
+}
+```
+
+### **Explanation**:
+- **Producer** thread generates items and adds them to the queue using the `put()` method. If the queue is full, the `put()` method will block until space becomes available.
+- **Consumer** thread retrieves items from the queue using the `take()` method. If the queue is empty, the `take()` method will block until an item is available.
+- **BlockingQueue** ensures that the producer and consumer operate in a synchronized and thread-safe manner, without explicitly managing synchronization.
+
+### **Common BlockingQueue Implementations**:
+
+1. **ArrayBlockingQueue**: 
+   - A bounded blocking queue, meaning it has a fixed size. If the queue is full, the producer will block until space becomes available. 
+   - Best suited when you want a fixed-size queue.
+   - **Example**:
+     ```java
+     BlockingQueue<Integer> queue = new ArrayBlockingQueue<>(10); // Fixed-size queue of 10
+     ```
+
+2. **LinkedBlockingQueue**:
+   - An optionally-bounded blocking queue, which grows as needed, meaning it can have a size limit or be unbounded. This is the most commonly used implementation.
+   - **Example**:
+     ```java
+     BlockingQueue<Integer> queue = new LinkedBlockingQueue<>(10); // Queue with max size of 10
+     ```
+
+3. **PriorityBlockingQueue**:
+   - A blocking queue that orders elements based on priority (usually determined by a comparator or natural ordering).
+   - Elements with higher priority are dequeued before lower-priority ones.
+   - **Example**:
+     ```java
+     BlockingQueue<Integer> queue = new PriorityBlockingQueue<>();
+     ```
+
+4. **SynchronousQueue**:
+   - A special kind of blocking queue where each `put()` operation must wait for a corresponding `take()` operation by another thread. There is no capacity to store elements, and it is used for thread handoff.
+   - **Example**:
+     ```java
+     BlockingQueue<Integer> queue = new SynchronousQueue<>();
+     ```
+
+### **Use Cases for BlockingQueue**:
+- **Producer-Consumer Problems**: One thread produces data and another thread consumes it, with the queue handling synchronization.
+- **Task Queues**: Used in thread pools to manage and execute tasks asynchronously.
+- **Rate Limiting**: Used to limit the rate of processing in a system by controlling the number of tasks being processed concurrently.
+- **Scheduling**: Using a **DelayQueue** to schedule tasks that need to be executed after a specific delay.
+
+---
+
+### **Summary**:
+- **BlockingQueue** in Java is part of the `java.util.concurrent` package and supports operations that allow threads to block until elements are available to be consumed or space is available to insert elements.
+- Common implementations include `ArrayBlockingQueue`, `LinkedBlockingQueue`, `PriorityBlockingQueue`, `SynchronousQueue`, and `DelayQueue`.
+- The key methods for thread-safe communication are `put()`, `take()`, and `offer()`.
+- **BlockingQueue** is widely used in multi-threaded applications for producer-consumer patterns and managing concurrency safely.
+
+In Java, **Executor** and **Concurrency Framework** are powerful tools for managing thread execution and simplifying concurrency, making it easier to write scalable and efficient multi-threaded applications. They are part of the **`java.util.concurrent`** package, which provides a high-level API for working with threads and concurrency.
+
+### **1. Executor Framework**
+
+The **Executor Framework** provides a higher-level replacement for managing threads directly. Instead of manually creating and managing threads, you can submit tasks (typically `Runnable` or `Callable` tasks) to an executor that handles the scheduling and execution of these tasks.
+
+#### **Key Components of the Executor Framework:**
+
+- **Executor Interface**: The simplest interface with a single method:
+  ```java
+  void execute(Runnable command);
+  ```
+  This method is used to submit a `Runnable` task for execution. The `Executor` interface doesn't return any result or handle exceptions.
+
+- **ExecutorService Interface**: Extends `Executor` and adds more methods to manage lifecycle and retrieve results from tasks.
+  ```java
+  Future<T> submit(Callable<T> task);
+  Future<?> submit(Runnable task);
+  void shutdown();
+  boolean awaitTermination(long timeout, TimeUnit unit) throws InterruptedException;
+  ```
+  The `ExecutorService` interface allows submitting both `Runnable` and `Callable` tasks, and it returns a `Future` object, which can be used to monitor the status of the task and retrieve the result once it’s completed.
+
+- **ScheduledExecutorService Interface**: Extends `ExecutorService` to support scheduled and periodic task execution.
+  ```java
+  ScheduledFuture<?> schedule(Runnable command, long delay, TimeUnit unit);
+  ScheduledFuture<?> scheduleAtFixedRate(Runnable command, long initialDelay, long period, TimeUnit unit);
+  ScheduledFuture<?> scheduleWithFixedDelay(Runnable command, long initialDelay, long delay, TimeUnit unit);
+  ```
+
+#### **Common Implementations of Executor Framework:**
+
+- **ThreadPoolExecutor**: A highly configurable implementation of `ExecutorService`. It allows setting core pool size, maximum pool size, and various queue types for task handling. It can automatically grow or shrink the number of threads based on the task demand.
+
+  **Example**:
+  ```java
+  ExecutorService executor = new ThreadPoolExecutor(
+      2,  // core pool size
+      4,  // maximum pool size
+      60L, TimeUnit.SECONDS, // idle thread timeout
+      new LinkedBlockingQueue<Runnable>()
+  );
+
+  executor.execute(() -> {
+      System.out.println("Task 1 running");
+  });
+
+  executor.submit(() -> {
+      System.out.println("Task 2 running");
+  });
+
+  executor.shutdown();
+  ```
+
+- **CachedThreadPool**: A thread pool that creates new threads as needed but reuses previously constructed threads when they are available. Useful for executing many short-lived asynchronous tasks.
+  ```java
+  ExecutorService executor = Executors.newCachedThreadPool();
+  ```
+
+- **FixedThreadPool**: A thread pool with a fixed number of threads. The size of the pool is fixed, and extra tasks are queued until a thread becomes available.
+  ```java
+  ExecutorService executor = Executors.newFixedThreadPool(4); // 4 threads
+  ```
+
+- **SingleThreadExecutor**: A thread pool with a single worker thread. All tasks are executed sequentially.
+  ```java
+  ExecutorService executor = Executors.newSingleThreadExecutor();
+  ```
+
+- **ScheduledThreadPoolExecutor**: An executor that can schedule commands to run after a given delay or periodically.
+  ```java
+  ScheduledExecutorService executor = Executors.newScheduledThreadPool(2);
+  executor.schedule(() -> System.out.println("Scheduled task"), 5, TimeUnit.SECONDS);
+  ```
+
+---
+
+### **2. Concurrency Framework**
+
+The **Concurrency Framework** in Java, provided by the `java.util.concurrent` package, includes classes and interfaces designed to simplify concurrency, reduce the complexity of working with threads, and improve performance in multi-threaded environments.
+
+#### **Key Features of the Concurrency Framework:**
+
+- **Locks and Synchronization**: The framework provides `Lock` and `ReadWriteLock` interfaces, which allow finer-grained control over thread synchronization than traditional `synchronized` blocks.
+
+- **Atomic Variables**: The framework provides classes like `AtomicInteger`, `AtomicLong`, and `AtomicReference` for atomic (thread-safe) operations on primitive values or objects without needing explicit synchronization.
+
+- **Concurrent Collections**: The framework provides thread-safe collection classes such as:
+  - `ConcurrentHashMap`: A thread-safe version of `HashMap` that allows multiple threads to concurrently read and write without locking the entire map.
+  - `CopyOnWriteArrayList`: A thread-safe variant of `ArrayList` where all mutative operations (like `add()`) are implemented by making a fresh copy of the underlying array.
+  - `BlockingQueue`: A thread-safe queue that supports blocking operations for putting and taking elements, useful in producer-consumer problems.
+
+- **ForkJoinPool**: A framework designed to support **divide-and-conquer** parallelism. It can break a task into smaller sub-tasks and process them concurrently.
+  ```java
+  ForkJoinPool forkJoinPool = new ForkJoinPool();
+  forkJoinPool.submit(() -> {
+      // Parallel tasks here
+  });
+  ```
+
+- **Future and Callable**: The `Future` interface represents the result of an asynchronous computation, and `Callable` is similar to `Runnable`, but it can return a result or throw an exception.
+  ```java
+  ExecutorService executor = Executors.newCachedThreadPool();
+  Callable<Integer> task = () -> {
+      // Simulating some task
+      return 123;
+  };
+
+  Future<Integer> future = executor.submit(task);
+  Integer result = future.get(); // Blocks until the result is available
+  ```
+
+- **CountDownLatch**: A synchronization aid that allows one or more threads to wait until a set of operations being performed by other threads completes. It can be used to coordinate the start or end of a set of tasks.
+
+  ```java
+  CountDownLatch latch = new CountDownLatch(3); // 3 threads need to complete
+  for (int i = 0; i < 3; i++) {
+      new Thread(() -> {
+          // Some task
+          latch.countDown(); // Decrements the latch count
+      }).start();
+  }
+  latch.await(); // Main thread waits until count reaches 0
+  ```
+
+- **Semaphore**: A counting semaphore is used for limiting access to a particular resource. A semaphore has a set number of permits, and each `acquire()` reduces the number of available permits. When the permits reach zero, other threads calling `acquire()` will block until a permit is released.
+
+  ```java
+  Semaphore semaphore = new Semaphore(2); // Only 2 threads can access a resource at a time
+  semaphore.acquire(); // Acquiring a permit
+  semaphore.release(); // Releasing a permit
+  ```
+
+- **CyclicBarrier**: A synchronization aid that allows a set of threads to wait until all threads reach a common barrier point. Once all threads have reached the barrier, they are released simultaneously.
+
+  ```java
+  CyclicBarrier barrier = new CyclicBarrier(3, () -> {
+      System.out.println("All threads reached the barrier");
+  });
+
+  for (int i = 0; i < 3; i++) {
+      new Thread(() -> {
+          // Simulate some task
+          barrier.await(); // Wait at the barrier
+      }).start();
+  }
+  ```
+
+---
+
+### **Executor and Concurrency Framework: A Real-World Example**
+
+Here’s an example of using an **ExecutorService** with **BlockingQueue** to simulate a **producer-consumer** problem using the **Concurrency Framework**.
+
+```java
+import java.util.concurrent.*;
+
+class Producer implements Runnable {
+    private final BlockingQueue<Integer> queue;
+
+    public Producer(BlockingQueue<Integer> queue) {
+        this.queue = queue;
+    }
+
+    @Override
+    public void run() {
+        try {
+            for (int i = 1; i <= 5; i++) {
+                System.out.println("Produced: " + i);
+                queue.put(i); // Blocking if the queue is full
+                Thread.sleep(1000); // Simulating time to produce
+            }
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+    }
+}
+
+class Consumer implements Runnable {
+    private final BlockingQueue<Integer> queue;
+
+    public Consumer(BlockingQueue<Integer> queue) {
+        this.queue = queue;
+    }
+
+    @Override
+    public void run() {
+        try {
+            while (true) {
+                Integer item = queue.take(); // Blocking if the queue is empty
+                System.out.println("Consumed: " + item);
+                Thread.sleep(500); // Simulating time to consume
+            }
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+    }
+}
+
+public class ExecutorConcurrencyExample {
+    public static void main(String[] args) {
+        BlockingQueue<Integer> queue = new ArrayBlockingQueue<>(10);
+        ExecutorService executorService = Executors.newFixedThreadPool(2);
+
+        executorService.submit(new Producer(queue));
+        executorService.submit(new Consumer(queue));
+
+        executorService.shutdown();
+    }
+}
+```
+
+### **Summary**
+
+- **Executor Framework** provides a high-level abstraction for managing threads in Java.
+  - `Executor`: Basic interface for running tasks.
+  - `ExecutorService`: Extends `Executor` and provides additional methods to manage task execution and handle results.
+  - `ScheduledExecutorService`: Provides methods for scheduling tasks with delays or periodic execution.
+  
+- **Concurrency Framework**: A collection of classes that make concurrency management easier.
+  - Includes utilities like `Locks`, `Atomic Variables`,
+
+ `BlockingQueues`, `CountDownLatch`, `Semaphore`, and `CyclicBarrier`.
+  - **ForkJoinPool**: Designed for parallel tasks.
+  - **Concurrent Collections**: Thread-safe collections like `ConcurrentHashMap`.
+
+The **Executor** and **Concurrency Framework** are powerful tools for writing scalable, maintainable, and efficient multi-threaded Java applications. They simplify task management, synchronization, and error handling in concurrent environments.
+
+### **Microservices Design Patterns**
+
+Microservices architecture is a design pattern that advocates building applications as a set of small, independent services, each of which is responsible for a specific business capability. These services communicate over lightweight protocols (such as HTTP or messaging queues) and can be independently developed, deployed, and scaled. Microservices design patterns help to manage the complexities of this architecture, particularly around service communication, reliability, scalability, and maintainability.
+
+### **Common Microservice Design Patterns:**
+
+1. **Decomposition Patterns**:
+   - **Decompose by Business Capability**: Break down your microservices according to business functions or domains. For example, in an e-commerce application, you might have services for "product management", "order processing", and "customer management".
+   - **Decompose by Subdomains** (Domain-Driven Design): Decompose the system based on business subdomains. Each subdomain gets its own microservice.
+
+2. **API Gateway**:
+   - An API Gateway acts as a single entry point for all client requests to the backend services. It handles routing, load balancing, security, authentication, and sometimes caching.
+   - **Pattern**: Instead of exposing each microservice to clients, all requests go through the API Gateway, which then routes them to the appropriate service.
+   - **Benefits**: Simplifies client interaction, centralizes cross-cutting concerns (e.g., logging, authentication), and reduces the complexity for clients.
+
+3. **Service Discovery**:
+   - Service discovery enables automatic detection of services within the network. This is particularly important in a microservice architecture where services are constantly being added or removed.
+   - **Pattern**: A service registry is used to track all services, and each microservice registers itself when it starts. The client or another service can look up the registry to discover available services.
+   - **Tools**: Netflix Eureka, Consul, and Zookeeper are popular service discovery tools.
+
+4. **Circuit Breaker**:
+   - The Circuit Breaker pattern prevents an application from repeatedly trying to execute a failing operation, which would otherwise result in more failures and poor performance.
+   - **Pattern**: If a service repeatedly fails, the circuit breaker trips, and subsequent calls to the service return a predefined fallback response or error without trying the service again.
+   - **Tools**: Netflix Hystrix, Resilience4J, and Spring Cloud Circuit Breaker.
+
+5. **Event Sourcing**:
+   - Event sourcing involves storing the state of a service as a sequence of events instead of just storing the current state.
+   - **Pattern**: Events are the source of truth, and the current state of an entity is derived by replaying events.
+   - **Benefits**: Provides an audit trail of changes, simplifies dealing with complex workflows, and enables rebuilding the state from events in the case of failure.
+
+6. **CQRS (Command Query Responsibility Segregation)**:
+   - CQRS separates the operations that mutate data (commands) from the operations that retrieve data (queries).
+   - **Pattern**: Commands update the state of a system, while queries read the state. This allows for optimized querying and writing.
+   - **Benefits**: Helps to scale and optimize reads and writes separately, which is especially useful when dealing with large-scale systems.
+
+7. **Strangler Fig**:
+   - The Strangler Fig pattern is a technique used when migrating from a monolithic system to a microservices-based architecture.
+   - **Pattern**: You incrementally replace parts of the monolith with microservices, with each new microservice "strangling" a part of the old system until the entire monolith is replaced.
+   - **Benefits**: Minimizes the risk of full system replacement, enables a gradual transition, and reduces downtime.
+
+8. **Database per Service**:
+   - This pattern advocates that each microservice should manage its own database schema, enabling data independence.
+   - **Pattern**: Each service has its own database (could be SQL or NoSQL), and communication between services happens through APIs rather than direct database access.
+   - **Benefits**: Decouples the services, enables independent scaling, and allows the use of the best database technology per service.
+
+9. **Saga Pattern**:
+   - The Saga Pattern is used to manage long-running distributed transactions and ensures that microservices can handle failures in a distributed environment.
+   - **Pattern**: Instead of a single large transaction, you break the transaction into a series of smaller steps (each step is a local transaction in one service). If one step fails, compensating transactions are executed to undo previous actions.
+   - **Types**:
+     - **Choreography**: Each service involved in the saga knows which other services it should communicate with.
+     - **Orchestration**: A central coordinator (often a service) manages the saga steps and compensating transactions.
+
+10. **Retry Pattern**:
+    - The Retry pattern is used to handle temporary failures by automatically retrying failed operations, often with an exponential backoff strategy.
+    - **Pattern**: After a service call fails, the operation is retried a predefined number of times before giving up or triggering an alert.
+    - **Benefits**: Helps recover from temporary network or service issues without human intervention.
+
+11. **Sidecar Pattern**:
+    - The Sidecar pattern involves deploying auxiliary or supporting components alongside the main application service, often in a separate container.
+    - **Pattern**: A sidecar runs in parallel with the main application, performing tasks such as logging, monitoring, security, or proxying.
+    - **Benefits**: Promotes separation of concerns, reduces the complexity of the main service, and can be managed independently.
+
+12. **Shared Library Pattern**:
+    - The Shared Library pattern involves creating common libraries that can be shared across multiple microservices.
+    - **Pattern**: A set of reusable, cross-cutting concerns (like logging, authentication, error handling) is abstracted into a shared library, which can be used by different services.
+    - **Benefits**: Reduces duplication and ensures consistency across microservices.
+
+---
+
+### **12 Rules of Microservices**
+
+The **12-Factor App** methodology is a set of best practices for building modern, scalable applications. While not specifically tailored for microservices, these rules are widely applicable and help guide developers toward building microservices that are maintainable, scalable, and resilient.
+
+1. **Codebase**: A microservice should have a single codebase tracked in version control (e.g., Git), with one or more deploys per environment.
+2. **Dependencies**: Declare and isolate dependencies. Explicitly declare all external libraries or services, and avoid relying on implicit system-level dependencies.
+3. **Config**: Store configuration in the environment (e.g., environment variables). This ensures that configuration is environment-specific and not tied to the codebase.
+4. **Backing Services**: Treat backing services (databases, caches, third-party APIs) as attached resources, and manage them as independent services.
+5. **Build, Release, Run**: Strictly separate the build, release, and run stages. This ensures that the build phase is separate from deployment and runtime.
+6. **Processes**: Execute the application as one or more stateless processes. This simplifies scaling, fault tolerance, and decoupling of services.
+7. **Port Binding**: A microservice should expose its functionality via a web service (e.g., HTTP) and bind to a specific port to handle requests.
+8. **Concurrency**: Scale out via the process model, using multiple instances of services to handle different loads concurrently.
+9. **Disposability**: Maximize robustness with fast startup and graceful shutdown. This allows for better resilience and less downtime.
+10. **Dev/Prod Parity**: Keep development, staging, and production environments as similar as possible to minimize issues when moving code between environments.
+11. **Logs**: Treat logs as event streams. Aggregate logs in a centralized service for easier monitoring and debugging.
+12. **Admin Processes**: Run administrative or maintenance tasks as one-off processes (e.g., database migrations).
+
+---
+
+### **Kafka in Depth**
+
+**Apache Kafka** is a distributed event streaming platform that is widely used for building real-time data pipelines and streaming applications. Kafka is designed for high-throughput, fault tolerance, and scalability, and it is commonly used in microservices architectures for decoupling services, event-driven architecture, and messaging.
+
+#### **Key Concepts in Kafka:**
+
+1. **Producer**:
+   - The producer is the entity that sends (or publishes) messages to Kafka topics. It is responsible for serializing data and managing message routing to topics.
+
+2. **Consumer**:
+   - Consumers are applications or services that read messages from Kafka topics. They can subscribe to one or more topics and process the messages asynchronously.
+
+3. **Topics**:
+   - A **topic** is a logical channel to which messages are published. Kafka topics are partitioned, meaning data within a topic is divided across multiple Kafka brokers for parallelism and scalability.
+   
+4. **Partitions**:
+   - A partition is a division of a Kafka topic, and each partition is an ordered, immutable sequence of messages. Kafka distributes partitions across multiple brokers to improve performance and fault tolerance.
+   
+5. **Brokers**:
+   - Kafka brokers are responsible for storing data, managing partitions, and serving data to producers and consumers. A Kafka cluster is made up of multiple brokers working together.
+   
+6. **Consumers Groups**:
+   - Kafka consumers can belong to a **consumer group**. When multiple consumers are part of the same group, each consumer is responsible for consuming a portion of the topic's partitions. This allows for parallel processing.
+
+7. **ZooKeeper**:
+   - Apache ZooKeeper is used to coordinate Kafka brokers, manage configuration, and handle leader election. However, newer versions of Kafka are moving away from Zookeeper in favor of Kafka's own internal consensus mechanism (`
+
+KRaft` mode).
+
+8. **Retention and Compaction**:
+   - Kafka allows messages to be retained for a configurable amount of time or based on disk usage. Kafka can also perform log compaction, which keeps only the latest message for each key in a topic.
+
+#### **Kafka Use Cases**:
+
+1. **Event-driven Architectures**:
+   - Kafka is ideal for systems that need to react to events in real-time. It provides a fault-tolerant, high-throughput mechanism to propagate changes across distributed systems.
+
+2. **Log Aggregation**:
+   - Kafka can aggregate logs from different microservices or systems and make them available for analysis and monitoring.
+
+3. **Real-time Data Pipelines**:
+   - Kafka is used to collect, stream, and process real-time data from various sources (e.g., sensors, user activity) and then forward it to downstream processing systems.
+
+4. **Decoupling Microservices**:
+   - Kafka helps in decoupling microservices by acting as an intermediary messaging layer, allowing services to communicate asynchronously through event messages.
+
+#### **Kafka Advantages**:
+- **Scalable**: Kafka handles high-throughput and high-volume data streams, allowing services to scale independently.
+- **Fault-tolerant**: Kafka replicates data across multiple brokers, ensuring durability and fault tolerance.
+- **Low Latency**: Kafka provides low-latency event processing, making it ideal for real-time use cases.
+  
