@@ -1,3 +1,47 @@
+## **Table of Contents**
+
+### **1. Leadership & Team FAQs**
+   - [LEAD FAQ](#1.1-lead-faq)
+   - [TEAm & Tools FAQ](#1.2-team-tools-faq)
+   - [Leadership & Management](#1.3-leadership-management)
+   - [Team Lead, My Role and Responsibilities](#1.4-team-lead-my-role-and-responsibilities)
+
+### **2. React Development**
+   - [React DevTools Overview](#2.1-react-devtools-overview)
+   - [Best Practices for Managing a React Application](#2.2-best-practices-for-managing-a-react-application)
+   - [Tools for Code Review](#2.3-tools-for-code-review)
+   - [Securing a React Application](#2.4-securing-a-react-application)
+   - [What is React Native?](#2.5-what-is-react-native)
+   - [What is a Mixin in React?](#2.6-what-is-a-mixin-in-react)
+   - [Managing Tokens Between React and a Backend REST Service](#2.7-managing-tokens-between-react-and-a-backend-rest-service)
+   - [Session in React and Spring Boot](#2.8-session-in-react-and-spring-boot)
+   - [How to Disable Copying Content in a React Application](#2.9-how-to-disable-copying-content-in-a-react-application)
+   - [Design Tools and UI Frameworks for React](#2.10-design-tools-and-ui-frameworks-for-react)
+   - [Creating a Real-Time Dashboard in React](#2.11-creating-a-real-time-dashboard-in-react)
+   - [Polling in React](#2.12-polling-in-react)
+
+### **3. Advanced React Concepts**
+   - [Idempotent in React](#3.1-idempotent-in-react)
+   - [Lightweight vs Heavyweight Components in React](#3.2-lightweight-vs-heavyweight-components-in-react)
+   - [Managing Props, State, Refs, Keys, Async/Await, Axios Security, Linting, Mixins, and Types of Hooks](#3.3-managing-props-state-refs-keys-asyncawait-axios-security-linting-mixins-and-types-of-hooks)
+
+### **4. Java & Kafka**
+   - [SQL vs NoSQL](#4.1-sql-vs-nosql)
+   - [Kafka: Partitions and Replication Factor](#4.2-kafka-partitions-and-replication-factor)
+   - [Key Components of Apache Kafka](#4.3-key-components-of-apache-kafka)
+   - [In Java, a BlockingQueue](#4.4-in-java-a-blockingqueue)
+
+### **5. Microservices & Kafka**
+   - [Microservices Design Patterns](#5.1-microservices-design-patterns)
+   - [12 Rules of Microservices](#5.2-12-rules-of-microservices)
+   - [Kafka in Depth](#5.3-kafka-in-depth)
+
+### **6. Containerization & Orchestration**
+   - [Containerization, Orchestration, Load Balancing, and Tracking Requests Across Regions](#6.1-containerization-orchestration-load-balancing-and-tracking-requests-across-regions)
+
+---
+
+## LEAD FAQ
 
 ### **4. General Development & Problem Solving**
 
@@ -105,6 +149,8 @@ HR discussions often focus on assessing a candidate's cultural fit, communicatio
 "When managing multiple deadlines, I use a structured approach. First, I assess the urgency and importance of each task and determine which ones have the highest priority. I break down larger tasks into smaller, more manageable chunks and create a timeline or checklist for each task. I also regularly communicate with stakeholders to ensure that any changes in priorities are accounted for. If I encounter unexpected roadblocks, I reassess and adjust my plan, ensuring I stay on track to meet all deadlines. I also make sure to allocate time for testing and code review to maintain the quality of my work."
 
 ---
+
+## TEAM & Tools FAQ
 
 When you're faced with **multiple priority tasks** and need to manage them effectively, it’s essential to have a structured approach to ensure that you're working efficiently and not feeling overwhelmed. Here's how you can break down and manage such situations:
 
@@ -357,6 +403,8 @@ To provide a **task sheet using Agile development methodology** for **frontend (
 
 This **Agile task sheet** provides a clear roadmap for your full-stack development process, allowing you to plan, execute, and track the progress of both **frontend (React/Angular)** and **backend (Spring Boot Microservices)** tasks while maintaining flexibility and focus on delivering high-quality software iteratively.
 
+## Leadership & Management
+
 ### 1. Team Leadership
 **Q: Can you describe your leadership style? How do you adapt it based on your team’s needs?**
 **A:** My leadership style is predominantly transformational. I believe in inspiring and motivating my team members to achieve their best. I adapt my approach based on individual team members’ strengths and weaknesses. For instance, with junior developers, I take a more hands-on approach, providing guidance and mentorship. With more experienced team members, I encourage autonomy, allowing them to take ownership of their projects.
@@ -462,6 +510,8 @@ As a team lead, effectively handling, helping, and training junior colleagues is
    - Set new goals and training plans based on feedback and performance.
 
 By implementing these strategies, you can effectively support and train junior colleagues, helping them grow into valuable team members and ensuring the overall success of your team.
+
+## Scrum framework
 
 In a Scrum framework, the daily routine typically involves a structured approach to keep the team aligned and focused on their goals. Here’s an outline of a typical daily routine in Scrum:
 
@@ -619,6 +669,9 @@ Development Goals:
 "To enhance your project management skills, consider attending a workshop on time management and scheduling weekly progress check-ins with your mentor."
 
 ---
+
+## Team lead, my role and responsibilities 
+
 As a team lead, my role and responsibilities encompass several key areas, including:
 
 ### 1. **Team Management**
@@ -666,6 +719,7 @@ As a team lead, my role and responsibilities encompass several key areas, includ
 
 Being a team lead involves a blend of technical expertise, management skills, and emotional intelligence. By focusing on effective communication, fostering a supportive environment, and addressing challenges proactively, I strive to lead my team to success while promoting individual growth.
 
+## Idempotent
 
 ### What Does **Idempotent** Mean?
 
@@ -755,7 +809,7 @@ console.log(addToFive(3));  // 8 (same result, no matter how many times it's cal
 - It’s useful in areas like **API design** (for safe retries), **database updates**, and **distributed systems** where repeated requests could otherwise cause inconsistencies or errors.
 - Common examples of idempotent HTTP methods include `GET`, `PUT`, and `DELETE` (under typical use cases).
 
-### React DevTools Overview
+## React DevTools Overview
 
 **React DevTools** is a set of tools built specifically for inspecting and debugging React applications. It provides an interface for inspecting the component tree, managing component state and props, tracking performance, and helping developers identify and fix potential issues in their React applications.
 
@@ -901,7 +955,7 @@ React DevTools is an indispensable tool for debugging, optimizing performance, a
 
 It is highly recommended for every React developer to install and use React DevTools regularly for building scalable and performant React applications.
 
-### Best Practices for Managing a React Application
+## Best Practices for Managing a React Application
 
 To build scalable, maintainable, and efficient React applications, following **best practices** is essential. Here’s a guide to some key best practices and tools to help you manage your React project effectively:
 
@@ -1042,7 +1096,7 @@ To build scalable, maintainable, and efficient React applications, following **b
 
 ---
 
-### Tools for Code Review
+## Tools for Code Review
 
 Code reviews are an essential part of maintaining high-quality code, ensuring consistency, and identifying potential issues early in the development process. Here are tools and techniques that can help facilitate efficient and effective code reviews:
 
@@ -1107,6 +1161,8 @@ Code reviews are an essential part of maintaining high-quality code, ensuring co
 ### Conclusion
 
 By following **React best practices** (component organization, state management, performance optimization, etc.) and leveraging powerful **code review tools** (like GitHub PRs
+
+## Securing a React application
 
 Securing a **React application** is critical to protecting both the frontend (client-side) and backend (server-side) aspects of the application. While React itself is a frontend library, ensuring the security of the application involves implementing various strategies that span both client-side and server-side concerns. Here's a list of ways to secure a React application:
 
@@ -1246,7 +1302,7 @@ Securing a **React application** is critical to protecting both the frontend (cl
 By following these best practices and integrating the right tools, you can significantly reduce security risks and protect both your React application and your users’ data.
 
 
-### **What is React Native?**
+## **What is React Native?**
 
 **React Native** is a **JavaScript framework** developed by **Facebook** that enables developers to build **mobile applications** using **React**. Unlike traditional mobile development frameworks (e.g., **Swift** for iOS or **Java** for Android), React Native allows developers to write apps in **JavaScript** (or **TypeScript**) and render them using **native UI components**. This makes it possible to develop cross-platform applications for both **iOS** and **Android** from a single codebase.
 
@@ -1470,7 +1526,7 @@ export default App;
 
 The example code provided shows how simple it can be to build basic UI elements and manage user interactions in React Native. For more advanced applications, you can integrate **navigation**, **state management** (e.g., **Redux**), and **native modules** to extend the functionality of your app.
 
-### **What is a Mixin in React?**
+## What is a Mixin in React?
 
 In the context of React, a **mixin** is a pattern or technique used to add reusable functionality to components. **Mixins** allow you to inject methods or behaviors into React components without needing to subclass them. They were common in older versions of React but have since been **deprecated** in favor of other patterns like **Higher-Order Components (HOCs)** and **Hooks** in React.
 
@@ -1954,6 +2010,7 @@ const emailValidationSchema = Yup.object().shape({
 
 Validating user input in React is vital for ensuring data integrity and security. You can manage form validation using basic **React state management** for simple cases, or you can use powerful libraries like **Formik** and **Yup** for more complex forms
 
+## Managing tokens between React and a backend REST service
 
 Managing tokens between React and a backend REST service, particularly for authentication and authorization, typically involves using **JWT (JSON Web Tokens)** or **OAuth tokens**. Here's a detailed guide on how to manage tokens between React and a Spring Boot backend.
 
@@ -2243,6 +2300,7 @@ If you want to implement a **refresh token** mechanism (to refresh the JWT token
 - **Frontend (React)**: Store the JWT token (in `localStorage`, `sessionStorage`, or `cookies`), and include the token in the `Authorization` header (`Bearer <token>`) for protected API calls.
 - **Backend (Spring Boot)**: Validate the token on each protected route using a filter, and generate a JWT token upon
 
+## Session in React and Spring Boot
 
 In the context of web development, a **session** refers to a period of interaction between a user and a web application, typically initiated when the user logs in and ending when they log out, or the session times out due to inactivity. Sessions are used to store user-specific information (e.g., authentication data) across multiple requests, without the user needing to re-authenticate every time they interact with the system.
 
@@ -2436,7 +2494,7 @@ You might want to prevent sensitive information from being exposed in URLs, espe
 - To **prevent sensitive information in URLs**, avoid passing tokens in the URL. Use HTTP headers for authentication and always use HTTPS for secure communication.
 
 
-### **How to Disable Copying Content in a React Application**
+## How to Disable Copying Content in a React Application
 
 While it is not 100% possible to prevent users from copying content from your application (as they could still take screenshots, inspect elements, or use other tools), you can implement some strategies to **discourage copying** or make it harder to do so. Below are some common techniques to prevent users from copying content (like text or images) in a React application:
 
@@ -2555,7 +2613,7 @@ export default App;
 
 ---
 
-### **Design Tools and UI Frameworks for React**
+## Design Tools and UI Frameworks for React
 
 In the same way that Angular uses frameworks like **Angular Material**, **Bootstrap**, or **Kendo UI** for UI design, there are many options available for React that provide **pre-designed components**, layouts, and themes. These tools allow for faster and more consistent UI development.
 
@@ -2704,6 +2762,7 @@ In the same way that Angular uses frameworks like **Angular Material**, **Bootst
 
 Each of these tools and frameworks has its strengths, and the choice depends on your design needs, familiarity, and the complexity of your application.
 
+## Creating a real-time dashboard
 
 Creating a **real-time dashboard** in React, where data is updated frequently (like a stock exchange), requires using WebSockets or polling to fetch the data periodically. For this example, we'll use **WebSockets** to get real-time updates. Additionally, we'll simulate stock exchange data with an API that sends updates every few seconds.
 
@@ -2954,7 +3013,7 @@ Your React app should now be receiving real-time stock data updates and displayi
 
 With this approach, you've created a **real-time stock dashboard** using React and WebSockets that simulates frequent updates, perfect for stock exchange-like applications.
 
-### **What is Polling?**
+## What is Polling?
 
 **Polling** is a technique where a client repeatedly requests data from a server at regular intervals. This is commonly used when you need to fetch updates on a regular basis, like displaying real-time data such as stock prices, weather data, or live scores on a dashboard.
 
@@ -3488,6 +3547,8 @@ This guide walks you through:
 
 Make sure to adjust the code and configurations based on your specific use case and cloud provider (AWS, GCP, Azure). Additionally, for multi-region deployments, you'll need to handle traffic routing using a **Global Load Balancer** or similar solution.
 
+## lightweight and heavyweight components 
+ 
 In React, the terms **lightweight** and **heavyweight** components generally refer to the **complexity**, **resource consumption**, and **rendering behavior** of the component. While these terms aren't official React terminology, they help describe the performance characteristics of a component.
 
 ### **Lightweight Components**:
@@ -3641,6 +3702,7 @@ function MyList({ items }) {
 
 In React, it’s important to understand the trade-offs between lightweight and heavyweight components. Proper optimization techniques, such as memoization, code splitting, and virtualization, can ensure that even heavyweight components perform efficiently.
 
+## lightweight and heavyweight components in java
 
 In Java, the terms **lightweight** and **heavyweight** typically refer to **components** or **objects** in the context of **user interface (UI)** components and **object-oriented design**. The distinction often involves how much system resources (e.g., memory, CPU) are consumed and how complex the components or objects are.
 
@@ -4380,7 +4442,7 @@ This guide walks you through:
 
 Make sure to adjust the code and configurations based on your specific use case and cloud provider (AWS, GCP, Azure). Additionally, for multi-region deployments, you'll need to handle traffic routing using a **Global Load Balancer** or similar solution.
 
-### Best Practices for Managing a React Application
+## Best Practices for Managing a React Application
 
 To build scalable, maintainable, and efficient React applications, following **best practices** is essential. Here’s a guide to some key best practices and tools to help you manage your React project effectively:
 
@@ -4521,7 +4583,7 @@ To build scalable, maintainable, and efficient React applications, following **b
 
 ---
 
-### Tools for Code Review
+## Tools for Code Review
 
 Code reviews are an essential part of maintaining high-quality code, ensuring consistency, and identifying potential issues early in the development process. Here are tools and techniques that can help facilitate efficient and effective code reviews:
 
@@ -4587,7 +4649,7 @@ Code reviews are an essential part of maintaining high-quality code, ensuring co
 
 By following **React best practices** (component organization, state management, performance optimization, etc.) and leveraging powerful **code review tools** (like GitHub PRs
 
-### React DevTools Overview
+## React DevTools Overview
 
 **React DevTools** is a set of tools built specifically for inspecting and debugging React applications. It provides an interface for inspecting the component tree, managing component state and props, tracking performance, and helping developers identify and fix potential issues in their React applications.
 
@@ -4638,7 +4700,7 @@ React DevTools consists of two main parts:
     
 ---
 
-### How to Install React DevTools
+## How to Install React DevTools
 
 #### For Chrome (or Chromium-based browsers like Edge):
 
@@ -4733,7 +4795,7 @@ React DevTools is an indispensable tool for debugging, optimizing performance, a
 
 It is highly recommended for every React developer to install and use React DevTools regularly for building scalable and performant React applications.
 
-### What Does **Idempotent** Mean?
+## What Does **Idempotent** Mean?
 
 In computing, the term **idempotent** refers to an operation that, when performed multiple times, has the same effect as when it is performed just once. In other words, an idempotent operation can be repeated without changing the result beyond the initial application.
 
@@ -4948,6 +5010,7 @@ function MyComponent() {
 
 In functional components, hooks like `useState`, `useEffect`, and `useMemo` replace class component lifecycle methods. The `useEffect` hook can be customized with dependencies to achieve similar behavior as mounting, updating, and unmounting phases.
 
+## In React the terms **lightweight** and **heavyweight**
 
 In React, the terms **lightweight** and **heavyweight** components generally refer to the **complexity**, **resource consumption**, and **rendering behavior** of the component. While these terms aren't official React terminology, they help describe the performance characteristics of a component.
 
@@ -5102,6 +5165,7 @@ function MyList({ items }) {
 
 In React, it’s important to understand the trade-offs between lightweight and heavyweight components. Proper optimization techniques, such as memoization, code splitting, and virtualization, can ensure that even heavyweight components perform efficiently.
 
+## In Java the terms **lightweight** and **heavyweight**
 
 In Java, the terms **lightweight** and **heavyweight** typically refer to **components** or **objects** in the context of **user interface (UI)** components and **object-oriented design**. The distinction often involves how much system resources (e.g., memory, CPU) are consumed and how complex the components or objects are.
 
@@ -5261,6 +5325,7 @@ Here, the `ComplexData` object is heavyweight because it holds a large amount of
 
 When choosing between lightweight and heavyweight components or objects in Java, always consider the **trade-offs** in terms of **performance**, **memory usage**, and **application requirements**.
 
+## Creating a **real-time dashboard** in React
 
 Creating a **real-time dashboard** in React, where data is updated frequently (like a stock exchange), requires using WebSockets or polling to fetch the data periodically. For this example, we'll use **WebSockets** to get real-time updates. Additionally, we'll simulate stock exchange data with an API that sends updates every few seconds.
 
@@ -5510,6 +5575,8 @@ Your React app should now be receiving real-time stock data updates and displayi
 ---
 
 With this approach, you've created a **real-time stock dashboard** using React and WebSockets that simulates frequent updates, perfect for stock exchange-like applications.
+
+## To achieve **containerization**, **orchestration**, **load balancing**, and **tracking requests across regions**
 
 To achieve **containerization**, **orchestration**, **load balancing**, and **tracking requests across regions** in a **React** and **Spring Boot** application, we'll break it down into a series of steps and outline the technologies, tools, and commands required. Additionally, we'll integrate a **CI/CD pipeline** for automated deployment.
 
@@ -5842,7 +5909,7 @@ This guide walks you through:
 
 Make sure to adjust the code and configurations based on your specific use case and cloud provider (AWS, GCP, Azure). Additionally, for multi-region deployments, you'll need to handle traffic routing using a **Global Load Balancer** or similar solution.
 
-### Best Practices for Managing a React Application
+## Best Practices for Managing a React Application
 
 To build scalable, maintainable, and efficient React applications, following **best practices** is essential. Here’s a guide to some key best practices and tools to help you manage your React project effectively:
 
@@ -5983,7 +6050,7 @@ To build scalable, maintainable, and efficient React applications, following **b
 
 ---
 
-### Tools for Code Review
+## Tools for Code Review
 
 Code reviews are an essential part of maintaining high-quality code, ensuring consistency, and identifying potential issues early in the development process. Here are tools and techniques that can help facilitate efficient and effective code reviews:
 
@@ -6049,7 +6116,7 @@ Code reviews are an essential part of maintaining high-quality code, ensuring co
 
 By following **React best practices** (component organization, state management, performance optimization, etc.) and leveraging powerful **code review tools** (like GitHub PRs
 
-### React DevTools Overview
+## React DevTools Overview
 
 **React DevTools** is a set of tools built specifically for inspecting and debugging React applications. It provides an interface for inspecting the component tree, managing component state and props, tracking performance, and helping developers identify and fix potential issues in their React applications.
 
@@ -6195,7 +6262,7 @@ React DevTools is an indispensable tool for debugging, optimizing performance, a
 
 It is highly recommended for every React developer to install and use React DevTools regularly for building scalable and performant React applications.
 
-### What Does **Idempotent** Mean?
+## What Does **Idempotent** Mean?
 
 In computing, the term **idempotent** refers to an operation that, when performed multiple times, has the same effect as when it is performed just once. In other words, an idempotent operation can be repeated without changing the result beyond the initial application.
 
@@ -6546,7 +6613,7 @@ This approach is useful for large-scale applications where state needs to be acc
 - **Lift State Up**: Move shared state to the nearest common ancestor of components that need it. Pass the state and state-updating functions down as props.
 - **Avoid Prop Drilling**: If you pass props through many layers, consider using **React Context** or a state management solution like **Redux**. React Context is best for moderate complexity, while Redux is suitable for complex or large applications with more involved state management.
 
-### **What is Polling?**
+## **What is Polling?**
 
 **Polling** is a technique where a client repeatedly requests data from a server at regular intervals. This is commonly used when you need to fetch updates on a regular basis, like displaying real-time data such as stock prices, weather data, or live scores on a dashboard.
 
@@ -6748,6 +6815,8 @@ However, polling can be inefficient because:
 - **SSE** is a good alternative if you need one-way communication from the server to the client.
 
 Choosing between polling, WebSockets, and SSE depends on the needs of your application, the server infrastructure, and the level of real-time interaction you require.
+
+## In React, understanding the different types of components
 
 In React, understanding the different types of components is essential for building scalable, maintainable, and effective applications. Here’s an overview of various component types and their definitions in React:
 
@@ -7059,6 +7128,8 @@ In this example:
 - **React Hooks**: Functional components with hooks (`useState`, `useEffect`, etc.) have become the standard in React development, and class components are now less commonly used, especially for new projects.
 - **Custom Hooks**: You can create reusable logic across components with **custom hooks**, which offers more flexibility than Higher-Order Components (HOCs) in some cases.
 - **Controlled vs. Uncontrolled**: **Controlled components** are generally preferred when you need to validate or manipulate input in real-time, while **uncontrolled components** are used when you want to simplify forms or when re-renders are unnecessary.
+
+## **Props**, **State**, **Refs**, **Keys**, **Async/Await**, **Axios security**, **Linting**, **Mixins**, and **Types of Hooks**
 
 Great! Let’s break down your request into different parts, including **Props**, **State**, **Refs**, **Keys**, **Async/Await**, **Axios security**, **Linting**, **Mixins**, and **Types of Hooks**. I’ll provide explanations, examples, and use cases for each.
 
@@ -7404,7 +7475,7 @@ function Counter() {
 - **Mixins**: Deprecated, avoid in modern React in favor of HOCs and custom hooks.
 - **Types of Hooks**: `useState`, `useEffect`, `useContext`, `useRef`, `useReducer`, etc., for managing state, side effects, and more in functional components.
 
-### **SQL vs NoSQL:**
+## **SQL vs NoSQL:**
 
 **SQL** and **NoSQL** are two broad categories of database management systems (DBMS) used to store, retrieve, and manage data. The main difference lies in how they structure and store the data.
 
@@ -7545,6 +7616,7 @@ function Counter() {
 - **SQL databases** are ideal when data structure is well-defined, relationships are complex, and consistency is critical. They are widely used in traditional applications requiring complex transactions and joins.
 - **NoSQL databases**, like **MongoDB**, are suited for applications that require flexibility, scalability, and performance. They are ideal for handling large, unstructured, or semi-structured data and are more capable of scaling horizontally across distributed systems.
 
+## In Kafka, **partitions** and **replication factor**
 
 In Kafka, **partitions** and **replication factor** are key concepts that help manage **scalability**, **fault tolerance**, and **data distribution** within the Kafka ecosystem. When you're working with **event-driven microservices** using Kafka, understanding how **partitions** and **replication** work can help ensure your system is both scalable and resilient.
 
@@ -7650,6 +7722,8 @@ This will create a topic `order-events` with **5 partitions** and a **replicatio
 - **Replication** ensures **fault tolerance** and **data availability**. By having multiple replicas of each partition, Kafka guarantees that data is not lost if a broker fails.
 - In **event-driven microservices**, partitions and replication help ensure **scalability**, **reliability**, and **availability** of your event-driven system.
 - Properly configuring **partitions** and **replication factors** is crucial for building a high-performance and fault-tolerant Kafka-based event-driven architecture.
+
+## key components of **Apache Kafka**
 
 Let's break down the key components of **Apache Kafka**: containers, brokers, leaders, followers, partitions, consumer groups, offsets, and producers. I'll explain each concept and then provide a **Mermaid diagram** to visualize how these components interact in a Kafka architecture.
 
@@ -7966,6 +8040,8 @@ A **Functional Interface** is an interface with exactly one abstract method, typ
 - **Functional Interface Methods**:
   - **`default`** methods allow providing default implementations in interfaces.
   - **`static`** methods are utility methods that belong to the interface itself and are not inherited by implementing classes.
+
+## In Java, a **BlockingQueue**
 
 In Java, a **BlockingQueue** is a type of **queue** that supports operations that wait for the queue to become non-empty when retrieving an element and wait for space to become available in the queue when storing an element. This is particularly useful in concurrent programming when you need to implement producer-consumer scenarios, thread pooling, or similar multi-threaded workflows.
 
@@ -8351,7 +8427,7 @@ public class ExecutorConcurrencyExample {
 
 The **Executor** and **Concurrency Framework** are powerful tools for writing scalable, maintainable, and efficient multi-threaded Java applications. They simplify task management, synchronization, and error handling in concurrent environments.
 
-### **Microservices Design Patterns**
+## **Microservices Design Patterns**
 
 Microservices architecture is a design pattern that advocates building applications as a set of small, independent services, each of which is responsible for a specific business capability. These services communicate over lightweight protocols (such as HTTP or messaging queues) and can be independently developed, deployed, and scaled. Microservices design patterns help to manage the complexities of this architecture, particularly around service communication, reliability, scalability, and maintainability.
 
@@ -8420,7 +8496,7 @@ Microservices architecture is a design pattern that advocates building applicati
 
 ---
 
-### **12 Rules of Microservices**
+## **12 Rules of Microservices**
 
 The **12-Factor App** methodology is a set of best practices for building modern, scalable applications. While not specifically tailored for microservices, these rules are widely applicable and help guide developers toward building microservices that are maintainable, scalable, and resilient.
 
@@ -8439,7 +8515,7 @@ The **12-Factor App** methodology is a set of best practices for building modern
 
 ---
 
-### **Kafka in Depth**
+## **Kafka in Depth**
 
 **Apache Kafka** is a distributed event streaming platform that is widely used for building real-time data pipelines and streaming applications. Kafka is designed for high-throughput, fault tolerance, and scalability, and it is commonly used in microservices architectures for decoupling services, event-driven architecture, and messaging.
 
