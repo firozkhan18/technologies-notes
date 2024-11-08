@@ -755,10 +755,6 @@ console.log(addToFive(3));  // 8 (same result, no matter how many times it's cal
 - It’s useful in areas like **API design** (for safe retries), **database updates**, and **distributed systems** where repeated requests could otherwise cause inconsistencies or errors.
 - Common examples of idempotent HTTP methods include `GET`, `PUT`, and `DELETE` (under typical use cases).
 
-Firoz Khan <mr.firozkhan@gmail.com>
-Nov 7, 2024, 7:37 PM (16 hours ago)
-to me
-
 ### React DevTools Overview
 
 **React DevTools** is a set of tools built specifically for inspecting and debugging React applications. It provides an interface for inspecting the component tree, managing component state and props, tracking performance, and helping developers identify and fix potential issues in their React applications.
@@ -904,11 +900,6 @@ You can directly modify the state and props of any component within React DevToo
 React DevTools is an indispensable tool for debugging, optimizing performance, and inspecting the inner workings of your React applications. With features like component tree inspection, props/state management, hook inspection, and performance profiling, it makes React development easier and more efficient.
 
 It is highly recommended for every React developer to install and use React DevTools regularly for building scalable and performant React applications.
-
-
-Firoz Khan <mr.firozkhan@gmail.com>
-Nov 7, 2024, 7:40 PM (16 hours ago)
-to me
 
 ### Best Practices for Managing a React Application
 
@@ -3497,11 +3488,6 @@ This guide walks you through:
 
 Make sure to adjust the code and configurations based on your specific use case and cloud provider (AWS, GCP, Azure). Additionally, for multi-region deployments, you'll need to handle traffic routing using a **Global Load Balancer** or similar solution.
 
-
-Firoz Khan <mr.firozkhan@gmail.com>
-Nov 7, 2024, 11:16 PM (12 hours ago)
-to me
-
 In React, the terms **lightweight** and **heavyweight** components generally refer to the **complexity**, **resource consumption**, and **rendering behavior** of the component. While these terms aren't official React terminology, they help describe the performance characteristics of a component.
 
 ### **Lightweight Components**:
@@ -3813,14 +3799,6 @@ Here, the `ComplexData` object is heavyweight because it holds a large amount of
 - **Heavyweight objects** are more complex and resource-intensive, used for situations where more data or processing power is needed.
 
 When choosing between lightweight and heavyweight components or objects in Java, always consider the **trade-offs** in terms of **performance**, **memory usage**, and **application requirements**.
-
-
----------- Forwarded message ----------
-From: Firoz Khan <mr.firozkhan@gmail.com>
-Date: Thursday, November 7, 2024
-Subject: React & Microservice
-To: Firoz Khan <mr.firozkhan@gmail.com>
-
 
 Creating a **real-time dashboard** in React, where data is updated frequently (like a stock exchange), requires using WebSockets or polling to fetch the data periodically. For this example, we'll use **WebSockets** to get real-time updates. Additionally, we'll simulate stock exchange data with an API that sends updates every few seconds.
 
