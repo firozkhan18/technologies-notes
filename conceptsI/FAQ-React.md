@@ -34,9 +34,8 @@ Hide/Show table of contents
 | 22  | [What are uncontrolled components?](#what-are-uncontrolled-components)                                                                                                                                                           |
 | 34  | [What are stateless components?](#what-are-stateless-components)                                                                                                                                                                 |
 | 35  | [What are stateful components?](#what-are-stateful-components)                                                                                                                                                                   |
-| 25  | [What are Higher-Order components?](#what-are-higher-order-components)
-                           |
-| 48  | [How do you memoize a component?](#how-do-you-memoize-a-component)                                                                                                                                                               |
+| 25  | [What are Higher-Order components?](#what-are-higher-order-components)|
+| 48  | [How do you memoize a component?](#how-do-you-memoize-a-component) |
 | 52  | [What is a switching component?](#what-is-a-switching-component)                                                                                                                                                                 |
 | 23  | [What is the difference between createElement and cloneElement?](#what-is-the-difference-between-createelement-and-cloneelement)                                                                                                 |
 | 24  | [What is Lifting State Up in React?](#what-is-lifting-state-up-in-react)                                                                                                                                                         |
