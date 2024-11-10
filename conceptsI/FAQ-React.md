@@ -12871,4 +12871,367 @@ export default ResponsiveComponent;
 - **Effect Handling**: Use `useEffect` inside a custom hook for side effects such as fetching data, setting up subscriptions, etc.
 - **Abstraction**: Custom hooks can abstract complex logic (e.g., data fetching, form handling) and make components cleaner and more maintainable.
 
-By creating custom hooks, you ensure that your React code is modular, easy to test, and reusable. If you'd like more examples or explanations on a specific custom hook, feel free to ask!
+Here’s a structured **Table of Contents with Navigation Links** for your ReactJS tutorial that spans a broad range of topics, covering React basics, advanced hooks, rendering optimizations, and TypeScript integration.
+
+---
+
+## **ReactJS Tutorial Table of Contents**
+
+---
+
+### **1. [Introduction](#introduction)**  
+An overview of ReactJS and its core concepts.
+
+### **2. [Hello World](#hello-world)**  
+Building your first React app and rendering "Hello World".
+
+### **3. [Folder Structure](#folder-structure)**  
+Understanding the default folder structure of a React app.
+
+### **4. [Components](#components)**  
+Introduction to React components: functional vs class components.
+
+### **5. [Functional Components](#functional-components)**  
+How to create and use functional components in React.
+
+### **6. [Class Components](#class-components)**  
+Explaining class-based components and their use cases.
+
+### **7. [Hooks Update](#hooks-update)**  
+How React hooks changed the way we manage state and side effects in functional components.
+
+### **8. [JSX](#jsx)**  
+What is JSX and how it allows you to write HTML-like syntax within JavaScript.
+
+### **9. [Props](#props)**  
+Passing data to components through props.
+
+### **10. [State](#state)**  
+How to use React state to manage dynamic data within components.
+
+### **11. [setState](#setstate)**  
+Understanding the `setState` function to update state in class components.
+
+### **12. [Destructuring Props and State](#destructuring-props-and-state)**  
+Using destructuring to extract values from props and state for easier access.
+
+### **13. [Event Handling](#event-handling)**  
+Handling user events such as clicks and changes in React.
+
+### **14. [Binding Event Handlers](#binding-event-handlers)**  
+Binding event handlers in class components to manage `this` context.
+
+### **15. [Methods as Props](#methods-as-props)**  
+Passing methods as props to child components for dynamic interaction.
+
+### **16. [Conditional Rendering](#conditional-rendering)**  
+Rendering different UI elements conditionally based on certain conditions.
+
+### **17. [List Rendering](#list-rendering)**  
+Rendering dynamic lists of components using JavaScript's `map()` function.
+
+### **18. [Lists and Keys](#lists-and-keys)**  
+How and why keys are important when rendering lists in React.
+
+### **19. [Index as Key Anti-pattern](#index-as-key-anti-pattern)**  
+Explaining why using array indices as keys can cause issues.
+
+### **20. [Styling and CSS Basics](#styling-and-css-basics)**  
+Basic styling approaches in React: CSS, inline styles, and CSS-in-JS.
+
+### **21. [Basics of Form Handling](#basics-of-form-handling)**  
+Handling form elements and user inputs in React.
+
+### **22. [Component Lifecycle Methods](#component-lifecycle-methods)**  
+Understanding lifecycle methods available in React class components.
+
+### **23. [Component Mounting Lifecycle Methods](#component-mounting-lifecycle-methods)**  
+Key lifecycle methods such as `componentDidMount` and `componentWillUnmount`.
+
+### **24. [Component Updating Lifecycle Methods](#component-updating-lifecycle-methods)**  
+Lifecycle methods like `shouldComponentUpdate` and `componentDidUpdate`.
+
+### **25. [Fragments](#fragments)**  
+Using fragments to return multiple elements from a component without adding extra nodes to the DOM.
+
+### **26. [Pure Components](#pure-components)**  
+Optimizing React components with `React.PureComponent` to avoid unnecessary renders.
+
+### **27. [memo](#memo)**  
+Using `React.memo` to memoize functional components and prevent re-renders.
+
+### **28. [Refs](#refs)**  
+Using `refs` to directly access and interact with DOM elements in React.
+
+### **29. [Refs with Class Components](#refs-with-class-components)**  
+Using `React.createRef()` in class components for referencing DOM elements.
+
+### **30. [Forwarding Refs](#forwarding-refs)**  
+Forwarding refs to child components using `forwardRef`.
+
+### **31. [Portals](#portals)**  
+Rendering children into a different part of the DOM using React Portals.
+
+### **32. [Error Boundary](#error-boundary)**  
+Implementing error boundaries to catch JavaScript errors in the component tree.
+
+### **33. [Higher Order Components (HOC)](#higher-order-components-hoc)**  
+Using higher-order components to enhance or modify components.
+
+### **34. [Render Props](#render-props)**  
+Using render props to share functionality between components.
+
+### **35. [Context](#context)**  
+Using React’s Context API to pass data down the component tree without props drilling.
+
+### **36. [HTTP and React](#http-and-react)**  
+Making HTTP requests (GET/POST) to interact with external APIs.
+
+### **37. [HTTP GET Request](#http-get-request)**  
+How to make HTTP GET requests to fetch data from an API.
+
+### **38. [HTTP Post Request](#http-post-request)**  
+How to make HTTP POST requests to send data to a server.
+
+---
+
+## **React Hooks Tutorial**
+
+---
+
+### **1. [Introduction](#react-hooks-introduction)**  
+An overview of React hooks and their significance in functional components.
+
+### **2. [useState Hook](#usestate-hook)**  
+Using the `useState` hook to add state to functional components.
+
+### **3. [useState with Previous State](#usestate-with-previous-state)**  
+Using the previous state value when updating state with `useState`.
+
+### **4. [useState with Object](#usestate-with-object)**  
+Managing state as objects with the `useState` hook.
+
+### **5. [useState with Array](#usestate-with-array)**  
+Handling state as arrays with the `useState` hook.
+
+### **6. [useEffect Hook](#useeffect-hook)**  
+Using the `useEffect` hook to perform side effects like data fetching and subscriptions.
+
+### **7. [useEffect After Render](#useeffect-after-render)**  
+Running side effects after the component renders.
+
+### **8. [Conditionally Run Effects](#conditionally-run-effects)**  
+How to conditionally run effects in functional components.
+
+### **9. [Run Effects Only Once](#run-effects-only-once)**  
+Running an effect only once, similar to `componentDidMount` in class components.
+
+### **10. [useEffect with Cleanup](#useeffect-with-cleanup)**  
+Cleaning up side effects to avoid memory leaks and unintended behavior.
+
+### **11. [useEffect with Incorrect Dependency](#useeffect-with-incorrect-dependency)**  
+Understanding the importance of correct dependencies in `useEffect`.
+
+### **12. [Fetching Data with useEffect (Part 1)](#fetching-data-with-useeffect-part-1)**  
+Using `useEffect` to fetch data from an API in React.
+
+### **13. [Fetching Data with useEffect (Part 2)](#fetching-data-with-useeffect-part-2)**  
+Continued example for fetching and displaying data in functional components.
+
+### **14. [Fetching Data with useEffect (Part 3)](#fetching-data-with-useeffect-part-3)**  
+Finalizing the data fetching flow with `useEffect`.
+
+### **15. [useContext Hook (Part 1)](#usecontext-hook-part-1)**  
+Using the `useContext` hook to consume context values in functional components.
+
+### **16. [useContext Hook (Part 2)](#usecontext-hook-part-2)**  
+Managing global state using `useContext`.
+
+### **17. [useContext Hook (Part 3)](#usecontext-hook-part-3)**  
+Advanced patterns for using `useContext` in complex applications.
+
+### **18. [useReducer Hook](#usereducer-hook)**  
+Managing complex state logic with the `useReducer` hook.
+
+### **19. [useReducer (Simple State & Action)](#usereducer-simple-state-action)**  
+Using `useReducer` to manage simple state transitions.
+
+### **20. [useReducer (Complex State & Action)](#usereducer-complex-state-action)**  
+Handling complex state with `useReducer` by using action creators and reducers.
+
+### **21. [Multiple useReducers](#multiple-usereducers)**  
+Using multiple `useReducer` hooks to manage various states.
+
+### **22. [useReducer with useContext](#usereducer-with-usecontext)**  
+Combining `useReducer` with `useContext` for global state management.
+
+### **23. [Fetching Data with useReducer (Part 1)](#fetching-data-with-usereducer-part-1)**  
+Example of fetching data in a component using `useReducer`.
+
+### **24. [Fetching Data with useReducer (Part 2)](#fetching-data-with-usereducer-part-2)**  
+Continued implementation for data fetching with `useReducer`.
+
+### **25. [useState vs useReducer](#usestate-vs-usereducer)**  
+When to use `useState` vs `useReducer` based on your state management needs.
+
+### **26. [useCallback Hook](#usecallback-hook)**  
+Optimizing performance by memoizing functions with the `useCallback` hook.
+
+### **27. [useMemo Hook](#usememo-hook)**  
+Memoizing expensive calculations in functional components using `useMemo`.
+
+### **28. [useRef Hook (Part 1)](#useref-hook-part-1)**  
+Using the `useRef` hook for mutable references to DOM elements and values.
+
+### **29. [useRef Hook (Part 2)](#useref-hook-part
+
+-2)**  
+Continuing with advanced examples of `useRef` usage in React.
+
+### **30. [Custom Hooks](#custom-hooks)**  
+Creating custom hooks to abstract logic and share it across components.
+
+### **31. [useDocumentTitle Custom Hook](#usedocumenttitle-custom-hook)**  
+Building a custom hook that changes the document title.
+
+### **32. [useCounter Custom Hook](#usecounter-custom-hook)**  
+Creating a custom counter hook to manage numeric state.
+
+### **33. [useInput Custom Hook](#useinput-custom-hook)**  
+A custom hook for handling form input values.
+
+---
+
+## **React Render Tutorial**
+
+---
+
+### **1. [Introduction](#react-render-introduction)**  
+Understanding React’s rendering process and optimization strategies.
+
+### **2. [Rendering](#rendering)**  
+How React renders and re-renders components.
+
+### **3. [useState](#usestate)**  
+Optimizing state rendering using `useState`.
+
+### **4. [useReducer](#usereducer)**  
+Optimizing state handling using `useReducer` for complex states.
+
+### **5. [State Immutability](#state-immutability)**  
+Why state should be immutable and how to handle updates efficiently.
+
+### **6. [Parent and Child](#parent-and-child)**  
+State and rendering patterns in parent-child component relationships.
+
+### **7. [Same Element Reference](#same-element-reference)**  
+When to use `key` to track the same elements across renders.
+
+### **8. [React.memo](#react-memo)**  
+Using `React.memo` to memoize functional components and prevent unnecessary re-renders.
+
+### **9. [Questions on Optimization](#questions-on-optimization)**  
+Common optimization questions and best practices in React rendering.
+
+### **10. [Incorrect memo with Children](#incorrect-memo-with-children)**  
+Understanding pitfalls when using `React.memo` with children components.
+
+### **11. [Incorrect memo with Impure Component](#incorrect-memo-with-impure-component)**  
+Issues with memoizing impure components and how to avoid them.
+
+### **12. [Incorrect memo with Props Reference](#incorrect-memo-with-props-reference)**  
+Common mistakes when memoizing components based on props reference.
+
+### **13. [useMemo and useCallback](#usememo-and-usecallback)**  
+Using `useMemo` and `useCallback` to optimize rendering and avoid redundant computations.
+
+### **14. [Context](#context)**  
+Understanding how context impacts component rendering.
+
+### **15. [Context and Memo](#context-and-memo)**  
+Optimizing context-based rendering with memoization.
+
+---
+
+## **React TypeScript Tutorial**
+
+---
+
+### **1. [Introduction](#react-typescript-introduction)**  
+Getting started with React and TypeScript for static type checking.
+
+### **2. [Getting Started](#getting-started)**  
+Setting up React with TypeScript.
+
+### **3. [Typing Props](#typing-props)**  
+How to type props in React components using TypeScript.
+
+### **4. [Basic Props](#basic-props)**  
+Understanding basic prop types in TypeScript.
+
+### **5. [Advanced Props](#advanced-props)**  
+Using advanced TypeScript features to type props.
+
+### **6. [Event Props](#event-props)**  
+Typing event handlers in TypeScript for better type safety.
+
+### **7. [Style Props](#style-props)**  
+Typing style props in TypeScript.
+
+### **8. [Prop Types and Tips](#prop-types-and-tips)**  
+Best practices for typing props and TypeScript tips for React.
+
+### **9. [useState Hook](#usestate-hook-typescript)**  
+Typing state values and setters with `useState` in TypeScript.
+
+### **10. [useState Future Value](#usestate-future-value)**  
+Using TypeScript to type future state values with `useState`.
+
+### **11. [useState Type Assertion](#usestate-type-assertion)**  
+How to use type assertions in `useState` to enforce specific types.
+
+### **12. [useReducer Hook](#usereducer-hook-typescript)**  
+Typing reducers and actions in TypeScript using `useReducer`.
+
+### **13. [useReducer Strict Action Types](#usereducer-strict-action-types)**  
+How to strictly type actions and state transitions in `useReducer`.
+
+### **14. [useContext Hook](#usecontext-hook-typescript)**  
+How to type context values and providers in TypeScript.
+
+### **15. [useContext Future Value](#usecontext-future-value)**  
+Advanced context patterns with TypeScript to manage future values.
+
+### **16. [useRef Hook](#useref-hook-typescript)**  
+Typing the `useRef` hook for mutable references in TypeScript.
+
+### **17. [Class Component](#class-component-typescript)**  
+Typing class components in React with TypeScript.
+
+### **18. [Component Prop](#component-prop-typescript)**  
+Typing the props of a class component in TypeScript.
+
+### **19. [Generic Props](#generic-props-typescript)**  
+Using TypeScript generics to type props dynamically.
+
+### **20. [Restricting Props](#restricting-props-typescript)**  
+Restricting prop types to specific values using TypeScript.
+
+### **21. [Template Literals and Exclude](#template-literals-and-exclude)**  
+Using TypeScript template literals and the `Exclude` utility type.
+
+### **22. [Wrapping HTML Elements](#wrapping-html-elements-typescript)**  
+Typing higher-order components that wrap HTML elements.
+
+### **23. [Extracting a Component's Prop Types](#extracting-component-prop-types)**  
+Extracting and reusing prop types in TypeScript.
+
+### **24. [Polymorphic Components](#polymorphic-components-typescript)**  
+Creating polymorphic components in TypeScript to support multiple element types.
+
+### **25. [Wrapping Up](#wrapping-up-typescript)**  
+Final thoughts on integrating TypeScript with React for improved type safety.
+
+---
+
+This **Table of Contents** provides a complete guide to ReactJS, Hooks, and TypeScript, along with detailed navigation to each section for easy access.
