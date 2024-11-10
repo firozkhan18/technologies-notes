@@ -11564,3 +11564,897 @@ ReactDOM.render(
 - **Collaborative Development**: Redux's predictable state and strict flow makes it easier for teams to collaborate, as they can rely on the same patterns and practices.
 
 In summary, **Redux** provides a powerful and predictable way to manage state in complex JavaScript applications, but it comes with some trade-offs in terms of boilerplate and complexity, especially for smaller applications.
+
+The **React PetClinic** is an example application that demonstrates how to build a modern React-based application while using practices such as **component-based architecture**, **state management**, and **client-server interaction** (typically with RESTful APIs). It's a sample project often used to showcase various React concepts and features. The application is typically used to simulate the management of a veterinary clinic, where users can manage pets, owners, visits, and appointments.
+
+### React PetClinic Example: Overview
+
+The **React PetClinic** example typically consists of:
+
+1. **A list of owners**: Users can view and manage pet owners.
+2. **Pet management**: Add, edit, and remove pets for each owner.
+3. **Visit management**: Schedule and view visits for pets.
+4. **API interaction**: Connects to a backend (often built with **Spring Boot** or another backend framework) to persist data.
+
+Let's break down a typical implementation of React PetClinic with **React**, **React Router**, and **Redux** (for state management). We'll structure the project with components like **OwnerList**, **PetList**, **VisitForm**, etc., while also interacting with an API.
+
+---
+
+### 1. **Set up the React App**
+
+First, you need to create a React app. You can use `create-react-app` to quickly generate a boilerplate:
+
+```bash
+npx create-react-app react-petclinic
+cd react-petclinic
+```
+
+---
+
+### 2. **Install Dependencies**
+
+You will need a few additional dependencies for state management (Redux) and routing:
+
+```bash
+npm install react-router-dom redux react-redux axios
+```
+
+- **react-router-dom**: For handling routing in the app.
+- **redux** and **react-redux**: For state management.
+- **axios**: For making API requests to interact with the backend.
+
+---
+
+### 3. **App Structure**
+
+Here’s a basic project structure for the **React PetClinic**:
+
+```
+react-petclinic/
+├── public/
+├── src/
+│   ├── actions/
+│   ├── components/
+│   │   ├── OwnerList.js
+│   │   ├── PetList.js
+│   │   ├── VisitForm.js
+│   ├── reducers/
+│   ├── App.js
+│   ├── store.js
+│   └── api.js
+├── package.json
+└── README.md
+```
+
+---
+
+### 4. **API Interaction (api.js)**
+
+Let's create a basic API utility that will interact with a backend API for the PetClinic. For simplicity, we'll assume there's a REST API like:
+
+- `/api/owners` — Get a list of owners.
+- `/api/owners/{ownerId}/pets` — Get pets for a specific owner.
+- `/api/owners/{ownerId}/pets/{petId}/visits` — Get visits for a specific pet.
+
+Here’s a simple `api.js`:
+
+```javascript
+import axios from 'axios';
+
+const API_URL = 'http://localhost:8080/api'; // Backend URL
+
+export const fetchOwners = async () => {
+  const response = await axios.get(`${API_URL}/owners`);
+  return response.data;
+};
+
+export const fetchPetsByOwnerId = async (ownerId) => {
+  const response = await axios.get(`${API_URL}/owners/${ownerId}/pets`);
+  return response.data;
+};
+
+export const fetchVisitsByPetId = async (ownerId, petId) => {
+  const response = await axios.get(`${API_URL}/owners/${ownerId}/pets/${petId}/visits`);
+  return response.data;
+};
+```
+
+---
+
+### 5. **Actions (actions/ownerActions.js)**
+
+Actions define what happens in the app, such as fetching data from an API. For Redux, you’ll create an action to fetch owners and their pets.
+
+```javascript
+// actions/ownerActions.js
+import { fetchOwners, fetchPetsByOwnerId } from '../api';
+
+export const FETCH_OWNERS = 'FETCH_OWNERS';
+export const FETCH_PETS = 'FETCH_PETS';
+
+export const fetchOwnersAction = () => {
+  return async (dispatch) => {
+    const owners = await fetchOwners();
+    dispatch({ type: FETCH_OWNERS, payload: owners });
+  };
+};
+
+export const fetchPetsAction = (ownerId) => {
+  return async (dispatch) => {
+    const pets = await fetchPetsByOwnerId(ownerId);
+    dispatch({ type: FETCH_PETS, payload: pets });
+  };
+};
+```
+
+---
+
+### 6. **Reducers (reducers/ownerReducer.js)**
+
+Reducers handle how state changes based on the dispatched actions. We'll handle owners and pets here.
+
+```javascript
+// reducers/ownerReducer.js
+import { FETCH_OWNERS, FETCH_PETS } from '../actions/ownerActions';
+
+const initialState = {
+  owners: [],
+  pets: [],
+};
+
+const ownerReducer = (state = initialState, action) => {
+  switch (action.type) {
+    case FETCH_OWNERS:
+      return { ...state, owners: action.payload };
+    case FETCH_PETS:
+      return { ...state, pets: action.payload };
+    default:
+      return state;
+  }
+};
+
+export default ownerReducer;
+```
+
+---
+
+### 7. **Store (store.js)**
+
+The store holds the entire state of your app. You’ll combine the reducers and create a store.
+
+```javascript
+// store.js
+import { createStore, applyMiddleware } from 'redux';
+import { Provider } from 'react-redux';
+import thunk from 'redux-thunk';
+import ownerReducer from './reducers/ownerReducer';
+
+const store = createStore(ownerReducer, applyMiddleware(thunk));
+
+export default store;
+```
+
+---
+
+### 8. **React Components**
+
+Let’s create some basic components to display owners, pets, and visits.
+
+#### OwnerList.js
+
+```javascript
+// components/OwnerList.js
+import React, { useEffect } from 'react';
+import { connect } from 'react-redux';
+import { fetchOwnersAction } from '../actions/ownerActions';
+import { Link } from 'react-router-dom';
+
+const OwnerList = ({ owners, fetchOwnersAction }) => {
+  useEffect(() => {
+    fetchOwnersAction();
+  }, [fetchOwnersAction]);
+
+  return (
+    <div>
+      <h1>Pet Clinic - Owners</h1>
+      <ul>
+        {owners.map((owner) => (
+          <li key={owner.id}>
+            <Link to={`/owners/${owner.id}`}>{owner.name}</Link>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+};
+
+const mapStateToProps = (state) => ({
+  owners: state.owners,
+});
+
+export default connect(mapStateToProps, { fetchOwnersAction })(OwnerList);
+```
+
+#### PetList.js
+
+```javascript
+// components/PetList.js
+import React, { useEffect } from 'react';
+import { connect } from 'react-redux';
+import { fetchPetsAction } from '../actions/ownerActions';
+
+const PetList = ({ pets, fetchPetsAction, match }) => {
+  const { ownerId } = match.params;
+
+  useEffect(() => {
+    fetchPetsAction(ownerId);
+  }, [fetchPetsAction, ownerId]);
+
+  return (
+    <div>
+      <h2>Pets</h2>
+      <ul>
+        {pets.map((pet) => (
+          <li key={pet.id}>{pet.name}</li>
+        ))}
+      </ul>
+    </div>
+  );
+};
+
+const mapStateToProps = (state) => ({
+  pets: state.pets,
+});
+
+export default connect(mapStateToProps, { fetchPetsAction })(PetList);
+```
+
+#### VisitForm.js
+
+```javascript
+// components/VisitForm.js
+import React, { useState } from 'react';
+
+const VisitForm = ({ petId }) => {
+  const [date, setDate] = useState('');
+  const [description, setDescription] = useState('');
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // Implement API call to create a new visit
+  };
+
+  return (
+    <div>
+      <h3>New Visit</h3>
+      <form onSubmit={handleSubmit}>
+        <input
+          type="date"
+          value={date}
+          onChange={(e) => setDate(e.target.value)}
+        />
+        <textarea
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+        />
+        <button type="submit">Add Visit</button>
+      </form>
+    </div>
+  );
+};
+
+export default VisitForm;
+```
+
+---
+
+### 9. **Routing (App.js)**
+
+We need to set up routes for the components:
+
+```javascript
+// App.js
+import React from 'react';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { Provider } from 'react-redux';
+import store from './store';
+import OwnerList from './components/OwnerList';
+import PetList from './components/PetList';
+import VisitForm from './components/VisitForm';
+
+function App() {
+  return (
+    <Provider store={store}>
+      <Router>
+        <Switch>
+          <Route path="/" exact component={OwnerList} />
+          <Route path="/owners/:ownerId" exact component={PetList} />
+          <Route path="/owners/:ownerId/pets/:petId/visits" component={VisitForm} />
+        </Switch>
+      </Router>
+    </Provider>
+  );
+}
+
+export default App;
+```
+
+---
+
+### 10. **Run the Application**
+
+To start the app, you can run:
+
+```bash
+npm start
+```
+
+Make sure the backend is running and accessible (the PetClinic backend can be set up with a framework like **
+
+Spring Boot** or any other backend solution).
+
+---
+
+### Conclusion
+
+This is a simplified version of the **React PetClinic** app. The actual implementation would include more features like authentication, validation, better error handling, and perhaps some UI frameworks like **Material-UI** or **Bootstrap** to improve the design.
+
+This example covers basic **React** principles, such as state management with **Redux**, routing with **React Router**, and interacting with an API. It's a great starting point to build more advanced applications with React.
+
+To implement **login authentication** in a **React PetClinic** application using **React-Redux**, we’ll break down the steps for setting up authentication and integrating it into the Redux flow.
+
+The goal is to authenticate a user (with username and password), store the authentication state in Redux, and conditionally display different views based on whether the user is logged in or not.
+
+Here’s how you can do that:
+
+---
+
+### 1. **Setup the Backend for Authentication**
+
+For simplicity, assume the backend (e.g., **Spring Boot**, **Node.js**, or any other server-side framework) provides authentication with a username and password through an endpoint, such as:
+
+- **POST /api/login** – Accepts `{username, password}` and returns a JWT token on success.
+
+### 2. **Install Dependencies**
+
+You need `redux`, `react-redux`, `axios`, and some other libraries:
+
+```bash
+npm install react-redux redux axios react-router-dom
+```
+
+### 3. **App Structure**
+
+We will add the following components and files:
+
+```
+src/
+├── actions/
+│   ├── authActions.js
+├── components/
+│   ├── LoginForm.js
+│   ├── PetList.js
+│   ├── OwnerList.js
+│   ├── Navbar.js
+├── reducers/
+│   ├── authReducer.js
+│   ├── rootReducer.js
+├── store.js
+├── api.js
+├── App.js
+```
+
+---
+
+### 4. **Authentication API (api.js)**
+
+Let’s define an API utility that handles authentication:
+
+```javascript
+// src/api.js
+import axios from 'axios';
+
+const API_URL = 'http://localhost:8080/api';
+
+export const login = async (username, password) => {
+  const response = await axios.post(`${API_URL}/login`, { username, password });
+  return response.data; // Assume it returns { token }
+};
+```
+
+---
+
+### 5. **Redux Actions (actions/authActions.js)**
+
+Define Redux actions for **login**, **logout**, and managing authentication state:
+
+```javascript
+// src/actions/authActions.js
+import { login } from '../api';
+
+export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
+export const LOGIN_FAILURE = 'LOGIN_FAILURE';
+export const LOGOUT = 'LOGOUT';
+
+// Action to handle login
+export const loginAction = (username, password) => async (dispatch) => {
+  try {
+    const data = await login(username, password); // Call the API
+    dispatch({
+      type: LOGIN_SUCCESS,
+      payload: {
+        username,
+        token: data.token, // Save token in state
+      },
+    });
+  } catch (error) {
+    dispatch({
+      type: LOGIN_FAILURE,
+      payload: 'Invalid credentials', // Handle error
+    });
+  }
+};
+
+// Action to handle logout
+export const logoutAction = () => ({
+  type: LOGOUT,
+});
+```
+
+---
+
+### 6. **Redux Reducer (reducers/authReducer.js)**
+
+The **authReducer** will store the authentication state (e.g., whether the user is logged in and the token):
+
+```javascript
+// src/reducers/authReducer.js
+import { LOGIN_SUCCESS, LOGIN_FAILURE, LOGOUT } from '../actions/authActions';
+
+const initialState = {
+  isAuthenticated: false,
+  token: null,
+  username: null,
+  error: null,
+};
+
+const authReducer = (state = initialState, action) => {
+  switch (action.type) {
+    case LOGIN_SUCCESS:
+      return {
+        ...state,
+        isAuthenticated: true,
+        username: action.payload.username,
+        token: action.payload.token,
+        error: null,
+      };
+    case LOGIN_FAILURE:
+      return {
+        ...state,
+        error: action.payload,
+      };
+    case LOGOUT:
+      return {
+        ...state,
+        isAuthenticated: false,
+        token: null,
+        username: null,
+        error: null,
+      };
+    default:
+      return state;
+  }
+};
+
+export default authReducer;
+```
+
+---
+
+### 7. **Root Reducer (reducers/rootReducer.js)**
+
+Combine the **authReducer** with other potential reducers:
+
+```javascript
+// src/reducers/rootReducer.js
+import { combineReducers } from 'redux';
+import authReducer from './authReducer';
+
+const rootReducer = combineReducers({
+  auth: authReducer,
+  // Add other reducers like ownerReducer, petReducer, etc.
+});
+
+export default rootReducer;
+```
+
+---
+
+### 8. **Create the Redux Store (store.js)**
+
+Create the Redux store and configure it with `redux-thunk` for async actions:
+
+```javascript
+// src/store.js
+import { createStore, applyMiddleware } from 'redux';
+import thunk from 'redux-thunk';
+import rootReducer from './reducers/rootReducer';
+
+const store = createStore(rootReducer, applyMiddleware(thunk));
+
+export default store;
+```
+
+---
+
+### 9. **Login Form Component (components/LoginForm.js)**
+
+Create a **LoginForm** component where users can enter their credentials to log in.
+
+```javascript
+// src/components/LoginForm.js
+import React, { useState } from 'react';
+import { connect } from 'react-redux';
+import { loginAction } from '../actions/authActions';
+
+const LoginForm = ({ loginAction, authError }) => {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    loginAction(username, password); // Dispatch login action
+  };
+
+  return (
+    <div>
+      <h2>Login</h2>
+      {authError && <p style={{ color: 'red' }}>{authError}</p>}
+      <form onSubmit={handleSubmit}>
+        <div>
+          <label>Username:</label>
+          <input
+            type="text"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            required
+          />
+        </div>
+        <div>
+          <label>Password:</label>
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+        </div>
+        <button type="submit">Login</button>
+      </form>
+    </div>
+  );
+};
+
+const mapStateToProps = (state) => ({
+  authError: state.auth.error,
+});
+
+export default connect(mapStateToProps, { loginAction })(LoginForm);
+```
+
+---
+
+### 10. **Navbar Component (components/Navbar.js)**
+
+Create a **Navbar** component to show either the login button or a logout button depending on the authentication state:
+
+```javascript
+// src/components/Navbar.js
+import React from 'react';
+import { connect } from 'react-redux';
+import { logoutAction } from '../actions/authActions';
+import { Link } from 'react-router-dom';
+
+const Navbar = ({ isAuthenticated, logoutAction, username }) => {
+  return (
+    <nav>
+      <ul>
+        {isAuthenticated ? (
+          <>
+            <li>Welcome, {username}</li>
+            <li>
+              <button onClick={logoutAction}>Logout</button>
+            </li>
+          </>
+        ) : (
+          <li>
+            <Link to="/login">Login</Link>
+          </li>
+        )}
+      </ul>
+    </nav>
+  );
+};
+
+const mapStateToProps = (state) => ({
+  isAuthenticated: state.auth.isAuthenticated,
+  username: state.auth.username,
+});
+
+export default connect(mapStateToProps, { logoutAction })(Navbar);
+```
+
+---
+
+### 11. **App Component (App.js)**
+
+Use **React Router** to handle routes for login and other pages, and conditionally render components based on whether the user is logged in:
+
+```javascript
+// src/App.js
+import React from 'react';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { Provider } from 'react-redux';
+import store from './store';
+import OwnerList from './components/OwnerList'; // PetClinic Component
+import PetList from './components/PetList'; // PetClinic Component
+import LoginForm from './components/LoginForm'; // LoginForm Component
+import Navbar from './components/Navbar'; // Navbar Component
+
+const App = () => (
+  <Provider store={store}>
+    <Router>
+      <Navbar />
+      <Switch>
+        <Route path="/login" component={LoginForm} />
+        <Route path="/owners" component={OwnerList} />
+        <Route path="/pets" component={PetList} />
+        {/* Add more routes as needed */}
+      </Switch>
+    </Router>
+  </Provider>
+);
+
+export default App;
+```
+
+---
+
+### 12. **Run the Application**
+
+To run the app, use the following command:
+
+```bash
+npm start
+```
+
+Ensure your backend authentication service is running and accessible at the appropriate URL (for example, `http://localhost:8080/api/login`).
+
+---
+
+### Summary
+
+- **Login Flow**: Users can log in using the `LoginForm` component, which dispatches a Redux action to authenticate them by calling the API. If authentication is successful, a token is stored in Redux, and the app navigates to protected routes.
+- **State Management**: The `authReducer` handles authentication state and stores the user’s login status and token.
+- **Conditional Rendering**: The **Navbar** component conditionally renders login/logout buttons based on the authentication status.
+- **Redux Flow**: The **Redux store** holds the authentication state, and components interact with it via `connect` to access and update the state.
+
+This structure ensures that user authentication is centralized in Redux, and the app conditionally renders views based on whether the user is authenticated or not.
+
+In React, to implement routing using the `Routes` component from **React Router v6**, you can follow the pattern you provided. Since you're using **React Router v6**, the way routes and components are declared has slightly changed compared to v5.
+
+Here’s an overview of what your routing setup could look like with the **React Router v6** API, and a brief explanation of each route:
+
+### 1. **Install React Router**
+
+If you haven’t already installed **React Router**, you can install it by running:
+
+```bash
+npm install react-router-dom@6
+```
+
+This installs React Router v6, which is the latest version.
+
+### 2. **Set up Routing with `<Routes>` and `<Route>`**
+
+You can define the routes and map them to the components you want to render. In React Router v6, the `Switch` component has been replaced by `Routes`. The `element` prop on each `<Route>` is used to specify which component should be rendered.
+
+### 3. **Example Routing Setup**
+
+Here is the routing setup you provided, updated for React Router v6:
+
+```jsx
+import React from 'react';
+import { Routes, Route } from 'react-router-dom';
+
+// Import your components
+import WelcomePage from './components/WelcomePage';
+import FindOwnersPage from './components/FindOwnersPage';
+import NewOwnerPage from './components/NewOwnerPage';
+import EditOwnerPage from './components/EditOwnerPage';
+import EditPetPage from './components/EditPetPage';
+import NewPetPage from './components/NewPetPage';
+import VisitsPage from './components/VisitsPage';
+import OwnersPage from './components/OwnersPage';
+import VetsPage from './components/VetsPage';
+import ErrorPage from './components/ErrorPage';
+import NotFoundPage from './components/NotFoundPage';
+
+function App() {
+  return (
+    <div>
+      <Routes>
+        <Route path="/" element={<WelcomePage />} />
+        <Route path="/owners/list" element={<FindOwnersPage />} />
+        <Route path="/owners/new" element={<NewOwnerPage />} />
+        <Route path="/owners/:ownerId/edit" element={<EditOwnerPage />} />
+        <Route path="/owners/:ownerId/pets/:petId/edit" element={<EditPetPage />} />
+        <Route path="/owners/:ownerId/pets/new" element={<NewPetPage />} />
+        <Route path="/owners/:ownerId/pets/:petId/visits/new" element={<VisitsPage />} />
+        <Route path="/owners/:ownerId" element={<OwnersPage />} />
+        <Route path="/vets" element={<VetsPage />} />
+        <Route path="/error" element={<ErrorPage />} />
+        <Route path="*" element={<NotFoundPage />} />
+      </Routes>
+    </div>
+  );
+}
+
+export default App;
+```
+
+### Explanation:
+
+- **`<Routes>`**: The new container component in React Router v6. It wraps all the `<Route>` components and is used to define the route paths.
+- **`<Route>`**: Each `<Route>` maps a specific path to a component. The `element` prop is used to render the component that matches the URL.
+  - **`:ownerId` and `:petId`**: These are route parameters. They will be passed as props to the components.
+- **Wildcard Route (`path="*"`)**: This is used to catch all routes that don't match any of the other defined routes and will render the `NotFoundPage`.
+
+### 4. **Handling Route Parameters in Components**
+
+For routes that contain dynamic parameters (e.g., `:ownerId`, `:petId`), you can access those parameters using the `useParams` hook provided by **React Router v6**.
+
+For example, in the `EditOwnerPage` component:
+
+```jsx
+import React from 'react';
+import { useParams } from 'react-router-dom';
+
+const EditOwnerPage = () => {
+  const { ownerId } = useParams(); // Access the ownerId route parameter
+
+  return (
+    <div>
+      <h2>Edit Owner</h2>
+      <p>Editing owner with ID: {ownerId}</p>
+      {/* Your logic to fetch and edit owner details */}
+    </div>
+  );
+};
+
+export default EditOwnerPage;
+```
+
+Similarly, for `EditPetPage`:
+
+```jsx
+import React from 'react';
+import { useParams } from 'react-router-dom';
+
+const EditPetPage = () => {
+  const { ownerId, petId } = useParams(); // Access ownerId and petId parameters
+
+  return (
+    <div>
+      <h2>Edit Pet</h2>
+      <p>Editing pet with ID: {petId} for owner with ID: {ownerId}</p>
+      {/* Your logic to fetch and edit pet details */}
+    </div>
+  );
+};
+
+export default EditPetPage;
+```
+
+### 5. **Navigation with `<Link>`**
+
+To navigate between the pages, you can use the `Link` component provided by **React Router**:
+
+```jsx
+import React from 'react';
+import { Link } from 'react-router-dom';
+
+const Navbar = () => {
+  return (
+    <nav>
+      <ul>
+        <li><Link to="/">Welcome</Link></li>
+        <li><Link to="/owners/list">Find Owners</Link></li>
+        <li><Link to="/vets">Vets</Link></li>
+        <li><Link to="/error">Error Page</Link></li>
+      </ul>
+    </nav>
+  );
+};
+
+export default Navbar;
+```
+
+---
+
+### 6. **Error Handling and NotFoundPage**
+
+To handle invalid routes (404 Not Found), you can use the wildcard route (`path="*"`) at the bottom of your `<Routes>` to display a custom **NotFoundPage**.
+
+```jsx
+// src/components/NotFoundPage.js
+import React from 'react';
+
+const NotFoundPage = () => {
+  return (
+    <div>
+      <h2>404 - Page Not Found</h2>
+      <p>The page you are looking for does not exist.</p>
+    </div>
+  );
+};
+
+export default NotFoundPage;
+```
+
+---
+
+### 7. **Full Example of `App.js`**
+
+```jsx
+import React from 'react';
+import { Routes, Route } from 'react-router-dom';
+
+// Import components
+import WelcomePage from './components/WelcomePage';
+import FindOwnersPage from './components/FindOwnersPage';
+import NewOwnerPage from './components/NewOwnerPage';
+import EditOwnerPage from './components/EditOwnerPage';
+import EditPetPage from './components/EditPetPage';
+import NewPetPage from './components/NewPetPage';
+import VisitsPage from './components/VisitsPage';
+import OwnersPage from './components/OwnersPage';
+import VetsPage from './components/VetsPage';
+import ErrorPage from './components/ErrorPage';
+import NotFoundPage from './components/NotFoundPage';
+import Navbar from './components/Navbar';
+
+function App() {
+  return (
+    <div>
+      <Navbar />
+      <Routes>
+        <Route path="/" element={<WelcomePage />} />
+        <Route path="/owners/list" element={<FindOwnersPage />} />
+        <Route path="/owners/new" element={<NewOwnerPage />} />
+        <Route path="/owners/:ownerId/edit" element={<EditOwnerPage />} />
+        <Route path="/owners/:ownerId/pets/:petId/edit" element={<EditPetPage />} />
+        <Route path="/owners/:ownerId/pets/new" element={<NewPetPage />} />
+        <Route path="/owners/:ownerId/pets/:petId/visits/new" element={<VisitsPage />} />
+        <Route path="/owners/:ownerId" element={<OwnersPage />} />
+        <Route path="/vets" element={<VetsPage />} />
+        <Route path="/error" element={<ErrorPage />} />
+        <Route path="*" element={<NotFoundPage />} />
+      </Routes>
+    </div>
+  );
+}
+
+export default App;
+```
+
+---
+
+### Final Notes:
+
+- **`element` Prop**: React Router v6 uses the `element` prop instead of `component` (which was used in previous versions). The component to be rendered is now passed as an element, such as `<WelcomePage />`.
+- **Nested Routes**: If you need to render routes inside other components, you can use **nested routes** by adding more `<Route>` elements inside the components (which wasn't explicitly covered here but can be easily integrated).
+- **`useParams` Hook**: Use the `useParams` hook to extract parameters like `:ownerId` or `:petId` from the URL.
+- **Wild Card (`*`) Route**: The `*` wildcard route catches any undefined routes, allowing you to display a custom 404 page.
+
+This should give you a full routing solution for your **PetClinic** application using React Router v6!
