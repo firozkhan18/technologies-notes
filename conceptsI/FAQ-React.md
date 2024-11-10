@@ -12458,3 +12458,148 @@ export default App;
 - **Wild Card (`*`) Route**: The `*` wildcard route catches any undefined routes, allowing you to display a custom 404 page.
 
 This should give you a full routing solution for your **PetClinic** application using React Router v6!
+
+Here's a table of contents based on the provided ReactJS tutorial structure. I’ve organized it in a way that includes the main topics and provides navigation through different sections:
+
+---
+
+## ReactJS Tutorial Table of Contents
+
+### **1. Introduction to ReactJS**
+   - [Introduction](#introduction)
+   - [Hello World](#hello-world)
+   - [Folder Structure](#folder-structure)
+
+### **2. React Components**
+   - [Components](#components)
+   - [Functional Components](#functional-components)
+   - [Class Components](#class-components)
+   - [Hooks Update](#hooks-update)
+
+### **3. JSX and Props**
+   - [JSX](#jsx)
+   - [Props](#props)
+   - [State](#state)
+   - [setState](#setstate)
+   - [Destructuring Props and State](#destructuring-props-and-state)
+
+### **4. Event Handling in React**
+   - [Event Handling](#event-handling)
+   - [Binding Event Handlers](#binding-event-handlers)
+   - [Methods as Props](#methods-as-props)
+
+### **5. Rendering Techniques**
+   - [Conditional Rendering](#conditional-rendering)
+   - [List Rendering](#list-rendering)
+   - [Lists and Keys](#lists-and-keys)
+   - [Index as Key Anti-pattern](#index-as-key-anti-pattern)
+
+### **6. Styling and Forms**
+   - [Styling and CSS Basics](#styling-and-css-basics)
+   - [Basics of Form Handling](#basics-of-form-handling)
+
+### **7. Component Lifecycle**
+   - [Component Lifecycle Methods](#component-lifecycle-methods)
+   - [Component Mounting Lifecycle Methods](#component-mounting-lifecycle-methods)
+   - [Component Updating Lifecycle Methods](#component-updating-lifecycle-methods)
+
+### **8. Advanced React Concepts**
+   - [Fragments](#fragments)
+   - [Pure Components](#pure-components)
+   - [memo](#memo)
+   - [Refs](#refs)
+   - [Forwarding Refs](#forwarding-refs)
+   - [Portals](#portals)
+   - [Error Boundary](#error-boundary)
+
+### **9. Higher Order Components & Render Props**
+   - [Higher Order Components (Part 1)](#higher-order-components-part-1)
+   - [Higher Order Components (Part 2)](#higher-order-components-part-2)
+   - [Render Props (Part 1)](#render-props-part-1)
+   - [Render Props (Part 2)](#render-props-part-2)
+
+### **10. Context API**
+   - [Context (Part 1)](#context-part-1)
+   - [Context (Part 2)](#context-part-2)
+   - [Context (Part 3)](#context-part-3)
+
+### **11. HTTP Requests**
+   - [HTTP and React](#http-and-react)
+   - [HTTP GET Request](#http-get-request)
+   - [HTTP POST Request](#http-post-request)
+
+---
+
+## **React Hooks Tutorial**
+
+### **1. Introduction to React Hooks**
+   - [Introduction](#hooks-introduction)
+   - [useState Hook](#usestate-hook)
+   - [useEffect Hook](#useeffect-hook)
+   - [useContext Hook](#usecontext-hook)
+   - [useReducer Hook](#usereducer-hook)
+
+### **2. Managing State with useState**
+   - [useState with Previous State](#usestate-with-previous-state)
+   - [useState with Object](#usestate-with-object)
+   - [useState with Array](#usestate-with-array)
+
+### **3. useEffect and Lifecycle in Hooks**
+   - [useEffect After Render](#useeffect-after-render)
+   - [Conditionally Run Effects](#conditionally-run-effects)
+   - [Run Effects Only Once](#run-effects-only-once)
+   - [useEffect with Cleanup](#useeffect-with-cleanup)
+
+### **4. useReducer and Complex State Management**
+   - [useReducer (Simple State & Action)](#usereducer-simple-state-action)
+   - [useReducer (Complex State & Action)](#usereducer-complex-state-action)
+
+### **5. useCallback, useMemo, and useRef**
+   - [useCallback Hook](#usecallback-hook)
+   - [useMemo Hook](#usememo-hook)
+   - [useRef Hook](#useref-hook)
+
+### **6. Custom Hooks**
+   - [useDocumentTitle Custom Hook](#usedocumenttitle-custom-hook)
+   - [useCounter Custom Hook](#usecounter-custom-hook)
+   - [useInput Custom Hook](#useinput-custom-hook)
+
+---
+
+## **React Render Tutorial**
+
+### **1. Introduction to Rendering**
+   - [Rendering](#rendering)
+   - [State Immutability](#state-immutability)
+   - [Parent and Child Rendering](#parent-child-rendering)
+
+### **2. Optimizing Rendering**
+   - [React Memo](#react-memo)
+   - [useMemo and useCallback](#usememo-and-usecallback)
+   - [Context and Memo](#context-and-memo)
+
+---
+
+## **React TypeScript Tutorial**
+
+### **1. Getting Started with TypeScript**
+   - [Introduction](#typescript-introduction)
+   - [Getting Started](#getting-started)
+   - [Typing Props](#typing-props)
+
+### **2. Advanced TypeScript in React**
+   - [Generic Props](#generic-props)
+   - [Restricting Props](#restricting-props)
+   - [Class Components with TypeScript](#class-components-with-typescript)
+
+### **3. React TypeScript Custom Hooks**
+   - [useState Hook with TypeScript](#usestate-hook-with-typescript)
+   - [useReducer Hook with TypeScript](#usereducer-hook-with-typescript)
+
+---
+
+## **React Interview Questions**
+   - [Preparation Guide](#preparation-guide)
+
+---
+
