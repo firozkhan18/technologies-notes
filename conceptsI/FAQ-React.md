@@ -12603,3 +12603,272 @@ Here's a table of contents based on the provided ReactJS tutorial structure. Iâ€
 
 ---
 
+Creating custom hooks in React allows you to reuse stateful logic across components without changing their component structure. Custom hooks are JavaScript functions whose names typically start with "use" (e.g., `useDocumentTitle`, `useCounter`, `useFetch`). They help to encapsulate and share logic between components in a clean and maintainable way.
+
+Here are examples of common custom hooks you can create in React:
+
+---
+
+### 1. **`useDocumentTitle` - Custom Hook to Update Document Title**
+
+This hook updates the document's title dynamically based on the state in your React component. You can use it to set the title of a page or update it based on different states or props.
+
+#### Code Example:
+```javascript
+import { useEffect } from 'react';
+
+// Custom hook to update the document title
+function useDocumentTitle(title) {
+  useEffect(() => {
+    document.title = title; // Update the document title
+  }, [title]); // Only re-run when the title changes
+}
+
+export default useDocumentTitle;
+```
+
+#### Usage in a Component:
+```javascript
+import React, { useState } from 'react';
+import useDocumentTitle from './useDocumentTitle'; // Import the custom hook
+
+function MyComponent() {
+  const [count, setCount] = useState(0);
+
+  // Use custom hook to update the document title
+  useDocumentTitle(`Count: ${count}`);
+
+  return (
+    <div>
+      <p>The count is {count}</p>
+      <button onClick={() => setCount(count + 1)}>Increment</button>
+    </div>
+  );
+}
+
+export default MyComponent;
+```
+
+---
+
+### 2. **`useCounter` - Custom Hook for Handling Count**
+
+This custom hook abstracts away the logic for managing a counter, which you can use across any component that needs a counter.
+
+#### Code Example:
+```javascript
+import { useState } from 'react';
+
+// Custom hook to manage counter
+function useCounter(initialValue = 0) {
+  const [count, setCount] = useState(initialValue);
+
+  const increment = () => setCount(count + 1);
+  const decrement = () => setCount(count - 1);
+  const reset = () => setCount(initialValue);
+
+  return { count, increment, decrement, reset };
+}
+
+export default useCounter;
+```
+
+#### Usage in a Component:
+```javascript
+import React from 'react';
+import useCounter from './useCounter';
+
+function CounterComponent() {
+  const { count, increment, decrement, reset } = useCounter(10); // Initial count is 10
+
+  return (
+    <div>
+      <h2>Counter: {count}</h2>
+      <button onClick={increment}>Increment</button>
+      <button onClick={decrement}>Decrement</button>
+      <button onClick={reset}>Reset</button>
+    </div>
+  );
+}
+
+export default CounterComponent;
+```
+
+---
+
+### 3. **`useFetch` - Custom Hook for Fetching Data**
+
+This hook makes it easy to fetch data from an API and manage loading, error, and response states.
+
+#### Code Example:
+```javascript
+import { useState, useEffect } from 'react';
+
+// Custom hook for fetching data
+function useFetch(url) {
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(url);
+        const result = await response.json();
+        setData(result);
+      } catch (err) {
+        setError(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [url]); // Re-fetch data if the URL changes
+
+  return { data, loading, error };
+}
+
+export default useFetch;
+```
+
+#### Usage in a Component:
+```javascript
+import React from 'react';
+import useFetch from './useFetch';
+
+function DataFetchingComponent() {
+  const { data, loading, error } = useFetch('https://jsonplaceholder.typicode.com/posts');
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error.message}</div>;
+  }
+
+  return (
+    <div>
+      <h2>Posts</h2>
+      <ul>
+        {data.map(post => (
+          <li key={post.id}>{post.title}</li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+export default DataFetchingComponent;
+```
+
+---
+
+### 4. **`useLocalStorage` - Custom Hook for Working with LocalStorage**
+
+This hook abstracts the logic for reading and writing to the browser's `localStorage`.
+
+#### Code Example:
+```javascript
+import { useState } from 'react';
+
+// Custom hook for localStorage
+function useLocalStorage(key, initialValue) {
+  // Get from localStorage or use the initial value
+  const storedValue = localStorage.getItem(key);
+  const [value, setValue] = useState(storedValue ? JSON.parse(storedValue) : initialValue);
+
+  const setStoredValue = (newValue) => {
+    setValue(newValue);
+    localStorage.setItem(key, JSON.stringify(newValue)); // Save to localStorage
+  };
+
+  return [value, setStoredValue];
+}
+
+export default useLocalStorage;
+```
+
+#### Usage in a Component:
+```javascript
+import React from 'react';
+import useLocalStorage from './useLocalStorage';
+
+function LocalStorageComponent() {
+  const [name, setName] = useLocalStorage('name', 'John Doe');
+
+  return (
+    <div>
+      <h2>Stored Name: {name}</h2>
+      <input 
+        type="text" 
+        value={name} 
+        onChange={(e) => setName(e.target.value)} 
+        placeholder="Enter your name" 
+      />
+    </div>
+  );
+}
+
+export default LocalStorageComponent;
+```
+
+---
+
+### 5. **`useWindowWidth` - Custom Hook to Track Window Width**
+
+This hook allows you to track and respond to the window's width dynamically, which is useful for responsive design.
+
+#### Code Example:
+```javascript
+import { useState, useEffect } from 'react';
+
+// Custom hook to track window width
+function useWindowWidth() {
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+
+  useEffect(() => {
+    const handleResize = () => setWindowWidth(window.innerWidth);
+
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
+  return windowWidth;
+}
+
+export default useWindowWidth;
+```
+
+#### Usage in a Component:
+```javascript
+import React from 'react';
+import useWindowWidth from './useWindowWidth';
+
+function ResponsiveComponent() {
+  const windowWidth = useWindowWidth();
+
+  return (
+    <div>
+      <h2>Window Width: {windowWidth}</h2>
+      {windowWidth < 600 ? <p>Small screen detected</p> : <p>Large screen detected</p>}
+    </div>
+  );
+}
+
+export default ResponsiveComponent;
+```
+
+---
+
+### Key Points for Creating Custom Hooks:
+- **Reusability**: Custom hooks allow you to reuse logic across multiple components.
+- **Stateful Logic**: You can manage state inside a custom hook, just like in components.
+- **Effect Handling**: Use `useEffect` inside a custom hook for side effects such as fetching data, setting up subscriptions, etc.
+- **Abstraction**: Custom hooks can abstract complex logic (e.g., data fetching, form handling) and make components cleaner and more maintainable.
+
+By creating custom hooks, you ensure that your React code is modular, easy to test, and reusable. If you'd like more examples or explanations on a specific custom hook, feel free to ask!
