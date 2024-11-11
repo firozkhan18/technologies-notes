@@ -14074,3 +14074,110 @@ This will build and start all the services. You can access **JMeter**, **JProfil
 - **VisualVM**: A monitoring and profiling tool for Java applications, installed in a Docker container, with remote profiling support.
 
 By using Docker, you can create isolated environments for each tool, which makes it easier to manage dependencies, configurations, and versions, especially when working with **Java 17**.
+
+It looks like your Docker build has completed successfully! The image `jmeter-java17-image` has been created and is now available in your local Docker image repository.
+
+### Next Steps
+
+Here’s what you can do next:
+
+#### 1. **Verify the Image Was Built Correctly**
+
+You can confirm that the image was successfully built and is available by listing all Docker images:
+
+```bash
+docker images
+```
+
+You should see `jmeter-java17-image` listed with its associated tags.
+
+#### 2. **Run the Container**
+
+Now, you can run a container using the image you just created. You can start the container in the background like this:
+
+```bash
+docker run -d --name jmeter-container jmeter-java17-image
+```
+
+This will start the container in detached mode (`-d`), and you’ll be able to check the status of the running container using:
+
+```bash
+docker ps
+```
+
+#### 3. **Execute Commands in the Running Container**
+
+If you want to interact with the container or verify the installation, you can run a shell inside the container:
+
+```bash
+docker exec -it jmeter-container /bin/bash
+```
+
+This will open a terminal inside the container, where you can check if JMeter is correctly installed and available.
+
+#### 4. **Run JMeter**
+
+Inside the container, you can verify if JMeter is correctly installed by running:
+
+```bash
+jmeter --version
+```
+
+This should output the JMeter version, confirming that it’s set up correctly.
+
+If you have specific tasks you want to run in JMeter (e.g., testing in non-GUI mode), you can use JMeter's command-line options. For example, to run JMeter in non-GUI mode with a test plan file, you could run:
+
+```bash
+jmeter -n -t /path/to/testplan.jmx -l /path/to/results.jtl
+```
+
+#### 5. **Stop and Remove the Container**
+
+If you are done with your container, you can stop it with:
+
+```bash
+docker stop jmeter-container
+```
+
+And remove the container:
+
+```bash
+docker rm jmeter-container
+```
+
+#### 6. **Optional: Clean Up Unused Docker Images**
+
+If you want to clean up old images and free up disk space, you can remove unused Docker images:
+
+```bash
+docker image prune
+```
+
+This will remove dangling images (those not tagged or referenced by any container). You can use `docker image prune -a` to remove all unused images.
+
+---
+
+### Warnings in the Build Output
+
+You also saw warnings related to the legacy key-value format for `ENV` in your Dockerfile:
+
+```
+- LegacyKeyValueFormat: "ENV key=value" should be used instead of legacy "ENV key value" format (line 16)
+- LegacyKeyValueFormat: "ENV key=value" should be used instead of legacy "ENV key value" format (line 19)
+```
+
+To fix this, you should update the `ENV` instructions in the Dockerfile to use the correct format (`key=value` instead of `key value`). Here’s how you can modify the `ENV` lines:
+
+```Dockerfile
+# Set the JMeter home directory
+ENV JMETER_HOME=/opt/apache-jmeter-5.5
+
+# Set PATH to include JMeter binaries
+ENV PATH=$JMETER_HOME/bin:$PATH
+```
+
+This change is optional for functionality but will help avoid the warnings.
+
+### Conclusion
+
+Your Docker image `jmeter-java17-image` is built and ready for use. You can run JMeter in the container, execute tests, and interact with it using the methods above. If you run into any further issues, feel free to ask!
