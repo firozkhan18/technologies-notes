@@ -13373,3 +13373,209 @@ public class MyClass implements FunctionalA, FunctionalB {
 
 By understanding how to use default and static methods in functional interfaces, you can leverage the flexibility of Java interfaces while maintaining clean and effective code architecture.
 
+### **What is On-Premises?**
+
+**On-premises** (often referred to as **on-prem**) refers to **hardware and software that is located and maintained on-site at a company's or individual's premises** (i.e., within the physical location, such as an office or data center) rather than being hosted remotely, such as on a cloud platform. 
+
+In the context of computing, **on-premises** typically means that the infrastructure (e.g., servers, storage, networking) and applications are installed and run on servers that are physically located within the organization's facilities. This contrasts with cloud computing, where the infrastructure and services are hosted on remote servers in data centers operated by cloud providers like Amazon Web Services (AWS), Microsoft Azure, or Google Cloud Platform (GCP).
+
+### **Key Characteristics of On-Premises:**
+
+1. **Control**: You have full control over the infrastructure and resources, including hardware, network, and security configurations.
+2. **Cost**: Initial setup costs for hardware, software, and IT personnel can be higher than in the cloud. However, over time, the cost can be lower if the infrastructure is optimized and fully utilized.
+3. **Security**: With on-premises, you manage the security of the hardware and software stack. This is ideal for organizations with strict data security or regulatory compliance requirements.
+4. **Customization**: Organizations can fully customize their environment and configurations to meet specific business needs.
+5. **Maintenance**: Organizations are responsible for the maintenance, including updates, patches, and hardware repairs.
+
+---
+
+### **How Does On-Premises Work?**
+
+In an **on-premises** setup, the organization owns and manages its own infrastructure, including:
+
+- **Servers**: Physical machines where the data and applications are hosted.
+- **Storage**: Local databases and file storage systems.
+- **Networking**: Local area networks (LANs), switches, and routers connecting all the devices and servers within the organization.
+- **Software**: The operating systems and business applications (e.g., ERP, CRM) running on the servers.
+- **Security**: Network firewalls, antivirus software, and other security measures to protect data.
+
+An example of an on-premises environment could be an enterprise's internal network, where all the servers, databases, and applications are maintained and managed by the company's IT team.
+
+---
+
+### **On-Premises Example Use Case:**
+
+Consider a **simple on-premises application** such as a web server that hosts a company's internal application. The server and database are hosted in the organization's data center, and all employees can access the application from within the network.
+
+---
+
+### **Example: On-Premises Web Application Setup**
+
+Let’s look at an example where a company has a **web server and a database** running on-premises. The example demonstrates how an employee can access an application hosted on the **on-prem server**.
+
+#### **Steps for Setting up On-Premises Web Application:**
+
+1. **Set up a web server** (e.g., **Apache Tomcat** or **NGINX**).
+2. **Install a database** (e.g., **MySQL** or **PostgreSQL**) on the server.
+3. **Configure the web server** to serve a web application.
+4. **Connect the web application** to the on-premises database.
+
+#### **Example Code:**
+
+In this scenario, let’s create a simple **Spring Boot application** hosted on an on-premises server that connects to a local **MySQL database**.
+
+##### 1. **Set up MySQL Database (On-Premises)**:
+
+First, install and configure MySQL on the server. Create a database:
+
+```sql
+CREATE DATABASE company_db;
+USE company_db;
+
+CREATE TABLE employees (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100),
+    position VARCHAR(100)
+);
+
+INSERT INTO employees (name, position) VALUES ('Alice', 'Developer'), ('Bob', 'Manager');
+```
+
+##### 2. **Spring Boot Application Setup (Web Application)**
+
+**`application.properties`** for connecting to MySQL:
+```properties
+spring.datasource.url=jdbc:mysql://localhost:3306/company_db
+spring.datasource.username=root
+spring.datasource.password=password
+spring.jpa.hibernate.ddl-auto=update
+spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+```
+
+**`pom.xml`** to include required dependencies for Spring Boot and MySQL:
+```xml
+<dependencies>
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-web</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-data-jpa</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>mysql</groupId>
+        <artifactId>mysql-connector-java</artifactId>
+    </dependency>
+</dependencies>
+```
+
+**`Employee.java`** - Entity class for the employee table:
+
+```java
+package com.example.onpremapp.model;
+
+import javax.persistence.Entity;
+import javax.persistence.Id;
+
+@Entity
+public class Employee {
+
+    @Id
+    private int id;
+    private String name;
+    private String position;
+
+    // Getters and setters
+}
+```
+
+**`EmployeeRepository.java`** - Spring Data JPA repository interface:
+
+```java
+package com.example.onpremapp.repository;
+
+import com.example.onpremapp.model.Employee;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
+}
+```
+
+**`EmployeeController.java`** - REST Controller to serve employee data:
+
+```java
+package com.example.onpremapp.controller;
+
+import com.example.onpremapp.model.Employee;
+import com.example.onpremapp.repository.EmployeeRepository;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
+
+@RestController
+public class EmployeeController {
+
+    private final EmployeeRepository employeeRepository;
+
+    public EmployeeController(EmployeeRepository employeeRepository) {
+        this.employeeRepository = employeeRepository;
+    }
+
+    @GetMapping("/employees")
+    public List<Employee> getEmployees() {
+        return employeeRepository.findAll();
+    }
+}
+```
+
+##### 3. **Run the Application on the On-Premises Server**:
+
+1. **Package the Spring Boot Application**:
+   - Run the following command to package the application:
+     ```bash
+     mvn clean install
+     ```
+
+2. **Start the Application**:
+   - Run the Spring Boot application using the following command:
+     ```bash
+     java -jar target/onpremapp-0.0.1-SNAPSHOT.jar
+     ```
+
+3. **Access the Application**:
+   - If everything is set up correctly, you can access the application from any browser on the local network by visiting:
+     ```
+     http://<server-ip>:8080/employees
+     ```
+
+   This will show the list of employees fetched from the on-premises **MySQL database**.
+
+---
+
+### **Advantages of On-Premises**
+
+1. **Full Control**: You control the hardware, software, security policies, and configurations.
+2. **Security and Privacy**: Data doesn't leave the premises, which can be important for organizations that deal with sensitive information.
+3. **Customization**: Custom hardware and software configurations tailored to business needs.
+4. **Compliance**: On-premises environments allow businesses to meet specific regulatory requirements that may be difficult or impossible to achieve in the cloud.
+
+---
+
+### **Disadvantages of On-Premises**
+
+1. **High Initial Costs**: Purchasing, installing, and maintaining hardware can be expensive.
+2. **Scalability Issues**: Scaling requires buying more hardware, which can be slow and costly.
+3. **Maintenance Overhead**: You are responsible for maintaining servers, software updates, patches, and backups.
+4. **Disaster Recovery**: Organizations need to implement their own disaster recovery plans, which can be costly and complex.
+
+---
+
+### **Summary**
+
+- **On-premises** refers to IT infrastructure and software hosted and maintained locally (on your own premises) rather than in the cloud.
+- The setup of on-premises solutions involves installing and configuring hardware, software, and network resources.
+- The example provided shows how to set up a simple **Spring Boot** web application that runs on a server and connects to a local **MySQL database** for data access.
+  
+On-premises solutions are typically chosen for security, control, or regulatory compliance reasons, though they come with increased maintenance responsibilities and higher upfront costs.
