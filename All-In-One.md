@@ -13579,3 +13579,498 @@ public class EmployeeController {
 - The example provided shows how to set up a simple **Spring Boot** web application that runs on a server and connects to a local **MySQL database** for data access.
   
 On-premises solutions are typically chosen for security, control, or regulatory compliance reasons, though they come with increased maintenance responsibilities and higher upfront costs.
+
+To run **Apache JMeter**, **JProfiler**, and **VisualVM** in Docker, you'll need to create Docker containers for each of these tools, install them in the container, and configure them for use. Below is a guide on how to set up and install each of these tools in Docker containers.
+
+### **1. Installing Apache JMeter in Docker**
+
+Apache JMeter is a popular tool for performance and load testing. It can be installed in a Docker container with the following steps.
+
+#### **Steps:**
+
+1. **Create a Dockerfile for JMeter**
+
+Create a directory for your JMeter Docker setup, and inside that directory, create a `Dockerfile`:
+
+```Dockerfile
+# Use the official openjdk image to install JMeter
+FROM openjdk:11-jre-slim
+
+# Install JMeter dependencies
+RUN apt-get update && apt-get install -y \
+    wget \
+    unzip \
+    && rm -rf /var/lib/apt/lists/*
+
+# Download and install Apache JMeter
+RUN wget https://archive.apache.org/dist/jmeter/binaries/apache-jmeter-5.5.tgz -P /tmp \
+    && tar -xvzf /tmp/apache-jmeter-5.5.tgz -C /opt/ \
+    && rm /tmp/apache-jmeter-5.5.tgz
+
+# Set the JMeter home directory
+ENV JMETER_HOME /opt/apache-jmeter-5.5
+
+# Set PATH to include JMeter binaries
+ENV PATH $JMETER_HOME/bin:$PATH
+
+# Expose JMeter default ports (optional)
+EXPOSE 1099 4445 60000
+
+# Start JMeter in GUI or non-GUI mode
+CMD ["sh", "-c", "echo 'Start JMeter with: jmeter or jmeter -n'; tail -f /dev/null"]
+```
+
+2. **Build and Run JMeter Docker Image**
+
+To build the Docker image:
+
+```bash
+docker build -t jmeter-image .
+```
+
+Once the image is built, you can run a container from it:
+
+```bash
+docker run --name jmeter-container -d jmeter-image
+```
+
+#### **Running JMeter in Non-GUI Mode**
+
+To run JMeter in non-GUI mode (which is the most common use case for performance testing in a container):
+
+```bash
+docker run --rm -v /path/to/test-plan:/test-plan jmeter-image -n -t /test-plan/test-plan.jmx -l /test-plan/result.jtl
+```
+
+### **2. Installing JProfiler in Docker**
+
+JProfiler is a powerful Java profiler. Unfortunately, JProfiler is not available in a public Docker image, so you must download and install it manually. You can create a Dockerfile that installs JProfiler in a base Java container.
+
+#### **Steps:**
+
+1. **Create a Dockerfile for JProfiler**
+
+```Dockerfile
+FROM openjdk:11-jre-slim
+
+# Install dependencies
+RUN apt-get update && apt-get install -y \
+    wget \
+    unzip \
+    && rm -rf /var/lib/apt/lists/*
+
+# Download and install JProfiler
+RUN wget https://download-eu.jetbrains.com/jprofiler/jprofiler_linux_11_1_2.tar.gz -P /tmp \
+    && tar -xvzf /tmp/jprofiler_linux_11_1_2.tar.gz -C /opt/ \
+    && rm /tmp/jprofiler_linux_11_1_2.tar.gz
+
+# Set JProfiler home directory
+ENV JPROFILER_HOME /opt/jprofiler
+
+# Set PATH to include JProfiler binaries
+ENV PATH $JPROFILER_HOME/bin:$PATH
+
+# Expose JProfiler default ports (optional)
+EXPOSE 8849
+
+# Set default command to run JProfiler
+CMD ["sh", "-c", "echo 'JProfiler has been installed. Start it using: jprofiler'; tail -f /dev/null"]
+```
+
+2. **Build and Run JProfiler Docker Image**
+
+To build the image:
+
+```bash
+docker build -t jprofiler-image .
+```
+
+Once built, you can run a container from it:
+
+```bash
+docker run --name jprofiler-container -d jprofiler-image
+```
+
+#### **Running JProfiler in Docker**
+
+Since JProfiler is a GUI-based tool, it’s often used with an X11 forwarding setup or connected remotely. To connect remotely to a Java process, you'll typically use the JProfiler's **Remote Profiling** feature.
+
+To enable remote profiling:
+1. Start your Java application with the `-agentlib:jprofilerti=port=8849` JVM argument.
+2. Connect to it from JProfiler by using the remote connection feature in the JProfiler GUI.
+
+---
+
+### **3. Installing VisualVM in Docker**
+
+VisualVM is a monitoring, troubleshooting, and profiling tool for Java applications. Like JProfiler, VisualVM is a GUI-based tool, so running it in a Docker container is typically done for **headless mode** or via **X11 forwarding**.
+
+#### **Steps:**
+
+1. **Create a Dockerfile for VisualVM**
+
+```Dockerfile
+FROM openjdk:11-jre-slim
+
+# Install dependencies
+RUN apt-get update && apt-get install -y \
+    wget \
+    openjdk-11-jdk \
+    libfreetype6 \
+    libx11-dev \
+    libxext-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+# Download and install VisualVM
+RUN wget https://github.com/oracle/visualvm/releases/download/2.1.8/visualvm_2.1.8.zip -P /tmp \
+    && unzip /tmp/visualvm_2.1.8.zip -d /opt/ \
+    && rm /tmp/visualvm_2.1.8.zip
+
+# Set VisualVM home directory
+ENV VISUALVM_HOME /opt/visualvm
+
+# Set PATH to include VisualVM binaries
+ENV PATH $VISUALVM_HOME/bin:$PATH
+
+# Expose VisualVM default port (optional)
+EXPOSE 1099
+
+# Set default command to run VisualVM
+CMD ["sh", "-c", "echo 'VisualVM has been installed. Start it using: visualvm'; tail -f /dev/null"]
+```
+
+2. **Build and Run VisualVM Docker Image**
+
+Build the Docker image:
+
+```bash
+docker build -t visualvm-image .
+```
+
+Run the Docker container:
+
+```bash
+docker run --name visualvm-container -d visualvm-image
+```
+
+#### **Running VisualVM**
+
+To use VisualVM, you can connect to the running Java application via **remote JMX**. You can expose the **JMX port** of your Java application and connect to it from VisualVM:
+
+1. Run your Java application with the following JVM arguments to expose JMX:
+
+   ```bash
+   -Dcom.sun.management.jmxremote 
+   -Dcom.sun.management.jmxremote.port=1099 
+   -Dcom.sun.management.jmxremote.ssl=false 
+   -Dcom.sun.management.jmxremote.authenticate=false
+   ```
+
+2. In VisualVM, choose **File > Add JMX Connection**, and enter the hostname and port (e.g., `localhost:1099`) of your application.
+
+---
+
+### **Example Docker-Compose Setup for All Three Tools**
+
+You can use `docker-compose` to manage all three tools (JMeter, JProfiler, and VisualVM) in a single YAML configuration.
+
+```yaml
+version: '3'
+
+services:
+  jmeter:
+    build: ./jmeter
+    container_name: jmeter-container
+    ports:
+      - "1099:1099"
+      - "4445:4445"
+      - "60000:60000"
+    volumes:
+      - ./jmeter/test-plans:/test-plans
+    command: ["sh", "-c", "tail -f /dev/null"]
+
+  jprofiler:
+    build: ./jprofiler
+    container_name: jprofiler-container
+    ports:
+      - "8849:8849"
+    volumes:
+      - ./jprofiler/profiles:/profiles
+    command: ["sh", "-c", "tail -f /dev/null"]
+
+  visualvm:
+    build: ./visualvm
+    container_name: visualvm-container
+    ports:
+      - "1099:1099"
+    command: ["sh", "-c", "tail -f /dev/null"]
+```
+
+### **Steps to Use Docker-Compose**:
+
+1. Make sure to have separate folders for **`jmeter`**, **`jprofiler`**, and **`visualvm`** where each `Dockerfile` and associated files are placed.
+2. Run `docker-compose` from the directory where `docker-compose.yml` is located:
+
+   ```bash
+   docker-compose up --build
+   ```
+
+This will build and start the containers for JMeter, JProfiler, and VisualVM. You can connect to these tools as required (e.g., via remote profiling for JProfiler and VisualVM).
+
+---
+
+### **Summary**
+
+- **JMeter**: A performance testing tool installed using a custom Docker image based on OpenJDK.
+- **JProfiler**: A Java profiler, which can be used with remote profiling in a Docker container.
+- **VisualVM**: A monitoring and profiling tool that connects to Java applications using JMX, also running in a Docker container.
+
+By using Docker, you can containerize these tools and run them in isolated environments, making it easier to set up, configure, and manage your Java profiling and testing setups.
+
+To run **JMeter**, **JProfiler**, and **VisualVM** in Docker for **Java 17**, the process is largely the same as with earlier Java versions, but we'll be using **OpenJDK 17** as the base image and modifying the Dockerfiles to be compatible with Java 17. Here's how you can set up each of these tools for Java 17 in Docker.
+
+### 1. **Installing Apache JMeter in Docker for Java 17**
+
+Apache JMeter is compatible with Java 17, and you can set it up similarly to previous versions.
+
+#### **Steps:**
+
+1. **Create a Dockerfile for JMeter using OpenJDK 17**
+
+```Dockerfile
+# Use the official openjdk 17 image to install JMeter
+FROM openjdk:17-jre-slim
+
+# Install JMeter dependencies
+RUN apt-get update && apt-get install -y \
+    wget \
+    unzip \
+    && rm -rf /var/lib/apt/lists/*
+
+# Download and install Apache JMeter
+RUN wget https://archive.apache.org/dist/jmeter/binaries/apache-jmeter-5.5.tgz -P /tmp \
+    && tar -xvzf /tmp/apache-jmeter-5.5.tgz -C /opt/ \
+    && rm /tmp/apache-jmeter-5.5.tgz
+
+# Set the JMeter home directory
+ENV JMETER_HOME /opt/apache-jmeter-5.5
+
+# Set PATH to include JMeter binaries
+ENV PATH $JMETER_HOME/bin:$PATH
+
+# Expose JMeter default ports (optional)
+EXPOSE 1099 4445 60000
+
+# Start JMeter in GUI or non-GUI mode
+CMD ["sh", "-c", "echo 'Start JMeter with: jmeter or jmeter -n'; tail -f /dev/null"]
+```
+
+2. **Build and Run JMeter Docker Image**
+
+To build the Docker image:
+
+```bash
+docker build -t jmeter-java17-image .
+```
+
+Run a container from the image:
+
+```bash
+docker run --name jmeter-java17-container -d jmeter-java17-image
+```
+
+#### **Running JMeter in Non-GUI Mode**
+
+To run JMeter in non-GUI mode (for testing purposes):
+
+```bash
+docker run --rm -v /path/to/test-plan:/test-plan jmeter-java17-image -n -t /test-plan/test-plan.jmx -l /test-plan/result.jtl
+```
+
+---
+
+### 2. **Installing JProfiler in Docker for Java 17**
+
+Since **JProfiler** does not have a publicly available Docker image, you can create a custom Docker image to install JProfiler, ensuring compatibility with Java 17.
+
+#### **Steps:**
+
+1. **Create a Dockerfile for JProfiler using OpenJDK 17**
+
+```Dockerfile
+FROM openjdk:17-jre-slim
+
+# Install necessary dependencies
+RUN apt-get update && apt-get install -y \
+    wget \
+    unzip \
+    && rm -rf /var/lib/apt/lists/*
+
+# Download and install JProfiler
+RUN wget https://download-eu.jetbrains.com/jprofiler/jprofiler_linux_11_1_2.tar.gz -P /tmp \
+    && tar -xvzf /tmp/jprofiler_linux_11_1_2.tar.gz -C /opt/ \
+    && rm /tmp/jprofiler_linux_11_1_2.tar.gz
+
+# Set JProfiler home directory
+ENV JPROFILER_HOME /opt/jprofiler
+
+# Set PATH to include JProfiler binaries
+ENV PATH $JPROFILER_HOME/bin:$PATH
+
+# Expose the JProfiler port (for remote profiling)
+EXPOSE 8849
+
+# Set default command
+CMD ["sh", "-c", "echo 'JProfiler has been installed. Start it using: jprofiler'; tail -f /dev/null"]
+```
+
+2. **Build and Run JProfiler Docker Image**
+
+Build the Docker image:
+
+```bash
+docker build -t jprofiler-java17-image .
+```
+
+Run a container from the image:
+
+```bash
+docker run --name jprofiler-java17-container -d jprofiler-java17-image
+```
+
+#### **Running JProfiler in Docker**
+
+To use **JProfiler** with remote profiling:
+1. Start your Java application with the following JVM argument to expose the profiler:
+
+   ```bash
+   -agentlib:jprofilerti=port=8849
+   ```
+
+2. In JProfiler, use the **Remote Profiling** feature to connect to the Java process running inside the container.
+
+---
+
+### 3. **Installing VisualVM in Docker for Java 17**
+
+**VisualVM** works well with Java 17 and can be used to monitor and profile your Java applications remotely.
+
+#### **Steps:**
+
+1. **Create a Dockerfile for VisualVM using OpenJDK 17**
+
+```Dockerfile
+FROM openjdk:17-jre-slim
+
+# Install necessary dependencies
+RUN apt-get update && apt-get install -y \
+    wget \
+    unzip \
+    libfreetype6 \
+    libx11-dev \
+    libxext-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+# Download and install VisualVM
+RUN wget https://github.com/oracle/visualvm/releases/download/2.1.8/visualvm_2.1.8.zip -P /tmp \
+    && unzip /tmp/visualvm_2.1.8.zip -d /opt/ \
+    && rm /tmp/visualvm_2.1.8.zip
+
+# Set VisualVM home directory
+ENV VISUALVM_HOME /opt/visualvm
+
+# Set PATH to include VisualVM binaries
+ENV PATH $VISUALVM_HOME/bin:$PATH
+
+# Expose VisualVM's JMX port (optional)
+EXPOSE 1099
+
+# Set default command
+CMD ["sh", "-c", "echo 'VisualVM has been installed. Start it using: visualvm'; tail -f /dev/null"]
+```
+
+2. **Build and Run VisualVM Docker Image**
+
+Build the Docker image:
+
+```bash
+docker build -t visualvm-java17-image .
+```
+
+Run a container from the image:
+
+```bash
+docker run --name visualvm-java17-container -d visualvm-java17-image
+```
+
+#### **Running VisualVM**
+
+To connect **VisualVM** to a running Java process via **remote JMX**, start the Java application with the following JVM arguments:
+
+```bash
+-Dcom.sun.management.jmxremote
+-Dcom.sun.management.jmxremote.port=1099
+-Dcom.sun.management.jmxremote.ssl=false
+-Dcom.sun.management.jmxremote.authenticate=false
+```
+
+In VisualVM, add a **JMX connection** to the containerized Java application by providing the host and port (`localhost:1099`).
+
+---
+
+### 4. **Example Docker Compose Setup for All Tools (JMeter, JProfiler, and VisualVM)**
+
+You can use Docker Compose to run all three tools in separate containers. Here’s a `docker-compose.yml` example that defines services for **JMeter**, **JProfiler**, and **VisualVM**.
+
+```yaml
+version: '3'
+
+services:
+  jmeter:
+    build: ./jmeter
+    container_name: jmeter-java17-container
+    ports:
+      - "1099:1099"
+      - "4445:4445"
+      - "60000:60000"
+    volumes:
+      - ./jmeter/test-plans:/test-plans
+    command: ["sh", "-c", "tail -f /dev/null"]
+
+  jprofiler:
+    build: ./jprofiler
+    container_name: jprofiler-java17-container
+    ports:
+      - "8849:8849"
+    volumes:
+      - ./jprofiler/profiles:/profiles
+    command: ["sh", "-c", "tail -f /dev/null"]
+
+  visualvm:
+    build: ./visualvm
+    container_name: visualvm-java17-container
+    ports:
+      - "1099:1099"
+    command: ["sh", "-c", "tail -f /dev/null"]
+```
+
+### Steps to Use Docker Compose:
+
+1. Create directories for `jmeter`, `jprofiler`, and `visualvm` with their respective `Dockerfile`s inside each directory.
+2. Run `docker-compose`:
+
+   ```bash
+   docker-compose up --build
+   ```
+
+This will build and start all the services. You can access **JMeter**, **JProfiler**, and **VisualVM** on their respective ports.
+
+---
+
+### **Summary**
+
+- **JMeter**: Installed in a Docker container using **OpenJDK 17** and runs performance tests either in GUI or non-GUI mode.
+- **JProfiler**: A profiler tool installed in a Docker container, allowing you to connect to remote Java applications for profiling.
+- **VisualVM**: A monitoring and profiling tool for Java applications, installed in a Docker container, with remote profiling support.
+
+By using Docker, you can create isolated environments for each tool, which makes it easier to manage dependencies, configurations, and versions, especially when working with **Java 17**.
