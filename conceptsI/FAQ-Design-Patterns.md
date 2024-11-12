@@ -50,7 +50,7 @@ Sure! Here's a comprehensive overview of various design patterns with example co
 
 ## **Creational Design Patterns**
 
-### **1. Singleton**
+## **1. Singleton**
 Ensures a class has only one instance and provides a global point of access to it.
 
 **Example:**
@@ -660,7 +660,7 @@ public class Singleton implements Cloneable {
 }
 ```
 
-### **2. Factory Method**
+## **2. Factory Method**
 Defines an interface for creating an object but lets subclasses alter the type of objects that will be created.
 
 **Example:**
