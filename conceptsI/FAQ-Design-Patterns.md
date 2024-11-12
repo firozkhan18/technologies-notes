@@ -4,48 +4,46 @@ JavaScript(Vanilla/ES6/TypeScript) and Java  (GoF) design patterns
 A design pattern is a general repeatable/reusable solution to a commonly occurring problem with a given context in software design. It can be treated as a description or template for how to solve a problem that can be used in many different situations.
 
 ## Creational
+- [Singleton](#Singleton)
+- [Factory Method/Factory](#Factory-MethodFactory)
+- [Abstract Factory](#Abstract-Factory)
+- [Builder](#Builder)
+- [Prototype](#Prototype)
+- [Object Pool](#Object-Pool)
 
-- Singleton
-- Factory Method/Factory
-- Abstract Factory
-- Builder
-- Prototype
-- Object Pool
 ## Structural
-
-- Adapter
-- Bridge
-- Composite
-- Decorator
-- Flyweight
-- Proxy
-- Facade
+- [Adapter](#Adapter)
+- [Bridge](#Bridge)
+- [Composite](#Composite)
+- [Flyweight](#Flyweight)
+- [Proxy](#Proxy)
+- [Facade](#Facade)
 
 ## Behavioral
-
-- Chain of Responsibility
-- Command
-- Interpreter
-- Iterator
-- Mediator
-- Memento
-- Observer
-- State
-- Strategy
-- Template Method
-- Visitor
-- Null Object
+- [Chain of Responsibility](#Chain-of-Responsibility)
+- [Command](#Command)
+- [Interpreter](#Interpreter)
+- [Iterator](#Iterator)
+- [Mediator](#Mediator)
+- [Memento](#Memento)
+- [Observer](#Observer)
+- [State](#State)
+- [Strategy](#Strategy)
+- [Template Method](#Template-Method)
+- [Visitor](#Visitor)
+- [Null Object](#Null-Object)
 
 ## Backend communication design patterns
-1. Request response
-2. push
-3. short polling
-4. long polling
-5. Server Sent Events
-6. Publish Subscribe(Pub/Sub)
-7. Multiplexing and Demultiplexing
-8. Stateful and Stateless
-9. Sidecart pattern
+1. [Request response](#Request-response)
+2. [Push](#push)
+3. [Short polling](#short-polling)
+4. [Long polling](#long-polling)
+5. [Server Sent Events](#Server-Sent-Events)
+6. [Publish Subscribe (Pub/Sub)](#Publish-Subscribe-PubSub)
+7. [Multiplexing and Demultiplexing](#Multiplexing-and-Demultiplexing)
+8. [Stateful and Stateless](#Stateful-and-Stateless)
+9. [Sidecart pattern](#Sidecart-pattern)
+
 
 
 Sure! Here's a comprehensive overview of various design patterns with example code in Java, covering creational, structural, and behavioral patterns, as well as backend communication design patterns.
