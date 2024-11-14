@@ -1239,6 +1239,19 @@ In Java, **access specifiers** and **non-access modifiers** are keywords used to
 
 Functional programming (FP) has gained significant traction in recent years, especially in languages like Java (since Java 8), JavaScript, Python, Scala, Haskell, and others. While object-oriented programming (OOP) remains dominant, there are several compelling reasons why you might want to use **functional programming** in your projects. Below are the key reasons **why FP is needed**:
 
+### Why Use Functional Style Instead of OOP?
+
+Functional programming (FP) and Object-Oriented Programming (OOP) are two distinct paradigms, each with its strengths. Here are reasons why functional style can be preferred:
+
+1. **Simplicity and Clarity**: Functional programming focuses on pure functions and immutability, which can lead to simpler and more predictable code. Functions that don’t have side effects make it easier to understand program flow.
+
+2. **Higher-Order Functions**: FP allows functions to be passed as parameters, returned from other functions, or stored in data structures, enabling powerful abstractions and code reuse.
+
+3. **Conciseness**: Functional programming constructs like lambda expressions and streams can result in less boilerplate code. This can make code cleaner and easier to read.
+
+4. **Parallelism**: FP constructs often lend themselves to parallel execution more naturally. For example, stream operations can be easily parallelized without changing the logic.
+
+5. **Ease of Testing**: Pure functions (functions without side effects) are easier to test and reason about compared to methods in OOP that might rely on shared mutable state.
 
 **[⬆ Back to Top](#table-of-contents)**
 ---
