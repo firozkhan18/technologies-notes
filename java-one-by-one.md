@@ -14,13 +14,12 @@
    - [Association](#association-1)
    - [Summary of When to Use Each Relationship](#summary-of-when-to-use-each-relationship)
 
-4. [**Programming Paradigms Comparison**](#programming-paradigms-comparison)
+4. [**Process-Oriented Object-Oriented and Functional Programming in Java**](#process-oriented-object-oriented-and-functional-programming-in-java)
    - [Process-Oriented Programming (POP)](#process-oriented-programming-pop)
    - [Object-Oriented Programming (OOP)](#object-oriented-programming-oop-1)
    - [Functional Programming (FP)](#functional-programming-fp)
 
-5. [**Process-Oriented Object-Oriented and Functional Programming in Java**](#process-oriented-object-oriented-and-functional-programming-in-java)
-   - [**Comparison of Process-Oriented, OOP, and FP in Java**](#comparison-of-process-oriented-oop-and-fp-in-java)
+5. [**Comparison of Process-Oriented, OOP, and FP in Java**](#comparison-of-process-oriented-oop-and-fp-in-java)
    - [Why Do We Need Functional Programming (FP)?](#why-do-we-need-functional-programming-fp)
      - [Immutability](#immutability)
      - [Declarative Style](#declarative-style)
