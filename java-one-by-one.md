@@ -1435,6 +1435,10 @@ Functional programming (FP) provides a range of benefits that are particularly v
 - **Concurrency** becomes easier and safer due to the absence of mutable shared state.
 - **Purity** leads to predictable, side-effect-free code that’s easier to test and debug.
 
+**[⬆ Back to Top](#table-of-contents)**
+
+---
+
 ## What is Immutability?
 
 **Immutability** refers to the property of an object whose state cannot be modified after it is created. Immutable objects are particularly useful in multi-threaded applications, as they can be shared between threads without the risk of being changed, which helps avoid issues like race conditions.
