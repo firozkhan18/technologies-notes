@@ -1,5 +1,4 @@
 # Section 1 - Java:
-Here is a **Table of Contents** and **Navigation** for the Java concepts and topics you mentioned:
 
 ---
 
