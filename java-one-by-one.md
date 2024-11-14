@@ -441,11 +441,42 @@
 
 ## **Object-Oriented Programming (OOP) Concepts in Depth**
 
-Object-Oriented Programming (OOP) is a programming paradigm that is based on the concept of **objects**, which are instances of **classes**. The four main pillars of OOP — **Encapsulation**, **Abstraction**, **Inheritance**, and **Polymorphism** — are foundational principles that guide the design and development of object-oriented software systems. Below is a deep dive into each of these principles:
+Object-Oriented Programming (OOP) is a programming paradigm that is based on the concept of **objects**, which are instances of **classes** which can contain data and methods. Java is a fully object-oriented language, and its OOP principles facilitate modular and reusable code.  The four main pillars of OOP — **Encapsulation**, **Abstraction**, **Inheritance**, and **Polymorphism** — are foundational principles that guide the design and development of object-oriented software systems. Below is a deep dive into each of these principles:
 
 ---
 
-### **1. Encapsulation**
+### **1. Classes and Objects**
+
+- **Class**: A blueprint for creating objects. It defines properties (attributes) and behaviors (methods). For example:
+
+    ```java
+    public class Car {
+        String color;
+        String model;
+
+        void drive() {
+            System.out.println("The car is driving.");
+        }
+    }
+    ```
+
+---
+
+- **Object**: An instance of a class. It represents a specific entity with state and behavior.
+
+    ```java
+    public class Main {
+        public static void main(String[] args) {
+            Car myCar = new Car(); // Creating an object of Car
+            myCar.color = "Red";
+            myCar.model = "Toyota";
+            myCar.drive(); // Calling a method
+        }
+    }
+    ```
+---
+
+### **2. Encapsulation**
 
 **Encapsulation** is the concept of **bundling the data (attributes)** and **methods (functions)** that operate on the data into a single unit, called a **class**. It also refers to restricting access to some of the object's components to protect the integrity of the object.
 
@@ -491,9 +522,35 @@ public class Account {
 - **Flexibility**: You can change the implementation of methods or attributes without affecting the external code that uses the class.
 - **Code Maintainability**: Centralizes the logic for accessing or modifying an object’s data, making maintenance easier.
 
+
+Encapsulation is the principle of bundling data (attributes) and methods that operate on the data within a single unit (class) and restricting access to some of the object's components. This is typically achieved using access modifiers:
+
+- **Private**: Accessible only within the class.
+- **Public**: Accessible from any other class.
+- **Protected**: Accessible within the same package and subclasses.
+- **Default**: Accessible only within the same package.
+
+#### Example:
+
+```java
+public class BankAccount {
+    private double balance;
+
+    public void deposit(double amount) {
+        if (amount > 0) {
+            balance += amount;
+        }
+    }
+
+    public double getBalance() {
+        return balance;
+    }
+}
+```
+
 ---
 
-### **2. Abstraction**
+### **3. Abstraction**
 
 **Abstraction** is the concept of **hiding the complexity** of the system and exposing only the necessary parts. It allows a programmer to focus on high-level functionality while hiding the implementation details.
 
@@ -547,9 +604,38 @@ class Circle implements Shape {
 - **Separation of Concerns**: Separates the **what** from the **how**, ensuring that changes in implementation don’t affect the interface.
 - **Improved Flexibility**: You can change the implementation of an abstract class or interface without affecting the system as long as the interface remains unchanged.
 
+Abstraction is the concept of hiding complex implementation details and showing only the essential features of an object. This can be achieved using abstract classes and interfaces.
+
+- **Abstract Class**: A class that cannot be instantiated and may contain abstract methods (methods without a body) and concrete methods.
+
+    ```java
+    abstract class Shape {
+        abstract void draw(); // Abstract method
+    }
+
+    class Circle extends Shape {
+        void draw() {
+            System.out.println("Drawing a circle.");
+        }
+    }
+    ```
+
+- **Interface**: A reference type that can contain only constants, method signatures, default methods, static methods, and nested types. Interfaces cannot contain instance fields.
+
+    ```java
+    interface Drawable {
+        void draw(); // Abstract method
+    }
+
+    class Rectangle implements Drawable {
+        public void draw() {
+            System.out.println("Drawing a rectangle.");
+        }
+    }
+    ```
 ---
 
-### **3. Inheritance**
+### **4. Inheritance**
 
 **Inheritance** is the mechanism by which one class can **inherit properties and methods** from another class. This promotes **code reusability** and allows for hierarchical class relationships. A subclass (or child class) inherits from a superclass (or parent class), and can:
 - Reuse code from the superclass.
@@ -593,9 +679,38 @@ public class Main {
 - **Extensibility**: You can easily extend existing code by creating new subclasses.
 - **Hierarchy**: Inheritance establishes a natural hierarchy and relationship between classes (e.g., `Dog` is a type of `Animal`).
 
+
+Inheritance is a mechanism that allows one class to inherit the properties and methods of another class. This promotes code reuse and establishes a hierarchy between classes.
+
+- **Superclass (Parent class)**: The class whose properties and methods are inherited.
+- **Subclass (Child class)**: The class that inherits from the superclass.
+
+#### Example:
+
+```java
+public class Vehicle {
+    void start() {
+        System.out.println("Vehicle started.");
+    }
+}
+
+public class Car extends Vehicle {
+    void honk() {
+        System.out.println("Car honks.");
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Car myCar = new Car();
+        myCar.start(); // Inherited method
+        myCar.honk();  // Car's own method
+    }
+}
+```
 ---
 
-### **4. Polymorphism**
+### **5. Polymorphism**
 
 **Polymorphism** means **many forms**, and it allows objects of different classes to be treated as objects of a common superclass. It is the ability for a method to perform different operations based on the object it is acting upon. Polymorphism is typically achieved via:
 - **Method Overloading**: Same method name but different parameter types (compile-time polymorphism).
@@ -643,13 +758,52 @@ public class Main {
 - **Code Simplification**: Polymorphism simplifies code by allowing one interface to be used for different implementations. This reduces the need for complex conditional statements (e.g., `if`-`else` chains).
 - **Maintainability**: As the number of classes and behavior grow, polymorphism allows the system to remain flexible and easily maintainable.
 
+Polymorphism allows methods to do different things based on the object that it is acting upon. It is mainly achieved through method overloading and method overriding.
+
+- **Method Overloading**: Same method name with different parameters within the same class.
+
+    ```java
+    public class MathOperations {
+        int add(int a, int b) {
+            return a + b;
+        }
+
+        double add(double a, double b) {
+            return a + b;
+        }
+    }
+    ```
+
+- **Method Overriding**: Subclass provides a specific implementation of a method already defined in its superclass.
+
+    ```java
+    public class Animal {
+        void sound() {
+            System.out.println("Animal makes a sound.");
+        }
+    }
+
+    public class Dog extends Animal {
+        @Override
+        void sound() {
+            System.out.println("Dog barks.");
+        }
+    }
+
+    public class Main {
+        public static void main(String[] args) {
+            Animal myDog = new Dog();
+            myDog.sound(); // Output: Dog barks.
+        }
+    }
+    ```
 ---
 
 ### **Other OOP Concepts**
 
 In addition to the main four pillars (Encapsulation, Abstraction, Inheritance, Polymorphism), OOP also involves several additional concepts and techniques:
 
-#### **5. Composition (Has-A Relationship)**
+#### **6. Composition (Has-A Relationship)**
 
 Composition is a design principle that allows for building complex objects by combining simpler ones. It is a **has-a** relationship where one object is a part of another.
 
@@ -754,7 +908,7 @@ public class Main {
 - The `Car` class contains an `Engine` object, meaning that an engine cannot exist independently without a car.
 - The engine is created when the car object is created, and the engine is destroyed when the car is destroyed (i.e., the engine's lifecycle is tied to the car).
   
-### **2. Aggregation**
+### **7. Aggregation**
 
 **Aggregation** is a **special form of Association** where one object **contains** or **references** another object, but the contained object can exist independently of the parent object. This is a **looser** relationship compared to composition.
 
@@ -819,7 +973,7 @@ public class Main {
 - In the `University` class, the professors can exist independently and can be added to multiple universities.
 - If a university is destroyed, the professors are not destroyed — they can still exist independently of any university.
 
-### **3. Association**
+### **8. Association**
 
 **Association** is the **most general** relationship between objects. In association, two or more objects are connected, but neither object **owns** or **depends** on the other. This is the weakest form of relationship, meaning that both objects can exist independently of each other.
 
@@ -888,6 +1042,16 @@ public class Main {
 | **Association**        | A **general relationship** where objects are related but have no strict lifecycle dependency. | Use when objects **interact**, but neither is **dependent** on the other. | A **Teacher teaches a Student**, but neither owns the other. |
 
 In practice, the choice between **composition**, **aggregation**, and **association** depends on the **lifetime** and **ownership** of the objects involved, and how closely related they are in your design.
+
+### Summary of OOP Concepts
+
+- **Classes and Objects**: The foundation of OOP, where classes are blueprints for objects.
+- **Encapsulation**: Bundles data and methods, restricting access to internal states.
+- **Inheritance**: Enables classes to inherit properties and behaviors from other classes.
+- **Polymorphism**: Allows methods to perform different functions based on the object context.
+- **Abstraction**: Hides complex implementations and exposes only essential features.
+
+These principles enable developers to build modular, maintainable, and scalable applications in Java. Understanding these concepts is crucial for effective programming and design in an object-oriented language.
 
 ## **Process-Oriented Object-Oriented and Functional Programming in Java**
 
