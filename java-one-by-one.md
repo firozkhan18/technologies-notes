@@ -1041,6 +1041,7 @@ In practice, the choice between **composition**, **aggregation**, and **associat
 
 Object-Oriented Programming (OOP) is a paradigm that helps in organizing software around the concept of **objects** and **classes**, making it more modular, maintainable, and reusable. Understanding the four pillars of OOP (Encapsulation, Abstraction, Inheritance, and Polymorphism) is essential for designing and building robust systems. By applying these principles, developers can create software that is easier to extend, debug, and maintain over time.
 
+**[⬆ Back to Top](#table-of-contents)**
 ---
 
 ## **Process-Oriented Object-Oriented and Functional Programming in Java**
@@ -2205,6 +2206,8 @@ In summary:
 
 By using these modifiers appropriately, Java developers can create clean, efficient, and maintainable code, controlling how classes and members are accessed and behave in different contexts.
 
+**[⬆ Back to Top](#table-of-contents)**
+
 In Java, **threads** and **concurrency** are key concepts for building applications that can perform multiple tasks simultaneously. Java provides several keywords and classes to work with threads and manage concurrency, making it easier to write efficient, multi-threaded applications. Below is a detailed explanation of **Java thread-related keywords** and **concurrency** concepts, including their uses with examples.
 
 ---
@@ -2508,6 +2511,8 @@ public class Main {
 ---
 
 By understanding and utilizing these keywords, you can effectively manage concurrency in your Java programs, making them more efficient, thread-safe, and responsive.
+
+**[⬆ Back to Top](#table-of-contents)**
 
 In Java, `final` and `static` are two important keywords that have distinct roles and uses in the language. They are often used to control the behavior and structure of variables, methods, and classes. Let's break them down in detail.
 
@@ -2868,8 +2873,9 @@ public class FunctionalInterfaceExample {
 - **Regular Interface**: Used when you want to define a contract for classes to implement common behavior without specifying how that behavior is implemented.
 - **Functional Interface**: A specialized type of interface with exactly one abstract method, used in conjunction with lambdas and method references, typically for functional programming.
 
-In modern Java development, especially with Java 8 and later, **functional interfaces** are often used to enable more concise, expressive, and functional-style programming, particularly when working with the **Streams API** and **lambda expressions**.
+**[⬆ Back to Top](#table-of-contents)**
 
+In modern Java development, especially with Java 8 and later, **functional interfaces** are often used to enable more concise, expressive, and functional-style programming, particularly when working with the **Streams API** and **lambda expressions**.
 
 Java 8, released in March 2014, introduced a host of new features that significantly changed the way Java applications are written, particularly in terms of **functional programming**, **streams**, and **new APIs**. These features aim to make Java programming more expressive, concise, and efficient. Let's take a detailed look at the key features introduced in Java 8:
 
@@ -3730,6 +3736,8 @@ To prevent breaking a Singleton and ensure that only one instance exists:
 - **Ways to break**: Using reflection, serialization, cloning, or reflection can break Singleton behavior.
 - **Prevention**: You can prevent breaking the Singleton by using techniques such as overriding `readResolve()`, making the constructor private, throwing exceptions on cloning, or using an `enum` for Singleton implementation.
 
+**[⬆ Back to Top](#table-of-contents)**
+
 Creating immutable classes for a **generic database connection** and an **in-memory cache** requires careful design to ensure that their state cannot be changed after they are created. The goal is to have objects that are **thread-safe** and can be used in environments where their state should not change once set.
 
 Let's break down how to design each of these immutable classes step by step:
@@ -4190,6 +4198,8 @@ While `Runnable` doesn't return a result, `Callable` does. You can use the `Futu
 - **Best Practices**: Use `ExecutorService` for thread management, limit thread creation, and handle concurrency issues such as deadlock and race conditions.
 
 The **Executor Framework** is a powerful tool for managing concurrency in Java applications, enabling efficient thread management and easy integration of asynchronous tasks.
+
+**[⬆ Back to Top](#table-of-contents)**
 
 In Java's **concurrency framework**, specifically when dealing with the **ExecutorService**, both the `execute()` and `submit()` methods are used to submit tasks for execution by a thread pool. However, they differ in how they handle the task execution and what kind of result (if any) they provide.
 
