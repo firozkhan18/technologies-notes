@@ -6,7 +6,7 @@
    - [Inheritance](#inheritance)
    - [Polymorphism](#polymorphism)
 
-2. [**Other OOP Concepts Composition Aggregation and Association in Java**](#other-oop-concepts-composition-aggregation-and-association-in-java)
+2. [**Other OOP Concepts in Java**](#other-oop-concepts-in-java)
    - [Composition (Has-A Relationship)](#composition-has-a-relationship-1)
    - [Aggregation](#aggregation-1)
    - [Association](#association-1)
@@ -793,7 +793,7 @@ Polymorphism allows methods to do different things based on the object that it i
     ```
 ---
 
-### **Other OOP Concepts**
+### **Other OOP Concepts in Java**
 
 In addition to the main four pillars (Encapsulation, Abstraction, Inheritance, Polymorphism), OOP also involves several additional concepts and techniques:
 
