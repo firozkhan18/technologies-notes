@@ -803,7 +803,11 @@ Polymorphism allows methods to do different things based on the object that it i
 
 In addition to the main four pillars (Encapsulation, Abstraction, Inheritance, Polymorphism), OOP also involves several additional concepts and techniques:
 
-#### **6. Composition (Has-A Relationship)**
+### **Composition, Aggregation, and Association in Java**
+
+In object-oriented programming, relationships between objects are an important concept. Three fundamental types of relationships in OOP are **Composition**, **Aggregation**, and **Association**. These relationships represent how objects interact or are related to one another in a system. Below, I’ll explain each of these relationships in depth, with examples and when to use them.
+
+### **6. Composition (Has-A Relationship)**
 
 Composition is a design principle that allows for building complex objects by combining simpler ones. It is a **has-a** relationship where one object is a part of another.
 
@@ -831,31 +835,6 @@ class Car {
 **Benefits of Composition**:
 - It offers more flexibility and a **loose coupling** between classes than inheritance.
 - You can easily change the parts (components) of an object without modifying the entire object.
-
-#### **6. Association**
-
-Association represents the relationship between two or more objects. There are different types of associations:
-- **One-to-One**: One object is associated with exactly one object.
-- **One-to-Many**: One object is associated with multiple objects.
-- **Many-to-Many**: Multiple objects are associated with multiple objects.
-
-#### **7. Aggregation**
-
-Aggregation is a special form of association that represents a "whole-part" relationship, where the "part" can exist independently of the "whole." It's a **Has-A** relationship with a more loosely-coupled structure than composition.
-
----
-
-### **Conclusion**
-
-Object-Oriented Programming (OOP) is a paradigm that helps in organizing software around the concept of **objects** and **classes**, making it more modular, maintainable, and reusable. Understanding the four pillars of OOP (Encapsulation, Abstraction, Inheritance, and Polymorphism) is essential for designing and building robust systems. By applying these principles, developers can create software that is easier to extend, debug, and maintain over time.
-
-### **Composition, Aggregation, and Association in Java**
-
-In object-oriented programming, relationships between objects are an important concept. Three fundamental types of relationships in OOP are **Composition**, **Aggregation**, and **Association**. These relationships represent how objects interact or are related to one another in a system. Below, I’ll explain each of these relationships in depth, with examples and when to use them.
-
----
-
-### **1. Composition (Has-A Relationship)**
 
 **Composition** is a type of association where one object **"owns"** or **"contains"** another object, and the contained object cannot exist independently without the parent object. It is also known as a **strong relationship** because if the parent object is destroyed, its contained objects are also destroyed.
 
@@ -907,8 +886,75 @@ public class Main {
 **Explanation**:
 - The `Car` class contains an `Engine` object, meaning that an engine cannot exist independently without a car.
 - The engine is created when the car object is created, and the engine is destroyed when the car is destroyed (i.e., the engine's lifecycle is tied to the car).
-  
-### **7. Aggregation**
+- 
+### **7. Association**
+
+Association represents the relationship between two or more objects. There are different types of associations:
+- **One-to-One**: One object is associated with exactly one object.
+- **One-to-Many**: One object is associated with multiple objects.
+- **Many-to-Many**: Multiple objects are associated with multiple objects.
+
+**Association** is the **most general** relationship between objects. In association, two or more objects are connected, but neither object **owns** or **depends** on the other. This is the weakest form of relationship, meaning that both objects can exist independently of each other.
+
+In association:
+- Objects are related but have no strict lifecycle dependency.
+- The relationship can be **bi-directional** (e.g., "A Teacher teaches a Student", where both Teacher and Student exist independently).
+
+#### **When to Use Association**
+- Use association when objects **interact** with each other, but there is **no ownership** or **dependency**.
+- Common in scenarios like **A Teacher teaches a Student**, **A Car is driven by a Driver**.
+
+#### **Example: Association in Java**
+
+```java
+class Student {
+    private String name;
+
+    public Student(String name) {
+        this.name = name;
+    }
+
+    public void study() {
+        System.out.println(name + " is studying.");
+    }
+}
+
+class Teacher {
+    private String name;
+
+    public Teacher(String name) {
+        this.name = name;
+    }
+
+    public void teach() {
+        System.out.println(name + " is teaching.");
+    }
+
+    public void teachStudent(Student student) {
+        System.out.println(name + " is teaching " + student.name);
+        student.study();  // Interaction between Teacher and Student
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Teacher teacher = new Teacher("Mr. John");
+        Student student = new Student("Alice");
+
+        teacher.teachStudent(student);  // Teacher and Student interact, but neither owns the other
+    }
+}
+```
+
+**Explanation**:
+- The `Teacher` and `Student` objects are **associated** because they interact with each other (the teacher teaches the student), but neither object **owns** the other.
+- Both objects can exist independently, and the teacher could teach multiple students, or the student could study with other teachers.
+
+---
+
+### **8. Aggregation**
+
+Aggregation is a special form of association that represents a "whole-part" relationship, where the "part" can exist independently of the "whole." It's a **Has-A** relationship with a more loosely-coupled structure than composition.
 
 **Aggregation** is a **special form of Association** where one object **contains** or **references** another object, but the contained object can exist independently of the parent object. This is a **looser** relationship compared to composition.
 
@@ -972,66 +1018,8 @@ public class Main {
 **Explanation**:
 - In the `University` class, the professors can exist independently and can be added to multiple universities.
 - If a university is destroyed, the professors are not destroyed — they can still exist independently of any university.
-
-### **8. Association**
-
-**Association** is the **most general** relationship between objects. In association, two or more objects are connected, but neither object **owns** or **depends** on the other. This is the weakest form of relationship, meaning that both objects can exist independently of each other.
-
-In association:
-- Objects are related but have no strict lifecycle dependency.
-- The relationship can be **bi-directional** (e.g., "A Teacher teaches a Student", where both Teacher and Student exist independently).
-
-#### **When to Use Association**
-- Use association when objects **interact** with each other, but there is **no ownership** or **dependency**.
-- Common in scenarios like **A Teacher teaches a Student**, **A Car is driven by a Driver**.
-
-#### **Example: Association in Java**
-
-```java
-class Student {
-    private String name;
-
-    public Student(String name) {
-        this.name = name;
-    }
-
-    public void study() {
-        System.out.println(name + " is studying.");
-    }
-}
-
-class Teacher {
-    private String name;
-
-    public Teacher(String name) {
-        this.name = name;
-    }
-
-    public void teach() {
-        System.out.println(name + " is teaching.");
-    }
-
-    public void teachStudent(Student student) {
-        System.out.println(name + " is teaching " + student.name);
-        student.study();  // Interaction between Teacher and Student
-    }
-}
-
-public class Main {
-    public static void main(String[] args) {
-        Teacher teacher = new Teacher("Mr. John");
-        Student student = new Student("Alice");
-
-        teacher.teachStudent(student);  // Teacher and Student interact, but neither owns the other
-    }
-}
-```
-
-**Explanation**:
-- The `Teacher` and `Student` objects are **associated** because they interact with each other (the teacher teaches the student), but neither object **owns** the other.
-- Both objects can exist independently, and the teacher could teach multiple students, or the student could study with other teachers.
-
 ---
+
 
 ### **Summary of When to Use Each Relationship**
 
@@ -1052,6 +1040,12 @@ In practice, the choice between **composition**, **aggregation**, and **associat
 - **Abstraction**: Hides complex implementations and exposes only essential features.
 
 These principles enable developers to build modular, maintainable, and scalable applications in Java. Understanding these concepts is crucial for effective programming and design in an object-oriented language.
+
+### **Conclusion**
+
+Object-Oriented Programming (OOP) is a paradigm that helps in organizing software around the concept of **objects** and **classes**, making it more modular, maintainable, and reusable. Understanding the four pillars of OOP (Encapsulation, Abstraction, Inheritance, and Polymorphism) is essential for designing and building robust systems. By applying these principles, developers can create software that is easier to extend, debug, and maintain over time.
+
+---
 
 ## **Process-Oriented Object-Oriented and Functional Programming in Java**
 
