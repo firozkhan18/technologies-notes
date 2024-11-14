@@ -22,7 +22,8 @@
    - [Object-Oriented Programming (OOP)](#object-oriented-programming-oop-1)
    - [Functional Programming (FP)](#functional-programming-fp)
 
-5. [**Comparison of Process-Oriented, OOP, and FP in Java**](#comparison-of-process-oriented-oop-and-fp-in-java)
+5. [**Process-Oriented Object-Oriented and Functional Programming in Java**](#process-oriented-object-oriented-and-functional-programming-in-java)
+   - [**Comparison of Process-Oriented, OOP, and FP in Java**](#comparison-of-process-oriented-oop-and-fp-in-java)
    - [Why Do We Need Functional Programming (FP)?](#why-do-we-need-functional-programming-fp)
      - [Immutability](#immutability)
      - [Declarative Style](#declarative-style)
@@ -32,9 +33,9 @@
      - [Purity and Referential Transparency](#purity-and-referential-transparency)
      - [Better Testability and Debugging](#better-testability-and-debugging)
 
-6. [**Conclusion: Why Do We Need Functional Programming?**](#conclusion-why-do-we-need-functional-programming)
+7. [**Conclusion: Why Do We Need Functional Programming?**](#conclusion-why-do-we-need-functional-programming)
 
-7. [**Functional Interfaces in Java**](#functional-interfaces-in-java)
+8. [**Functional Interfaces in Java**](#functional-interfaces-in-java)
    - [What is a Functional Interface?](#what-is-a-functional-interface)
    - [Regular Interface with Single Abstract Method vs. Functional Interface](#regular-interface-with-single-abstract-method-vs-functional-interface)
      - [Regular Interface (with a Single Abstract Method)](#regular-interface-with-a-single-abstract-method)
@@ -45,11 +46,11 @@
      - [Better Intent Communication with `@FunctionalInterface` Annotation](#better-intent-communication-with-functionalinterface-annotation)
    - [Why Not Just Use Regular Interfaces with Single Abstract Methods?](#why-not-just-use-regular-interfaces-with-single-abstract-methods)
 
-8. [**Marker Interfaces in Java**](#marker-interfaces-in-java)
+9. [**Marker Interfaces in Java**](#marker-interfaces-in-java)
    - [What is a Marker Interface?](#what-is-a-marker-interface)
    - [Types of Marker Interfaces in Java](#types-of-marker-interfaces-in-java)
 
-9. [**Java Modifiers**](#java-modifiers)
+10. [**Java Modifiers**](#java-modifiers)
    - [Access Specifiers in Java](#access-specifiers-in-java)
    - [Non-Access Modifiers in Java](#non-access-modifiers-in-java)
      - [Common Non-Access Modifiers:](#common-non-access-modifiers)
@@ -60,7 +61,7 @@
        - `transient` (Serialization)
        - `volatile` (Concurrency)
 
-10. [**Threads and Concurrency in Java**](#threads-and-concurrency-in-java)
+11. [**Threads and Concurrency in Java**](#threads-and-concurrency-in-java)
    - [Thread Keywords in Java](#thread-keywords-in-java)
      - `synchronized`, `volatile`, `final`
    - [Concurrency Keywords and Concepts in Java](#concurrency-keywords-and-concepts-in-java)
