@@ -1,11 +1,4 @@
-
-### **Table of Contents**
-
-Here is the **Table of Contents** with navigation links for your document:
-
----
-
-### **Table of Contents**
+## **Table of Contents**
 
 1. [**Object-Oriented Programming (OOP) Concepts in Depth**](#object-oriented-programming-oop-concepts-in-depth)
    - [Encapsulation](#encapsulation)
@@ -262,6 +255,275 @@ Here is the **Table of Contents** with navigation links for your document:
     - [Liskov Substitution Principle (LSP)](#liskov-substitution-principle-lsp)
     - [Interface Segregation Principle (ISP)](#interface-segregation-principle-isp)
     - [Dependency Inversion Principle (DIP)](#dependency-inversion-principle-dip)
+
+41. [**Spring and Spring Boot**](#spring-and-spring-boot)
+   - [Spring Framework](#spring-framework)
+   - [Spring Boot](#spring-boot)
+   - [Comparison: Spring vs Spring Boot](#comparison-spring-vs-spring-boot)
+   - [When to Use Spring vs Spring Boot](#when-to-use-spring-vs-spring-boot)
+
+42. [**Dependency Injection (DI) and Inversion of Control (IoC) in Spring**](#dependency-injection-di-and-inversion-of-control-ioc-in-spring)
+   - [How IoC and DI Work in Spring](#how-ioc-and-di-work-in-spring)
+   - [Types of Dependency Injection in Spring](#types-of-dependency-injection-in-spring)
+
+43. [**Spring IoC Container Configurations**](#spring-ioc-container-configurations)
+   - [XML-based Configuration](#xml-based-configuration)
+   - [Annotation-based Configuration](#annotation-based-configuration)
+   - [Java-based Configuration (Java Config)](#java-based-configuration-java-config)
+   - [Spring IoC Container Types](#spring-ioc-container-types)
+
+44. [**AOP (Aspect-Oriented Programming) in Spring**](#aop-aspect-oriented-programming-in-spring)
+   - [Types of AOP in Spring](#types-of-aop-in-spring)
+   - [How to Implement AOP in Spring (Using Annotations)](#how-to-implement-aop-in-spring-using-annotations)
+   - [Common Use Cases for AOP in Spring](#common-use-cases-for-aop-in-spring)
+   - [Example of AOP in Spring](#example-of-aop-in-spring)
+
+45. [**Autowiring in Spring**](#autowiring-in-spring)
+   - [Types of Autowiring in Spring](#types-of-autowiring-in-spring)
+
+46. [**Spring Boot Microservice Architecture**](#spring-boot-microservice-architecture)
+   - [Handling Huge Amounts of Data](#handling-huge-amounts-of-data)
+     - [Database Design and Data Partitioning](#database-design-and-data-partitioning)
+     - [Data Streaming](#data-streaming)
+     - [Data Pagination and Query Optimization](#data-pagination-and-query-optimization)
+     - [Asynchronous Processing and Background Jobs](#asynchronous-processing-and-background-jobs)
+     - [Data Compression and Optimized Data Formats](#data-compression-and-optimized-data-formats)
+     - [Data Archiving and Offloading](#data-archiving-and-offloading)
+     - [Horizontal Scaling](#horizontal-scaling)
+   - [Error Handling in Microservices](#error-handling-in-microservices)
+     - [Categorizing Errors](#categorizing-errors)
+     - [Basic Strategies for Error Handling in Microservices](#basic-strategies-for-error-handling-in-microservices)
+     - [Resilience Patterns](#resilience-patterns)
+     - [Handling Distributed Transactions and Consistency](#handling-distributed-transactions-and-consistency)
+     - [Logging, Monitoring, and Tracing](#logging-monitoring-and-tracing)
+     - [Service Availability and Monitoring](#service-availability-and-monitoring)
+     - [Error Handling for Asynchronous Communication](#error-handling-for-asynchronous-communication)
+
+47. [**Microservices Security**](#microservices-security)
+   - [Authentication and Authorization](#authentication-and-authorization)
+   - [Secure Communication](#secure-communication)
+   - [Input Validation and Data Sanitization](#input-validation-and-data-sanitization)
+   - [Service-Level Security](#service-level-security)
+   - [Audit and Monitoring](#audit-and-monitoring)
+   - [Data Protection and Security](#data-protection-and-security)
+   - [Infrastructure and Network Security](#infrastructure-and-network-security)
+   - [Disaster Recovery and Fault Tolerance](#disaster-recovery-and-fault-tolerance)
+   - [Compliance and Security Standards](#compliance-and-security-standards)
+
+48. [**Failure and Exception Handling in Spring Boot Microservices**](#failure-and-exception-handling-in-spring-boot-microservices)
+   - [Failure Handling Techniques](#failure-handling-techniques)
+   - [Exception Handling Techniques](#exception-handling-techniques)
+   - [Failure and Exception Handler Techniques Summary](#failure-and-exception-handler-techniques-summary)
+
+49. [**Throttling in Microservices**](#throttling-in-microservices)
+
+50. [**Sharding: Explanation and Overview**](#sharding-explanation-and-overview)
+
+51. [**Comparing Sharding Management in PostgreSQL, Oracle, and MongoDB**](#comparing-sharding-management-in-postgresql-oracle-and-mongodb)
+
+52. [**Database Deadlocks in Spring Boot Microservices**](#database-deadlocks-in-spring-boot-microservices)
+   - [Understanding Database Deadlocks](#understanding-database-deadlocks)
+   - [Preventing Database Deadlocks](#preventing-database-deadlocks)
+
+53. [**Interservice Communication in Spring Boot Microservices**](#interservice-communication-in-spring-boot-microservices)
+
+54. [**Blocking vs Non-Blocking: Pros and Cons**](#blocking-vs-non-blocking-pros-and-cons)
+
+55. [**Upgrading from React 16 to React 19**](#upgrading-from-react-16-to-react-19)
+   - [Key Changes and Features from React 16 to React 19](#key-changes-and-features-from-react-16-to-react-19)
+   - [Summary of Major Features Across Versions](#summary-of-major-features-across-versions)
+   - [Summary of Key Features in React 16](#summary-of-key-features-in-react-16)
+   - [React Hooks](#react-hooks)
+   - [Expected Hook Enhancements in React 19](#expected-hook-enhancements-in-react-19)
+
+56. [**Programming Concepts in React**](#programming-concepts-in-react)
+   - [1. `let`, `var`, and `const` (Variable Declarations)](#let-var-and-const-variable-declarations)
+   - [2. `async` / `await` (Asynchronous Programming)](#async-await-asynchronous-programming)
+   - [3. `Promise` (Handling Asynchronous Operations)](#promise-handling-asynchronous-operations)
+   - [4. `Observable` (Reactive Programming)](#observable-reactive-programming)
+   - [5. `SyntheticEvent` (React's Event System)](#syntheticevent-reacts-event-system)
+   - [6. `evict` (Cache Eviction in React/React Query)](#evict-cache-eviction-in-reactreact-query)
+   - [7. `useEffect` (Side Effects)](#useeffect-side-effects)
+   - [8. `useCallback` and `useMemo` (Performance Optimization)](#usecallback-and-usememo-performance-optimization)
+   - [9. `setState` (State Management in Class Components)](#setstate-state-management-in-class-components)
+   - [10. `event.preventDefault()` (Prevent Default Action)](#eventpreventdefault-prevent-default-action)
+   - [11. `ref` in React (References)](#ref-in-react-references)
+   - [12. `key` in React (List Rendering Key)](#key-in-react-list-rendering-key)
+   - [13. Differences Between `ref` and `key`](#differences-between-ref-and-key)
+
+57. [**Types of React Components**](#types-of-react-components)
+   - [Functional Components](#functional-components)
+   - [Class Components](#class-components)
+   - [Pure Components](#pure-components)
+   - [Higher-Order Components (HOC)](#higher-order-components-hoc)
+   - [Controlled Components](#controlled-components)
+   - [Uncontrolled Components](#uncontrolled-components)
+   - [Stateful Components](#stateful-components)
+   - [Stateless Components](#stateless-components)
+   - [Lifecycle Methods in Class Components](#lifecycle-methods-in-class-components)
+   - [Error Handling Lifecycle Methods](#error-handling-lifecycle-methods)
+
+58. [**React Fiber and Virtual DOM**](#react-fiber-and-virtual-dom)
+   - [DOM, Virtual DOM, Diffing, Reconciliation, and Fiber in React](#dom-virtual-dom-diffing-reconciliation-and-fiber-in-react)
+   - [How React Fiber Works in Practice](#how-react-fiber-works-in-practice)
+
+59. [**Concurrency in Java: Threads and Executors**](#concurrency-in-java-threads-and-executors)
+   - [User Threads](#user-threads)
+   - [Daemon Threads](#daemon-threads)
+   - [Main Thread](#main-thread)
+   - [Worker Threads](#worker-threads)
+   - [Child Threads](#child-threads)
+   - [Blocking Threads](#blocking-threads)
+   - [Summary of Thread Types in Java](#summary-of-thread-types-in-java)
+   - [Mermaid Diagram of Thread and Thread Concurrency](#mermaid-diagram-of-thread-and-thread-concurrency)
+   - [Basic Thread Lifecycle](#basic-thread-lifecycle)
+   - [Thread Concurrency: Multi-threading Model](#thread-concurrency-multi-threading-model)
+   - [Thread Pooling and Concurrency with Executor Service](#thread-pooling-and-concurrency-with-executor-service)
+
+60. [**Concurrency in Java & Executor Framework**](#concurrency-in-java-executor-framework)
+   - [Introduction to Concurrency in Java](#introduction-to-concurrency-in-java)
+   - [Executor Framework](#executor-framework)
+   - [Executor Framework Example Code](#executor-framework-example-code)
+   - [Scheduled Executor Service Example](#scheduled-executor-service-example)
+   - [Common Interview Questions on Executor Framework](#common-interview-questions-on-executor-framework)
+
+61. [**CI/CD Tools in Docker**](#ci-cd-tools-in-docker)
+   - [GitLab CI](#gitlab-ci)
+   - [Jenkins](#jenkins)
+   - [JMeter](#jmeter)
+   - [JProfiler](#jprofiler)
+   - [VisualVM](#visualvm)
+
+62. [**Protecting and Securing a React Application**](#protecting-and-securing-a-react-application)
+   - [Error Handling and Logs](#error-handling-and-logs)
+
+63. [**Event Queue and Event Bus in Spring Boot Microservices**](#event-queue-and-event-bus-in-spring-boot-microservices)
+
+64. [**Microservices Architecture: The 12 Rules**](#microservices-architecture-the-12-rules)
+
+65. [**String Permutation**](#string-permutation)
+
+66. [**Connection Pool Implementation**](#connection-pool-implementation)
+
+67. [**Method Overloading vs Method Overriding in Java**](#method-overloading-vs-method-overriding-in-java)
+   - [Key Differences Between Method Overloading and Method Overriding](#key-differences-between-method-overloading-and-method-overriding)
+   - [Common Interview Questions on Method Overloading and Overriding](#common-interview-questions-on-method-overloading-and-overriding)
+
+68. [**`super` Keyword in Java**](#super-keyword-in-java)
+69. [**Exception Handling in Java**](#exception-handling-in-java)
+70. [**Interthread Communication in Java**](#interthread-communication-in-java)
+71. [**Consumer-Producer Problem in Multithreading**](#consumer-producer-problem-in-multithreading)
+72. [**Upcasting and Downcasting in Java**](#upcasting-and-downcasting-in-java)
+
+73. [**Object Creation in Java**](#object-creation-in-java)
+   - [Different Ways to Create Objects in Java](#different-ways-to-create-objects-in-java)
+
+74. [**Reflection in Java**](#reflection-in-java)
+   - [Class Loading and Types of Class Loaders in Java](#class-loading-and-types-of-class-loaders-in-java)
+   - [JVM (Java Virtual Machine)](#jvm-java-virtual-machine)
+   - [Bytecode in Java](#bytecode-in-java)
+   - [JIT (Just-In-Time) Compilation](#jit-just-in-time-compilation)
+
+75. [**Java Number Conversion (Decimal, Binary, Hexadecimal)**](#java-number-conversion-decimal-binary-hexadecimal)
+   - [Examples of Number Conversions](#examples-of-number-conversions)
+
+76. [**Java Memory Management**](#java-memory-management)
+   - [Java Memory Model and Garbage Collection](#java-memory-model-and-garbage-collection)
+   - [Java Memory Management Diagram](#java-memory-management-diagram)
+   - [Memory Management Flow Diagram](#memory-management-flow-diagram)
+   - [Mermaid Diagram for JVM Memory Structure](#mermaid-diagram-for-jvm-memory-structure)
+
+77. [**SSL/TLS and Certificates in Java**](#ssltls-and-certificates-in-java)
+    - [Generating SSL/TLS Certificates](#generating-ssltls-certificates)
+    - [Importing Certificates into Java Keystore (JKS or PKCS12)](#importing-certificates-into-java-keystore-jks-or-pkcs12)
+    - [Private Key and Certificate Concepts](#private-key-and-certificate-concepts)
+    - [How Private Key and Certificate Work Together](#how-private-key-and-certificate-work-together)
+
+78. [**API Security Best Practices**](#api-security-best-practices)
+    - [API Protocols Overview](#api-protocols-overview)
+    - [Comparison Table for Common API Protocols](#comparison-table-for-common-api-protocols)
+    - [12 Best Practices for Securing Your APIs](#12-best-practices-for-securing-your-apis)
+
+79. [**Improving Database Performance**](#improving-database-performance)
+    - [Indexing](#indexing)
+    - [Query Caching and Optimization](#query-caching-and-optimization)
+    - [Database Partitioning and Sharding](#database-partitioning-and-sharding)
+    - [Connection Pooling](#connection-pooling)
+    - [Database Configuration Tuning](#database-configuration-tuning)
+    - [Database Monitoring and Profiling](#database-monitoring-and-profiling)
+
+80. [**REST API Authentication Methods**](#rest-api-authentication-methods)
+    - [Basic Authentication](#basic-authentication)
+    - [Bearer Token Authentication (OAuth 2.0)](#bearer-token-authentication-oauth-20)
+    - [JWT (JSON Web Token) Authentication](#jwt-json-web-token-authentication)
+    - [OAuth 2.0](#oauth-20)
+    - [Session-based Authentication](#session-based-authentication)
+    - [HMAC (Hash-Based Message Authentication Code)](#hmac-hash-based-message-authentication-code)
+    - [Client Certificates (Mutual TLS)](#client-certificates-mutual-tls)
+
+81. [**Mermaid Diagrams**](#mermaid-diagrams)
+    - [CI/CD Pipeline with Kubernetes](#cicd-pipeline-with-kubernetes)
+    - [API Security](#api-security)
+    - [Load Balancer vs Reverse Proxy vs API Gateway vs Forward Proxy](#load-balancer-vs-reverse-proxy-vs-api-gateway-vs-forward-proxy)
+
+82. [**Load Balancer, Reverse Proxy, API Gateway, Forward Proxy**](#load-balancer-reverse-proxy-api-gateway-forward-proxy)
+    - [Comparison Table](#comparison-table)
+
+83. [**Consumer-Producer Problem in Multithreading**](#consumer-producer-problem-in-multithreading)
+
+84. [**Method Overloading vs Method Overriding in Java**](#method-overloading-vs-method-overriding-in-java)
+    - [Key Differences Between Method Overloading and Method Overriding](#key-differences-between-method-overloading-and-method-overriding)
+    - [Common Interview Questions on Method Overloading and Overriding](#common-interview-questions-on-method-overloading-and-overriding)
+
+85. **React Hooks Overview**
+   - [useState](#usestate)
+   - [useReducer](#usereducer)
+   - [useSyncExternalStore](#usesyncexternalstore)
+   - [useEffect](#useeffect)
+   - [useLayoutEffect](#uselayouteffect)
+   - [useInsertionEffect](#useinsertioneffect)
+   - [useRef](#useref)
+   - [useImperativeHandle](#useimperativehandle)
+   - [useMemo](#usememo)
+   - [useCallback](#usecallback)
+   - [useContext](#usecontext)
+   - [useTransition](#usetransition)
+   - [useDeferredValue](#usedeferredvalue)
+   - [useDebugValue](#usedebugvalue)
+   - [useId](#useid)
+
+86. **Advanced React Concepts**
+   - [Async Server Components](#async-server-components)
+   - [Directives & Server Actions](#directives-server-actions)
+   - [Data Fetching](#data-fetching)
+   - [Authentication](#authentication)
+   - [Strict Mode](#strict-mode)
+
+87. **Navigation Links**:
+
+- [useState](#usestate)
+- [useReducer](#usereducer)
+- [useSyncExternalStore](#usesyncexternalstore)
+- [useEffect](#useeffect)
+- [useLayoutEffect](#uselayouteffect)
+- [useInsertionEffect](#useinsertioneffect)
+- [useRef](#useref)
+- [useImperativeHandle](#useimperativehandle)
+- [useMemo](#usememo)
+- [useCallback](#usecallback)
+- [useContext](#usecontext)
+- [useTransition](#usetransition)
+- [useDeferredValue](#usedeferredvalue)
+- [useDebugValue](#usedebugvalue)
+- [useId](#useid)
+
+88. **Advanced React Concepts:**
+
+- [Async Server Components](#async-server-components)
+- [Directives & Server Actions](#directives-server-actions)
+- [Data Fetching](#data-fetching)
+- [Authentication](#authentication)
+- [Strict Mode](#strict-mode)
 
 ---
 
