@@ -6,9 +6,7 @@
    - [Inheritance](#inheritance)
    - [Polymorphism](#polymorphism)
 
-2. [**Other OOP Concepts**](#other-oop-concepts)
- 
-3. [**Composition, Aggregation, and Association in Java**](#composition-aggregation-and-association-in-java)
+2. [**Other OOP Concepts Composition, Aggregation, and Association in Java**](#other-oop-concepts-composition-aggregation-and-association-in-java)
    - [Composition (Has-A Relationship)](#composition-has-a-relationship-1)
    - [Aggregation](#aggregation-1)
    - [Association](#association-1)
