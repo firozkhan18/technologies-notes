@@ -886,7 +886,7 @@ public class Main {
 **Explanation**:
 - The `Car` class contains an `Engine` object, meaning that an engine cannot exist independently without a car.
 - The engine is created when the car object is created, and the engine is destroyed when the car is destroyed (i.e., the engine's lifecycle is tied to the car).
-- 
+
 ### **7. Association**
 
 Association represents the relationship between two or more objects. There are different types of associations:
@@ -1020,6 +1020,15 @@ public class Main {
 - If a university is destroyed, the professors are not destroyed — they can still exist independently of any university.
 ---
 
+### Summary of OOP Concepts
+
+- **Classes and Objects**: The foundation of OOP, where classes are blueprints for objects.
+- **Encapsulation**: Bundles data and methods, restricting access to internal states.
+- **Inheritance**: Enables classes to inherit properties and behaviors from other classes.
+- **Polymorphism**: Allows methods to perform different functions based on the object context.
+- **Abstraction**: Hides complex implementations and exposes only essential features.
+
+These principles enable developers to build modular, maintainable, and scalable applications in Java. Understanding these concepts is crucial for effective programming and design in an object-oriented language.
 
 ### **Summary of When to Use Each Relationship**
 
@@ -1030,16 +1039,6 @@ public class Main {
 | **Association**        | A **general relationship** where objects are related but have no strict lifecycle dependency. | Use when objects **interact**, but neither is **dependent** on the other. | A **Teacher teaches a Student**, but neither owns the other. |
 
 In practice, the choice between **composition**, **aggregation**, and **association** depends on the **lifetime** and **ownership** of the objects involved, and how closely related they are in your design.
-
-### Summary of OOP Concepts
-
-- **Classes and Objects**: The foundation of OOP, where classes are blueprints for objects.
-- **Encapsulation**: Bundles data and methods, restricting access to internal states.
-- **Inheritance**: Enables classes to inherit properties and behaviors from other classes.
-- **Polymorphism**: Allows methods to perform different functions based on the object context.
-- **Abstraction**: Hides complex implementations and exposes only essential features.
-
-These principles enable developers to build modular, maintainable, and scalable applications in Java. Understanding these concepts is crucial for effective programming and design in an object-oriented language.
 
 ### **Conclusion**
 
