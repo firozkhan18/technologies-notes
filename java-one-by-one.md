@@ -5519,10 +5519,10 @@ graph LR
     A[Virtual Thread] --> C[Managed by JVM]
     B --> D[Low Memory Usage]
     C --> E[Multiplexed onto Platform Threads]
-    E --> F[Platform Thread (OS Level)]
+    E --> F[Platform Thread - OS Level]
     F --> G[Traditional Thread Scheduler]
     
-    F[Platform Thread (OS Level)] --> H[Memory Stack Allocation]
+    F[Platform Thread - OS Level] --> H[Memory Stack Allocation]
     G[Traditional Thread Scheduler] --> I[OS-Level Context Switching]
     I --> J[High Overhead]
     
