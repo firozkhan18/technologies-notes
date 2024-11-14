@@ -1,3 +1,271 @@
+
+### **Table of Contents**
+
+Here is the **Table of Contents** with navigation links for your document:
+
+---
+
+### **Table of Contents**
+
+1. [**Object-Oriented Programming (OOP) Concepts in Depth**](#object-oriented-programming-oop-concepts-in-depth)
+   - [Encapsulation](#encapsulation)
+   - [Abstraction](#abstraction)
+   - [Inheritance](#inheritance)
+   - [Polymorphism](#polymorphism)
+
+2. [**Other OOP Concepts**](#other-oop-concepts)
+   - [Composition (Has-A Relationship)](#composition-has-a-relationship)
+   - [Association](#association)
+   - [Aggregation](#aggregation)
+
+3. [**Composition, Aggregation, and Association in Java**](#composition-aggregation-and-association-in-java)
+   - [Composition (Has-A Relationship)](#composition-has-a-relationship-1)
+   - [Aggregation](#aggregation-1)
+   - [Association](#association-1)
+   - [Summary of When to Use Each Relationship](#summary-of-when-to-use-each-relationship)
+
+4. [**Programming Paradigms Comparison**](#programming-paradigms-comparison)
+   - [Process-Oriented Programming (POP)](#process-oriented-programming-pop)
+   - [Object-Oriented Programming (OOP)](#object-oriented-programming-oop-1)
+   - [Functional Programming (FP)](#functional-programming-fp)
+
+5. [**Comparison of Process-Oriented, OOP, and FP in Java**](#comparison-of-process-oriented-oop-and-fp-in-java)
+   - [Why Do We Need Functional Programming (FP)?](#why-do-we-need-functional-programming-fp)
+     - [Immutability](#immutability)
+     - [Declarative Style](#declarative-style)
+     - [First-Class Functions](#first-class-functions)
+     - [Higher-Order Functions](#higher-order-functions)
+     - [Concurrency and Parallelism](#concurrency-and-parallelism)
+     - [Purity and Referential Transparency](#purity-and-referential-transparency)
+     - [Better Testability and Debugging](#better-testability-and-debugging)
+
+6. [**Conclusion: Why Do We Need Functional Programming?**](#conclusion-why-do-we-need-functional-programming)
+
+7. [**Functional Interfaces in Java**](#functional-interfaces-in-java)
+   - [What is a Functional Interface?](#what-is-a-functional-interface)
+   - [Regular Interface with Single Abstract Method vs. Functional Interface](#regular-interface-with-single-abstract-method-vs-functional-interface)
+     - [Regular Interface (with a Single Abstract Method)](#regular-interface-with-a-single-abstract-method)
+   - [Why Do We Need Functional Interfaces in Java?](#why-do-we-need-functional-interfaces-in-java)
+     - [Lambda Expressions & Conciseness](#lambda-expressions-conciseness)
+     - [Easier to Use with Built-In Java Functional API (Streams, Collections)](#easier-to-use-with-built-in-java-functional-api-streams-collections)
+     - [Compatibility with Functional Programming](#compatibility-with-functional-programming)
+     - [Better Intent Communication with `@FunctionalInterface` Annotation](#better-intent-communication-with-functionalinterface-annotation)
+   - [Why Not Just Use Regular Interfaces with Single Abstract Methods?](#why-not-just-use-regular-interfaces-with-single-abstract-methods)
+
+8. [**Marker Interfaces in Java**](#marker-interfaces-in-java)
+   - [What is a Marker Interface?](#what-is-a-marker-interface)
+   - [Types of Marker Interfaces in Java](#types-of-marker-interfaces-in-java)
+
+9. [**Java Modifiers**](#java-modifiers)
+   - [Access Specifiers in Java](#access-specifiers-in-java)
+   - [Non-Access Modifiers in Java](#non-access-modifiers-in-java)
+     - [Common Non-Access Modifiers:](#common-non-access-modifiers)
+       - `static` (Static Variables, Methods, Blocks, Classes) 
+       - `final` (Final Variables, Methods, Classes)
+       - `abstract` (Abstract Classes, Methods)
+       - `synchronized` (Synchronization)
+       - `transient` (Serialization)
+       - `volatile` (Concurrency)
+
+10. [**Threads and Concurrency in Java**](#threads-and-concurrency-in-java)
+   - [Thread Keywords in Java](#thread-keywords-in-java)
+     - `synchronized`, `volatile`, `final`
+   - [Concurrency Keywords and Concepts in Java](#concurrency-keywords-and-concepts-in-java)
+     - `extends Thread`, `implements Runnable`
+   - [Concurrency Concepts and Tools in Java](#concurrency-concepts-and-tools-in-java)
+     - Thread Pools (`Executor Framework`), `CountDownLatch`, `CyclicBarrier`
+
+11. [**`final` and `static` Keywords in Java**](#final-and-static-keywords-in-java)
+   - [`final` Keyword in Java](#final-keyword-in-java)
+     - Usage of `final`: Final Variable, Final Method, Final Class
+   - [`static` Keyword in Java](#static-keyword-in-java)
+     - Usage of `static`: Static Variable, Static Method, Static Block, Static Class (Nested Class)
+   - [Key Differences Between `final` and `static`](#key-differences-between-final-and-static)
+
+12. [**Java: Abstract Classes, Interfaces, and Functional Interfaces**](#java-abstract-classes-interfaces-and-functional-interfaces)
+   - [Abstract Class](#abstract-class)
+   - [Regular Interface](#regular-interface)
+   - [Functional Interface](#functional-interface)
+   - [Key Differences](#key-differences)
+
+13. [**Java 8 Features**](#java-8-features)
+   - [Lambda Expressions](#lambda-expressions)
+   - [Functional Interfaces](#functional-interfaces-1)
+   - [Streams API](#streams-api)
+     - Stream Operations:
+       - [Intermediate Operations:](#intermediate-operations)
+         - `map()`, `filter()`, `distinct()`, `sorted()`
+       - [Terminal Operations:](#terminal-operations)
+         - `collect()`, `reduce()`, `forEach()`, `count()`
+   - [Default Methods in Interfaces](#default-methods-in-interfaces)
+   - [Method References](#method-references)
+   - [Optional Class](#optional-class)
+   - [New Date/Time API (java.time)](#new-datetime-api-javatime)
+   - [Nashorn JavaScript Engine](#nashorn-javascript-engine)
+   - [New Parallel Operations](#new-parallel-operations)
+   - [New APIs](#new-apis)
+
+14. [**Why Do We Need Functional Interfaces in Java 8?**](#why-do-we-need-functional-interfaces-in-java-8)
+   - [Lambda Expressions: Enabling Concise Functionality](#lambda-expressions-enabling-concise-functionality)
+   - [Enabling Functional Programming Features in Java](#enabling-functional-programming-features-in-java)
+   - [Encouraging Reusability and Modularity](#encouraging-reusability-and-modularity)
+   - [Interoperability with Existing Java Libraries](#interoperability-with-existing-java-libraries)
+   - [Support for Method References](#support-for-method-references)
+   - [Improved API Design](#improved-api-design)
+   - [Consistency with Other Languages](#consistency-with-other-languages)
+
+15. [**Immutability in Java**](#immutability-in-java)
+   - [Creating Immutable Objects in Java](#creating-immutable-objects-in-java)
+   - [Immutable Collections in Java](#immutable-collections-in-java)
+   - [Immutable Object Best Practices](#immutable-object-best-practices)
+
+16. [**Singleton Class in Java**](#singleton-class-in-java)
+   - [How to "Break" a Singleton](#how-to-break-a-singleton)
+
+17. [**Threading, Concurrency, and Executor Framework in Java**](#threading-concurrency-and-executor-framework-in-java)
+   - [Threading in Java](#threading-in-java)
+   - [Concurrency in Java](#concurrency-in-java)
+   - [Executor Framework in Java](#executor-framework-in-java)
+   - [Working with Future and Callable](#working-with-future-and-callable)
+   - [Best Practices for Concurrency](#best-practices-for-concurrency)
+
+18. [**Executor Framework**](#executor-framework)
+   - [`execute()` vs `submit()` Method Comparison](#execute-vs-submit-method-comparison)
+     - [Key Differences Between `execute()` and `submit()`](#key-differences-between-execute-and-submit)
+     - [When to Use `execute()` vs `submit()`](#when-to-use-execute-vs-submit)
+
+19. [**HashMap vs ConcurrentHashMap in Java**](#hashmap-vs-concurrenthashmap-in-java)
+   - [Thread Safety](#thread-safety)
+     - [HashMap](#hashmap)
+     - [ConcurrentHashMap](#concurrenthashmap)
+   - [Performance](#performance)
+   - [Null Keys and Values](#null-keys-and-values)
+   - [Synchronization Model](#synchronization-model)
+   - [API Differences](#api-differences)
+   - [Locking Behavior](#locking-behavior)
+   - [Use Cases](#use-cases)
+
+20. [**Approaches to Implement a Thread-Safe In-Memory Cache in Java**](#approaches-to-implement-a-thread-safe-in-memory-cache-in-java)
+   - [Using `ConcurrentHashMap`](#using-concurrenthashmap)
+   - [Using `synchronized` Blocks](#using-synchronized-blocks)
+   - [Using Cache Libraries (e.g., Caffeine)](#using-cache-libraries-e-g-caffeine)
+
+21. [**Memory Management and Garbage Collection in Java**](#memory-management-and-garbage-collection-in-java)
+   - [Garbage Collection in Java](#garbage-collection-in-java)
+     - [How Garbage Collection Works](#how-garbage-collection-works)
+     - [When Does Garbage Collection Happen?](#when-does-garbage-collection-happen)
+   - [Memory Leaks in Java](#memory-leaks-in-java)
+     - [What Causes Memory Leaks?](#what-causes-memory-leaks)
+     - [Detecting Memory Leaks](#detecting-memory-leaks)
+   - [Best Practices to Prevent Memory Leaks](#best-practices-to-prevent-memory-leaks)
+     - [Avoid Retaining Unnecessary References](#avoid-retaining-unnecessary-references)
+     - [Use Weak References](#use-weak-references)
+     - [Proper Cleanup of Resources](#proper-cleanup-of-resources)
+     - [Remove Listeners and Callbacks](#remove-listeners-and-callbacks)
+     - [Avoid Static References](#avoid-static-references)
+     - [Use Collections Wisely](#use-collections-wisely)
+     - [Monitor and Profile Regularly](#monitor-and-profile-regularly)
+
+22. [**Garbage Collection Optimization**](#garbage-collection-optimization)
+   - [GC Tuning](#gc-tuning)
+   - [Avoid Frequent Full GCs](#avoid-frequent-full-gcs)
+   - [Heap Size Management](#heap-size-management)
+
+23. [**Memory Management in Java: Stack, Heap, Pools, and Memory Leaks**](#memory-management-in-java-stack-heap-pools-and-memory-leaks)
+   - [Stack Memory](#stack-memory)
+   - [Heap Memory](#heap-memory)
+   - [Object Pool](#object-pool)
+   - [Instance Pool](#instance-pool)
+   - [Constant Pool](#constant-pool)
+   - [String Pool](#string-pool)
+   - [Thread Pool](#thread-pool)
+
+24. [**Memory Leak Example and Prevention in Java**](#memory-leak-example-and-prevention-in-java)
+    - [Memory Leak Example](#memory-leak-example)
+    - [Prevention Techniques for Memory Leaks](#prevention-techniques-for-memory-leaks)
+
+25. [**Docker Installation for Profiling Tools**](#docker-installation-for-profiling-tools)
+    - [Docker Setup for JVisualVM](#docker-setup-for-jvisualvm)
+    - [Docker Setup for Eclipse MAT](#docker-setup-for-eclipse-mat)
+    - [Docker Setup for YourKit](#docker-setup-for-yourkit)
+
+26. [**Virtual Threads in Java**](#virtual-threads-in-java)
+   - [Virtual Threads vs Traditional Threads](#virtual-threads-vs-traditional-threads)
+   - [Virtual Thread Concept in Memory Management](#virtual-thread-concept-in-memory-management)
+   - [Mermaid Diagram: Memory Management and Virtual Thread Concept](#mermaid-diagram-memory-management-and-virtual-thread-concept)
+
+27. [**Functional Interface in Java**](#functional-interface-in-java)
+   - [What is a Functional Interface?](#what-is-a-functional-interface)
+   - [Why are we using Functional Interfaces?](#why-are-we-using-functional-interfaces)
+
+28. [**Diamond Problem in Java**](#diamond-problem-in-java)
+   - [What is the Diamond Problem?](#what-is-the-diamond-problem)
+
+29. [**Race Condition in Java**](#race-condition-in-java)
+   - [What is a Race Condition?](#what-is-a-race-condition)
+
+30. [**Deadlock in Java**](#deadlock-in-java)
+   - [What is a Deadlock?](#what-is-a-deadlock)
+   - [How to Prevent Deadlocks?](#how-to-prevent-deadlocks)
+
+31. [**Starvation in Java**](#starvation-in-java)
+   - [What is Starvation?](#what-is-starvation)
+   - [How to Prevent Starvation?](#how-to-prevent-starvation)
+
+32. [**Fairness and Prevention**](#fairness-and-prevention)
+   - [What is Fairness?](#what-is-fairness)
+   - [How to Implement Fairness?](#how-to-implement-fairness)
+
+33. [**Fail-Fast vs Fail-Safe in Java**](#fail-fast-vs-fail-safe-in-java)
+   - [What is Fail-Fast?](#what-is-fail-fast)
+   - [What is Fail-Safe?](#what-is-fail-safe)
+   - [Key Differences Between Fail-Fast and Fail-Safe](#key-differences-between-fail-fast-and-fail-safe)
+   - [When to Use Fail-Fast vs Fail-Safe](#when-to-use-fail-fast-vs-fail-safe)
+
+34. [**Concurrency and Threads in Java**](#concurrency-and-threads-in-java)
+   - [What is Concurrency?](#what-is-concurrency)
+   - [What are Threads?](#what-are-threads)
+   - [Creating Threads in Java](#creating-threads-in-java)
+   - [Concurrency vs Parallelism](#concurrency-vs-parallelism)
+   - [Java Concurrency Basics: Managing Threads](#java-concurrency-basics-managing-threads)
+   - [Key Concepts in Java Concurrency](#key-concepts-in-java-concurrency)
+
+35. [**Java Collections Framework**](#java-collections-framework)
+    - [Core Collection Interfaces](#core-collection-interfaces)
+    - [Common Collection Classes and Their Implementations](#common-collection-classes-and-their-implementations)
+    - [Java Collections Class (Utility Methods)](#java-collections-class-utility-methods)
+    - [Summary of Key Collection Interfaces and Classes](#summary-of-key-collection-interfaces-and-classes)
+
+36. [**`HashMap` vs `ConcurrentHashMap`**](#hashmap-vs-concurrenthashmap)
+    - [Thread Safety](#thread-safety)
+    - [Performance](#performance)
+    - [Blocking Behavior](#blocking-behavior)
+    - [Null Keys/Values](#null-keysvalues)
+    - [Iteration and Modifications](#iteration-and-modifications)
+    - [Example Code Comparison](#example-code-comparison)
+
+37. [**Hibernate Caching Mechanisms**](#hibernate-caching-mechanisms)
+    - [First-Level Cache (L1 Cache)](#first-level-cache-l1-cache)
+    - [Second-Level Cache (L2 Cache)](#second-level-cache-l2-cache)
+    - [Advantages and Disadvantages of L2 Cache](#advantages-and-disadvantages-of-l2-cache)
+
+38. [**Design Patterns in Java**](#design-patterns-in-java)
+    - [Creational Patterns](#creational-patterns)
+    - [Structural Patterns](#structural-patterns)
+    - [Behavioral Patterns](#behavioral-patterns)
+
+39. [**Serialization and Synchronization in Java**](#serialization-and-synchronization-in-java)
+
+40. [**SOLID Principles**](#solid-principles)
+    - [Single Responsibility Principle (SRP)](#single-responsibility-principle-srp)
+    - [Open/Closed Principle (OCP)](#openclosed-principle-ocp)
+    - [Liskov Substitution Principle (LSP)](#liskov-substitution-principle-lsp)
+    - [Interface Segregation Principle (ISP)](#interface-segregation-principle-isp)
+    - [Dependency Inversion Principle (DIP)](#dependency-inversion-principle-dip)
+
+---
+
+
 ### **Object-Oriented Programming (OOP) Concepts in Depth**
 
 Object-Oriented Programming (OOP) is a programming paradigm that is based on the concept of **objects**, which are instances of **classes**. The four main pillars of OOP — **Encapsulation**, **Abstraction**, **Inheritance**, and **Polymorphism** — are foundational principles that guide the design and development of object-oriented software systems. Below is a deep dive into each of these principles:
