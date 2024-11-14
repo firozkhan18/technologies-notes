@@ -12,23 +12,37 @@ Here is a **Table of Contents** and **Navigation** for the Java concepts and top
    - [Polymorphism](#polymorphism)
    - [Abstraction](#abstraction)
 
-2. **Functional Programming and Interfaces**
-   - [Why Use Functional Style Instead of OOP?](#why-use-functional-style-instead-of-oop)
+2. **Why Use Functional Style Instead of OOP?**
    - [Functional Interfaces - Purpose of Default & Static Methods](#functional-interfaces-purpose-of-default-static-methods)
    - [Interfaces vs. Abstract Classes](#interfaces-vs-abstract-classes)
-   - [Lambda Expressions vs. Anonymous Classes](#lambda-expressions-vs-anonymous-classes)
-   - [Functional Interface vs. Abstract Class](#functional-interface-vs-abstract-class)
+   - [Functional Interfaces](#functional-interfaces)
+   - [Default Methods](#default-methods)
+   - [Static Methods](#static-methods)
+   - [Purpose of Default Methods](#purpose-of-default-methods)
+   - [Differences from Traditional Interfaces](#differences-from-traditional-interfaces)
+   - [Why Use Functional Interfaces?](#why-use-functional-interfaces)
 
-3. **Exception Handling**
+3. **Lambda Expressions vs. Anonymous Classes**
+   - [Lambda Expressions](#lambda-expressions)
+   - [Anonymous Classes](#anonymous-classes)
+
+4. **Functional Interface vs. Abstract Class**
+   - [Functional Interface](#functional-interface)
+   - [Abstract Class](#abstract-class)
+
+5. **Exception Handling**
    - [Final, Finally, and Finalize](#final-finally-and-finalize)
    - [Key Benefits of Try-With-Resources](#key-benefits-of-try-with-resources)
 
-4. **Garbage Collection and Memory Management**
+6. **Garbage Collection and Memory Management**
    - [Memory Pools in Java](#memory-pools-in-java)
    - [Garbage Collection Algorithms](#garbage-collection-algorithms)
    - [Memory Leak Prevention](#memory-leak-prevention)
 
-5. **Java Design Patterns**
+7. **Marker Interface**
+   - [Serialization & Deserialization](#serialization-deserialization)
+
+8. **Design Patterns**
    - [Creational Design Patterns](#creational-design-patterns)
      - [Singleton Pattern](#singleton-pattern)
      - [Factory Method Pattern](#factory-method-pattern)
@@ -42,121 +56,48 @@ Here is a **Table of Contents** and **Navigation** for the Java concepts and top
      - [Observer Pattern](#observer-pattern)
      - [Command Pattern](#command-pattern)
 
-6. **Java Reflection**
+9. **Java Reflection**
    - [Types of Class Loaders in Java](#types-of-class-loaders-in-java)
    - [Accessing Private Members Using Reflection API](#accessing-private-members-using-reflection-api)
 
-7. **Concurrency and Threads**
-   - [Concurrency Executor Framework](#concurrency-executor-framework)
-   - [Threads](#threads)
-   - [HashMap vs. ConcurrentHashMap](#hashmap-vs-concurrenthashmap)
-   - [Fail-Fast vs. Fail-Safe](#fail-fast-vs-fail-safe)
-   - [Cloning in Java](#cloning-in-java)
-     - [Shallow Cloning](#shallow-cloning)
-     - [Deep Cloning](#deep-cloning)
-   - [Breaking the Singleton Pattern](#breaking-the-singleton-pattern)
-     - [Reflection](#reflection)
-     - [Serialization](#serialization)
-     - [Multiple Threads](#multiple-threads)
+10. **Concurrency and Threads**
+    - [Concurrency Executor Framework](#concurrency-executor-framework)
+    - [Threads](#threads)
+    - [HashMap vs. ConcurrentHashMap](#hashmap-vs-concurrenthashmap)
+    - [Fail-Fast vs. Fail-Safe](#fail-fast-vs-fail-safe)
+    - [Cloning in Java](#cloning-in-java)
+      - [Shallow Cloning](#shallow-cloning)
+      - [Deep Cloning](#deep-cloning)
+    - [Breaking the Singleton Pattern](#breaking-the-singleton-pattern)
+      - [Reflection](#reflection)
+      - [Serialization](#serialization)
+      - [Multiple Threads](#multiple-threads)
 
-8. **Garbage Collection Algorithms**
-   - [Serial GC](#serial-gc)
-   - [Parallel GC](#parallel-gc)
-   - [G1 GC](#g1-gc)
-   - [ZGC](#zgc)
+11. **Garbage Collection Algorithms**
+    - [Serial GC](#serial-gc)
+    - [Parallel GC](#parallel-gc)
+    - [G1 GC](#g1-gc)
+    - [ZGC](#zgc)
 
-9. **Java Data Structures**
-   - [Iterator in Java](#iterator-in-java)
-     - [Iterator](#iterator)
-     - [ListIterator](#listiterator)
-     - [Enumeration](#enumeration)
-     - [Spliterator](#spliterator)
-     - [Stream Iterator](#stream-iterator)
-   - [Custom Implementations for Data Structures](#custom-implementations-for-data-structures)
-     - [Custom Linked List](#custom-linked-list)
-     - [Custom Map](#custom-map)
-     - [Custom Set](#custom-set)
-     - [Custom Class Demonstrating Memory Leak](#custom-class-demonstrating-memory-leak)
+12. **Java Data Structures**
+    - [Iterator in Java](#iterator-in-java)
+      - [Iterator](#iterator)
+      - [ListIterator](#listiterator)
+      - [Enumeration](#enumeration)
+      - [Spliterator](#spliterator)
+      - [Stream Iterator](#stream-iterator)
+    - [Custom Implementations for Data Structures](#custom-implementations-for-data-structures)
+      - [Custom Linked List](#custom-linked-list)
+      - [Custom Map](#custom-map)
+      - [Custom Set](#custom-set)
+      - [Custom Class Demonstrating Memory Leak](#custom-class-demonstrating-memory-leak)
 
----
-
-### **Navigation Links**:
-
-- [Object-Oriented Programming (OOP)](#object-oriented-programming-oop)
-   - [Classes and Objects](#classes-and-objects)
-   - [Encapsulation](#encapsulation)
-   - [Inheritance](#inheritance)
-   - [Polymorphism](#polymorphism)
-   - [Abstraction](#abstraction)
-
-- [Functional Programming and Interfaces](#functional-programming-and-interfaces)
-   - [Why Use Functional Style Instead of OOP?](#why-use-functional-style-instead-of-oop)
-   - [Functional Interfaces - Purpose of Default & Static Methods](#functional-interfaces-purpose-of-default-static-methods)
-   - [Interfaces vs. Abstract Classes](#interfaces-vs-abstract-classes)
-   - [Lambda Expressions vs. Anonymous Classes](#lambda-expressions-vs-anonymous-classes)
-   - [Functional Interface vs. Abstract Class](#functional-interface-vs-abstract-class)
-
-- [Exception Handling](#exception-handling)
-   - [Final, Finally, and Finalize](#final-finally-and-finalize)
-   - [Key Benefits of Try-With-Resources](#key-benefits-of-try-with-resources)
-
-- [Garbage Collection and Memory Management](#garbage-collection-and-memory-management)
-   - [Memory Pools in Java](#memory-pools-in-java)
-   - [Garbage Collection Algorithms](#garbage-collection-algorithms)
-   - [Memory Leak Prevention](#memory-leak-prevention)
-
-- [Java Design Patterns](#java-design-patterns)
-   - [Creational Design Patterns](#creational-design-patterns)
-     - [Singleton Pattern](#singleton-pattern)
-     - [Factory Method Pattern](#factory-method-pattern)
-     - [Abstract Factory Pattern](#abstract-factory-pattern)
-   - [Structural Design Patterns](#structural-design-patterns)
-     - [Adapter Pattern](#adapter-pattern)
-     - [Decorator Pattern](#decorator-pattern)
-     - [Composite Pattern](#composite-pattern)
-   - [Behavioral Design Patterns](#behavioral-design-patterns)
-     - [Strategy Pattern](#strategy-pattern)
-     - [Observer Pattern](#observer-pattern)
-     - [Command Pattern](#command-pattern)
-
-- [Java Reflection](#java-reflection)
-   - [Types of Class Loaders in Java](#types-of-class-loaders-in-java)
-   - [Accessing Private Members Using Reflection API](#accessing-private-members-using-reflection-api)
-
-- [Concurrency and Threads](#concurrency-and-threads)
-   - [Concurrency Executor Framework](#concurrency-executor-framework)
-   - [Threads](#threads)
-   - [HashMap vs. ConcurrentHashMap](#hashmap-vs-concurrenthashmap)
-   - [Fail-Fast vs. Fail-Safe](#fail-fast-vs-fail-safe)
-   - [Cloning in Java](#cloning-in-java)
-     - [Shallow Cloning](#shallow-cloning)
-     - [Deep Cloning](#deep-cloning)
-   - [Breaking the Singleton Pattern](#breaking-the-singleton-pattern)
-     - [Reflection](#reflection)
-     - [Serialization](#serialization)
-     - [Multiple Threads](#multiple-threads)
-
-- [Garbage Collection Algorithms](#garbage-collection-algorithms)
-   - [Serial GC](#serial-gc)
-   - [Parallel GC](#parallel-gc)
-   - [G1 GC](#g1-gc)
-   - [ZGC](#zgc)
-
-- [Java Data Structures](#java-data-structures)
-   - [Iterator in Java](#iterator-in-java)
-     - [Iterator](#iterator)
-     - [ListIterator](#listiterator)
-     - [Enumeration](#enumeration)
-     - [Spliterator](#spliterator)
-     - [Stream Iterator](#stream-iterator)
-   - [Custom Implementations for Data Structures](#custom-implementations-for-data-structures)
-     - [Custom Linked List](#custom-linked-list)
-     - [Custom Map](#custom-map)
-     - [Custom Set](#custom-set)
-     - [Custom Class Demonstrating Memory Leak](#custom-class-demonstrating-memory-leak)
+13. **Java Reflection API**
+    - [Using Reflection to Call a Private Method](#using-reflection-to-call-a-private-method)
 
 ---
 
+This table of contents provides a detailed structure and navigation to all the topics mentioned, allowing easy access to each section.
 ## Object-Oriented Programming (OOP)
 
 Object-Oriented Programming (OOP) is a programming paradigm based on the concept of "objects," which can contain data and methods. Java is a fully object-oriented language, and its OOP principles facilitate modular and reusable code. Here’s an in-depth look at the core concepts of OOP:
