@@ -12,6 +12,7 @@ Here is a **Table of Contents** and **Navigation** for the Java concepts and top
    - [Polymorphism](#polymorphism)
    - [Abstraction](#abstraction)
 
+
 2. **Why Use Functional Style Instead of OOP?**
    - [Functional Interfaces - Purpose of Default & Static Methods](#functional-interfaces-purpose-of-default-static-methods)
    - [Interfaces vs. Abstract Classes](#interfaces-vs-abstract-classes)
@@ -60,7 +61,9 @@ Here is a **Table of Contents** and **Navigation** for the Java concepts and top
    - [Types of Class Loaders in Java](#types-of-class-loaders-in-java)
    - [Accessing Private Members Using Reflection API](#accessing-private-members-using-reflection-api)
 
-10. **Concurrency and Threads**
+10. **What is Immutability?**
+   - [What is Immutability?](#what-is-immutability?)
+11. **Concurrency and Threads**
     - [Concurrency Executor Framework](#concurrency-executor-framework)
     - [Threads](#threads)
     - [HashMap vs. ConcurrentHashMap](#hashmap-vs-concurrenthashmap)
@@ -72,27 +75,28 @@ Here is a **Table of Contents** and **Navigation** for the Java concepts and top
       - [Reflection](#reflection)
       - [Serialization](#serialization)
       - [Multiple Threads](#multiple-threads)
-
-11. **Garbage Collection Algorithms**
+12. **Internal Representation of `HashSet`**
+13. **Garbage Collection Algorithms**
     - [Serial GC](#serial-gc)
     - [Parallel GC](#parallel-gc)
     - [G1 GC](#g1-gc)
     - [ZGC](#zgc)
 
-12. **Java Data Structures**
+14. **Java Data Structures**
     - [Iterator in Java](#iterator-in-java)
       - [Iterator](#iterator)
       - [ListIterator](#listiterator)
       - [Enumeration](#enumeration)
       - [Spliterator](#spliterator)
       - [Stream Iterator](#stream-iterator)
+      - [Descending Iterator in Java](#descending-iterator-in-java)
     - [Custom Implementations for Data Structures](#custom-implementations-for-data-structures)
       - [Custom Linked List](#custom-linked-list)
       - [Custom Map](#custom-map)
       - [Custom Set](#custom-set)
       - [Custom Class Demonstrating Memory Leak](#custom-class-demonstrating-memory-leak)
 
-13. **Java Reflection API**
+15. **Java Reflection API**
     - [Using Reflection to Call a Private Method](#using-reflection-to-call-a-private-method)
 
 ---
