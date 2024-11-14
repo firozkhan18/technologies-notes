@@ -1087,6 +1087,8 @@ In Java, **access specifiers** and **non-access modifiers** are keywords used to
 
 Functional programming (FP) has gained significant traction in recent years, especially in languages like Java (since Java 8), JavaScript, Python, Scala, Haskell, and others. While object-oriented programming (OOP) remains dominant, there are several compelling reasons why you might want to use **functional programming** in your projects. Below are the key reasons **why FP is needed**:
 
+
+**[⬆ Back to Top](#table-of-contents)**
 ---
 
 ### 1. **Immutability**
@@ -1270,6 +1272,8 @@ Functional programming (FP) provides a range of benefits that are particularly v
 - **Concurrency** becomes easier and safer due to the absence of mutable shared state.
 - **Purity** leads to predictable, side-effect-free code that’s easier to test and debug.
 
+**[⬆ Back to Top](#table-of-contents)**
+
 In modern Java (from Java 8 onwards), functional programming features like **lambdas**, **streams**, and **optional** allow you to write more expressive and concise code that’s easier to understand and maintain.
 
 ### Why Do We Need **Functional Interfaces** in Java, Even When We Can Create Regular Interfaces with a Single Abstract Method?
@@ -1446,6 +1450,8 @@ We **need functional interfaces** in Java primarily because they:
 - Offer **better type safety** and **compiler support** through the `@FunctionalInterface` annotation, ensuring that the interface adheres to the functional programming paradigm.
 
 Even though you can create regular interfaces with a single abstract method, functional interfaces are specifically designed to provide better **support for functional programming** patterns, and they help to make the **Java programming model** more powerful and functional.
+
+**[⬆ Back to Top](#table-of-contents)**
 
 ### **1. Marker Interface in Java**
 
@@ -1652,7 +1658,8 @@ In Java, **functional interfaces** can be classified based on their signature an
 - **Functional Interfaces**: Functional interfaces have exactly **one abstract method** and can be used with **lambda expressions** to implement behavior concisely. They are essential for **functional programming** in Java.
   - Common functional interfaces in Java include `Runnable`, `Callable`, `Predicate`, `Function`, `Consumer`, etc.
   - **Functional interfaces** help promote a **functional style** of programming, enabling cleaner, more readable, and maintainable code, especially in conjunction with **Streams**, **lambda expressions**, and **method references**.
-    
+
+**[⬆ Back to Top](#table-of-contents)**
 
 ### **1. Access Specifiers in Java**
 Access specifiers determine the visibility or accessibility of a class, method, or variable to other parts of the program. There are **four** main types of access specifiers:
@@ -2549,7 +2556,7 @@ The `static` keyword in Java is used to create class-level members (variables an
 
 Both `final` and `static` are crucial for writing clean, efficient, and safe Java code, especially when it comes to constants, utility functions, and shared state.
 
-
+**[⬆ Back to Top](#table-of-contents)**
 
 In Java, **abstract classes**, **regular interfaces**, and **functional interfaces** are important concepts that help define how we model behavior in our programs. They each have specific use cases, and understanding their differences is key to writing effective Java code.
 
@@ -2961,6 +2968,8 @@ Java 8 also introduced several other important enhancements:
 
 Java 8 is a major update that brings a paradigm shift towards functional programming. The key features such as **lambda expressions**, **streams**, **default methods in interfaces**, and the **new Date/Time API** make Java code more concise, readable, and maintainable. These additions open up new possibilities for writing cleaner, more efficient code, particularly when working with collections, asynchronous tasks, and functional programming patterns.
 
+**[⬆ Back to Top](#table-of-contents)**
+
 Java 8 not only modernized Java, making it more competitive with languages like Scala and Kotlin but also allowed developers to write more expressive and maintainable code.
 
 ### Why Do We Need Functional Interfaces in Java 8?
@@ -3147,6 +3156,8 @@ Java 8 introduced functional programming features, and **functional interfaces**
 5. **Enable Method References**: They provide a foundation for method references, allowing more concise syntax when calling methods.
 
 In essence, **functional interfaces** are a fundamental building block that enables Java to adopt and leverage the power of functional programming, making the language more expressive and modern while maintaining its core object-oriented principles.
+
+**[⬆ Back to Top](#table-of-contents)**
 
 ### Immutability in Java
 
@@ -3355,6 +3366,7 @@ Some key takeaways:
 - Use defensive copying when dealing with mutable fields to preserve immutability.
 - Immutable objects are naturally thread-safe, making them great for concurrent programming.
 
+**[⬆ Back to Top](#table-of-contents)**
 
 ### Singleton Class in Java
 
@@ -3771,6 +3783,8 @@ In this case, we're copying each value in the cache to ensure that the caller ca
 
 By adhering to the principles of immutability, you ensure that both the database connection and the in-memory cache are safe from external modification, which is particularly useful in multi-threaded environments.
 
+**[⬆ Back to Top](#table-of-contents)**
+
 ### Threading, Concurrency, and Executor Framework in Java
 
 Concurrency in Java refers to the ability to run multiple tasks simultaneously, potentially improving performance and responsiveness. Java provides powerful tools for managing multiple threads and for building efficient, scalable, and maintainable concurrent applications. Among these tools is the **Executor Framework**, which abstracts the details of thread management and task scheduling.
@@ -4166,6 +4180,7 @@ executorService.shutdown();
 - Use **`execute()`** when you simply want to run a task asynchronously without worrying about the result or exceptions. It's typically used for **fire-and-forget** tasks.
 - Use **`submit()`** when you need more control, such as retrieving the result of the task, checking its status, or handling exceptions. It's useful for **tasks that return results** or need to be **monitored** during execution.
   
+**[⬆ Back to Top](#table-of-contents)**
 
 In Java, both `HashMap` and `ConcurrentHashMap` are classes that implement the `Map` interface and are used to store key-value pairs. However, they differ significantly in terms of **thread safety**, **performance**, and **use cases**. Here's an in-depth comparison of `HashMap` and `ConcurrentHashMap`:
 
@@ -4366,6 +4381,8 @@ public class ConcurrentHashMapExample {
 
  or when external synchronization is sufficient (e.g., single-threaded applications or when you can synchronize access manually).
 - **Use `ConcurrentHashMap`** in highly concurrent, multi-threaded environments where you need thread safety without blocking other threads unnecessarily, especially when many threads may be reading and writing to the map simultaneously.
+
+**[⬆ Back to Top](#table-of-contents)**
 
 Creating a **thread-safe in-memory cache** in Java is a common requirement in many applications where caching data can improve performance, especially for frequently accessed data. Java provides several tools and techniques to implement such a cache. Below are various ways to implement a **thread-safe in-memory cache**, followed by a simple and efficient implementation.
 
@@ -4607,6 +4624,8 @@ public class CaffeineCacheExample {
 - For more **advanced features**, like eviction policies, time-to-live (TTL) caching, or cache size limits, a dedicated caching library like **Caffeine** is an excellent choice.
 - The `synchronized` approach should be used sparingly as it may not scale well under high concurrency due to global locking.
 
+**[⬆ Back to Top](#table-of-contents)**
+
 ### Memory Leak and Garbage Collection in Java: Handling Memory Leaks and Memory Management
 
 Java's **Garbage Collection (GC)** is designed to automatically manage memory allocation and deallocation, freeing developers from the need to manually handle memory management. However, despite the garbage collector, memory leaks can still occur in Java applications, and understanding how to handle them is crucial to building efficient and robust applications.
@@ -4784,7 +4803,9 @@ Example:
 ## Conclusion
 
 While Java's garbage collection mechanism automates much of the memory management, **memory leaks** can still occur due to improper handling of object references, resources, and caches. By following best practices like **dereferencing unused objects**, using **weak references**, **cleaning up resources**, **monitoring memory usage**, and **optimizing garbage collection**, you can effectively prevent memory leaks and manage memory in  a way that ensures high performance and stability for your Java applications. Regular **profiling and monitoring** are essential to catching memory issues early and maintaining a healthy application.
- 
+
+**[⬆ Back to Top](#table-of-contents)**
+
 ### **Memory Management in Java: Stack, Heap, Pools, and Memory Leaks**
 
 In Java, memory management is a crucial concept for ensuring performance and stability in applications. Understanding the **Stack**, **Heap**, and various **pools** (like **Object Pool**, **Instance Pool**, **Thread Pool**, **Constant Pool**, **String Pool**) is essential for managing memory usage effectively.
@@ -4989,6 +5010,8 @@ ugs**, **PMD**, or **SonarQube** to detect potential memory leaks during develop
 - Understanding **memory management** concepts in Java (like **Stack**, **Heap**, **Pools**, and **Garbage Collection**) is essential for writing efficient and stable applications.
 - **Memory leaks** occur when objects are not properly disposed of, and can lead to performance degradation or even application crashes. Prevention involves careful resource management, avoiding circular references, and using profiling tools to monitor memory usage.
 - **Tools** such as **JVisualVM**, **YourKit**, and **GC logging** help track and resolve memory leaks effectively.
+
+**[⬆ Back to Top](#table-of-contents)**
 
 In Java, **PermGen** and **Metaspace** are memory areas used for storing **metadata** related to classes, methods, and other resources used by the JVM. Understanding how these memory areas work and how to configure them is critical for managing memory in large applications or in environments where memory utilization is a concern.
 
@@ -5352,6 +5375,8 @@ Memory leaks in Java can be detrimental to application performance, but they can
 
 By using the proper memory management techniques and utilizing the right tools, you can effectively prevent memory leaks and improve the performance and stability of your Java applications.
 
+**[⬆ Back to Top](#table-of-contents)**
+
 ---
 
 ### **Virtual Threads in Java**
@@ -5474,6 +5499,8 @@ graph LR
 - The **JVM scheduler** multiplexes virtual threads onto a smaller number of **platform threads**, making them highly efficient.
   
 This makes **virtual threads** a powerful tool for handling modern concurrency patterns in Java. Whether it's for web servers, microservices, or high-performance applications with many concurrent tasks, virtual threads are a promising advancement for Java developers.
+
+**[⬆ Back to Top](#table-of-contents)**
 
 ---
 
@@ -5696,6 +5723,8 @@ A **fail-safe** system is designed to continue functioning (or recover) even if 
 - **Fail-Fast**: `ArrayList`, `HashMap` (non-concurrent), `Iterator`.
 - **Fail-Safe**: `CopyOnWriteArrayList`, `ConcurrentHashMap`, `Iterator` in concurrent collections.
 
+**[⬆ Back to Top](#table-of-contents)**
+
 ---
 
 ## Summary
@@ -5824,6 +5853,8 @@ Let's explore both concepts in detail:
 - **Fail-Safe** is more suitable for **concurrent systems** that require safe iteration and modification, often at the cost of performance or memory usage.
 
 Each approach has its pros and cons, and the choice between them depends on the requirements of your application and how you handle concurrency and error management.
+
+**[⬆ Back to Top](#table-of-contents)**
 
 **Concurrency** and **threads** are fundamental concepts in modern programming, particularly when working with multi-threaded environments in languages like Java. Understanding how concurrency works and how threads are used can significantly improve your ability to write efficient, scalable, and thread-safe applications.
 
@@ -6008,7 +6039,9 @@ Java’s `java.util.concurrent` package provides a rich set of tools for dealing
 - **Concurrency** allows multiple tasks to make progress in a given period of time, whether simultaneously (parallelism) or by time-slicing on a single core.
 - **Threads** are the fundamental units of execution in a concurrent system. Java allows for easy creation and management of threads using the `Thread` class, `Runnable` interface, and higher-level concurrency utilities in the `java.util.concurrent` package.
 - Managing concurrency properly is crucial to avoid issues like race conditions, deadlocks, and performance bottlenecks, which is why synchronization mechanisms, thread pools, and atomic operations are key to writing safe and efficient multi-threaded applications in Java.
-  
+
+**[⬆ Back to Top](#table-of-contents)**
+
 Java Collections are a set of classes and interfaces that provide a way to store, manipulate, and access data. The Java Collections Framework (JCF) is a unified architecture for representing and manipulating collections, providing a set of interfaces, classes, and algorithms to handle different types of data.
 
 ### **Key Components of the Java Collections Framework**
@@ -6373,7 +6406,7 @@ for (String key : map.keySet()) {
 
 In most modern Java applications, especially those involving multi-threaded access, **`ConcurrentHashMap`** is typically the preferred choice due to its performance and built-in concurrency features.
 
-
+**[⬆ Back to Top](#table-of-contents)**
 
 In the context of **Hibernate** or **JPA (Java Persistence API)**, **First-level cache** and **Second-level cache** are concepts related to **caching** mechanisms used to optimize database access and improve application performance. Caching is used to store entities in memory so that repeated database queries can be avoided, which improves the overall performance of the application.
 
@@ -6497,6 +6530,8 @@ Hibernate and JPA allow you to use both the **first-level cache** and **second-l
 - **First-Level Cache**: Automatically enabled, scoped to the session, and provides **in-memory caching** for entities within the current session. It's perfect for reducing database queries within a session but doesn't persist beyond it.
 - **Second-Level Cache**: Provides **cross-session caching** and can be configured to store entities and query results across sessions. It's useful for caching frequently accessed data and reducing database access across sessions, but it requires additional configuration and setup.
 - Both caches work together in a typical Hibernate setup to maximize performance and reduce the need to repeatedly access the database.
+
+**[⬆ Back to Top](#table-of-contents)**
 
 In Java, **design patterns** are proven solutions to common problems that arise during software development. They represent best practices that developers can use to solve recurring problems in object-oriented design. Design patterns are broadly categorized into three types:
 
@@ -7087,6 +7122,8 @@ While it's important to understand these patterns, it's equally important to use
 
 Both **serialization** and **synchronization** play crucial roles in ensuring that Java applications can handle multi-threaded environments and persistent storage requirements effectively.
 
+**[⬆ Back to Top](#table-of-contents)**
+
 
 The **SOLID** principles are a set of five principles that help in creating a robust, maintainable, and scalable object-oriented design. While these principles are not "design patterns" themselves, they form the foundation for writing good, clean code and help in applying design patterns effectively.
 
@@ -7363,6 +7400,8 @@ The **SOLID** principles are key to writing maintainable, flexible, and scalable
 
 When applied with the right **design patterns**, SOLID principles allow for effective solutions to common design problems and can help in building robust software architectures.
 
+**[⬆ Back to Top](#table-of-contents)**
+
 **Spring** and **Spring Boot** are related but serve different purposes in the Java ecosystem. Let's break down the differences:
 
 ### 1. **Spring Framework**
@@ -7415,6 +7454,7 @@ However, the **Spring Framework** does not provide an out-of-the-box solution fo
 ### Conclusion
 Spring Boot is essentially an extension of the Spring Framework that makes it easier to get started with Spring-based applications. While Spring provides all the flexibility and features you need for building robust Java applications, Spring Boot simplifies the development process and focuses on making it easy to create stand-alone, production-grade applications with minimal effort. If you're starting a new project and don't need deep customization, Spring Boot is usually the best choice.
 
+**[⬆ Back to Top](#table-of-contents)**
 
 ### **Dependency Injection (DI) and Inversion of Control (IoC) in Spring**
 
@@ -7879,6 +7919,8 @@ Executed method: getUser with result: User John
 - **AOP** allows you to modularize cross-cutting concerns (like logging, security, transactions, etc.) and apply them declaratively to different parts of your application.
 - By applying aspects, you can **decrease the amount of code duplication**, **improve code maintainability**, and **centralize common functionality** like logging and transaction management.
 - Spring’s **AOP support** (using proxies and aspects) makes it easy to integrate these concepts into your application in a transparent and declarative manner.
+
+**[⬆ Back to Top](#table-of-contents)**
 
 ### **Autowiring in Spring**
 
@@ -8473,11 +8515,11 @@ This setup routes all requests to `/products/**` through the **API Gateway** to 
 
 ### **Conclusion**
 
-Building microservices with **Spring Boot** and **Spring Cloud**
-
- provides a highly modular, flexible, and scalable architecture. Using **Eureka** for service discovery, **Spring Cloud Gateway** for API routing, and leveraging Spring's other tools for configuration management, fault tolerance, and messaging, you can create robust, resilient, and scalable microservices that are easy to maintain and deploy independently.
+Building microservices with **Spring Boot** and **Spring Cloud** provides a highly modular, flexible, and scalable architecture. Using **Eureka** for service discovery, **Spring Cloud Gateway** for API routing, and leveraging Spring's other tools for configuration management, fault tolerance, and messaging, you can create robust, resilient, and scalable microservices that are easy to maintain and deploy independently.
 
 This architecture allows for rapid development and scaling, making it suitable for modern cloud-native applications.
+
+**[⬆ Back to Top](#table-of-contents)**
 
 Handling **huge amounts of data** efficiently in a **microservices architecture** is a critical challenge, as it requires careful consideration of data storage, transmission, processing, and scaling. There are several strategies to handle large datasets effectively while maintaining performance, scalability, and reliability. Here are the key approaches:
 
@@ -8633,6 +8675,8 @@ Handling large datasets in a microservices architecture requires thoughtful cons
 7. **Horizontal Scaling**: Scale services horizontally to handle growing data loads and maintain performance.
 
 By combining these strategies, you can build scalable and resilient microservices that efficiently handle huge amounts of data without impacting performance.
+
+**[⬆ Back to Top](#table-of-contents)**
 
 Error handling in a **microservices architecture** is crucial for maintaining resilience, consistency, and a good user experience. Since microservices are distributed and typically communicate over a network, errors can occur at multiple layers: network issues, service failures, data consistency problems, or even bugs within a service itself.
 
@@ -8851,9 +8895,7 @@ Asynchronous communication, such as messaging queues (Kafka, RabbitMQ), can also
 - **Dead-letter Queues (DLQ)**: When a message cannot be processed (due to data issues, service unavailability, etc.), it can be sent to a Dead-letter Queue for later inspection and reprocessing.
   
   ```yaml
-  spring.rabbitmq.listener.simple.dlq
-
-QueueName=myDLQ
+  spring.rabbitmq.listener.simple.dlqQueueName=myDLQ
   ```
 
 - **Retries for Messaging Systems**: You can set retries for message consumption to attempt processing the message again if an error occurs.
@@ -8872,6 +8914,8 @@ Key points to remember:
 - Provide fallback responses and retries for failed requests.
 
 With these strategies in place, you can ensure that your microservices architecture is both robust and capable of gracefully handling errors at scale.
+
+**[⬆ Back to Top](#table-of-contents)**
 
 Protecting microservices is critical to ensure they are secure, resilient, and resilient to potential attacks or unauthorized access. Since microservices often communicate over networks, expose APIs, and manage sensitive data, they can become attractive targets for attackers. To protect microservices, you need a comprehensive approach to security, including authentication, authorization, secure communication, monitoring, and other preventive measures.
 
@@ -9073,6 +9117,8 @@ Protecting microservices requires a multi-layered security approach, covering ev
 7. **Infrastructure Security**: Secure your network using firewalls, API gateways, and Zero Trust principles.
 
 By implementing these security practices, you can ensure your microservices are well-protected against a wide range of security threats.
+
+**[⬆ Back to Top](#table-of-contents)**
 
 In a Spring Boot microservice, effective **failure handling** and **exception handling** are crucial to ensure the system is robust, resilient, and fault-tolerant. Failure handling encompasses strategies to recover gracefully from failures, such as circuit breakers, retries, timeouts, etc., while exception handling focuses on catching and managing exceptions in a way that doesn't disrupt service flow and provides meaningful responses to clients.
 
@@ -9305,6 +9351,7 @@ The techniques for failure handling and exception handling in a Spring Boot micr
 
 Choosing the right combination of these strategies based on the type of failure scenario is essential for building a reliable and fault-tolerant microservice.
 
+**[⬆ Back to Top](#table-of-contents)**
 
 Creating a comprehensive solution for managing a high data load with a Spring Boot monorepo, microservices, and handling aspects like security, caching, failure handling, and testing requires a modular approach. I'll break down the implementation into various sections and provide a structure to build out a Spring Boot microservices architecture with load testing, failure handling, security, and a frontend React application.
 
@@ -10221,6 +10268,8 @@ The techniques for failure handling and exception handling in a Spring Boot micr
 
 Choosing the right combination of these strategies based on the type of failure scenario is essential for building a reliable and fault-tolerant microservice.
 
+**[⬆ Back to Top](#table-of-contents)**
+
 ### **Sharding: Explanation and Overview**
 
 **Sharding** is a method of distributing data across multiple machines or nodes, allowing you to scale horizontally and manage large volumes of data. It helps in **data partitioning** and **load balancing** by splitting large datasets into smaller, more manageable pieces (called **shards**), which are then distributed across multiple database instances or clusters. Each shard holds a portion of the data, allowing parallel processing of queries, improving performance, and enabling the system to handle more data than a single machine can.
@@ -10389,6 +10438,8 @@ MongoDB’s sharding is designed to handle large-scale deployments and provides 
 
 ### Conclusion
 Sharding is an essential technique for managing large-scale data in databases. **PostgreSQL**, **Oracle**, and **MongoDB** all offer ways to shard data, but each database has its own tools and strategies. While PostgreSQL requires extensions like Citus, Oracle and MongoDB offer built-in, more automated solutions. The right approach depends on your system’s needs, including scalability, complexity, and your data model.
+
+**[⬆ Back to Top](#table-of-contents)**
 
 Handling storage in a Spring Boot microservice can be approached in different ways depending on the nature of the data being stored and the storage requirements (e.g., relational databases, NoSQL databases, file systems, cloud storage, etc.). The storage strategy you choose will depend on factors such as scalability, performance, consistency, and fault tolerance.
 
@@ -10917,6 +10968,8 @@ In a Spring Boot microservice architecture, security can be handled across multi
 
 Implementing these security mechanisms will help ensure that your Spring Boot microservice architecture is secure, robust, and resilient against common security threats.
 
+**[⬆ Back to Top](#table-of-contents)**
+
 Database deadlocks are situations where two or more database transactions are blocked, each waiting on the other to release a resource (like a lock), leading to a standstill where none of the transactions can proceed. Deadlocks can cause significant performance issues and even data inconsistencies if not handled properly.
 
 In a Spring Boot microservice architecture, deadlock handling can be addressed at multiple layers, including database design, transaction management, and retry mechanisms.
@@ -11107,6 +11160,8 @@ Most modern relational databases have deadlock logging mechanisms (e.g., Postgre
 
 ### **Conclusion**
 Handling database deadlocks effectively in Spring Boot involves designing your database and transactions in a way that minimizes the risk of deadlocks, using retry mechanisms to automatically resolve conflicts, and ensuring proper logging and monitoring. By following best practices like consistent lock ordering, transaction timeout management, and leveraging optimistic locking, you can significantly reduce the impact of deadlocks on your system.
+
+**[⬆ Back to Top](#table-of-contents)**
 
 To prevent **database deadlocks** in a **Spring Boot microservice** environment, we can implement a combination of **best practices** for database transactions, **transaction management** in Spring, and **efficient query design**. Deadlocks occur when two or more database transactions are blocked, each waiting on the other to release a resource, causing a standstill. Preventing deadlocks involves minimizing the chances of conflicting resource locking.
 
@@ -11333,6 +11388,8 @@ To prevent **database deadlocks** in a Spring Boot microservice environment:
 - Utilize **retry logic** for deadlock resolution, combined with **logging and monitoring**.
 
 By carefully applying these best practices, you can significantly reduce the likelihood of deadlocks in your Spring Boot microservices, ensuring smooth and reliable database operations.
+
+**[⬆ Back to Top](#table-of-contents)**
 
 **Interservice communication** in a **Spring Boot microservice** architecture refers to the process through which different microservices exchange data and communicate with each other. Since microservices are designed to be loosely coupled and independently deployable, interservice communication is a crucial aspect to ensure that they can work together to serve the business needs.
 
@@ -11606,7 +11663,9 @@ Spring Boot provides a variety of options for interservice communication in a mi
 
 The choice of communication method depends on factors such as performance requirements, scalability, fault tolerance, and service decoupling. Each method has its advantages and trade-offs, and often a combination of them is used in a microservice ecosystem.
 
- In Java, the terms **blocking** and **non-blocking** refer to how operations handle threads during execution, particularly when dealing with tasks like I/O, network communication, or waiting for responses from other systems.
+**[⬆ Back to Top](#table-of-contents)**
+
+In Java, the terms **blocking** and **non-blocking** refer to how operations handle threads during execution, particularly when dealing with tasks like I/O, network communication, or waiting for responses from other systems.
 
 ### **Blocking vs Non-Blocking**
 
@@ -12287,6 +12346,7 @@ The **Executor Framework** in Java simplifies concurrency by abstracting thread 
 
 Understanding the Executor Framework, `Callable`, `Future`, and scheduling tasks using `ScheduledExecutorService` is essential for anyone working on large-scale multi-threaded applications.
 
+**[⬆ Back to Top](#table-of-contents)**
 
 Here's a breakdown of whether **GitLab CI**, **Jenkins**, **JMeter**, **JProfiler**, and **VisualVM** are open-source or not:
 
@@ -12359,6 +12419,8 @@ Here's a breakdown of whether **GitLab CI**, **Jenkins**, **JMeter**, **JProfile
 ### Conclusion:
 - **GitLab CI**, **Jenkins**, **JMeter**, and **VisualVM** are all open-source.
 - **JProfiler** is the only one in this list that is **not open-source** and requires a commercial license (though it offers a free trial).
+
+**[⬆ Back to Top](#table-of-contents)**
 
 Yes, you can install **GitLab CI**, **Jenkins**, **JMeter**, **JProfiler**, and **VisualVM** in Docker containers. Docker provides a flexible environment for running applications, and many of these tools have official Docker images or can be set up in a containerized environment. Below is a brief guide on how to run each of these tools in Docker.
 
@@ -14055,6 +14117,7 @@ public class ConnectionPool {
 ### **Conclusion**:
 - The original implementation is a good starting point, but adding error handling, connection validation, and proper resource management (like closing connections on shutdown) can significantly improve its reliability and robustness in a production environment.
 
+**[⬆ Back to Top](#table-of-contents)**
 
 ### **Method Overloading** vs **Method Overriding** in Java
 
@@ -14424,6 +14487,8 @@ public class Test {
 In conclusion:
 - **Method Overloading** enables methods with the same name to perform different tasks depending on their arguments.
 - **Method Overriding** allows subclasses to provide their specific implementation for a method defined in the superclass, ensuring dynamic method dispatch at runtime.
+
+**[⬆ Back to Top](#table-of-contents)**
 
 ### `super` Keyword in Java
 
@@ -15155,6 +15220,8 @@ Using **`BlockingQueue`** is a simpler and more efficient way to implement the p
 - By using **`wait()`** and **`notify()`**, we ensure that threads can safely share resources without race conditions or deadlocks.
 - For easier implementation in modern Java, consider using the **`BlockingQueue`** interface, which handles synchronization and waiting for you.
 
+**[⬆ Back to Top](#table-of-contents)**
+
 ### Upcasting and Downcasting in Java
 
 **Upcasting** and **Downcasting** refer to casting between different types, typically when dealing with objects in an inheritance hierarchy (e.g., parent-child classes). These concepts are fundamental in **Object-Oriented Programming (OOP)** and play an important role in polymorphism.
@@ -15345,6 +15412,7 @@ public class BoxingUnboxingWithList {
 - **Upcasting** and **Downcasting** are used for converting objects between a superclass and subclass in an inheritance hierarchy.
 - **Boxing** and **Unboxing** are techniques used to convert between primitive types and their corresponding wrapper classes, enabling you to work with objects in places where primitives cannot be used (such as collections).
 
+**[⬆ Back to Top](#table-of-contents)**
 
 In Java, an **object** is an instance of a **class**. To create an object, you typically use the `new` keyword, but there are several ways to instantiate an object depending on the scenario. Let’s break down the key concepts and the different ways to create objects in Java.
 
@@ -15550,6 +15618,7 @@ In Java, you can create objects in several ways:
 
 Each method serves a different use case depending on the specific needs of the program, such as creating objects dynamically, copying existing objects, or deserializing objects for data persistence.
 
+**[⬆ Back to Top](#table-of-contents)**
 
 ### Reflection in Java
 
@@ -15711,6 +15780,8 @@ public class ReflectionExample {
 - **Reflection** is a powerful feature in Java that allows you to inspect and manipulate classes, fields, methods, and constructors at runtime.
 - It is commonly used in frameworks, dynamic class loading, object serialization, testing, and situations where flexibility and runtime decision-making are required.
 - While reflection is powerful, it should be used judiciously due to its impact on performance, security, and code complexity.
+
+**[⬆ Back to Top](#table-of-contents)**
 
 ### 1. **Class Loading and Types of Class Loaders in Java**
 
@@ -16850,6 +16921,8 @@ API protocols define the set of rules and standards that govern how data is exch
 
 Selecting the right **API protocol** depends on your use case, such as whether you need **real-time communication**, **low-latency**, **security**, or **scalability**. Understanding these protocols and their specific applications will help you design robust and secure systems.
 
+**[⬆ Back to Top](#table-of-contents)**
+
 Improving **database performance** is crucial for ensuring fast and efficient data access, especially in applications with high data loads and complex queries. Several techniques, optimizations, and strategies can be implemented at various levels (hardware, database configuration, query design, etc.) to enhance the performance of your database.
 
 Here’s a comprehensive guide on how to **improve database performance**:
@@ -17028,6 +17101,8 @@ Here’s a comprehensive guide on how to **improve database performance**:
 ### Conclusion
 
 Improving database performance is a multi-faceted task that requires attention to database design, query optimization, server configuration, and proper hardware resources. By adopting the techniques listed above, you can ensure your database runs efficiently even under heavy loads and large datasets. Regular monitoring and maintenance are also essential for long-term performance and stability.
+
+**[⬆ Back to Top](#table-of-contents)**
 
 In **REST API authentication**, verifying the identity of users or systems is crucial for ensuring that only authorized parties can access sensitive data and resources. There are various authentication methods, each with its own use cases and security benefits. Here's a breakdown of the most common REST API authentication methods:
 
@@ -17320,6 +17395,8 @@ The choice of **authentication method** depends on factors like security needs, 
 
 Implementing the right authentication method ensures both security and smooth user experience across REST APIs.
 
+**[⬆ Back to Top](#table-of-contents)**
+
 Creating and importing certificates is an essential part of securing communication between clients and servers, especially in the context of **SSL/TLS encryption**. Certificates help in authenticating servers and encrypting data during transmission. Below are the steps involved in creating and importing certificates, along with the tools commonly used:
 
 ### **1. Generating SSL/TLS Certificates**
@@ -17479,6 +17556,8 @@ Here’s a recap of the tools and concepts:
 - **Browsers**: Importing certificates for trust in secure communication.
 
 If you are using **Keycloak**, it would manage certificates for OAuth 2.0 tokens and handle secure communications between the identity provider and your services.
+
+**[⬆ Back to Top](#table-of-contents)**
 
 In the context of SSL/TLS and secure communications, terms like **private key**, **certificate**, and **.pem file** are often encountered. Let's go over these concepts in detail, including how they work together and how to create, manage, and convert them.
 
@@ -17673,5 +17752,5 @@ sudo service apache2 restart
 
 Using these methods and understanding these formats, you can effectively manage certificates, secure your applications, and establish trust between clients and servers.
 
-
+**[⬆ Back to Top](#table-of-contents)**
 ---
