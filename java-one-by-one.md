@@ -529,7 +529,7 @@
 ---
 
 
-### **Object-Oriented Programming (OOP) Concepts in Depth**
+## **Object-Oriented Programming (OOP) Concepts in Depth**
 
 Object-Oriented Programming (OOP) is a programming paradigm that is based on the concept of **objects**, which are instances of **classes**. The four main pillars of OOP — **Encapsulation**, **Abstraction**, **Inheritance**, and **Polymorphism** — are foundational principles that guide the design and development of object-oriented software systems. Below is a deep dive into each of these principles:
 
@@ -979,7 +979,7 @@ public class Main {
 
 In practice, the choice between **composition**, **aggregation**, and **association** depends on the **lifetime** and **ownership** of the objects involved, and how closely related they are in your design.
 
-### **Process-Oriented, Object-Oriented, and Functional Programming in Java**
+## **Process-Oriented Object-Oriented and Functional Programming in Java**
 
 Java, being a versatile language, supports various programming paradigms, including **process-oriented**, **object-oriented**, and **functional programming**. Each of these paradigms has different characteristics and advantages, and understanding how they can be applied in Java can help you write cleaner, more maintainable, and efficient code. 
 
