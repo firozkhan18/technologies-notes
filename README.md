@@ -5135,6 +5135,7 @@ graph TD
     X --> Y
     Y --> Z
 ```
+![Desktop Screenshot](images/projectstructure.svg)
 
 ### **Explanation:**
 - **API Gateway** acts as the entry point for the client (mobile, desktop, browser). It routes the requests to appropriate microservices (like Inventory Service, Sales Service, Payment Service, etc.).
