@@ -4389,3 +4389,119 @@ By using the `name` attribute effectively, you can create a robust and flexible 
 ![Desktop Screenshot](images/Dealership-Diagram.drawio.svg)
 
 ![Desktop Screenshot](images/microservice.svg)
+
+Below is a **Mermaid diagram** that represents the architecture flow for **Configuration Routing and Service Communication** in a microservices system, incorporating components like API Gateway, Service Discovery, Configuration Server, and various services.
+
+```mermaid
+graph LR
+    A[UI Layer - Mobile Desktop Browser] -->|Requests| B[API Gateway]
+    B -->|Routes Requests| C[Service Discovery]
+    C -->|Finds Services| D[Inventory Management Service]
+    C -->|Finds Services| E[Sales Management Service]
+    C -->|Finds Services| F[Payment Service]
+    C -->|Finds Services| G[Shipping Service]
+    C -->|Finds Services| H[Notification Service]
+    C -->|Finds Services| I[Loan & Financing Service]
+    C -->|Finds Services| J[Customer Management Service]
+    C -->|Finds Services| K[Price and Promotion Service]
+    C -->|Finds Services| L[Consent Management Service]
+    B -->|Forwards Requests| D
+    B -->|Forwards Requests| E
+    B -->|Forwards Requests| F
+    B -->|Forwards Requests| G
+    B -->|Forwards Requests| H
+    B -->|Forwards Requests| I
+    B -->|Forwards Requests| J
+    B -->|Forwards Requests| K
+    B -->|Forwards Requests| L
+    
+    %% Configuration Flow
+    B --> M[Configuration Server]
+    M --> N[Configuration Repository - Git]
+    M -->|Serves Configurations| D
+    M -->|Serves Configurations| E
+    M -->|Serves Configurations| F
+    M -->|Serves Configurations| G
+    M -->|Serves Configurations| H
+    M -->|Serves Configurations| I
+    M -->|Serves Configurations| J
+    M -->|Serves Configurations| K
+    M -->|Serves Configurations| L
+
+    %% Service Communication
+    D -->|Inventory Data| E
+    E -->|Order Details| F
+    F -->|Payment Status| G
+    G -->|Shipping Updates| H
+    H -->|Notification for Updates| I
+    I -->|Loan Status| J
+    J -->|Customer Data| K
+    K -->|Pricing and Promotions| L
+    L -->|Consent Information| D
+
+    %% Optional communication with external systems - payment gateway
+    F --> O[External Payment Gateway]
+    G --> P[External Shipping System]
+    O --> Q[Payment Provider API]
+    P --> R[Shipping Provider API]
+    
+    style A fill:#f9f,stroke:#333,stroke-width:4px
+    style B fill:#bbf,stroke:#333,stroke-width:4px
+    style M fill:#cfc,stroke:#333,stroke-width:4px
+    style C fill:#fbb,stroke:#333,stroke-width:4px
+    style D fill:#bfb,stroke:#333,stroke-width:4px
+    style E fill:#cfd,stroke:#333,stroke-width:4px
+    style F fill:#dfd,stroke:#333,stroke-width:4px
+    style G fill:#dfd,stroke:#333,stroke-width:4px
+    style H fill:#fdd,stroke:#333,stroke-width:4px
+    style I fill:#fdd,stroke:#333,stroke-width:4px
+    style J fill:#fdd,stroke:#333,stroke-width:4px
+    style K fill:#cfc,stroke:#333,stroke-width:4px
+    style L fill:#cfc,stroke:#333,stroke-width:4px
+    style O fill:#f9f,stroke:#333,stroke-width:4px
+    style P fill:#f9f,stroke:#333,stroke-width:4px
+    style Q fill:#f9f,stroke:#333,stroke-width:4px
+    style R fill:#f9f,stroke:#333,stroke-width:4px
+```
+
+### **Explanation of the Diagram**
+
+1. **UI Layer**:
+   - End-users (through Mobile, Desktop, or Browser) interact with the system via the **API Gateway**.
+   
+2. **API Gateway**:
+   - Acts as the entry point for all requests. It routes incoming requests to the appropriate microservices.
+   - It also interacts with **Service Discovery** to find available service instances dynamically.
+
+3. **Service Discovery**:
+   - Maintains a registry of available services.
+   - Each microservice (Inventory, Sales, Payment, etc.) registers itself to the **Service Discovery**.
+   - The API Gateway queries the service registry to route requests to the right service instance.
+
+4. **Configuration Server**:
+   - Manages configurations for all microservices. This can be a centralized repository (like Git or a database).
+   - Microservices retrieve configurations from the **Configuration Server** during startup or at runtime.
+   - The **API Gateway** also interacts with the Configuration Server to fetch necessary configuration properties (e.g., routing, security policies).
+
+5. **Service Communication**:
+   - Microservices communicate with each other using synchronous or asynchronous patterns.
+   - For example, after an order is placed via the **Sales Management Service**, it may call the **Payment Service** to process the payment.
+   - **Kafka** or other messaging systems can be used for asynchronous communication (not shown in the diagram).
+
+6. **External Systems**:
+   - Some services may communicate with external systems. For example, the **Payment Service** communicates with an **External Payment Gateway**, and the **Shipping Service** interacts with an **External Shipping System**.
+
+7. **Optional Advanced Features**:
+   - **Load Balancing**, **Circuit Breaker**, **Retry Mechanisms**, and **Rate Limiting** ensure fault tolerance and high availability.
+   - **Kafka** can be introduced for event-driven communication among microservices.
+
+---
+
+### **Key Points in the Architecture**:
+
+- **API Gateway**: Handles routing and acts as a central entry point to various microservices.
+- **Service Discovery**: Helps microservices find each other and scales dynamically.
+- **Configuration Server**: Centralized management for configurations, ensuring consistency and flexibility across the services.
+- **Service Communication**: Microservices interact with each other for shared business logic (e.g., sales triggers inventory update, payment processes an order).
+
+This architecture is designed to be modular, fault-tolerant, and flexible, where services are decoupled but still able to coordinate through a **Saga Orchestration Pattern**.
