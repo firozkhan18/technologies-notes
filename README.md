@@ -5148,3 +5148,118 @@ graph TD
 - **CI/CD Pipeline**: GitLab and Jenkins for continuous integration and deployment, with Docker and Kubernetes for containerization and orchestration.
 
 This architecture supports scalability, fault tolerance, and resilience through decoupled services, asynchronous communication, and robust monitoring and observability tools.
+
+It looks like you're asking for a **Saga Orchestration** flow in a **Mermaid** diagram. Here’s how you can represent the entire flow, including **Saga Orchestration**, using a **graph TD** in Mermaid:
+
+```mermaid
+graph TD
+    A[Client - Mobile/Desktop/Browser] --> B[API Gateway]
+    B --> C[Inventory Service]
+    B --> D[Sales Service]
+    B --> E[Payment Service]
+    B --> F[Loan & Financing Service]
+    B --> G[Shipping Service]
+    B --> H[Notification Service]
+    B --> I[Customer Service]
+
+    C --> J[PostgreSQL]
+    C --> K[MongoDB]
+    D --> J[PostgreSQL]
+    E --> L[Payment Gateway]
+    F --> M[Loan Provider API]
+    G --> N[Shipping API]
+    
+    subgraph "Service Discovery"
+        P[Eureka Service Discovery]
+        Q[Spring Cloud Config Server]
+    end
+
+    subgraph "Event-Driven Architecture"
+        R[Apache Kafka]
+    end
+
+    P --> C
+    P --> D
+    P --> E
+    P --> F
+    P --> G
+    P --> H
+    P --> I
+    
+    R --> C
+    R --> D
+    R --> E
+    R --> F
+    R --> G
+    R --> H
+
+    subgraph "Saga Orchestration Flow"
+        S[Start Order]
+        T[Reserve Vehicle in Inventory]
+        U[Verify Loan Eligibility]
+        V[Process Payment]
+        W[Initiate Shipping]
+        X[Notify Customer]
+        Y[Compensating Transaction]
+    end
+
+    S --> T
+    T --> U
+    U --> V
+    V --> W
+    W --> X
+    Y --> T
+    Y --> U
+    Y --> V
+    Y --> W
+    Y --> X
+    
+    subgraph "Monitoring & Observability"
+        Z[Zipkin]
+        AA[Prometheus]
+        AB[Grafana]
+        AC[ELK Stack]
+    end
+
+    B --> Z
+    B --> AA
+    B --> AB
+    B --> AC
+
+    B --> AD[Redis Cache]
+    AD --> C
+    AD --> D
+    AD --> E
+    AD --> F
+    AD --> G
+    AD --> H
+
+    subgraph "CI/CD"
+        AE[GitLab]
+        AF[Jenkins]
+        AG[Docker & Kubernetes]
+    end
+
+    AE --> AF
+    AF --> AG
+```
+
+### **Explanation of Saga Orchestration Flow**:
+- **Saga Orchestration** is a pattern used to manage long-running transactions and distributed data consistency.
+- In the diagram:
+  - The **Client** interacts with the system via the **API Gateway**, which routes requests to different services like Inventory, Sales, Payment, etc.
+  - The **Saga Orchestrator** (handled by the Sales Service) starts the order processing and triggers a series of operations in different services:
+    - **Reserve Vehicle in Inventory**: Ensures the vehicle is available.
+    - **Verify Loan Eligibility**: Confirms whether the customer qualifies for financing.
+    - **Process Payment**: Handles the payment processing.
+    - **Initiate Shipping**: Arranges vehicle delivery.
+    - **Notify Customer**: Sends order status notifications to the customer.
+  - If any step fails, **Compensating Transactions** are triggered to revert previous actions and maintain data consistency.
+  
+### **Other Components**:
+- **Kafka** handles asynchronous communication between the services in the Saga flow, ensuring they are decoupled and scalable.
+- **Redis Cache** stores frequently accessed data to speed up responses.
+- **Eureka Service Discovery** and **Spring Cloud Config Server** manage service registration and configuration.
+- **Monitoring** tools like **Zipkin**, **Prometheus**, **Grafana**, and **ELK Stack** provide distributed tracing, metrics collection, and log aggregation.
+
+This diagram offers a detailed overview of the entire system architecture and Saga Orchestration process for managing transactions across microservices.
