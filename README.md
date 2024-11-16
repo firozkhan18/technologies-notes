@@ -5244,6 +5244,8 @@ graph TD
     AF --> AG
 ```
 
+![Desktop Screenshot](images/architecture.svg)
+
 ### **Explanation of Saga Orchestration Flow**:
 - **Saga Orchestration** is a pattern used to manage long-running transactions and distributed data consistency.
 - In the diagram:
