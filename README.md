@@ -4387,3 +4387,5 @@ In the annotation you provided:
 By using the `name` attribute effectively, you can create a robust and flexible architecture that adapts well to changes in your microservice environment.
 
 ![Desktop Screenshot](images/Dealership-Diagram.drawio.svg)
+
+![Desktop Screenshot](images/microservice.svg)
