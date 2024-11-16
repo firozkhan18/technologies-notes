@@ -4385,3 +4385,5 @@ In the annotation you provided:
 - **Easier Management**: When you refer to services by name, it simplifies your codebase and makes it easier to manage different microservices within a larger system.
 
 By using the `name` attribute effectively, you can create a robust and flexible architecture that adapts well to changes in your microservice environment.
+
+![Desktop Screenshot](images/Dealership-Diagram.drawio.svg)
