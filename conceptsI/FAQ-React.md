@@ -26319,3 +26319,116 @@ var bar = function() {
 ```
 
 Understanding hoisting helps you avoid pitfalls and write more predictable, cleaner code in JavaScript and React.
+
+### What is **Render Hijacking** in React?
+
+**Render hijacking** refers to a situation where an external component, function, or external library modifies or overrides the rendering behavior of a React component without explicit intention from the component itself. It can happen when an external piece of code interferes with React's internal rendering cycle or logic, which may lead to unintended side effects, performance issues, or incorrect rendering behavior.
+
+Render hijacking is not a common term you’ll hear frequently in React documentation, but it could refer to a couple of key concepts related to interfering with how React handles rendering, especially in more advanced or non-standard scenarios.
+
+### Possible Causes and Examples of Render Hijacking:
+
+1. **Manipulating the Component Tree via React Context or Higher-Order Components (HOCs):**
+   - **React Context API** or **HOCs** can be used to pass down state or logic to components in a way that changes their behavior. If a context or HOC is improperly used, it might unintentionally alter a component's rendering or its data.
+
+   - For example, a `useEffect` hook or a HOC could override or mutate state or props, resulting in an unexpected render cycle or layout change.
+
+   **Example:**
+   ```javascript
+   const withHijackedRender = (Component) => {
+     return (props) => {
+       // Hijacking the component's render logic
+       if (props.shouldRenderHijacked) {
+         return <div>Hijacked Render</div>;
+       }
+       return <Component {...props} />;
+     };
+   };
+
+   const MyComponent = ({ name }) => {
+     return <div>Hello, {name}!</div>;
+   };
+
+   const EnhancedComponent = withHijackedRender(MyComponent);
+   ```
+
+   - In this example, `withHijackedRender` is modifying the rendering behavior of `MyComponent` by checking the `shouldRenderHijacked` prop. If this condition is true, the original render is bypassed, and a new render is triggered with the "Hijacked Render" content.
+
+2. **Manipulating Component's Internal State or Props (Unintended Re-renders):**
+   - Hijacking could also mean indirectly causing unnecessary re-renders or changes to a component’s internal state/props from an external source, causing the component to render in unexpected ways.
+
+   **Example:**
+   ```javascript
+   let hijackedState = false;
+
+   const MyComponent = () => {
+     const [count, setCount] = useState(0);
+
+     // Hijacking state externally
+     if (hijackedState) {
+       setCount(100); // Unintended hijacking of state
+     }
+
+     return (
+       <div>
+         <button onClick={() => setCount(count + 1)}>Increment</button>
+         <p>Count: {count}</p>
+       </div>
+     );
+   };
+
+   // Externally hijacking the state from outside the component
+   hijackedState = true;
+   ```
+
+   - In the above example, `hijackedState` is a global variable that can unexpectedly alter the component's internal state, potentially causing side effects or unwanted renders.
+
+3. **Third-Party Libraries Hijacking Render Flow:**
+   - Some libraries may manipulate React’s rendering process to achieve a specific behavior, such as animations or DOM manipulation. This can lead to render hijacking if those libraries interact with React in unexpected ways.
+
+   **Example:**
+   - **React-Redux** or state management tools often inject and modify state values, potentially affecting how components render if not properly managed.
+   - Some **performance optimization libraries** may change the way React updates the DOM or may introduce conditional rendering outside of React’s standard lifecycle.
+
+4. **Manipulating JSX or the Virtual DOM:**
+   - If a developer modifies React’s Virtual DOM or JSX output in an unexpected or unsafe way (e.g., using direct DOM manipulation or overriding React's rendering mechanism), they may "hijack" the render process.
+
+   **Example:**
+   ```javascript
+   const HijackRender = () => {
+     // Manipulating the DOM directly (avoiding React's virtual DOM)
+     document.body.innerHTML = "<h1>Hijacked!</h1>";
+     return <div>This is a React Component</div>;
+   };
+   ```
+
+   - In this example, the `document.body.innerHTML` is manipulated directly, bypassing React’s virtual DOM. This is generally not recommended as it breaks the React component lifecycle and can cause inconsistencies.
+
+### Why Is Render Hijacking a Problem?
+
+- **Unpredictability**: Hijacking can lead to unpredictable rendering behavior, causing bugs or side effects that are hard to trace.
+- **Performance Issues**: Uncontrolled re-renders or unnecessary updates due to hijacking can cause performance issues, especially if the render logic is being altered frequently or inappropriately.
+- **Maintainability**: Code that hijacks renders can become difficult to maintain. Other developers might not expect such side effects and could struggle with debugging or extending the code.
+
+### Avoiding Render Hijacking
+
+To avoid render hijacking and unintended render behavior, consider the following best practices:
+
+1. **Follow React’s Lifecycle Properly**:
+   - Use React’s built-in mechanisms like **state**, **props**, and **context** to control the flow of data and re-renders.
+   - Avoid manipulating the DOM directly, and let React manage updates to the virtual DOM.
+
+2. **Use Controlled Components**:
+   - Always use **controlled components** (where state is managed in React and not manipulated directly by the DOM) to prevent external interference with rendering logic.
+
+3. **Minimize Side Effects**:
+   - Use **`useEffect`** (for functional components) or **`componentDidMount`**/**`componentDidUpdate`** (for class components) to manage side effects in a predictable manner.
+   - Be cautious when external libraries or context values trigger state changes.
+
+4. **Performance Optimization**:
+   - Use **React.memo**, **PureComponent**, and **shouldComponentUpdate** to optimize rendering and ensure that unnecessary re-renders do not occur.
+   - Avoid introducing unnecessary complexity in the render cycle that could lead to hijacking.
+
+### Conclusion
+
+**Render hijacking** refers to situations where rendering behavior is influenced or overridden by external forces (e.g., third-party libraries, manually manipulating state, or using HOCs improperly). While React's declarative model typically avoids such issues, hijacking can occur when developers inadvertently modify the state or props in unexpected ways. To maintain predictable rendering behavior, it’s essential to follow React’s patterns and best practices.
