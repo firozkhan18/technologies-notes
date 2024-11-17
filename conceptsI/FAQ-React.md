@@ -26740,9 +26740,7 @@ networks:
     driver: bridge
 ```
 
-In this setup, **Docker Compose** ensures that the React front-end (`frontend`) and the Spring Boot back-end (`backend`) run in their respective containers. The React app can communicate with the backend API at `http://backend:808
-
-0`.
+In this setup, **Docker Compose** ensures that the React front-end (`frontend`) and the Spring Boot back-end (`backend`) run in their respective containers. The React app can communicate with the backend API at `http://backend:8080`.
 
 ---
 
