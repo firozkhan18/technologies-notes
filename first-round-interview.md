@@ -1,13 +1,13 @@
 
- - [OOP features]
-  - [What is Polymorphism?](#what-is-polymorphism)
- - [Java 8 features]
-  - [Lambda Expressions](#lambda-expression)
-  - [Streams](#streams)
-  - [Default Methods in Interfaces](#default-methods-in-interfaces)
-  - [Optional](#optional)
-  - [Functional Interfaces](#functional-interface)
-  - [Method References](#method-reference)
+ - [1. OOP features]
+  - [1.1 What is Polymorphism?](#11-what-is-polymorphism)
+ - [2. Java 8 features]
+  - [2.1 Lambda Expressions](#21-lambda-expressions)
+  - [2.2 Streams](#22-streams)
+  - [2.3 Default Methods in Interfaces](#23-default-methods-in-interfaces)
+  - [2.4 Optional](#24-optional)
+  - [2.5 Functional Interfaces](#25-functional-interfaces)
+  - [2.6 Method References](#26-method-references)
  
 ### What is Polymorphism?
 
