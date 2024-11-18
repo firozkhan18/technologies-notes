@@ -98,17 +98,17 @@ This will help you prepare questions and themes for the **Managerial Round Inter
 ## 15. **Work Culture and Team Building**
    - [15.1 What do you believe is the key to building a strong team culture?](#151-what-do-you-believe-is-the-key-to-building-a-strong-team-culture)
    - [15.2 How do you prioritize your tasks when you have multiple deadlines to meet?](#152-how-do-you-prioritize-your-tasks-when-you-have-multiple-deadlines-to-meet)
-
-## 16. **[Leadership and Soft Skills](#16-leadership-and-soft-skills)**
-    - [16.1 Managing Development Teams](#161-managing-development-teams)
-    - [16.2 Handling Conflicts](#162-handling-conflicts)
-    - [16.3 Mentoring Junior Developers](#163-mentoring-junior-developers)
-    - [16.4 Task Prioritization and Deadlines](#164-task-prioritization-and-deadlines)
-    - [16.5 Ensuring Code Quality](#165-ensuring-code-quality)
-    - [16.6 Handling Feedback](#166-handling-feedback)
-    - [16.7 Agile and Scrum Practices](#167-agile-and-scrum-practices)
-    - [16.8 Team Motivation](#168-team-motivation)
-    - [16.9 Designing Software Architecture](#169-designing-software-architecture)
+     
+## 16. **Leadership and Soft Skills**
+   - [16.1 Managing Development Teams](#161-managing-development-teams)
+   - [16.2 Handling Conflicts](#162-handling-conflicts)
+   - [16.3 Mentoring Junior Developers](#163-mentoring-junior-developers)
+   - [16.4 Task Prioritization and Deadlines](#164-task-prioritization-and-deadlines)
+   - [16.5 Ensuring Code Quality](#165-ensuring-code-quality)
+   - [16.6 Handling Feedback](#166-handling-feedback)
+   - [16.7 Agile and Scrum Practices](#167-agile-and-scrum-practices)
+   - [16.8 Team Motivation](#168-team-motivation)
+   - [16.9 Designing Software Architecture](#169-designing-software-architecture)
 
 ---
 
@@ -907,3 +907,52 @@ As a team lead, my role and responsibilities encompass several key areas, includ
 ### Conclusion
 Being a team lead involves a blend of technical expertise, management skills, and emotional intelligence. By focusing on effective communication, fostering a supportive environment, and addressing challenges proactively, I strive to lead my team to success while promoting individual growth.
 
+## 16. **Leadership and Soft Skills**
+
+### 16.1 Managing a Team of Developers
+
+- **Leadership styles**: Autocratic, Democratic, Laissez-Faire, Transformational.
+- Ensuring that the team works efficiently and collaborates effectively is essential.
+
+---
+
+### 16.2 Conflict Management within Development Teams
+
+- Address conflicts by fostering an open and collaborative environment.
+- Use **active listening**, **negotiation**, and **mediator roles** to resolve conflicts.
+
+---
+
+### 16.3 Mentoring Junior Developers
+
+- Provide regular feedback, share knowledge, and encourage learning through code reviews and pair programming.
+- Help junior developers grow by providing opportunities to work on different parts of the project.
+
+---
+
+### 16.4 Task Prioritization and Deadline Management
+
+- Use methodologies like **Agile**, **Scrum**, or **Kanban** to prioritize tasks.
+- Track progress using **task boards** and ensure that everyone is aligned to meet deadlines.
+
+---
+
+### 16.5 Code Quality and Best Practices
+
+- Encourage practices like **code reviews**, **unit testing**, **refactoring**, and maintaining good **test coverage**.
+- Use static analysis tools like **SonarQube** to enforce coding standards.
+
+---
+
+### 16.6 Agile and Scrum Practices
+
+- **Agile** focuses on iterative development and collaboration.
+- **Scrum** is a framework that organizes work into time-boxed sprints with regular reviews and retrospectives.
+
+---
+
+### 16.7 Motivating Your Team
+
+- Recognize achievements, provide career growth opportunities, and ensure the work is meaningful and challenging.
+
+---
