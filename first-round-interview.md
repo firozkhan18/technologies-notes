@@ -32,13 +32,15 @@
 
 4. [**Comparison of Process-Oriented, OOP, and FP in Java**](#comparison-of-process-oriented-oop-and-fp-in-java)
    - [Why Do We Need Functional Programming (FP)?](#why-do-we-need-functional-programming-fp)
-   - [4.1 Immutability](#41-immutability)
-   - [4.2 Declarative Style](#declarative-style)
-   - [First-Class Functions](#first-class-functions)
-   - [Higher-Order Functions](#higher-order-functions)
-   - [Concurrency and Parallelism](#concurrency-and-parallelism)
-   - [Purity and Referential Transparency](#purity-and-referential-transparency)
-   - [Better Testability and Debugging](#better-testability-and-debugging)
+   - [6.5 Diamond Problem in Java (Multiple Inheritance)](#65-diamond-problem-in-java-multiple-inheritance)
+   - [7 Immutability](#7-immutability)
+   - [7.1 Declarative Style](#71-declarative-style)
+   - [7.2 First-Class Functions (Functions as First-Class Citizens)](#72-first-class-functions-functions-as-first-class-citizens)
+   - [7.3 Higher-Order Functions](#73-higher-order-functions)
+   - [7.4 Concurrency and Parallelism](#74-concurrency-and-parallelism)
+   - [7.5 Purity and Referential Transparency](#75-purity-and-referential-transparency)
+   - [7.6 Better Testability and Debugging](#76-better-testability-and-debugging)
+
 
 7. [**Conclusion: Why Do We Need Functional Programming?**](#conclusion-why-do-we-need-functional-programming)
 
@@ -2445,7 +2447,7 @@ In the above example, `ReentrantLock(true)` ensures that the lock is fair, meani
 
 ---
 
-## **Diamond Problem in Java (Multiple Inheritance)**
+## 6.5 Diamond Problem in Java (Multiple Inheritance)
 
 ### **Definition:**
 The **diamond problem** occurs when a class inherits from two classes that both inherit from a common base class. This leads to ambiguity about which superclass method to use. Java avoids this issue by not allowing multiple inheritance of classes but allows multiple inheritance through interfaces.
@@ -2511,13 +2513,7 @@ By understanding these concurrency concepts, you can create more robust, thread-
 
 ---
 
-## **Table of Contents**
-
-
-
-
-
-### 1. **Immutability**
+### 7 Immutability
    - **What is Immutability?** In FP, data is **immutable**, meaning once data is created, it cannot be changed. Instead, new data is created by applying transformations.
    - **Why is it important?**
      - **Reduces side effects**: Immutable data reduces unintentional changes that might occur elsewhere in your program. This makes the program more predictable.
@@ -2547,7 +2543,7 @@ By understanding these concurrency concepts, you can create more robust, thread-
 
 ---
 
-### 2. **Declarative Style**
+### 7.1 Declarative Style
    - **What is Declarative Programming?** In FP, you **declare what you want to do** with data (e.g., map, filter, reduce) rather than focusing on how to do it (imperative programming).
    - **Why is it important?**
      - **Cleaner code**: Declarative code tends to be more concise and easier to understand, as you specify the logic in terms of operations on data rather than control flow.
@@ -2576,7 +2572,7 @@ By understanding these concurrency concepts, you can create more robust, thread-
 
 ---
 
-### 3. **First-Class Functions (Functions as First-Class Citizens)**
+### 7.2 First-Class Functions (Functions as First-Class Citizens)
    - **What does First-Class Mean?** In FP, functions are treated as **first-class citizens**, meaning they can be assigned to variables, passed as arguments to other functions, and returned as values from functions.
    - **Why is it important?**
      - **Flexibility**: Functions can be passed around and combined in creative ways. For example, you can pass functions as arguments to higher-order functions (functions that take other functions as parameters).
@@ -2605,7 +2601,7 @@ By understanding these concurrency concepts, you can create more robust, thread-
 
 ---
 
-### 4. **Higher-Order Functions**
+### 7.3 Higher-Order Functions
    - **What are Higher-Order Functions?** These are functions that either:
      - Take one or more **functions** as arguments, or
      - **Return** a function as a result.
@@ -2632,7 +2628,7 @@ By understanding these concurrency concepts, you can create more robust, thread-
 
 ---
 
-### 5. **Concurrency and Parallelism**
+### 7.4 Concurrency and Parallelism
    - **Why is FP better for concurrency?**
      - **No shared mutable state**: Since data in FP is immutable, you don’t have to worry about race conditions or managing locks when multiple threads are accessing the same data.
      - **Simpler parallel processing**: Functions like `map()`, `reduce()`, and `filter()` can be parallelized easily because they operate on immutable data and have no side effects.
@@ -2660,7 +2656,7 @@ By understanding these concurrency concepts, you can create more robust, thread-
 
 ---
 
-### 6. **Purity and Referential Transparency**
+### 7.5 Purity and Referential Transparency
    - **What is Purity?** In FP, functions are expected to be **pure**, meaning they don’t cause side effects (like changing global variables or modifying shared state) and always produce the same output for the same input.
    - **Why is it important?**
      - **Predictability**: Pure functions are predictable and easy to reason about.
@@ -2680,7 +2676,7 @@ By understanding these concurrency concepts, you can create more robust, thread-
 
 ---
 
-### 7. **Better Testability and Debugging**
+### 7.6 Better Testability and Debugging
    - **Why is FP good for testing?**
      - **No state**: Functions don’t rely on mutable state or external systems, so they are easier to test in isolation.
      - **Smaller, simpler units**: FP encourages smaller, more focused functions that can be tested individually.
