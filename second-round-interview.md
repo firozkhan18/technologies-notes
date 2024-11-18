@@ -101,13 +101,13 @@ This will help you prepare questions and themes for the **Managerial Round Inter
      
 ## 16. **Leadership and Soft Skills**
    - [16.1 Managing Development Teams](#161-managing-development-teams)
-   - [16.2 Handling Conflicts](#162-handling-conflicts)
+   - [16.2 Conflict Management within Development Teams](#162-conflict-management-within-development-teams)
    - [16.3 Mentoring Junior Developers](#163-mentoring-junior-developers)
-   - [16.4 Task Prioritization and Deadlines](#164-task-prioritization-and-deadlines)
-   - [16.5 Ensuring Code Quality](#165-ensuring-code-quality)
+   - [16.4 Task Prioritization and Deadlines Management](#164-task-prioritization-and-deadlines-management)
+   - [16.5 Ensuring Code Quality and Best Practices](#165-ensuring-code-quality-and-best-practices)
    - [16.6 Handling Feedback](#166-handling-feedback)
    - [16.7 Agile and Scrum Practices](#167-agile-and-scrum-practices)
-   - [16.8 Team Motivation](#168-team-motivation)
+   - [16.8 Motivating Your Team](#168-motivating-your-team)
    - [16.9 Designing Software Architecture](#169-designing-software-architecture)
 
 ---
@@ -909,7 +909,7 @@ Being a team lead involves a blend of technical expertise, management skills, an
 
 ## 16. **Leadership and Soft Skills**
 
-### 16.1 Managing a Team of Developers
+### 16.1 Managing Development Teams
 
 - **Leadership styles**: Autocratic, Democratic, Laissez-Faire, Transformational.
 - Ensuring that the team works efficiently and collaborates effectively is essential.
@@ -930,34 +930,38 @@ Being a team lead involves a blend of technical expertise, management skills, an
 
 ---
 
-### 16.4 Task Prioritization and Deadline Management
+### 16.4 Task Prioritization and Deadlines Management
 
 - Use methodologies like **Agile**, **Scrum**, or **Kanban** to prioritize tasks.
 - Track progress using **task boards** and ensure that everyone is aligned to meet deadlines.
 
 ---
 
-### 16.5 Code Quality and Best Practices
+### 16.5 Ensuring Code Quality and Best Practices
 
 - Encourage practices like **code reviews**, **unit testing**, **refactoring**, and maintaining good **test coverage**.
 - Use static analysis tools like **SonarQube** to enforce coding standards.
 
 ---
 
-### 16.6 Agile and Scrum Practices
+### 16.6 Handling Feedback
+
+---
+
+### 16.7 Agile and Scrum Practices
 
 - **Agile** focuses on iterative development and collaboration.
 - **Scrum** is a framework that organizes work into time-boxed sprints with regular reviews and retrospectives.
 
 ---
-
-### 16.7 Motivating Your Team
+ 
+### 16.8 Motivating Your Team
 
 - Recognize achievements, provide career growth opportunities, and ensure the work is meaningful and challenging.
 
 ---
 
-### 16.8 Designing Software Architecture
+### 16.9 Designing Software Architecture
 
 - Consider **performance**, **scalability**, **maintainability**, and **security** while designing a robust software architecture.
 - Use **modular design**, **microservices**, and **cloud-native** approaches.
