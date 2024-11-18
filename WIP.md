@@ -726,13 +726,6 @@ Apologies for the incomplete response earlier. Let's continue and complete the *
 
 ---
 
-### Designing Software Architecture
-
-- Consider **performance**, **scalability**, **maintainability**, and **security** while designing a robust software architecture.
-- Use **modular design**, **microservices**, and **cloud-native** approaches.
-
----
-
 ## 8. **Problem-Solving / Algorithmic Questions**
 
 ### Fibonacci Function (Without Recursion)
