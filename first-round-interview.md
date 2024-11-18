@@ -9,7 +9,7 @@
   - [2.5 Method References](#25-method-references)
   - [2.6 Optional](#26-optional)
   - [2.7 Collector API](#27-collectors-api)
-  - [2.8 New Date and Time API (java.time)](#28-new-date-and-time-api-java-time)
+  - [2.8 New Date and Time API (java.time)](#28-new-date-and-time-api)
 
  
 ### 1.1 What is Polymorphism?
