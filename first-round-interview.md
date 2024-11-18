@@ -291,6 +291,8 @@ Polymorphism enhances code maintainability and flexibility in several ways:
 
 By leveraging polymorphism, developers can create more robust and flexible applications that are easier to understand, extend, and maintain.
 
+[Back to Top](#table-of-contents)
+
 ---
 
 ## **Java 8 Features**
@@ -328,6 +330,8 @@ public class LambdaExample {
 **Explanation**:  
 Lambda expressions replace anonymous classes with a more concise syntax, making code more readable and expressive. In the above example, we use a lambda expression to pass behavior to the `Thread` constructor.
 
+[Back to Top](#table-of-contents)
+
 ---
 
 ### 2.2 Functional Interfaces
@@ -352,6 +356,8 @@ public class FunctionalInterfaceExample {
 
 **Explanation**:  
 `MyFunctionalInterface` is a functional interface with one abstract method `myMethod()`. We can implement it with a lambda expression.
+
+[Back to Top](#table-of-contents)
 
 ---
 
@@ -388,6 +394,8 @@ public class DefaultMethodExample {
 **Explanation**:  
 In the example, `MyInterface` defines a default method `defaultMethod()`. The class `MyClass` implements the interface and provides an implementation for the abstract method `abstractMethod()`, but it doesn't need to override the default method.
 
+[Back to Top](#table-of-contents)
+
 ---
 
 ### 2.4 Streams API
@@ -419,6 +427,8 @@ public class StreamsExample {
 **Explanation**:  
 In the above example, we use `stream()` to convert the list into a stream. Then we filter the names starting with "A" using the `filter()` method, followed by the terminal operation `forEach()` to print the result.
 
+[Back to Top](#table-of-contents)
+
 ---
 
 ### 2.5 Method References
@@ -449,6 +459,8 @@ public class MethodReferenceExample {
 **Explanation**:  
 In this example, `System.out::println` is a method reference that is used to print each element of the list. It's equivalent to using a lambda expression like `name -> System.out.println(name)`.
 
+[Back to Top](#table-of-contents)
+
 ---
 
 ### 2.6 Optional
@@ -477,6 +489,8 @@ public class OptionalExample {
 
 **Explanation**:  
 In this example, `Optional.ofNullable(value)` creates an `Optional` that may or may not contain a value. We use `ifPresent()` to check if the value is present and print it. `orElse()` provides a default value if the value is absent.
+
+[Back to Top](#table-of-contents)
 
 ---
 
@@ -508,6 +522,8 @@ public class CollectorsExample {
 **Explanation**:  
 Here, we use `collect()` with `Collectors.toList()` to collect the filtered stream results into a list.
 
+[Back to Top](#table-of-contents)
+
 ---
 
 ### 2.8 New Date and Time API (java.time)
@@ -535,6 +551,8 @@ public class DateTimeExample {
 
 **Explanation**:  
 We use `LocalDate.now()` to get the current date, and `DateTimeFormatter.ofPattern()` to format the date in a custom format.
+
+[Back to Top](#table-of-contents)
 
 ---
 
@@ -586,6 +604,9 @@ public class StreamExample {
 }
 ```
 
+[Back to Top](#table-of-contents)
+
+---
 #### 3.2 Default Methods in Collection Interfaces
 
 Java 8 introduced **default methods** in interfaces, which allow you to add new methods to interfaces without breaking existing implementations.
@@ -614,6 +635,9 @@ public class CollectionDefaultMethods {
     }
 }
 ```
+[Back to Top](#table-of-contents)
+
+---
 
 #### 3.3 New Utility Methods in Collections
 
@@ -639,6 +663,9 @@ public class MapExample {
     }
 }
 ```
+[Back to Top](#table-of-contents)
+
+---
 
 #### 3.4 Parallel Streams
 
@@ -660,6 +687,9 @@ public class ParallelStreamExample {
     }
 }
 ```
+[Back to Top](#table-of-contents)
+
+---
 
 #### 3.5 `Optional` Class
 
@@ -681,6 +711,8 @@ public class OptionalExample {
     }
 }
 ```
+
+[Back to Top](#table-of-contents)
 
 ---
 
@@ -711,6 +743,10 @@ public class CompletableFutureExample {
 }
 ```
 
+[Back to Top](#table-of-contents)
+
+---
+
 #### 4.2 `Stream.parallel()` for Parallel Processing
 
 Java 8 introduced a more convenient way to process collections in parallel using the `parallel()` method available in the `Stream` API. It simplifies the task of parallelizing data processing without the need to manage threads explicitly.
@@ -731,6 +767,10 @@ public class ParallelStreamConcurrency {
     }
 }
 ```
+
+[Back to Top](#table-of-contents)
+
+---
 
 #### **2.3. The `ForkJoinPool` Framework**
 
@@ -753,9 +793,17 @@ public class ForkJoinPoolExample {
 }
 ```
 
+[Back to Top](#table-of-contents)
+
+---
+
 #### 4.4 `Collectors` for Concurrent Collections
 
 Java 8 enhanced the `Collectors` utility class to support concurrency better. For example, you can now collect results of parallel streams into **thread-safe collections** using `Collector.toMap()` or `Collector.toList()`.
+
+[Back to Top](#table-of-contents)
+
+---
 
 #### 4.5 `java.util.concurrent` Enhancements
 
@@ -763,6 +811,8 @@ Java 8 introduced several new methods to improve concurrency, such as:
 
 - **`ConcurrentMap`**: Added methods like `compute()`, `computeIfAbsent()`, and `merge()`.
 - **`ExecutorService`**: Supports new ways of submitting and managing tasks.
+
+[Back to Top](#table-of-contents)
 
 ---
 
@@ -946,6 +996,8 @@ By employing these strategies, you can prevent race conditions and ensure that y
 
 Here’s a consolidated version for **Deadlock**, **Starvation**, **Fairness Policies**, and the **Diamond Problem** in the context of multi-threading and concurrency in Java:
 
+[Back to Top](#table-of-contents)
+
 ---
 
 ## 5.2 Deadlock
@@ -1013,6 +1065,8 @@ In the above example, `Thread 1` holds the lock on `ResourceA` and tries to acqu
 4. **Use `ReentrantLock` with Timeout**:  
    `ReentrantLock` allows specifying a timeout when attempting to acquire a lock, which prevents indefinite blocking.
 
+[Back to Top](#table-of-contents)
+
 ---
 
 ## 5.3 Starvation
@@ -1062,6 +1116,8 @@ In the above example, the high-priority thread runs more frequently, and the low
 
 4. **Round-robin Scheduling**:  
    This approach ensures that each thread receives a fair amount of time for execution by using time slices.
+
+[Back to Top](#table-of-contents)
 
 ---
 
@@ -1115,6 +1171,8 @@ public class FairnessPolicyExample {
 **Explanation**:  
 In the above example, `ReentrantLock(true)` ensures that the lock is fair, meaning threads will acquire the lock in the order they requested it, preventing starvation.
 
+[Back to Top](#table-of-contents)
+
 ---
 
 ## **Diamond Problem in Java (Multiple Inheritance)**
@@ -1164,6 +1222,8 @@ The above code demonstrates the diamond problem where class `D` implements inter
 
 - **Interfaces**: Java allows multiple inheritance only through interfaces, and if there are conflicting default methods, the class implementing them must override the method to resolve ambiguity.
 - **No Multiple Inheritance of Classes**: Java doesn't allow multiple inheritance of classes, which would lead to the diamond problem.
+
+[Back to Top](#table-of-contents)
 
 ---
 
