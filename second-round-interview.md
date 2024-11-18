@@ -894,3 +894,166 @@ As a team lead, my role and responsibilities encompass several key areas, includ
    - **Solution:** Encourage a healthy work-life balance, provide flexibility, and regularly check in on team morale.
 ### Conclusion
 Being a team lead involves a blend of technical expertise, management skills, and emotional intelligence. By focusing on effective communication, fostering a supportive environment, and addressing challenges proactively, I strive to lead my team to success while promoting individual growth.
+
+## Concurrency Issues in Java
+
+### **Race Conditions in Java**
+
+#### **Definition**:
+A **race condition** occurs in a multi-threaded environment when two or more threads access and modify shared data simultaneously without proper synchronization, leading to unpredictable or inconsistent results. The outcome of such situations depends on the timing of thread execution, making the results unreliable.
+
+---
+
+### **Example of a Race Condition**:
+
+```java
+public class Counter {
+    private int count = 0;
+
+    public void increment() {
+        count++; // Not thread-safe
+    }
+
+    public int getCount() {
+        return count;
+    }
+
+    public static void main(String[] args) throws InterruptedException {
+        Counter counter = new Counter();
+
+        // Creating multiple threads
+        Thread thread1 = new Thread(() -> {
+            for (int i = 0; i < 1000; i++) {
+                counter.increment();
+            }
+        });
+        Thread thread2 = new Thread(() -> {
+            for (int i = 0; i < 1000; i++) {
+                counter.increment();
+            }
+        });
+
+        // Start both threads
+        thread1.start();
+        thread2.start();
+
+        // Wait for both threads to finish
+        thread1.join();
+        thread2.join();
+
+        // Expected output: 2000, but might be less due to race condition
+        System.out.println("Count: " + counter.getCount());
+    }
+}
+```
+
+**Explanation**:  
+In the above example, two threads try to increment the `count` variable 1000 times each. Since the `increment()` method is not thread-safe, both threads might simultaneously access and modify the `count` variable, causing an inconsistent result. The final count is likely to be less than the expected 2000 due to the race condition.
+
+---
+
+### **How to Prevent Race Conditions:**
+
+To prevent race conditions and ensure thread safety, you can use the following techniques:
+
+1. **Synchronization**:  
+   Using the `synchronized` keyword ensures that only one thread can access a critical section (method or block of code) at a time, preventing concurrent modification of shared data.
+
+   **Example**:
+   ```java
+   public synchronized void increment() {
+       count++;  // Only one thread can access this at a time
+   }
+   ```
+
+   In this example, synchronization ensures that the `increment()` method is thread-safe, and only one thread can modify the `count` variable at a time.
+
+2. **Atomic Variables**:  
+   Classes from the `java.util.concurrent.atomic` package (e.g., `AtomicInteger`, `AtomicLong`) provide atomic operations that ensure thread-safe updates without explicit synchronization.
+
+   **Example**:
+   ```java
+   import java.util.concurrent.atomic.AtomicInteger;
+
+   public class Counter {
+       private AtomicInteger count = new AtomicInteger(0);
+
+       public void increment() {
+           count.incrementAndGet(); // Thread-safe increment
+       }
+
+       public int getCount() {
+           return count.get();
+       }
+
+       public static void main(String[] args) throws InterruptedException {
+           Counter counter = new Counter();
+           Thread thread1 = new Thread(() -> {
+               for (int i = 0; i < 1000; i++) counter.increment();
+           });
+           Thread thread2 = new Thread(() -> {
+               for (int i = 0; i < 1000; i++) counter.increment();
+           });
+
+           thread1.start();
+           thread2.start();
+           thread1.join();
+           thread2.join();
+
+           System.out.println("Count: " + counter.getCount()); // Output: 2000
+       }
+   }
+   ```
+
+   Here, `AtomicInteger` guarantees that the `increment()` operation is atomic, meaning it handles the synchronization internally, preventing race conditions.
+
+3. **Using Locks**:  
+   For more complex scenarios, you can use `ReentrantLock` from the `java.util.concurrent.locks` package to control access to shared resources more explicitly. This allows finer-grained control over lock acquisition and release.
+
+   **Example**:
+   ```java
+   import java.util.concurrent.locks.ReentrantLock;
+
+   public class Counter {
+       private int count = 0;
+       private final ReentrantLock lock = new ReentrantLock();
+
+       public void increment() {
+           lock.lock();  // Acquire the lock
+           try {
+               count++;  // Critical section
+           } finally {
+               lock.unlock();  // Always release the lock
+           }
+       }
+
+       public int getCount() {
+           return count;
+       }
+   }
+   ```
+
+   The `ReentrantLock` provides a way to lock the critical section manually and release the lock once the operation is complete, preventing other threads from entering the critical section.
+
+---
+
+### **Summary of Prevention Strategies**:
+
+1. **Synchronization**:  
+   Use the `synchronized` keyword to ensure that only one thread can access shared resources or methods at a time.
+
+2. **Atomic Variables**:  
+   Use classes from the `java.util.concurrent.atomic` package, such as `AtomicInteger`, to perform thread-safe operations without the need for explicit synchronization.
+
+3. **Locks**:  
+   Use `ReentrantLock` for more complex scenarios where you need more control over thread synchronization. This allows manual acquisition and release of locks.
+
+---
+
+### **Key Points**:
+
+- **Race Conditions**: Occur when multiple threads modify shared data simultaneously without proper synchronization, leading to inconsistent or unpredictable results.
+- **Prevention**: Race conditions can be avoided by using synchronization (e.g., `synchronized` keyword), atomic variables, or locks to manage thread access to shared resources.
+- **Atomic Operations**: Using atomic classes like `AtomicInteger` can simplify thread-safe operations and avoid explicit synchronization.
+
+By employing these strategies, you can prevent race conditions and ensure that your multi-threaded Java applications operate predictably and reliably.
