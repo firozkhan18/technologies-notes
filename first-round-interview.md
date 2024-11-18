@@ -1080,7 +1080,7 @@ Polymorphism enhances code maintainability and flexibility in several ways:
 
 By leveraging polymorphism, developers can create more robust and flexible applications that are easier to understand, extend, and maintain.
 
-[Back to Top](#table-of-contents)
+**[⬆ Back to Top](#table-of-contents)**
 
 ---
 ---
@@ -1093,7 +1093,7 @@ In addition to the main four pillars (Encapsulation, Abstraction, Inheritance, P
 
 In object-oriented programming, relationships between objects are an important concept. Three fundamental types of relationships in OOP are **Composition**, **Aggregation**, and **Association**. These relationships represent how objects interact or are related to one another in a system. Below, I’ll explain each of these relationships in depth, with examples and when to use them.
 
-### **6. Composition (Has-A Relationship)**
+### 1.6 Composition (Has-A Relationship)
 
 Composition is a design principle that allows for building complex objects by combining simpler ones. It is a **has-a** relationship where one object is a part of another.
 
@@ -1173,7 +1173,11 @@ public class Main {
 - The `Car` class contains an `Engine` object, meaning that an engine cannot exist independently without a car.
 - The engine is created when the car object is created, and the engine is destroyed when the car is destroyed (i.e., the engine's lifecycle is tied to the car).
 
-### **7. Association**
+**[⬆ Back to Top](#table-of-contents)**
+
+---
+
+### 1.7 Association
 
 Association represents the relationship between two or more objects. There are different types of associations:
 - **One-to-One**: One object is associated with exactly one object.
@@ -1236,9 +1240,11 @@ public class Main {
 - The `Teacher` and `Student` objects are **associated** because they interact with each other (the teacher teaches the student), but neither object **owns** the other.
 - Both objects can exist independently, and the teacher could teach multiple students, or the student could study with other teachers.
 
+**[⬆ Back to Top](#table-of-contents)**
+
 ---
 
-### **8. Aggregation**
+### 1.8 Aggregation
 
 Aggregation is a special form of association that represents a "whole-part" relationship, where the "part" can exist independently of the "whole." It's a **Has-A** relationship with a more loosely-coupled structure than composition.
 
@@ -1304,6 +1310,9 @@ public class Main {
 **Explanation**:
 - In the `University` class, the professors can exist independently and can be added to multiple universities.
 - If a university is destroyed, the professors are not destroyed — they can still exist independently of any university.
+
+**[⬆ Back to Top](#table-of-contents)**
+
 ---
 
 ### Summary of OOP Concepts
@@ -1385,6 +1394,8 @@ public class ProcessOrientedExample {
 - Difficult to manage large codebases because of scattered data and procedures.
 - Lacks abstraction and reuse features compared to OOP or functional paradigms.
 
+**[⬆ Back to Top](#table-of-contents)**
+
 ---
 
 ### **2. Object-Oriented Programming (OOP)**
@@ -1450,6 +1461,8 @@ In the example:
 - **Maintainability**: Objects encapsulate related data and behavior, making code easier to manage.
 - **Scalability**: OOP enables modeling of complex real-world entities, making it more suitable for large applications.
 
+**[⬆ Back to Top](#table-of-contents)**
+
 ---
 
 ### **3. Functional Programming (FP)**
@@ -1502,6 +1515,8 @@ In this example:
 - **Concurrency**: Because of immutability and lack of shared mutable state, functional programs are naturally easier to parallelize.
 - **Modularity**: Higher-order functions and function composition make it easier to build and combine small reusable functions.
 
+**[⬆ Back to Top](#table-of-contents)**
+
 ---
 
 ### **Comparison of Process-Oriented, OOP, and FP in Java**
@@ -1524,7 +1539,10 @@ In this example:
 - **Functional Programming (FP)** in Java (introduced in Java 8) emphasizes immutability, stateless functions, and declarative code, offering benefits for writing clean, concise, and concurrent code.
 
 By understanding these paradigms, Java developers can choose the appropriate approach depending on the problem at hand and mix them as necessary for building scalable and maintainable applications.
- 
+
+**[⬆ Back to Top](#table-of-contents)**
+
+---
 In Java, **access specifiers** and **non-access modifiers** are keywords used to define the visibility, accessibility, and behavior of classes, methods, variables, and constructors. Understanding how these work is essential for designing robust and maintainable applications. Below, I’ll provide a detailed overview of both access specifiers and non-access modifiers, along with examples.
 
 ### **Why Do We Need Functional Programming (FP)?**
@@ -1584,7 +1602,7 @@ public class LambdaExample {
 **Explanation**:  
 Lambda expressions replace anonymous classes with a more concise syntax, making code more readable and expressive. In the above example, we use a lambda expression to pass behavior to the `Thread` constructor.
 
-[Back to Top](#table-of-contents)
+**[⬆ Back to Top](#table-of-contents)**
 
 ---
 
@@ -1611,7 +1629,7 @@ public class FunctionalInterfaceExample {
 **Explanation**:  
 `MyFunctionalInterface` is a functional interface with one abstract method `myMethod()`. We can implement it with a lambda expression.
 
-[Back to Top](#table-of-contents)
+**[⬆ Back to Top](#table-of-contents)**
 
 ---
 
@@ -1648,7 +1666,7 @@ public class DefaultMethodExample {
 **Explanation**:  
 In the example, `MyInterface` defines a default method `defaultMethod()`. The class `MyClass` implements the interface and provides an implementation for the abstract method `abstractMethod()`, but it doesn't need to override the default method.
 
-[Back to Top](#table-of-contents)
+**[⬆ Back to Top](#table-of-contents)**
 
 ---
 
@@ -1681,7 +1699,7 @@ public class StreamsExample {
 **Explanation**:  
 In the above example, we use `stream()` to convert the list into a stream. Then we filter the names starting with "A" using the `filter()` method, followed by the terminal operation `forEach()` to print the result.
 
-[Back to Top](#table-of-contents)
+**[⬆ Back to Top](#table-of-contents)**
 
 ---
 
@@ -1713,7 +1731,7 @@ public class MethodReferenceExample {
 **Explanation**:  
 In this example, `System.out::println` is a method reference that is used to print each element of the list. It's equivalent to using a lambda expression like `name -> System.out.println(name)`.
 
-[Back to Top](#table-of-contents)
+**[⬆ Back to Top](#table-of-contents)**
 
 ---
 
@@ -1744,7 +1762,7 @@ public class OptionalExample {
 **Explanation**:  
 In this example, `Optional.ofNullable(value)` creates an `Optional` that may or may not contain a value. We use `ifPresent()` to check if the value is present and print it. `orElse()` provides a default value if the value is absent.
 
-[Back to Top](#table-of-contents)
+**[⬆ Back to Top](#table-of-contents)**
 
 ---
 
@@ -1776,7 +1794,7 @@ public class CollectorsExample {
 **Explanation**:  
 Here, we use `collect()` with `Collectors.toList()` to collect the filtered stream results into a list.
 
-[Back to Top](#table-of-contents)
+**[⬆ Back to Top](#table-of-contents)**
 
 ---
 
@@ -1806,7 +1824,7 @@ public class DateTimeExample {
 **Explanation**:  
 We use `LocalDate.now()` to get the current date, and `DateTimeFormatter.ofPattern()` to format the date in a custom format.
 
-[Back to Top](#table-of-contents)
+**[⬆ Back to Top](#table-of-contents)**
 
 ---
 
@@ -1858,7 +1876,7 @@ public class StreamExample {
 }
 ```
 
-[Back to Top](#table-of-contents)
+**[⬆ Back to Top](#table-of-contents)**
 
 ---
 #### 3.2 Default Methods in Collection Interfaces
@@ -1889,7 +1907,7 @@ public class CollectionDefaultMethods {
     }
 }
 ```
-[Back to Top](#table-of-contents)
+**[⬆ Back to Top](#table-of-contents)**
 
 ---
 
@@ -1917,7 +1935,7 @@ public class MapExample {
     }
 }
 ```
-[Back to Top](#table-of-contents)
+**[⬆ Back to Top](#table-of-contents)**
 
 ---
 
@@ -1941,7 +1959,7 @@ public class ParallelStreamExample {
     }
 }
 ```
-[Back to Top](#table-of-contents)
+**[⬆ Back to Top](#table-of-contents)**
 
 ---
 
@@ -1966,7 +1984,7 @@ public class OptionalExample {
 }
 ```
 
-[Back to Top](#table-of-contents)
+**[⬆ Back to Top](#table-of-contents)**
 
 ---
 
@@ -1997,7 +2015,7 @@ public class CompletableFutureExample {
 }
 ```
 
-[Back to Top](#table-of-contents)
+**[⬆ Back to Top](#table-of-contents)**
 
 ---
 
@@ -2022,7 +2040,7 @@ public class ParallelStreamConcurrency {
 }
 ```
 
-[Back to Top](#table-of-contents)
+**[⬆ Back to Top](#table-of-contents)**
 
 ---
 
@@ -2047,7 +2065,7 @@ public class ForkJoinPoolExample {
 }
 ```
 
-[Back to Top](#table-of-contents)
+**[⬆ Back to Top](#table-of-contents)**
 
 ---
 
@@ -2055,7 +2073,7 @@ public class ForkJoinPoolExample {
 
 Java 8 enhanced the `Collectors` utility class to support concurrency better. For example, you can now collect results of parallel streams into **thread-safe collections** using `Collector.toMap()` or `Collector.toList()`.
 
-[Back to Top](#table-of-contents)
+**[⬆ Back to Top](#table-of-contents)**
 
 ---
 
@@ -2066,7 +2084,7 @@ Java 8 introduced several new methods to improve concurrency, such as:
 - **`ConcurrentMap`**: Added methods like `compute()`, `computeIfAbsent()`, and `merge()`.
 - **`ExecutorService`**: Supports new ways of submitting and managing tasks.
 
-[Back to Top](#table-of-contents)
+**[⬆ Back to Top](#table-of-contents)**
 
 ---
 
@@ -2250,7 +2268,7 @@ By employing these strategies, you can prevent race conditions and ensure that y
 
 Here’s a consolidated version for **Deadlock**, **Starvation**, **Fairness Policies**, and the **Diamond Problem** in the context of multi-threading and concurrency in Java:
 
-[Back to Top](#table-of-contents)
+**[⬆ Back to Top](#table-of-contents)**
 
 ---
 
@@ -2319,7 +2337,7 @@ In the above example, `Thread 1` holds the lock on `ResourceA` and tries to acqu
 4. **Use `ReentrantLock` with Timeout**:  
    `ReentrantLock` allows specifying a timeout when attempting to acquire a lock, which prevents indefinite blocking.
 
-[Back to Top](#table-of-contents)
+**[⬆ Back to Top](#table-of-contents)**
 
 ---
 
@@ -2371,7 +2389,7 @@ In the above example, the high-priority thread runs more frequently, and the low
 4. **Round-robin Scheduling**:  
    This approach ensures that each thread receives a fair amount of time for execution by using time slices.
 
-[Back to Top](#table-of-contents)
+**[⬆ Back to Top](#table-of-contents)**
 
 ---
 
@@ -2425,7 +2443,7 @@ public class FairnessPolicyExample {
 **Explanation**:  
 In the above example, `ReentrantLock(true)` ensures that the lock is fair, meaning threads will acquire the lock in the order they requested it, preventing starvation.
 
-[Back to Top](#table-of-contents)
+**[⬆ Back to Top](#table-of-contents)**
 
 ---
 
@@ -2477,7 +2495,7 @@ The above code demonstrates the diamond problem where class `D` implements inter
 - **Interfaces**: Java allows multiple inheritance only through interfaces, and if there are conflicting default methods, the class implementing them must override the method to resolve ambiguity.
 - **No Multiple Inheritance of Classes**: Java doesn't allow multiple inheritance of classes, which would lead to the diamond problem.
 
-[Back to Top](#table-of-contents)
+**[⬆ Back to Top](#table-of-contents)**
 
 ---
 
