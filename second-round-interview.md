@@ -1,8 +1,6 @@
+This will help you prepare questions and themes for the **Managerial Round Interview** of a **Java Full Stack Team Lead**.
+
 ## **Table of Contents**
-
-Below is the detailed breakdown of each section based on the **navigation structure** provided earlier. This will help you prepare questions and themes for the **Managerial Round Interview** of a **Java Full Stack Team Lead**.
-
-# Interview Navigation Structure
 
 ## 1. **Team Leadership and Management**
    - [1.1 Prioritization and Task Management](#1.1-prioritization-and-task-management)
