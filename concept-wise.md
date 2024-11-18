@@ -1,5 +1,6 @@
 
 [void and Void are used in different](#differences-between-void-and-void-in-java)
+[Functional Interface](#functional-interface)
 
 ## Differences between void and Void in java
 
@@ -44,6 +45,8 @@ public Callable<Void> createTask() {
 - **`Void`**: Reference type; used in generics or when a method needs to comply with an API that requires a return type but does not return a value.
 
 In essence, use `void` when defining methods that don’t return a value, and use `Void` when you need to work with generics or APIs that require a return type in a context where there is no actual return value.
+
+## Functional Interface
 
 In Java, prior to Java 8, interfaces could only declare abstract methods. However, with the introduction of Java 8, two significant features were added to interfaces: default methods and static methods. Here’s why they were introduced and their importance:
 
