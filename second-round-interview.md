@@ -271,9 +271,7 @@ This will help you prepare questions and themes for the **Managerial Round Inter
 - **Key Areas:** Sprint planning, retrospectives, daily stand-ups, backlog grooming.
 
 ### 8.2 Managing Scope Creep in Agile Projects
-- **Question Focus
-
-:** How do you manage scope creep during an Agile project?
+- **Question Focus:** How do you manage scope creep during an Agile project?
 - **Key Areas:** Managing stakeholder expectations, clear project requirements, continuous prioritization.
 
 ### 8.3 Managing Challenging Sprints or Releases
