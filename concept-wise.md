@@ -483,6 +483,241 @@ public class RaceConditionExample {
 
 **Explanation**: The method `count++` is not thread-safe. If both threads increment `count` simultaneously, they might read the same value of `count` and write it back, resulting in incorrect results. 
 
+#### Example:
+
+```java
+class Counter {
+    private int count = 0;
+
+    public void increment() {
+        count++;
+    }
+
+    public int getCount() {
+        return count;
+    }
+}
+
+class IncrementThread extends Thread {
+    private Counter counter;
+
+    public IncrementThread(Counter counter) {
+        this.counter = counter;
+    }
+
+    @Override
+    public void run() {
+        for (int i = 0; i < 1000; i++) {
+            counter.increment();
+        }
+    }
+}
+
+// Usage
+public class Main {
+    public static void main(String[] args) throws InterruptedException {
+        Counter counter = new Counter();
+        Thread t1 = new IncrementThread(counter);
+        Thread t2 = new IncrementThread(counter);
+
+        t1.start();
+        t2.start();
+        t1.join();
+        t2.join();
+
+        System.out.println("Final count: " + counter.getCount());
+    }
+}
+```
+
+#### Possible Output:
+```
+Final count: 1500  // Unpredictable; could be less due to race conditions
+```
+
+
+#### Example:
+
+```java
+class Counter {
+    private int count = 0;
+
+    public void increment() {
+        count++;
+    }
+
+    public int getCount() {
+        return count;
+    }
+}
+
+class IncrementThread extends Thread {
+    private Counter counter;
+
+    public IncrementThread(Counter counter) {
+        this.counter = counter;
+    }
+
+    @Override
+    public void run() {
+        for (int i = 0; i < 1000; i++) {
+            counter.increment();
+        }
+    }
+}
+
+// Usage
+public class Main {
+    public static void main(String[] args) throws InterruptedException {
+        Counter counter = new Counter();
+        Thread t1 = new IncrementThread(counter);
+        Thread t2 = new IncrementThread(counter);
+
+        t1.start();
+        t2.start();
+        t1.join();
+        t2.join();
+
+        System.out.println("Final count: " + counter.getCount());
+    }
+}
+```
+
+#### Possible Output:
+```
+Final count: 1500  // Unpredictable; could be less due to race conditions
+```
+
+**Example:**
+
+```java
+class Counter {
+    private int count = 0;
+
+    public void increment() {
+        count++; // Not thread-safe
+    }
+
+    public int getCount() {
+        return count;
+    }
+}
+
+public class RaceConditionExample {
+    public static void main(String[] args) throws InterruptedException {
+        Counter counter = new Counter();
+        
+        Thread t1 = new Thread(() -> {
+            for (int i = 0; i < 1000; i++) {
+                counter.increment();
+            }
+        });
+        
+        Thread t2 = new Thread(() -> {
+            for (int i = 0; i < 1000; i++) {
+                counter.increment();
+            }
+        });
+        
+        t1.start();
+        t2.start();
+        t1.join();
+        t2.join();
+        
+        System.out.println("Final count: " + counter.getCount());
+    }
+}
+```
+
+**Output:** (Unpredictable, often not 2000)
+
+#### Example of Race Condition
+
+```java
+class Counter {
+    private int count = 0;
+
+    public void increment() {
+        count++; // Not thread-safe
+    }
+
+    public int getCount() {
+        return count;
+    }
+}
+
+public class RaceConditionExample {
+    public static void main(String[] args) throws InterruptedException {
+        Counter counter = new Counter();
+        
+        Thread t1 = new Thread(() -> {
+            for (int i = 0; i < 1000; i++) {
+                counter.increment();
+            }
+        });
+        
+        Thread t2 = new Thread(() -> {
+            for (int i = 0; i < 1000; i++) {
+                counter.increment();
+            }
+        });
+        
+        t1.start();
+        t2.start();
+        t1.join();
+        t2.join();
+        
+        System.out.println("Final count: " + counter.getCount());
+    }
+}
+```
+
+**Output**: The final count is often less than 2000 due to the race condition.
+
+
+#### Example of Race Condition
+
+```java
+class Counter {
+    private int count = 0;
+
+    public void increment() {
+        count++; // Not thread-safe
+    }
+
+    public int getCount() {
+        return count;
+    }
+}
+
+public class RaceConditionExample {
+    public static void main(String[] args) throws InterruptedException {
+        Counter counter = new Counter();
+        
+        Thread t1 = new Thread(() -> {
+            for (int i = 0; i < 1000; i++) {
+                counter.increment();
+            }
+        });
+        
+        Thread t2 = new Thread(() -> {
+            for (int i = 0; i < 1000; i++) {
+                counter.increment();
+            }
+        });
+        
+        t1.start();
+        t2.start();
+        t1.join();
+        t2.join();
+        
+        System.out.println("Final count: " + counter.getCount());
+    }
+}
+```
+
+**Output**: The final count is often less than 2000 due to the race condition.
+
 ---
 
 ### **Solutions**:
@@ -521,7 +756,7 @@ public class RaceConditionExample {
   - Use **synchronization** (e.g., `synchronized` keyword) to ensure only one thread can access the resource at a time.
   - Use **atomic variables** (`AtomicInteger`, `AtomicLong`, etc.) for thread-safe operations on primitive types.
   - Use **concurrent collections** (`ConcurrentHashMap`, `CopyOnWriteArrayList`, etc.) to safely modify data in multi-threaded environments.
-  - 
+  
 #### 2. Deadlock
 
 A deadlock occurs when two or more threads are blocked forever, each waiting for the other to release locks.
