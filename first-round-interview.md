@@ -2,14 +2,14 @@
 ### Table of Contents
 
 1. [**Object-Oriented Programming (OOP) Concepts in Depth**](#object-oriented-programming-oop-concepts-in-depth)
-   - [1.1 Encapsulation](#11-encapsulation)
-   - [1.2 Abstraction](#12-abstraction)
-   - [1.3 Inheritance](#13-inheritance)
-   - [1.4 Polymorphism](#14-polymorphism)
-     - [1.4.1 What is Polymorphism?](#1-4-1-what-is-polymorphism)
-     - [1.4.1 What is Polymorphism?](#141-what-is-polymorphism)
+   - [1.1 Classes and Objects](#11-classes-and-objects)
+   - [1.2 Encapsulation](#12-encapsulation)
+   - [1.3 Abstraction](#13-abstraction)
+   - [1.4 Inheritance](#14-inheritance)
+   - [1.5 Polymorphism](#15-polymorphism)
+     - [1.5.1 What is Polymorphism?](#151-what-is-polymorphism)
 
-2. [**Other OOP Concepts in Java**](#other-oop-concepts-in-java)
+3. [**Other OOP Concepts in Java**](#other-oop-concepts-in-java)
    - [Composition (Has-A Relationship)](#composition-has-a-relationship-1)
    - [Aggregation](#aggregation-1)
    - [Association](#association-1)
@@ -446,13 +446,13 @@
     - [Common Interview Questions on Method Overloading and Overriding](#common-interview-questions-on-method-overloading-and-overriding)
 ---
 
-## **Object-Oriented Programming (OOP) Concepts in Depth**
+## 1 **Object-Oriented Programming (OOP) Concepts in Depth**
 
 Object-Oriented Programming (OOP) is a programming paradigm that is based on the concept of **objects**, which are instances of **classes** which can contain data and methods. Java is a fully object-oriented language, and its OOP principles facilitate modular and reusable code.  The four main pillars of OOP — **Encapsulation**, **Abstraction**, **Inheritance**, and **Polymorphism** — are foundational principles that guide the design and development of object-oriented software systems. Below is a deep dive into each of these principles:
 
 ---
 
-### **1. Classes and Objects**
+### 1.1 Classes and Objects
 
 - **Class**: A blueprint for creating objects. It defines properties (attributes) and behaviors (methods). For example:
 
@@ -483,7 +483,7 @@ Object-Oriented Programming (OOP) is a programming paradigm that is based on the
     ```
 ---
 
-### **2. Encapsulation**
+### 1.2 Encapsulation
 
 **Encapsulation** is the concept of **bundling the data (attributes)** and **methods (functions)** that operate on the data into a single unit, called a **class**. It also refers to restricting access to some of the object's components to protect the integrity of the object.
 
@@ -557,7 +557,7 @@ public class BankAccount {
 
 ---
 
-### **3. Abstraction**
+### 1.3 Abstraction
 
 **Abstraction** is the concept of **hiding the complexity** of the system and exposing only the necessary parts. It allows a programmer to focus on high-level functionality while hiding the implementation details.
 
@@ -642,7 +642,7 @@ Abstraction is the concept of hiding complex implementation details and showing 
     ```
 ---
 
-### **4. Inheritance**
+### 1.4 Inheritance
 
 **Inheritance** is the mechanism by which one class can **inherit properties and methods** from another class. This promotes **code reusability** and allows for hierarchical class relationships. A subclass (or child class) inherits from a superclass (or parent class), and can:
 - Reuse code from the superclass.
@@ -717,7 +717,7 @@ public class Main {
 ```
 ---
 
-### **5. Polymorphism**
+### 1.5 Polymorphism
 
 **Polymorphism** means **many forms**, and it allows objects of different classes to be treated as objects of a common superclass. It is the ability for a method to perform different operations based on the object it is acting upon. Polymorphism is typically achieved via:
 - **Method Overloading**: Same method name but different parameter types (compile-time polymorphism).
@@ -806,7 +806,7 @@ Polymorphism allows methods to do different things based on the object that it i
     ```
 
      
-### 1.1 What is Polymorphism?
+### 1.5.1 What is Polymorphism?
 
 **Polymorphism** is a fundamental concept in object-oriented programming (OOP) that allows methods to do different things based on the object it is acting upon, even if they share the same name. It enables one interface to be used for a general class of actions. The specific action is determined by the exact nature of the situation, allowing for flexibility and the ability to extend functionality.
 
