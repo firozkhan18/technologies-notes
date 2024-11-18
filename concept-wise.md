@@ -403,18 +403,51 @@ To prevent ambiguities:
 - Use `InterfaceName.super.methodName()` to explicitly call the default method of a specific interface.
 
 ---
+### **Race Condition** in Java
 
-### 2. **Race Conditions**
+A **race condition** occurs when multiple threads access and modify shared data simultaneously without proper synchronization. This leads to unpredictable results because the execution order of threads is not controlled.
 
-A **race condition** occurs in a multi-threaded environment when two or more threads attempt to modify shared data at the same time, leading to unpredictable results. Race conditions often happen when proper synchronization is not used to manage access to shared resources.
+#### **Preventing Race Conditions**
+To ensure thread safety and avoid race conditions, you can use several methods:
 
-#### Example:
+1. **Synchronization**:
+   - Use the `synchronized` keyword to restrict access to a block of code or a method, ensuring that only one thread can execute it at a time.
+   - **Example**:
+     ```java
+     public synchronized void increment() {
+         count++;
+     }
+     ```
+
+2. **Atomic Variables**:
+   - Java provides atomic classes like `AtomicInteger`, `AtomicLong`, etc., in the `java.util.concurrent.atomic` package. These classes ensure thread-safe operations on variables without needing explicit synchronization.
+   - **Example**:
+     ```java
+     AtomicInteger count = new AtomicInteger(0);
+     count.incrementAndGet();  // Thread-safe increment
+     ```
+
+3. **Concurrent Collections**:
+   - Java's `java.util.concurrent` package includes thread-safe collections like `ConcurrentHashMap` and `CopyOnWriteArrayList` that help prevent race conditions in multi-threaded scenarios.
+   - **Example**:
+     ```java
+     ConcurrentMap<String, Integer> map = new ConcurrentHashMap<>();
+     map.put("key", 1);  // Thread-safe put operation
+     ```
+
+---
+
+### **Understanding Race Conditions**
+
+Race conditions are dangerous because they cause **unpredictable results**. For example, if two threads attempt to modify a shared variable at the same time, the final result might not reflect both operations correctly.
+
+#### Example of a Race Condition:
 ```java
-public class Counter {
+public class RaceConditionExample {
     private int count = 0;
 
     public void increment() {
-        count++; // This is not thread-safe
+        count++;  // Not thread-safe
     }
 
     public int getCount() {
@@ -422,49 +455,102 @@ public class Counter {
     }
 
     public static void main(String[] args) throws InterruptedException {
-        Counter counter = new Counter();
+        RaceConditionExample example = new RaceConditionExample();
 
-        // Creating multiple threads
+        // Thread 1
         Thread thread1 = new Thread(() -> {
             for (int i = 0; i < 1000; i++) {
-                counter.increment();
+                example.increment();
             }
         });
+
+        // Thread 2
         Thread thread2 = new Thread(() -> {
             for (int i = 0; i < 1000; i++) {
-                counter.increment();
+                example.increment();
             }
         });
 
-        // Start both threads
         thread1.start();
         thread2.start();
-
-        // Wait for both threads to finish
         thread1.join();
         thread2.join();
 
-        // Expected output: 2000, but might be less due to race condition
-        System.out.println("Count: " + counter.getCount());
+        System.out.println("Count: " + example.getCount());  // May not be 2000
     }
 }
 ```
 
-#### **Explanation**:
-In this example, two threads increment the same counter 1000 times each. Without synchronization, both threads may access and modify the `count` variable at the same time, resulting in inconsistent or incorrect results.
+**Explanation**: The method `count++` is not thread-safe. If both threads increment `count` simultaneously, they might read the same value of `count` and write it back, resulting in incorrect results. 
 
-#### **Solution**:
-To fix this, you should **synchronize** access to shared resources:
+---
 
+### **Solutions**:
+
+1. **Using Synchronization**:
+   Synchronizing access to the method ensures that only one thread can modify the value at a time.
+
+   ```java
+   public synchronized void increment() {
+       count++;
+   }
+   ```
+
+2. **Using Atomic Variables**:
+   Atomic variables ensure that the increment operation is thread-safe without needing explicit synchronization.
+
+   ```java
+   AtomicInteger count = new AtomicInteger(0);
+   count.incrementAndGet();  // Thread-safe increment
+   ```
+
+3. **Using Concurrent Collections**:
+   If you're working with collections and need to ensure thread safety, you can use Java's concurrent collections that handle synchronization internally.
+
+   ```java
+   ConcurrentHashMap<String, Integer> map = new ConcurrentHashMap<>();
+   map.put("key", 1);  // Thread-safe operation
+   ```
+
+---
+
+### **Summary**
+
+- **Race Condition**: Occurs when multiple threads access shared data concurrently and attempt to modify it at the same time.
+- **Prevention**: To prevent race conditions:
+  - Use **synchronization** (e.g., `synchronized` keyword) to ensure only one thread can access the resource at a time.
+  - Use **atomic variables** (`AtomicInteger`, `AtomicLong`, etc.) for thread-safe operations on primitive types.
+  - Use **concurrent collections** (`ConcurrentHashMap`, `CopyOnWriteArrayList`, etc.) to safely modify data in multi-threaded environments.
+  - 
+#### 2. Deadlock
+
+A deadlock occurs when two or more threads are blocked forever, each waiting for the other to release locks.
+
+**Example:**
 ```java
-public synchronized void increment() {
-    count++;
+class Resource {
+    public synchronized void methodA(Resource other) {
+        other.methodB();
+    }
+    public synchronized void methodB() {}
+}
+
+public class DeadlockExample {
+    public static void main(String[] args) {
+        Resource resource1 = new Resource();
+        Resource resource2 = new Resource();
+        
+        new Thread(() -> resource1.methodA(resource2)).start();
+        new Thread(() -> resource2.methodA(resource1)).start();
+    }
 }
 ```
 
-Alternatively, you can use higher-level concurrency utilities like `AtomicInteger` to handle atomic operations on shared variables.
+**Prevention:**
+- **Avoid Nested Locks**
+- **Lock Ordering:** Always acquire locks in a consistent order.
+- **Use Timeout:** Implement timeout mechanisms when trying to acquire locks.
 
----
 
 ### 3. **Deadlocks**
 
@@ -588,8 +674,2609 @@ List: []
 ### Summary
 
 - **Diamond Problem**: Resolved by overriding conflicting methods in the implementing class and using `InterfaceName.super.methodName()` to call specific implementations.
-- **Race Conditions**: Occur when multiple threads modify shared data concurrently. To prevent this, use synchronization (`synchronized` keyword or `Atomic` classes).
+
 - **Deadlocks**: Happens when threads are waiting on each other, creating a cycle of dependency. To avoid deadlocks, acquire locks in a consistent order and consider using `tryLock()`.
 - **Fail-Fast vs. Fail-Safe**: Fail-fast collections throw exceptions when modified during iteration, while fail-safe collections allow modifications but may not reflect changes immediately.
 
 By understanding and addressing these issues, Java developers can write more reliable and efficient code, especially in multi-threaded and complex inheritance scenarios.
+
+
+### Interfaces in Java (Post-Java 8)
+
+Java 8 introduced **default** and **static methods** in interfaces, enhancing their capabilities significantly.
+
+#### Default Methods
+
+**Definition**: Default methods are methods in interfaces that have a body, allowing for a default implementation that can be inherited by implementing classes.
+
+**Purpose**:
+1. **Backward Compatibility**: New methods can be added to interfaces without breaking existing implementations.
+2. **Shared Behavior**: Common functionality can be provided, reducing code duplication.
+
+**Example**:
+```java
+interface Animal {
+    void sound(); // Abstract method
+
+    default void sleep() {
+        System.out.println("Sleeping...");
+    }
+}
+
+class Dog implements Animal {
+    @Override
+    public void sound() {
+        System.out.println("Bark");
+    }
+}
+
+class Cat implements Animal {
+    @Override
+    public void sound() {
+        System.out.println("Meow");
+    }
+}
+
+// Usage
+Animal dog = new Dog();
+dog.sound(); // Output: Bark
+dog.sleep(); // Output: Sleeping...
+```
+
+### Static Methods
+
+**Definition**: Static methods in interfaces are methods that belong to the interface itself and can be called without creating an instance of the interface.
+
+**Purpose**:
+1. **Utility Methods**: Provide utility functions relevant to the interface.
+2. **Organizing Code**: Help in grouping related functionality within the interface.
+
+**Example**:
+```java
+interface MathOperations {
+    static int add(int a, int b) {
+        return a + b;
+    }
+
+    static int subtract(int a, int b) {
+        return a - b;
+    }
+}
+
+// Usage
+int sum = MathOperations.add(5, 3); // Output: 8
+int difference = MathOperations.subtract(5, 3); // Output: 2
+```
+
+### Achieving Multiple Inheritance with Interfaces
+
+Java does not allow multiple inheritance with classes to avoid ambiguity (the "diamond problem"). However, it permits multiple inheritance of behavior through interfaces, including default methods.
+
+1. **Default Method Overriding**: A class can implement multiple interfaces that define the same default method. The class must override the method to resolve the ambiguity.
+
+**Example**:
+```java
+interface Flyer {
+    default void fly() {
+        System.out.println("Flying...");
+    }
+}
+
+interface Swimmer {
+    default void fly() {
+        System.out.println("Swimming...");
+    }
+}
+
+class Duck implements Flyer, Swimmer {
+    @Override
+    public void fly() {
+        // Resolving ambiguity by providing a custom implementation
+        System.out.println("Duck flying!");
+    }
+}
+
+// Usage
+Duck duck = new Duck();
+duck.fly(); // Output: Duck flying!
+```
+
+### Handling Ambiguity with Inherited Default Methods
+
+When an interface extends another interface that has a default method, the implementing class must explicitly resolve which method to inherit if both interfaces define the same method.
+
+**Example**:
+```java
+interface B {
+    default void display() {
+        System.out.println("Display from interface B");
+    }
+}
+
+interface A extends B {
+    default void display() {
+        System.out.println("Display from interface A");
+    }
+}
+
+class MyClass implements A {
+    @Override
+    public void display() {
+        // You can choose to call either method
+        A.super.display(); // Calls display from A
+        // or
+        B.super.display(); // Calls display from B
+        System.out.println("Display from MyClass");
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        MyClass myClass = new MyClass();
+        myClass.display(); // Output: Display from A
+                           // Output: Display from B
+                           // Output: Display from MyClass
+    }
+}
+```
+
+### Key Points
+
+- **Backward Compatibility**: Default methods ensure that adding new methods to an interface does not break existing implementations.
+- **Code Reusability**: Default methods provide shared functionality across multiple classes.
+- **Multiple Inheritance**: Java allows multiple inheritance through interfaces, and ambiguities must be resolved by the implementing class.
+
+
+
+==========================================
+
+
+
+---
+
+
+
+### 3. Deadlock
+
+A deadlock occurs when two or more threads are blocked forever, waiting for each other to release locks.
+
+**Example:**
+
+```java
+class Resource {
+    public synchronized void methodA(Resource other) {
+        System.out.println(Thread.currentThread().getName() + " is in methodA");
+        other.methodB();
+    }
+
+    public synchronized void methodB() {
+        System.out.println(Thread.currentThread().getName() + " is in methodB");
+    }
+}
+
+public class DeadlockExample {
+    public static void main(String[] args) {
+        Resource resource1 = new Resource();
+        Resource resource2 = new Resource();
+
+        Thread t1 = new Thread(() -> resource1.methodA(resource2));
+        Thread t2 = new Thread(() -> resource2.methodA(resource1));
+
+        t1.start();
+        t2.start();
+    }
+}
+```
+
+### How to Prevent Deadlocks:
+- Avoid nested locks.
+- Use a timeout when trying to acquire locks.
+- Implement a locking hierarchy (always acquire locks in the same order).
+
+---
+
+### 4. Fail-Fast vs. Fail-Safe
+
+**Fail-Fast**:
+- Fail-fast systems immediately throw an exception when they encounter a problem. For example, iterators in Java’s `Collections` framework are fail-fast; they throw `ConcurrentModificationException` if the collection is modified while iterating.
+
+**Example:**
+
+```java
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+public class FailFastExample {
+    public static void main(String[] args) {
+        List<String> list = new ArrayList<>();
+        list.add("A");
+        list.add("B");
+
+        Iterator<String> iterator = list.iterator();
+
+        // Modify the list after obtaining the iterator
+        list.add("C"); // This will cause a ConcurrentModificationException
+        
+        while (iterator.hasNext()) {
+            System.out.println(iterator.next());
+        }
+    }
+}
+```
+
+**Output:**
+```
+Exception in thread "main" java.util.ConcurrentModificationException
+```
+
+**Fail-Safe**:
+- Fail-safe systems allow for a safe way to continue operating even in the presence of errors. In Java, the `java.util.concurrent` package provides collections like `CopyOnWriteArrayList` that are fail-safe.
+
+**Example:**
+
+```java
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
+
+public class FailSafeExample {
+    public static void main(String[] args) {
+        List<String> list = new CopyOnWriteArrayList<>();
+        list.add("A");
+        list.add("B");
+
+        for (String item : list) {
+            System.out.println(item);
+            list.add("C"); // Safe to modify
+        }
+    }
+}
+```
+
+**Output:**
+```
+A
+B
+C
+```
+
+### Summary
+
+- **Diamond Problem**: Resolve ambiguities by overriding methods in implementing classes and explicitly calling the desired implementation.
+
+- **Deadlock**: Avoid nested locks and implement a locking hierarchy to prevent circular waiting.
+- **Fail-Fast vs. Fail-Safe**: Choose fail-fast collections for immediate error detection, while fail-safe collections allow modifications during iteration without throwing exceptions.
+
+Understanding these concepts is essential for writing robust Java applications, especially in concurrent programming.
+
+Sure! Let’s explore race conditions, deadlocks, and starvation in Java, along with examples and ways to prevent them.
+
+
+
+### 2. Deadlock
+
+A deadlock occurs when two or more threads are blocked forever, waiting for each other to release locks.
+
+#### Example of Deadlock
+
+```java
+class Resource {
+    public synchronized void methodA(Resource other) {
+        System.out.println(Thread.currentThread().getName() + " is in methodA");
+        other.methodB();
+    }
+
+    public synchronized void methodB() {
+        System.out.println(Thread.currentThread().getName() + " is in methodB");
+    }
+}
+
+public class DeadlockExample {
+    public static void main(String[] args) {
+        Resource resource1 = new Resource();
+        Resource resource2 = new Resource();
+
+        Thread t1 = new Thread(() -> resource1.methodA(resource2));
+        Thread t2 = new Thread(() -> resource2.methodA(resource1));
+
+        t1.start();
+        t2.start();
+    }
+}
+```
+
+#### How to Prevent Deadlocks:
+- **Avoid Nested Locks**: Do not hold multiple locks at once.
+- **Lock Ordering**: Always acquire locks in a consistent order.
+- **Use Timeout**: Attempt to acquire locks with a timeout.
+
+```java
+public boolean tryLock(Resource other) {
+    try {
+        if (this.lock.tryLock(100, TimeUnit.MILLISECONDS)) {
+            return other.lock.tryLock(100, TimeUnit.MILLISECONDS);
+        }
+    } catch (InterruptedException e) {
+        Thread.currentThread().interrupt();
+    }
+    return false;
+}
+```
+
+---
+
+### 3. Starvation
+
+Starvation occurs when a thread is perpetually denied access to resources because other threads are continually being given priority.
+
+#### Example of Starvation
+
+```java
+class SharedResource {
+    public synchronized void access() {
+        System.out.println(Thread.currentThread().getName() + " is accessing resource.");
+        try {
+            Thread.sleep(100); // Simulating some work
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+    }
+}
+
+public class StarvationExample {
+    public static void main(String[] args) {
+        SharedResource resource = new SharedResource();
+        
+        Runnable task = () -> {
+            while (true) {
+                resource.access();
+            }
+        };
+        
+        // High-priority thread
+        Thread highPriorityThread = new Thread(task);
+        highPriorityThread.setPriority(Thread.MAX_PRIORITY);
+        
+        // Low-priority threads
+        Thread lowPriorityThread1 = new Thread(task);
+        Thread lowPriorityThread2 = new Thread(task);
+        
+        lowPriorityThread1.setPriority(Thread.MIN_PRIORITY);
+        lowPriorityThread2.setPriority(Thread.MIN_PRIORITY);
+        
+        highPriorityThread.start();
+        lowPriorityThread1.start();
+        lowPriorityThread2.start();
+    }
+}
+```
+
+#### How to Prevent Starvation:
+- **Fair Locks**: Use `ReentrantLock` with the fairness policy set to true.
+
+```java
+import java.util.concurrent.locks.ReentrantLock;
+
+class SharedResource {
+    private final ReentrantLock lock = new ReentrantLock(true); // Fair lock
+
+    public void access() {
+        lock.lock();
+        try {
+            // Access resource
+        } finally {
+            lock.unlock();
+        }
+    }
+}
+```
+
+- **Avoid Excessive Prioritization**: Ensure that no single thread is given too much priority over others.
+
+---
+
+### Summary
+
+
+- **Deadlock**: Avoid by using lock ordering, avoiding nested locks, and implementing timeouts.
+- **Starvation**: Use fair locks or avoid excessive prioritization to ensure all threads get access to resources.
+
+Understanding these concurrency issues is crucial for building robust multi-threaded applications in Java.
+
+Sure! Let’s explore race conditions, deadlocks, and starvation in Java, along with examples and ways to prevent them.
+
+
+
+### 2. Deadlock
+
+A deadlock occurs when two or more threads are blocked forever, waiting for each other to release locks.
+
+#### Example of Deadlock
+
+```java
+class Resource {
+    public synchronized void methodA(Resource other) {
+        System.out.println(Thread.currentThread().getName() + " is in methodA");
+        other.methodB();
+    }
+
+    public synchronized void methodB() {
+        System.out.println(Thread.currentThread().getName() + " is in methodB");
+    }
+}
+
+public class DeadlockExample {
+    public static void main(String[] args) {
+        Resource resource1 = new Resource();
+        Resource resource2 = new Resource();
+
+        Thread t1 = new Thread(() -> resource1.methodA(resource2));
+        Thread t2 = new Thread(() -> resource2.methodA(resource1));
+
+        t1.start();
+        t2.start();
+    }
+}
+```
+
+#### How to Prevent Deadlocks:
+- **Avoid Nested Locks**: Do not hold multiple locks at once.
+- **Lock Ordering**: Always acquire locks in a consistent order.
+- **Use Timeout**: Attempt to acquire locks with a timeout.
+
+```java
+public boolean tryLock(Resource other) {
+    try {
+        if (this.lock.tryLock(100, TimeUnit.MILLISECONDS)) {
+            return other.lock.tryLock(100, TimeUnit.MILLISECONDS);
+        }
+    } catch (InterruptedException e) {
+        Thread.currentThread().interrupt();
+    }
+    return false;
+}
+```
+
+---
+
+### 3. Starvation
+
+Starvation occurs when a thread is perpetually denied access to resources because other threads are continually being given priority.
+
+#### Example of Starvation
+
+```java
+class SharedResource {
+    public synchronized void access() {
+        System.out.println(Thread.currentThread().getName() + " is accessing resource.");
+        try {
+            Thread.sleep(100); // Simulating some work
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+    }
+}
+
+public class StarvationExample {
+    public static void main(String[] args) {
+        SharedResource resource = new SharedResource();
+        
+        Runnable task = () -> {
+            while (true) {
+                resource.access();
+            }
+        };
+        
+        // High-priority thread
+        Thread highPriorityThread = new Thread(task);
+        highPriorityThread.setPriority(Thread.MAX_PRIORITY);
+        
+        // Low-priority threads
+        Thread lowPriorityThread1 = new Thread(task);
+        Thread lowPriorityThread2 = new Thread(task);
+        
+        lowPriorityThread1.setPriority(Thread.MIN_PRIORITY);
+        lowPriorityThread2.setPriority(Thread.MIN_PRIORITY);
+        
+        highPriorityThread.start();
+        lowPriorityThread1.start();
+        lowPriorityThread2.start();
+    }
+}
+```
+
+#### How to Prevent Starvation:
+- **Fair Locks**: Use `ReentrantLock` with the fairness policy set to true.
+
+```java
+import java.util.concurrent.locks.ReentrantLock;
+
+class SharedResource {
+    private final ReentrantLock lock = new ReentrantLock(true); // Fair lock
+
+    public void access() {
+        lock.lock();
+        try {
+            // Access resource
+        } finally {
+            lock.unlock();
+        }
+    }
+}
+```
+
+- **Avoid Excessive Prioritization**: Ensure that no single thread is given too much priority over others.
+
+---
+
+### Summary
+
+
+- **Deadlock**: Avoid by using lock ordering, avoiding nested locks, and implementing timeouts.
+- **Starvation**: Use fair locks or avoid excessive prioritization to ensure all threads get access to resources.
+
+Understanding these concurrency issues is crucial for building robust multi-threaded applications in Java.
+
+
+### Fairness Policy
+
+The **fairness policy** in Java's concurrency framework determines how threads acquire locks. It ensures that threads are granted access to shared resources in a fair manner, typically using FIFO (First-In-First-Out) ordering. 
+
+1. **Fair Locks**: If a lock is fair, the longest waiting thread will acquire the lock first. This helps prevent thread starvation.
+2. **Unfair Locks**: If a lock is unfair, a thread that has been waiting may not get the lock in the order it arrived. This can lead to better performance but may result in starvation.
+
+You can set the fairness policy when creating a `ReentrantLock`:
+
+```java
+ReentrantLock fairLock = new ReentrantLock(true); // Fair
+ReentrantLock unfairLock = new ReentrantLock(false); // Unfair
+```
+
+### Concurrency
+
+**Concurrency** is the ability to run multiple threads simultaneously, enabling tasks to be executed in overlapping time periods. It’s crucial for improving the efficiency and responsiveness of applications, especially in I/O-bound and CPU-bound operations.
+
+### Thread
+
+A **thread** is the smallest unit of processing that can be scheduled by an operating system. In Java, threads are created using:
+
+1. **Extending the `Thread` class**:
+    ```java
+    class MyThread extends Thread {
+        public void run() {
+            System.out.println("Thread is running");
+        }
+    }
+    ```
+
+2. **Implementing the `Runnable` interface**:
+    ```java
+    class MyRunnable implements Runnable {
+        public void run() {
+            System.out.println("Thread is running");
+        }
+    }
+    ```
+
+### Concurrent HashMap
+
+A **ConcurrentHashMap** is a thread-safe variant of `HashMap` designed for concurrent use. It allows multiple threads to read and write simultaneously without locking the entire map, improving performance and scalability.
+
+#### Example of ConcurrentHashMap
+
+```java
+import java.util.concurrent.ConcurrentHashMap;
+
+public class ConcurrentHashMapExample {
+    public static void main(String[] args) {
+        ConcurrentHashMap<String, Integer> map = new ConcurrentHashMap<>();
+
+        // Populate the map
+        map.put("One", 1);
+        map.put("Two", 2);
+        map.put("Three", 3);
+
+        // Accessing the map concurrently
+        Runnable task = () -> {
+            String threadName = Thread.currentThread().getName();
+            for (String key : map.keySet()) {
+                System.out.println(threadName + " read: " + key + " = " + map.get(key));
+            }
+        };
+
+        Thread t1 = new Thread(task);
+        Thread t2 = new Thread(task);
+        
+        t1.start();
+        t2.start();
+    }
+}
+```
+
+### Executor Framework
+
+The **Executor framework** in Java provides a high-level API for managing and controlling threads. It decouples task submission from the details of how each task will be run, allowing better resource management and flexibility.
+
+#### Key Components
+
+1. **Executor Interface**: A simple interface for executing tasks.
+
+2. **ExecutorService**: Extends `Executor` and provides methods to manage the lifecycle of the executor (like shutdown).
+
+3. **ScheduledExecutorService**: Extends `ExecutorService` to schedule commands to run after a given delay or periodically.
+
+4. **ThreadPoolExecutor**: A versatile implementation of `ExecutorService` that allows managing a pool of threads.
+
+#### Example of Executor Framework
+
+```java
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+public class ExecutorFrameworkExample {
+    public static void main(String[] args) {
+        // Create a thread pool with 3 threads
+        ExecutorService executorService = Executors.newFixedThreadPool(3);
+
+        Runnable task = () -> {
+            String threadName = Thread.currentThread().getName();
+            System.out.println("Task executed by: " + threadName);
+        };
+
+        // Submit tasks to the executor
+        for (int i = 0; i < 5; i++) {
+            executorService.submit(task);
+        }
+
+        // Shutdown the executor
+        executorService.shutdown();
+    }
+}
+```
+
+### Summary
+
+1. **Fairness Policy**: Controls how locks are acquired by threads, preventing starvation with fair locks.
+2. **Concurrency**: Enables simultaneous execution of threads to enhance performance.
+3. **Thread**: The smallest unit of execution in Java, created using `Thread` or `Runnable`.
+4. **ConcurrentHashMap**: A thread-safe map allowing concurrent access without locking the entire structure.
+5. **Executor Framework**: A high-level API for managing threads, providing various services for task execution.
+
+This framework helps manage resources efficiently, making it easier to build scalable and responsive applications in Java.
+
+### Fairness Policy
+
+The **fairness policy** in Java's concurrency framework determines how threads acquire locks. It ensures that threads are granted access to shared resources in a fair manner, typically using FIFO (First-In-First-Out) ordering. 
+
+1. **Fair Locks**: If a lock is fair, the longest waiting thread will acquire the lock first. This helps prevent thread starvation.
+2. **Unfair Locks**: If a lock is unfair, a thread that has been waiting may not get the lock in the order it arrived. This can lead to better performance but may result in starvation.
+
+You can set the fairness policy when creating a `ReentrantLock`:
+
+```java
+ReentrantLock fairLock = new ReentrantLock(true); // Fair
+ReentrantLock unfairLock = new ReentrantLock(false); // Unfair
+```
+
+### Concurrency
+
+**Concurrency** is the ability to run multiple threads simultaneously, enabling tasks to be executed in overlapping time periods. It’s crucial for improving the efficiency and responsiveness of applications, especially in I/O-bound and CPU-bound operations.
+
+### Thread
+
+A **thread** is the smallest unit of processing that can be scheduled by an operating system. In Java, threads are created using:
+
+1. **Extending the `Thread` class**:
+    ```java
+    class MyThread extends Thread {
+        public void run() {
+            System.out.println("Thread is running");
+        }
+    }
+    ```
+
+2. **Implementing the `Runnable` interface**:
+    ```java
+    class MyRunnable implements Runnable {
+        public void run() {
+            System.out.println("Thread is running");
+        }
+    }
+    ```
+
+### Concurrent HashMap
+
+A **ConcurrentHashMap** is a thread-safe variant of `HashMap` designed for concurrent use. It allows multiple threads to read and write simultaneously without locking the entire map, improving performance and scalability.
+
+#### Example of ConcurrentHashMap
+
+```java
+import java.util.concurrent.ConcurrentHashMap;
+
+public class ConcurrentHashMapExample {
+    public static void main(String[] args) {
+        ConcurrentHashMap<String, Integer> map = new ConcurrentHashMap<>();
+
+        // Populate the map
+        map.put("One", 1);
+        map.put("Two", 2);
+        map.put("Three", 3);
+
+        // Accessing the map concurrently
+        Runnable task = () -> {
+            String threadName = Thread.currentThread().getName();
+            for (String key : map.keySet()) {
+                System.out.println(threadName + " read: " + key + " = " + map.get(key));
+            }
+        };
+
+        Thread t1 = new Thread(task);
+        Thread t2 = new Thread(task);
+        
+        t1.start();
+        t2.start();
+    }
+}
+```
+
+### Executor Framework
+
+The **Executor framework** in Java provides a high-level API for managing and controlling threads. It decouples task submission from the details of how each task will be run, allowing better resource management and flexibility.
+
+#### Key Components
+
+1. **Executor Interface**: A simple interface for executing tasks.
+
+2. **ExecutorService**: Extends `Executor` and provides methods to manage the lifecycle of the executor (like shutdown).
+
+3. **ScheduledExecutorService**: Extends `ExecutorService` to schedule commands to run after a given delay or periodically.
+
+4. **ThreadPoolExecutor**: A versatile implementation of `ExecutorService` that allows managing a pool of threads.
+
+#### Example of Executor Framework
+
+```java
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+public class ExecutorFrameworkExample {
+    public static void main(String[] args) {
+        // Create a thread pool with 3 threads
+        ExecutorService executorService = Executors.newFixedThreadPool(3);
+
+        Runnable task = () -> {
+            String threadName = Thread.currentThread().getName();
+            System.out.println("Task executed by: " + threadName);
+        };
+
+        // Submit tasks to the executor
+        for (int i = 0; i < 5; i++) {
+            executorService.submit(task);
+        }
+
+        // Shutdown the executor
+        executorService.shutdown();
+    }
+}
+```
+
+### Summary
+
+1. **Fairness Policy**: Controls how locks are acquired by threads, preventing starvation with fair locks.
+2. **Concurrency**: Enables simultaneous execution of threads to enhance performance.
+3. **Thread**: The smallest unit of execution in Java, created using `Thread` or `Runnable`.
+4. **ConcurrentHashMap**: A thread-safe map allowing concurrent access without locking the entire structure.
+5. **Executor Framework**: A high-level API for managing threads, providing various services for task execution.
+
+This framework helps manage resources efficiently, making it easier to build scalable and responsive applications in Java.
+
+To achieve synchronous and asynchronous execution using threads, concurrency, the Executor framework, and concurrent collections in Java, we can explore practical examples for each approach.
+
+### 1. Synchronous Execution
+
+**Synchronous execution** means that the caller waits for the task to complete before proceeding. You can achieve this with the basic thread model or using the Executor framework.
+
+#### Example Using Threads
+
+```java
+class SynchronousTask extends Thread {
+    @Override
+    public void run() {
+        try {
+            Thread.sleep(1000); // Simulating a long-running task
+            System.out.println("Task completed: " + Thread.currentThread().getName());
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+    }
+}
+
+public class SynchronousExecutionExample {
+    public static void main(String[] args) {
+        SynchronousTask task = new SynchronousTask();
+        task.start(); // Start the thread
+        try {
+            task.join(); // Wait for the task to complete
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        System.out.println("Main thread proceeding after task completion.");
+    }
+}
+```
+
+#### Example Using Executor Framework
+
+```java
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+
+public class SynchronousExecutorExample {
+    public static void main(String[] args) {
+        ExecutorService executorService = Executors.newSingleThreadExecutor();
+
+        Future<String> future = executorService.submit(() -> {
+            Thread.sleep(1000); // Simulating a long-running task
+            return "Task completed";
+        });
+
+        try {
+            String result = future.get(); // Blocks until the task completes
+            System.out.println(result);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            executorService.shutdown();
+        }
+
+        System.out.println("Main thread proceeding after task completion.");
+    }
+}
+```
+
+### 2. Asynchronous Execution
+
+**Asynchronous execution** allows the caller to continue processing without waiting for the task to complete. This can be achieved using threads or the Executor framework.
+
+#### Example Using Threads
+
+```java
+class AsynchronousTask extends Thread {
+    @Override
+    public void run() {
+        try {
+            Thread.sleep(1000); // Simulating a long-running task
+            System.out.println("Asynchronous task completed: " + Thread.currentThread().getName());
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+    }
+}
+
+public class AsynchronousExecutionExample {
+    public static void main(String[] args) {
+        AsynchronousTask task = new AsynchronousTask();
+        task.start(); // Start the thread
+
+        System.out.println("Main thread is not waiting for the task to complete.");
+        
+        // Continue with other processing...
+        try {
+            task.join(); // Optionally wait for task completion
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+#### Example Using Executor Framework
+
+```java
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+public class AsynchronousExecutorExample {
+    public static void main(String[] args) {
+        ExecutorService executorService = Executors.newFixedThreadPool(2);
+
+        executorService.execute(() -> {
+            try {
+                Thread.sleep(1000); // Simulating a long-running task
+                System.out.println("Asynchronous task completed by: " + Thread.currentThread().getName());
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        });
+
+        System.out.println("Main thread is not waiting for the task to complete.");
+
+        // Perform other operations while the task runs asynchronously...
+
+        executorService.shutdown(); // Shutdown the executor
+    }
+}
+```
+
+### 3. Using Concurrent Collections
+
+Concurrent collections can be used within both synchronous and asynchronous contexts. They ensure thread safety when accessing shared data.
+
+#### Example Using ConcurrentHashMap
+
+```java
+import java.util.concurrent.ConcurrentHashMap;
+
+public class ConcurrentCollectionExample {
+    public static void main(String[] args) {
+        ConcurrentHashMap<String, Integer> map = new ConcurrentHashMap<>();
+
+        // Asynchronous updates to the map
+        Runnable updateTask = () -> {
+            for (int i = 0; i < 5; i++) {
+                map.put(Thread.currentThread().getName() + "-" + i, i);
+                System.out.println(Thread.currentThread().getName() + " added: " + i);
+            }
+        };
+
+        Thread t1 = new Thread(updateTask);
+        Thread t2 = new Thread(updateTask);
+        
+        t1.start();
+        t2.start();
+        
+        try {
+            t1.join();
+            t2.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        System.out.println("Final map: " + map);
+    }
+}
+```
+
+### Summary
+
+1. **Synchronous Execution**:
+   - Achieved using `Thread.join()` to block the main thread until the task is complete.
+   - In the Executor framework, `Future.get()` blocks until the task completes.
+
+2. **Asynchronous Execution**:
+   - Started threads without waiting for them to complete.
+   - In the Executor framework, tasks can be submitted without waiting, and the main thread continues processing.
+
+3. **Concurrent Collections**:
+   - Use concurrent collections like `ConcurrentHashMap` to handle shared data safely in both synchronous and asynchronous tasks.
+
+These examples demonstrate how to manage synchronous and asynchronous execution effectively using Java's threading and concurrency features.
+
+In Java 8, the introduction of **default** and **static** methods in interfaces serves several important purposes, enhancing the flexibility and usability of interfaces in object-oriented programming. Here’s a detailed explanation of why these features were added, despite regular interfaces having methods:
+
+### 1. Default Methods
+
+**Default methods** allow interfaces to provide a default implementation of a method. This feature was introduced primarily for two reasons:
+
+- **Backward Compatibility**: With the introduction of new methods in interfaces, existing classes that implement those interfaces wouldn’t break. Without default methods, adding new methods to an interface would require all implementing classes to provide an implementation, potentially leading to a lot of changes in existing codebases.
+
+  ```java
+  interface MyInterface {
+      default void greet() {
+          System.out.println("Hello from MyInterface");
+      }
+  }
+
+  class MyClass implements MyInterface {
+      // MyClass can use the default implementation or override it
+  }
+  ```
+
+- **Enhanced Functionality**: Default methods allow interfaces to evolve with additional behavior without forcing all implementing classes to change. This is particularly useful for frameworks and libraries where interfaces might need to be extended.
+
+### 2. Static Methods
+
+**Static methods** in interfaces allow you to define utility or helper methods that can be called without needing an instance of the interface. This feature is beneficial for several reasons:
+
+- **Organized Utility Methods**: It provides a way to group related utility methods in one place (the interface), improving code organization. For example, if you have utility methods that are relevant to the interface, defining them as static methods keeps them logically associated.
+
+  ```java
+  interface MathUtils {
+      static int square(int number) {
+          return number * number;
+      }
+  }
+
+  // Usage
+  int result = MathUtils.square(5); // No instance needed
+  ```
+
+- **Namespace Management**: Static methods in interfaces help avoid naming conflicts in classes by providing a clear namespace for utility methods related to the interface.
+
+### Comparison to Regular Methods
+
+Before Java 8, interfaces could only declare abstract methods (methods without implementations). This limitation meant that any changes to an interface would have a significant impact on all implementing classes. With the introduction of default and static methods, interfaces gained the following benefits:
+
+- **Flexibility**: They can provide both contracts (abstract methods) and implementations (default methods) without breaking existing code.
+- **Encapsulation of Behavior**: Interfaces can encapsulate common behaviors, reducing code duplication across implementing classes.
+- **Utility Functions**: Static methods allow for shared utility functions that can operate on data without requiring an object instance.
+
+### Conclusion
+
+Default and static methods in interfaces introduced in Java 8 enhance the power of interfaces by:
+
+- Allowing backward-compatible evolution of interfaces.
+- Providing default implementations for new methods.
+- Offering organized utility methods related to the interface.
+
+These features help maintain cleaner code, support easier maintenance, and encourage better design practices in Java applications.
+
+### Backward Compatibility and Evolution in Java
+
+**Backward compatibility** refers to the ability of newer versions of a software system (like Java) to work with older code without requiring modification. In the context of Java interfaces, it means that existing implementations of an interface should not break when new methods are added to that interface.
+
+### The Need for Evolution
+
+As software systems evolve, there may be a need to add new functionality to interfaces. However, modifying an interface by adding new abstract methods poses a significant problem:
+
+1. **Existing Implementations**: All classes implementing the interface would be required to implement the new methods. This could lead to extensive changes across the codebase, making it cumbersome and error-prone.
+2. **Compatibility Issues**: It can introduce breaking changes, causing existing code to fail if not updated.
+
+### How Default and Static Methods Help
+
+Java 8 introduced **default** and **static** methods in interfaces specifically to address these backward compatibility concerns and facilitate the evolution of interfaces.
+
+#### 1. Default Methods
+
+- **Implementation**: Default methods allow an interface to provide a concrete implementation of a method.
+  
+- **Backward Compatibility**: When a new method is added to an interface as a default method, existing classes implementing that interface do not need to change. They can either:
+  - Use the default implementation provided by the interface.
+  - Override the default method if they need specific behavior.
+
+**Example**:
+
+```java
+interface Vehicle {
+    // Existing method
+    void start();
+
+    // New default method added in Java 8
+    default void honk() {
+        System.out.println("Honk! Honk!");
+    }
+}
+
+class Car implements Vehicle {
+    public void start() {
+        System.out.println("Car starting");
+    }
+
+    // No need to implement honk() unless custom behavior is needed
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Vehicle car = new Car();
+        car.start(); // Car starting
+        car.honk(); // Honk! Honk!
+    }
+}
+```
+
+In this example, if the `honk()` method were added without being a default method, all classes implementing `Vehicle` would need to provide an implementation for it. With the default method, they can continue functioning without any changes.
+
+#### 2. Static Methods
+
+- **Utility Functions**: Static methods in interfaces can be used to provide utility or helper functions related to the interface.
+
+- **No Impact on Implementations**: Adding a static method does not affect existing implementations, as static methods belong to the interface itself, not to instances of the classes implementing it.
+
+**Example**:
+
+```java
+interface MathUtils {
+    // Static method for utility
+    static int square(int number) {
+        return number * number;
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        int result = MathUtils.square(5); // Calls the static method
+        System.out.println("Square: " + result); // Square: 25
+    }
+}
+```
+
+In this example, the `square` method can be added to `MathUtils` without affecting any classes that implement it. Users can directly call `MathUtils.square()` without needing an instance.
+
+### Conclusion
+
+The introduction of default and static methods in Java 8 allows interfaces to evolve while maintaining backward compatibility. This means:
+
+- **Backward Compatibility**: Existing implementations remain valid without requiring changes.
+- **Ease of Evolution**: New functionalities can be added to interfaces without breaking existing code.
+- **Cleaner Code**: Static methods provide a way to encapsulate related utility functions within the interface.
+
+These features support better software design, making it easier to maintain and extend codebases over time.
+
+
+In Java, interfaces can contain default and static methods, introduced in Java 8. Here’s a breakdown of their purpose, use cases, and how they help achieve multiple inheritance.
+
+### Default Methods
+
+**Definition**: Default methods are methods in interfaces that have a body. They allow you to provide a default implementation that can be inherited by implementing classes.
+
+**Purpose**:
+1. **Backward Compatibility**: Default methods allow you to add new methods to interfaces without breaking existing implementations.
+2. **Shared Behavior**: They enable common behavior across multiple classes without requiring those classes to implement the method themselves.
+
+**Example**:
+```java
+interface Animal {
+    void sound();
+
+    default void sleep() {
+        System.out.println("Sleeping...");
+    }
+}
+
+class Dog implements Animal {
+    @Override
+    public void sound() {
+        System.out.println("Bark");
+    }
+}
+
+class Cat implements Animal {
+    @Override
+    public void sound() {
+        System.out.println("Meow");
+    }
+}
+
+// Usage
+Animal dog = new Dog();
+dog.sound(); // Output: Bark
+dog.sleep(); // Output: Sleeping...
+```
+
+### Static Methods
+
+**Definition**: Static methods in interfaces are methods that belong to the interface itself rather than any instance of a class. They can be called without creating an instance of the interface.
+
+**Purpose**:
+1. **Utility Methods**: They can be used to provide utility functions that are relevant to the interface but do not require instance-specific behavior.
+2. **Organizing Code**: Static methods can help organize related functionality within the interface.
+
+**Example**:
+```java
+interface MathOperations {
+    static int add(int a, int b) {
+        return a + b;
+    }
+
+    static int subtract(int a, int b) {
+        return a - b;
+    }
+}
+
+// Usage
+int sum = MathOperations.add(5, 3); // Output: 8
+int difference = MathOperations.subtract(5, 3); // Output: 2
+```
+
+### Achieving Multiple Inheritance
+
+Java does not support multiple inheritance with classes to avoid ambiguity. However, it allows multiple inheritance of behavior through interfaces, including default methods. Here’s how default methods enable this:
+
+1. **Default Method Overriding**: A class can implement multiple interfaces that define the same default method. The class must override the method to resolve the ambiguity.
+
+**Example**:
+```java
+interface Flyer {
+    default void fly() {
+        System.out.println("Flying...");
+    }
+}
+
+interface Swimmer {
+    default void fly() {
+        System.out.println("Swimming...");
+    }
+}
+
+class Duck implements Flyer, Swimmer {
+    @Override
+    public void fly() {
+        // Resolving ambiguity by providing a custom implementation
+        System.out.println("Duck flying!");
+    }
+}
+
+// Usage
+Duck duck = new Duck();
+duck.fly(); // Output: Duck flying!
+```
+
+### Summary
+
+- **Default Methods**: Provide default implementations in interfaces, allowing for backward compatibility and shared behavior across implementing classes.
+- **Static Methods**: Allow utility functions to be associated with the interface, enabling organized, instance-independent behavior.
+- **Multiple Inheritance**: Achieved through interfaces by implementing multiple interfaces with default methods. Ambiguities must be resolved in the implementing class.
+
+This approach allows you to combine behaviors from different interfaces while maintaining clean and organized code.
+
+When you have two interfaces, `A` and `B`, with the same method, and `A` extends `B`, you can use the method from either interface in a class that implements `A`. However, if the class does not provide its own implementation, it will inherit the method from `B`. If the method in `A` is also defined, then the implementing class must override it to provide a specific behavior.
+
+Here’s how to work with this scenario:
+
+### Example Code
+
+```java
+interface B {
+    default void display() {
+        System.out.println("Display from interface B");
+    }
+}
+
+interface A extends B {
+    default void display() {
+        System.out.println("Display from interface A");
+    }
+}
+
+class MyClass implements A {
+    @Override
+    public void display() {
+        // You can choose to call either method
+        A.super.display(); // Calls display from A
+        // or
+        B.super.display(); // Calls display from B
+        System.out.println("Display from MyClass");
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        MyClass myClass = new MyClass();
+        myClass.display();
+    }
+}
+```
+
+### Output
+```
+Display from A
+Display from MyClass
+```
+
+### Explanation
+
+1. **Interface Definitions**:
+   - Interface `B` has a default method `display()`.
+   - Interface `A` extends `B` and also has a default method `display()`. 
+
+2. **Class Implementation**:
+   - `MyClass` implements interface `A`.
+   - It overrides the `display()` method. Within this method, you can call the `display()` method from either `A` or `B` using the `super` keyword, specifying which interface's method you want to call.
+
+3. **Method Resolution**:
+   - By default, if the method is not overridden, the implementation from `A` will be used since `A` extends `B`.
+   - If you want to call the method from `B`, you explicitly call `B.super.display()`.
+
+### Key Points
+
+- If `A` has a method that overrides the one in `B`, the class must provide its own implementation of that method.
+- You can call methods from both interfaces using the syntax `InterfaceName.super.methodName()` if needed.
+- This design allows for flexibility in method implementation and resolution when dealing with multiple interfaces.
+
+Sure! Let’s delve into the **diamond problem**, **race conditions**, **starvation**, and **deadlocks**—common issues in programming, particularly in concurrent and object-oriented programming—and explore how to prevent them, along with code examples.
+
+### 1. Diamond Problem
+
+#### Definition:
+The diamond problem occurs in multiple inheritance scenarios when a class inherits from two classes that have a method with the same signature. This can create ambiguity about which method to execute.
+
+#### Example:
+
+```java
+interface A {
+    default void show() {
+        System.out.println("Show from A");
+    }
+}
+
+interface B extends A {
+    default void show() {
+        System.out.println("Show from B");
+    }
+}
+
+interface C extends A {
+    default void show() {
+        System.out.println("Show from C");
+    }
+}
+
+class D implements B, C {
+    @Override
+    public void show() {
+        // Resolve ambiguity by calling a specific interface method
+        B.super.show(); // Calls show from B
+        C.super.show(); // Calls show from C
+    }
+}
+
+// Usage
+public class Main {
+    public static void main(String[] args) {
+        D d = new D();
+        d.show();
+    }
+}
+```
+
+#### Output:
+```
+Show from B
+Show from C
+```
+
+#### Prevention:
+- **Explicitly Override**: Always override the conflicting method in the subclass to resolve ambiguity.
+- **Design Interfaces Carefully**: Avoid multiple inheritance of stateful interfaces.
+
+---
+
+### 3. Starvation
+
+#### Definition:
+Starvation occurs when a thread is perpetually denied the resources it needs for execution. This typically happens when high-priority threads consume all the CPU time, leaving low-priority threads waiting indefinitely.
+
+#### Example:
+
+```java
+class StarvationExample {
+    public static void main(String[] args) {
+        final Thread highPriorityThread = new Thread(() -> {
+            while (true) {
+                // Simulating work
+            }
+        });
+
+        final Thread lowPriorityThread = new Thread(() -> {
+            try {
+                Thread.sleep(1000); // Giving high-priority thread a chance to run
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            System.out.println("Low priority thread finished work");
+        });
+
+        highPriorityThread.setPriority(Thread.MAX_PRIORITY);
+        lowPriorityThread.setPriority(Thread.MIN_PRIORITY);
+        
+        highPriorityThread.start();
+        lowPriorityThread.start();
+    }
+}
+```
+
+#### Prevention:
+- **Fair Scheduling**: Use fair locks (`ReentrantLock(true)`) or Java's built-in thread scheduler that balances priorities.
+- **Resource Allocation**: Ensure that all threads have fair access to resources.
+
+---
+
+### 4. Deadlock
+
+#### Definition:
+A deadlock occurs when two or more threads are blocked forever, each waiting on the other to release a resource. This can lead to a situation where none of the threads can proceed.
+
+#### Example:
+
+```java
+class Resource {
+    private final String name;
+
+    public Resource(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
+    }
+}
+
+public class DeadlockExample {
+    private static final Resource resource1 = new Resource("Resource 1");
+    private static final Resource resource2 = new Resource("Resource 2");
+
+    public static void main(String[] args) {
+        Thread t1 = new Thread(() -> {
+            synchronized (resource1) {
+                System.out.println("Thread 1: Holding resource 1...");
+                try { Thread.sleep(100); } catch (InterruptedException e) {}
+                System.out.println("Thread 1: Waiting for resource 2...");
+                synchronized (resource2) {
+                    System.out.println("Thread 1: Acquired resource 2");
+                }
+            }
+        });
+
+        Thread t2 = new Thread(() -> {
+            synchronized (resource2) {
+                System.out.println("Thread 2: Holding resource 2...");
+                try { Thread.sleep(100); } catch (InterruptedException e) {}
+                System.out.println("Thread 2: Waiting for resource 1...");
+                synchronized (resource1) {
+                    System.out.println("Thread 2: Acquired resource 1");
+                }
+            }
+        });
+
+        t1.start();
+        t2.start();
+    }
+}
+```
+
+#### Prevention:
+- **Lock Ordering**: Always acquire locks in a specific order to prevent circular wait.
+- **Timeouts**: Use try-locks with a timeout to avoid waiting indefinitely.
+
+```java
+if (lock1.tryLock(100, TimeUnit.MILLISECONDS)) {
+    try {
+        // Acquire lock2
+    } finally {
+        lock1.unlock();
+    }
+}
+```
+
+### Summary
+
+- **Diamond Problem**: Avoid ambiguity in method resolution through explicit overrides.
+
+- **Starvation**: Implement fair resource allocation to ensure all threads get a chance to execute.
+- **Deadlock**: Use lock ordering and timeouts to prevent circular waits.
+
+These practices help create robust, efficient, and predictable concurrent applications.
+
+
+In Java, achieving synchronous and asynchronous behavior in concurrent programming can be effectively managed using the **Executor Framework** and **Java Collections**. Here's an in-depth look at both approaches.
+
+### Synchronous Execution
+
+Synchronous execution refers to blocking operations where a thread waits for a task to complete before moving on. In the Executor Framework, you can achieve synchronous behavior using `ExecutorService` and `Future`.
+
+#### Example of Synchronous Execution:
+
+```java
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+
+public class SynchronousExecutionExample {
+    public static void main(String[] args) {
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+
+        Callable<String> task = () -> {
+            Thread.sleep(1000); // Simulating a long-running task
+            return "Task completed";
+        };
+
+        Future<String> future = executor.submit(task);
+
+        try {
+            // This will block until the task is completed
+            String result = future.get();
+            System.out.println(result);
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        } finally {
+            executor.shutdown();
+        }
+    }
+}
+```
+
+### Key Points:
+- **`Future.get()`**: This method blocks until the task is completed and retrieves the result.
+- **Single-threaded Executor**: This is useful for synchronous execution as it processes one task at a time.
+
+---
+
+### Asynchronous Execution
+
+Asynchronous execution allows a thread to start a task and move on without waiting for it to complete. You can achieve this using the `CompletableFuture` class introduced in Java 8, which provides a powerful way to handle asynchronous programming.
+
+#### Example of Asynchronous Execution:
+
+```java
+import java.util.concurrent.CompletableFuture;
+
+public class AsynchronousExecutionExample {
+    public static void main(String[] args) {
+        CompletableFuture<String> future = CompletableFuture.supplyAsync(() -> {
+            try {
+                Thread.sleep(1000); // Simulating a long-running task
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            return "Task completed";
+        });
+
+        // Non-blocking; can perform other operations while waiting
+        System.out.println("Doing something else...");
+
+        // Handle the result asynchronously
+        future.thenAccept(result -> {
+            System.out.println(result);
+        });
+
+        // Optional: Wait for completion if needed
+        future.join();
+    }
+}
+```
+
+### Key Points:
+- **`supplyAsync`**: This method allows you to run a task asynchronously.
+- **Non-blocking execution**: The main thread can continue executing while the task runs in the background.
+- **`thenAccept`**: This method is used to define a callback that will be executed when the computation is complete.
+
+---
+
+### Using Java Collections with Executors
+
+When dealing with collections in a concurrent environment, Java provides various thread-safe collections. These can be used with the Executor Framework to manage data safely across multiple threads.
+
+#### Example with Thread-Safe Collections:
+
+```java
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+public class ConcurrentCollectionExample {
+    public static void main(String[] args) {
+        ExecutorService executor = Executors.newFixedThreadPool(2);
+        ConcurrentHashMap<String, Integer> map = new ConcurrentHashMap<>();
+
+        Runnable task1 = () -> {
+            for (int i = 0; i < 5; i++) {
+                map.put("Key" + i, i);
+                System.out.println("Task1 added Key" + i);
+            }
+        };
+
+        Runnable task2 = () -> {
+            for (int i = 0; i < 5; i++) {
+                map.put("Key" + (i + 5), i + 5);
+                System.out.println("Task2 added Key" + (i + 5));
+            }
+        };
+
+        executor.submit(task1);
+        executor.submit(task2);
+
+        executor.shutdown();
+        
+        // Wait for all tasks to finish before accessing the map
+        while (!executor.isTerminated()) {}
+
+        System.out.println("Final map: " + map);
+    }
+}
+```
+
+### Key Points:
+- **`ConcurrentHashMap`**: This is a thread-safe collection that allows multiple threads to read and write without external synchronization.
+- **Fixed Thread Pool**: Using a thread pool for managing concurrent tasks helps in efficient resource utilization.
+
+---
+
+### Summary
+
+- **Synchronous Execution**: Use `ExecutorService` and `Future` to block until a task completes.
+- **Asynchronous Execution**: Use `CompletableFuture` for non-blocking execution with callback handling.
+- **Thread-Safe Collections**: Use collections like `ConcurrentHashMap` for safe access in a concurrent environment.
+
+These tools enable robust concurrent programming in Java, helping manage both synchronous and asynchronous tasks effectively.
+
+Certainly! Let’s delve into **threads**, **concurrency**, and the **Executor Framework** in Java, along with detailed explanations, coding examples, and some tricky questions to deepen your understanding.
+
+### 1. Threads
+
+#### Definition:
+A thread is the smallest unit of processing that can be scheduled by the operating system. In Java, a thread is an instance of the `Thread` class or implements the `Runnable` interface.
+
+#### Creating Threads:
+You can create threads in Java in two main ways:
+
+1. **By Extending the Thread Class**:
+   ```java
+   class MyThread extends Thread {
+       @Override
+       public void run() {
+           System.out.println("Thread running: " + Thread.currentThread().getName());
+       }
+   }
+
+   public class ThreadExample {
+       public static void main(String[] args) {
+           MyThread thread = new MyThread();
+           thread.start(); // Start the thread
+       }
+   }
+   ```
+
+2. **By Implementing the Runnable Interface**:
+   ```java
+   class MyRunnable implements Runnable {
+       @Override
+       public void run() {
+           System.out.println("Runnable running: " + Thread.currentThread().getName());
+       }
+   }
+
+   public class RunnableExample {
+       public static void main(String[] args) {
+           Thread thread = new Thread(new MyRunnable());
+           thread.start(); // Start the thread
+       }
+   }
+   ```
+
+### 2. Concurrency
+
+#### Definition:
+Concurrency refers to the ability to run multiple threads simultaneously, which can improve the performance of applications, especially on multi-core processors. Concurrency allows multiple tasks to make progress, which may or may not happen at the same time.
+
+#### Issues in Concurrency:
+
+- **Deadlocks**: Occur when two or more threads are blocked forever, each waiting for the other to release a resource.
+- **Starvation**: Occurs when a thread is perpetually denied access to resources.
+
+### 3. Executor Framework
+
+#### Definition:
+The Executor Framework in Java provides a higher-level replacement for managing threads directly. It simplifies thread management and allows for more scalable and maintainable code.
+
+#### Key Components:
+- **Executor**: The simplest interface to provide a way to execute a runnable task.
+- **ExecutorService**: An interface that provides methods for managing and controlling the execution of tasks.
+- **ScheduledExecutorService**: An extension of `ExecutorService` that can schedule tasks to run after a given delay or periodically.
+
+#### Example of Executor Framework:
+
+```java
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+public class ExecutorExample {
+    public static void main(String[] args) {
+        ExecutorService executor = Executors.newFixedThreadPool(3); // Thread pool with 3 threads
+
+        for (int i = 0; i < 5; i++) {
+            final int taskId = i;
+            executor.submit(() -> {
+                System.out.println("Task " + taskId + " is running on thread: " + Thread.currentThread().getName());
+                try {
+                    Thread.sleep(1000); // Simulate work
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            });
+        }
+
+        executor.shutdown(); // Initiates an orderly shutdown
+    }
+}
+```
+
+### Key Features of the Executor Framework:
+- **Thread Pool Management**: You don’t need to manage threads manually; the executor handles it for you.
+- **Task Submission**: You can submit `Runnable` or `Callable` tasks for execution.
+- **Graceful Shutdown**: The framework provides methods to shut down the executor gracefully.
+
+### Tricky Questions and Answers
+
+1. **What is the difference between `Runnable` and `Callable`?**
+   - **Runnable**: Represents a task that does not return a result and cannot throw checked exceptions. Its method `run()` does not return a value.
+   - **Callable**: Represents a task that returns a result and can throw checked exceptions. It has a method `call()` that returns a value.
+
+   ```java
+   Callable<Integer> task = () -> {
+       return 42; // Can return a result
+   };
+   ```
+
+2. **How can you avoid deadlocks in Java?**
+   - **Lock Ordering**: Always acquire locks in a consistent global order to avoid circular wait conditions.
+   - **Timeouts**: Use `tryLock()` with a timeout to avoid waiting indefinitely.
+   - **Deadlock Detection**: Implement logic to detect and recover from deadlocks.
+
+3. **What happens if you don’t call `shutdown()` on an `ExecutorService`?**
+   - The application may not terminate gracefully. Unfinished tasks may continue running, and the program could hang indefinitely. Always ensure to shut down the executor using `shutdown()` or `shutdownNow()`.
+
+4. **Explain thread safety. How can you achieve it?**
+   - **Thread Safety**: It means that a class or a method behaves correctly when accessed by multiple threads simultaneously.
+   - **Ways to achieve it**:
+     - Use synchronized methods or blocks.
+     - Utilize thread-safe collections (e.g., `ConcurrentHashMap`).
+     - Employ higher-level constructs like `ReentrantLock`.
+
+5. **What is the purpose of `Future` in the Executor Framework?**
+   - `Future` represents the result of an asynchronous computation. You can use it to check if the task is complete, wait for its completion, and retrieve its result.
+
+   ```java
+   Future<Integer> future = executor.submit(() -> {
+       // Some computation
+       return 10;
+   });
+   ```
+
+### Summary
+
+- **Threads**: Fundamental units of execution in Java.
+- **Concurrency**: The ability to run multiple threads and manage shared resources.
+- **Executor Framework**: A high-level API for managing thread execution, simplifying concurrent programming.
+
+By mastering these concepts, you can write efficient, maintainable, and scalable multi-threaded applications in Java.
+
+
+---------------------------------------------------
+
+In Java, `void` and `Void` are used in different contexts and have distinct meanings. Here’s a breakdown of the differences between them:
+
+### `void`
+
+- **Definition**: `void` is a primitive type used as a return type in methods to indicate that the method does not return a value.
+- **Usage**: When a method is declared with a return type of `void`, it cannot return any value.
+
+#### Example:
+```java
+public void doSomething() {
+    // Method logic here
+    // No return statement
+}
+```
+
+### `Void`
+
+- **Definition**: `Void` is a reference type (a class) in Java that is the wrapper for the `void` type. It is part of the `java.lang` package.
+- **Usage**: `Void` can be used as a type parameter in generic classes or methods, particularly in scenarios where a method needs to represent the absence of a return value but still participate in generics.
+
+#### Example:
+```java
+public Callable<Void> createTask() {
+    return () -> {
+        // Task logic here
+        return null; // Must return null for Void
+    };
+}
+```
+
+### Return Type
+
+- **`void`**: Indicates that a method does not return a value.
+- **`Void`**: Can be used as a return type in contexts where you want to use generics but have no actual value to return.
+
+### Summary
+
+- **`void`**: Primitive type; used in method signatures to indicate no return value.
+- **`Void`**: Reference type; used in generics or when a method needs to comply with an API that requires a return type but does not return a value.
+
+In essence, use `void` when defining methods that don’t return a value, and use `Void` when you need to work with generics or APIs that require a return type in a context where there is no actual return value.
+
+---
+
+Sure! Let’s delve into the **diamond problem**, **race conditions**, **starvation**, and **deadlocks**—common issues in programming, particularly in concurrent and object-oriented programming—and explore how to prevent them, along with code examples.
+
+### 1. Diamond Problem
+
+#### Definition:
+The diamond problem occurs in multiple inheritance scenarios when a class inherits from two classes that have a method with the same signature. This can create ambiguity about which method to execute.
+
+#### Example:
+
+```java
+interface A {
+    default void show() {
+        System.out.println("Show from A");
+    }
+}
+
+interface B extends A {
+    default void show() {
+        System.out.println("Show from B");
+    }
+}
+
+interface C extends A {
+    default void show() {
+        System.out.println("Show from C");
+    }
+}
+
+class D implements B, C {
+    @Override
+    public void show() {
+        // Resolve ambiguity by calling a specific interface method
+        B.super.show(); // Calls show from B
+        C.super.show(); // Calls show from C
+    }
+}
+
+// Usage
+public class Main {
+    public static void main(String[] args) {
+        D d = new D();
+        d.show();
+    }
+}
+```
+
+#### Output:
+```
+Show from B
+Show from C
+```
+
+#### Prevention:
+- **Explicitly Override**: Always override the conflicting method in the subclass to resolve ambiguity.
+- **Design Interfaces Carefully**: Avoid multiple inheritance of stateful interfaces.
+
+---
+
+
+
+### 3. Starvation
+
+#### Definition:
+Starvation occurs when a thread is perpetually denied the resources it needs for execution. This typically happens when high-priority threads consume all the CPU time, leaving low-priority threads waiting indefinitely.
+
+#### Example:
+
+```java
+class StarvationExample {
+    public static void main(String[] args) {
+        final Thread highPriorityThread = new Thread(() -> {
+            while (true) {
+                // Simulating work
+            }
+        });
+
+        final Thread lowPriorityThread = new Thread(() -> {
+            try {
+                Thread.sleep(1000); // Giving high-priority thread a chance to run
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            System.out.println("Low priority thread finished work");
+        });
+
+        highPriorityThread.setPriority(Thread.MAX_PRIORITY);
+        lowPriorityThread.setPriority(Thread.MIN_PRIORITY);
+        
+        highPriorityThread.start();
+        lowPriorityThread.start();
+    }
+}
+```
+
+#### Prevention:
+- **Fair Scheduling**: Use fair locks (`ReentrantLock(true)`) or Java's built-in thread scheduler that balances priorities.
+- **Resource Allocation**: Ensure that all threads have fair access to resources.
+
+---
+
+### 4. Deadlock
+
+#### Definition:
+A deadlock occurs when two or more threads are blocked forever, each waiting on the other to release a resource. This can lead to a situation where none of the threads can proceed.
+
+#### Example:
+
+```java
+class Resource {
+    private final String name;
+
+    public Resource(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
+    }
+}
+
+public class DeadlockExample {
+    private static final Resource resource1 = new Resource("Resource 1");
+    private static final Resource resource2 = new Resource("Resource 2");
+
+    public static void main(String[] args) {
+        Thread t1 = new Thread(() -> {
+            synchronized (resource1) {
+                System.out.println("Thread 1: Holding resource 1...");
+                try { Thread.sleep(100); } catch (InterruptedException e) {}
+                System.out.println("Thread 1: Waiting for resource 2...");
+                synchronized (resource2) {
+                    System.out.println("Thread 1: Acquired resource 2");
+                }
+            }
+        });
+
+        Thread t2 = new Thread(() -> {
+            synchronized (resource2) {
+                System.out.println("Thread 2: Holding resource 2...");
+                try { Thread.sleep(100); } catch (InterruptedException e) {}
+                System.out.println("Thread 2: Waiting for resource 1...");
+                synchronized (resource1) {
+                    System.out.println("Thread 2: Acquired resource 1");
+                }
+            }
+        });
+
+        t1.start();
+        t2.start();
+    }
+}
+```
+
+#### Prevention:
+- **Lock Ordering**: Always acquire locks in a specific order to prevent circular wait.
+- **Timeouts**: Use try-locks with a timeout to avoid waiting indefinitely.
+
+```java
+if (lock1.tryLock(100, TimeUnit.MILLISECONDS)) {
+    try {
+        // Acquire lock2
+    } finally {
+        lock1.unlock();
+    }
+}
+```
+
+### Summary
+
+- **Diamond Problem**: Avoid ambiguity in method resolution through explicit overrides.
+
+- **Starvation**: Implement fair resource allocation to ensure all threads get a chance to execute.
+- **Deadlock**: Use lock ordering and timeouts to prevent circular waits.
+
+These practices help create robust, efficient, and predictable concurrent applications.
+
+---
+
+In Java, achieving synchronous and asynchronous behavior in concurrent programming can be effectively managed using the **Executor Framework** and **Java Collections**. Here's an in-depth look at both approaches.
+
+### Synchronous Execution
+
+Synchronous execution refers to blocking operations where a thread waits for a task to complete before moving on. In the Executor Framework, you can achieve synchronous behavior using `ExecutorService` and `Future`.
+
+#### Example of Synchronous Execution:
+
+```java
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+
+public class SynchronousExecutionExample {
+    public static void main(String[] args) {
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+
+        Callable<String> task = () -> {
+            Thread.sleep(1000); // Simulating a long-running task
+            return "Task completed";
+        };
+
+        Future<String> future = executor.submit(task);
+
+        try {
+            // This will block until the task is completed
+            String result = future.get();
+            System.out.println(result);
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        } finally {
+            executor.shutdown();
+        }
+    }
+}
+```
+
+### Key Points:
+- **`Future.get()`**: This method blocks until the task is completed and retrieves the result.
+- **Single-threaded Executor**: This is useful for synchronous execution as it processes one task at a time.
+
+---
+
+### Asynchronous Execution
+
+Asynchronous execution allows a thread to start a task and move on without waiting for it to complete. You can achieve this using the `CompletableFuture` class introduced in Java 8, which provides a powerful way to handle asynchronous programming.
+
+#### Example of Asynchronous Execution:
+
+```java
+import java.util.concurrent.CompletableFuture;
+
+public class AsynchronousExecutionExample {
+    public static void main(String[] args) {
+        CompletableFuture<String> future = CompletableFuture.supplyAsync(() -> {
+            try {
+                Thread.sleep(1000); // Simulating a long-running task
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            return "Task completed";
+        });
+
+        // Non-blocking; can perform other operations while waiting
+        System.out.println("Doing something else...");
+
+        // Handle the result asynchronously
+        future.thenAccept(result -> {
+            System.out.println(result);
+        });
+
+        // Optional: Wait for completion if needed
+        future.join();
+    }
+}
+```
+
+### Key Points:
+- **`supplyAsync`**: This method allows you to run a task asynchronously.
+- **Non-blocking execution**: The main thread can continue executing while the task runs in the background.
+- **`thenAccept`**: This method is used to define a callback that will be executed when the computation is complete.
+
+---
+
+### Using Java Collections with Executors
+
+When dealing with collections in a concurrent environment, Java provides various thread-safe collections. These can be used with the Executor Framework to manage data safely across multiple threads.
+
+#### Example with Thread-Safe Collections:
+
+```java
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+public class ConcurrentCollectionExample {
+    public static void main(String[] args) {
+        ExecutorService executor = Executors.newFixedThreadPool(2);
+        ConcurrentHashMap<String, Integer> map = new ConcurrentHashMap<>();
+
+        Runnable task1 = () -> {
+            for (int i = 0; i < 5; i++) {
+                map.put("Key" + i, i);
+                System.out.println("Task1 added Key" + i);
+            }
+        };
+
+        Runnable task2 = () -> {
+            for (int i = 0; i < 5; i++) {
+                map.put("Key" + (i + 5), i + 5);
+                System.out.println("Task2 added Key" + (i + 5));
+            }
+        };
+
+        executor.submit(task1);
+        executor.submit(task2);
+
+        executor.shutdown();
+        
+        // Wait for all tasks to finish before accessing the map
+        while (!executor.isTerminated()) {}
+
+        System.out.println("Final map: " + map);
+    }
+}
+```
+
+### Key Points:
+- **`ConcurrentHashMap`**: This is a thread-safe collection that allows multiple threads to read and write without external synchronization.
+- **Fixed Thread Pool**: Using a thread pool for managing concurrent tasks helps in efficient resource utilization.
+
+---
+
+### Summary
+
+- **Synchronous Execution**: Use `ExecutorService` and `Future` to block until a task completes.
+- **Asynchronous Execution**: Use `CompletableFuture` for non-blocking execution with callback handling.
+- **Thread-Safe Collections**: Use collections like `ConcurrentHashMap` for safe access in a concurrent environment.
+
+These tools enable robust concurrent programming in Java, helping manage both synchronous and asynchronous tasks effectively.
+
+Certainly! Let’s delve into **threads**, **concurrency**, and the **Executor Framework** in Java, along with detailed explanations, coding examples, and some tricky questions to deepen your understanding.
+
+### 1. Threads
+
+#### Definition:
+A thread is the smallest unit of processing that can be scheduled by the operating system. In Java, a thread is an instance of the `Thread` class or implements the `Runnable` interface.
+
+#### Creating Threads:
+You can create threads in Java in two main ways:
+
+1. **By Extending the Thread Class**:
+   ```java
+   class MyThread extends Thread {
+       @Override
+       public void run() {
+           System.out.println("Thread running: " + Thread.currentThread().getName());
+       }
+   }
+
+   public class ThreadExample {
+       public static void main(String[] args) {
+           MyThread thread = new MyThread();
+           thread.start(); // Start the thread
+       }
+   }
+   ```
+
+2. **By Implementing the Runnable Interface**:
+   ```java
+   class MyRunnable implements Runnable {
+       @Override
+       public void run() {
+           System.out.println("Runnable running: " + Thread.currentThread().getName());
+       }
+   }
+
+   public class RunnableExample {
+       public static void main(String[] args) {
+           Thread thread = new Thread(new MyRunnable());
+           thread.start(); // Start the thread
+       }
+   }
+   ```
+
+### 2. Concurrency
+
+#### Definition:
+Concurrency refers to the ability to run multiple threads simultaneously, which can improve the performance of applications, especially on multi-core processors. Concurrency allows multiple tasks to make progress, which may or may not happen at the same time.
+
+#### Issues in Concurrency:
+
+- **Deadlocks**: Occur when two or more threads are blocked forever, each waiting for the other to release a resource.
+- **Starvation**: Occurs when a thread is perpetually denied access to resources.
+
+### 3. Executor Framework
+
+#### Definition:
+The Executor Framework in Java provides a higher-level replacement for managing threads directly. It simplifies thread management and allows for more scalable and maintainable code.
+
+#### Key Components:
+- **Executor**: The simplest interface to provide a way to execute a runnable task.
+- **ExecutorService**: An interface that provides methods for managing and controlling the execution of tasks.
+- **ScheduledExecutorService**: An extension of `ExecutorService` that can schedule tasks to run after a given delay or periodically.
+
+#### Example of Executor Framework:
+
+```java
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+public class ExecutorExample {
+    public static void main(String[] args) {
+        ExecutorService executor = Executors.newFixedThreadPool(3); // Thread pool with 3 threads
+
+        for (int i = 0; i < 5; i++) {
+            final int taskId = i;
+            executor.submit(() -> {
+                System.out.println("Task " + taskId + " is running on thread: " + Thread.currentThread().getName());
+                try {
+                    Thread.sleep(1000); // Simulate work
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            });
+        }
+
+        executor.shutdown(); // Initiates an orderly shutdown
+    }
+}
+```
+
+### Key Features of the Executor Framework:
+- **Thread Pool Management**: You don’t need to manage threads manually; the executor handles it for you.
+- **Task Submission**: You can submit `Runnable` or `Callable` tasks for execution.
+- **Graceful Shutdown**: The framework provides methods to shut down the executor gracefully.
+
+### Tricky Questions and Answers
+
+1. **What is the difference between `Runnable` and `Callable`?**
+   - **Runnable**: Represents a task that does not return a result and cannot throw checked exceptions. Its method `run()` does not return a value.
+   - **Callable**: Represents a task that returns a result and can throw checked exceptions. It has a method `call()` that returns a value.
+
+   ```java
+   Callable<Integer> task = () -> {
+       return 42; // Can return a result
+   };
+   ```
+
+2. **How can you avoid deadlocks in Java?**
+   - **Lock Ordering**: Always acquire locks in a consistent global order to avoid circular wait conditions.
+   - **Timeouts**: Use `tryLock()` with a timeout to avoid waiting indefinitely.
+   - **Deadlock Detection**: Implement logic to detect and recover from deadlocks.
+
+3. **What happens if you don’t call `shutdown()` on an `ExecutorService`?**
+   - The application may not terminate gracefully. Unfinished tasks may continue running, and the program could hang indefinitely. Always ensure to shut down the executor using `shutdown()` or `shutdownNow()`.
+
+4. **Explain thread safety. How can you achieve it?**
+   - **Thread Safety**: It means that a class or a method behaves correctly when accessed by multiple threads simultaneously.
+   - **Ways to achieve it**:
+     - Use synchronized methods or blocks.
+     - Utilize thread-safe collections (e.g., `ConcurrentHashMap`).
+     - Employ higher-level constructs like `ReentrantLock`.
+
+5. **What is the purpose of `Future` in the Executor Framework?**
+   - `Future` represents the result of an asynchronous computation. You can use it to check if the task is complete, wait for its completion, and retrieve its result.
+
+   ```java
+   Future<Integer> future = executor.submit(() -> {
+       // Some computation
+       return 10;
+   });
+   ```
+
+### Summary
+
+- **Threads**: Fundamental units of execution in Java.
+- **Concurrency**: The ability to run multiple threads and manage shared resources.
+- **Executor Framework**: A high-level API for managing thread execution, simplifying concurrent programming.
+
+By mastering these concepts, you can write efficient, maintainable, and scalable multi-threaded applications in Java.
+
+============================
+
+### The Diamond Problem
+Occurs when a class inherits from two interfaces that have the same method signature. The implementing class must override the method to resolve ambiguity.
+
+#### Example of the Diamond Problem
+```java
+interface InterfaceA {
+    default void display() {
+        System.out.println("Display from Interface A");
+    }
+}
+
+interface InterfaceB {
+    default void display() {
+        System.out.println("Display from Interface B");
+    }
+}
+
+class ConcreteClass implements InterfaceA, InterfaceB {
+    @Override
+    public void display() {
+        InterfaceA.super.display(); // Calls Interface A's method
+        InterfaceB.super.display(); // Calls Interface B's method
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        ConcreteClass obj = new ConcreteClass();
+        obj.display(); // Output: Display from Interface A Display from Interface B
+    }
+}
+```
+
+### Concurrency Issues in Java
+
+
+#### 2. Deadlock
+Occurs when two or more threads are blocked forever, each waiting for the other to release a lock.
+
+##### Example of Deadlock
+```java
+class Resource {
+    public synchronized void methodA(Resource other) {
+        System.out.println(Thread.currentThread().getName() + " is in methodA");
+        other.methodB();
+    }
+
+    public synchronized void methodB() {
+        System.out.println(Thread.currentThread().getName() + " is in methodB");
+    }
+}
+
+public class DeadlockExample {
+    public static void main(String[] args) {
+        Resource resource1 = new Resource();
+        Resource resource2 = new Resource();
+
+        Thread t1 = new Thread(() -> resource1.methodA(resource2));
+        Thread t2 = new Thread(() -> resource2.methodA(resource1));
+
+        t1.start();
+        t2.start();
+    }
+}
+```
+
+##### Prevention
+- **Lock Ordering**: Always acquire locks in a consistent order.
+- **Timeouts**: Use timeout when trying to acquire locks.
+
+#### 3. Starvation
+Occurs when a thread is perpetually denied access to resources due to other threads continuously being prioritized.
+
+##### Example of Starvation
+```java
+class SharedResource {
+    public synchronized void access() {
+        System.out.println(Thread.currentThread().getName() + " is accessing resource.");
+        try {
+            Thread.sleep(100); // Simulating work
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+    }
+}
+
+public class StarvationExample {
+    public static void main(String[] args) {
+        SharedResource resource = new SharedResource();
+        
+        Runnable task = () -> {
+            while (true) {
+                resource.access();
+            }
+        };
+        
+        Thread highPriorityThread = new Thread(task);
+        highPriorityThread.setPriority(Thread.MAX_PRIORITY);
+        
+        Thread lowPriorityThread1 = new Thread(task);
+        Thread lowPriorityThread2 = new Thread(task);
+        
+        lowPriorityThread1.setPriority(Thread.MIN_PRIORITY);
+        lowPriorityThread2.setPriority(Thread.MIN_PRIORITY);
+        
+        highPriorityThread.start();
+        lowPriorityThread1.start();
+        lowPriorityThread2.start();
+    }
+}
+```
+
+##### Prevention
+- **Fair Locks**: Use `ReentrantLock` with fairness policy.
+- **Avoid Excessive Prioritization**: Balance thread priorities.
+
+### Summary
+- **Diamond Problem**: Resolve ambiguities by overriding methods in implementing classes.
+
+- **Deadlock**: Avoid nested locks and implement a consistent lock ordering.
+- **Starvation**: Utilize fair locking mechanisms and balance thread priorities.
+
+Understanding these concepts is crucial for building robust and efficient Java applications, especially in concurrent programming scenarios.
+
+Here's a consolidated overview of race conditions, deadlocks, starvation, and key concurrency concepts in Java, along with examples and prevention strategies.
+
+---
+
+### Concurrency Issues in Java
+
+#### 3. Starvation
+
+Starvation occurs when a thread is perpetually denied access to resources because other threads continually receive priority.
+
+**Example:**
+```java
+class SharedResource {
+    public synchronized void access() {
+        try { Thread.sleep(100); } catch (InterruptedException e) {}
+    }
+}
+
+public class StarvationExample {
+    public static void main(String[] args) {
+        SharedResource resource = new SharedResource();
+        Thread highPriorityThread = new Thread(() -> { while (true) resource.access(); });
+        highPriorityThread.setPriority(Thread.MAX_PRIORITY);
+        highPriorityThread.start();
+
+        new Thread(() -> { while (true) resource.access(); }).start();
+        new Thread(() -> { while (true) resource.access(); }).start();
+    }
+}
+```
+
+**Prevention:**
+- **Fair Locks:** Use `ReentrantLock` with the fairness policy set to true.
+- **Avoid Excessive Prioritization.**
+
+### Key Concepts
+
+#### Fairness Policy
+
+The fairness policy in Java's concurrency framework ensures that threads acquire locks in a fair manner (FIFO order), which can help prevent starvation.
+
+```java
+ReentrantLock fairLock = new ReentrantLock(true); // Fair
+ReentrantLock unfairLock = new ReentrantLock(false); // Unfair
+```
+
+#### Concurrency
+
+Concurrency enables multiple threads to run simultaneously, improving application performance, especially for I/O-bound and CPU-bound operations.
+
+#### Thread Creation
+
+Threads can be created by:
+1. Extending the `Thread` class:
+    ```java
+    class MyThread extends Thread {
+        public void run() { System.out.println("Thread is running"); }
+    }
+    ```
+2. Implementing the `Runnable` interface:
+    ```java
+    class MyRunnable implements Runnable {
+        public void run() { System.out.println("Thread is running"); }
+    }
+    ```
+
+#### Concurrent HashMap
+
+`ConcurrentHashMap` is a thread-safe variant of `HashMap`, allowing concurrent access without locking the entire structure.
+
+**Example:**
+```java
+import java.util.concurrent.ConcurrentHashMap;
+
+public class ConcurrentHashMapExample {
+    public static void main(String[] args) {
+        ConcurrentHashMap<String, Integer> map = new ConcurrentHashMap<>();
+        map.put("One", 1); map.put("Two", 2);
+
+        Runnable task = () -> {
+            for (String key : map.keySet()) {
+                System.out.println(Thread.currentThread().getName() + " read: " + key + " = " + map.get(key));
+            }
+        };
+
+        new Thread(task).start();
+        new Thread(task).start();
+    }
+}
+```
+
+#### Executor Framework
+
+The Executor framework provides a high-level API for managing threads and task execution, improving resource management and flexibility.
+
+**Example:**
+```java
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+public class ExecutorFrameworkExample {
+    public static void main(String[] args) {
+        ExecutorService executorService = Executors.newFixedThreadPool(3);
+        Runnable task = () -> System.out.println("Task executed by: " + Thread.currentThread().getName());
+        
+        for (int i = 0; i < 5; i++) {
+            executorService.submit(task);
+        }
+        executorService.shutdown();
+    }
+}
+```
+
+### Summary
+
+
+- **Deadlock:** Avoid with lock ordering, timeout mechanisms, and avoiding nested locks.
+- **Starvation:** Use fair locks and minimize thread priority disparities.
+- **Concurrency:** Improve efficiency through simultaneous execution of tasks.
+- **Executor Framework:** Simplifies thread management and task execution.
+
+Understanding these concepts is crucial for building robust multi-threaded applications in Java.
+
+---
+
+Here's a consolidated overview of the introduction of **default** and **static** methods in interfaces in Java 8, highlighting their purposes, benefits, and examples:
+
+### Introduction of Default and Static Methods in Java 8
+
+Java 8 introduced **default** and **static** methods in interfaces to enhance their flexibility and usability in object-oriented programming. These features allow interfaces to evolve without breaking existing code, facilitating better software design.
+
+### 1. Default Methods
+
+**Default methods** enable interfaces to provide a concrete implementation of a method, addressing two main concerns:
+
+- **Backward Compatibility**: Adding new methods to an interface without default implementations would require all implementing classes to provide an implementation, leading to extensive changes in existing codebases. Default methods allow existing implementations to remain valid.
+
+  **Example**:
+  ```java
+  interface Vehicle {
+      void start();
+      default void honk() {
+          System.out.println("Honk! Honk!");
+      }
+  }
+
+  class Car implements Vehicle {
+      public void start() {
+          System.out.println("Car starting");
+      }
+      // No need to implement honk() unless custom behavior is needed
+  }
+
+  public class Main {
+      public static void main(String[] args) {
+          Vehicle car = new Car();
+          car.start(); // Car starting
+          car.honk();  // Honk! Honk!
+      }
+  }
+  ```
+
+- **Enhanced Functionality**: Default methods allow interfaces to evolve with additional behavior without requiring changes to all implementing classes. This is particularly useful for libraries and frameworks.
+
+### 2. Static Methods
+
+**Static methods** in interfaces allow defining utility or helper methods that can be called without an instance of the interface. Their benefits include:
+
+- **Organized Utility Methods**: They group related utility methods within the interface, improving code organization.
+
+  **Example**:
+  ```java
+  interface MathUtils {
+      static int square(int number) {
+          return number * number;
+      }
+  }
+
+  public class Main {
+      public static void main(String[] args) {
+          int result = MathUtils.square(5); // No instance needed
+          System.out.println("Square: " + result); // Square: 25
+      }
+  }
+  ```
+
+- **Namespace Management**: Static methods provide a clear namespace for utility methods, helping avoid naming conflicts.
+
+### Benefits Compared to Regular Methods
+
+Before Java 8, interfaces could only declare abstract methods, limiting their evolution. With default and static methods, interfaces now offer:
+
+- **Flexibility**: They can provide both contracts (abstract methods) and implementations (default methods) without breaking existing code.
+- **Encapsulation of Behavior**: Interfaces can encapsulate common behaviors, reducing code duplication across implementing classes.
+- **Utility Functions**: Static methods allow shared utility functions that operate on data without requiring an object instance.
+
+### Conclusion
+
+The introduction of default and static methods in Java 8 enhances the power of interfaces by:
+
+- Allowing backward-compatible evolution of interfaces.
+- Providing default implementations for new methods.
+- Offering organized utility methods related to the interface.
+
+These features help maintain cleaner code, support easier maintenance, and encourage better design practices in Java applications.
+
+---
+
+Here's a consolidated overview of the concepts related to interfaces, including default and static methods introduced in Java 8, as well as their implications for multiple inheritance, with relevant examples.
+
+
+This approach enables developers to combine behaviors from different interfaces while maintaining clean and organized code.
