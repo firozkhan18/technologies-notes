@@ -11,8 +11,8 @@
 
    [**Other OOP Concepts in Java**](#other-oop-concepts-in-java)
    - [1.6 Composition (Has-A Relationship)](#16-composition-hasarelationship)
-   - [1.7 Aggregation](#17-aggregation)
-   - [1.8 Association](#18-association)
+   - [1.7 Association](#17-association)
+   - [1.8 Aggregation](#18-Aggregation)   
    - [1.9 Summary of When to Use Each Relationship](#summary-of-when-to-use-each-relationship)
 
 2. [**Process-Oriented Object-Oriented and Functional Programming in Java**](#process-oriented-object-oriented-and-functional-programming-in-java)
