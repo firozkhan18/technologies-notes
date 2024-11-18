@@ -1,3 +1,8 @@
+
+[`void` and `Void` are used in different](#differences-between-void-and-void-in-java)
+
+## `void` and `Void` are used in different
+
 In Java, `void` and `Void` are used in different contexts and have distinct meanings. Here’s a breakdown of the differences between them:
 
 ### `void`
