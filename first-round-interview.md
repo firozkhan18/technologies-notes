@@ -19,10 +19,8 @@
    - [2.1 Process-Oriented Programming (POP)](#21-process-oriented-programming-pop)
    - [2.2 Object-Oriented Programming (OOP)](#22-object-oriented-programming-oop-1)
    - [2.3 Functional Programming (FP)](#23-functional-programming-fp)
-
-  
      
-3. [**Java 8 Features**]
+3. [**Java 8 Features**](#java-8-features)
    - [3.1 Lambda Expressions](#31-lambda-expressions)
    - [3.2 Functional Interfaces](#32-functional-interfaces)
    - [3.3 Default Methods in Interfaces](#33-default-methods-in-interfaces)
@@ -1567,9 +1565,9 @@ Functional programming (FP) and Object-Oriented Programming (OOP) are two distin
 
 ---
 
-## **Java 8 Features**
+## 3 Java 8 Features
 
-### 2.1 Lambda Expressions
+### 3.1 Lambda Expressions
 
 #### **Definition:**
 Lambda expressions in Java 8 allow you to express instances of single-method interfaces (functional interfaces) in a more compact and readable form. They provide a way to pass behavior as parameters to methods, enhancing the language's ability to work with functional programming concepts.
@@ -1606,7 +1604,7 @@ Lambda expressions replace anonymous classes with a more concise syntax, making 
 
 ---
 
-### 2.2 Functional Interfaces
+### 3.2 Functional Interfaces
 
 #### **Definition:**
 A **Functional Interface** is an interface with just one abstract method. It may contain multiple default or static methods. The `@FunctionalInterface` annotation is used to indicate that an interface is functional, though it's not mandatory.
@@ -1633,7 +1631,7 @@ public class FunctionalInterfaceExample {
 
 ---
 
-### 2.3 Default Methods in Interfaces
+### 3.3 Default Methods in Interfaces
 
 #### **Definition:**
 Java 8 allows interfaces to have **default methods** with a body. This allows you to add methods to interfaces without breaking existing implementations, providing a backward-compatible way to extend interfaces.
@@ -1670,7 +1668,7 @@ In the example, `MyInterface` defines a default method `defaultMethod()`. The cl
 
 ---
 
-### 2.4 Streams API
+### 3.4 Streams API
 
 #### **Definition:**
 The **Streams API** allows you to process sequences of elements (collections, arrays, etc.) in a functional style. Streams provide methods to perform complex operations like filtering, mapping, and reducing in a more concise way.
@@ -1703,7 +1701,7 @@ In the above example, we use `stream()` to convert the list into a stream. Then 
 
 ---
 
-### 2.5 Method References
+### 3.5 Method References
 
 #### **Definition:**
 Method references provide a shorthand syntax for calling methods. They allow you to refer to methods directly by their names. Method references are often used in conjunction with functional interfaces.
@@ -1735,7 +1733,7 @@ In this example, `System.out::println` is a method reference that is used to pri
 
 ---
 
-### 2.6 Optional
+### 3.6 Optional
 
 #### **Definition:**
 `Optional` is a container object which may or may not contain a non-null value. It is introduced to avoid `NullPointerException` and to make the code more expressive by explicitly handling the possibility of `null`.
@@ -1766,7 +1764,7 @@ In this example, `Optional.ofNullable(value)` creates an `Optional` that may or 
 
 ---
 
-### 2.7 Collectors API
+### 3.7 Collectors API
 
 #### **Definition:**
 The **Collectors API** provides implementations of common reduction operations, such as accumulating elements into collections, summarizing data, or grouping data. The most commonly used collector is `Collectors.toList()` to collect the results of a stream into a list.
@@ -1798,7 +1796,7 @@ Here, we use `collect()` with `Collectors.toList()` to collect the filtered stre
 
 ---
 
-### 2.8 New Date and Time API (java.time)
+### 3.8 New Date and Time API (java.time)
 
 #### **Definition:**
 Java 8 introduced a new Date and Time API (`java.time`) to overcome the issues with the old `Date` and `Calendar` classes. The new API is more comprehensive and user-friendly, with better support for time zones and durations.
@@ -1842,11 +1840,11 @@ We use `LocalDate.now()` to get the current date, and `DateTimeFormatter.ofPatte
 ---
 In **Java 8**, there were several important changes and enhancements made to both the **Collections Framework** and **Concurrency Framework**. These changes provided more powerful and flexible ways to work with collections and concurrency, making Java easier to use in multi-threaded, parallel, and functional programming environments.
 
-### 3 Changes in the Collections Framework in Java 8
+### 4 Changes in the Collections Framework in Java 8
 
 Java 8 introduced several improvements to the **Collections Framework**, particularly with the introduction of **Streams API**, **default methods in interfaces**, and **new utility methods** in existing collection classes.
 
-#### 3.1 Introduction of the Streams API
+#### 4.1 Introduction of the Streams API
 
 The **Streams API** is one of the most significant additions to the Collections Framework in Java 8. It enables functional-style operations on collections (like lists, sets, etc.) and allows for more declarative and concise code.
 
@@ -1879,7 +1877,7 @@ public class StreamExample {
 **[⬆ Back to Top](#table-of-contents)**
 
 ---
-#### 3.2 Default Methods in Collection Interfaces
+#### 4.2 Default Methods in Collection Interfaces
 
 Java 8 introduced **default methods** in interfaces, which allow you to add new methods to interfaces without breaking existing implementations.
 
@@ -1911,7 +1909,7 @@ public class CollectionDefaultMethods {
 
 ---
 
-#### 3.3 New Utility Methods in Collections
+#### 4.3 New Utility Methods in Collections
 
 Java 8 introduced new methods to enhance the functionality of existing collection classes:
 
@@ -1939,7 +1937,7 @@ public class MapExample {
 
 ---
 
-#### 3.4 Parallel Streams
+#### 4.4 Parallel Streams
 
 Java 8 allows you to easily process data in parallel using the `parallelStream()` method, which enables multi-core processing with minimal effort.
 
@@ -1963,7 +1961,7 @@ public class ParallelStreamExample {
 
 ---
 
-#### 3.5 `Optional` Class
+#### 4.5 `Optional` Class
 
 Although **Optional** is not strictly a part of the Collections Framework, it is used widely in combination with collections to avoid `NullPointerException`. It is a container object that may or may not contain a non-null value.
 
@@ -1988,11 +1986,11 @@ public class OptionalExample {
 
 ---
 
-### 4 Changes in the Concurrency Framework in Java 8
+### 5 Changes in the Concurrency Framework in Java 8
 
 Java 8 made several significant improvements to the **Concurrency Framework**, with a focus on **parallelism** and **thread-safe** operations, making it easier to write highly scalable multi-threaded applications.
 
-#### 4.1 The `CompletableFuture` Class
+#### 5.1 The `CompletableFuture` Class
 
 `CompletableFuture` was introduced in Java 8 to provide a way of handling asynchronous programming more efficiently. It allows you to perform **non-blocking operations** and chain multiple tasks to run in parallel.
 
@@ -2019,7 +2017,7 @@ public class CompletableFutureExample {
 
 ---
 
-#### 4.2 `Stream.parallel()` for Parallel Processing
+#### 5.2 `Stream.parallel()` for Parallel Processing
 
 Java 8 introduced a more convenient way to process collections in parallel using the `parallel()` method available in the `Stream` API. It simplifies the task of parallelizing data processing without the need to manage threads explicitly.
 
@@ -2044,7 +2042,7 @@ public class ParallelStreamConcurrency {
 
 ---
 
-#### **2.3. The `ForkJoinPool` Framework**
+#### **5.3 The `ForkJoinPool` Framework**
 
 Java 8 introduced the **ForkJoinPool** as part of the **parallel processing framework**. It is specifically designed for tasks that can be recursively divided into smaller subtasks and then combined. The `ForkJoinPool` framework allows more efficient execution of such tasks.
 
@@ -2069,7 +2067,7 @@ public class ForkJoinPoolExample {
 
 ---
 
-#### 4.4 `Collectors` for Concurrent Collections
+#### 5.4 `Collectors` for Concurrent Collections
 
 Java 8 enhanced the `Collectors` utility class to support concurrency better. For example, you can now collect results of parallel streams into **thread-safe collections** using `Collector.toMap()` or `Collector.toList()`.
 
@@ -2077,7 +2075,7 @@ Java 8 enhanced the `Collectors` utility class to support concurrency better. Fo
 
 ---
 
-#### 4.5 `java.util.concurrent` Enhancements
+#### 5.5 `java.util.concurrent` Enhancements
 
 Java 8 introduced several new methods to improve concurrency, such as:
 
@@ -2103,9 +2101,9 @@ Java 8 introduced several new methods to improve concurrency, such as:
 3. **ForkJoinPool**: A new concurrency framework for parallelizing tasks with recursion.
 4. **Enhanced Concurrency Utilities**: Improvements to existing utilities like `ExecutorService` and `ConcurrentMap` for better concurrency control.
 
-## 5 Concurrency Issues in Java
+## 6 Concurrency Issues in Java
 
-### 5.1 Race Conditions in Java
+### 6.1 Race Conditions in Java
 
 #### **Definition**:
 A **race condition** occurs in a multi-threaded environment when two or more threads access and modify shared data simultaneously without proper synchronization, leading to unpredictable or inconsistent results. The outcome of such situations depends on the timing of thread execution, making the results unreliable.
@@ -2272,7 +2270,7 @@ Here’s a consolidated version for **Deadlock**, **Starvation**, **Fairness Pol
 
 ---
 
-## 5.2 Deadlock
+## 6.2 Deadlock
 
 ### **Definition:**
 A **deadlock** occurs in a multi-threaded environment when two or more threads are blocked forever, waiting for each other to release resources. This results in a standstill where no thread can proceed because they are all waiting for resources that other threads hold.
@@ -2341,7 +2339,7 @@ In the above example, `Thread 1` holds the lock on `ResourceA` and tries to acqu
 
 ---
 
-## 5.3 Starvation
+## 6.3 Starvation
 
 ### **Definition:**
 Starvation happens when a thread is perpetually denied access to resources due to other threads continuously acquiring those resources. This typically occurs when threads with higher priority keep monopolizing resources and prevent lower-priority threads from executing.
@@ -2393,7 +2391,7 @@ In the above example, the high-priority thread runs more frequently, and the low
 
 ---
 
-## 5.4 Fairness Policies
+## 6.4 Fairness Policies
 
 ### **Definition:**
 Fairness policies in multi-threading govern how threads acquire locks or access resources, ensuring no thread is indefinitely delayed or starved. Fairness generally means giving each thread an equal chance to acquire a resource.
