@@ -1,14 +1,16 @@
 1. OOP features
   - [1.1 What is Polymorphism?](#11-what-is-polymorphism)
+  
 2. Java 8 features
   - [2.1 Lambda Expressions](#21-lambda-expressions)
-  - [2.2 Functional Interfaces](#22-functional-interfaces) 
+  - [2.2 Functional Interfaces](#22-functional-interfaces)
   - [2.3 Default Methods in Interfaces](#23-default-methods-in-interfaces)
   - [2.4 Streams API](#24-streams-api)
   - [2.5 Method References](#25-method-references)
   - [2.6 Optional](#26-optional)
   - [2.7 Collector API](#27-collectors-api)
   - [2.8 New Date and Time API (java.time)](#28-new-date-and-time-api-javatime)
+
  
 ### 1.1 What is Polymorphism?
 
