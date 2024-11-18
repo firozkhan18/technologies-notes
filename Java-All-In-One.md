@@ -1,4 +1,15 @@
 
+# Table of Contents
+
+1. [Class Components](#class-components)
+2. [Functional Components](#functional-components)
+3. [Pure Components](#pure-components)
+4. [Higher-Order Components (HOCs)](#higher-order-components-hocs)
+5. [Stateless Functional Components](#stateless-functional-components)
+6. [Controlled Components](#controlled-components)
+7. [Uncontrolled Components](#uncontrolled-components)
+8. [Render Props Components](#render-props-components)
+9. [Context Provider Components](#context-provider-components)
 
 ## JAVA
 
