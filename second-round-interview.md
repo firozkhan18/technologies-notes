@@ -3,9 +3,9 @@ This will help you prepare questions and themes for the **Managerial Round Inter
 ## **Table of Contents**
 
 ## 1. **Team Leadership and Management**
-   - [1.1 Prioritization and Task Management](#1.1-prioritization-and-task-management)
-   - [1.2 Conflict Resolution](#1.2-conflict-resolution)
-   - [1.3 Team Motivation in Stressful Times](#1.3-team-motivation-in-stressful-times)
+   - [1.1 Prioritization and Task Management](#1-1-prioritization-and-task-management)
+   - [1.2 Conflict Resolution](#1-2-conflict-resolution)
+   - [1.3 Team Motivation in Stressful Times](#1-3-team-motivation-in-stressful-times)
    - [1.4 Fostering Continuous Skill Improvement](#1.4-fostering-continuous-skill-improvement)
    - [1.5 Balancing Business Needs and Team Workload](#1.5-balancing-business-needs-and-team-workload)
    - [1.6 Managing Underperformance](#1.6-managing-underperformance)
