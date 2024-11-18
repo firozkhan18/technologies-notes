@@ -87,18 +87,18 @@ This guide is structured to provide you with a deep dive into various topics ran
     - [Binary Search on Sorted Array](#binary-search-on-sorted-array)
     - [Merging Two Sorted Arrays](#merging-two-sorted-arrays)
 
-8. **[Java & Kafka}**
+8. **[Java & Kafka](#java-kafka)**
    - [SQL vs NoSQL](#sql-vs-nosql)
    - [Kafka: Partitions and Replication Factor](#kafka-partitions-and-replication-factor)
    - [Key Components of Apache Kafka](#key-components-of-apache-kafka)
    - [In Java, a BlockingQueue](#in-java-a-blockingqueue)
 
-9. **[Microservices & Kafka]**
+9. **[Microservices & Kafka](microservices-kafka)**
    - [Microservices Design Patterns](#microservices-design-patterns)
    - [12 Rules of Microservices](#12-rules-of-microservices)
    - [Kafka in Depth](#kafka-in-depth)
 
-10. **[Containerization & Orchestration]**
+10. **[Containerization & Orchestration](containerization-orchestration)**
    - [Containerization, Orchestration, Load Balancing, and Tracking Requests Across Regions](#containerization-orchestration-load-balancing-and-tracking-requests-across-regions)
 ---
 
