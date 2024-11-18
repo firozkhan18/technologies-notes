@@ -6,8 +6,8 @@
    - [1.2 Abstraction](#12-abstraction)
    - [1.3 Inheritance](#13-inheritance)
    - [1.4 Polymorphism](#14-polymorphism)
+     - [1.4.1 What is Polymorphism?](#1-4-1-what-is-polymorphism)
      - [1.4.1 What is Polymorphism?](#141-what-is-polymorphism)
-     - [1.4.1 What is Polymorphism?](#1411-what-is-polymorphism)
 
 2. [**Other OOP Concepts in Java**](#other-oop-concepts-in-java)
    - [Composition (Has-A Relationship)](#composition-has-a-relationship-1)
