@@ -1,7 +1,7 @@
-1. OOP features
+- 1. OOP features
   - [1.1 What is Polymorphism?](#11-what-is-polymorphism)
   
-2. Java 8 features
+- 2. Java 8 features
   - [2.1 Lambda Expressions](#21-lambda-expressions)
   - [2.2 Functional Interfaces](#22-functional-interfaces)
   - [2.3 Default Methods in Interfaces](#23-default-methods-in-interfaces)
