@@ -98,6 +98,18 @@ This will help you prepare questions and themes for the **Managerial Round Inter
 ## 15. **Work Culture and Team Building**
    - [15.1 What do you believe is the key to building a strong team culture?](#151-what-do-you-believe-is-the-key-to-building-a-strong-team-culture)
    - [15.2 How do you prioritize your tasks when you have multiple deadlines to meet?](#152-how-do-you-prioritize-your-tasks-when-you-have-multiple-deadlines-to-meet)
+
+## 16. **[Leadership and Soft Skills](#16-leadership-and-soft-skills)**
+    - [16.1 Managing Development Teams](#161-managing-development-teams)
+    - [16.2 Handling Conflicts](#162-handling-conflicts)
+    - [16.3 Mentoring Junior Developers](#163-mentoring-junior-developers)
+    - [16.4 Task Prioritization and Deadlines](#164-task-prioritization-and-deadlines)
+    - [16.5 Ensuring Code Quality](#165-ensuring-code-quality)
+    - [16.6 Handling Feedback](#166-handling-feedback)
+    - [16.7 Agile and Scrum Practices](#167-agile-and-scrum-practices)
+    - [16.8 Team Motivation](#168-team-motivation)
+    - [16.9 Designing Software Architecture](#169-designing-software-architecture)
+
 ---
 
 ## 1. **Team Leadership and Management**
