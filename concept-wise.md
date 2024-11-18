@@ -51,40 +51,37 @@ In essence, use `void` when defining methods that don’t return a value, and us
 In Java, prior to Java 8, interfaces could only declare abstract methods. However, with the introduction of Java 8, two significant features were added to interfaces: default methods and static methods. Here’s why they were introduced and their importance:
 
 1. **Default Methods**:
-   - **Backward Compatibility**: Default methods allow developers to add new methods to interfaces without breaking existing implementations. This is crucial for maintaining libraries and APIs.
-   - **Code Reusability**: They enable the provision of common functionality directly in the interface, allowing implementing classes to inherit this behavior without needing to override it unless customization is required.
-   - **Multiple Inheritance**: They help avoid the complexities of multiple inheritance by allowing interfaces to provide shared behavior.
-
-2. **Static Methods**:
-   - **Utility Methods**: Static methods in interfaces allow you to define utility functions related to the interface itself, similar to static methods in classes.
-   - **Organization**: They help keep related functionality within the interface, improving code organization and readability.
-
-Overall, these features enhance the expressiveness and flexibility of interfaces in Java, enabling better design patterns and easier maintenance of code.
-
-
-In Java 8, the introduction of default and static methods in interfaces helps address several challenges related to multiple inheritance and the diamond problem. Here’s how they work and their significance:
-
-### Default Methods
 
 **Definition**: A default method is a method defined in an interface with the `default` keyword. It provides a default implementation that can be inherited by implementing classes.
 
-**Uses**:
-1. **Backward Compatibility**: When new methods are added to an interface, existing implementations don’t break since they can choose to use the default implementation.
-2. **Code Reusability**: Common functionality can be provided in the interface itself, reducing code duplication across implementing classes.
-
+**Uses**:   
+   - **Backward Compatibility**: Default methods allow developers to add new methods to interfaces without breaking existing implementations. This is crucial for maintaining libraries and APIs.
+     When new methods are added to an interface, existing implementations don’t break since they can choose to use the default implementation.
+   - **Code Reusability**: They enable the provision of common functionality directly in the interface, allowing implementing classes to inherit this behavior without needing to override it unless customization is required.
+      Common functionality can be provided in the interface itself, reducing code duplication across implementing classes.
+   - **Multiple Inheritance**: They help avoid the complexities of multiple inheritance by allowing interfaces to provide shared behavior.
+  
 **Resolving Diamond Problem**:
 - The diamond problem occurs when a class inherits from two interfaces that provide the same method. With default methods, if a class implements two interfaces that have a conflicting default method, it must override that method to resolve the ambiguity. The compiler will throw an error if the method is not explicitly overridden, forcing the developer to clarify which implementation to use.
+- 
 
-### Static Methods
+3. **Static Methods**:
 
 **Definition**: Static methods are methods that belong to the interface itself rather than to any instance. They are declared using the `static` keyword.
 
 **Uses**:
-1. **Utility Functions**: Static methods can provide utility or helper functions that are relevant to the interface but don’t require an instance of a class.
-2. **Encapsulation**: They help in grouping related methods within the interface, enhancing organization.
+   - **Utility Methods**: Static methods in interfaces allow you to define utility functions related to the interface itself, similar to static methods in classes.
+     Static methods can provide utility or helper functions that are relevant to the interface but don’t require an instance of a class.
+   - **Organization**: They help keep related functionality within the interface, improving code organization and readability.
+   - **Encapsulation**: They help in grouping related methods within the interface, enhancing organization.
 
 **Resolving Ambiguities**:
 - Static methods do not participate in inheritance, meaning they cannot be overridden. Therefore, if a class implements multiple interfaces with static methods of the same name, there is no ambiguity, as the static methods must be called on the interface itself (e.g., `InterfaceName.method()`).
+- 
+Overall, these features enhance the expressiveness and flexibility of interfaces in Java, enabling better design patterns and easier maintenance of code.
+
+
+In Java 8, the introduction of default and static methods in interfaces helps address several challenges related to multiple inheritance and the diamond problem. Here’s how they work and their significance:
 
 ### Summary
 
@@ -93,7 +90,7 @@ In Java 8, the introduction of default and static methods in interfaces helps ad
 
 Together, these features enhance Java's interfaces by enabling better design and managing complexities related to multiple inheritance.
 
-Sure! Here’s a coding example to illustrate the use of default and static methods in Java 8 interfaces, as well as how they resolve the diamond problem.
+Here’s a coding example to illustrate the use of default and static methods in Java 8 interfaces, as well as how they resolve the diamond problem.
 
 ### Example of Default Methods
 
