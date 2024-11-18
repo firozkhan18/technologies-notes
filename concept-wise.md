@@ -1,6 +1,6 @@
 
-[void and Void are used in different](#differences-between-void-and-void-in-java)
-[Functional Interface](#functional-interface)
+- [void and Void are used in different](#differences-between-void-and-void-in-java)
+- [Functional Interface](#functional-interface)
 
 ## Differences between void and Void in java
 
