@@ -1,11 +1,5 @@
 ## **Table of Contents**
 
-### **1. Leadership & Team FAQs**
-   - [LEAD FAQ](#lead-faq)
-   - [TEAm & Tools FAQ](#team-tools-faq)
-   - [Leadership & Management](#leadership-management)
-   - [Team Lead, My Role and Responsibilities](#team-lead-my-role-and-responsibilities)
-
 ### **2. React Development**
    - [React DevTools Overview](#react-devtools-overview)
    - [Best Practices for Managing a React Application](#best-practices-for-managing-a-react-application)
@@ -40,7 +34,6 @@
    - [Containerization, Orchestration, Load Balancing, and Tracking Requests Across Regions](#containerization-orchestration-load-balancing-and-tracking-requests-across-regions)
 
 ---
-
 
 
 ## Idempotent
