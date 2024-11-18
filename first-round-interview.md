@@ -9,39 +9,38 @@
    - [1.5 Polymorphism](#15-polymorphism)
      - [1.5.1 What is Polymorphism?](#151-what-is-polymorphism)
 
-3. [**Other OOP Concepts in Java**](#other-oop-concepts-in-java)
-   - [Composition (Has-A Relationship)](#composition-has-a-relationship-1)
-   - [Aggregation](#aggregation-1)
-   - [Association](#association-1)
-   - [Summary of When to Use Each Relationship](#summary-of-when-to-use-each-relationship)
+   [**Other OOP Concepts in Java**](#other-oop-concepts-in-java)
+   - [1.6 Composition (Has-A Relationship)](#16-composition-hasarelationship)
+   - [1.7 Aggregation](#17-aggregation)
+   - [1.8 Association](#18-association)
+   - [1.9 Summary of When to Use Each Relationship](#summary-of-when-to-use-each-relationship)
 
-4. [**Process-Oriented Object-Oriented and Functional Programming in Java**](#process-oriented-object-oriented-and-functional-programming-in-java)
-   - [Process-Oriented Programming (POP)](#process-oriented-programming-pop)
-   - [Object-Oriented Programming (OOP)](#object-oriented-programming-oop-1)
-   - [Functional Programming (FP)](#functional-programming-fp)
-   - 
-2. **Java 8 Features**
-   - [2.1 Lambda Expressions](#21-lambda-expressions)
-   - [2.2 Functional Interfaces](#22-functional-interfaces)
-   - [2.3 Default Methods in Interfaces](#23-default-methods-in-interfaces)
-   - [2.4 Streams API](#24-streams-api)
-   - [2.5 Method References](#25-method-references)
-   - [2.6 Optional](#26-optional)
-   - [2.7 Collector API](#27-collectors-api)
-   - [2.8 New Date and Time API (java.time)](#28-new-date-and-time-api-javatime)
+2. [**Process-Oriented Object-Oriented and Functional Programming in Java**](#process-oriented-object-oriented-and-functional-programming-in-java)
+   - [2.1 Process-Oriented Programming (POP)](#21-process-oriented-programming-pop)
+   - [2.2 Object-Oriented Programming (OOP)](#22-object-oriented-programming-oop-1)
+   - [2.3 Functional Programming (FP)](#23-functional-programming-fp)
 
+  
+     
+3. [**Java 8 Features**]
+   - [3.1 Lambda Expressions](#31-lambda-expressions)
+   - [3.2 Functional Interfaces](#32-functional-interfaces)
+   - [3.3 Default Methods in Interfaces](#33-default-methods-in-interfaces)
+   - [3.4 Streams API](#34-streams-api)
+   - [3.5 Method References](#35-method-references)
+   - [3.6 Optional](#36-optional)
+   - [3.7 Collector API](#37-collectors-api)
+   - [3.8 New Date and Time API (java.time)](#38-new-date-and-time-api-javatime)
 
-
-
-5. [**Comparison of Process-Oriented, OOP, and FP in Java**](#comparison-of-process-oriented-oop-and-fp-in-java)
+4. [**Comparison of Process-Oriented, OOP, and FP in Java**](#comparison-of-process-oriented-oop-and-fp-in-java)
    - [Why Do We Need Functional Programming (FP)?](#why-do-we-need-functional-programming-fp)
-     - [Immutability](#immutability)
-     - [Declarative Style](#declarative-style)
-     - [First-Class Functions](#first-class-functions)
-     - [Higher-Order Functions](#higher-order-functions)
-     - [Concurrency and Parallelism](#concurrency-and-parallelism)
-     - [Purity and Referential Transparency](#purity-and-referential-transparency)
-     - [Better Testability and Debugging](#better-testability-and-debugging)
+   - [4.1 Immutability](#41-immutability)
+   - [4.2 Declarative Style](#declarative-style)
+   - [First-Class Functions](#first-class-functions)
+   - [Higher-Order Functions](#higher-order-functions)
+   - [Concurrency and Parallelism](#concurrency-and-parallelism)
+   - [Purity and Referential Transparency](#purity-and-referential-transparency)
+   - [Better Testability and Debugging](#better-testability-and-debugging)
 
 7. [**Conclusion: Why Do We Need Functional Programming?**](#conclusion-why-do-we-need-functional-programming)
 
