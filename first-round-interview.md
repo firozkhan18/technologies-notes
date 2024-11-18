@@ -2541,6 +2541,298 @@ By understanding these concurrency concepts, you can create more robust, thread-
      ```
      - In this example, once a `Person` object is created, you cannot change its `name` or `age` directly. Instead, you create a new `Person` instance with the updated value, ensuring immutability.
 
+## What is Immutability?
+
+**Immutability** refers to the property of an object whose state cannot be modified after it is created. Immutable objects are particularly useful in multi-threaded applications, as they can be shared between threads without the risk of being changed, which helps avoid issues like race conditions.
+
+### Benefits of Immutability
+
+1. **Thread Safety**: Immutable objects are inherently thread-safe as their state cannot be changed.
+2. **Simplicity**: Easier to reason about since their state does not change over time.
+3. **Caching**: Immutable objects can be cached and reused, reducing memory overhead.
+4. **Safe Publishing**: They can be safely shared between multiple threads without synchronization.
+
+### Creating an Immutable Class in Java
+
+To create an immutable class in Java, follow these guidelines:
+
+1. **Declare the class as `final`**: This prevents subclasses from altering its behavior.
+2. **Make all fields `private` and `final`**: This ensures that fields cannot be modified after construction.
+3. **Do not provide setter methods**: This prevents any field from being changed after the object is created.
+4. **Initialize all fields via the constructor**: This allows all fields to be set at the time of object creation.
+5. **Return copies of mutable objects**: If your class holds references to mutable objects, return copies instead of the original objects to prevent external modification.
+
+### Example of an Immutable Class
+
+Here’s how you can implement an immutable class in Java:
+
+```java
+import java.util.Date;
+
+public final class ImmutablePerson {
+    private final String name;
+    private final int age;
+    private final Date birthDate; // Mutable field
+
+    // Constructor
+    public ImmutablePerson(String name, int age, Date birthDate) {
+        this.name = name;
+        this.age = age;
+        // Create a defensive copy to maintain immutability
+        this.birthDate = new Date(birthDate.getTime());
+    }
+
+    // Getter methods
+    public String getName() {
+        return name;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public Date getBirthDate() {
+        // Return a defensive copy
+        return new Date(birthDate.getTime());
+    }
+}
+```
+
+### Usage Example
+
+```java
+public class Main {
+    public static void main(String[] args) {
+        Date birthDate = new Date();
+        ImmutablePerson person = new ImmutablePerson("Alice", 30, birthDate);
+
+        System.out.println("Name: " + person.getName());
+        System.out.println("Age: " + person.getAge());
+        System.out.println("Birth Date: " + person.getBirthDate());
+
+        // Attempting to modify the birthDate
+        birthDate.setTime(0); // This will not affect the ImmutablePerson instance
+        System.out.println("Original Birth Date after modification: " + person.getBirthDate());
+    }
+}
+```
+
+### Conclusion
+
+Immutability is a powerful concept in programming that enhances safety and simplicity. By following the guidelines to create immutable classes, you can ensure that your objects remain consistent and thread-safe. If you have further questions or need more examples, feel free to ask!
+
+**[⬆ Back to Top](#table-of-contents)**
+
+
+### Immutability in Java
+
+**Immutability** in Java refers to an object's state that, once created, **cannot** be changed. Immutable objects are particularly useful in concurrent programming, as they ensure thread safety by preventing the modification of their state. 
+
+Java provides several mechanisms and best practices for creating immutable objects, and it's a common design pattern used in many libraries and frameworks (e.g., `String`, `Integer`, `LocalDate`, etc.).
+
+---
+
+### **Why Immutability?**
+
+Immutability offers several benefits:
+
+1. **Thread Safety**: Immutable objects can be safely shared between threads because their state cannot change after they are constructed. This makes them inherently thread-safe, as there's no need for synchronization.
+2. **Simplicity**: The design of immutable objects is often simpler and less error-prone because the object’s state cannot change.
+3. **Cacheability**: Immutable objects are good candidates for caching because they can be shared without concern for data corruption.
+4. **Predictability**: Since the state cannot be changed after creation, immutable objects make the code more predictable and easier to reason about.
+
+---
+
+### **Characteristics of Immutable Objects**
+
+For an object to be immutable, it must meet the following criteria:
+
+1. **Final Class**: The class should be `final` to prevent subclassing, which could potentially change the behavior of the object.
+2. **Final Fields**: All fields of the class should be `final` to ensure they can be assigned only once.
+3. **Private Fields**: Fields should be `private` to prevent direct access from outside the class.
+4. **No Setter Methods**: The class should not provide setter methods (methods that modify fields) to prevent changing the state of the object.
+5. **Proper Initialization**: All fields should be initialized in the constructor (either directly or through methods) to ensure that the object is fully constructed before being used.
+6. **Defensive Copying**: If the object holds references to mutable objects, defensive copying should be used to prevent the caller from modifying those objects.
+
+---
+
+### **Creating Immutable Objects in Java**
+
+Let's look at a step-by-step example of how to create an immutable class in Java:
+
+#### Example: Immutable `Person` Class
+
+```java
+import java.util.Date;
+
+public final class Person {
+    private final String name;
+    private final int age;
+    private final Date birthDate;
+
+    // Constructor that initializes all fields
+    public Person(String name, int age, Date birthDate) {
+        this.name = name;
+        this.age = age;
+        // Defensive copying to prevent external modification
+        this.birthDate = new Date(birthDate.getTime());
+    }
+
+    // Getter methods for all fields
+    public String getName() {
+        return name;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public Date getBirthDate() {
+        // Returning a defensive copy to preserve immutability
+        return new Date(birthDate.getTime());
+    }
+}
+```
+
+#### Key Points:
+1. **Final Class**: The class is declared as `final` to prevent inheritance.
+2. **Final Fields**: The fields are `final` to ensure they are set only once during object construction.
+3. **No Setters**: No setter methods are provided, so fields cannot be modified after the object is created.
+4. **Defensive Copying**: For the `birthDate` field (a mutable `Date` object), we make a defensive copy in both the constructor and the `getBirthDate()` method to ensure that the original `Date` object cannot be modified from outside.
+
+---
+
+### **Immutable Collections in Java**
+
+While it's straightforward to create immutable objects of custom classes, Java provides built-in support for immutable collections as well, especially since Java 9 with the introduction of the `List.of()`, `Set.of()`, and `Map.of()` methods.
+
+#### Example: Immutable List
+
+```java
+import java.util.List;
+
+public class ImmutableListExample {
+    public static void main(String[] args) {
+        List<String> immutableList = List.of("apple", "banana", "cherry");
+
+        // The following will throw UnsupportedOperationException because the list is immutable
+        // immutableList.add("date");
+
+        System.out.println(immutableList);
+    }
+}
+```
+
+In this case, `List.of()` creates an immutable list that doesn't allow modification (e.g., no `add()`, `remove()`, or `clear()` operations).
+
+---
+
+### **Immutable Object Best Practices**
+
+1. **Ensure Proper Initialization**: 
+   Always initialize fields in the constructor. Ensure the object is fully initialized before it is used.
+   
+2. **Defensive Copying**:
+   - If the object contains mutable fields (like `Date`, arrays, or custom objects), always make a copy of those fields in the constructor and any getter methods. This ensures the caller cannot modify the internal state.
+   
+   - Example:
+     ```java
+     public class Address {
+         private final String city;
+         private final String state;
+
+         public Address(String city, String state) {
+             this.city = city;
+             this.state = state;
+         }
+
+         public String getCity() {
+             return city;
+         }
+
+         public String getState() {
+             return state;
+         }
+     }
+     ```
+
+3. **Use `final` for Fields and Methods**:
+   - Mark fields as `final` to ensure they are assigned only once.
+   - Mark methods (including the constructor) as `final` where appropriate to prevent overriding.
+
+4. **Serialization Considerations**:
+   If the immutable object is being serialized, ensure that the deserialization process does not violate immutability. One way to handle this is to use a custom `readObject` method, which ensures the object’s state cannot be altered during deserialization.
+
+---
+
+### **Example: Immutable `Person` Class with Serialization**
+
+```java
+import java.io.Serializable;
+import java.util.Date;
+import java.io.ObjectStreamException;
+import java.io.ObjectInputStream;
+
+public final class Person implements Serializable {
+    private static final long serialVersionUID = 1L;
+
+    private final String name;
+    private final int age;
+    private final Date birthDate;
+
+    public Person(String name, int age, Date birthDate) {
+        this.name = name;
+        this.age = age;
+        this.birthDate = new Date(birthDate.getTime());  // Defensive copy
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public Date getBirthDate() {
+        return new Date(birthDate.getTime());  // Defensive copy
+    }
+
+    // Ensure immutability during deserialization
+    private Object readResolve() throws ObjectStreamException {
+        return new Person(this.name, this.age, this.birthDate);
+    }
+}
+```
+
+### **Common Use Cases of Immutable Objects**
+
+1. **String Class**: One of the most famous examples of immutability in Java is the `String` class. Once a `String` object is created, its value cannot be changed.
+   ```java
+   String s = "Hello";
+   s = s + " World"; // A new String object is created, the original "Hello" remains unchanged.
+   ```
+
+2. **Wrapper Classes**: Classes like `Integer`, `Double`, `Long`, and `BigDecimal` are immutable. Once they are created, their value cannot be altered.
+
+3. **Immutable Data Transfer Objects (DTOs)**: DTOs used to transfer data between different layers of an application (like between controllers and services in a microservice) are often immutable. This ensures that data passed around in the system remains unchanged.
+
+4. **Java 8+ Immutable Collections**: As mentioned earlier, `List.of()`, `Set.of()`, and `Map.of()` provide easy ways to create immutable collections, which are highly useful in Java 9 and beyond.
+
+---
+
+### **Conclusion**
+
+Immutability is a valuable design principle in Java that enhances **thread safety**, **predictability**, and **simplicity** in code. By ensuring that once an object is created, it cannot be altered, you eliminate a wide range of potential errors and concurrency issues. The use of immutable objects is a great way to make your Java programs more robust, and with Java 8+ features, working with immutability is more convenient and efficient than ever before.
+
+Some key takeaways:
+- Use `final` classes, fields, and methods to create immutable objects.
+- Avoid setter methods to ensure that object state cannot change after creation.
+- Use defensive copying when dealing with mutable fields to preserve immutability.
+- Immutable objects are naturally thread-safe, making them great for concurrent programming.
+
+**[⬆ Back to Top](#table-of-contents)**
+
 ---
 
 ### 7.1 Declarative Style
@@ -2698,89 +2990,6 @@ Functional programming (FP) provides a range of benefits that are particularly v
 
 ---
 
-## What is Immutability?
-
-**Immutability** refers to the property of an object whose state cannot be modified after it is created. Immutable objects are particularly useful in multi-threaded applications, as they can be shared between threads without the risk of being changed, which helps avoid issues like race conditions.
-
-### Benefits of Immutability
-
-1. **Thread Safety**: Immutable objects are inherently thread-safe as their state cannot be changed.
-2. **Simplicity**: Easier to reason about since their state does not change over time.
-3. **Caching**: Immutable objects can be cached and reused, reducing memory overhead.
-4. **Safe Publishing**: They can be safely shared between multiple threads without synchronization.
-
-### Creating an Immutable Class in Java
-
-To create an immutable class in Java, follow these guidelines:
-
-1. **Declare the class as `final`**: This prevents subclasses from altering its behavior.
-2. **Make all fields `private` and `final`**: This ensures that fields cannot be modified after construction.
-3. **Do not provide setter methods**: This prevents any field from being changed after the object is created.
-4. **Initialize all fields via the constructor**: This allows all fields to be set at the time of object creation.
-5. **Return copies of mutable objects**: If your class holds references to mutable objects, return copies instead of the original objects to prevent external modification.
-
-### Example of an Immutable Class
-
-Here’s how you can implement an immutable class in Java:
-
-```java
-import java.util.Date;
-
-public final class ImmutablePerson {
-    private final String name;
-    private final int age;
-    private final Date birthDate; // Mutable field
-
-    // Constructor
-    public ImmutablePerson(String name, int age, Date birthDate) {
-        this.name = name;
-        this.age = age;
-        // Create a defensive copy to maintain immutability
-        this.birthDate = new Date(birthDate.getTime());
-    }
-
-    // Getter methods
-    public String getName() {
-        return name;
-    }
-
-    public int getAge() {
-        return age;
-    }
-
-    public Date getBirthDate() {
-        // Return a defensive copy
-        return new Date(birthDate.getTime());
-    }
-}
-```
-
-### Usage Example
-
-```java
-public class Main {
-    public static void main(String[] args) {
-        Date birthDate = new Date();
-        ImmutablePerson person = new ImmutablePerson("Alice", 30, birthDate);
-
-        System.out.println("Name: " + person.getName());
-        System.out.println("Age: " + person.getAge());
-        System.out.println("Birth Date: " + person.getBirthDate());
-
-        // Attempting to modify the birthDate
-        birthDate.setTime(0); // This will not affect the ImmutablePerson instance
-        System.out.println("Original Birth Date after modification: " + person.getBirthDate());
-    }
-}
-```
-
-### Conclusion
-
-Immutability is a powerful concept in programming that enhances safety and simplicity. By following the guidelines to create immutable classes, you can ensure that your objects remain consistent and thread-safe. If you have further questions or need more examples, feel free to ask!
-
----
-
-**[⬆ Back to Top](#table-of-contents)**
 
 In modern Java (from Java 8 onwards), functional programming features like **lambdas**, **streams**, and **optional** allow you to write more expressive and concise code that’s easier to understand and maintain.
 
@@ -6608,214 +6817,7 @@ These features enable more flexible and maintainable code, allowing developers t
 
 **[⬆ Back to Top](#table-of-contents)**
 
-### Immutability in Java
 
-**Immutability** in Java refers to an object's state that, once created, **cannot** be changed. Immutable objects are particularly useful in concurrent programming, as they ensure thread safety by preventing the modification of their state. 
-
-Java provides several mechanisms and best practices for creating immutable objects, and it's a common design pattern used in many libraries and frameworks (e.g., `String`, `Integer`, `LocalDate`, etc.).
-
----
-
-### **Why Immutability?**
-
-Immutability offers several benefits:
-
-1. **Thread Safety**: Immutable objects can be safely shared between threads because their state cannot change after they are constructed. This makes them inherently thread-safe, as there's no need for synchronization.
-2. **Simplicity**: The design of immutable objects is often simpler and less error-prone because the object’s state cannot change.
-3. **Cacheability**: Immutable objects are good candidates for caching because they can be shared without concern for data corruption.
-4. **Predictability**: Since the state cannot be changed after creation, immutable objects make the code more predictable and easier to reason about.
-
----
-
-### **Characteristics of Immutable Objects**
-
-For an object to be immutable, it must meet the following criteria:
-
-1. **Final Class**: The class should be `final` to prevent subclassing, which could potentially change the behavior of the object.
-2. **Final Fields**: All fields of the class should be `final` to ensure they can be assigned only once.
-3. **Private Fields**: Fields should be `private` to prevent direct access from outside the class.
-4. **No Setter Methods**: The class should not provide setter methods (methods that modify fields) to prevent changing the state of the object.
-5. **Proper Initialization**: All fields should be initialized in the constructor (either directly or through methods) to ensure that the object is fully constructed before being used.
-6. **Defensive Copying**: If the object holds references to mutable objects, defensive copying should be used to prevent the caller from modifying those objects.
-
----
-
-### **Creating Immutable Objects in Java**
-
-Let's look at a step-by-step example of how to create an immutable class in Java:
-
-#### Example: Immutable `Person` Class
-
-```java
-import java.util.Date;
-
-public final class Person {
-    private final String name;
-    private final int age;
-    private final Date birthDate;
-
-    // Constructor that initializes all fields
-    public Person(String name, int age, Date birthDate) {
-        this.name = name;
-        this.age = age;
-        // Defensive copying to prevent external modification
-        this.birthDate = new Date(birthDate.getTime());
-    }
-
-    // Getter methods for all fields
-    public String getName() {
-        return name;
-    }
-
-    public int getAge() {
-        return age;
-    }
-
-    public Date getBirthDate() {
-        // Returning a defensive copy to preserve immutability
-        return new Date(birthDate.getTime());
-    }
-}
-```
-
-#### Key Points:
-1. **Final Class**: The class is declared as `final` to prevent inheritance.
-2. **Final Fields**: The fields are `final` to ensure they are set only once during object construction.
-3. **No Setters**: No setter methods are provided, so fields cannot be modified after the object is created.
-4. **Defensive Copying**: For the `birthDate` field (a mutable `Date` object), we make a defensive copy in both the constructor and the `getBirthDate()` method to ensure that the original `Date` object cannot be modified from outside.
-
----
-
-### **Immutable Collections in Java**
-
-While it's straightforward to create immutable objects of custom classes, Java provides built-in support for immutable collections as well, especially since Java 9 with the introduction of the `List.of()`, `Set.of()`, and `Map.of()` methods.
-
-#### Example: Immutable List
-
-```java
-import java.util.List;
-
-public class ImmutableListExample {
-    public static void main(String[] args) {
-        List<String> immutableList = List.of("apple", "banana", "cherry");
-
-        // The following will throw UnsupportedOperationException because the list is immutable
-        // immutableList.add("date");
-
-        System.out.println(immutableList);
-    }
-}
-```
-
-In this case, `List.of()` creates an immutable list that doesn't allow modification (e.g., no `add()`, `remove()`, or `clear()` operations).
-
----
-
-### **Immutable Object Best Practices**
-
-1. **Ensure Proper Initialization**: 
-   Always initialize fields in the constructor. Ensure the object is fully initialized before it is used.
-   
-2. **Defensive Copying**:
-   - If the object contains mutable fields (like `Date`, arrays, or custom objects), always make a copy of those fields in the constructor and any getter methods. This ensures the caller cannot modify the internal state.
-   
-   - Example:
-     ```java
-     public class Address {
-         private final String city;
-         private final String state;
-
-         public Address(String city, String state) {
-             this.city = city;
-             this.state = state;
-         }
-
-         public String getCity() {
-             return city;
-         }
-
-         public String getState() {
-             return state;
-         }
-     }
-     ```
-
-3. **Use `final` for Fields and Methods**:
-   - Mark fields as `final` to ensure they are assigned only once.
-   - Mark methods (including the constructor) as `final` where appropriate to prevent overriding.
-
-4. **Serialization Considerations**:
-   If the immutable object is being serialized, ensure that the deserialization process does not violate immutability. One way to handle this is to use a custom `readObject` method, which ensures the object’s state cannot be altered during deserialization.
-
----
-
-### **Example: Immutable `Person` Class with Serialization**
-
-```java
-import java.io.Serializable;
-import java.util.Date;
-import java.io.ObjectStreamException;
-import java.io.ObjectInputStream;
-
-public final class Person implements Serializable {
-    private static final long serialVersionUID = 1L;
-
-    private final String name;
-    private final int age;
-    private final Date birthDate;
-
-    public Person(String name, int age, Date birthDate) {
-        this.name = name;
-        this.age = age;
-        this.birthDate = new Date(birthDate.getTime());  // Defensive copy
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public int getAge() {
-        return age;
-    }
-
-    public Date getBirthDate() {
-        return new Date(birthDate.getTime());  // Defensive copy
-    }
-
-    // Ensure immutability during deserialization
-    private Object readResolve() throws ObjectStreamException {
-        return new Person(this.name, this.age, this.birthDate);
-    }
-}
-```
-
-### **Common Use Cases of Immutable Objects**
-
-1. **String Class**: One of the most famous examples of immutability in Java is the `String` class. Once a `String` object is created, its value cannot be changed.
-   ```java
-   String s = "Hello";
-   s = s + " World"; // A new String object is created, the original "Hello" remains unchanged.
-   ```
-
-2. **Wrapper Classes**: Classes like `Integer`, `Double`, `Long`, and `BigDecimal` are immutable. Once they are created, their value cannot be altered.
-
-3. **Immutable Data Transfer Objects (DTOs)**: DTOs used to transfer data between different layers of an application (like between controllers and services in a microservice) are often immutable. This ensures that data passed around in the system remains unchanged.
-
-4. **Java 8+ Immutable Collections**: As mentioned earlier, `List.of()`, `Set.of()`, and `Map.of()` provide easy ways to create immutable collections, which are highly useful in Java 9 and beyond.
-
----
-
-### **Conclusion**
-
-Immutability is a valuable design principle in Java that enhances **thread safety**, **predictability**, and **simplicity** in code. By ensuring that once an object is created, it cannot be altered, you eliminate a wide range of potential errors and concurrency issues. The use of immutable objects is a great way to make your Java programs more robust, and with Java 8+ features, working with immutability is more convenient and efficient than ever before.
-
-Some key takeaways:
-- Use `final` classes, fields, and methods to create immutable objects.
-- Avoid setter methods to ensure that object state cannot change after creation.
-- Use defensive copying when dealing with mutable fields to preserve immutability.
-- Immutable objects are naturally thread-safe, making them great for concurrent programming.
-
-**[⬆ Back to Top](#table-of-contents)**
 
 ### Singleton Class in Java
 
