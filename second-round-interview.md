@@ -956,3 +956,10 @@ Being a team lead involves a blend of technical expertise, management skills, an
 - Recognize achievements, provide career growth opportunities, and ensure the work is meaningful and challenging.
 
 ---
+
+### 16.8 Designing Software Architecture
+
+- Consider **performance**, **scalability**, **maintainability**, and **security** while designing a robust software architecture.
+- Use **modular design**, **microservices**, and **cloud-native** approaches.
+
+---
