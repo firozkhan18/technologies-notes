@@ -94,10 +94,10 @@ This will help you prepare questions and themes for the **Managerial Round Inter
    - [14.2 How do you handle stress and tight deadlines?](#142-how-do-you-handle-stress-and-tight-deadlines)
    - [14.3 Can you describe a situation where you had to learn a new technology or tool quickly? How did you approach it?](#143-can-you-describe-a-situation-where-you-had-to-learn-a-new-technology-or-tool-quickly-how-did-you-approach-it)
    - [4.4 How do you handle changes in project scope?](#44-how-do-you-handle-changes-in-project-scope)
-   - [14.5 How do you prioritize your tasks when you have multiple deadlines to meet?](#145-how-do-you-prioritize-your-tasks-when-you-have-multiple-deadlines-to-meet)
- 
+    
 ## 15. **Work Culture and Team Building**
    - [15.1 What do you believe is the key to building a strong team culture?](#151-what-do-you-believe-is-the-key-to-building-a-strong-team-culture)
+   - [15.2 How do you prioritize your tasks when you have multiple deadlines to meet?](#152-how-do-you-prioritize-your-tasks-when-you-have-multiple-deadlines-to-meet)
 ---
 
 ## 1. **Team Leadership and Management**
@@ -412,7 +412,7 @@ This will help you prepare questions and themes for the **Managerial Round Inter
 
 ## 14. **Technical Skills and Decision-Making**
 
-### 14.1 How do you ensure code quality and maintainability in a full-stack project?**
+### 14.1 How do you ensure code quality and maintainability in a full-stack project?
 - Discuss your approach to writing clean, reusable code, using version control, conducting code reviews, and implementing automated tests.
 
 **Answer**:
@@ -436,36 +436,24 @@ Ensuring **code quality and maintainability** involves a few best practices:
 "In a previous project, I was required to use **Kafka** for message streaming, which was something I hadn't worked with before. To learn Kafka quickly, I first went through the official documentation and completed some online tutorials to get a basic understanding of how Kafka works. I then created a small prototype within the project to implement message producers and consumers. During the implementation, I worked closely with team members who had more experience with Kafka to get their insights and best practices. I also joined online forums and communities to ask questions and troubleshoot issues. By breaking down the learning process into smaller steps and practicing hands-on, I was able to become proficient with Kafka within a few weeks."
 
 ### 14.4 How do you handle changes in project scope?
-- Talk about how you manage scope changes, whether by re-assessing priorities, communicating with stakeholders, or adjusting timelines.
-
-### 14.5 How do you prioritize your tasks when you have multiple deadlines to meet?
-
-**Answer**:  
-"When managing multiple deadlines, I use a structured approach. First, I assess the urgency and importance of each task and determine which ones have the highest priority. I break down larger tasks into smaller, more manageable chunks and create a timeline or checklist for each task. I also regularly communicate with stakeholders to ensure that any changes in priorities are accounted for. If I encounter unexpected roadblocks, I reassess and adjust my plan, ensuring I stay on track to meet all deadlines. I also make sure to allocate time for testing and code review to maintain the quality of my work."
-
----
+- Talk about how you manage scope changes, whether by re-assessing priorities, communicating with stakeholders, or adjusting timelines.---
 
 ## 15. **Work Culture and Team Building**
 
 ### 15.1 What do you believe is the key to building a strong team culture?
 - Share your thoughts on creating a supportive, open, and accountable team culture, whether through shared values, team-building activities, or effective communication.
 
----
+### 15.2 How do you prioritize your tasks when you have multiple deadlines to meet?
 
-HR discussions often focus on assessing a candidate's cultural fit, communication skills, attitude, and alignment with the company’s values and goals. 
-
----
-
-
-
+**Answer**:  
+"When managing multiple deadlines, I use a structured approach. First, I assess the urgency and importance of each task and determine which ones have the highest priority. I break down larger tasks into smaller, more manageable chunks and create a timeline or checklist for each task. I also regularly communicate with stakeholders to ensure that any changes in priorities are accounted for. If I encounter unexpected roadblocks, I reassess and adjust my plan, ensuring I stay on track to meet all deadlines. I also make sure to allocate time for testing and code review to maintain the quality of my work."
 
 ---
-
-## TEAM & Tools FAQ
+## 16 How do you handle multiple priority tasks?
 
 When you're faced with **multiple priority tasks** and need to manage them effectively, it’s essential to have a structured approach to ensure that you're working efficiently and not feeling overwhelmed. Here's how you can break down and manage such situations:
 
-### 1. **Assess and Categorize the Tasks**
+### 16.1 **Assess and Categorize the Tasks**
 The first step is to **identify** and **categorize** all the tasks you need to complete. Not all tasks, even if they seem equally urgent, have the same level of complexity or importance.
 
 - **Urgent vs. Important**: Differentiate between tasks that are urgent and those that are important. Urgent tasks might need immediate attention but may not necessarily contribute to your long-term goals. Important tasks, while they might not need immediate action, will contribute significantly to your project or goals.
@@ -477,7 +465,7 @@ The first step is to **identify** and **categorize** all the tasks you need to c
   
 - **Task Dependencies**: Identify any tasks that are dependent on the completion of others. Prioritize tasks that unblock others or need to be completed in sequence.
 
-### 2. **Break Down Larger Tasks into Smaller, Manageable Parts**
+### 16.2 **Break Down Larger Tasks into Smaller, Manageable Parts**
 When facing a large or complex task, it’s easy to become overwhelmed. Break down these tasks into smaller, more actionable items. This will help you manage your workload more efficiently and give you a clear path forward.
 
 - **Identify Milestones**: For each large task, break it down into smaller **milestones** or **sub-tasks** that can be completed in a shorter time frame.
@@ -490,14 +478,14 @@ When facing a large or complex task, it’s easy to become overwhelmed. Break do
 
 - **Estimate Time for Each Sub-task**: Estimate how long each part will take. This will help you gauge the overall time needed to complete the task and adjust priorities accordingly.
 
-### 3. **Use a Task Management System or Tool**
+### 16.3 **Use a Task Management System or Tool**
 Having a clear system to track tasks is crucial when you're juggling multiple priorities. Use tools like **Trello**, **JIRA**, **Asana**, or even a simple to-do list (digital or paper) to manage your tasks.
 
 - **Create a Priority List**: List all the tasks and rank them according to urgency and importance. Consider time-sensitive projects, deadlines, and dependencies.
 - **Set Deadlines**: Even if some tasks are flexible, setting **internal deadlines** can help you manage time better and prevent procrastination.
 - **Visual Tracking**: Tools like Trello or JIRA use visual boards and timelines that help you track task progress, assign deadlines, and identify blockers.
 
-### 4. **Time Blocking and Scheduling**
+### 16.4 **Time Blocking and Scheduling**
 Effective time management often comes down to allocating **specific time slots** for each task. This will ensure that you stay focused and don’t get overwhelmed by switching between tasks constantly.
 
 - **Time Blocking**: Set aside **specific periods** of time for each task. For example:
@@ -507,25 +495,25 @@ Effective time management often comes down to allocating **specific time slots**
   - 3 PM - 4 PM: Review and test unit tests for the service.
 - **Pomodoro Technique**: Work in **focused intervals** (e.g., 25 minutes of work, followed by a 5-minute break). This can improve productivity and help you stay sharp.
 
-### 5. **Delegate When Possible**
+### 16.5 **Delegate When Possible**
 If you're working as part of a team and find yourself overwhelmed with too many high-priority tasks, consider **delegating** where appropriate. Delegation doesn’t just relieve your workload; it also empowers other team members.
 
 - **Delegate Low Priority or Repetitive Tasks**: Tasks that don’t require your expertise or have low impact can be delegated to someone else, allowing you to focus on more critical work.
 - **Collaborate**: Communicate with colleagues or managers if you feel that certain tasks or deadlines are unrealistic. Collaboration can help redistribute workload effectively.
 
-### 6. **Use the 80/20 Rule (Pareto Principle)**
+### 16.6 **Use the 80/20 Rule (Pareto Principle)**
 The **80/20 Rule** states that **80% of results** come from **20% of efforts**. Focus on the tasks that will give you the most impact in terms of results and overall project success.
 
 - **Prioritize High-Impact Tasks**: Look for tasks that will directly move the needle on your project or business goals and give them the highest priority.
 - **Avoid Time-Wasters**: Identify tasks that consume a lot of time but contribute little to progress, and consider postponing or eliminating them.
 
-### 7. **Stay Agile and Adjust Priorities**
+### 16.7 **Stay Agile and Adjust Priorities**
 Sometimes, even the best-laid plans need to be adjusted. In a fast-paced work environment, priorities can change quickly, and flexibility is key to managing multiple tasks.
 
 - **Review Daily**: At the end of each day, assess your progress. If some tasks took longer than expected or if priorities have shifted, adjust your schedule and task list accordingly.
 - **Use Agile Methodology**: In an Agile environment, prioritize work based on **sprint goals** or **backlog grooming**. Regular stand-ups or team meetings can help identify shifting priorities and re-align tasks.
 
-### 8. **Communicate with Stakeholders**
+### 16.8 **Communicate with Stakeholders**
 Transparency is key when managing multiple high-priority tasks. If you're unsure about meeting deadlines or prioritizing work, communicate with stakeholders, managers, or team leads.
 
 - **Set Expectations**: Let them know if a task might take longer than expected or if you're focusing on another high-priority task first.
@@ -533,7 +521,7 @@ Transparency is key when managing multiple high-priority tasks. If you're unsure
 
 ---
 
-### 9. **Take Care of Yourself**
+### 16.9 **Take Care of Yourself**
 Managing multiple high-priority tasks can be stressful, but it’s essential to take care of your physical and mental health in order to maintain high productivity over time.
 
 - **Take Breaks**: Short breaks throughout the day can help maintain focus and reduce stress.
