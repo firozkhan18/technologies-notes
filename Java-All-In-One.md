@@ -1,15 +1,24 @@
 
 # Table of Contents
 
-1. [Class Components](#class-components)
-2. [Functional Components](#functional-components)
-3. [Pure Components](#pure-components)
-4. [Higher-Order Components (HOCs)](#higher-order-components-hocs)
-5. [Stateless Functional Components](#stateless-functional-components)
-6. [Controlled Components](#controlled-components)
-7. [Uncontrolled Components](#uncontrolled-components)
-8. [Render Props Components](#render-props-components)
-9. [Context Provider Components](#context-provider-components)
+1. [Class and Object](#class-and-object)
+2. [Encapsulation](#encapsulation)
+3. [Inheritance](#inheritance)
+4. [Polymorphism](#polymorphism)
+5. [Abstraction](#abstraction)
+6. [Composition](#composition)
+7. [Abstract Class](#abstract-class)
+8. [Regular Interface](#regular-interface)
+9. [Functional Interface](#functional-interface)
+10. [Class Components](#class-components)
+11. [Functional Components](#functional-components)
+12. [Pure Components](#pure-components)
+13. [Higher-Order Components (HOCs)](#higher-order-components-hocs)
+14. [Stateless Functional Components](#stateless-functional-components)
+15. [Controlled Components](#controlled-components)
+16. [Uncontrolled Components](#uncontrolled-components)
+17. [Render Props Components](#render-props-components)
+18. [Context Provider Components](#context-provider-components)
 
 ## JAVA
 
