@@ -65,39 +65,38 @@ This will help you prepare questions and themes for the **Managerial Round Inter
    - [10.2 Vision for Evolving Technology Stack](#102-vision-for-evolving-technology-stack)
    - [10.3 Staying Ahead of Industry Trends and New Technologies](#103-staying-ahead-of-industry-trends-and-new-technologies)
 
+## 11. **Personal Motivation and Self-Reflection**
+   - [11.1 Tell us about yourself](#111-tell-us-about-yourself)
+   - [11.2 Why do you want to work at XXX?](#112-why-do-you-want-to-work-at-xxx)
+   - [11.3 What motivates you to do your best work?](#113-what-motivates-you-to-do-your-best-work)
+   - [11.4 How do you stay motivated when working on repetitive tasks or projects?](#114-how-do-you-stay-motivated-when-working-on-repetitive-tasks-or-projects)
+   - [11.5 What are your long-term career goals, and how do you see this role helping you achieve them?](#115-what-are-your-long-term-career-goals-and-how-do-you-see-this-role-helping-you-achieve-them)
 
-### 1. **Personal Motivation and Self-Reflection**
-   - [1.1 Tell us about yourself](#11-tell-us-about-yourself)
-   - [1.2 Why do you want to work at XXX?](#12-why-do-you-want-to-work-at-xxx)
-   - [1.3 What motivates you to do your best work?](#13-what-motivates-you-to-do-your-best-work)
-   - [1.4 How do you stay motivated when working on repetitive tasks or projects?](#14-how-do-you-stay-motivated-when-working-on-repetitive-tasks-or-projects)
-   - [1.5 What are your long-term career goals, and how do you see this role helping you achieve them?](#15-what-are-your-long-term-career-goals-and-how-do-you-see-this-role-helping-you-achieve-them)
+## 12. **Communication and Collaboration**
+   - [12.1 How do you handle communication and collaboration with cross-functional teams, such as business stakeholders or SMEs?](#121-how-do-you-handle-communication-and-collaboration-with-cross-functional-teams-such-as-business-stakeholders-or-smes)
+   - [12.2 How do you ensure effective communication within your team and with other departments?](#122-how-do-you-ensure-effective-communication-within-your-team-and-with-other-departments)
+   - [12.3 How do you approach teamwork and collaboration in a diverse work environment?](#123-how-do-you-approach-teamwork-and-collaboration-in-a-diverse-work-environment)
+   - [12.4 How do you handle conflicts with team members or stakeholders?](#124-how-do-you-handle-conflicts-with-team-members-or-stakeholders)
+   - [12.5 Describe a situation where you had to make a tough decision that was unpopular with your team.](#125-describe-a-situation-where-you-had-to-make-a-tough-decision-that-was-unpopular-with-your-team)
+   - [12.6 How do you align your team's goals with the overall objectives of the organization?](#126-how-do-you-align-your-teams-goals-with-the-overall-objectives-of-the-organization)
 
-### 2. **Communication and Collaboration**
-   - [2.1 How do you handle communication and collaboration with cross-functional teams, such as business stakeholders or SMEs?](#21-how-do-you-handle-communication-and-collaboration-with-cross-functional-teams-such-as-business-stakeholders-or-smes)
-   - [2.2 How do you ensure effective communication within your team and with other departments?](#22-how-do-you-ensure-effective-communication-within-your-team-and-with-other-departments)
-   - [2.3 How do you approach teamwork and collaboration in a diverse work environment?](#23-how-do-you-approach-teamwork-and-collaboration-in-a-diverse-work-environment)
-   - [2.4 How do you handle conflicts with team members or stakeholders?](#24-how-do-you-handle-conflicts-with-team-members-or-stakeholders)
-   - [2.5 Describe a situation where you had to make a tough decision that was unpopular with your team.](#25-describe-a-situation-where-you-had-to-make-a-tough-decision-that-was-unpopular-with-your-team)
-   - [2.6 How do you align your team's goals with the overall objectives of the organization?](#26-how-do-you-align-your-teams-goals-with-the-overall-objectives-of-the-organization)
+## 13. **Leadership & Management**
+   - [13.1 How do you prioritize tasks and manage deadlines in a fast-paced environment?](#131-how-do-you-prioritize-tasks-and-manage-deadlines-in-a-fast-paced-environment)
+   - [13.2 Describe a time when you faced a challenge in a project and how you overcame it.](#132-describe-a-time-when-you-faced-a-challenge-in-a-project-and-how-you-overcame-it)
+   - [13.3 How do you assess team members' performance?](#133-how-do-you-assess-team-members-performance)
+   - [13.4 What strategies do you use to mentor junior developers?](#134-what-strategies-do-you-use-to-mentor-junior-developers)
+   - [13.5 How do you prioritize tasks and manage deadlines in a fast-paced environment?](#135-how-do-you-prioritize-tasks-and-manage-deadlines-in-a-fast-paced-environment)
+   - [13.6 How do you ensure you remain technically relevant while managing a team?](#136-how-do-you-ensure-you-remain-technically-relevant-while-managing-a-team)
+   - [13.7 Can you describe your leadership style? How do you adapt it based on your team’s needs?](#137-can-you-describe-your-leadership-style-how-do-you-adapt-it-based-on-your-teams-needs)
 
-### 3. **Leadership & Management**
-   - [3.1 How do you prioritize tasks and manage deadlines in a fast-paced environment?](#31-how-do-you-prioritize-tasks-and-manage-deadlines-in-a-fast-paced-environment)
-   - [3.2 Describe a time when you faced a challenge in a project and how you overcame it.](#32-describe-a-time-when-you-faced-a-challenge-in-a-project-and-how-you-overcame-it)
-   - [3.3 How do you assess team members' performance?](#33-how-do-you-assess-team-members-performance)
-   - [3.4 What strategies do you use to mentor junior developers?](#34-what-strategies-do-you-use-to-mentor-junior-developers)
-   - [3.5 How do you prioritize tasks and manage deadlines in a fast-paced environment?](#35-how-do-you-prioritize-tasks-and-manage-deadlines-in-a-fast-paced-environment)
-   - [3.6 How do you ensure you remain technically relevant while managing a team?](#36-how-do-you-ensure-you-remain-technically-relevant-while-managing-a-team)
-   - [3.7 Can you describe your leadership style? How do you adapt it based on your team’s needs?](#37-can-you-describe-your-leadership-style-how-do-you-adapt-it-based-on-your-teams-needs)
-
-### 4. **Technical Skills and Decision-Making**
-   - [4.1 How do you ensure code quality and maintainability in a full-stack project?](#41-how-do-you-ensure-code-quality-and-maintainability-in-a-full-stack-project)
-   - [4.2 How do you handle stress and tight deadlines?](#42-how-do-you-handle-stress-and-tight-deadlines)
-   - [4.3 Can you describe a situation where you had to learn a new technology or tool quickly? How did you approach it?](#43-can-you-describe-a-situation-where-you-had-to-learn-a-new-technology-or-tool-quickly-how-did-you-approach-it)
+## 14. **Technical Skills and Decision-Making**
+   - [14.1 How do you ensure code quality and maintainability in a full-stack project?](#141-how-do-you-ensure-code-quality-and-maintainability-in-a-full-stack-project)
+   - [14.2 How do you handle stress and tight deadlines?](#142-how-do-you-handle-stress-and-tight-deadlines)
+   - [14.3 Can you describe a situation where you had to learn a new technology or tool quickly? How did you approach it?](#143-can-you-describe-a-situation-where-you-had-to-learn-a-new-technology-or-tool-quickly-how-did-you-approach-it)
    - [4.4 How do you handle changes in project scope?](#44-how-do-you-handle-changes-in-project-scope)
 
-### 5. **Work Culture and Team Building**
-   - [5.1 What do you believe is the key to building a strong team culture?](#51-what-do-you-believe-is-the-key-to-building-a-strong-team-culture)
+## 15. **Work Culture and Team Building**
+   - [15.1 What do you believe is the key to building a strong team culture?](#151-what-do-you-believe-is-the-key-to-building-a-strong-team-culture)
 ---
 
 ## 1. **Team Leadership and Management**
