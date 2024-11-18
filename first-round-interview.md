@@ -1,9 +1,24 @@
 
 ### Table of Contents
 
-1. **OOP Features**
+1. [**Object-Oriented Programming (OOP) Concepts in Depth**](#object-oriented-programming-oop-concepts-in-depth)
+   - [Encapsulation](#encapsulation)
+   - [Abstraction](#abstraction)
+   - [Inheritance](#inheritance)
+   - [Polymorphism](#polymorphism)
    - [1.1 What is Polymorphism?](#11-what-is-polymorphism)
+   
+2. [**Other OOP Concepts in Java**](#other-oop-concepts-in-java)
+   - [Composition (Has-A Relationship)](#composition-has-a-relationship-1)
+   - [Aggregation](#aggregation-1)
+   - [Association](#association-1)
+   - [Summary of When to Use Each Relationship](#summary-of-when-to-use-each-relationship)
 
+4. [**Process-Oriented Object-Oriented and Functional Programming in Java**](#process-oriented-object-oriented-and-functional-programming-in-java)
+   - [Process-Oriented Programming (POP)](#process-oriented-programming-pop)
+   - [Object-Oriented Programming (OOP)](#object-oriented-programming-oop-1)
+   - [Functional Programming (FP)](#functional-programming-fp)
+   - 
 2. **Java 8 Features**
    - [2.1 Lambda Expressions](#21-lambda-expressions)
    - [2.2 Functional Interfaces](#22-functional-interfaces)
@@ -15,22 +30,7 @@
    - [2.8 New Date and Time API (java.time)](#28-new-date-and-time-api-javatime)
 
 
-1. [**Object-Oriented Programming (OOP) Concepts in Depth**](#object-oriented-programming-oop-concepts-in-depth)
-   - [Encapsulation](#encapsulation)
-   - [Abstraction](#abstraction)
-   - [Inheritance](#inheritance)
-   - [Polymorphism](#polymorphism)
 
-2. [**Other OOP Concepts in Java**](#other-oop-concepts-in-java)
-   - [Composition (Has-A Relationship)](#composition-has-a-relationship-1)
-   - [Aggregation](#aggregation-1)
-   - [Association](#association-1)
-   - [Summary of When to Use Each Relationship](#summary-of-when-to-use-each-relationship)
-
-4. [**Process-Oriented Object-Oriented and Functional Programming in Java**](#process-oriented-object-oriented-and-functional-programming-in-java)
-   - [Process-Oriented Programming (POP)](#process-oriented-programming-pop)
-   - [Object-Oriented Programming (OOP)](#object-oriented-programming-oop-1)
-   - [Functional Programming (FP)](#functional-programming-fp)
 
 5. [**Comparison of Process-Oriented, OOP, and FP in Java**](#comparison-of-process-oriented-oop-and-fp-in-java)
    - [Why Do We Need Functional Programming (FP)?](#why-do-we-need-functional-programming-fp)
@@ -443,6 +443,830 @@
 84. [**Method Overloading vs Method Overriding in Java**](#method-overloading-vs-method-overriding-in-java)
     - [Key Differences Between Method Overloading and Method Overriding](#key-differences-between-method-overloading-and-method-overriding)
     - [Common Interview Questions on Method Overloading and Overriding](#common-interview-questions-on-method-overloading-and-overriding)
+---
+
+## **Object-Oriented Programming (OOP) Concepts in Depth**
+
+Object-Oriented Programming (OOP) is a programming paradigm that is based on the concept of **objects**, which are instances of **classes** which can contain data and methods. Java is a fully object-oriented language, and its OOP principles facilitate modular and reusable code.  The four main pillars of OOP — **Encapsulation**, **Abstraction**, **Inheritance**, and **Polymorphism** — are foundational principles that guide the design and development of object-oriented software systems. Below is a deep dive into each of these principles:
+
+---
+
+### **1. Classes and Objects**
+
+- **Class**: A blueprint for creating objects. It defines properties (attributes) and behaviors (methods). For example:
+
+    ```java
+    public class Car {
+        String color;
+        String model;
+
+        void drive() {
+            System.out.println("The car is driving.");
+        }
+    }
+    ```
+
+---
+
+- **Object**: An instance of a class. It represents a specific entity with state and behavior.
+
+    ```java
+    public class Main {
+        public static void main(String[] args) {
+            Car myCar = new Car(); // Creating an object of Car
+            myCar.color = "Red";
+            myCar.model = "Toyota";
+            myCar.drive(); // Calling a method
+        }
+    }
+    ```
+---
+
+### **2. Encapsulation**
+
+**Encapsulation** is the concept of **bundling the data (attributes)** and **methods (functions)** that operate on the data into a single unit, called a **class**. It also refers to restricting access to some of the object's components to protect the integrity of the object.
+
+#### Key Aspects of Encapsulation:
+- **Private Data**: The internal state of an object (its fields or attributes) is kept private and can only be accessed or modified through public methods (getters and setters).
+- **Access Control**: Using access modifiers (`private`, `public`, `protected`), we can control access to the data and methods in a class.
+- **Getter/Setter Methods**: Public methods are provided to retrieve (`get`) or modify (`set`) the values of private fields.
+
+#### Example of Encapsulation in Java:
+```java
+public class Account {
+    // Private fields (data)
+    private double balance;
+
+    // Constructor to initialize the Account object
+    public Account(double balance) {
+        this.balance = balance;
+    }
+
+    // Getter method to access the balance
+    public double getBalance() {
+        return balance;
+    }
+
+    // Setter method to modify the balance
+    public void deposit(double amount) {
+        if (amount > 0) {
+            balance += amount;
+        }
+    }
+
+    // Method to withdraw money
+    public void withdraw(double amount) {
+        if (amount > 0 && balance >= amount) {
+            balance -= amount;
+        }
+    }
+}
+```
+
+**Benefits of Encapsulation**:
+- **Data Hiding**: It protects the object's internal state from unauthorized access.
+- **Flexibility**: You can change the implementation of methods or attributes without affecting the external code that uses the class.
+- **Code Maintainability**: Centralizes the logic for accessing or modifying an object’s data, making maintenance easier.
+
+
+Encapsulation is the principle of bundling data (attributes) and methods that operate on the data within a single unit (class) and restricting access to some of the object's components. This is typically achieved using access modifiers:
+
+- **Private**: Accessible only within the class.
+- **Public**: Accessible from any other class.
+- **Protected**: Accessible within the same package and subclasses.
+- **Default**: Accessible only within the same package.
+
+#### Example:
+
+```java
+public class BankAccount {
+    private double balance;
+
+    public void deposit(double amount) {
+        if (amount > 0) {
+            balance += amount;
+        }
+    }
+
+    public double getBalance() {
+        return balance;
+    }
+}
+```
+
+---
+
+### **3. Abstraction**
+
+**Abstraction** is the concept of **hiding the complexity** of the system and exposing only the necessary parts. It allows a programmer to focus on high-level functionality while hiding the implementation details.
+
+#### Key Aspects of Abstraction:
+- **Abstract Classes**: A class that cannot be instantiated on its own, but can be subclassed. It can contain abstract methods (without implementation) and concrete methods (with implementation).
+- **Interfaces**: An interface is a contract that defines a set of abstract methods, which any implementing class must define. It allows for a form of abstraction by decoupling the interface (what an object can do) from its implementation (how it does it).
+
+#### Example of Abstraction using an Abstract Class:
+```java
+abstract class Animal {
+    // Abstract method (no implementation)
+    public abstract void makeSound();
+
+    // Concrete method
+    public void sleep() {
+        System.out.println("The animal is sleeping.");
+    }
+}
+
+class Dog extends Animal {
+    @Override
+    public void makeSound() {
+        System.out.println("Woof!");
+    }
+}
+```
+
+#### Example of Abstraction using an Interface:
+```java
+interface Shape {
+    // Abstract method (no implementation)
+    double area();
+}
+
+class Circle implements Shape {
+    private double radius;
+
+    public Circle(double radius) {
+        this.radius = radius;
+    }
+
+    @Override
+    public double area() {
+        return Math.PI * radius * radius;
+    }
+}
+```
+
+**Benefits of Abstraction**:
+- **Simplifies Complexity**: Allows the user to interact with high-level functionalities and ignore implementation details.
+- **Separation of Concerns**: Separates the **what** from the **how**, ensuring that changes in implementation don’t affect the interface.
+- **Improved Flexibility**: You can change the implementation of an abstract class or interface without affecting the system as long as the interface remains unchanged.
+
+Abstraction is the concept of hiding complex implementation details and showing only the essential features of an object. This can be achieved using abstract classes and interfaces.
+
+- **Abstract Class**: A class that cannot be instantiated and may contain abstract methods (methods without a body) and concrete methods.
+
+    ```java
+    abstract class Shape {
+        abstract void draw(); // Abstract method
+    }
+
+    class Circle extends Shape {
+        void draw() {
+            System.out.println("Drawing a circle.");
+        }
+    }
+    ```
+
+- **Interface**: A reference type that can contain only constants, method signatures, default methods, static methods, and nested types. Interfaces cannot contain instance fields.
+
+    ```java
+    interface Drawable {
+        void draw(); // Abstract method
+    }
+
+    class Rectangle implements Drawable {
+        public void draw() {
+            System.out.println("Drawing a rectangle.");
+        }
+    }
+    ```
+---
+
+### **4. Inheritance**
+
+**Inheritance** is the mechanism by which one class can **inherit properties and methods** from another class. This promotes **code reusability** and allows for hierarchical class relationships. A subclass (or child class) inherits from a superclass (or parent class), and can:
+- Reuse code from the superclass.
+- Override methods of the superclass to provide specialized behavior.
+- Extend the functionality of the superclass by adding new methods or properties.
+
+#### Key Aspects of Inheritance:
+- **Single Inheritance**: A class can inherit from only one class (in Java).
+- **Method Overriding**: A subclass can provide its own implementation of a method that is already defined in the superclass.
+- **`super` keyword**: Used to call a superclass’s method or constructor from a subclass.
+
+#### Example of Inheritance:
+```java
+class Animal {
+    public void eat() {
+        System.out.println("This animal is eating.");
+    }
+}
+
+class Dog extends Animal {
+    // Method overriding
+    @Override
+    public void eat() {
+        System.out.println("This dog is eating.");
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Animal animal = new Animal();
+        animal.eat();  // Output: This animal is eating.
+
+        Dog dog = new Dog();
+        dog.eat();  // Output: This dog is eating.
+    }
+}
+```
+
+**Benefits of Inheritance**:
+- **Code Reusability**: Subclasses can reuse code from the superclass.
+- **Extensibility**: You can easily extend existing code by creating new subclasses.
+- **Hierarchy**: Inheritance establishes a natural hierarchy and relationship between classes (e.g., `Dog` is a type of `Animal`).
+
+
+Inheritance is a mechanism that allows one class to inherit the properties and methods of another class. This promotes code reuse and establishes a hierarchy between classes.
+
+- **Superclass (Parent class)**: The class whose properties and methods are inherited.
+- **Subclass (Child class)**: The class that inherits from the superclass.
+
+#### Example:
+
+```java
+public class Vehicle {
+    void start() {
+        System.out.println("Vehicle started.");
+    }
+}
+
+public class Car extends Vehicle {
+    void honk() {
+        System.out.println("Car honks.");
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Car myCar = new Car();
+        myCar.start(); // Inherited method
+        myCar.honk();  // Car's own method
+    }
+}
+```
+---
+
+### **5. Polymorphism**
+
+**Polymorphism** means **many forms**, and it allows objects of different classes to be treated as objects of a common superclass. It is the ability for a method to perform different operations based on the object it is acting upon. Polymorphism is typically achieved via:
+- **Method Overloading**: Same method name but different parameter types (compile-time polymorphism).
+- **Method Overriding**: Same method name and parameters, but different implementations in the subclass (runtime polymorphism).
+
+#### Key Aspects of Polymorphism:
+- **Dynamic Method Dispatch (Runtime Polymorphism)**: In Java, polymorphism is commonly used via method overriding. The method that gets called is determined at runtime based on the object's actual type, not the reference type.
+- **Compile-Time Polymorphism (Method Overloading)**: The method to call is determined at compile time based on method signatures.
+
+#### Example of Polymorphism (Method Overriding):
+```java
+class Animal {
+    public void sound() {
+        System.out.println("Some generic animal sound");
+    }
+}
+
+class Dog extends Animal {
+    @Override
+    public void sound() {
+        System.out.println("Woof!");
+    }
+}
+
+class Cat extends Animal {
+    @Override
+    public void sound() {
+        System.out.println("Meow!");
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Animal animal1 = new Dog();
+        animal1.sound();  // Output: Woof!
+
+        Animal animal2 = new Cat();
+        animal2.sound();  // Output: Meow!
+    }
+}
+```
+
+**Benefits of Polymorphism**:
+- **Flexibility and Extensibility**: You can extend or modify the behavior of a class without altering its interface.
+- **Code Simplification**: Polymorphism simplifies code by allowing one interface to be used for different implementations. This reduces the need for complex conditional statements (e.g., `if`-`else` chains).
+- **Maintainability**: As the number of classes and behavior grow, polymorphism allows the system to remain flexible and easily maintainable.
+
+Polymorphism allows methods to do different things based on the object that it is acting upon. It is mainly achieved through method overloading and method overriding.
+
+- **Method Overloading**: Same method name with different parameters within the same class.
+
+    ```java
+    public class MathOperations {
+        int add(int a, int b) {
+            return a + b;
+        }
+
+        double add(double a, double b) {
+            return a + b;
+        }
+    }
+    ```
+
+- **Method Overriding**: Subclass provides a specific implementation of a method already defined in its superclass.
+
+    ```java
+    public class Animal {
+        void sound() {
+            System.out.println("Animal makes a sound.");
+        }
+    }
+
+    public class Dog extends Animal {
+        @Override
+        void sound() {
+            System.out.println("Dog barks.");
+        }
+    }
+
+    public class Main {
+        public static void main(String[] args) {
+            Animal myDog = new Dog();
+            myDog.sound(); // Output: Dog barks.
+        }
+    }
+    ```
+---
+
+### **Other OOP Concepts in Java**
+
+In addition to the main four pillars (Encapsulation, Abstraction, Inheritance, Polymorphism), OOP also involves several additional concepts and techniques:
+
+### **Composition, Aggregation, and Association in Java**
+
+In object-oriented programming, relationships between objects are an important concept. Three fundamental types of relationships in OOP are **Composition**, **Aggregation**, and **Association**. These relationships represent how objects interact or are related to one another in a system. Below, I’ll explain each of these relationships in depth, with examples and when to use them.
+
+### **6. Composition (Has-A Relationship)**
+
+Composition is a design principle that allows for building complex objects by combining simpler ones. It is a **has-a** relationship where one object is a part of another.
+
+```java
+class Engine {
+    public void start() {
+        System.out.println("Engine starting");
+    }
+}
+
+class Car {
+    private Engine engine; // Car has an Engine
+
+    public Car() {
+        engine = new Engine();
+    }
+
+    public void start() {
+        engine.start();  // Delegating the start operation to Engine
+        System.out.println("Car started");
+    }
+}
+```
+
+**Benefits of Composition**:
+- It offers more flexibility and a **loose coupling** between classes than inheritance.
+- You can easily change the parts (components) of an object without modifying the entire object.
+
+**Composition** is a type of association where one object **"owns"** or **"contains"** another object, and the contained object cannot exist independently without the parent object. It is also known as a **strong relationship** because if the parent object is destroyed, its contained objects are also destroyed.
+
+In composition:
+- The lifetime of the contained object is dependent on the parent object.
+- It represents a **strong "Has-A"** relationship (i.e., "A House has Rooms").
+- If the parent object is deleted, the contained object is deleted too.
+
+#### **When to Use Composition**
+- Use composition when you want to establish a **strong lifecycle dependency** between objects, where one object is a part of another.
+- Common in real-world systems, like a **Car has an Engine** or a **Library has Books**.
+
+#### **Example: Composition in Java**
+
+```java
+class Engine {
+    private String engineType;
+
+    public Engine(String engineType) {
+        this.engineType = engineType;
+    }
+
+    public void start() {
+        System.out.println("Engine starting...");
+    }
+}
+
+class Car {
+    private Engine engine;  // Car "has-a" Engine (Composition)
+
+    public Car(String engineType) {
+        engine = new Engine(engineType); // Car owns the Engine, hence it is created when Car is created
+    }
+
+    public void startCar() {
+        engine.start();
+        System.out.println("Car is ready to go.");
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Car myCar = new Car("V8");
+        myCar.startCar();  // Engine is created with the Car object and will be destroyed when Car is destroyed.
+    }
+}
+```
+
+**Explanation**:
+- The `Car` class contains an `Engine` object, meaning that an engine cannot exist independently without a car.
+- The engine is created when the car object is created, and the engine is destroyed when the car is destroyed (i.e., the engine's lifecycle is tied to the car).
+
+### **7. Association**
+
+Association represents the relationship between two or more objects. There are different types of associations:
+- **One-to-One**: One object is associated with exactly one object.
+- **One-to-Many**: One object is associated with multiple objects.
+- **Many-to-Many**: Multiple objects are associated with multiple objects.
+
+**Association** is the **most general** relationship between objects. In association, two or more objects are connected, but neither object **owns** or **depends** on the other. This is the weakest form of relationship, meaning that both objects can exist independently of each other.
+
+In association:
+- Objects are related but have no strict lifecycle dependency.
+- The relationship can be **bi-directional** (e.g., "A Teacher teaches a Student", where both Teacher and Student exist independently).
+
+#### **When to Use Association**
+- Use association when objects **interact** with each other, but there is **no ownership** or **dependency**.
+- Common in scenarios like **A Teacher teaches a Student**, **A Car is driven by a Driver**.
+
+#### **Example: Association in Java**
+
+```java
+class Student {
+    private String name;
+
+    public Student(String name) {
+        this.name = name;
+    }
+
+    public void study() {
+        System.out.println(name + " is studying.");
+    }
+}
+
+class Teacher {
+    private String name;
+
+    public Teacher(String name) {
+        this.name = name;
+    }
+
+    public void teach() {
+        System.out.println(name + " is teaching.");
+    }
+
+    public void teachStudent(Student student) {
+        System.out.println(name + " is teaching " + student.name);
+        student.study();  // Interaction between Teacher and Student
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Teacher teacher = new Teacher("Mr. John");
+        Student student = new Student("Alice");
+
+        teacher.teachStudent(student);  // Teacher and Student interact, but neither owns the other
+    }
+}
+```
+
+**Explanation**:
+- The `Teacher` and `Student` objects are **associated** because they interact with each other (the teacher teaches the student), but neither object **owns** the other.
+- Both objects can exist independently, and the teacher could teach multiple students, or the student could study with other teachers.
+
+---
+
+### **8. Aggregation**
+
+Aggregation is a special form of association that represents a "whole-part" relationship, where the "part" can exist independently of the "whole." It's a **Has-A** relationship with a more loosely-coupled structure than composition.
+
+**Aggregation** is a **special form of Association** where one object **contains** or **references** another object, but the contained object can exist independently of the parent object. This is a **looser** relationship compared to composition.
+
+In aggregation:
+- The lifetime of the contained object does **not depend** on the parent object. It can exist on its own and may be shared across other objects.
+- It represents a **"Has-A"** relationship, but with **independence** for the contained objects (e.g., "A University has Professors" but professors can exist independently of the university).
+
+#### **When to Use Aggregation**
+- Use aggregation when the contained objects have an **independent existence** and are **shared** among multiple parent objects.
+- Common in cases like **A Department has Employees**, **A University has Professors** (Professors can be in multiple Universities).
+
+#### **Example: Aggregation in Java**
+
+```java
+class Professor {
+    private String name;
+
+    public Professor(String name) {
+        this.name = name;
+    }
+
+    public void teach() {
+        System.out.println(name + " is teaching.");
+    }
+}
+
+class University {
+    private String universityName;
+    private List<Professor> professors;  // University "has-a" Professors (Aggregation)
+
+    public University(String universityName) {
+        this.universityName = universityName;
+        this.professors = new ArrayList<>();
+    }
+
+    public void addProfessor(Professor professor) {
+        professors.add(professor);
+    }
+
+    public void showProfessors() {
+        for (Professor professor : professors) {
+            professor.teach();
+        }
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Professor prof1 = new Professor("Dr. Smith");
+        Professor prof2 = new Professor("Dr. Brown");
+
+        University university = new University("Tech University");
+        university.addProfessor(prof1);
+        university.addProfessor(prof2);
+
+        university.showProfessors();
+    }
+}
+```
+
+**Explanation**:
+- In the `University` class, the professors can exist independently and can be added to multiple universities.
+- If a university is destroyed, the professors are not destroyed — they can still exist independently of any university.
+---
+
+### Summary of OOP Concepts
+
+- **Classes and Objects**: The foundation of OOP, where classes are blueprints for objects.
+- **Encapsulation**: Bundles data and methods, restricting access to internal states.
+- **Inheritance**: Enables classes to inherit properties and behaviors from other classes.
+- **Polymorphism**: Allows methods to perform different functions based on the object context.
+- **Abstraction**: Hides complex implementations and exposes only essential features.
+
+These principles enable developers to build modular, maintainable, and scalable applications in Java. Understanding these concepts is crucial for effective programming and design in an object-oriented language.
+
+### **Summary of When to Use Each Relationship**
+
+| **Relationship Type** | **Description** | **When to Use** | **Example** |
+|-----------------------|-----------------|-----------------|-------------|
+| **Composition (Has-A)** | A strong **"Has-A"** relationship where the child object **cannot exist independently** of the parent object. | Use when the child object is **part of** the parent object and its lifecycle is tied to the parent object. | A **Car has an Engine**. If the car is destroyed, so is the engine. |
+| **Aggregation**        | A **looser Has-A** relationship where the child object **can exist independently**. | Use when the child object can exist independently and might be **shared** across multiple objects. | A **University has Professors**, but professors can exist without the university. |
+| **Association**        | A **general relationship** where objects are related but have no strict lifecycle dependency. | Use when objects **interact**, but neither is **dependent** on the other. | A **Teacher teaches a Student**, but neither owns the other. |
+
+In practice, the choice between **composition**, **aggregation**, and **association** depends on the **lifetime** and **ownership** of the objects involved, and how closely related they are in your design.
+
+### **Conclusion**
+
+Object-Oriented Programming (OOP) is a paradigm that helps in organizing software around the concept of **objects** and **classes**, making it more modular, maintainable, and reusable. Understanding the four pillars of OOP (Encapsulation, Abstraction, Inheritance, and Polymorphism) is essential for designing and building robust systems. By applying these principles, developers can create software that is easier to extend, debug, and maintain over time.
+
+**[⬆ Back to Top](#table-of-contents)**
+---
+
+## **Process-Oriented Object-Oriented and Functional Programming in Java**
+
+Java, being a versatile language, supports various programming paradigms, including **process-oriented**, **object-oriented**, and **functional programming**. Each of these paradigms has different characteristics and advantages, and understanding how they can be applied in Java can help you write cleaner, more maintainable, and efficient code. 
+
+Let's break down each programming paradigm and how they are implemented in Java.
+
+---
+
+### **1. Process-Oriented Programming (POP)**
+
+#### **Definition:**
+Process-oriented programming, often known as **procedural programming**, focuses on **sequences of instructions** or procedures that operate on data. The core concept in POP is that the logic of the program is divided into functions or procedures that manipulate data.
+
+#### **Characteristics:**
+- **Functions/Procedures**: Functions (or methods) are used to perform operations.
+- **Global State**: Typically, data is shared across the program and is manipulated directly by functions.
+- **Sequence of Steps**: The program is written as a sequence of steps that are executed one after another.
+
+#### **In Java:**
+Java is fundamentally an **object-oriented language**, but you can still use process-oriented programming with **procedural code** inside classes, using methods to define operations.
+
+**Example:**
+
+```java
+public class ProcessOrientedExample {
+
+    // Procedure to add two numbers
+    public static int add(int a, int b) {
+        return a + b;
+    }
+
+    // Procedure to subtract two numbers
+    public static int subtract(int a, int b) {
+        return a - b;
+    }
+
+    public static void main(String[] args) {
+        int resultAdd = add(5, 3);   // Process (method) call
+        int resultSubtract = subtract(5, 3); // Process (method) call
+
+        System.out.println("Addition Result: " + resultAdd);
+        System.out.println("Subtraction Result: " + resultSubtract);
+    }
+}
+```
+
+- In this example, the focus is on defining **procedures** (`add` and `subtract`) that are called to perform operations. The program's logic is not inherently tied to objects, just functions.
+
+#### **Limitations of POP:**
+- Difficult to manage large codebases because of scattered data and procedures.
+- Lacks abstraction and reuse features compared to OOP or functional paradigms.
+
+---
+
+### **2. Object-Oriented Programming (OOP)**
+
+#### **Definition:**
+Object-oriented programming (OOP) is a paradigm based on **objects** and **classes**. The key idea is to group related data and behavior into objects, and interact with these objects to perform actions. In Java, everything is primarily **object-oriented**.
+
+#### **Core Principles of OOP**:
+1. **Encapsulation**: Data and methods are bundled into classes. Only the necessary details are exposed to the outside world.
+2. **Abstraction**: Hiding complex implementation details and exposing only essential features.
+3. **Inheritance**: A class can inherit methods and fields from another class, enabling code reuse.
+4. **Polymorphism**: The ability of a single function to operate on different types, or the ability to redefine a function in derived classes.
+
+#### **In Java:**
+Java is a fully object-oriented language, and OOP is the default paradigm. Most Java applications are designed using classes and objects.
+
+**Example:**
+
+```java
+// A class defining a Car
+class Car {
+    // Fields
+    private String model;
+    private int year;
+
+    // Constructor to initialize the Car object
+    public Car(String model, int year) {
+        this.model = model;
+        this.year = year;
+    }
+
+    // Method to display car details
+    public void displayDetails() {
+        System.out.println("Car Model: " + model);
+        System.out.println("Manufacturing Year: " + year);
+    }
+
+    // Method to start the car
+    public void start() {
+        System.out.println("The car has started.");
+    }
+}
+
+public class OOPExample {
+
+    public static void main(String[] args) {
+        // Create an instance of the Car class (object)
+        Car myCar = new Car("Tesla Model 3", 2022);
+        
+        // Call methods on the object
+        myCar.displayDetails();
+        myCar.start();
+    }
+}
+```
+
+In the example:
+- The `Car` class defines a **blueprint** for creating car objects with attributes (`model`, `year`) and behaviors (`displayDetails()`, `start()`).
+- The program uses the **object** (`myCar`) to interact with the car’s properties and methods.
+
+#### **Advantages of OOP:**
+- **Reusability**: Inheritance and polymorphism allow code to be reused and extended.
+- **Maintainability**: Objects encapsulate related data and behavior, making code easier to manage.
+- **Scalability**: OOP enables modeling of complex real-world entities, making it more suitable for large applications.
+
+---
+
+### **3. Functional Programming (FP)**
+
+#### **Definition:**
+Functional programming (FP) is a paradigm that treats computation as the evaluation of **mathematical functions** and avoids changing state or mutable data. FP emphasizes **immutable data**, **higher-order functions**, and **first-class functions**.
+
+#### **Core Concepts of FP**:
+1. **Immutability**: Data cannot be modified after it is created.
+2. **Pure Functions**: Functions that return the same output for the same input and have no side effects.
+3. **First-Class Functions**: Functions are treated as first-class citizens, meaning they can be assigned to variables, passed as arguments, and returned as values.
+4. **Higher-Order Functions**: Functions that take other functions as arguments or return them as results.
+5. **Declarative Code**: Focuses on describing what to do, rather than how to do it.
+
+#### **In Java:**
+Although Java is primarily object-oriented, starting from **Java 8**, it has incorporated many functional programming features, such as **lambda expressions**, **streams**, and **optional**. These features allow developers to write code in a functional style.
+
+**Example:**
+
+```java
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
+public class FunctionalProgrammingExample {
+
+    public static void main(String[] args) {
+        // A list of numbers
+        List<Integer> numbers = Arrays.asList(1, 2, 3, 4, 5, 6);
+
+        // Using functional programming with streams to filter and transform the list
+        List<Integer> squaredEvens = numbers.stream()  // Convert list to stream
+            .filter(n -> n % 2 == 0)                   // Keep even numbers
+            .map(n -> n * n)                           // Square the numbers
+            .collect(Collectors.toList());             // Collect the results into a list
+
+        // Print the result
+        System.out.println(squaredEvens);  // Output: [4, 16, 36]
+    }
+}
+```
+
+In this example:
+- We use **streams** to transform and filter a list of numbers.
+- The operation is **declarative** and focuses on what we want to do (filter and square) instead of how we do it.
+- The data is **immutable**, and functions like `filter()` and `map()` return new modified streams instead of modifying the original list.
+
+#### **Advantages of FP:**
+- **Immutability**: Reduces side effects and makes programs easier to reason about.
+- **Concurrency**: Because of immutability and lack of shared mutable state, functional programs are naturally easier to parallelize.
+- **Modularity**: Higher-order functions and function composition make it easier to build and combine small reusable functions.
+
+---
+
+### **Comparison of Process-Oriented, OOP, and FP in Java**
+
+| **Feature**                | **Process-Oriented Programming**  | **Object-Oriented Programming (OOP)**      | **Functional Programming (FP)**           |
+|----------------------------|-----------------------------------|--------------------------------------------|-------------------------------------------|
+| **Primary Focus**           | A sequence of procedures or tasks | Organizing code into classes and objects  | Treating computation as functions        |
+| **State Handling**          | Global state, mutable data        | State is encapsulated within objects      | Immutable data, no side effects          |
+| **Functions**               | Independent functions/procedures  | Methods tied to objects (encapsulation)   | First-class functions, higher-order      |
+| **Data Management**         | Data is shared globally           | Data is private within objects            | Data is passed through functions (immutable) |
+| **Concurrency Support**     | Difficult to parallelize          | Some concurrency support via threads      | Naturally more concurrent (due to immutability) |
+| **Example Use Cases**       | Small, straightforward programs   | Complex applications with interrelated data | Complex data processing, transformations, and analytics |
+| **Example Java Features**   | Methods in classes, procedural code | Classes, objects, inheritance, polymorphism | Lambdas, streams, `Optional`, `Map`, `Reduce` |
+
+---
+
+### **Conclusion:**
+- **Process-Oriented Programming** in Java focuses on functions and procedures that perform tasks sequentially. It's simple but not ideal for complex systems.
+- **Object-Oriented Programming (OOP)** is the main paradigm in Java and emphasizes organizing code around objects, which promotes modularity, reusability, and abstraction.
+- **Functional Programming (FP)** in Java (introduced in Java 8) emphasizes immutability, stateless functions, and declarative code, offering benefits for writing clean, concise, and concurrent code.
+
+By understanding these paradigms, Java developers can choose the appropriate approach depending on the problem at hand and mix them as necessary for building scalable and maintainable applications.
+ 
+In Java, **access specifiers** and **non-access modifiers** are keywords used to define the visibility, accessibility, and behavior of classes, methods, variables, and constructors. Understanding how these work is essential for designing robust and maintainable applications. Below, I’ll provide a detailed overview of both access specifiers and non-access modifiers, along with examples.
+
+### **Why Do We Need Functional Programming (FP)?**
+
+Functional programming (FP) has gained significant traction in recent years, especially in languages like Java (since Java 8), JavaScript, Python, Scala, Haskell, and others. While object-oriented programming (OOP) remains dominant, there are several compelling reasons why you might want to use **functional programming** in your projects. Below are the key reasons **why FP is needed**:
+
+### Why Use Functional Style Instead of OOP?
+
+Functional programming (FP) and Object-Oriented Programming (OOP) are two distinct paradigms, each with its strengths. Here are reasons why functional style can be preferred:
+
+1. **Simplicity and Clarity**: Functional programming focuses on pure functions and immutability, which can lead to simpler and more predictable code. Functions that don’t have side effects make it easier to understand program flow.
+
+2. **Higher-Order Functions**: FP allows functions to be passed as parameters, returned from other functions, or stored in data structures, enabling powerful abstractions and code reuse.
+
+3. **Conciseness**: Functional programming constructs like lambda expressions and streams can result in less boilerplate code. This can make code cleaner and easier to read.
+
+4. **Parallelism**: FP constructs often lend themselves to parallel execution more naturally. For example, stream operations can be easily parallelized without changing the logic.
+
+5. **Ease of Testing**: Pure functions (functions without side effects) are easier to test and reason about compared to methods in OOP that might rely on shared mutable state.
+
+**[⬆ Back to Top](#table-of-contents)**
+
 ---
 
  
@@ -1676,828 +2500,6 @@ By understanding these concurrency concepts, you can create more robust, thread-
 
 
 
-## **Object-Oriented Programming (OOP) Concepts in Depth**
-
-Object-Oriented Programming (OOP) is a programming paradigm that is based on the concept of **objects**, which are instances of **classes** which can contain data and methods. Java is a fully object-oriented language, and its OOP principles facilitate modular and reusable code.  The four main pillars of OOP — **Encapsulation**, **Abstraction**, **Inheritance**, and **Polymorphism** — are foundational principles that guide the design and development of object-oriented software systems. Below is a deep dive into each of these principles:
-
----
-
-### **1. Classes and Objects**
-
-- **Class**: A blueprint for creating objects. It defines properties (attributes) and behaviors (methods). For example:
-
-    ```java
-    public class Car {
-        String color;
-        String model;
-
-        void drive() {
-            System.out.println("The car is driving.");
-        }
-    }
-    ```
-
----
-
-- **Object**: An instance of a class. It represents a specific entity with state and behavior.
-
-    ```java
-    public class Main {
-        public static void main(String[] args) {
-            Car myCar = new Car(); // Creating an object of Car
-            myCar.color = "Red";
-            myCar.model = "Toyota";
-            myCar.drive(); // Calling a method
-        }
-    }
-    ```
----
-
-### **2. Encapsulation**
-
-**Encapsulation** is the concept of **bundling the data (attributes)** and **methods (functions)** that operate on the data into a single unit, called a **class**. It also refers to restricting access to some of the object's components to protect the integrity of the object.
-
-#### Key Aspects of Encapsulation:
-- **Private Data**: The internal state of an object (its fields or attributes) is kept private and can only be accessed or modified through public methods (getters and setters).
-- **Access Control**: Using access modifiers (`private`, `public`, `protected`), we can control access to the data and methods in a class.
-- **Getter/Setter Methods**: Public methods are provided to retrieve (`get`) or modify (`set`) the values of private fields.
-
-#### Example of Encapsulation in Java:
-```java
-public class Account {
-    // Private fields (data)
-    private double balance;
-
-    // Constructor to initialize the Account object
-    public Account(double balance) {
-        this.balance = balance;
-    }
-
-    // Getter method to access the balance
-    public double getBalance() {
-        return balance;
-    }
-
-    // Setter method to modify the balance
-    public void deposit(double amount) {
-        if (amount > 0) {
-            balance += amount;
-        }
-    }
-
-    // Method to withdraw money
-    public void withdraw(double amount) {
-        if (amount > 0 && balance >= amount) {
-            balance -= amount;
-        }
-    }
-}
-```
-
-**Benefits of Encapsulation**:
-- **Data Hiding**: It protects the object's internal state from unauthorized access.
-- **Flexibility**: You can change the implementation of methods or attributes without affecting the external code that uses the class.
-- **Code Maintainability**: Centralizes the logic for accessing or modifying an object’s data, making maintenance easier.
-
-
-Encapsulation is the principle of bundling data (attributes) and methods that operate on the data within a single unit (class) and restricting access to some of the object's components. This is typically achieved using access modifiers:
-
-- **Private**: Accessible only within the class.
-- **Public**: Accessible from any other class.
-- **Protected**: Accessible within the same package and subclasses.
-- **Default**: Accessible only within the same package.
-
-#### Example:
-
-```java
-public class BankAccount {
-    private double balance;
-
-    public void deposit(double amount) {
-        if (amount > 0) {
-            balance += amount;
-        }
-    }
-
-    public double getBalance() {
-        return balance;
-    }
-}
-```
-
----
-
-### **3. Abstraction**
-
-**Abstraction** is the concept of **hiding the complexity** of the system and exposing only the necessary parts. It allows a programmer to focus on high-level functionality while hiding the implementation details.
-
-#### Key Aspects of Abstraction:
-- **Abstract Classes**: A class that cannot be instantiated on its own, but can be subclassed. It can contain abstract methods (without implementation) and concrete methods (with implementation).
-- **Interfaces**: An interface is a contract that defines a set of abstract methods, which any implementing class must define. It allows for a form of abstraction by decoupling the interface (what an object can do) from its implementation (how it does it).
-
-#### Example of Abstraction using an Abstract Class:
-```java
-abstract class Animal {
-    // Abstract method (no implementation)
-    public abstract void makeSound();
-
-    // Concrete method
-    public void sleep() {
-        System.out.println("The animal is sleeping.");
-    }
-}
-
-class Dog extends Animal {
-    @Override
-    public void makeSound() {
-        System.out.println("Woof!");
-    }
-}
-```
-
-#### Example of Abstraction using an Interface:
-```java
-interface Shape {
-    // Abstract method (no implementation)
-    double area();
-}
-
-class Circle implements Shape {
-    private double radius;
-
-    public Circle(double radius) {
-        this.radius = radius;
-    }
-
-    @Override
-    public double area() {
-        return Math.PI * radius * radius;
-    }
-}
-```
-
-**Benefits of Abstraction**:
-- **Simplifies Complexity**: Allows the user to interact with high-level functionalities and ignore implementation details.
-- **Separation of Concerns**: Separates the **what** from the **how**, ensuring that changes in implementation don’t affect the interface.
-- **Improved Flexibility**: You can change the implementation of an abstract class or interface without affecting the system as long as the interface remains unchanged.
-
-Abstraction is the concept of hiding complex implementation details and showing only the essential features of an object. This can be achieved using abstract classes and interfaces.
-
-- **Abstract Class**: A class that cannot be instantiated and may contain abstract methods (methods without a body) and concrete methods.
-
-    ```java
-    abstract class Shape {
-        abstract void draw(); // Abstract method
-    }
-
-    class Circle extends Shape {
-        void draw() {
-            System.out.println("Drawing a circle.");
-        }
-    }
-    ```
-
-- **Interface**: A reference type that can contain only constants, method signatures, default methods, static methods, and nested types. Interfaces cannot contain instance fields.
-
-    ```java
-    interface Drawable {
-        void draw(); // Abstract method
-    }
-
-    class Rectangle implements Drawable {
-        public void draw() {
-            System.out.println("Drawing a rectangle.");
-        }
-    }
-    ```
----
-
-### **4. Inheritance**
-
-**Inheritance** is the mechanism by which one class can **inherit properties and methods** from another class. This promotes **code reusability** and allows for hierarchical class relationships. A subclass (or child class) inherits from a superclass (or parent class), and can:
-- Reuse code from the superclass.
-- Override methods of the superclass to provide specialized behavior.
-- Extend the functionality of the superclass by adding new methods or properties.
-
-#### Key Aspects of Inheritance:
-- **Single Inheritance**: A class can inherit from only one class (in Java).
-- **Method Overriding**: A subclass can provide its own implementation of a method that is already defined in the superclass.
-- **`super` keyword**: Used to call a superclass’s method or constructor from a subclass.
-
-#### Example of Inheritance:
-```java
-class Animal {
-    public void eat() {
-        System.out.println("This animal is eating.");
-    }
-}
-
-class Dog extends Animal {
-    // Method overriding
-    @Override
-    public void eat() {
-        System.out.println("This dog is eating.");
-    }
-}
-
-public class Main {
-    public static void main(String[] args) {
-        Animal animal = new Animal();
-        animal.eat();  // Output: This animal is eating.
-
-        Dog dog = new Dog();
-        dog.eat();  // Output: This dog is eating.
-    }
-}
-```
-
-**Benefits of Inheritance**:
-- **Code Reusability**: Subclasses can reuse code from the superclass.
-- **Extensibility**: You can easily extend existing code by creating new subclasses.
-- **Hierarchy**: Inheritance establishes a natural hierarchy and relationship between classes (e.g., `Dog` is a type of `Animal`).
-
-
-Inheritance is a mechanism that allows one class to inherit the properties and methods of another class. This promotes code reuse and establishes a hierarchy between classes.
-
-- **Superclass (Parent class)**: The class whose properties and methods are inherited.
-- **Subclass (Child class)**: The class that inherits from the superclass.
-
-#### Example:
-
-```java
-public class Vehicle {
-    void start() {
-        System.out.println("Vehicle started.");
-    }
-}
-
-public class Car extends Vehicle {
-    void honk() {
-        System.out.println("Car honks.");
-    }
-}
-
-public class Main {
-    public static void main(String[] args) {
-        Car myCar = new Car();
-        myCar.start(); // Inherited method
-        myCar.honk();  // Car's own method
-    }
-}
-```
----
-
-### **5. Polymorphism**
-
-**Polymorphism** means **many forms**, and it allows objects of different classes to be treated as objects of a common superclass. It is the ability for a method to perform different operations based on the object it is acting upon. Polymorphism is typically achieved via:
-- **Method Overloading**: Same method name but different parameter types (compile-time polymorphism).
-- **Method Overriding**: Same method name and parameters, but different implementations in the subclass (runtime polymorphism).
-
-#### Key Aspects of Polymorphism:
-- **Dynamic Method Dispatch (Runtime Polymorphism)**: In Java, polymorphism is commonly used via method overriding. The method that gets called is determined at runtime based on the object's actual type, not the reference type.
-- **Compile-Time Polymorphism (Method Overloading)**: The method to call is determined at compile time based on method signatures.
-
-#### Example of Polymorphism (Method Overriding):
-```java
-class Animal {
-    public void sound() {
-        System.out.println("Some generic animal sound");
-    }
-}
-
-class Dog extends Animal {
-    @Override
-    public void sound() {
-        System.out.println("Woof!");
-    }
-}
-
-class Cat extends Animal {
-    @Override
-    public void sound() {
-        System.out.println("Meow!");
-    }
-}
-
-public class Main {
-    public static void main(String[] args) {
-        Animal animal1 = new Dog();
-        animal1.sound();  // Output: Woof!
-
-        Animal animal2 = new Cat();
-        animal2.sound();  // Output: Meow!
-    }
-}
-```
-
-**Benefits of Polymorphism**:
-- **Flexibility and Extensibility**: You can extend or modify the behavior of a class without altering its interface.
-- **Code Simplification**: Polymorphism simplifies code by allowing one interface to be used for different implementations. This reduces the need for complex conditional statements (e.g., `if`-`else` chains).
-- **Maintainability**: As the number of classes and behavior grow, polymorphism allows the system to remain flexible and easily maintainable.
-
-Polymorphism allows methods to do different things based on the object that it is acting upon. It is mainly achieved through method overloading and method overriding.
-
-- **Method Overloading**: Same method name with different parameters within the same class.
-
-    ```java
-    public class MathOperations {
-        int add(int a, int b) {
-            return a + b;
-        }
-
-        double add(double a, double b) {
-            return a + b;
-        }
-    }
-    ```
-
-- **Method Overriding**: Subclass provides a specific implementation of a method already defined in its superclass.
-
-    ```java
-    public class Animal {
-        void sound() {
-            System.out.println("Animal makes a sound.");
-        }
-    }
-
-    public class Dog extends Animal {
-        @Override
-        void sound() {
-            System.out.println("Dog barks.");
-        }
-    }
-
-    public class Main {
-        public static void main(String[] args) {
-            Animal myDog = new Dog();
-            myDog.sound(); // Output: Dog barks.
-        }
-    }
-    ```
----
-
-### **Other OOP Concepts in Java**
-
-In addition to the main four pillars (Encapsulation, Abstraction, Inheritance, Polymorphism), OOP also involves several additional concepts and techniques:
-
-### **Composition, Aggregation, and Association in Java**
-
-In object-oriented programming, relationships between objects are an important concept. Three fundamental types of relationships in OOP are **Composition**, **Aggregation**, and **Association**. These relationships represent how objects interact or are related to one another in a system. Below, I’ll explain each of these relationships in depth, with examples and when to use them.
-
-### **6. Composition (Has-A Relationship)**
-
-Composition is a design principle that allows for building complex objects by combining simpler ones. It is a **has-a** relationship where one object is a part of another.
-
-```java
-class Engine {
-    public void start() {
-        System.out.println("Engine starting");
-    }
-}
-
-class Car {
-    private Engine engine; // Car has an Engine
-
-    public Car() {
-        engine = new Engine();
-    }
-
-    public void start() {
-        engine.start();  // Delegating the start operation to Engine
-        System.out.println("Car started");
-    }
-}
-```
-
-**Benefits of Composition**:
-- It offers more flexibility and a **loose coupling** between classes than inheritance.
-- You can easily change the parts (components) of an object without modifying the entire object.
-
-**Composition** is a type of association where one object **"owns"** or **"contains"** another object, and the contained object cannot exist independently without the parent object. It is also known as a **strong relationship** because if the parent object is destroyed, its contained objects are also destroyed.
-
-In composition:
-- The lifetime of the contained object is dependent on the parent object.
-- It represents a **strong "Has-A"** relationship (i.e., "A House has Rooms").
-- If the parent object is deleted, the contained object is deleted too.
-
-#### **When to Use Composition**
-- Use composition when you want to establish a **strong lifecycle dependency** between objects, where one object is a part of another.
-- Common in real-world systems, like a **Car has an Engine** or a **Library has Books**.
-
-#### **Example: Composition in Java**
-
-```java
-class Engine {
-    private String engineType;
-
-    public Engine(String engineType) {
-        this.engineType = engineType;
-    }
-
-    public void start() {
-        System.out.println("Engine starting...");
-    }
-}
-
-class Car {
-    private Engine engine;  // Car "has-a" Engine (Composition)
-
-    public Car(String engineType) {
-        engine = new Engine(engineType); // Car owns the Engine, hence it is created when Car is created
-    }
-
-    public void startCar() {
-        engine.start();
-        System.out.println("Car is ready to go.");
-    }
-}
-
-public class Main {
-    public static void main(String[] args) {
-        Car myCar = new Car("V8");
-        myCar.startCar();  // Engine is created with the Car object and will be destroyed when Car is destroyed.
-    }
-}
-```
-
-**Explanation**:
-- The `Car` class contains an `Engine` object, meaning that an engine cannot exist independently without a car.
-- The engine is created when the car object is created, and the engine is destroyed when the car is destroyed (i.e., the engine's lifecycle is tied to the car).
-
-### **7. Association**
-
-Association represents the relationship between two or more objects. There are different types of associations:
-- **One-to-One**: One object is associated with exactly one object.
-- **One-to-Many**: One object is associated with multiple objects.
-- **Many-to-Many**: Multiple objects are associated with multiple objects.
-
-**Association** is the **most general** relationship between objects. In association, two or more objects are connected, but neither object **owns** or **depends** on the other. This is the weakest form of relationship, meaning that both objects can exist independently of each other.
-
-In association:
-- Objects are related but have no strict lifecycle dependency.
-- The relationship can be **bi-directional** (e.g., "A Teacher teaches a Student", where both Teacher and Student exist independently).
-
-#### **When to Use Association**
-- Use association when objects **interact** with each other, but there is **no ownership** or **dependency**.
-- Common in scenarios like **A Teacher teaches a Student**, **A Car is driven by a Driver**.
-
-#### **Example: Association in Java**
-
-```java
-class Student {
-    private String name;
-
-    public Student(String name) {
-        this.name = name;
-    }
-
-    public void study() {
-        System.out.println(name + " is studying.");
-    }
-}
-
-class Teacher {
-    private String name;
-
-    public Teacher(String name) {
-        this.name = name;
-    }
-
-    public void teach() {
-        System.out.println(name + " is teaching.");
-    }
-
-    public void teachStudent(Student student) {
-        System.out.println(name + " is teaching " + student.name);
-        student.study();  // Interaction between Teacher and Student
-    }
-}
-
-public class Main {
-    public static void main(String[] args) {
-        Teacher teacher = new Teacher("Mr. John");
-        Student student = new Student("Alice");
-
-        teacher.teachStudent(student);  // Teacher and Student interact, but neither owns the other
-    }
-}
-```
-
-**Explanation**:
-- The `Teacher` and `Student` objects are **associated** because they interact with each other (the teacher teaches the student), but neither object **owns** the other.
-- Both objects can exist independently, and the teacher could teach multiple students, or the student could study with other teachers.
-
----
-
-### **8. Aggregation**
-
-Aggregation is a special form of association that represents a "whole-part" relationship, where the "part" can exist independently of the "whole." It's a **Has-A** relationship with a more loosely-coupled structure than composition.
-
-**Aggregation** is a **special form of Association** where one object **contains** or **references** another object, but the contained object can exist independently of the parent object. This is a **looser** relationship compared to composition.
-
-In aggregation:
-- The lifetime of the contained object does **not depend** on the parent object. It can exist on its own and may be shared across other objects.
-- It represents a **"Has-A"** relationship, but with **independence** for the contained objects (e.g., "A University has Professors" but professors can exist independently of the university).
-
-#### **When to Use Aggregation**
-- Use aggregation when the contained objects have an **independent existence** and are **shared** among multiple parent objects.
-- Common in cases like **A Department has Employees**, **A University has Professors** (Professors can be in multiple Universities).
-
-#### **Example: Aggregation in Java**
-
-```java
-class Professor {
-    private String name;
-
-    public Professor(String name) {
-        this.name = name;
-    }
-
-    public void teach() {
-        System.out.println(name + " is teaching.");
-    }
-}
-
-class University {
-    private String universityName;
-    private List<Professor> professors;  // University "has-a" Professors (Aggregation)
-
-    public University(String universityName) {
-        this.universityName = universityName;
-        this.professors = new ArrayList<>();
-    }
-
-    public void addProfessor(Professor professor) {
-        professors.add(professor);
-    }
-
-    public void showProfessors() {
-        for (Professor professor : professors) {
-            professor.teach();
-        }
-    }
-}
-
-public class Main {
-    public static void main(String[] args) {
-        Professor prof1 = new Professor("Dr. Smith");
-        Professor prof2 = new Professor("Dr. Brown");
-
-        University university = new University("Tech University");
-        university.addProfessor(prof1);
-        university.addProfessor(prof2);
-
-        university.showProfessors();
-    }
-}
-```
-
-**Explanation**:
-- In the `University` class, the professors can exist independently and can be added to multiple universities.
-- If a university is destroyed, the professors are not destroyed — they can still exist independently of any university.
----
-
-### Summary of OOP Concepts
-
-- **Classes and Objects**: The foundation of OOP, where classes are blueprints for objects.
-- **Encapsulation**: Bundles data and methods, restricting access to internal states.
-- **Inheritance**: Enables classes to inherit properties and behaviors from other classes.
-- **Polymorphism**: Allows methods to perform different functions based on the object context.
-- **Abstraction**: Hides complex implementations and exposes only essential features.
-
-These principles enable developers to build modular, maintainable, and scalable applications in Java. Understanding these concepts is crucial for effective programming and design in an object-oriented language.
-
-### **Summary of When to Use Each Relationship**
-
-| **Relationship Type** | **Description** | **When to Use** | **Example** |
-|-----------------------|-----------------|-----------------|-------------|
-| **Composition (Has-A)** | A strong **"Has-A"** relationship where the child object **cannot exist independently** of the parent object. | Use when the child object is **part of** the parent object and its lifecycle is tied to the parent object. | A **Car has an Engine**. If the car is destroyed, so is the engine. |
-| **Aggregation**        | A **looser Has-A** relationship where the child object **can exist independently**. | Use when the child object can exist independently and might be **shared** across multiple objects. | A **University has Professors**, but professors can exist without the university. |
-| **Association**        | A **general relationship** where objects are related but have no strict lifecycle dependency. | Use when objects **interact**, but neither is **dependent** on the other. | A **Teacher teaches a Student**, but neither owns the other. |
-
-In practice, the choice between **composition**, **aggregation**, and **association** depends on the **lifetime** and **ownership** of the objects involved, and how closely related they are in your design.
-
-### **Conclusion**
-
-Object-Oriented Programming (OOP) is a paradigm that helps in organizing software around the concept of **objects** and **classes**, making it more modular, maintainable, and reusable. Understanding the four pillars of OOP (Encapsulation, Abstraction, Inheritance, and Polymorphism) is essential for designing and building robust systems. By applying these principles, developers can create software that is easier to extend, debug, and maintain over time.
-
-**[⬆ Back to Top](#table-of-contents)**
----
-
-## **Process-Oriented Object-Oriented and Functional Programming in Java**
-
-Java, being a versatile language, supports various programming paradigms, including **process-oriented**, **object-oriented**, and **functional programming**. Each of these paradigms has different characteristics and advantages, and understanding how they can be applied in Java can help you write cleaner, more maintainable, and efficient code. 
-
-Let's break down each programming paradigm and how they are implemented in Java.
-
----
-
-### **1. Process-Oriented Programming (POP)**
-
-#### **Definition:**
-Process-oriented programming, often known as **procedural programming**, focuses on **sequences of instructions** or procedures that operate on data. The core concept in POP is that the logic of the program is divided into functions or procedures that manipulate data.
-
-#### **Characteristics:**
-- **Functions/Procedures**: Functions (or methods) are used to perform operations.
-- **Global State**: Typically, data is shared across the program and is manipulated directly by functions.
-- **Sequence of Steps**: The program is written as a sequence of steps that are executed one after another.
-
-#### **In Java:**
-Java is fundamentally an **object-oriented language**, but you can still use process-oriented programming with **procedural code** inside classes, using methods to define operations.
-
-**Example:**
-
-```java
-public class ProcessOrientedExample {
-
-    // Procedure to add two numbers
-    public static int add(int a, int b) {
-        return a + b;
-    }
-
-    // Procedure to subtract two numbers
-    public static int subtract(int a, int b) {
-        return a - b;
-    }
-
-    public static void main(String[] args) {
-        int resultAdd = add(5, 3);   // Process (method) call
-        int resultSubtract = subtract(5, 3); // Process (method) call
-
-        System.out.println("Addition Result: " + resultAdd);
-        System.out.println("Subtraction Result: " + resultSubtract);
-    }
-}
-```
-
-- In this example, the focus is on defining **procedures** (`add` and `subtract`) that are called to perform operations. The program's logic is not inherently tied to objects, just functions.
-
-#### **Limitations of POP:**
-- Difficult to manage large codebases because of scattered data and procedures.
-- Lacks abstraction and reuse features compared to OOP or functional paradigms.
-
----
-
-### **2. Object-Oriented Programming (OOP)**
-
-#### **Definition:**
-Object-oriented programming (OOP) is a paradigm based on **objects** and **classes**. The key idea is to group related data and behavior into objects, and interact with these objects to perform actions. In Java, everything is primarily **object-oriented**.
-
-#### **Core Principles of OOP**:
-1. **Encapsulation**: Data and methods are bundled into classes. Only the necessary details are exposed to the outside world.
-2. **Abstraction**: Hiding complex implementation details and exposing only essential features.
-3. **Inheritance**: A class can inherit methods and fields from another class, enabling code reuse.
-4. **Polymorphism**: The ability of a single function to operate on different types, or the ability to redefine a function in derived classes.
-
-#### **In Java:**
-Java is a fully object-oriented language, and OOP is the default paradigm. Most Java applications are designed using classes and objects.
-
-**Example:**
-
-```java
-// A class defining a Car
-class Car {
-    // Fields
-    private String model;
-    private int year;
-
-    // Constructor to initialize the Car object
-    public Car(String model, int year) {
-        this.model = model;
-        this.year = year;
-    }
-
-    // Method to display car details
-    public void displayDetails() {
-        System.out.println("Car Model: " + model);
-        System.out.println("Manufacturing Year: " + year);
-    }
-
-    // Method to start the car
-    public void start() {
-        System.out.println("The car has started.");
-    }
-}
-
-public class OOPExample {
-
-    public static void main(String[] args) {
-        // Create an instance of the Car class (object)
-        Car myCar = new Car("Tesla Model 3", 2022);
-        
-        // Call methods on the object
-        myCar.displayDetails();
-        myCar.start();
-    }
-}
-```
-
-In the example:
-- The `Car` class defines a **blueprint** for creating car objects with attributes (`model`, `year`) and behaviors (`displayDetails()`, `start()`).
-- The program uses the **object** (`myCar`) to interact with the car’s properties and methods.
-
-#### **Advantages of OOP:**
-- **Reusability**: Inheritance and polymorphism allow code to be reused and extended.
-- **Maintainability**: Objects encapsulate related data and behavior, making code easier to manage.
-- **Scalability**: OOP enables modeling of complex real-world entities, making it more suitable for large applications.
-
----
-
-### **3. Functional Programming (FP)**
-
-#### **Definition:**
-Functional programming (FP) is a paradigm that treats computation as the evaluation of **mathematical functions** and avoids changing state or mutable data. FP emphasizes **immutable data**, **higher-order functions**, and **first-class functions**.
-
-#### **Core Concepts of FP**:
-1. **Immutability**: Data cannot be modified after it is created.
-2. **Pure Functions**: Functions that return the same output for the same input and have no side effects.
-3. **First-Class Functions**: Functions are treated as first-class citizens, meaning they can be assigned to variables, passed as arguments, and returned as values.
-4. **Higher-Order Functions**: Functions that take other functions as arguments or return them as results.
-5. **Declarative Code**: Focuses on describing what to do, rather than how to do it.
-
-#### **In Java:**
-Although Java is primarily object-oriented, starting from **Java 8**, it has incorporated many functional programming features, such as **lambda expressions**, **streams**, and **optional**. These features allow developers to write code in a functional style.
-
-**Example:**
-
-```java
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
-
-public class FunctionalProgrammingExample {
-
-    public static void main(String[] args) {
-        // A list of numbers
-        List<Integer> numbers = Arrays.asList(1, 2, 3, 4, 5, 6);
-
-        // Using functional programming with streams to filter and transform the list
-        List<Integer> squaredEvens = numbers.stream()  // Convert list to stream
-            .filter(n -> n % 2 == 0)                   // Keep even numbers
-            .map(n -> n * n)                           // Square the numbers
-            .collect(Collectors.toList());             // Collect the results into a list
-
-        // Print the result
-        System.out.println(squaredEvens);  // Output: [4, 16, 36]
-    }
-}
-```
-
-In this example:
-- We use **streams** to transform and filter a list of numbers.
-- The operation is **declarative** and focuses on what we want to do (filter and square) instead of how we do it.
-- The data is **immutable**, and functions like `filter()` and `map()` return new modified streams instead of modifying the original list.
-
-#### **Advantages of FP:**
-- **Immutability**: Reduces side effects and makes programs easier to reason about.
-- **Concurrency**: Because of immutability and lack of shared mutable state, functional programs are naturally easier to parallelize.
-- **Modularity**: Higher-order functions and function composition make it easier to build and combine small reusable functions.
-
----
-
-### **Comparison of Process-Oriented, OOP, and FP in Java**
-
-| **Feature**                | **Process-Oriented Programming**  | **Object-Oriented Programming (OOP)**      | **Functional Programming (FP)**           |
-|----------------------------|-----------------------------------|--------------------------------------------|-------------------------------------------|
-| **Primary Focus**           | A sequence of procedures or tasks | Organizing code into classes and objects  | Treating computation as functions        |
-| **State Handling**          | Global state, mutable data        | State is encapsulated within objects      | Immutable data, no side effects          |
-| **Functions**               | Independent functions/procedures  | Methods tied to objects (encapsulation)   | First-class functions, higher-order      |
-| **Data Management**         | Data is shared globally           | Data is private within objects            | Data is passed through functions (immutable) |
-| **Concurrency Support**     | Difficult to parallelize          | Some concurrency support via threads      | Naturally more concurrent (due to immutability) |
-| **Example Use Cases**       | Small, straightforward programs   | Complex applications with interrelated data | Complex data processing, transformations, and analytics |
-| **Example Java Features**   | Methods in classes, procedural code | Classes, objects, inheritance, polymorphism | Lambdas, streams, `Optional`, `Map`, `Reduce` |
-
----
-
-### **Conclusion:**
-- **Process-Oriented Programming** in Java focuses on functions and procedures that perform tasks sequentially. It's simple but not ideal for complex systems.
-- **Object-Oriented Programming (OOP)** is the main paradigm in Java and emphasizes organizing code around objects, which promotes modularity, reusability, and abstraction.
-- **Functional Programming (FP)** in Java (introduced in Java 8) emphasizes immutability, stateless functions, and declarative code, offering benefits for writing clean, concise, and concurrent code.
-
-By understanding these paradigms, Java developers can choose the appropriate approach depending on the problem at hand and mix them as necessary for building scalable and maintainable applications.
- 
-In Java, **access specifiers** and **non-access modifiers** are keywords used to define the visibility, accessibility, and behavior of classes, methods, variables, and constructors. Understanding how these work is essential for designing robust and maintainable applications. Below, I’ll provide a detailed overview of both access specifiers and non-access modifiers, along with examples.
-
-### **Why Do We Need Functional Programming (FP)?**
-
-Functional programming (FP) has gained significant traction in recent years, especially in languages like Java (since Java 8), JavaScript, Python, Scala, Haskell, and others. While object-oriented programming (OOP) remains dominant, there are several compelling reasons why you might want to use **functional programming** in your projects. Below are the key reasons **why FP is needed**:
-
-### Why Use Functional Style Instead of OOP?
-
-Functional programming (FP) and Object-Oriented Programming (OOP) are two distinct paradigms, each with its strengths. Here are reasons why functional style can be preferred:
-
-1. **Simplicity and Clarity**: Functional programming focuses on pure functions and immutability, which can lead to simpler and more predictable code. Functions that don’t have side effects make it easier to understand program flow.
-
-2. **Higher-Order Functions**: FP allows functions to be passed as parameters, returned from other functions, or stored in data structures, enabling powerful abstractions and code reuse.
-
-3. **Conciseness**: Functional programming constructs like lambda expressions and streams can result in less boilerplate code. This can make code cleaner and easier to read.
-
-4. **Parallelism**: FP constructs often lend themselves to parallel execution more naturally. For example, stream operations can be easily parallelized without changing the logic.
-
-5. **Ease of Testing**: Pure functions (functions without side effects) are easier to test and reason about compared to methods in OOP that might rely on shared mutable state.
-
-**[⬆ Back to Top](#table-of-contents)**
----
 
 ### 1. **Immutability**
    - **What is Immutability?** In FP, data is **immutable**, meaning once data is created, it cannot be changed. Instead, new data is created by applying transformations.
