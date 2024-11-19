@@ -1,4 +1,3 @@
-It seems I wasn't able to generate the image. However, I can provide you with the complete diagram in code form. Here’s the diagram you requested, including all the elements for handling memory, service instance management, large data, exception handling, retries, and more:
 
 ```mermaid
 graph LR
