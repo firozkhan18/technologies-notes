@@ -198,6 +198,21 @@ graph LR
     P --> R[Shipping Provider API]
 ```
 
+
+The abopve diagram represents a **Spring Boot Cloud Microservices Architecture** with several key components integrated, such as:
+
+1. **API Gateway**: Acts as the entry point for all client requests.
+2. **Eureka Discovery Service**: Provides service discovery for microservices.
+3. **Configuration Server**: Manages application configuration in a centralized way.
+4. **Multiple Microservices**: Each service is focused on a specific domain, e.g., Authentication, Customer Management, Sales, Inventory, etc.
+5. **Event-Driven Communication via Kafka**: Kafka is used for asynchronous communication between microservices through events.
+6. **Security with OAuth2 / JWT**: Security for API calls and services via token-based authentication.
+7. **Redis for Caching**: Optimizes performance for frequently accessed data.
+8. **CI/CD Pipeline**: Automates build and deployment using Jenkins, Docker, and Kubernetes.
+9. **Databases**: Each microservice interacts with its respective database.
+10. **Observability**: Includes monitoring tools like Prometheus, Grafana, ELK stack, and Jaeger for logging, metrics, and distributed tracing.
+
+
 ### Key Points Addressed:
 
 1. **Memory and Service Instance Management**: Kubernetes is used for service instance scaling, and memory management is handled at the Kubernetes level through resource limits.
@@ -211,21 +226,8 @@ graph LR
 9. **Deadlock Prevention**: Microservices are designed to avoid blocking calls, ensuring high availability.
 10. **Memory Leak Prevention**: Kubernetes manages container resource usage, monitoring with tools like Prometheus to identify and mitigate memory leaks.
 
-This diagram and explanation encapsulate a robust architecture designed to handle performance and reliability across various system components. Let me know if you'd like further details or adjustments!
+This diagram and explanation encapsulate a robust architecture designed to handle performance and reliability across various system components. 
 
-
-The diagram you've provided represents a **Spring Boot Cloud Microservices Architecture** with several key components integrated, such as:
-
-1. **API Gateway**: Acts as the entry point for all client requests.
-2. **Eureka Discovery Service**: Provides service discovery for microservices.
-3. **Configuration Server**: Manages application configuration in a centralized way.
-4. **Multiple Microservices**: Each service is focused on a specific domain, e.g., Authentication, Customer Management, Sales, Inventory, etc.
-5. **Event-Driven Communication via Kafka**: Kafka is used for asynchronous communication between microservices through events.
-6. **Security with OAuth2 / JWT**: Security for API calls and services via token-based authentication.
-7. **Redis for Caching**: Optimizes performance for frequently accessed data.
-8. **CI/CD Pipeline**: Automates build and deployment using Jenkins, Docker, and Kubernetes.
-9. **Databases**: Each microservice interacts with its respective database.
-10. **Observability**: Includes monitoring tools like Prometheus, Grafana, ELK stack, and Jaeger for logging, metrics, and distributed tracing.
 
 ### Validation & Considerations:
 Overall, the diagram is a solid representation of a typical **Spring Boot Cloud Microservices** architecture using **Spring Cloud** components, **Kafka** for messaging, **Redis** for caching, and other supporting infrastructure like **OAuth2**, **Prometheus**, **Grafana**, **CI/CD**, and **Databases**.
