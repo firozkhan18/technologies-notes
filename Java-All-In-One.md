@@ -1303,9 +1303,7 @@ Understanding the distinction between these operations is important for writing 
 | **Optional Class**              | A container for optional values to avoid `NullPointerException` |
 | **Nashorn JavaScript Engine**   | Running JavaScript code within Java     |
 | **Date and Time API**           | A modern, immutable, thread-safe date-time API |
-| **CompletableFuture
-
-**           | Handling asynchronous programming with ease |
+| **CompletableFuture**           | Handling asynchronous programming with ease |
 | **Parallel Streams**            | Simplified parallel processing of collections |
 | **Collection Factory Methods**  | Convenient ways to create immutable collections |
 
@@ -1313,8 +1311,6 @@ Understanding the distinction between these operations is important for writing 
 
 These features make Java 8 much more powerful, expressive, and modern. They embrace functional programming paradigms, improve concurrency and parallelism, and make working with collections and date/time easier.
 
-
-Sure, let's break down each concept in detail:
 
 ---
 
