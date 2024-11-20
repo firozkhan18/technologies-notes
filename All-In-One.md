@@ -9,7 +9,6 @@
 8. [Regular Interface](#regular-interface)
 9. [Functional Interface](#functional-interface)
 10. [Java Thread & Concurrency](#java-thread-concurrency)
-Here's a table of contents with navigation links for the topics you've listed:
 
 ### Table of Contents
 
