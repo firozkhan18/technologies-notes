@@ -813,10 +813,13 @@ System.out.println(result);  // Output: apple, banana, cherry
 - **Collectors**: Utilities to collect and manipulate streams in various ways.
 
 These Java 8 features represent a major shift towards functional programming in Java, enhancing both code readability and performance. By leveraging these features, developers can write more concise, expressive, and maintainable Java code.
-In Java, **threads** and **concurrency** are critical concepts that enable parallel execution and efficient resource utilization, particularly in multi-core processors. Understanding how threads work, how to manage concurrency, and how to avoid common pitfalls like race conditions is key to writing efficient, thread-safe applications.
+
+
 ---
 
 ## Java Thread & Concurrency
+
+In Java, **threads** and **concurrency** are critical concepts that enable parallel execution and efficient resource utilization, particularly in multi-core processors. Understanding how threads work, how to manage concurrency, and how to avoid common pitfalls like race conditions is key to writing efficient, thread-safe applications.
 
 ### **1. What is a Thread?**
 A **thread** is a lightweight unit of execution within a process. In Java, a thread is a single path of execution, and a program can have multiple threads running simultaneously. Each thread runs independently but shares the same memory space of the parent process.
@@ -1842,6 +1845,533 @@ Using `Condition` objects provides a powerful way to handle inter-thread communi
 
 **Perpetually** means in a way that is continuous, unending, or everlasting. It describes something that happens without interruption or that continues indefinitely over time. For example, if a task is described as being "perpetually delayed," it means that it is always delayed and there seems to be no end to the delays.
 
+---
+
+### Concurrency
+
+**Concurrency** is the ability to run multiple threads simultaneously, enabling tasks to be executed in overlapping time periods. It’s crucial for improving the efficiency and responsiveness of applications, especially in I/O-bound and CPU-bound operations.
+
+### Thread
+
+A **thread** is the smallest unit of processing that can be scheduled by an operating system. In Java, threads are created using:
+
+1. **Extending the `Thread` class**:
+    ```java
+    class MyThread extends Thread {
+        public void run() {
+            System.out.println("Thread is running");
+        }
+    }
+    ```
+
+2. **Implementing the `Runnable` interface**:
+    ```java
+    class MyRunnable implements Runnable {
+        public void run() {
+            System.out.println("Thread is running");
+        }
+    }
+    ```
+
+### Concurrent HashMap
+
+A **ConcurrentHashMap** is a thread-safe variant of `HashMap` designed for concurrent use. It allows multiple threads to read and write simultaneously without locking the entire map, improving performance and scalability.
+
+#### Example of ConcurrentHashMap
+
+```java
+import java.util.concurrent.ConcurrentHashMap;
+
+public class ConcurrentHashMapExample {
+    public static void main(String[] args) {
+        ConcurrentHashMap<String, Integer> map = new ConcurrentHashMap<>();
+
+        // Populate the map
+        map.put("One", 1);
+        map.put("Two", 2);
+        map.put("Three", 3);
+
+        // Accessing the map concurrently
+        Runnable task = () -> {
+            String threadName = Thread.currentThread().getName();
+            for (String key : map.keySet()) {
+                System.out.println(threadName + " read: " + key + " = " + map.get(key));
+            }
+        };
+
+        Thread t1 = new Thread(task);
+        Thread t2 = new Thread(task);
+        
+        t1.start();
+        t2.start();
+    }
+}
+```
+
+### Executor Framework
+
+The **Executor framework** in Java provides a high-level API for managing and controlling threads. It decouples task submission from the details of how each task will be run, allowing better resource management and flexibility.
+
+#### Key Components
+
+1. **Executor Interface**: A simple interface for executing tasks.
+
+2. **ExecutorService**: Extends `Executor` and provides methods to manage the lifecycle of the executor (like shutdown).
+
+3. **ScheduledExecutorService**: Extends `ExecutorService` to schedule commands to run after a given delay or periodically.
+
+4. **ThreadPoolExecutor**: A versatile implementation of `ExecutorService` that allows managing a pool of threads.
+
+#### Example of Executor Framework
+
+```java
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+public class ExecutorFrameworkExample {
+    public static void main(String[] args) {
+        // Create a thread pool with 3 threads
+        ExecutorService executorService = Executors.newFixedThreadPool(3);
+
+        Runnable task = () -> {
+            String threadName = Thread.currentThread().getName();
+            System.out.println("Task executed by: " + threadName);
+        };
+
+        // Submit tasks to the executor
+        for (int i = 0; i < 5; i++) {
+            executorService.submit(task);
+        }
+
+        // Shutdown the executor
+        executorService.shutdown();
+    }
+}
+```
+
+### Summary
+
+1. **Fairness Policy**: Controls how locks are acquired by threads, preventing starvation with fair locks.
+2. **Concurrency**: Enables simultaneous execution of threads to enhance performance.
+3. **Thread**: The smallest unit of execution in Java, created using `Thread` or `Runnable`.
+4. **ConcurrentHashMap**: A thread-safe map allowing concurrent access without locking the entire structure.
+5. **Executor Framework**: A high-level API for managing threads, providing various services for task execution.
+
+This framework helps manage resources efficiently, making it easier to build scalable and responsive applications in Java.
+
+### Fairness Policy
+
+The **fairness policy** in Java's concurrency framework determines how threads acquire locks. It ensures that threads are granted access to shared resources in a fair manner, typically using FIFO (First-In-First-Out) ordering. 
+
+1. **Fair Locks**: If a lock is fair, the longest waiting thread will acquire the lock first. This helps prevent thread starvation.
+2. **Unfair Locks**: If a lock is unfair, a thread that has been waiting may not get the lock in the order it arrived. This can lead to better performance but may result in starvation.
+
+You can set the fairness policy when creating a `ReentrantLock`:
+
+```java
+ReentrantLock fairLock = new ReentrantLock(true); // Fair
+ReentrantLock unfairLock = new ReentrantLock(false); // Unfair
+```
+
+### Concurrency
+
+**Concurrency** is the ability to run multiple threads simultaneously, enabling tasks to be executed in overlapping time periods. It’s crucial for improving the efficiency and responsiveness of applications, especially in I/O-bound and CPU-bound operations.
+
+### Thread
+
+A **thread** is the smallest unit of processing that can be scheduled by an operating system. In Java, threads are created using:
+
+1. **Extending the `Thread` class**:
+    ```java
+    class MyThread extends Thread {
+        public void run() {
+            System.out.println("Thread is running");
+        }
+    }
+    ```
+
+2. **Implementing the `Runnable` interface**:
+    ```java
+    class MyRunnable implements Runnable {
+        public void run() {
+            System.out.println("Thread is running");
+        }
+    }
+    ```
+
+### Concurrent HashMap
+
+A **ConcurrentHashMap** is a thread-safe variant of `HashMap` designed for concurrent use. It allows multiple threads to read and write simultaneously without locking the entire map, improving performance and scalability.
+
+#### Example of ConcurrentHashMap
+
+```java
+import java.util.concurrent.ConcurrentHashMap;
+
+public class ConcurrentHashMapExample {
+    public static void main(String[] args) {
+        ConcurrentHashMap<String, Integer> map = new ConcurrentHashMap<>();
+
+        // Populate the map
+        map.put("One", 1);
+        map.put("Two", 2);
+        map.put("Three", 3);
+
+        // Accessing the map concurrently
+        Runnable task = () -> {
+            String threadName = Thread.currentThread().getName();
+            for (String key : map.keySet()) {
+                System.out.println(threadName + " read: " + key + " = " + map.get(key));
+            }
+        };
+
+        Thread t1 = new Thread(task);
+        Thread t2 = new Thread(task);
+        
+        t1.start();
+        t2.start();
+    }
+}
+```
+
+### Executor Framework
+
+The **Executor framework** in Java provides a high-level API for managing and controlling threads. It decouples task submission from the details of how each task will be run, allowing better resource management and flexibility.
+
+#### Key Components
+
+1. **Executor Interface**: A simple interface for executing tasks.
+
+2. **ExecutorService**: Extends `Executor` and provides methods to manage the lifecycle of the executor (like shutdown).
+
+3. **ScheduledExecutorService**: Extends `ExecutorService` to schedule commands to run after a given delay or periodically.
+
+4. **ThreadPoolExecutor**: A versatile implementation of `ExecutorService` that allows managing a pool of threads.
+
+#### Example of Executor Framework
+
+```java
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+public class ExecutorFrameworkExample {
+    public static void main(String[] args) {
+        // Create a thread pool with 3 threads
+        ExecutorService executorService = Executors.newFixedThreadPool(3);
+
+        Runnable task = () -> {
+            String threadName = Thread.currentThread().getName();
+            System.out.println("Task executed by: " + threadName);
+        };
+
+        // Submit tasks to the executor
+        for (int i = 0; i < 5; i++) {
+            executorService.submit(task);
+        }
+
+        // Shutdown the executor
+        executorService.shutdown();
+    }
+}
+```
+
+### Summary
+
+1. **Fairness Policy**: Controls how locks are acquired by threads, preventing starvation with fair locks.
+2. **Concurrency**: Enables simultaneous execution of threads to enhance performance.
+3. **Thread**: The smallest unit of execution in Java, created using `Thread` or `Runnable`.
+4. **ConcurrentHashMap**: A thread-safe map allowing concurrent access without locking the entire structure.
+5. **Executor Framework**: A high-level API for managing threads, providing various services for task execution.
+
+This framework helps manage resources efficiently, making it easier to build scalable and responsive applications in Java.
+
+To achieve synchronous and asynchronous execution using threads, concurrency, the Executor framework, and concurrent collections in Java, we can explore practical examples for each approach.
+
+### 1. Synchronous Execution
+
+**Synchronous execution** means that the caller waits for the task to complete before proceeding. You can achieve this with the basic thread model or using the Executor framework.
+
+#### Example Using Threads
+
+```java
+class SynchronousTask extends Thread {
+    @Override
+    public void run() {
+        try {
+            Thread.sleep(1000); // Simulating a long-running task
+            System.out.println("Task completed: " + Thread.currentThread().getName());
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+    }
+}
+
+public class SynchronousExecutionExample {
+    public static void main(String[] args) {
+        SynchronousTask task = new SynchronousTask();
+        task.start(); // Start the thread
+        try {
+            task.join(); // Wait for the task to complete
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        System.out.println("Main thread proceeding after task completion.");
+    }
+}
+```
+
+#### Example Using Executor Framework
+
+```java
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+
+public class SynchronousExecutorExample {
+    public static void main(String[] args) {
+        ExecutorService executorService = Executors.newSingleThreadExecutor();
+
+        Future<String> future = executorService.submit(() -> {
+            Thread.sleep(1000); // Simulating a long-running task
+            return "Task completed";
+        });
+
+        try {
+            String result = future.get(); // Blocks until the task completes
+            System.out.println(result);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            executorService.shutdown();
+        }
+
+        System.out.println("Main thread proceeding after task completion.");
+    }
+}
+```
+
+### 2. Asynchronous Execution
+
+**Asynchronous execution** allows the caller to continue processing without waiting for the task to complete. This can be achieved using threads or the Executor framework.
+
+#### Example Using Threads
+
+```java
+class AsynchronousTask extends Thread {
+    @Override
+    public void run() {
+        try {
+            Thread.sleep(1000); // Simulating a long-running task
+            System.out.println("Asynchronous task completed: " + Thread.currentThread().getName());
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+    }
+}
+
+public class AsynchronousExecutionExample {
+    public static void main(String[] args) {
+        AsynchronousTask task = new AsynchronousTask();
+        task.start(); // Start the thread
+
+        System.out.println("Main thread is not waiting for the task to complete.");
+        
+        // Continue with other processing...
+        try {
+            task.join(); // Optionally wait for task completion
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+#### Example Using Executor Framework
+
+```java
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+public class AsynchronousExecutorExample {
+    public static void main(String[] args) {
+        ExecutorService executorService = Executors.newFixedThreadPool(2);
+
+        executorService.execute(() -> {
+            try {
+                Thread.sleep(1000); // Simulating a long-running task
+                System.out.println("Asynchronous task completed by: " + Thread.currentThread().getName());
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        });
+
+        System.out.println("Main thread is not waiting for the task to complete.");
+
+        // Perform other operations while the task runs asynchronously...
+
+        executorService.shutdown(); // Shutdown the executor
+    }
+}
+```
+
+### 3. Using Concurrent Collections
+
+Concurrent collections can be used within both synchronous and asynchronous contexts. They ensure thread safety when accessing shared data.
+
+#### Example Using ConcurrentHashMap
+
+```java
+import java.util.concurrent.ConcurrentHashMap;
+
+public class ConcurrentCollectionExample {
+    public static void main(String[] args) {
+        ConcurrentHashMap<String, Integer> map = new ConcurrentHashMap<>();
+
+        // Asynchronous updates to the map
+        Runnable updateTask = () -> {
+            for (int i = 0; i < 5; i++) {
+                map.put(Thread.currentThread().getName() + "-" + i, i);
+                System.out.println(Thread.currentThread().getName() + " added: " + i);
+            }
+        };
+
+        Thread t1 = new Thread(updateTask);
+        Thread t2 = new Thread(updateTask);
+        
+        t1.start();
+        t2.start();
+        
+        try {
+            t1.join();
+            t2.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        System.out.println("Final map: " + map);
+    }
+}
+```
+
+### Summary
+
+1. **Synchronous Execution**:
+   - Achieved using `Thread.join()` to block the main thread until the task is complete.
+   - In the Executor framework, `Future.get()` blocks until the task completes.
+
+2. **Asynchronous Execution**:
+   - Started threads without waiting for them to complete.
+   - In the Executor framework, tasks can be submitted without waiting, and the main thread continues processing.
+
+3. **Concurrent Collections**:
+   - Use concurrent collections like `ConcurrentHashMap` to handle shared data safely in both synchronous and asynchronous tasks.
+
+These examples demonstrate how to manage synchronous and asynchronous execution effectively using Java's threading and concurrency features.
+
+In Java, the `ExecutorService` interface, part of the `java.util.concurrent` package, provides a high-level API for managing and controlling thread execution. It abstracts thread management, allowing developers to focus on task execution rather than thread lifecycle management. Here are some key methods provided by the `ExecutorService` interface:
+
+### Key Methods of `ExecutorService`
+
+1. **submit()**:
+   - **Description**: Submits a task for execution and returns a `Future` representing the result of the task.
+   - **Overloads**: It can take either a `Callable` (which can return a result) or a `Runnable` (which does not return a result).
+   - **Example**:
+
+     ```java
+     ExecutorService executor = Executors.newFixedThreadPool(2);
+     Future<Integer> future = executor.submit(() -> {
+         // Task logic
+         return 123;
+     });
+     ```
+
+2. **invokeAll()**:
+   - **Description**: Accepts a collection of `Callable` tasks, executes them, and returns a list of `Future` objects.
+   - **Blocking**: It blocks until all tasks are completed.
+   - **Example**:
+
+     ```java
+     List<Callable<Integer>> tasks = Arrays.asList(
+         () -> 1,
+         () -> 2,
+         () -> 3
+     );
+     List<Future<Integer>> results = executor.invokeAll(tasks);
+     ```
+
+3. **invokeAny()**:
+   - **Description**: Accepts a collection of `Callable` tasks and executes them. It returns the result of the first successfully completed task.
+   - **Blocking**: It blocks until at least one task is completed.
+   - **Example**:
+
+     ```java
+     Integer result = executor.invokeAny(tasks);
+     ```
+
+4. **shutdown()**:
+   - **Description**: Initiates an orderly shutdown of the `ExecutorService` in which previously submitted tasks are executed, but no new tasks will be accepted.
+   - **Example**:
+
+     ```java
+     executor.shutdown();
+     ```
+
+5. **shutdownNow()**:
+   - **Description**: Attempts to stop all actively executing tasks, halts the processing of waiting tasks, and returns a list of the tasks that were waiting to be executed.
+   - **Example**:
+
+     ```java
+     List<Runnable> notExecutedTasks = executor.shutdownNow();
+     ```
+
+6. **isShutdown()**:
+   - **Description**: Returns `true` if the `ExecutorService` has been shut down.
+   - **Example**:
+
+     ```java
+     boolean shutdown = executor.isShutdown();
+     ```
+
+7. **isTerminated()**:
+   - **Description**: Returns `true` if all tasks have completed following a shutdown request.
+   - **Example**:
+
+     ```java
+     boolean terminated = executor.isTerminated();
+     ```
+
+8. **awaitTermination()**:
+   - **Description**: Blocks until all tasks have completed execution after a shutdown request, or the timeout occurs, or the current thread is interrupted.
+   - **Example**:
+
+     ```java
+     executor.shutdown();
+     try {
+         if (!executor.awaitTermination(60, TimeUnit.SECONDS)) {
+             executor.shutdownNow(); // Force shutdown if not terminated
+         }
+     } catch (InterruptedException e) {
+         executor.shutdownNow();
+     }
+     ```
+
+### Additional Methods
+
+- **execute()**:
+  - **Description**: Accepts a `Runnable` task for execution. It does not return a result and does not throw checked exceptions.
+  - **Example**:
+
+    ```java
+    executor.execute(() -> {
+        // Task logic
+    });
+    ```
+
+### Summary
+
+The `ExecutorService` interface provides a robust framework for concurrent programming in Java, making it easier to manage threads and execute tasks asynchronously. By using these methods, you can effectively handle task submission, execution, and lifecycle management in a multi-threaded environment.
+
+---
 ## Garbage collection (GC) algorithms
 
 Java provides several garbage collection (GC) algorithms to manage memory automatically. Each of these algorithms has its own strengths and use cases. Here’s an overview of **Serial GC**, **Parallel GC**, **G1 GC**, and **ZGC**:
@@ -1899,9 +2429,11 @@ Java provides several garbage collection (GC) algorithms to manage memory automa
 
 Choosing the right garbage collector depends on the specific requirements of your application, such as throughput, latency, and memory usage patterns.
 
-A memory leak in Java occurs when the Java Virtual Machine (JVM) retains references to objects that are no longer needed, preventing the garbage collector from reclaiming their memory. This can lead to increased memory usage and ultimately cause an application to run out of memory.
+---
 
-### Causes of Memory Leaks in Java
+## Causes of Memory Leaks in Java
+
+A memory leak in Java occurs when the Java Virtual Machine (JVM) retains references to objects that are no longer needed, preventing the garbage collector from reclaiming their memory. This can lead to increased memory usage and ultimately cause an application to run out of memory.
 
 1. **Static Fields**: Objects held in static fields are not eligible for garbage collection until the class is unloaded, which typically happens only when the application is terminated.
 
@@ -1937,9 +2469,7 @@ By being mindful of object references, employing the right patterns, and regular
 
 ---
 
-Java 8 and beyond introduced several important updates and improvements to the **Java Collections Framework**. These updates enhance the flexibility, performance, and ease of use of collections in Java. Below are the key updates and new features related to the Collections Framework:
-
----
+## Java 8 Updated Collections Framework:
 
 ### **1. Stream API (Java 8)**
 One of the most significant additions to the Collections Framework in Java 8 is the **Stream API**. The Stream API allows you to process sequences of elements (such as collections, arrays, or I/O channels) in a functional style, enabling efficient, declarative operations on data.
@@ -2258,6 +2788,8 @@ class Outer {
 Lambda expressions in Java 8 represent a powerful addition to the language, allowing for more expressive, concise, and functional-style programming. By enabling the use of functional interfaces, they significantly enhance the way Java developers can write code, particularly when working with collections and streams. 
 
 ---
+
+## Java 8 Lambda Expressions 
 
 In Java 8, **lambda expressions** were introduced as a way to provide a clear and concise syntax for writing anonymous methods (i.e., methods without a name). They are primarily used to implement functional interfaces (interfaces with a single abstract method), and they simplify the syntax for passing behavior as parameters.
 
@@ -3216,32 +3748,46 @@ Java 8 introduced several enhancements and new features to the Java Collections 
 ### Summary
 Java 8 significantly enhanced the Java Collections Framework, particularly through the introduction of the Stream API, default methods, and various utility methods for easier data manipulation. These improvements have made it simpler to perform complex data operations while maintaining readability and conciseness.
 
-
+---
 
 ## ACID properties
 
-ACID properties are a set of principles that ensure reliable processing of database transactions. ACID stands for **Atomicity, Consistency, Isolation, and Durability**. Here’s a breakdown of each property:
+## ACID properties
+
+ACID properties are a set of principles that ensure reliable processing of database transactions. They are critical for maintaining data integrity and consistency. ACID stands for **Atomicity, Consistency, Isolation, and Durability**. Here’s a breakdown of each property:
 
 ### 1. Atomicity
 
 - **Definition**: A transaction is treated as a single, indivisible unit of work. This means that either all operations within the transaction are completed successfully, or none are applied at all.
 - **Implication**: If any part of the transaction fails, the entire transaction is rolled back, leaving the database in its original state. This ensures that partial updates do not occur.
 
+- **Definition**: Ensures that a transaction is treated as a single, indivisible unit. It either completes in its entirety or does not execute at all.
+- **Example**: If a transaction involves transferring money from one account to another, both the debit from the first account and the credit to the second account must succeed; if one fails, the entire transaction is rolled back.
+- 
 ### 2. Consistency
 
 - **Definition**: A transaction must bring the database from one valid state to another valid state, maintaining all predefined rules, including constraints, cascades, and triggers.
 - **Implication**: Any data written to the database must be valid according to the defined schema and rules. If a transaction violates these rules, it should be aborted, ensuring that the database remains consistent.
+
+- **Definition**: Guarantees that a transaction brings the database from one valid state to another, maintaining all predefined rules, constraints, and triggers.
+- **Example**: If a transaction violates a database constraint (e.g., a foreign key constraint), it will not be allowed to commit, ensuring that the database remains in a consistent state.
 
 ### 3. Isolation
 
 - **Definition**: Transactions should operate independently of one another. The execution of one transaction should not affect the execution of another.
 - **Implication**: Isolation ensures that concurrent transactions do not lead to inconsistencies in the database. Different levels of isolation (such as read committed, repeatable read, and serializable) can be implemented to manage how transactions interact.
 
+- **Definition**: Ensures that concurrent transactions do not interfere with each other. Each transaction should execute as if it is the only transaction in the system.
+- **Example**: If two transactions are trying to update the same data simultaneously, isolation prevents them from affecting each other's operations, ensuring data integrity.
+- 
 ### 4. Durability
 
 - **Definition**: Once a transaction has been committed, it will remain so, even in the event of a system failure (like a crash or power loss).
 - **Implication**: The effects of a committed transaction are permanent and must be stored in non-volatile memory, ensuring that the database can recover to the last committed state after a failure.
 
+- **Definition**: Guarantees that once a transaction has been committed, its effects are permanent, even in the event of a system failure.
+- **Example**: After a transaction to update a record is completed, the changes remain in the database even if there is a crash or power failure.
+- 
 ### Summary
 
 - **Atomicity**: All or nothing.
@@ -3249,11 +3795,15 @@ ACID properties are a set of principles that ensure reliable processing of datab
 - **Isolation**: Independent execution.
 - **Durability**: Permanent results.
 
+The ACID properties are essential for ensuring reliable transaction processing in database systems, providing a framework that maintains data integrity, consistency, and reliability in multi-user environments.
+
 These properties are crucial for maintaining the integrity and reliability of a database, especially in environments with concurrent transactions and potential failures.
 
-Transaction isolation in Spring Boot is an essential aspect of managing database transactions to ensure data consistency and integrity, especially in concurrent environments. In Spring, you can control transaction isolation levels using the `@Transactional` annotation.
+---
 
-### Transaction Isolation Levels
+## Transaction Isolation Levels
+
+Transaction isolation in Spring Boot is an essential aspect of managing database transactions to ensure data consistency and integrity, especially in concurrent environments. In Spring, you can control transaction isolation levels using the `@Transactional` annotation.
 
 There are several transaction isolation levels defined by the SQL standard, which dictate how transaction integrity is visible to other transactions. The levels are:
 
@@ -3323,29 +3873,7 @@ If you do not specify an isolation level, Spring uses the default isolation leve
 
 Transaction isolation in Spring Boot plays a crucial role in ensuring that your application maintains data integrity during concurrent operations. By leveraging the `@Transactional` annotation and understanding the implications of different isolation levels, you can design robust applications that handle transactions effectively.
 
-
-## ACID properties
-
-ACID properties are a set of principles that ensure reliable processing of database transactions. They are critical for maintaining data integrity and consistency. ACID stands for:
-
-### 1. Atomicity
-- **Definition**: Ensures that a transaction is treated as a single, indivisible unit. It either completes in its entirety or does not execute at all.
-- **Example**: If a transaction involves transferring money from one account to another, both the debit from the first account and the credit to the second account must succeed; if one fails, the entire transaction is rolled back.
-
-### 2. Consistency
-- **Definition**: Guarantees that a transaction brings the database from one valid state to another, maintaining all predefined rules, constraints, and triggers.
-- **Example**: If a transaction violates a database constraint (e.g., a foreign key constraint), it will not be allowed to commit, ensuring that the database remains in a consistent state.
-
-### 3. Isolation
-- **Definition**: Ensures that concurrent transactions do not interfere with each other. Each transaction should execute as if it is the only transaction in the system.
-- **Example**: If two transactions are trying to update the same data simultaneously, isolation prevents them from affecting each other's operations, ensuring data integrity.
-
-### 4. Durability
-- **Definition**: Guarantees that once a transaction has been committed, its effects are permanent, even in the event of a system failure.
-- **Example**: After a transaction to update a record is completed, the changes remain in the database even if there is a crash or power failure.
-
-### Summary
-The ACID properties are essential for ensuring reliable transaction processing in database systems, providing a framework that maintains data integrity, consistency, and reliability in multi-user environments.
+---
 
 ## SOLID principles
 
@@ -3379,6 +3907,8 @@ The SOLID principles are a set of design principles aimed at making software des
 ### Summary
 The SOLID principles guide developers in creating systems that are easy to manage, extend, and maintain. By adhering to these principles, you can reduce complexity and improve the overall design of your software architecture.
 
+
+---
 
 ## Java design patterns
 
@@ -3726,6 +4256,7 @@ These patterns are concerned with algorithms and the assignment of responsibilit
 ### Conclusion
 Java design patterns provide proven solutions to common problems encountered in software design. Understanding and applying these patterns can significantly improve the structure and maintainability of your code.
 
+----
 ## Microservice Design Patterns
 
 Microservices architecture involves designing applications as a collection of loosely coupled services that can be developed, deployed, and scaled independently. Various design patterns can help manage the complexity and enhance the effectiveness of microservices. Here are some common microservice design patterns, with a focus on the Sidecar pattern:
@@ -3906,6 +4437,8 @@ These patterns enhance the reliability and stability of microservices and distri
 
 Microservice design patterns provide essential strategies for managing complexity in distributed systems. The **Sidecar pattern**, in particular, allows for the separation of concerns by offloading cross-cutting functionalities, which can enhance maintainability and scalability in Spring Boot microservices.
 
+---
+
 ## Overview of `Hashtable` & `ConcurrentHashMap`
 
 Here’s a detailed overview of `Hashtable`, `ConcurrentHashMap`, and hashing itself, along with a Mermaid diagram to visualize their structures.
@@ -4066,7 +4599,9 @@ graph TD
 
 This diagram illustrates how both `Hashtable` and `ConcurrentHashMap` use hashing and handle collisions, without unsupported comments. If you have any further questions or need more modifications, feel free to ask!
 
-### Hashing in `Hashtable &  `ConcurrentHashMap`
+---
+
+## Hashing in `Hashtable &  `ConcurrentHashMap`
 
 Hashing in a `Hashtable` and the concept of buckets in a `ConcurrentHashMap` are fundamental to how these data structures manage their data. Here’s an overview of each:
 
@@ -4152,7 +4687,7 @@ graph TD
 
 Concepts of `HashMap` and `HashSet`, highlighting how they manage data using hashing.
 
-### Mermaid Diagram
+###  `HashMap` and `HashSet` Diagram
 
 ```mermaid
 graph TD
@@ -4200,11 +4735,12 @@ This diagram helps illustrate the structural similarities and differences betwee
 
 
 ---
-In Java, both **`HashMap`** and **`ConcurrentHashMap`** are used to store key-value pairs, but they are designed for different purposes and have distinct characteristics, especially when it comes to **thread safety** and **concurrency**.
+
+## Comparison of HashMap and ConcurrentHashMap
+
+Java, both **`HashMap`** and **`ConcurrentHashMap`** are used to store key-value pairs, but they are designed for different purposes and have distinct characteristics, especially when it comes to **thread safety** and **concurrency**.
 
 Here's a detailed comparison of **`HashMap`** and **`ConcurrentHashMap`**:
-
----
 
 ### **1. Thread Safety**
 
@@ -4356,6 +4892,10 @@ public class ConcurrentHashMapExample {
   - You are working in a **multi-threaded** environment where multiple threads will access and modify the map concurrently.
   - You need thread-safe operations without locking the entire map (e.g., for performance reasons).
 
+---
+
+## Fail-Fast and Fail-Safe
+
 In Java's **Collections Framework**, the terms **Fail-Fast** and **Fail-Safe** describe how iterators behave when the underlying collection is modified during iteration. Both concepts are particularly relevant in concurrent programming scenarios where multiple threads might be modifying a collection while it is being iterated.
 
 ### **1. Fail-Fast Iterators**
@@ -4497,6 +5037,10 @@ These collections implement fail-safe iterators.
 - **Fail-Safe**: Allows modifications while iterating without throwing exceptions, but may not reflect the changes immediately in the iteration. This is generally used with **thread-safe** collections (like `CopyOnWriteArrayList`, `ConcurrentHashMap`).
 
 In summary, **Fail-Fast** is useful for catching bugs early in single-threaded or synchronized environments, while **Fail-Safe** is used in multi-threaded environments where modifications to the collection are expected during iteration.
+
+---
+
+## Snapshot
 
 In the context of **data structures** and **collections**, a **snapshot** refers to a **static copy** of a collection (or data structure) at a specific point in time. When a snapshot is created, the collection is **frozen** and does not reflect any subsequent modifications to the original collection. This concept is commonly used in **fail-safe iterators** and in systems where **concurrent modifications** to the collection might occur during iteration.
 
@@ -4869,7 +5413,7 @@ By adopting these best practices and using the provided code examples, you can e
 
 ---
 
-**Here’s an overview of Angular, React, microservices, and threading, along with their interactions and use cases.**
+## An overview of Angular, React, microservices, and threading, along with their interactions and use cases
 
 ### Angular
 
@@ -4948,6 +5492,10 @@ Debugging React and Angular code involves various tools and techniques. Here’s
 - **Network Monitoring**: Use the Network tab to check API calls and responses.
 
 By using these strategies and tools, you can efficiently debug both React and Angular applications.
+
+---
+
+## Sharding in MongoDB
 
 Sharding in MongoDB is a method used to distribute data across multiple servers, allowing for horizontal scaling. It helps manage large datasets and high-throughput applications by breaking up the data into smaller, more manageable pieces called "shards."
 
@@ -5030,7 +5578,7 @@ db.users.find({ "user_id": 2 });
 
 Sharding in MongoDB is a powerful technique for managing large datasets and ensuring efficient data access. By properly selecting a shard key and configuring the sharded cluster, you can effectively scale your applications to handle increased load and data volume.
 
-### Horizontal and Vertical Scaling
+## Horizontal and Vertical Scaling
 
 **Horizontal Scaling**:
 - Involves adding more machines or nodes to a system (scaling out).
@@ -5053,7 +5601,7 @@ Sharding in MongoDB is a powerful technique for managing large datasets and ensu
 
 In Java, the ClassLoader is a part of the Java Runtime Environment (JRE) that is responsible for loading classes into memory. It dynamically loads classes at runtime and is an essential component of the Java programming model. The ClassLoader finds the binary representation of a class and loads it into the Java Virtual Machine (JVM).
 
-### Types of ClassLoaders
+## Types of ClassLoaders
 
 Java has a hierarchical structure of class loaders. The main types of class loaders are:
 
@@ -5096,6 +5644,9 @@ Bootstrap ClassLoader
 - **Custom ClassLoaders**: User-defined loaders for specialized class-loading requirements.
 
 ---
+
+## Java ways to create objects
+
 In Java, there are several ways to create objects. Here are the main methods:
 
 1. **Using the `new` Keyword**
@@ -5164,7 +5715,7 @@ In Java, there are several ways to create objects. Here are the main methods:
 
 ---
 
-## In Java, `wait()`, `sleep()`, `join()`, and `yield()` are methods used in multi-threading to manage thread behavior. Here’s a breakdown of each:
+## In Java, `wait()`, `sleep()`, `join()`, and `yield()` are methods used in multi-threading to manage thread behavior.
 
 ### 1. `wait()`
 - **Purpose**: Causes the current thread to wait until another thread invokes the `notify()` or `notifyAll()` method on the same object.
@@ -5231,7 +5782,7 @@ Thread.yield(); // Suggests that the current thread yield
 - **`join()`**: Makes the calling thread wait for another thread to finish.
 - **`yield()`**: Suggests to the scheduler that the current thread can be paused to allow other threads to run.
 
-# Immutable Classes in Java
+## Immutable Classes in Java
 
 In Java, an immutable object is one whose state can not be changed once created. Immutable objects are persistent views of their data without a direct option to change it. To change the state, we must create a new copy of such an object with the intended changes. 
 
@@ -5394,7 +5945,7 @@ We also saw the benefits which immutable classes bring in an application. As a d
 
 ---
 
-### **Concurrency Issues: Deadlock, Starvation, Race Condition, Fairness Policy**
+## **Concurrency Issues: Deadlock, Starvation, Race Condition, Fairness Policy**
 
 #### 1. **Deadlock**
 A **deadlock** is a situation in concurrent programming where two or more threads are blocked forever, waiting for each other to release resources that they need to continue execution. This can occur when:
@@ -5548,7 +6099,7 @@ This causes ambiguity, as class **D** would inherit conflicting `display()` meth
 
 ---
 
-### **Breaking Singleton Pattern**
+## **Breaking Singleton Pattern**
 
 The **Singleton Pattern** ensures that a class has only one instance and provides a global point of access to that instance. However, in some cases, you may want to **break** the Singleton pattern (for example, in testing or to allow more flexibility).
 
@@ -5589,7 +6140,7 @@ public class SingletonTest {
 
 ---
 
-### **Immutable Objects in Java**
+## **Immutable Objects in Java**
 
 An **immutable object** is an object whose state cannot be changed once it is created. Immutable objects are inherently **thread-safe** because their state cannot be modified by multiple threads after they are created.
 
@@ -5702,6 +6253,8 @@ public Callable<Void> createTask() {
 - **`Void`**: Reference type; used in generics or when a method needs to comply with an API that requires a return type but does not return a value.
 
 In essence, use `void` when defining methods that don’t return a value, and use `Void` when you need to work with generics or APIs that require a return type in a context where there is no actual return value.
+
+---
 
 In Java, prior to Java 8, interfaces could only declare abstract methods. However, with the introduction of Java 8, two significant features were added to interfaces: default methods and static methods. Here’s why they were introduced and their importance:
 
@@ -5843,6 +6396,10 @@ public class Main {
 - **Static Methods**: Provide utility methods directly within the interface, avoiding inheritance issues.
 
 This illustrates how Java 8 enhances interfaces, enabling better design and resolving multiple inheritance complexities.
+
+---
+
+## To resolve the diamond problem in Java
 
 To resolve the diamond problem in Java, when two interfaces have the same method (including default methods) and a class implements both, the class must explicitly override the method to clarify which implementation to use. Here’s a coding example demonstrating this:
 
@@ -6574,6 +7131,10 @@ public class BoundedBuffer {
 
 `ReentrantLock` provides greater flexibility and more control than synchronized blocks, making it suitable for complex concurrent programming tasks. However, it requires careful handling to avoid deadlocks, especially when acquiring multiple locks.
 
+---
+
+## Conditions
+
 In Java, a **Condition** is an interface that provides a way for threads to communicate about the state of a shared resource, typically used in conjunction with a `ReentrantLock`. It allows threads to wait for certain conditions to occur and to signal other threads when those conditions are met.
 
 ### Key Features of Conditions
@@ -6647,6 +7208,10 @@ class BoundedBuffer {
 
 Using `Condition` objects provides a powerful way to handle inter-thread communication and synchronization in a flexible manner. It's especially useful for implementing producer-consumer scenarios and other complex threading patterns.
 
+---
+
+## Lifecycle of a thread 
+
 The lifecycle of a thread in Java consists of several states, each representing the different stages of a thread's execution. Understanding these states helps in effectively managing thread behavior. Here's an overview of the thread lifecycle:
 
 ### Thread States
@@ -6712,7 +7277,13 @@ A simplified diagram might look like this:
 
 Understanding the thread lifecycle is essential for effective multi-threaded programming. It helps in managing thread synchronization, avoiding deadlocks, and improving performance in concurrent applications.
 
-In Java, `sleep()`, `wait()`, `join()`, and `LockSupport.park()` are all methods related to thread management and synchronization, but they serve different purposes. Here’s a detailed explanation of each:
+---
+
+## Java, `sleep()`, `wait()`, `join()`, and `LockSupport.park()` 
+
+In Java, `sleep()`, `wait()`, `join()`, and `LockSupport.park()` are all methods related to thread management and synchronization, but they serve different purposes. 
+
+Here’s a detailed explanation of each:
 
 ### 1. `sleep()`
 
@@ -6804,11 +7375,9 @@ Understanding these methods helps in managing thread synchronization and ensurin
 
 Understanding these concurrency issues is crucial for building robust multi-threaded applications in Java.
 
+---
+
 Sure! Let’s explore race conditions, deadlocks, and starvation in Java, along with examples and ways to prevent them.
-
-
-
-
 
 ### 3. Starvation
 
@@ -6903,529 +7472,7 @@ ReentrantLock fairLock = new ReentrantLock(true); // Fair
 ReentrantLock unfairLock = new ReentrantLock(false); // Unfair
 ```
 
-### Concurrency
-
-**Concurrency** is the ability to run multiple threads simultaneously, enabling tasks to be executed in overlapping time periods. It’s crucial for improving the efficiency and responsiveness of applications, especially in I/O-bound and CPU-bound operations.
-
-### Thread
-
-A **thread** is the smallest unit of processing that can be scheduled by an operating system. In Java, threads are created using:
-
-1. **Extending the `Thread` class**:
-    ```java
-    class MyThread extends Thread {
-        public void run() {
-            System.out.println("Thread is running");
-        }
-    }
-    ```
-
-2. **Implementing the `Runnable` interface**:
-    ```java
-    class MyRunnable implements Runnable {
-        public void run() {
-            System.out.println("Thread is running");
-        }
-    }
-    ```
-
-### Concurrent HashMap
-
-A **ConcurrentHashMap** is a thread-safe variant of `HashMap` designed for concurrent use. It allows multiple threads to read and write simultaneously without locking the entire map, improving performance and scalability.
-
-#### Example of ConcurrentHashMap
-
-```java
-import java.util.concurrent.ConcurrentHashMap;
-
-public class ConcurrentHashMapExample {
-    public static void main(String[] args) {
-        ConcurrentHashMap<String, Integer> map = new ConcurrentHashMap<>();
-
-        // Populate the map
-        map.put("One", 1);
-        map.put("Two", 2);
-        map.put("Three", 3);
-
-        // Accessing the map concurrently
-        Runnable task = () -> {
-            String threadName = Thread.currentThread().getName();
-            for (String key : map.keySet()) {
-                System.out.println(threadName + " read: " + key + " = " + map.get(key));
-            }
-        };
-
-        Thread t1 = new Thread(task);
-        Thread t2 = new Thread(task);
-        
-        t1.start();
-        t2.start();
-    }
-}
-```
-
-### Executor Framework
-
-The **Executor framework** in Java provides a high-level API for managing and controlling threads. It decouples task submission from the details of how each task will be run, allowing better resource management and flexibility.
-
-#### Key Components
-
-1. **Executor Interface**: A simple interface for executing tasks.
-
-2. **ExecutorService**: Extends `Executor` and provides methods to manage the lifecycle of the executor (like shutdown).
-
-3. **ScheduledExecutorService**: Extends `ExecutorService` to schedule commands to run after a given delay or periodically.
-
-4. **ThreadPoolExecutor**: A versatile implementation of `ExecutorService` that allows managing a pool of threads.
-
-#### Example of Executor Framework
-
-```java
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
-public class ExecutorFrameworkExample {
-    public static void main(String[] args) {
-        // Create a thread pool with 3 threads
-        ExecutorService executorService = Executors.newFixedThreadPool(3);
-
-        Runnable task = () -> {
-            String threadName = Thread.currentThread().getName();
-            System.out.println("Task executed by: " + threadName);
-        };
-
-        // Submit tasks to the executor
-        for (int i = 0; i < 5; i++) {
-            executorService.submit(task);
-        }
-
-        // Shutdown the executor
-        executorService.shutdown();
-    }
-}
-```
-
-### Summary
-
-1. **Fairness Policy**: Controls how locks are acquired by threads, preventing starvation with fair locks.
-2. **Concurrency**: Enables simultaneous execution of threads to enhance performance.
-3. **Thread**: The smallest unit of execution in Java, created using `Thread` or `Runnable`.
-4. **ConcurrentHashMap**: A thread-safe map allowing concurrent access without locking the entire structure.
-5. **Executor Framework**: A high-level API for managing threads, providing various services for task execution.
-
-This framework helps manage resources efficiently, making it easier to build scalable and responsive applications in Java.
-
-### Fairness Policy
-
-The **fairness policy** in Java's concurrency framework determines how threads acquire locks. It ensures that threads are granted access to shared resources in a fair manner, typically using FIFO (First-In-First-Out) ordering. 
-
-1. **Fair Locks**: If a lock is fair, the longest waiting thread will acquire the lock first. This helps prevent thread starvation.
-2. **Unfair Locks**: If a lock is unfair, a thread that has been waiting may not get the lock in the order it arrived. This can lead to better performance but may result in starvation.
-
-You can set the fairness policy when creating a `ReentrantLock`:
-
-```java
-ReentrantLock fairLock = new ReentrantLock(true); // Fair
-ReentrantLock unfairLock = new ReentrantLock(false); // Unfair
-```
-
-### Concurrency
-
-**Concurrency** is the ability to run multiple threads simultaneously, enabling tasks to be executed in overlapping time periods. It’s crucial for improving the efficiency and responsiveness of applications, especially in I/O-bound and CPU-bound operations.
-
-### Thread
-
-A **thread** is the smallest unit of processing that can be scheduled by an operating system. In Java, threads are created using:
-
-1. **Extending the `Thread` class**:
-    ```java
-    class MyThread extends Thread {
-        public void run() {
-            System.out.println("Thread is running");
-        }
-    }
-    ```
-
-2. **Implementing the `Runnable` interface**:
-    ```java
-    class MyRunnable implements Runnable {
-        public void run() {
-            System.out.println("Thread is running");
-        }
-    }
-    ```
-
-### Concurrent HashMap
-
-A **ConcurrentHashMap** is a thread-safe variant of `HashMap` designed for concurrent use. It allows multiple threads to read and write simultaneously without locking the entire map, improving performance and scalability.
-
-#### Example of ConcurrentHashMap
-
-```java
-import java.util.concurrent.ConcurrentHashMap;
-
-public class ConcurrentHashMapExample {
-    public static void main(String[] args) {
-        ConcurrentHashMap<String, Integer> map = new ConcurrentHashMap<>();
-
-        // Populate the map
-        map.put("One", 1);
-        map.put("Two", 2);
-        map.put("Three", 3);
-
-        // Accessing the map concurrently
-        Runnable task = () -> {
-            String threadName = Thread.currentThread().getName();
-            for (String key : map.keySet()) {
-                System.out.println(threadName + " read: " + key + " = " + map.get(key));
-            }
-        };
-
-        Thread t1 = new Thread(task);
-        Thread t2 = new Thread(task);
-        
-        t1.start();
-        t2.start();
-    }
-}
-```
-
-### Executor Framework
-
-The **Executor framework** in Java provides a high-level API for managing and controlling threads. It decouples task submission from the details of how each task will be run, allowing better resource management and flexibility.
-
-#### Key Components
-
-1. **Executor Interface**: A simple interface for executing tasks.
-
-2. **ExecutorService**: Extends `Executor` and provides methods to manage the lifecycle of the executor (like shutdown).
-
-3. **ScheduledExecutorService**: Extends `ExecutorService` to schedule commands to run after a given delay or periodically.
-
-4. **ThreadPoolExecutor**: A versatile implementation of `ExecutorService` that allows managing a pool of threads.
-
-#### Example of Executor Framework
-
-```java
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
-public class ExecutorFrameworkExample {
-    public static void main(String[] args) {
-        // Create a thread pool with 3 threads
-        ExecutorService executorService = Executors.newFixedThreadPool(3);
-
-        Runnable task = () -> {
-            String threadName = Thread.currentThread().getName();
-            System.out.println("Task executed by: " + threadName);
-        };
-
-        // Submit tasks to the executor
-        for (int i = 0; i < 5; i++) {
-            executorService.submit(task);
-        }
-
-        // Shutdown the executor
-        executorService.shutdown();
-    }
-}
-```
-
-### Summary
-
-1. **Fairness Policy**: Controls how locks are acquired by threads, preventing starvation with fair locks.
-2. **Concurrency**: Enables simultaneous execution of threads to enhance performance.
-3. **Thread**: The smallest unit of execution in Java, created using `Thread` or `Runnable`.
-4. **ConcurrentHashMap**: A thread-safe map allowing concurrent access without locking the entire structure.
-5. **Executor Framework**: A high-level API for managing threads, providing various services for task execution.
-
-This framework helps manage resources efficiently, making it easier to build scalable and responsive applications in Java.
-
-To achieve synchronous and asynchronous execution using threads, concurrency, the Executor framework, and concurrent collections in Java, we can explore practical examples for each approach.
-
-### 1. Synchronous Execution
-
-**Synchronous execution** means that the caller waits for the task to complete before proceeding. You can achieve this with the basic thread model or using the Executor framework.
-
-#### Example Using Threads
-
-```java
-class SynchronousTask extends Thread {
-    @Override
-    public void run() {
-        try {
-            Thread.sleep(1000); // Simulating a long-running task
-            System.out.println("Task completed: " + Thread.currentThread().getName());
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
-    }
-}
-
-public class SynchronousExecutionExample {
-    public static void main(String[] args) {
-        SynchronousTask task = new SynchronousTask();
-        task.start(); // Start the thread
-        try {
-            task.join(); // Wait for the task to complete
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        System.out.println("Main thread proceeding after task completion.");
-    }
-}
-```
-
-#### Example Using Executor Framework
-
-```java
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-
-public class SynchronousExecutorExample {
-    public static void main(String[] args) {
-        ExecutorService executorService = Executors.newSingleThreadExecutor();
-
-        Future<String> future = executorService.submit(() -> {
-            Thread.sleep(1000); // Simulating a long-running task
-            return "Task completed";
-        });
-
-        try {
-            String result = future.get(); // Blocks until the task completes
-            System.out.println(result);
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            executorService.shutdown();
-        }
-
-        System.out.println("Main thread proceeding after task completion.");
-    }
-}
-```
-
-### 2. Asynchronous Execution
-
-**Asynchronous execution** allows the caller to continue processing without waiting for the task to complete. This can be achieved using threads or the Executor framework.
-
-#### Example Using Threads
-
-```java
-class AsynchronousTask extends Thread {
-    @Override
-    public void run() {
-        try {
-            Thread.sleep(1000); // Simulating a long-running task
-            System.out.println("Asynchronous task completed: " + Thread.currentThread().getName());
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
-    }
-}
-
-public class AsynchronousExecutionExample {
-    public static void main(String[] args) {
-        AsynchronousTask task = new AsynchronousTask();
-        task.start(); // Start the thread
-
-        System.out.println("Main thread is not waiting for the task to complete.");
-        
-        // Continue with other processing...
-        try {
-            task.join(); // Optionally wait for task completion
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-}
-```
-
-#### Example Using Executor Framework
-
-```java
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
-public class AsynchronousExecutorExample {
-    public static void main(String[] args) {
-        ExecutorService executorService = Executors.newFixedThreadPool(2);
-
-        executorService.execute(() -> {
-            try {
-                Thread.sleep(1000); // Simulating a long-running task
-                System.out.println("Asynchronous task completed by: " + Thread.currentThread().getName());
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-            }
-        });
-
-        System.out.println("Main thread is not waiting for the task to complete.");
-
-        // Perform other operations while the task runs asynchronously...
-
-        executorService.shutdown(); // Shutdown the executor
-    }
-}
-```
-
-### 3. Using Concurrent Collections
-
-Concurrent collections can be used within both synchronous and asynchronous contexts. They ensure thread safety when accessing shared data.
-
-#### Example Using ConcurrentHashMap
-
-```java
-import java.util.concurrent.ConcurrentHashMap;
-
-public class ConcurrentCollectionExample {
-    public static void main(String[] args) {
-        ConcurrentHashMap<String, Integer> map = new ConcurrentHashMap<>();
-
-        // Asynchronous updates to the map
-        Runnable updateTask = () -> {
-            for (int i = 0; i < 5; i++) {
-                map.put(Thread.currentThread().getName() + "-" + i, i);
-                System.out.println(Thread.currentThread().getName() + " added: " + i);
-            }
-        };
-
-        Thread t1 = new Thread(updateTask);
-        Thread t2 = new Thread(updateTask);
-        
-        t1.start();
-        t2.start();
-        
-        try {
-            t1.join();
-            t2.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        System.out.println("Final map: " + map);
-    }
-}
-```
-
-### Summary
-
-1. **Synchronous Execution**:
-   - Achieved using `Thread.join()` to block the main thread until the task is complete.
-   - In the Executor framework, `Future.get()` blocks until the task completes.
-
-2. **Asynchronous Execution**:
-   - Started threads without waiting for them to complete.
-   - In the Executor framework, tasks can be submitted without waiting, and the main thread continues processing.
-
-3. **Concurrent Collections**:
-   - Use concurrent collections like `ConcurrentHashMap` to handle shared data safely in both synchronous and asynchronous tasks.
-
-These examples demonstrate how to manage synchronous and asynchronous execution effectively using Java's threading and concurrency features.
-
-In Java, the `ExecutorService` interface, part of the `java.util.concurrent` package, provides a high-level API for managing and controlling thread execution. It abstracts thread management, allowing developers to focus on task execution rather than thread lifecycle management. Here are some key methods provided by the `ExecutorService` interface:
-
-### Key Methods of `ExecutorService`
-
-1. **submit()**:
-   - **Description**: Submits a task for execution and returns a `Future` representing the result of the task.
-   - **Overloads**: It can take either a `Callable` (which can return a result) or a `Runnable` (which does not return a result).
-   - **Example**:
-
-     ```java
-     ExecutorService executor = Executors.newFixedThreadPool(2);
-     Future<Integer> future = executor.submit(() -> {
-         // Task logic
-         return 123;
-     });
-     ```
-
-2. **invokeAll()**:
-   - **Description**: Accepts a collection of `Callable` tasks, executes them, and returns a list of `Future` objects.
-   - **Blocking**: It blocks until all tasks are completed.
-   - **Example**:
-
-     ```java
-     List<Callable<Integer>> tasks = Arrays.asList(
-         () -> 1,
-         () -> 2,
-         () -> 3
-     );
-     List<Future<Integer>> results = executor.invokeAll(tasks);
-     ```
-
-3. **invokeAny()**:
-   - **Description**: Accepts a collection of `Callable` tasks and executes them. It returns the result of the first successfully completed task.
-   - **Blocking**: It blocks until at least one task is completed.
-   - **Example**:
-
-     ```java
-     Integer result = executor.invokeAny(tasks);
-     ```
-
-4. **shutdown()**:
-   - **Description**: Initiates an orderly shutdown of the `ExecutorService` in which previously submitted tasks are executed, but no new tasks will be accepted.
-   - **Example**:
-
-     ```java
-     executor.shutdown();
-     ```
-
-5. **shutdownNow()**:
-   - **Description**: Attempts to stop all actively executing tasks, halts the processing of waiting tasks, and returns a list of the tasks that were waiting to be executed.
-   - **Example**:
-
-     ```java
-     List<Runnable> notExecutedTasks = executor.shutdownNow();
-     ```
-
-6. **isShutdown()**:
-   - **Description**: Returns `true` if the `ExecutorService` has been shut down.
-   - **Example**:
-
-     ```java
-     boolean shutdown = executor.isShutdown();
-     ```
-
-7. **isTerminated()**:
-   - **Description**: Returns `true` if all tasks have completed following a shutdown request.
-   - **Example**:
-
-     ```java
-     boolean terminated = executor.isTerminated();
-     ```
-
-8. **awaitTermination()**:
-   - **Description**: Blocks until all tasks have completed execution after a shutdown request, or the timeout occurs, or the current thread is interrupted.
-   - **Example**:
-
-     ```java
-     executor.shutdown();
-     try {
-         if (!executor.awaitTermination(60, TimeUnit.SECONDS)) {
-             executor.shutdownNow(); // Force shutdown if not terminated
-         }
-     } catch (InterruptedException e) {
-         executor.shutdownNow();
-     }
-     ```
-
-### Additional Methods
-
-- **execute()**:
-  - **Description**: Accepts a `Runnable` task for execution. It does not return a result and does not throw checked exceptions.
-  - **Example**:
-
-    ```java
-    executor.execute(() -> {
-        // Task logic
-    });
-    ```
-
-### Summary
-
-The `ExecutorService` interface provides a robust framework for concurrent programming in Java, making it easier to manage threads and execute tasks asynchronously. By using these methods, you can effectively handle task submission, execution, and lifecycle management in a multi-threaded environment.
+---
 
 In Java 8, the introduction of **default** and **static** methods in interfaces serves several important purposes, enhancing the flexibility and usability of interfaces in object-oriented programming. Here’s a detailed explanation of why these features were added, despite regular interfaces having methods:
 
@@ -7684,6 +7731,8 @@ duck.fly(); // Output: Duck flying!
 
 This approach allows you to combine behaviors from different interfaces while maintaining clean and organized code.
 
+---
+
 When you have two interfaces, `A` and `B`, with the same method, and `A` extends `B`, you can use the method from either interface in a class that implements `A`. However, if the class does not provide its own implementation, it will inherit the method from `B`. If the method in `A` is also defined, then the implementing class must override it to provide a specific behavior.
 
 Here’s how to work with this scenario:
@@ -7747,6 +7796,8 @@ Display from MyClass
 - If `A` has a method that overrides the one in `B`, the class must provide its own implementation of that method.
 - You can call methods from both interfaces using the syntax `InterfaceName.super.methodName()` if needed.
 - This design allows for flexibility in method implementation and resolution when dealing with multiple interfaces.
+
+---
 
 Sure! Let’s delve into the **diamond problem**, **race conditions**, **starvation**, and **deadlocks**—common issues in programming, particularly in concurrent and object-oriented programming—and explore how to prevent them, along with code examples.
 
@@ -7992,6 +8043,7 @@ if (lock1.tryLock(100, TimeUnit.MILLISECONDS)) {
 
 These practices help create robust, efficient, and predictable concurrent applications.
 
+---
 
 In Java, achieving synchronous and asynchronous behavior in concurrent programming can be effectively managed using the **Executor Framework** and **Java Collections**. Here's an in-depth look at both approaches.
 
@@ -8135,6 +8187,8 @@ public class ConcurrentCollectionExample {
 - **Thread-Safe Collections**: Use collections like `ConcurrentHashMap` for safe access in a concurrent environment.
 
 These tools enable robust concurrent programming in Java, helping manage both synchronous and asynchronous tasks effectively.
+
+---
 
 Certainly! Let’s delve into **threads**, **concurrency**, and the **Executor Framework** in Java, along with detailed explanations, coding examples, and some tricky questions to deepen your understanding.
 
@@ -8488,6 +8542,7 @@ By following these best practices, you can manage thread lifecycles more safely 
 
 By mastering these concepts, you can write efficient, maintainable, and scalable multi-threaded applications in Java.
 
+---
 
 In Java, `void` and `Void` are used in different contexts and have distinct meanings. Here’s a breakdown of the differences between them:
 
@@ -8922,6 +8977,8 @@ public class ConcurrentCollectionExample {
 
 These tools enable robust concurrent programming in Java, helping manage both synchronous and asynchronous tasks effectively.
 
+---
+
 Certainly! Let’s delve into **threads**, **concurrency**, and the **Executor Framework** in Java, along with detailed explanations, coding examples, and some tricky questions to deepen your understanding.
 
 ### 1. Threads
@@ -9063,7 +9120,7 @@ public class ExecutorExample {
 
 By mastering these concepts, you can write efficient, maintainable, and scalable multi-threaded applications in Java.
 
-============================
+---
 
 ### The Diamond Problem
 Occurs when a class inherits from two interfaces that have the same method signature. The implementing class must override the method to resolve ambiguity.
@@ -9428,7 +9485,7 @@ Understanding these concepts is crucial for building robust multi-threaded appli
 
 Here's a consolidated overview of the introduction of **default** and **static** methods in interfaces in Java 8, highlighting their purposes, benefits, and examples:
 
-### Introduction of Default and Static Methods in Java 8
+## Introduction of Default and Static Methods in Java 8
 
 Java 8 introduced **default** and **static** methods in interfaces to enhance their flexibility and usability in object-oriented programming. These features allow interfaces to evolve without breaking existing code, facilitating better software design.
 
@@ -9511,7 +9568,7 @@ These features help maintain cleaner code, support easier maintenance, and encou
 
 Here's a consolidated overview of the concepts related to interfaces, including default and static methods introduced in Java 8, as well as their implications for multiple inheritance, with relevant examples.
 
-### Interfaces in Java (Post-Java 8)
+## Interfaces in Java (Post-Java 8)
 
 Java 8 introduced **default** and **static methods** in interfaces, enhancing their capabilities significantly.
 
@@ -9659,7 +9716,7 @@ public class Main {
 This approach enables developers to combine behaviors from different interfaces while maintaining clean and organized code.
 Here's a detailed overview of the concepts you mentioned, along with updates and changes introduced in Java 8, 11, and 17 related to concurrency and collections.
 
-### The Diamond Problem in Java
+## The Diamond Problem in Java
 
 The **Diamond Problem** arises when a class inherits from two classes (or interfaces) that have methods with the same signature. This creates ambiguity about which method to inherit. Although Java does not support multiple inheritance through classes, it allows multiple inheritance through interfaces, which can lead to similar issues with default methods.
 
@@ -9772,9 +9829,6 @@ class StaticExample {
 - Functional interfaces can be implemented without ambiguity since they have only one abstract method.
 - If multiple interfaces have default methods with the same name, the implementing class must override it, while static methods are accessed through the interface name and do not cause ambiguity.
 
-If you have further questions or need clarification on any specific points, feel free to ask!
-
-Sure! Let’s dive deep into threads, concurrency, and the differences between `HashMap` and `ConcurrentHashMap`, as well as the concepts of parallel and sequential processing using the Thread Executor framework.
 
 ### Key Concepts
 
@@ -9901,6 +9955,10 @@ Here’s a tabular summary of the changes and updates in Java 8, 11, and 17 rela
 
 Understanding these concepts and the evolution of Java's concurrency and collections framework is crucial for developing efficient, thread-safe applications. Each version has brought improvements and new features that enhance how developers work with concurrent programming and collections in Java. If you have any further questions or need clarification on specific topics, feel free to ask!
 
+---
+
+## ForkJoinPool
+
 `ForkJoinPool` is a special implementation of the `ExecutorService` in Java that is designed to efficiently handle a large number of tasks that can be broken down into smaller subtasks. It is part of the `java.util.concurrent` package and is particularly useful for tasks that can take advantage of parallel processing.
 
 ### Key Features of ForkJoinPool
@@ -9991,7 +10049,7 @@ public class ForkJoinExample {
 
 `ForkJoinPool` is a powerful tool for parallel processing in Java, especially for tasks that can be decomposed into smaller subtasks. It helps maximize CPU utilization and can significantly improve performance for compute-intensive applications. 
 
-### Threads and Concurrency
+## Threads and Concurrency
 
 #### Threads
 - A thread is the smallest unit of processing that can be scheduled by an operating system.
@@ -10221,6 +10279,8 @@ public class ExecutorExample {
 
 The Executor framework is a vital component of Java’s concurrency support, offering a high-level mechanism for managing and executing tasks in a multithreaded environment. It allows for better resource management, simplifies code, and enhances performance in concurrent applications. If you have any further questions or need more examples, feel free to ask!
 
+---
+
 The Executor framework in Java provides several advantages over traditional thread management (creating and managing threads manually). Here are the key benefits:
 
 ### 1. **Simplified Thread Management**
@@ -10260,6 +10320,8 @@ The Executor framework in Java provides several advantages over traditional thre
 ### Summary
 
 The Executor framework significantly enhances the way multithreading is handled in Java by providing a higher level of abstraction, better resource management, and improved code readability. It simplifies many aspects of concurrent programming, making it easier to develop robust, scalable, and maintainable applications. In contrast, traditional multithreading often involves more boilerplate code, greater complexity, and manual management of thread lifecycles. If you have any specific scenarios or further questions, feel free to ask!
+
+---
 
 Sure! Let’s explore the key classes and interfaces in the Executor framework, along with their methods, using code examples for better understanding.
 
@@ -10506,6 +10568,8 @@ classDiagram
 
 This diagram illustrates the hierarchical relationships among the main classes and interfaces in Java's concurrency framework. If you need more details or specific aspects covered, feel free to ask!
 
+---
+
 In the Java Executor framework, there are several ways to create a thread pool using the `Executors` class. Here are the main methods:
 
 ### 1. **Fixed Thread Pool**
@@ -10598,6 +10662,8 @@ In summary, you can create thread pools in the Executor framework using the foll
 6. Custom creation using `ThreadPoolExecutor`
 
 These methods allow for flexible management of concurrency in Java applications. If you have further questions or need examples for specific methods, feel free to ask!
+
+---
 
 Sure! Below are complete code examples for different types of thread pools in the Java Executor framework, along with explanations of their differences and expected results.
 
@@ -10801,6 +10867,8 @@ Work Stealing Pool - Task 5 executed by pool-1-thread-3
 
 The Java Executor framework provides various ways to create and manage thread pools, each suited for different use cases. The choice of thread pool affects how tasks are executed, how resources are managed, and the overall performance of the application. If you have further questions or need specific details about any aspect, feel free to ask!
 
+---
+
 Certainly! Below is an example that demonstrates the use of threads, `Runnable`, `Callable`, `Semaphore`, and locking conditions in a multi-threading scenario.
 
 ### Scenario
@@ -10940,6 +11008,8 @@ Consumed: 1
 
 This example illustrates the use of `Runnable` for the producer, `Callable` for the consumer, and a `Semaphore` to manage access to a shared resource in a multi-threading environment. The producer adds items to the buffer, while the consumer removes items, both coordinating their actions with semaphores to ensure thread safety and proper resource management. If you have more questions or need further modifications, feel free to ask!
 
+---
+
 `ForkJoinPool` is a special implementation of the `ExecutorService` in Java that is designed to efficiently handle a large number of tasks that can be broken down into smaller subtasks. It is part of the `java.util.concurrent` package and is particularly useful for tasks that can take advantage of parallel processing.
 
 ### Key Features of ForkJoinPool
@@ -11030,8 +11100,9 @@ public class ForkJoinExample {
 
 `ForkJoinPool` is a powerful tool for parallel processing in Java, especially for tasks that can be decomposed into smaller subtasks. It helps maximize CPU utilization and can significantly improve performance for compute-intensive applications. If you have more questions or need further details, feel free to ask!
 
+---
 
-### Java and Concurrency
+## Java and Concurrency
 1. **Question**: What is the difference between `synchronized` and `volatile` in Java?
    **Answer**: `synchronized` is a keyword that ensures that only one thread can access a block of code or method at a time, providing mutual exclusion. `volatile`, on the other hand, is used to indicate that a variable's value will be modified by different threads. It ensures that the most recent value is always read from the main memory, but it does not provide mutual exclusion.
 
@@ -11050,7 +11121,7 @@ public class ForkJoinExample {
 2. **Question**: Explain garbage collection in Java.
    **Answer**: Garbage Collection (GC) is the process of automatically freeing memory by removing objects that are no longer in use. Java provides several garbage collectors, such as the Serial GC, Parallel GC, G1 GC, and ZGC, each with different performance characteristics.
 
-### **Garbage Collection in Java**
+## Garbage Collection in Java
 
 **Garbage Collection (GC)** in Java is the process by which the Java Virtual Machine (JVM) automatically reclaims memory that is no longer in use or referenced by any part of the program. It helps in managing memory automatically and preventing memory leaks, which can cause a program to consume more memory than necessary or even crash due to an **OutOfMemoryError**.
 
@@ -11087,7 +11158,7 @@ Java uses automatic garbage collection to handle the deallocation of memory for 
 6. **Finalization**:
    - Objects that are about to be garbage collected can have their `finalize()` method called. However, the use of `finalize()` is **deprecated** in recent Java versions, and it is recommended to use `try-with-resources` or other mechanisms for cleanup.
 
-### **Memory Management in Java**
+## **Memory Management in Java**
 
 Memory management in Java involves controlling the allocation and deallocation of memory for objects in the heap. Java provides automatic memory management through garbage collection, but developers still have control over object creation, resource management, and the proper release of resources.
 
@@ -11105,7 +11176,7 @@ Memory management in Java involves controlling the allocation and deallocation o
 
 ---
 
-### **Garbage Collection vs Semaphore**
+## Garbage Collection vs Semaphore
 
 Garbage collection and semaphores are two very different concepts, but they are often discussed in concurrent programming. Here's a comparison:
 
@@ -11149,7 +11220,7 @@ Garbage collection and semaphores are two very different concepts, but they are 
 
 In conclusion, **garbage collection** is about automatic memory management, while **semaphores** are about managing concurrency and access to resources in multi-threaded applications. They serve different purposes but are both crucial for building efficient, concurrent, and memory-safe applications.
 
-### **Garbage Collection Algorithms in Java**
+## **Garbage Collection Algorithms in Java**
 
 In Java, **Garbage Collection (GC)** is the automatic process by which the JVM (Java Virtual Machine) reclaims memory by identifying and deleting objects that are no longer in use (i.e., objects that cannot be reached from any live thread or static references). The goal of GC is to free up memory, preventing memory leaks, and optimizing memory usage during the application's lifecycle.
 
@@ -11162,7 +11233,7 @@ The **GC process** typically follows these steps:
 2. **Sweeping**: Unreachable objects (those that cannot be accessed from any references) are cleared from memory.
 3. **Compacting (optional)**: To avoid memory fragmentation, the memory is reorganized (compact the memory) by moving objects together, which creates contiguous free space.
 
-### **Main Garbage Collection Algorithms**
+## Main Garbage Collection Algorithms
 
 #### 1. **Serial Garbage Collector**
 - The **Serial Garbage Collector** is the simplest and most basic garbage collection algorithm in Java. It uses a **single thread** for both the **mark** and **sweep** phases.
@@ -11313,6 +11384,8 @@ The **GC process** typically follows these steps:
 
 Garbage collection algorithms in Java vary in terms of their performance characteristics, complexity, and suitability for different types of applications. While the **Serial** and **Parallel** collectors are more suitable for small applications with limited memory requirements, the **CMS**, **G1**, **ZGC**, and **Shenandoah** collectors are designed to handle large heaps and provide low-latency, high-throughput performance for applications that require minimal pause times. Each algorithm comes with trade-offs, and choosing the right one depends on your application's specific needs for **heap size**, **pause times**, **throughput**, and **latency**.
 
+---
+
 Java provides several garbage collection (GC) algorithms to manage memory automatically. Each of these algorithms has its own strengths and use cases. Here’s an overview of **Serial GC**, **Parallel GC**, **G1 GC**, and **ZGC**:
 
 ### 1. Serial GC
@@ -11437,6 +11510,11 @@ Choosing the right garbage collector depends on the specific requirements of you
 6. **Question**: What are the differences between RDBMS and NoSQL databases?
    **Answer**: RDBMS (Relational Database Management System) uses structured schemas and SQL for querying, supporting ACID properties. NoSQL databases are schema-less, designed for horizontal scalability, and often use key-value, document, or column-family data models.
 
+---
+
+
+## ACID properties 
+
 ACID properties are a set of principles that ensure reliable processing of database transactions. ACID stands for **Atomicity, Consistency, Isolation, and Durability**. Here’s a breakdown of each property:
 
 ### 1. Atomicity
@@ -11468,6 +11546,8 @@ ACID properties are a set of principles that ensure reliable processing of datab
 
 These properties are crucial for maintaining the integrity and reliability of a database, especially in environments with concurrent transactions and potential failures.
 
+---
+
 ACID properties are a set of principles that ensure reliable processing of database transactions. They are critical for maintaining data integrity and consistency. ACID stands for:
 
 ### 1. Atomicity
@@ -11488,6 +11568,10 @@ ACID properties are a set of principles that ensure reliable processing of datab
 
 ### Summary
 The ACID properties are essential for ensuring reliable transaction processing in database systems, providing a framework that maintains data integrity, consistency, and reliability in multi-user environments.
+
+---
+
+## SOLID principles
 
 The SOLID principles are a set of design principles aimed at making software designs more understandable, flexible, and maintainable. The acronym SOLID stands for five key principles:
 
@@ -11559,7 +11643,7 @@ These questions and answers cover a broad range of topics relevant to the skills
 
 Ambiguities in Java and Spring Boot can arise from various sources. 
 
-### Ambiguities In Java
+## Ambiguities In Java
 
 1. **Method Overloading vs. Method Overriding**:
    - **Overloading**: Same method name, different parameters within the same class.
@@ -11656,14 +11740,9 @@ To minimize ambiguity, it’s essential to have a strong understanding of both J
 
 By implementing these strategies, you can significantly reduce ambiguity in Java and Spring Boot development. Regular training, consistent documentation, and fostering a culture of knowledge sharing within your team can also help clarify these areas. If you have specific scenarios where ambiguity arises, feel free to share, and we can address them further!
 
+---
 
-
-
-
-
-
-
-Certainly! Here's a list of common Java interview questions along with detailed answers that can help you prepare for your next interview:
+## List of common Java interview questions along with detailed answers
 
 ### **Java Core Concepts**
 
@@ -11842,10 +11921,9 @@ names.stream()
      .forEach(System.out::println);  // Output: John, Jane
 ```
 
+---
 
-Certainly! Here’s a comprehensive list of Java 8-related interview questions, along with coding examples and explanations to help you prepare effectively.
-
-### **Java 8 Interview Questions and Answers**
+## Java 8 Interview Questions and Answers
 
 #### **1. What are the main features introduced in Java 8?**
 
@@ -12110,7 +12188,9 @@ public class StreamExceptionHandlingExample {
 
 These questions cover a wide range of Java 8 features, from lambda expressions and the Streams API to the `Optional` class and functional interfaces. Understanding these concepts and being able to apply them in coding scenarios will help you perform well in Java 8 interviews.
 
-Java 8 introduced a host of new features and enhancements that have significantly transformed the way Java applications are written. Below is an in-depth explanation of the major features introduced in Java 8:
+---
+
+## Features introduced in Java 8:
 
 ### **1. Lambda Expressions**
 
@@ -12384,6 +12464,8 @@ public class FunctionalInterfacesExample {
 
 These features represent the core enhancements introduced in Java 8. They have significantly improved the language, making it more expressive, functional, and efficient. Understanding these concepts in depth will not only help you write better code but also prepare you well for Java 8-related interview questions.
 
+---
+
 In Java, functional interfaces are interfaces with exactly one abstract method. With the introduction of Java 8, functional interfaces can also contain `static` and `default` methods. Here’s a detailed look at their usage and limitations, along with real-time examples.
 
 ### **Static Methods in Functional Interfaces**
@@ -12541,8 +12623,9 @@ public class LoggerExample {
 
 Understanding these methods and their limitations helps in designing flexible and maintainable interfaces in Java.
 
+----
 
-Sure! Here are some common interview questions related to Java multithreading and concurrency, along with detailed answers and code examples.
+## Common interview questions related to Java multithreading and concurrency, along with detailed answers and code examples.
 
 ### **1. What is the difference between `Thread` and `Runnable`?**
 
@@ -13008,6 +13091,10 @@ public class StringBuilderExample {
 
 These questions and answers should provide a comprehensive overview of fundamental Java concepts and help you prepare for interviews effectively.
 
+---
+
+## Tricky Java interview questions
+
 Here are some tricky Java interview questions related to strings, arrays, inheritance, access specifiers, and keywords. Each question is accompanied by its answer and an explanation.
 
 ### **1. String Immutability and Interning**
@@ -13264,6 +13351,9 @@ Display in A
 
 These questions test various aspects of Java, including string handling, inheritance, access control, and keywords. Understanding these tricky scenarios helps in mastering Java and preparing for complex interview questions.
 
+---
+
+## POJO (Plain Old Java Object) classes
 
 POJO (Plain Old Java Object) classes are fundamental in Java programming, especially when working with frameworks like Spring and Hibernate, or in JavaBeans conventions. POJOs are used to encapsulate data in a simple and straightforward manner without imposing unnecessary constraints or requiring complex structures. Here are the key rules and conventions for creating POJO classes:
 
