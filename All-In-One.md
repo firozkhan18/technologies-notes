@@ -195,6 +195,392 @@ Lambda expressions in Java 8 represent a powerful addition to the language, allo
   });
   ```
 
+### CompletableFuture: Depth Concept and Methods
+
+`CompletableFuture` in Java is part of the `java.util.concurrent` package and provides a powerful and flexible mechanism to handle asynchronous programming. It allows you to run code asynchronously, write non-blocking applications, and handle future results or exceptions. Unlike `Future`, which represents a task that will be completed at some point, `CompletableFuture` allows you to **explicitly complete** the future and also handle the result asynchronously.
+
+### Depth Concept of `CompletableFuture`
+
+1. **Asynchronous Execution**:  
+   The main feature of `CompletableFuture` is its ability to execute code asynchronously. A `CompletableFuture` represents a future result that may not be available yet. It can be completed at some point in the future by another thread.
+
+2. **Completing Futures**:  
+   The key aspect of `CompletableFuture` is its ability to be manually completed. You can complete it either normally (by providing a value) or exceptionally (by providing an exception). This is different from the regular `Future`, which is typically completed by the thread executing the task.
+
+3. **Chaining and Composition**:  
+   You can chain multiple asynchronous tasks together using methods like `thenApply`, `thenCompose`, and `thenAccept`, which allow you to compose asynchronous tasks that execute one after another.
+
+4. **Handling Results and Exceptions**:  
+   `CompletableFuture` provides methods to handle results and exceptions asynchronously, so you don’t have to block waiting for results.
+
+### Key Methods of `CompletableFuture`
+
+Here’s an overview of the main methods available in `CompletableFuture`:
+
+#### 1. **`supplyAsync(Supplier<U> supplier)`**
+   - **Description**: This method is used to asynchronously execute a task and return a result. It accepts a `Supplier` and runs it asynchronously, returning a `CompletableFuture<U>`.
+   - **Example**:
+     ```java
+     CompletableFuture<Integer> future = CompletableFuture.supplyAsync(() -> {
+         return 5 * 5;
+     });
+     ```
+
+#### 2. **`runAsync(Runnable runnable)`**
+   - **Description**: This method executes a `Runnable` asynchronously but does not return a result. It’s useful when you need to perform side-effects (e.g., logging or updating some state).
+   - **Example**:
+     ```java
+     CompletableFuture<Void> future = CompletableFuture.runAsync(() -> {
+         System.out.println("Running task asynchronously.");
+     });
+     ```
+
+#### 3. **`thenApply(Function<? super T,? extends U> fn)`**
+   - **Description**: This method is used to apply a function to the result of the future when it completes. It transforms the result and returns a new `CompletableFuture<U>`.
+   - **Example**:
+     ```java
+     CompletableFuture<Integer> result = CompletableFuture.supplyAsync(() -> 5)
+         .thenApply(value -> value * 2);
+     // result will contain 10
+     ```
+
+#### 4. **`thenAccept(Consumer<? super T> action)`**
+   - **Description**: This method is used when you just want to consume the result of a completed `CompletableFuture` without changing it. It applies a `Consumer` to the result.
+   - **Example**:
+     ```java
+     CompletableFuture<Void> result = CompletableFuture.supplyAsync(() -> 10)
+         .thenAccept(value -> System.out.println("Value: " + value));
+     // Output: "Value: 10"
+     ```
+
+#### 5. **`thenCompose(Function<? super T, ? extends CompletableFuture<U>> fn)`**
+   - **Description**: This method allows you to chain two asynchronous operations. Unlike `thenApply`, which returns a transformed result, `thenCompose` returns a new `CompletableFuture<U>`. It's useful for dependent asynchronous tasks.
+   - **Example**:
+     ```java
+     CompletableFuture<Integer> result = CompletableFuture.supplyAsync(() -> 5)
+         .thenCompose(value -> CompletableFuture.supplyAsync(() -> value * 2));
+     // result will contain 10
+     ```
+
+#### 6. **`exceptionally(Function<Throwable, ? extends T> fn)`**
+   - **Description**: This method allows you to handle exceptions that occur during asynchronous execution. If the `CompletableFuture` completes exceptionally, it will invoke the provided function to handle the exception and return a fallback value.
+   - **Example**:
+     ```java
+     CompletableFuture<Integer> result = CompletableFuture.supplyAsync(() -> {
+         if (true) throw new RuntimeException("Failure");
+         return 5;
+     }).exceptionally(ex -> {
+         System.out.println("Exception: " + ex.getMessage());
+         return 0;
+     });
+     // Output: Exception: Failure
+     // result will contain 0
+     ```
+
+#### 7. **`handle(BiFunction<? super T, Throwable, ? extends U> fn)`**
+   - **Description**: This method allows you to handle both the result and the exception in one step. It’s similar to `exceptionally`, but provides both the result and the exception (if any) to the handler.
+   - **Example**:
+     ```java
+     CompletableFuture<Integer> result = CompletableFuture.supplyAsync(() -> {
+         if (true) throw new RuntimeException("Failure");
+         return 5;
+     }).handle((res, ex) -> {
+         if (ex != null) {
+             System.out.println("Exception: " + ex.getMessage());
+             return 0;
+         }
+         return res * 2;
+     });
+     // Output: Exception: Failure
+     // result will contain 0
+     ```
+
+#### 8. **`whenComplete(BiConsumer<? super T, ? super Throwable> action)`**
+   - **Description**: Similar to `handle`, but doesn't allow you to modify the result. It just lets you observe the completion (whether successful or exceptionally).
+   - **Example**:
+     ```java
+     CompletableFuture<Integer> result = CompletableFuture.supplyAsync(() -> 5)
+         .whenComplete((res, ex) -> {
+             if (ex != null) {
+                 System.out.println("Exception: " + ex.getMessage());
+             } else {
+                 System.out.println("Result: " + res);
+             }
+         });
+     // Output: Result: 5
+     ```
+
+#### 9. **`join()`**
+   - **Description**: This method blocks the current thread and waits for the completion of the `CompletableFuture`. If it completes exceptionally, it throws an exception.
+   - **Example**:
+     ```java
+     Integer result = CompletableFuture.supplyAsync(() -> 5).join();
+     // result will contain 5
+     ```
+
+#### 10. **`get()`**
+   - **Description**: Similar to `join()`, but throws checked exceptions (`ExecutionException` or `InterruptedException`) if something goes wrong during the execution of the future.
+   - **Example**:
+     ```java
+     try {
+         Integer result = CompletableFuture.supplyAsync(() -> 10).get();
+         // result will contain 10
+     } catch (Exception e) {
+         e.printStackTrace();
+     }
+     ```
+
+#### 11. **`allOf(CompletableFuture<?>... cfs)`**
+   - **Description**: This method takes an array of `CompletableFuture` instances and returns a new `CompletableFuture<Void>`. This future will complete when all the given futures complete.
+   - **Example**:
+     ```java
+     CompletableFuture<Void> allOf = CompletableFuture.allOf(
+         CompletableFuture.supplyAsync(() -> 5),
+         CompletableFuture.supplyAsync(() -> 10)
+     );
+     allOf.join();
+     ```
+
+#### 12. **`anyOf(CompletableFuture<?>... cfs)`**
+   - **Description**: This method takes an array of `CompletableFuture` instances and returns a new `CompletableFuture<Object>`. This future will complete when any one of the given futures completes.
+   - **Example**:
+     ```java
+     CompletableFuture<Object> anyOf = CompletableFuture.anyOf(
+         CompletableFuture.supplyAsync(() -> 5),
+         CompletableFuture.supplyAsync(() -> 10)
+     );
+     System.out.println(anyOf.join()); // Prints either 5 or 10
+     ```
+
+---
+
+### Example: Using Multiple CompletableFutures
+
+Here is an example that uses several of the methods above:
+
+```java
+import java.util.concurrent.CompletableFuture;
+
+public class CompletableFutureExample {
+    public static void main(String[] args) throws Exception {
+        // Supply async with a computation
+        CompletableFuture<Integer> future1 = CompletableFuture.supplyAsync(() -> 2);
+        
+        // Chain another computation using thenApply
+        CompletableFuture<Integer> future2 = future1.thenApply(result -> result * 5);
+        
+        // Handle exceptions using exceptionally
+        CompletableFuture<Integer> future3 = future2.exceptionally(ex -> {
+            System.out.println("Exception: " + ex.getMessage());
+            return 0;
+        });
+
+        // Wait for the final result
+        System.out.println("Final Result: " + future3.join());
+    }
+}
+```
+
+### Conclusion
+`CompletableFuture` allows you to write asynchronous and non-blocking code efficiently. The methods it provides help manage dependencies between multiple asynchronous tasks and handle their results or errors gracefully. By leveraging chaining and composing tasks, `CompletableFuture` offers a robust framework for building concurrent applications in Java.
+
+### Handling Exceptions in `CompletableFuture`
+
+In `CompletableFuture`, exceptions can be handled using methods such as `exceptionally()`, `handle()`, and `whenComplete()`. These methods allow you to handle exceptions that occur during asynchronous computations. 
+
+### Methods for Handling Exceptions
+
+#### 1. **`exceptionally()`**  
+   The `exceptionally()` method is used to handle exceptions that might occur during the execution of a `CompletableFuture`. It takes a `Function<Throwable, T>` as an argument, which is invoked if the `CompletableFuture` completes exceptionally (i.e., with an exception). The function is expected to return a fallback value.
+
+   - **Usage**: It’s used when you want to provide a fallback value if an exception occurs.
+   - **Example**:
+
+   ```java
+   CompletableFuture<Integer> future = CompletableFuture.supplyAsync(() -> {
+       if (true) throw new RuntimeException("Something went wrong!");
+       return 5;
+   });
+
+   future.exceptionally(ex -> {
+       System.out.println("Exception occurred: " + ex.getMessage());
+       return 0;  // Fallback value
+   }).thenAccept(result -> System.out.println("Result: " + result));
+   ```
+
+   **Output:**
+   ```
+   Exception occurred: Something went wrong!
+   Result: 0
+   ```
+
+#### 2. **`handle()`**  
+   The `handle()` method is similar to `exceptionally()`, but it allows you to handle both the result and the exception at the same time. This method provides access to the result of the `CompletableFuture` and the exception (if any) via a `BiFunction`. It’s useful when you want to process both the normal result and the exception in one place, and it allows you to modify the result based on the exception.
+
+   - **Usage**: It’s used when you want to handle both the normal result and the exception, and possibly modify the result.
+   - **Example**:
+
+   ```java
+   CompletableFuture<Integer> future = CompletableFuture.supplyAsync(() -> {
+       if (true) throw new RuntimeException("Something went wrong!");
+       return 5;
+   });
+
+   future.handle((result, ex) -> {
+       if (ex != null) {
+           System.out.println("Exception occurred: " + ex.getMessage());
+           return 0;  // Fallback value
+       }
+       return result * 2;
+   }).thenAccept(result -> System.out.println("Result: " + result));
+   ```
+
+   **Output:**
+   ```
+   Exception occurred: Something went wrong!
+   Result: 0
+   ```
+
+#### 3. **`whenComplete()`**  
+   The `whenComplete()` method allows you to perform some action when a `CompletableFuture` is completed, regardless of whether it was completed normally or exceptionally. It provides a `BiConsumer<T, Throwable>` where you can handle the result and the exception. The main difference between `whenComplete()` and `handle()` is that `whenComplete()` cannot modify the result; it’s just for performing side-effects (like logging or cleanup).
+
+   - **Usage**: It’s used for logging or side effects after a `CompletableFuture` completes (without modifying the result).
+   - **Example**:
+
+   ```java
+   CompletableFuture<Integer> future = CompletableFuture.supplyAsync(() -> {
+       if (true) throw new RuntimeException("Something went wrong!");
+       return 5;
+   });
+
+   future.whenComplete((result, ex) -> {
+       if (ex != null) {
+           System.out.println("Exception occurred: " + ex.getMessage());
+       } else {
+           System.out.println("Result: " + result);
+       }
+   }).thenAccept(result -> System.out.println("Final Result: " + result));
+   ```
+
+   **Output:**
+   ```
+   Exception occurred: Something went wrong!
+   Final Result: null
+   ```
+
+### Which Method to Call When Handling Two `CompletableFuture` Instances?
+
+If you have two `CompletableFuture` instances and need to handle them or combine their results, the method you call depends on what you're trying to do:
+
+1. **Combine the Results of Two `CompletableFuture`s**
+   - If you want to combine two independent `CompletableFuture`s and handle both results (or handle an exception from either), use `thenCombine()`, `thenAcceptBoth()`, or `allOf()`.
+
+   #### `thenCombine()`
+   - This method is used to combine the results of two `CompletableFuture` instances. It takes two `CompletableFuture` instances, performs the tasks in parallel, and combines their results into one.
+   - **Usage**: Used when you want to perform a combination of the results of two `CompletableFuture`s.
+   - **Example**:
+
+     ```java
+     CompletableFuture<Integer> future1 = CompletableFuture.supplyAsync(() -> 5);
+     CompletableFuture<Integer> future2 = CompletableFuture.supplyAsync(() -> 10);
+
+     future1.thenCombine(future2, (result1, result2) -> result1 + result2)
+            .thenAccept(result -> System.out.println("Combined Result: " + result));
+     ```
+
+     **Output:**
+     ```
+     Combined Result: 15
+     ```
+
+2. **Wait for Both `CompletableFuture`s to Complete**
+   - If you want to wait for both `CompletableFuture`s to complete (whether normally or exceptionally), and you do not need to combine their results, use `allOf()` or `anyOf()`.
+
+   #### `allOf()`
+   - This method returns a new `CompletableFuture<Void>` that completes when all given `CompletableFuture`s complete.
+   - **Usage**: Used when you need to wait for all futures to complete before proceeding, without worrying about individual results.
+   - **Example**:
+
+     ```java
+     CompletableFuture<Void> allOf = CompletableFuture.allOf(
+         CompletableFuture.supplyAsync(() -> 5),
+         CompletableFuture.supplyAsync(() -> 10)
+     );
+     allOf.join();  // Wait for both to complete
+     System.out.println("Both futures are complete.");
+     ```
+
+     **Output:**
+     ```
+     Both futures are complete.
+     ```
+
+   #### `anyOf()`
+   - This method returns a new `CompletableFuture<Object>` that completes when any one of the given `CompletableFuture`s completes.
+   - **Usage**: Used when you only care about the completion of any one of the futures.
+   - **Example**:
+
+     ```java
+     CompletableFuture<Object> anyOf = CompletableFuture.anyOf(
+         CompletableFuture.supplyAsync(() -> 5),
+         CompletableFuture.supplyAsync(() -> 10)
+     );
+     System.out.println("First completed future: " + anyOf.join());
+     ```
+
+     **Output:**
+     ```
+     First completed future: 5
+     ```
+
+3. **Handling Exceptions in Multiple `CompletableFuture` Instances**
+   - If you have multiple `CompletableFuture` instances and want to handle exceptions across all of them, you can use `handle()` or `exceptionally()` on each individual `CompletableFuture`.
+   - Alternatively, you can use `whenComplete()` to ensure that any exception in the completion of any `CompletableFuture` is logged or handled.
+
+### Example of Handling Exceptions in Two `CompletableFuture`s
+
+```java
+import java.util.concurrent.CompletableFuture;
+
+public class CompletableFutureExample {
+    public static void main(String[] args) {
+        CompletableFuture<Integer> future1 = CompletableFuture.supplyAsync(() -> 5);
+        CompletableFuture<Integer> future2 = CompletableFuture.supplyAsync(() -> {
+            if (true) throw new RuntimeException("Error in future2");
+            return 10;
+        });
+
+        CompletableFuture<Void> combined = CompletableFuture.allOf(future1, future2)
+            .handle((result, ex) -> {
+                if (ex != null) {
+                    System.out.println("Exception: " + ex.getMessage());
+                } else {
+                    System.out.println("Both futures completed");
+                }
+                return null;
+            });
+
+        combined.join(); // Wait for both futures to complete
+    }
+}
+```
+
+**Output:**
+```
+Exception: Error in future2
+```
+
+### Summary of Methods:
+
+- **`exceptionally()`**: Handles exceptions and provides a fallback value.
+- **`handle()`**: Handles both the result and exception, and can modify the result.
+- **`whenComplete()`**: Handles side-effects like logging, but doesn't modify the result.
+- **`thenCombine()`**: Combines the results of two `CompletableFuture` instances.
+- **`allOf()`**: Waits for all `CompletableFuture` instances to complete.
+- **`anyOf()`**: Waits for any one `CompletableFuture` to complete.
+
+By using these methods appropriately, you can create robust, non-blocking applications that handle both successful results and errors in a clean and efficient way.
+
 ### Summary
 Java 8 introduced significant features that enhance the language's expressiveness and performance, especially in functional programming, concurrency, and data manipulation. These improvements have made Java more modern and aligned with other programming paradigms. If you have specific features you'd like to dive deeper into, feel free to ask!
 
