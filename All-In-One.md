@@ -4197,6 +4197,384 @@ graph TD
 
 This diagram helps illustrate the structural similarities and differences between `HashMap` and `HashSet`, particularly in how they use hashing and handle collisions.
 
+
+---
+In Java, both **`HashMap`** and **`ConcurrentHashMap`** are used to store key-value pairs, but they are designed for different purposes and have distinct characteristics, especially when it comes to **thread safety** and **concurrency**.
+
+Here's a detailed comparison of **`HashMap`** and **`ConcurrentHashMap`**:
+
+---
+
+### **1. Thread Safety**
+
+- **`HashMap`**:
+  - **Not thread-safe**: `HashMap` is **not thread-safe**. If multiple threads attempt to read and write to the map concurrently, you may encounter **data inconsistency** or **exceptions** (e.g., `ConcurrentModificationException`).
+  - If you need to access a `HashMap` from multiple threads, you must manually synchronize access using synchronized blocks or other synchronization mechanisms (e.g., `Collections.synchronizedMap()`).
+  
+- **`ConcurrentHashMap`**:
+  - **Thread-safe**: `ConcurrentHashMap` is **designed for concurrent access**. It allows multiple threads to read and write to the map concurrently without causing data corruption or inconsistency.
+  - It achieves thread safety by **locking individual segments** (buckets) of the map, rather than locking the entire map. This allows for **fine-grained concurrency**, making it more efficient than a fully synchronized `HashMap` or `Hashtable`.
+
+---
+
+### **2. Locking Mechanism**
+
+- **`HashMap`**:
+  - Since `HashMap` is not thread-safe, **manual synchronization** (such as synchronized blocks or methods) must be implemented when it is accessed by multiple threads.
+  - **No internal locking**: `HashMap` does not have any internal locking mechanism.
+
+- **`ConcurrentHashMap`**:
+  - **Segmented locking**: `ConcurrentHashMap` uses a technique called **segment locking**, where the map is divided into several segments (internally a `Segment[]` array), and only one segment is locked at a time for write operations.
+  - **Read operations** are generally not blocked by locks, meaning multiple threads can read from the map concurrently without waiting for other threads.
+  - **Fine-grained concurrency**: This allows multiple threads to access different parts of the map simultaneously, increasing throughput.
+
+---
+
+### **3. Performance**
+
+- **`HashMap`**:
+  - **Faster for single-threaded access**: Since `HashMap` is not thread-safe, it is generally **faster** than `ConcurrentHashMap` in single-threaded applications because it does not need to manage locks.
+  - In multi-threaded scenarios, you would need to wrap the `HashMap` in a synchronized block, which can degrade performance due to thread contention.
+
+- **`ConcurrentHashMap`**:
+  - **Optimized for concurrency**: In multi-threaded scenarios, `ConcurrentHashMap` provides better performance compared to a `synchronizedMap` or manually synchronized `HashMap` because it allows **concurrent reads** and **fine-grained locks** on different parts of the map.
+  - **Higher throughput**: In high-concurrency environments, `ConcurrentHashMap` allows better scalability as different threads can update or query different parts of the map simultaneously without locking the entire structure.
+
+---
+
+### **4. Null Keys and Values**
+
+- **`HashMap`**:
+  - **Allows null keys and values**: `HashMap` allows **one null key** and **multiple null values**. This means you can insert a `null` key or value into a `HashMap`.
+
+- **`ConcurrentHashMap`**:
+  - **No null keys or values**: `ConcurrentHashMap` does not allow **null keys** or **null values**. If you try to insert a `null` key or value, it will throw a `NullPointerException`. This is done to avoid ambiguity and errors when dealing with concurrent operations (e.g., distinguishing between a key that doesn't exist and a key whose value is `null`).
+
+---
+
+### **5. Operations (Put, Remove, Replace, etc.)**
+
+- **`HashMap`**:
+  - Standard operations like `put()`, `get()`, `remove()`, and `containsKey()` are atomic but **not thread-safe** in a multi-threaded environment.
+  - In multi-threaded scenarios, you need to explicitly synchronize these operations or use `Collections.synchronizedMap()` to make it thread-safe.
+
+- **`ConcurrentHashMap`**:
+  - **Atomic operations**: Operations like `put()`, `get()`, `remove()`, `replace()`, and `containsKey()` are thread-safe in `ConcurrentHashMap`. Moreover, `ConcurrentHashMap` provides additional atomic operations like:
+    - `putIfAbsent(key, value)`: Adds the key-value pair if the key is not already present.
+    - `remove(key, value)`: Removes the key-value pair if the key is associated with the specified value.
+    - `replace(key, oldValue, newValue)`: Replaces the value only if the key is currently mapped to the old value.
+
+- **`HashMap`** requires manual synchronization for atomicity in concurrent access scenarios.
+
+---
+
+### **6. Iteration**
+
+- **`HashMap`**:
+  - **Weakly consistent iterator**: The iterator returned by a `HashMap` is not guaranteed to be **thread-safe**. If the map is modified during iteration (from another thread), it will throw a `ConcurrentModificationException`.
+  
+- **`ConcurrentHashMap`**:
+  - **Strongly consistent iterator**: The iterator of `ConcurrentHashMap` is **weakly consistent**. This means it reflects changes made to the map during iteration (e.g., elements may be added or removed), but it will not throw `ConcurrentModificationException`. However, the iterator will not necessarily reflect every update made to the map during iteration (e.g., updates from other threads that are being synchronized with locks).
+
+---
+
+### **7. Use Cases**
+
+- **`HashMap`**:
+  - Best suited for **single-threaded** applications or when you have external synchronization mechanisms in place.
+  - Common in cases where the map is only accessed by a single thread or when synchronization is manually handled by the developer.
+
+- **`ConcurrentHashMap`**:
+  - Best suited for **multi-threaded** applications where concurrent access to the map is required, and performance must be optimized.
+  - Common in scenarios where you need high concurrency, such as **caching** (e.g., `Cache`), **thread-safe counters**, **message queues**, and **thread pool management**.
+
+---
+
+### **8. Example Code**
+
+#### **Using HashMap:**
+```java
+import java.util.HashMap;
+import java.util.Map;
+
+public class HashMapExample {
+    public static void main(String[] args) {
+        Map<String, String> map = new HashMap<>();
+        map.put("a", "apple");
+        map.put("b", "banana");
+        
+        // Accessing values
+        System.out.println(map.get("a")); // Output: apple
+    }
+}
+```
+
+#### **Using ConcurrentHashMap:**
+```java
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.Map;
+
+public class ConcurrentHashMapExample {
+    public static void main(String[] args) {
+        Map<String, String> map = new ConcurrentHashMap<>();
+        map.put("a", "apple");
+        map.put("b", "banana");
+        
+        // Atomic putIfAbsent
+        map.putIfAbsent("a", "orange");  // Does not replace "a" because it's already present
+        
+        // Accessing values
+        System.out.println(map.get("a")); // Output: apple
+    }
+}
+```
+
+---
+
+### **Summary of Key Differences**
+
+| Feature                          | `HashMap`                          | `ConcurrentHashMap`                 |
+|-----------------------------------|------------------------------------|-------------------------------------|
+| **Thread-Safety**                 | Not thread-safe                    | Thread-safe                         |
+| **Null Keys/Values**              | Allows null key and values         | Does not allow null keys/values    |
+| **Locking Mechanism**             | No internal locking, manual sync needed | Segment-based locking, fine-grained concurrency |
+| **Performance in Concurrency**    | Slower in multi-threaded access due to external synchronization | Faster in multi-threaded environments |
+| **Atomic Operations**             | Not atomic in multi-threaded access | Provides atomic operations (e.g., `putIfAbsent()`, `remove()`) |
+| **Iteration Behavior**            | Throws `ConcurrentModificationException` if modified during iteration | Weakly consistent iterator, no `ConcurrentModificationException` |
+| **Best Use Case**                 | Single-threaded access or external synchronization | High concurrency in multi-threaded environments |
+
+---
+
+### **When to Use Which?**
+
+- Use **`HashMap`** when:
+  - You are working in a **single-threaded** environment or you can manage synchronization externally.
+  - You do not need thread-safety and you are not concerned about concurrent modifications.
+  
+- Use **`ConcurrentHashMap`** when:
+  - You are working in a **multi-threaded** environment where multiple threads will access and modify the map concurrently.
+  - You need thread-safe operations without locking the entire map (e.g., for performance reasons).
+
+In Java's **Collections Framework**, the terms **Fail-Fast** and **Fail-Safe** describe how iterators behave when the underlying collection is modified during iteration. Both concepts are particularly relevant in concurrent programming scenarios where multiple threads might be modifying a collection while it is being iterated.
+
+### **1. Fail-Fast Iterators**
+
+A **Fail-Fast** iterator is designed to throw an exception as soon as it detects that the collection has been modified during iteration (except through the iterator's own `remove()` method).
+
+#### Characteristics of Fail-Fast:
+- **Immediate detection of modification**: If the collection is modified (structurally) while iterating, a `ConcurrentModificationException` is thrown.
+- **Detects modifications made by other threads**: It is mostly used with collections that are not thread-safe (e.g., `ArrayList`, `HashMap`), and it will throw an exception if the collection is modified while an iterator is traversing it.
+- **Prevents data inconsistency**: By throwing an exception early, it prevents the iterator from returning inconsistent or incorrect results.
+  
+#### How It Works:
+- The **modCount** field of the collection is used to track structural changes. If the collection is modified (for example, elements are added or removed), the **modCount** is updated. The iterator compares the current **modCount** with the value it had when the iteration began. If they don't match, the iterator throws a `ConcurrentModificationException`.
+
+#### Example of Fail-Fast (with `ArrayList`):
+```java
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+public class FailFastExample {
+    public static void main(String[] args) {
+        List<String> list = new ArrayList<>();
+        list.add("A");
+        list.add("B");
+        list.add("C");
+
+        Iterator<String> iterator = list.iterator();
+
+        // Modify the list during iteration
+        while (iterator.hasNext()) {
+            String element = iterator.next();
+            System.out.println(element);
+
+            // Adding/removing elements will cause a ConcurrentModificationException
+            if (element.equals("B")) {
+                list.remove("B");
+            }
+        }
+    }
+}
+```
+
+**Output**:
+```
+A
+B
+C
+Exception in thread "main" java.util.ConcurrentModificationException
+```
+
+In the example above, attempting to modify the `ArrayList` (removing "B") while iterating over it causes a `ConcurrentModificationException` because the `ArrayList` is fail-fast.
+
+#### Fail-Fast Collections:
+- **`ArrayList`**
+- **`HashMap`**
+- **`HashSet`**
+- **`LinkedHashMap`**
+- **`LinkedList`**
+- **`TreeMap`**
+- **`TreeSet`**
+
+These are examples of collections that generally use fail-fast iterators.
+
+### **2. Fail-Safe Iterators**
+
+A **Fail-Safe** iterator, on the other hand, allows modifications to be made to the collection while it is being iterated, without throwing exceptions. In other words, if the collection is modified during iteration (even by other threads), the iteration continues without errors, but it may not reflect the changes immediately.
+
+#### Characteristics of Fail-Safe:
+- **No `ConcurrentModificationException`**: Fail-safe iterators do not throw exceptions if the collection is modified during iteration.
+- **Copy of collection**: Fail-safe iterators usually work on a **copy** of the collection or on a snapshot of the collection at the time the iteration started.
+- **Safe in concurrent environments**: Fail-safe iterators are generally used with thread-safe collections where multiple threads can safely modify the collection while others are iterating over it (without any issues).
+
+#### How It Works:
+- Fail-safe collections create a copy (or snapshot) of the underlying data structure and iterate over this snapshot. Any changes made to the original collection (while iterating) will not be reflected in the iterator.
+- Fail-safe iterators work in concurrent environments where collections may be modified by multiple threads.
+
+#### Example of Fail-Safe (with `CopyOnWriteArrayList`):
+```java
+import java.util.Iterator;
+import java.util.concurrent.CopyOnWriteArrayList;
+
+public class FailSafeExample {
+    public static void main(String[] args) {
+        CopyOnWriteArrayList<String> list = new CopyOnWriteArrayList<>();
+        list.add("A");
+        list.add("B");
+        list.add("C");
+
+        Iterator<String> iterator = list.iterator();
+
+        // Modify the list during iteration
+        while (iterator.hasNext()) {
+            String element = iterator.next();
+            System.out.println(element);
+
+            // Modifying the list during iteration does not throw an exception
+            if (element.equals("B")) {
+                list.remove("B"); // This will not affect the current iteration
+            }
+        }
+    }
+}
+```
+
+**Output**:
+```
+A
+B
+C
+```
+
+In this example, even though we remove "B" from the list while iterating, the iteration continues without throwing a `ConcurrentModificationException` because `CopyOnWriteArrayList` is a fail-safe collection.
+
+#### Fail-Safe Collections:
+- **`CopyOnWriteArrayList`**
+- **`CopyOnWriteArraySet`**
+- **`ConcurrentHashMap`** (while iterating over the `keySet()`, `entrySet()`, or `values()`)
+  
+These collections implement fail-safe iterators.
+
+---
+
+### **Comparison Between Fail-Fast and Fail-Safe**
+
+| Feature                         | **Fail-Fast**                               | **Fail-Safe**                                |
+|----------------------------------|---------------------------------------------|---------------------------------------------|
+| **Behavior on Modification**    | Throws `ConcurrentModificationException` if the collection is modified during iteration. | Allows modification during iteration without throwing exceptions. |
+| **Used in**                      | Non-thread-safe collections (e.g., `ArrayList`, `HashMap`) | Thread-safe collections (e.g., `CopyOnWriteArrayList`, `ConcurrentHashMap`) |
+| **Modification Detection**       | Detects structural changes and throws an exception. | Works on a snapshot/copy of the collection, so modifications don't affect iteration. |
+| **Performance**                  | Can be more efficient because it doesn’t create copies or snapshots. | May have overhead because of creating a copy/snapshot for iteration. |
+| **Typical Use Case**            | Single-threaded or where manual synchronization is needed. | Multi-threaded applications where the collection is modified concurrently by multiple threads. |
+
+---
+
+### **Summary**
+
+- **Fail-Fast**: Ensures data consistency by throwing a `ConcurrentModificationException` if a collection is modified during iteration. This is typically used in **non-thread-safe** collections (like `ArrayList`, `HashMap`).
+- **Fail-Safe**: Allows modifications while iterating without throwing exceptions, but may not reflect the changes immediately in the iteration. This is generally used with **thread-safe** collections (like `CopyOnWriteArrayList`, `ConcurrentHashMap`).
+
+In summary, **Fail-Fast** is useful for catching bugs early in single-threaded or synchronized environments, while **Fail-Safe** is used in multi-threaded environments where modifications to the collection are expected during iteration.
+
+In the context of **data structures** and **collections**, a **snapshot** refers to a **static copy** of a collection (or data structure) at a specific point in time. When a snapshot is created, the collection is **frozen** and does not reflect any subsequent modifications to the original collection. This concept is commonly used in **fail-safe iterators** and in systems where **concurrent modifications** to the collection might occur during iteration.
+
+A snapshot allows you to work with a consistent view of the data at the time the snapshot was taken, while changes in the underlying collection (such as adding or removing elements) do not affect the snapshot.
+
+### **Snapshot in Different Contexts**
+
+1. **In Java Collections (Fail-Safe Iterators)**:
+   - In some **concurrent collections**, a snapshot is used to create an iterator that operates on a consistent, read-only view of the collection, even if the original collection is being modified by other threads.
+   - For example, in a `CopyOnWriteArrayList` or `ConcurrentHashMap`, when you create an iterator, it iterates over a snapshot of the collection at the time the iterator was created. Even if other threads modify the collection (e.g., add or remove elements), the snapshot seen by the iterator remains unchanged.
+   
+   #### Example of Snapshot in `CopyOnWriteArrayList`:
+   ```java
+   import java.util.concurrent.CopyOnWriteArrayList;
+   import java.util.Iterator;
+
+   public class SnapshotExample {
+       public static void main(String[] args) {
+           // Create a CopyOnWriteArrayList
+           CopyOnWriteArrayList<String> list = new CopyOnWriteArrayList<>();
+           list.add("A");
+           list.add("B");
+           list.add("C");
+
+           // Create an iterator (snapshot of the list)
+           Iterator<String> iterator = list.iterator();
+
+           // Modify the list during iteration
+           list.add("D");
+
+           // Iterate over the snapshot (original state of the list when iterator was created)
+           while (iterator.hasNext()) {
+               System.out.println(iterator.next());  // This will print A, B, C, not D
+           }
+       }
+   }
+   ```
+
+   **Output**:
+   ```
+   A
+   B
+   C
+   ```
+
+   In the above example, even though `"D"` is added to the list during iteration, the iterator still sees the snapshot of the list at the time it was created, which only contains `"A"`, `"B"`, and `"C"`.
+
+2. **In Databases**:
+   - A snapshot can also refer to a **consistent copy of the database** at a specific moment in time. This is often used in databases to perform **backups** or to allow **read-only access** to a consistent view of the database while it is being modified.
+   - For example, in some database systems, you can take a snapshot of the database at a specific point in time and query it without affecting the ongoing changes in the live database.
+
+3. **In Version Control Systems**:
+   - A snapshot in version control (e.g., **Git**, **SVN**) refers to a **commit** or a **version** of the repository at a specific point in time. It captures the state of the repository (files, directories, etc.) at that point.
+   - This snapshot allows developers to revisit or revert to a previous state of the codebase.
+
+### **Key Characteristics of a Snapshot**
+
+- **Consistency**: The snapshot represents the state of the data at a particular point in time, so even if the original data structure changes afterward, the snapshot will remain consistent and unaffected by those changes.
+  
+- **Read-Only**: Once a snapshot is created, it is usually a **read-only view** of the data. Any modification to the underlying collection does not affect the snapshot.
+
+- **Performance Overhead**: Creating a snapshot, especially in concurrent collections, may involve some overhead, as the system might need to create a copy of the data or track changes independently to ensure consistency.
+
+### **When Are Snapshots Used?**
+
+1. **Concurrency Control**: In systems with concurrent access, snapshots provide a way to safely iterate over a collection or perform operations without being affected by ongoing changes made by other threads or processes.
+   
+2. **Backups**: In databases and file systems, snapshots are used to create a backup of the system without locking it or interrupting ongoing operations.
+
+3. **Versioning**: In version control systems, snapshots are used to capture the state of a project at specific commits, allowing developers to revert to or review past versions of the project.
+
+### **Example in Concurrent Collections:**
+
+In a **`CopyOnWriteArrayList`**, the underlying array is **copied** whenever a modification is made (such as adding or removing an element). Therefore, when an iterator is created, it operates on a **snapshot** of the original array, meaning the iterator will not reflect the changes made to the list after the iterator was created.
+
+This is in contrast to non-concurrent collections like `ArrayList`, where modifications made to the collection during iteration may cause a **`ConcurrentModificationException`** or unexpected results.
+
+---
+
 ## Ambiguities in Java technologies
 
 Java technologies encompass a wide range of tools, libraries, frameworks, and APIs, which can sometimes lead to ambiguities. Here are some common areas where ambiguities may arise:
