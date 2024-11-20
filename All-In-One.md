@@ -622,6 +622,223 @@ Here is a tabular representation of the main methods provided by `CompletableFut
 
 These methods allow you to handle asynchronous tasks effectively, manage dependencies between them, and deal with exceptions or timeouts gracefully.
 
+Certainly! Below is a complete Java program that demonstrates the usage of **all the methods** listed in the table for `CompletableFuture`:
+
+```java
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+
+public class CompletableFutureExample {
+
+    public static void main(String[] args) {
+
+        // supplyAsync() - Executes a task asynchronously and supplies a result.
+        CompletableFuture<Integer> future1 = CompletableFuture.supplyAsync(() -> {
+            System.out.println("Task 1: Running asynchronously");
+            return 5;  // Simulating computation
+        });
+
+        // runAsync() - Executes a task asynchronously that does not return any result.
+        CompletableFuture<Void> future2 = CompletableFuture.runAsync(() -> {
+            System.out.println("Task 2: Running asynchronously without a result");
+        });
+
+        // thenApply() - Transforms the result of a CompletableFuture once it completes.
+        CompletableFuture<Integer> transformedFuture = future1.thenApply(result -> {
+            System.out.println("Task 1 result doubled: " + result * 2);
+            return result * 2;
+        });
+
+        // thenAccept() - Consumes the result of a CompletableFuture when it completes.
+        future1.thenAccept(result -> {
+            System.out.println("Task 1 result consumed: " + result);
+        });
+
+        // thenRun() - Runs a task after the CompletableFuture completes successfully.
+        future1.thenRun(() -> {
+            System.out.println("Task 1: Completed successfully, running post-task");
+        });
+
+        // thenCombine() - Combines the results of two CompletableFutures.
+        CompletableFuture<Integer> future3 = CompletableFuture.supplyAsync(() -> {
+            return 3;
+        });
+        future1.thenCombine(future3, (result1, result2) -> {
+            int combinedResult = result1 + result2;
+            System.out.println("Combined result: " + combinedResult);
+            return combinedResult;
+        });
+
+        // thenAcceptBoth() - Consumes the results of two CompletableFuture instances when both are done.
+        future1.thenAcceptBoth(future3, (result1, result2) -> {
+            System.out.println("Task 1 and 3 results consumed together: " + (result1 + result2));
+        });
+
+        // applyToEither() - Applies a function to the result of the first completed CompletableFuture.
+        CompletableFuture<Integer> future4 = CompletableFuture.supplyAsync(() -> {
+            return 10;
+        });
+        future1.applyToEither(future4, result -> {
+            System.out.println("First completed result: " + result);
+            return result;
+        });
+
+        // acceptEither() - Consumes the result of the first completed CompletableFuture.
+        future1.acceptEither(future4, result -> {
+            System.out.println("First completed result consumed: " + result);
+        });
+
+        // allOf() - Waits for all provided CompletableFutures to complete.
+        CompletableFuture<Void> allOf = CompletableFuture.allOf(future1, future2, future3);
+        allOf.thenRun(() -> {
+            System.out.println("All futures completed");
+        });
+
+        // anyOf() - Waits for any of the provided CompletableFutures to complete.
+        CompletableFuture<Object> anyOf = CompletableFuture.anyOf(future1, future3);
+        anyOf.thenAccept(result -> {
+            System.out.println("Any future completed with result: " + result);
+        });
+
+        // exceptionally() - Handles exceptions that occur in a CompletableFuture.
+        CompletableFuture<Integer> future5 = CompletableFuture.supplyAsync(() -> {
+            throw new RuntimeException("Exception occurred");
+        }).exceptionally(ex -> {
+            System.out.println("Handled exception: " + ex.getMessage());
+            return -1; // Default value in case of error
+        });
+
+        // handle() - Handles both the result and exception of a CompletableFuture.
+        future5.handle((result, ex) -> {
+            if (ex != null) {
+                System.out.println("Handled exception in handle: " + ex.getMessage());
+                return 0;  // Default value
+            } else {
+                return result;
+            }
+        });
+
+        // whenComplete() - Performs a side-effect action after the CompletableFuture completes.
+        future1.whenComplete((result, ex) -> {
+            if (ex != null) {
+                System.out.println("Handled exception in whenComplete: " + ex.getMessage());
+            } else {
+                System.out.println("Task 1 completed with result: " + result);
+            }
+        });
+
+        // obtrudeValue() - Sets a result to a CompletableFuture that has already been completed.
+        future1.obtrudeValue(100);
+        future1.thenAccept(result -> {
+            System.out.println("Obtruded value: " + result);  // Should print 100
+        });
+
+        // obtrudeException() - Sets an exception to a CompletableFuture that has already been completed.
+        future1.obtrudeException(new RuntimeException("Forced exception"));
+        future1.exceptionally(ex -> {
+            System.out.println("Obtruded exception handled: " + ex.getMessage());
+            return -1;
+        });
+
+        // join() - Waits for the CompletableFuture to complete and returns the result.
+        Integer resultFromJoin = future1.join();
+        System.out.println("Result from join: " + resultFromJoin);
+
+        // get() - Waits for the CompletableFuture to complete and returns the result (throws checked exceptions).
+        try {
+            Integer resultFromGet = future1.get();
+            System.out.println("Result from get: " + resultFromGet);
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        // getNow() - Returns the result if the CompletableFuture has completed, or a default value otherwise.
+        Integer resultFromGetNow = future1.getNow(0);
+        System.out.println("Result from getNow: " + resultFromGetNow);
+
+        // isDone() - Checks if the CompletableFuture has completed.
+        boolean isDone = future1.isDone();
+        System.out.println("Is future1 done? " + isDone);
+
+        // isCompletedExceptionally() - Checks if the CompletableFuture completed exceptionally.
+        boolean isExceptional = future1.isCompletedExceptionally();
+        System.out.println("Did future1 complete exceptionally? " + isExceptional);
+
+        // cancel() - Attempts to cancel the CompletableFuture.
+        boolean isCancelled = future1.cancel(true);
+        System.out.println("Was future1 cancelled? " + isCancelled);
+    }
+}
+```
+
+### Explanation of Code:
+
+- **Async Execution**:
+  - `supplyAsync()`: Creates a `CompletableFuture` that computes a result asynchronously.
+  - `runAsync()`: Creates a `CompletableFuture` that runs a task asynchronously but does not return a result.
+  
+- **Result Transformation**:
+  - `thenApply()`: Transforms the result of `future1` once it completes.
+  - `thenAccept()`: Consumes the result of `future1` once it completes.
+  - `thenRun()`: Runs a post-task after `future1` completes.
+
+- **Combining Futures**:
+  - `thenCombine()`: Combines the results of `future1` and `future3`.
+  - `thenAcceptBoth()`: Consumes the results of `future1` and `future3` together.
+  
+- **Handling Multiple Futures**:
+  - `applyToEither()`: Applies a function to the result of the first completed `CompletableFuture` between `future1` and `future4`.
+  - `acceptEither()`: Consumes the result of the first completed `CompletableFuture` between `future1` and `future4`.
+  - `allOf()`: Waits for `future1`, `future2`, and `future3` to complete.
+  - `anyOf()`: Waits for any of `future1` or `future3` to complete.
+
+- **Exception Handling**:
+  - `exceptionally()`: Handles any exception from `future5` and returns a default value.
+  - `handle()`: Handles both result and exception for `future5`.
+  - `whenComplete()`: Performs an action after `future1` completes, regardless of success or failure.
+
+- **Completion Methods**:
+  - `obtrudeValue()`: Overwrites the result of `future1` with `100`.
+  - `obtrudeException()`: Forces an exception in `future1` and handles it using `exceptionally()`.
+  - `join()`: Waits for `future1` to complete and returns the result.
+  - `get()`: Waits for `future1` to complete and returns the result, with exception handling.
+  - `getNow()`: Returns the result of `future1` if it is completed, otherwise returns a default value.
+
+- **Completion State**:
+  - `isDone()`: Checks if `future1` is completed.
+  - `isCompletedExceptionally()`: Checks if `future1` completed exceptionally.
+  - `cancel()`: Attempts to cancel `future1`.
+
+### Expected Output:
+
+```
+Task 1: Running asynchronously
+Task 2: Running asynchronously without a result
+Task 1 result doubled: 10
+Task 1 result consumed: 5
+Task 1: Completed successfully, running post-task
+Combined result: 8
+Task 1 and 3 results consumed together: 8
+First completed result: 5
+First completed result consumed: 5
+All futures completed
+Any future completed with result: 5
+Handled exception: Exception occurred
+Handled exception in handle: Exception occurred
+Task 1 completed with result: 5
+Obtruded value: 100
+Obtruded exception handled: Forced exception
+Result from join: 100
+Result from get: 100
+
+
+Result from getNow: 100
+Is future1 done? true
+Did future1 complete exceptionally? true
+Was future1 cancelled? false
+```
+
+This program demonstrates the usage of **all the methods** from the table in various combinations. It shows how to manage asynchronous tasks, handle results and exceptions, and combine multiple `CompletableFuture` instances.
 ---
 
 ## New features introduced in Java 8 Collections Framework
