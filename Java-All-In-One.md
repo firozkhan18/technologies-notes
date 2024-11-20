@@ -1,3 +1,165 @@
+[Self Introduction](#self-introduction)
+[Project](#Project)
+
+---
+
+### Self Introduction
+
+I am a highly skilled and experienced software engineer with over 16 years of professional experience in the IT industry. I hold a **Master's in Computer Applications (MCA)** from **Guru Ghasidas University, Bilaspur** (C.G.), where I graduated in 2005 with a percentage of 67.03%. Prior to that, I completed my **Bachelor’s in Computer Applications (BCA)** from the same university in 2001, with a percentage of 63.33%. 
+
+Throughout my career, I have worked across various roles and technologies, primarily focusing on **Java development**, **microservices**, and **enterprise-level applications**. My experience spans several leading companies, including **SnapWork Technologies Pvt. Ltd.**, **S&P Global**, and **Reliance Tech Services**, where I have successfully contributed to the design, development, and management of complex applications, both as an individual contributor and a leader.
+
+### **Academic Qualifications:**
+
+- **MCA (Master of Computer Applications)**  
+  Guru Ghasidas University, Bilaspur (C.G.)  
+  Graduation Year: 2005  
+  Percentage: 67.03%
+
+- **BCA (Bachelor of Computer Applications)**  
+  Guru Ghasidas University, Bilaspur (C.G.)  
+  Graduation Year: 2001  
+  Percentage: 63.33%
+
+### **Professional Experience:**
+
+- **SnapWork Technologies Pvt. Ltd. Mumbai**  
+  **Role:** Java Team Lead  
+  **Duration:** Oct 2023 – Feb 2024  
+  In this role, I led a team in developing a microservices-based platform for Toyota’s car dealership operations. My responsibilities included developing secure RESTful APIs, leading the team through complex requirements, and ensuring efficient service delivery.
+
+- **S&P Global Technology Resources (India) LLP, Hyderabad**  
+  **Role:** Sr. Software Engineer – Grade 9  
+  **Duration:** Jun 2014 – Sept 2023  
+  Over 9 years at S&P Global, I worked on enterprise applications like Simplify DS and Ratings360™, building complex microservices, API integrations, and enhancing the user experience for financial services.
+
+- **Stefanini Pvt. Ltd., Hyderabad**  
+  **Role:** Sr. Software Engineer  
+  **Duration:** Feb 2014 – Jun 2014  
+  I was responsible for developing Java-based applications, focusing on system integration and data management.
+
+- **LiquidHub Pvt. Ltd., Hyderabad**  
+  **Role:** Sr. Software Engineer  
+  **Duration:** Feb 2013 – Jan 2014  
+  Worked on web-based solutions, integrating APIs and developing core business logic for enterprise-level applications.
+
+- **NSE.IT Ltd., Mumbai**  
+  **Role:** Systems Analyst  
+  **Duration:** Mar 2012 – Jan 2013  
+  Involved in requirement gathering, analysis, and implementing system solutions for financial services applications.
+
+- **Reliance Tech Services Pvt. Ltd., Mumbai**  
+  **Role:** Deputy Manager & Operational Engineer-L3  
+  **Duration:** Jun 2009 – Mar 2012  
+  Managed high-level operations and system maintenance, ensuring smooth IT operations across the organization.
+
+- **Patni Computer System Pvt. Ltd., Mumbai (on payroll of Magna InfoTech Pvt. Ltd., Bangalore)**  
+  **Role:** Software Engineer  
+  **Duration:** Sept 2007 – Mar 2009  
+  Worked on Java-based applications, focusing on backend development and system enhancements.
+
+---
+
+### Project
+
+---
+
+### 1. **TFSIN (Toyota Cars Dealership)**  
+**Role:** Java Team Lead  
+**Client:** SnapWork Technologies Pvt. Ltd., Mumbai  
+**Team Size:** 5  
+**Duration:** Oct 2023 – Feb 2024  
+**Environment:**  
+- **Languages:** Java 8, Spring Boot, Microservices, RESTful Web Services  
+- **Database:** MySQL, PostgreSQL  
+- **Tools:** Tomcat, Gradle, GitLab, Postman, Redis, ChatGPT  
+- **OS:** Windows 11  
+
+**Project Description:**  
+TFSIN is a Toyota Cars Dealership application designed to manage various dealership activities such as car (New, Used & KINTO) sales, dealership and salesperson details, customer management, and overall sales progress tracking. The application allows store admins to manage and update records for cars, salespersons, and admin details across multiple stores. Each store has a manager who is responsible for updating and managing the store’s records. The application aims to streamline the management and visibility of car, customer, and sales data while ensuring only admins can modify records.
+
+**Responsibilities:**  
+- Designed and implemented the monorepo structure for the Spring Boot microservices project using Gradle and Cookie-Cutter templates.  
+- Led the development of complex business APIs for various dealership operations.  
+- Developed secure RESTful Web Services with authorization tokens for client interactions.  
+- Integrated API consumption with React for the front-end.  
+- Built and optimized DAO layer using JPA (Java Persistence API) framework for database interactions.  
+- Wrote business logic for core service functionalities and streamlined workflows for data management.  
+- Led and mentored a cross-functional team of developers, business analysts, architects, and QA personnel to ensure timely delivery.  
+- Delivered training to the team on new technologies and ensured risk mitigation in delivery.
+
+---
+
+### 2. **Simplify DS**  
+**Role:** Senior Software Engineer  
+**Client:** Standard & Poor’s (S&P)  
+**Team Size:** 5  
+**Duration:** Apr 2021 – Sept 2023  
+**Environment:**  
+- **Languages:** Azure DevOps, Spring Boot, Microservices, RESTful Web Services, React  
+- **Database:** Oracle 10g, MongoDB  
+- **Tools:** Tomcat, WebLogic, MAVEN, Git, Postman, Kafka, Splunk  
+- **OS:** Windows 8  
+
+**Project Description:**  
+Simplify DS is a comprehensive enterprise application consisting of 15 modules designed to facilitate the data transformation and rating process for S&P’s financial products. It integrates with core systems to gather data and provide ratings for various entities like banks, sovereigns, and corporations. The application also enables analysts to use different sub-modules like ADS, meetings, and surveillance optimization to assist in decision-making.
+
+**Responsibilities:**  
+- Worked across multiple modules in the development and enhancement of the application.  
+- Integrated Java FaaS and CaaS for serverless operations.  
+- Developed complex business APIs and secured RESTful Web Services for client interactions.  
+- Worked closely with front-end teams to implement React-based user interfaces.  
+- Built DAO layers using Hibernate ORM framework to streamline data access.  
+- Contributed to writing and implementing business logic in the service layer.  
+- Participated in writing unit tests to ensure quality and robustness of the application.
+
+---
+
+### 3. **R360 Application**  
+**Role:** Senior Software Engineer  
+**Client:** Standard & Poor’s (S&P)  
+**Team Size:** 5  
+**Duration:** May 2019 – Apr 2021  
+**Environment:**  
+- **Languages:** Hydra XML, Hydrob, JavaScript, JQuery, Knockout  
+- **Database:** Oracle 10g  
+- **Tools:** Hydra & Hydra Designer, TFS, Git Repo, Visual Studio 2017  
+- **OS:** Windows 8  
+
+**Project Description:**  
+Ratings360™ is a digital platform by S&P Global Ratings, which offers clients a comprehensive view of their credit risk across multiple industries. The platform consolidates critical credit risk factors, ratings, research, and insights into a unified, easy-to-use interface. It is designed to help clients track and make informed decisions based on S&P Global’s credit ratings and market insights.
+
+**Responsibilities:**  
+- Developed business logic using Stored Procedures to process complex financial data.  
+- Designed and developed the front-end using Hydra XML Designer, enhancing the user experience.  
+- Managed database communication via Oracle JDBC drivers.  
+- Involved in code tuning and optimization to improve performance.  
+- Participated in daily Scrum and user story review meetings, collaborating with both onsite and offshore teams to ensure quality deliverables.
+
+---
+
+### 4. **Credit Estimates**  
+**Role:** Technical Lead (In Ness Technologies)  
+**Client:** Standard & Poor’s (S&P)  
+**Team Size:** 6  
+**Duration:** Sept 2015 – May 2019  
+**Environment:**  
+- **Languages:** Core Java 1.6, JSP, Servlet, Spring, SOA Web Services, JavaScript  
+- **Database:** Oracle 10g  
+- **Tools:** Eclipse  
+- **OS:** Windows 7, Unix  
+
+**Project Description:**  
+Credit Estimates is a key application used by S&P to provide ratings for corporate and financial instruments. The application facilitates interaction between multiple modules such as the front-end user interface, backend data services, and document management system. It uses ESB (Enterprise Service Bus) for communication between modules and exposes essential business functionality through web services built with Apache Axis and XML Beans.
+
+**Responsibilities:**  
+- Developed business logic using Spring and EJB for backend processing.  
+- Developed presentation layer using JSPs, ensuring seamless UI/UX design.  
+- Used Oracle JDBC drivers to manage database communication and interactions.  
+- Implemented source control using CVS and participated in regular Scrum meetings.  
+- Involved in code enhancement and performance tuning for better efficiency and scalability.
+
+---
 
 In React, **Props**, **State**, **Refs**, and the **Context API** are fundamental concepts that help manage data and behavior in components. Understanding how and when to use each of these concepts is essential for building dynamic and maintainable React applications. Below is an explanation of each of these concepts:
 
