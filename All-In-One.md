@@ -8,15 +8,7 @@
 7. [Abstract Class](#abstract-class)
 8. [Regular Interface](#regular-interface)
 9. [Functional Interface](#functional-interface)
-10. [Class Components](#class-components)
-11. [Functional Components](#functional-components)
-12. [Pure Components](#pure-components)
-13. [Higher-Order Components (HOCs)](#higher-order-components-hocs)
-14. [Stateless Functional Components](#stateless-functional-components)
-15. [Controlled Components](#controlled-components)
-16. [Uncontrolled Components](#uncontrolled-components)
-17. [Render Props Components](#render-props-components)
-18. [Context Provider Components](#context-provider-components)
+
 
 ## JAVA
 
@@ -617,7 +609,9 @@ public class TestFunctionalInterface {
 - **Abstract Class**: Used for sharing common behavior between classes, can have both abstract and concrete methods, allows instance variables and constructors.
 - **Regular Interface**: Defines a contract for behavior, can be implemented by multiple classes, and can have default methods (since Java 8).
 - **Functional Interface**: A special type of interface that has exactly one abstract method and can be used with lambda expressions, ideal for representing single-function behaviors.
-Java 8 introduced several powerful features that significantly changed the way developers write Java code. These features improve readability, maintainability, and performance by introducing functional programming concepts and new language constructs. Here's an in-depth look at the major features introduced in Java 8:
+
+
+## Features introduced in Java 8:
 
 ### 1. **Lambda Expressions**
 Lambda expressions allow you to write instances of single-method interfaces (functional interfaces) more concisely. They provide a way to pass behavior as a parameter to methods or to execute operations on data without explicitly writing classes or implementing interfaces.
@@ -820,9 +814,10 @@ System.out.println(result);  // Output: apple, banana, cherry
 
 These Java 8 features represent a major shift towards functional programming in Java, enhancing both code readability and performance. By leveraging these features, developers can write more concise, expressive, and maintainable Java code.
 In Java, **threads** and **concurrency** are critical concepts that enable parallel execution and efficient resource utilization, particularly in multi-core processors. Understanding how threads work, how to manage concurrency, and how to avoid common pitfalls like race conditions is key to writing efficient, thread-safe applications.
-Let’s break this down into key concepts:
-
 ---
+
+## Java Thread & Concurrency
+
 ### **1. What is a Thread?**
 A **thread** is a lightweight unit of execution within a process. In Java, a thread is a single path of execution, and a program can have multiple threads running simultaneously. Each thread runs independently but shares the same memory space of the parent process.
 - **Thread**: A sequence of instructions that can be executed independently.
@@ -1037,1284 +1032,7 @@ A **Semaphore** controls access to a particular resource by multiple threads by 
 - **Deadlocks**: Careful attention is needed to avoid deadlocks by properly managing resource locking.
 
 By understanding these concepts and applying best practices, Java developers can efficiently manage concurrency, improve application performance, and avoid common multi-threading pitfalls.
-Java 8 and beyond introduced several important updates and improvements to the **Java Collections Framework**. These updates enhance the flexibility, performance, and ease of use of collections in Java. Below are the key updates and new features related to the Collections Framework:
 
----
-
-### **1. Stream API (Java 8)**
-One of the most significant additions to the Collections Framework in Java 8 is the **Stream API**. The Stream API allows you to process sequences of elements (such as collections, arrays, or I/O channels) in a functional style, enabling efficient, declarative operations on data.
-
-#### Key Features of Streams:
-- **Declarative Operations**: Perform operations like filtering, mapping, reducing, sorting, and collecting in a clean, readable, and functional way.
-- **Parallel Processing**: Streams can be processed in parallel, making it easier to leverage multi-core processors.
-- **Laziness**: Streams are lazy, meaning computations are only performed when a terminal operation (like `collect()`, `forEach()`, or `reduce()`) is invoked.
-
-#### Example:
-```java
-List<String> words = Arrays.asList("apple", "banana", "cherry", "date");
-// Filter and print words starting with "b"
-words.stream()
-     .filter(word -> word.startsWith("b"))
-     .forEach(System.out::println);  // Output: banana
-```
-Streams can also be processed in parallel:
-```java
-words.parallelStream()
-     .filter(word -> word.startsWith("b"))
-     .forEach(System.out::println);
-```
-
----
-
-### **2. Default and Static Methods in Interfaces (Java 8)**
-Java 8 introduced **default** and **static** methods in interfaces, allowing developers to add methods to interfaces without breaking the existing implementation.
-#### a) **Default Methods**
-A **default method** in an interface allows you to provide a default implementation for a method. This is especially useful for adding new methods to interfaces without breaking existing implementations.
-```java
-interface MyList {
-    default void printList() {
-        System.out.println("Printing list");
-    }
-}
-class MyListImpl implements MyList {
-    // No need to implement printList() since it has a default implementation
-}
-```
-
-#### b) **Static Methods**
-Static methods in interfaces allow you to define utility methods that can be invoked without creating an instance of the implementing class.
-```java
-interface MyList {
-    static void printListStatic() {
-        System.out.println("Printing static list");
-    }
-}
-```
-
----
-
-### **3. New Collection Classes (Java 8)**
-Java 8 introduced new classes and methods to the **`java.util.concurrent`** package, which enhances concurrency support and adds more powerful utilities for managing collections in a multi-threaded environment.
-
-#### a) **ConcurrentMap** Enhancements
-`ConcurrentMap` is an interface that extends `Map` and adds atomic operations for thread-safe modifications. Java 8 added new methods such as:
-- `compute()`, `computeIfAbsent()`, `computeIfPresent()`
-- `merge()`
-Example using `computeIfAbsent()`:
-```java
-ConcurrentMap<String, Integer> map = new ConcurrentHashMap<>();
-map.computeIfAbsent("key", k -> 42);  // Only computes if absent, else returns the existing value.
-```
-
-#### b) **CopyOnWriteArrayList and CopyOnWriteArraySet**
-These thread-safe variants of `ArrayList` and `HashSet` are optimized for scenarios where read operations dominate and few modifications are made. The data structure creates a new copy of the list or set whenever it's modified, ensuring thread safety without synchronization overhead.
-
----
-### **4. The `forEach` Method (Java 8)**
-Java 8 introduced the `forEach()` method to the `Collection` interface, enabling a more concise and readable way to iterate over collections using lambdas. It replaces the traditional `for` loop or `Iterator` pattern.
-```java
-List<String> words = Arrays.asList("apple", "banana", "cherry");
-words.forEach(word -> System.out.println(word));  // Output: apple, banana, cherry
-```
-Internally, `forEach()` uses the `Consumer` functional interface, which allows you to process each element in the collection.
-
----
-### **5. `List`, `Set`, and `Map` Enhancements (Java 8)**
-Java 8 added several new methods to the `List`, `Set`, and `Map` interfaces to improve functionality and usability.
-#### a) **List Interface Enhancements**
-- **`replaceAll()`**: A method to replace each element of the list using the given operator.
-  
-```java
-List<Integer> numbers = Arrays.asList(1, 2, 3, 4, 5);
-numbers.replaceAll(n -> n * 2);  // Doubles each element in the list
-```
-- **`sort()`**: A method to sort the list in-place using the specified comparator.
-```java
-List<Integer> numbers = Arrays.asList(5, 3, 8, 1);
-numbers.sort(Integer::compareTo);  // Sort in ascending order
-```
-#### b) **Set Interface Enhancements**
-- **`removeIf()`**: A method that removes elements based on a predicate.
-  
-```java
-Set<Integer> numbers = new HashSet<>(Arrays.asList(1, 2, 3, 4, 5));
-numbers.removeIf(n -> n % 2 == 0);  // Removes even numbers
-```
-#### c) **Map Interface Enhancements**
-- **`forEach()`**: This method allows you to iterate over key-value pairs.
-  
-```java
-Map<String, Integer> map = new HashMap<>();
-map.put("a", 1);
-map.put("b", 2);
-map.forEach((key, value) -> System.out.println(key + " = " + value));
-```
-- **`compute()`, `computeIfAbsent()`, and `computeIfPresent()`**: These methods provide atomic operations for modifying values in a map.
-Example using `computeIfAbsent()`:
-```java
-Map<String, Integer> map = new HashMap<>();
-map.computeIfAbsent("key", k -> 42);  // Computes a value if the key is absent
-```
----
-### **6. `Collectors` Utility Class (Java 8)**
-Java 8 introduced the **`Collectors`** utility class in the `java.util.stream` package, which provides various predefined collection strategies for reducing and collecting the results of a stream operation.
-#### Common Collectors:
-- **`toList()`**: Collects the stream into a `List`.
-- **`toSet()`**: Collects the stream into a `Set`.
-- **`joining()`**: Concatenates the elements of a stream into a single `String`.
-- **`groupingBy()`**: Groups the elements of a stream by a classifier function.
-Example:
-```java
-List<String> words = Arrays.asList("apple", "banana", "cherry");
-String result = words.stream().collect(Collectors.joining(", "));  // "apple, banana, cherry"
-```
-- **`groupingBy()`**: Groups the stream elements by a given key.
-```java
-Map<Integer, List<String>> grouped = words.stream()
-    .collect(Collectors.groupingBy(String::length));
-```
----
-### **7. `Spliterator` (Java 8)**
-Java 8 introduced **`Spliterator`**, a new interface that helps in efficiently dividing and processing large datasets in parallel. The `Spliterator` can be used for parallel stream processing, making it more efficient for large collections.
-It provides methods such as:
-- `trySplit()`: Splits the data into smaller parts for parallel processing.
-- `forEachRemaining()`: Processes the remaining elements.
-Example:
-```java
-List<String> words = Arrays.asList("apple", "banana", "cherry");
-Spliterator<String> spliterator = words.spliterator();
-spliterator.forEachRemaining(System.out::println);
-```
----
-### **8. Immutable Collections (Java 9)**
-Java 9 introduced **immutable collections** with a convenient factory API for creating immutable lists, sets, and maps.
-#### Example of Immutable Collections:
-```java
-List<String> list = List.of("apple", "banana", "cherry");
-Set<String> set = Set.of("apple", "banana", "cherry");
-Map<String, Integer> map = Map.of("a", 1, "b", 2);
-list.add("date");  // Throws UnsupportedOperationException
-```
-- These collections are unmodifiable, which means once they are created, their contents cannot be modified.
-
----
-
-### **9. `ConcurrentSkipListMap` and `ConcurrentSkipListSet` (Java 6)**
-
-Although not a feature of Java 8, the **`ConcurrentSkipListMap`** and **`ConcurrentSkipListSet`** are thread-safe, sorted collections introduced earlier in Java 6. These are a part of the `java.util.concurrent` package and are often used when you need thread-safe access to sorted data.
-
----
-### **10. `var` Keyword (Java 10)**
-Java 10 introduced **local variable type inference** via the `var` keyword. This allows you to omit the explicit type declaration for local variables when it can be inferred from the context.
-Example:
-```java
-var list = new ArrayList<String>();  // Type is inferred as ArrayList<String>
-```
-This makes working with collections more concise.
----
-### **Summary of Key Collection Framework Updates:**
-- **Stream API**: Provides a functional approach to working with collections (filtering, mapping, reducing).
-- **Default and Static Methods in Interfaces**: Added default behavior and utility methods to interfaces.
-- **Enhanced Methods in `List
-`, `Set`, and `Map`**: New methods like `replaceAll()`, `removeIf()`, and `forEach()` for more functional-style operations.
-- **Immutable Collections**: Java 9 introduced factory methods to create unmodifiable collections.
-- **Concurrency Utilities**: Enhancements in `ConcurrentMap`, `CopyOnWriteArrayList`, etc., for more efficient multi-threaded access.
-- **Collectors**: A utility class for collecting stream results with predefined strategies like `groupingBy()`, `joining()`, etc.
-- **Spliterator**: Supports parallel processing of collections with a customizable splitting mechanism.
-These updates provide developers with more flexible, efficient, and functional tools for managing collections and parallelism in Java.
-
----
-
-## New features introduced in Java 8
-
-Java 8 introduced several significant features and enhancements that greatly improved the language and the Java Development Kit (JDK). Here are some of the key features:
-
-### 1. Lambda Expressions
-- **Description**: Provides a clear and concise way to represent a function as an object. It enables functional programming in Java, allowing you to pass behavior as a parameter.
-- **Example**:
-  ```java
-  (a, b) -> a + b; // A simple lambda expression that adds two numbers.
-  ```
-
-Lambda expressions, introduced in Java 8, provide a clear and concise way to represent functional interfaces (interfaces with a single abstract method). They enable functional programming capabilities in Java, allowing you to treat behavior as a parameter and pass around functionality.
-
-### 1. Basic Syntax
-The syntax of a lambda expression is as follows:
-```java
-(parameters) -> expression
-```
-or, for more complex bodies:
-```java
-(parameters) -> { statements; }
-```
-
-### 2. Functional Interfaces
-A functional interface is an interface that contains exactly one abstract method. Lambda expressions can be used to create instances of functional interfaces. Common examples include:
-- `Runnable`
-- `Callable`
-- `Comparator`
-- `Consumer`
-- `Supplier`
-- `Function`
-- `Predicate`
-
-#### Example:
-```java
-@FunctionalInterface
-interface MyFunctionalInterface {
-    void execute();
-}
-
-MyFunctionalInterface myLambda = () -> System.out.println("Executing...");
-myLambda.execute();
-```
-
-### 3. Types of Lambda Expressions
-Lambda expressions can be categorized based on the number of parameters and the type of body:
-
-- **No Parameters**:
-  ```java
-  () -> System.out.println("Hello, World!");
-  ```
-
-- **Single Parameter (Type Inference)**:
-  ```java
-  x -> x * x; // No need for parentheses for a single parameter
-  ```
-
-- **Multiple Parameters**:
-  ```java
-  (x, y) -> x + y;
-  ```
-
-- **Block Body**:
-  ```java
-  (int x, int y) -> {
-      int sum = x + y;
-      return sum;
-  };
-  ```
-
-### 4. Using Lambda Expressions
-Lambda expressions can be used with Java's Collections Framework, particularly with the Stream API, to perform operations like filtering, mapping, and reducing.
-
-#### Example with Streams:
-```java
-List<String> names = Arrays.asList("Alice", "Bob", "Charlie", "David");
-names.stream()
-     .filter(name -> name.startsWith("A"))
-     .forEach(name -> System.out.println(name));
-```
-
-### 5. Method References
-Lambda expressions can often be replaced with method references for improved readability. Method references are a shorthand notation for calling methods.
-
-#### Syntax:
-- **Static Method Reference**: `ClassName::methodName`
-- **Instance Method Reference**: `instance::methodName`
-- **Constructor Reference**: `ClassName::new`
-
-#### Example:
-```java
-names.forEach(System.out::println); // Method reference instead of lambda
-```
-
-### 6. Benefits of Lambda Expressions
-- **Conciseness**: Reduces boilerplate code, especially for simple implementations.
-- **Readability**: Makes the code more readable and expressive.
-- **Enhanced Functionality**: Facilitates functional programming constructs such as higher-order functions.
-
-### 7. Capturing Variables
-Lambda expressions can capture variables from their enclosing context (effectively final variables).
-
-#### Example:
-```java
-int threshold = 5;
-Predicate<Integer> filter = num -> num > threshold; // Captures `threshold`
-```
-
-### 8. Scope and `this`
-Within a lambda expression, `this` refers to the enclosing class instance, not the lambda itself.
-
-#### Example:
-```java
-class Outer {
-    void outerMethod() {
-        Runnable r = () -> System.out.println(this); // Refers to Outer instance
-    }
-}
-```
-
-### 9. Limitations
-- **No `this` or `super`**: Lambda expressions cannot declare their own `this` or `super`, as they inherit from the enclosing context.
-- **No checked exceptions**: You cannot throw checked exceptions from a lambda unless they are handled.
-
-### 10. Use Cases
-- **Event Handling**: Useful in GUI applications for handling events.
-- **Functional Programming**: Streamlining functional operations on collections.
-- **Parallel Processing**: Using streams to process collections in parallel.
-
-### Conclusion
-Lambda expressions in Java 8 represent a powerful addition to the language, allowing for more expressive, concise, and functional-style programming. By enabling the use of functional interfaces, they significantly enhance the way Java developers can write code, particularly when working with collections and streams. 
-
----
-
-In Java 8, **lambda expressions** were introduced as a way to provide a clear and concise syntax for writing anonymous methods (i.e., methods without a name). They are primarily used to implement functional interfaces (interfaces with a single abstract method), and they simplify the syntax for passing behavior as parameters.
-
-### Key Characteristics of Lambda Expressions:
-1. **Concise Syntax**: Lambda expressions allow you to write code more compactly, eliminating the need for boilerplate code (such as anonymous classes).
-2. **Functional Interface**: A lambda expression works with functional interfaces, which are interfaces that contain exactly one abstract method. These interfaces are typically used to represent behavior that can be passed around as parameters to methods.
-3. **First-Class Function**: Lambdas allow you to treat behavior as a parameter (e.g., passing functions as arguments to methods), making it easier to pass functionality around in Java.
-
-### Basic Syntax of Lambda Expression:
-
-The general syntax of a lambda expression is:
-
-```java
-(parameter1, parameter2, ...) -> expression
-```
-
-Alternatively, it can have a block of code as the body:
-
-```java
-(parameter1, parameter2, ...) -> {
-    // body with multiple statements
-}
-```
-
-### Example 1: Simple Lambda Expression
-
-Suppose we have a functional interface:
-
-```java
-@FunctionalInterface
-interface Greeting {
-    void greet(String name);
-}
-```
-
-Using a lambda expression to implement the interface:
-
-```java
-public class LambdaExample {
-    public static void main(String[] args) {
-        // Using a lambda expression to implement the greet method
-        Greeting greeting = (name) -> System.out.println("Hello, " + name);
-        greeting.greet("John");
-    }
-}
-```
-
-**Output**:
-
-```
-Hello, John
-```
-
-### Example 2: Lambda with Multiple Parameters
-
-A lambda expression can take multiple parameters. Here's an example of adding two integers:
-
-```java
-@FunctionalInterface
-interface MathOperation {
-    int operation(int a, int b);
-}
-
-public class LambdaExample {
-    public static void main(String[] args) {
-        // Using lambda expression to add two numbers
-        MathOperation addition = (a, b) -> a + b;
-        System.out.println("Addition: " + addition.operation(10, 5)); // Output: 15
-    }
-}
-```
-
-**Output**:
-
-```
-Addition: 15
-```
-
-### Example 3: Lambda Expression with Block of Code
-
-When the lambda expression has more than one statement, it needs to be enclosed in braces `{}`.
-
-```java
-@FunctionalInterface
-interface MathOperation {
-    int operation(int a, int b);
-}
-
-public class LambdaExample {
-    public static void main(String[] args) {
-        // Using lambda with a block of code
-        MathOperation multiplication = (a, b) -> {
-            int result = a * b;
-            return result; // Return the result
-        };
-        System.out.println("Multiplication: " + multiplication.operation(10, 5)); // Output: 50
-    }
-}
-```
-
-**Output**:
-
-```
-Multiplication: 50
-```
-
-### Benefits of Lambda Expressions:
-1. **Concise and Readable Code**: Lambda expressions allow you to write more concise and readable code, reducing the need for boilerplate code such as anonymous inner classes.
-2. **Functional Programming**: Lambda expressions are a key part of functional programming in Java, enabling you to pass behavior as arguments and return values from methods more naturally.
-3. **Parallel Processing**: Lambdas, combined with streams, make it easier to perform operations like filtering, mapping, and reducing data in parallel.
-
-### Example 4: Lambda with `Streams` API
-
-Java 8 introduced the `Streams` API, which allows you to perform functional-style operations on collections of objects.
-
-```java
-import java.util.Arrays;
-import java.util.List;
-
-public class LambdaExample {
-    public static void main(String[] args) {
-        List<String> names = Arrays.asList("Alice", "Bob", "Charlie", "David");
-
-        // Using lambda with Streams API to filter and print names that start with 'A'
-        names.stream()
-             .filter(name -> name.startsWith("A"))
-             .forEach(name -> System.out.println(name));
-    }
-}
-```
-
-**Output**:
-
-```
-Alice
-```
-
-### Example 5: Lambda with `Comparator`
-
-Lambdas are frequently used with `Comparator` to sort collections:
-
-```java
-import java.util.Arrays;
-import java.util.List;
-
-public class LambdaExample {
-    public static void main(String[] args) {
-        List<Integer> numbers = Arrays.asList(3, 2, 1, 4, 5);
-
-        // Using lambda expression to sort the list
-        numbers.sort((a, b) -> a.compareTo(b));
-
-        System.out.println(numbers); // Output: [1, 2, 3, 4, 5]
-    }
-}
-```
-
-**Output**:
-
-```
-[1, 2, 3, 4, 5]
-```
-
-### Summary of Lambda Syntax:
-- **Single parameter**: `(param) -> expression`
-- **Multiple parameters**: `(param1, param2) -> expression`
-- **Block of code**: `(param1, param2) -> { code }`
-- **No parameter**: `() -> expression`
-
-### Conclusion:
-Lambda expressions in Java 8 are a powerful feature that simplifies the process of writing clean, efficient, and readable code. They enable functional programming capabilities by allowing you to pass behavior as parameters, work with `Streams`, and manipulate data in a concise way.
-
----
-### 2. Streams API
-- **Description**: Introduces a new abstraction for processing sequences of elements (collections, arrays, etc.) in a functional style. It supports operations like filtering, mapping, and reducing.
-- **Example**:
-  ```java
-  List<String> names = Arrays.asList("Alice", "Bob", "Charlie");
-  List<String> filteredNames = names.stream()
-                                     .filter(name -> name.startsWith("A"))
-                                     .collect(Collectors.toList());
-  ```
-
-### 3. Default Methods
-- **Description**: Allows you to add new methods to interfaces with an implementation. This helps in evolving interfaces without breaking existing implementations.
-- **Example**:
-  ```java
-  interface MyInterface {
-      default void myDefaultMethod() {
-          System.out.println("Default implementation");
-      }
-  }
-  ```
-
-### 4. Method References
-- **Description**: A shorthand notation of a lambda expression to call a method. They enhance readability and can be used when you want to refer to a method without executing it.
-- **Example**:
-  ```java
-  List<String> names = Arrays.asList("Alice", "Bob", "Charlie");
-  names.forEach(System.out::println); // Method reference to print each name.
-  ```
-
-### 5. Optional Class
-- **Description**: A container object which may or may not contain a value, designed to help avoid `NullPointerException` and to provide a more expressive way of dealing with optional values.
-- **Example**:
-  ```java
-  Optional<String> optionalName = Optional.ofNullable(getName());
-  optionalName.ifPresent(name -> System.out.println(name));
-  ```
-
-### 6. New Date and Time API
-- **Description**: Introduces a comprehensive and immutable date and time API (java.time package) to handle dates and times more effectively than the old `java.util.Date` and `java.util.Calendar`.
-- **Example**:
-  ```java
-  LocalDate today = LocalDate.now();
-  LocalDate birthday = LocalDate.of(1990, Month.JANUARY, 1);
-  Period age = Period.between(birthday, today);
-  ```
-
-### 7. Nashorn JavaScript Engine
-- **Description**: A new lightweight JavaScript engine that allows you to execute JavaScript code on the Java Virtual Machine (JVM).
-- **Example**:
-  ```java
-  ScriptEngine engine = new ScriptEngineManager().getEngineByName("Nashorn");
-  engine.eval("print('Hello, Nashorn!');");
-  ```
-
-### 8. CompletableFuture
-- **Description**: A new class that represents a future result of an asynchronous computation. It allows you to write non-blocking code using a functional style.
-- **Example**:
-  ```java
-  CompletableFuture.supplyAsync(() -> {
-      return "Hello, World!";
-  }).thenAccept(result -> {
-      System.out.println(result);
-  });
-  ```
-
-### CompletableFuture: Depth Concept and Methods
-
-`CompletableFuture` in Java is part of the `java.util.concurrent` package and provides a powerful and flexible mechanism to handle asynchronous programming. It allows you to run code asynchronously, write non-blocking applications, and handle future results or exceptions. Unlike `Future`, which represents a task that will be completed at some point, `CompletableFuture` allows you to **explicitly complete** the future and also handle the result asynchronously.
-
-### Depth Concept of `CompletableFuture`
-
-1. **Asynchronous Execution**:  
-   The main feature of `CompletableFuture` is its ability to execute code asynchronously. A `CompletableFuture` represents a future result that may not be available yet. It can be completed at some point in the future by another thread.
-
-2. **Completing Futures**:  
-   The key aspect of `CompletableFuture` is its ability to be manually completed. You can complete it either normally (by providing a value) or exceptionally (by providing an exception). This is different from the regular `Future`, which is typically completed by the thread executing the task.
-
-3. **Chaining and Composition**:  
-   You can chain multiple asynchronous tasks together using methods like `thenApply`, `thenCompose`, and `thenAccept`, which allow you to compose asynchronous tasks that execute one after another.
-
-4. **Handling Results and Exceptions**:  
-   `CompletableFuture` provides methods to handle results and exceptions asynchronously, so you don’t have to block waiting for results.
-
-### Key Methods of `CompletableFuture`
-
-Here’s an overview of the main methods available in `CompletableFuture`:
-
-#### 1. **`supplyAsync(Supplier<U> supplier)`**
-   - **Description**: This method is used to asynchronously execute a task and return a result. It accepts a `Supplier` and runs it asynchronously, returning a `CompletableFuture<U>`.
-   - **Example**:
-     ```java
-     CompletableFuture<Integer> future = CompletableFuture.supplyAsync(() -> {
-         return 5 * 5;
-     });
-     ```
-
-#### 2. **`runAsync(Runnable runnable)`**
-   - **Description**: This method executes a `Runnable` asynchronously but does not return a result. It’s useful when you need to perform side-effects (e.g., logging or updating some state).
-   - **Example**:
-     ```java
-     CompletableFuture<Void> future = CompletableFuture.runAsync(() -> {
-         System.out.println("Running task asynchronously.");
-     });
-     ```
-
-#### 3. **`thenApply(Function<? super T,? extends U> fn)`**
-   - **Description**: This method is used to apply a function to the result of the future when it completes. It transforms the result and returns a new `CompletableFuture<U>`.
-   - **Example**:
-     ```java
-     CompletableFuture<Integer> result = CompletableFuture.supplyAsync(() -> 5)
-         .thenApply(value -> value * 2);
-     // result will contain 10
-     ```
-
-#### 4. **`thenAccept(Consumer<? super T> action)`**
-   - **Description**: This method is used when you just want to consume the result of a completed `CompletableFuture` without changing it. It applies a `Consumer` to the result.
-   - **Example**:
-     ```java
-     CompletableFuture<Void> result = CompletableFuture.supplyAsync(() -> 10)
-         .thenAccept(value -> System.out.println("Value: " + value));
-     // Output: "Value: 10"
-     ```
-
-#### 5. **`thenCompose(Function<? super T, ? extends CompletableFuture<U>> fn)`**
-   - **Description**: This method allows you to chain two asynchronous operations. Unlike `thenApply`, which returns a transformed result, `thenCompose` returns a new `CompletableFuture<U>`. It's useful for dependent asynchronous tasks.
-   - **Example**:
-     ```java
-     CompletableFuture<Integer> result = CompletableFuture.supplyAsync(() -> 5)
-         .thenCompose(value -> CompletableFuture.supplyAsync(() -> value * 2));
-     // result will contain 10
-     ```
-
-#### 6. **`exceptionally(Function<Throwable, ? extends T> fn)`**
-   - **Description**: This method allows you to handle exceptions that occur during asynchronous execution. If the `CompletableFuture` completes exceptionally, it will invoke the provided function to handle the exception and return a fallback value.
-   - **Example**:
-     ```java
-     CompletableFuture<Integer> result = CompletableFuture.supplyAsync(() -> {
-         if (true) throw new RuntimeException("Failure");
-         return 5;
-     }).exceptionally(ex -> {
-         System.out.println("Exception: " + ex.getMessage());
-         return 0;
-     });
-     // Output: Exception: Failure
-     // result will contain 0
-     ```
-
-#### 7. **`handle(BiFunction<? super T, Throwable, ? extends U> fn)`**
-   - **Description**: This method allows you to handle both the result and the exception in one step. It’s similar to `exceptionally`, but provides both the result and the exception (if any) to the handler.
-   - **Example**:
-     ```java
-     CompletableFuture<Integer> result = CompletableFuture.supplyAsync(() -> {
-         if (true) throw new RuntimeException("Failure");
-         return 5;
-     }).handle((res, ex) -> {
-         if (ex != null) {
-             System.out.println("Exception: " + ex.getMessage());
-             return 0;
-         }
-         return res * 2;
-     });
-     // Output: Exception: Failure
-     // result will contain 0
-     ```
-
-#### 8. **`whenComplete(BiConsumer<? super T, ? super Throwable> action)`**
-   - **Description**: Similar to `handle`, but doesn't allow you to modify the result. It just lets you observe the completion (whether successful or exceptionally).
-   - **Example**:
-     ```java
-     CompletableFuture<Integer> result = CompletableFuture.supplyAsync(() -> 5)
-         .whenComplete((res, ex) -> {
-             if (ex != null) {
-                 System.out.println("Exception: " + ex.getMessage());
-             } else {
-                 System.out.println("Result: " + res);
-             }
-         });
-     // Output: Result: 5
-     ```
-
-#### 9. **`join()`**
-   - **Description**: This method blocks the current thread and waits for the completion of the `CompletableFuture`. If it completes exceptionally, it throws an exception.
-   - **Example**:
-     ```java
-     Integer result = CompletableFuture.supplyAsync(() -> 5).join();
-     // result will contain 5
-     ```
-
-#### 10. **`get()`**
-   - **Description**: Similar to `join()`, but throws checked exceptions (`ExecutionException` or `InterruptedException`) if something goes wrong during the execution of the future.
-   - **Example**:
-     ```java
-     try {
-         Integer result = CompletableFuture.supplyAsync(() -> 10).get();
-         // result will contain 10
-     } catch (Exception e) {
-         e.printStackTrace();
-     }
-     ```
-
-#### 11. **`allOf(CompletableFuture<?>... cfs)`**
-   - **Description**: This method takes an array of `CompletableFuture` instances and returns a new `CompletableFuture<Void>`. This future will complete when all the given futures complete.
-   - **Example**:
-     ```java
-     CompletableFuture<Void> allOf = CompletableFuture.allOf(
-         CompletableFuture.supplyAsync(() -> 5),
-         CompletableFuture.supplyAsync(() -> 10)
-     );
-     allOf.join();
-     ```
-
-#### 12. **`anyOf(CompletableFuture<?>... cfs)`**
-   - **Description**: This method takes an array of `CompletableFuture` instances and returns a new `CompletableFuture<Object>`. This future will complete when any one of the given futures completes.
-   - **Example**:
-     ```java
-     CompletableFuture<Object> anyOf = CompletableFuture.anyOf(
-         CompletableFuture.supplyAsync(() -> 5),
-         CompletableFuture.supplyAsync(() -> 10)
-     );
-     System.out.println(anyOf.join()); // Prints either 5 or 10
-     ```
-
----
-
-### Example: Using Multiple CompletableFutures
-
-Here is an example that uses several of the methods above:
-
-```java
-import java.util.concurrent.CompletableFuture;
-
-public class CompletableFutureExample {
-    public static void main(String[] args) throws Exception {
-        // Supply async with a computation
-        CompletableFuture<Integer> future1 = CompletableFuture.supplyAsync(() -> 2);
-        
-        // Chain another computation using thenApply
-        CompletableFuture<Integer> future2 = future1.thenApply(result -> result * 5);
-        
-        // Handle exceptions using exceptionally
-        CompletableFuture<Integer> future3 = future2.exceptionally(ex -> {
-            System.out.println("Exception: " + ex.getMessage());
-            return 0;
-        });
-
-        // Wait for the final result
-        System.out.println("Final Result: " + future3.join());
-    }
-}
-```
-
-### Conclusion
-`CompletableFuture` allows you to write asynchronous and non-blocking code efficiently. The methods it provides help manage dependencies between multiple asynchronous tasks and handle their results or errors gracefully. By leveraging chaining and composing tasks, `CompletableFuture` offers a robust framework for building concurrent applications in Java.
-
-### Handling Exceptions in `CompletableFuture`
-
-In `CompletableFuture`, exceptions can be handled using methods such as `exceptionally()`, `handle()`, and `whenComplete()`. These methods allow you to handle exceptions that occur during asynchronous computations. 
-
-### Methods for Handling Exceptions
-
-#### 1. **`exceptionally()`**  
-   The `exceptionally()` method is used to handle exceptions that might occur during the execution of a `CompletableFuture`. It takes a `Function<Throwable, T>` as an argument, which is invoked if the `CompletableFuture` completes exceptionally (i.e., with an exception). The function is expected to return a fallback value.
-
-   - **Usage**: It’s used when you want to provide a fallback value if an exception occurs.
-   - **Example**:
-
-   ```java
-   CompletableFuture<Integer> future = CompletableFuture.supplyAsync(() -> {
-       if (true) throw new RuntimeException("Something went wrong!");
-       return 5;
-   });
-
-   future.exceptionally(ex -> {
-       System.out.println("Exception occurred: " + ex.getMessage());
-       return 0;  // Fallback value
-   }).thenAccept(result -> System.out.println("Result: " + result));
-   ```
-
-   **Output:**
-   ```
-   Exception occurred: Something went wrong!
-   Result: 0
-   ```
-
-#### 2. **`handle()`**  
-   The `handle()` method is similar to `exceptionally()`, but it allows you to handle both the result and the exception at the same time. This method provides access to the result of the `CompletableFuture` and the exception (if any) via a `BiFunction`. It’s useful when you want to process both the normal result and the exception in one place, and it allows you to modify the result based on the exception.
-
-   - **Usage**: It’s used when you want to handle both the normal result and the exception, and possibly modify the result.
-   - **Example**:
-
-   ```java
-   CompletableFuture<Integer> future = CompletableFuture.supplyAsync(() -> {
-       if (true) throw new RuntimeException("Something went wrong!");
-       return 5;
-   });
-
-   future.handle((result, ex) -> {
-       if (ex != null) {
-           System.out.println("Exception occurred: " + ex.getMessage());
-           return 0;  // Fallback value
-       }
-       return result * 2;
-   }).thenAccept(result -> System.out.println("Result: " + result));
-   ```
-
-   **Output:**
-   ```
-   Exception occurred: Something went wrong!
-   Result: 0
-   ```
-
-#### 3. **`whenComplete()`**  
-   The `whenComplete()` method allows you to perform some action when a `CompletableFuture` is completed, regardless of whether it was completed normally or exceptionally. It provides a `BiConsumer<T, Throwable>` where you can handle the result and the exception. The main difference between `whenComplete()` and `handle()` is that `whenComplete()` cannot modify the result; it’s just for performing side-effects (like logging or cleanup).
-
-   - **Usage**: It’s used for logging or side effects after a `CompletableFuture` completes (without modifying the result).
-   - **Example**:
-
-   ```java
-   CompletableFuture<Integer> future = CompletableFuture.supplyAsync(() -> {
-       if (true) throw new RuntimeException("Something went wrong!");
-       return 5;
-   });
-
-   future.whenComplete((result, ex) -> {
-       if (ex != null) {
-           System.out.println("Exception occurred: " + ex.getMessage());
-       } else {
-           System.out.println("Result: " + result);
-       }
-   }).thenAccept(result -> System.out.println("Final Result: " + result));
-   ```
-
-   **Output:**
-   ```
-   Exception occurred: Something went wrong!
-   Final Result: null
-   ```
-
-### Which Method to Call When Handling Two `CompletableFuture` Instances?
-
-If you have two `CompletableFuture` instances and need to handle them or combine their results, the method you call depends on what you're trying to do:
-
-1. **Combine the Results of Two `CompletableFuture`s**
-   - If you want to combine two independent `CompletableFuture`s and handle both results (or handle an exception from either), use `thenCombine()`, `thenAcceptBoth()`, or `allOf()`.
-
-   #### `thenCombine()`
-   - This method is used to combine the results of two `CompletableFuture` instances. It takes two `CompletableFuture` instances, performs the tasks in parallel, and combines their results into one.
-   - **Usage**: Used when you want to perform a combination of the results of two `CompletableFuture`s.
-   - **Example**:
-
-     ```java
-     CompletableFuture<Integer> future1 = CompletableFuture.supplyAsync(() -> 5);
-     CompletableFuture<Integer> future2 = CompletableFuture.supplyAsync(() -> 10);
-
-     future1.thenCombine(future2, (result1, result2) -> result1 + result2)
-            .thenAccept(result -> System.out.println("Combined Result: " + result));
-     ```
-
-     **Output:**
-     ```
-     Combined Result: 15
-     ```
-
-2. **Wait for Both `CompletableFuture`s to Complete**
-   - If you want to wait for both `CompletableFuture`s to complete (whether normally or exceptionally), and you do not need to combine their results, use `allOf()` or `anyOf()`.
-
-   #### `allOf()`
-   - This method returns a new `CompletableFuture<Void>` that completes when all given `CompletableFuture`s complete.
-   - **Usage**: Used when you need to wait for all futures to complete before proceeding, without worrying about individual results.
-   - **Example**:
-
-     ```java
-     CompletableFuture<Void> allOf = CompletableFuture.allOf(
-         CompletableFuture.supplyAsync(() -> 5),
-         CompletableFuture.supplyAsync(() -> 10)
-     );
-     allOf.join();  // Wait for both to complete
-     System.out.println("Both futures are complete.");
-     ```
-
-     **Output:**
-     ```
-     Both futures are complete.
-     ```
-
-   #### `anyOf()`
-   - This method returns a new `CompletableFuture<Object>` that completes when any one of the given `CompletableFuture`s completes.
-   - **Usage**: Used when you only care about the completion of any one of the futures.
-   - **Example**:
-
-     ```java
-     CompletableFuture<Object> anyOf = CompletableFuture.anyOf(
-         CompletableFuture.supplyAsync(() -> 5),
-         CompletableFuture.supplyAsync(() -> 10)
-     );
-     System.out.println("First completed future: " + anyOf.join());
-     ```
-
-     **Output:**
-     ```
-     First completed future: 5
-     ```
-
-3. **Handling Exceptions in Multiple `CompletableFuture` Instances**
-   - If you have multiple `CompletableFuture` instances and want to handle exceptions across all of them, you can use `handle()` or `exceptionally()` on each individual `CompletableFuture`.
-   - Alternatively, you can use `whenComplete()` to ensure that any exception in the completion of any `CompletableFuture` is logged or handled.
-
-### Example of Handling Exceptions in Two `CompletableFuture`s
-
-```java
-import java.util.concurrent.CompletableFuture;
-
-public class CompletableFutureExample {
-    public static void main(String[] args) {
-        CompletableFuture<Integer> future1 = CompletableFuture.supplyAsync(() -> 5);
-        CompletableFuture<Integer> future2 = CompletableFuture.supplyAsync(() -> {
-            if (true) throw new RuntimeException("Error in future2");
-            return 10;
-        });
-
-        CompletableFuture<Void> combined = CompletableFuture.allOf(future1, future2)
-            .handle((result, ex) -> {
-                if (ex != null) {
-                    System.out.println("Exception: " + ex.getMessage());
-                } else {
-                    System.out.println("Both futures completed");
-                }
-                return null;
-            });
-
-        combined.join(); // Wait for both futures to complete
-    }
-}
-```
-
-**Output:**
-```
-Exception: Error in future2
-```
-
-### Summary of Methods:
-
-- **`exceptionally()`**: Handles exceptions and provides a fallback value.
-- **`handle()`**: Handles both the result and exception, and can modify the result.
-- **`whenComplete()`**: Handles side-effects like logging, but doesn't modify the result.
-- **`thenCombine()`**: Combines the results of two `CompletableFuture` instances.
-- **`allOf()`**: Waits for all `CompletableFuture` instances to complete.
-- **`anyOf()`**: Waits for any one `CompletableFuture` to complete.
-
-By using these methods appropriately, you can create robust, non-blocking applications that handle both successful results and errors in a clean and efficient way.
-
-### Summary
-Java 8 introduced significant features that enhance the language's expressiveness and performance, especially in functional programming, concurrency, and data manipulation. These improvements have made Java more modern and aligned with other programming paradigms.
-
-Here is a tabular representation of the main methods provided by `CompletableFuture` in Java. These methods are used to manage asynchronous computation and allow you to handle results, exceptions, and combine multiple `CompletableFuture` instances.
-
-| **Method**                         | **Description**                                                                 | **Return Type**                      | **Example Usage**                                                                                                                                                    |
-|------------------------------------|---------------------------------------------------------------------------------|--------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `supplyAsync()`                    | Executes a task asynchronously and supplies a result.                           | `CompletableFuture<T>`               | `CompletableFuture<Integer> future = CompletableFuture.supplyAsync(() -> 5);`                                   |
-| `runAsync()`                       | Executes a task asynchronously that does not return any result.                 | `CompletableFuture<Void>`            | `CompletableFuture<Void> future = CompletableFuture.runAsync(() -> System.out.println("Task executed"));`            |
-| `thenApply()`                      | Transforms the result of a `CompletableFuture` once it completes successfully.  | `CompletableFuture<R>`               | `future.thenApply(result -> result * 2)`                                                                                                                             |
-| `thenAccept()`                     | Consumes the result of a `CompletableFuture` when it completes successfully.    | `CompletableFuture<Void>`            | `future.thenAccept(result -> System.out.println(result))`                                                                                                            |
-| `thenRun()`                        | Runs a task after the `CompletableFuture` completes successfully.               | `CompletableFuture<Void>`            | `future.thenRun(() -> System.out.println("Task completed"))`                                                                                                         |
-| `thenCombine()`                    | Combines the results of two `CompletableFuture` instances.                      | `CompletableFuture<R>`               | `future1.thenCombine(future2, (result1, result2) -> result1 + result2)`                                         |
-| `thenAcceptBoth()`                 | Consumes the results of two `CompletableFuture` instances when both are done.   | `CompletableFuture<Void>`            | `future1.thenAcceptBoth(future2, (result1, result2) -> System.out.println(result1 + result2))`                   |
-| `applyToEither()`                  | Applies a function to the result of the first completed `CompletableFuture`.    | `CompletableFuture<R>`               | `future1.applyToEither(future2, result -> result * 2)`                                                                                                               |
-| `acceptEither()`                   | Consumes the result of the first completed `CompletableFuture`.                 | `CompletableFuture<Void>`            | `future1.acceptEither(future2, result -> System.out.println(result))`                                                                                                |
-| `allOf()`                          | Waits for all provided `CompletableFuture` instances to complete.               | `CompletableFuture<Void>`            | `CompletableFuture<Void> allOf = CompletableFuture.allOf(future1, future2)`                                    |
-| `anyOf()`                          | Waits for any of the provided `CompletableFuture` instances to complete.        | `CompletableFuture<Object>`          | `CompletableFuture<Object> anyOf = CompletableFuture.anyOf(future1, future2)`                                 |
-| `exceptionally()`                  | Handles exceptions that occur in a `CompletableFuture`.                         | `CompletableFuture<T>`               | `future.exceptionally(ex -> { System.out.println(ex.getMessage()); return 0; })`                               |
-| `handle()`                         | Handles both the result and exception of a `CompletableFuture`.                 | `CompletableFuture<T>`               | `future.handle((result, ex) -> { return (ex != null) ? 0 : result; })`                                         |
-| `whenComplete()`                   | Performs a side-effect action after the `CompletableFuture` completes.          | `CompletableFuture<T>`               | `future.whenComplete((result, ex) -> { if (ex != null) System.out.println(ex.getMessage()); })`                |
-| `obtrudeValue()`                   | Sets a result to a `CompletableFuture` that has already been completed.         | `CompletableFuture<T>`               | `future.obtrudeValue(10)`                                                                                                                                            |
-| `obtrudeException()`               | Sets an exception to a `CompletableFuture` that has already been completed.     | `CompletableFuture<T>`               | `future.obtrudeException(new RuntimeException("Error"))`                                                                                                            |
-| `join()`                           | Waits for the `CompletableFuture` to complete and returns the result.           | `T`                                  | `Integer result = future.join();`                                                                                                                                    |
-| `get()`                            | Waits for the `CompletableFuture` to complete and returns the result (throws checked exceptions). | `T`                                  | `Integer result = future.get();`                                                                                                                                     |
-| `getNow()`                         | Returns the result if the `CompletableFuture` has completed, or a default value otherwise. | `T`                                  | `Integer result = future.getNow(0);`                                                                                                                                 |
-| `isDone()`                         | Checks if the `CompletableFuture` has completed.                                | `boolean`                            | `boolean completed = future.isDone();`                                                                                                                                |
-| `isCompletedExceptionally()`       | Checks if the `CompletableFuture` completed exceptionally.                     | `boolean`                            | `boolean failed = future.isCompletedExceptionally();`                                                                                                              |
-| `cancel()`                         | Attempts to cancel the `CompletableFuture`.                                     | `boolean`                            | `boolean cancelled = future.cancel(true);`                                                                                                                            |
-
-### Summary of Key Methods:
-- **Async Execution**: `supplyAsync()`, `runAsync()`
-- **Result Transformation**: `thenApply()`, `thenAccept()`, `thenRun()`
-- **Combining Futures**: `thenCombine()`, `thenAcceptBoth()`
-- **Handling Multiple Futures**: `allOf()`, `anyOf()`
-- **Exception Handling**: `exceptionally()`, `handle()`, `whenComplete()`
-- **Completion Methods**: `join()`, `get()`, `getNow()`
-- **Completion State**: `isDone()`, `isCompletedExceptionally()`
-
-These methods allow you to handle asynchronous tasks effectively, manage dependencies between them, and deal with exceptions or timeouts gracefully.
-
-Certainly! Below is a complete Java program that demonstrates the usage of **all the methods** listed in the table for `CompletableFuture`:
-
-```java
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
-
-public class CompletableFutureExample {
-
-    public static void main(String[] args) {
-
-        // supplyAsync() - Executes a task asynchronously and supplies a result.
-        CompletableFuture<Integer> future1 = CompletableFuture.supplyAsync(() -> {
-            System.out.println("Task 1: Running asynchronously");
-            return 5;  // Simulating computation
-        });
-
-        // runAsync() - Executes a task asynchronously that does not return any result.
-        CompletableFuture<Void> future2 = CompletableFuture.runAsync(() -> {
-            System.out.println("Task 2: Running asynchronously without a result");
-        });
-
-        // thenApply() - Transforms the result of a CompletableFuture once it completes.
-        CompletableFuture<Integer> transformedFuture = future1.thenApply(result -> {
-            System.out.println("Task 1 result doubled: " + result * 2);
-            return result * 2;
-        });
-
-        // thenAccept() - Consumes the result of a CompletableFuture when it completes.
-        future1.thenAccept(result -> {
-            System.out.println("Task 1 result consumed: " + result);
-        });
-
-        // thenRun() - Runs a task after the CompletableFuture completes successfully.
-        future1.thenRun(() -> {
-            System.out.println("Task 1: Completed successfully, running post-task");
-        });
-
-        // thenCombine() - Combines the results of two CompletableFutures.
-        CompletableFuture<Integer> future3 = CompletableFuture.supplyAsync(() -> {
-            return 3;
-        });
-        future1.thenCombine(future3, (result1, result2) -> {
-            int combinedResult = result1 + result2;
-            System.out.println("Combined result: " + combinedResult);
-            return combinedResult;
-        });
-
-        // thenAcceptBoth() - Consumes the results of two CompletableFuture instances when both are done.
-        future1.thenAcceptBoth(future3, (result1, result2) -> {
-            System.out.println("Task 1 and 3 results consumed together: " + (result1 + result2));
-        });
-
-        // applyToEither() - Applies a function to the result of the first completed CompletableFuture.
-        CompletableFuture<Integer> future4 = CompletableFuture.supplyAsync(() -> {
-            return 10;
-        });
-        future1.applyToEither(future4, result -> {
-            System.out.println("First completed result: " + result);
-            return result;
-        });
-
-        // acceptEither() - Consumes the result of the first completed CompletableFuture.
-        future1.acceptEither(future4, result -> {
-            System.out.println("First completed result consumed: " + result);
-        });
-
-        // allOf() - Waits for all provided CompletableFutures to complete.
-        CompletableFuture<Void> allOf = CompletableFuture.allOf(future1, future2, future3);
-        allOf.thenRun(() -> {
-            System.out.println("All futures completed");
-        });
-
-        // anyOf() - Waits for any of the provided CompletableFutures to complete.
-        CompletableFuture<Object> anyOf = CompletableFuture.anyOf(future1, future3);
-        anyOf.thenAccept(result -> {
-            System.out.println("Any future completed with result: " + result);
-        });
-
-        // exceptionally() - Handles exceptions that occur in a CompletableFuture.
-        CompletableFuture<Integer> future5 = CompletableFuture.supplyAsync(() -> {
-            throw new RuntimeException("Exception occurred");
-        }).exceptionally(ex -> {
-            System.out.println("Handled exception: " + ex.getMessage());
-            return -1; // Default value in case of error
-        });
-
-        // handle() - Handles both the result and exception of a CompletableFuture.
-        future5.handle((result, ex) -> {
-            if (ex != null) {
-                System.out.println("Handled exception in handle: " + ex.getMessage());
-                return 0;  // Default value
-            } else {
-                return result;
-            }
-        });
-
-        // whenComplete() - Performs a side-effect action after the CompletableFuture completes.
-        future1.whenComplete((result, ex) -> {
-            if (ex != null) {
-                System.out.println("Handled exception in whenComplete: " + ex.getMessage());
-            } else {
-                System.out.println("Task 1 completed with result: " + result);
-            }
-        });
-
-        // obtrudeValue() - Sets a result to a CompletableFuture that has already been completed.
-        future1.obtrudeValue(100);
-        future1.thenAccept(result -> {
-            System.out.println("Obtruded value: " + result);  // Should print 100
-        });
-
-        // obtrudeException() - Sets an exception to a CompletableFuture that has already been completed.
-        future1.obtrudeException(new RuntimeException("Forced exception"));
-        future1.exceptionally(ex -> {
-            System.out.println("Obtruded exception handled: " + ex.getMessage());
-            return -1;
-        });
-
-        // join() - Waits for the CompletableFuture to complete and returns the result.
-        Integer resultFromJoin = future1.join();
-        System.out.println("Result from join: " + resultFromJoin);
-
-        // get() - Waits for the CompletableFuture to complete and returns the result (throws checked exceptions).
-        try {
-            Integer resultFromGet = future1.get();
-            System.out.println("Result from get: " + resultFromGet);
-        } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
-        }
-
-        // getNow() - Returns the result if the CompletableFuture has completed, or a default value otherwise.
-        Integer resultFromGetNow = future1.getNow(0);
-        System.out.println("Result from getNow: " + resultFromGetNow);
-
-        // isDone() - Checks if the CompletableFuture has completed.
-        boolean isDone = future1.isDone();
-        System.out.println("Is future1 done? " + isDone);
-
-        // isCompletedExceptionally() - Checks if the CompletableFuture completed exceptionally.
-        boolean isExceptional = future1.isCompletedExceptionally();
-        System.out.println("Did future1 complete exceptionally? " + isExceptional);
-
-        // cancel() - Attempts to cancel the CompletableFuture.
-        boolean isCancelled = future1.cancel(true);
-        System.out.println("Was future1 cancelled? " + isCancelled);
-    }
-}
-```
-
-### Explanation of Code:
-
-- **Async Execution**:
-  - `supplyAsync()`: Creates a `CompletableFuture` that computes a result asynchronously.
-  - `runAsync()`: Creates a `CompletableFuture` that runs a task asynchronously but does not return a result.
-  
-- **Result Transformation**:
-  - `thenApply()`: Transforms the result of `future1` once it completes.
-  - `thenAccept()`: Consumes the result of `future1` once it completes.
-  - `thenRun()`: Runs a post-task after `future1` completes.
-
-- **Combining Futures**:
-  - `thenCombine()`: Combines the results of `future1` and `future3`.
-  - `thenAcceptBoth()`: Consumes the results of `future1` and `future3` together.
-  
-- **Handling Multiple Futures**:
-  - `applyToEither()`: Applies a function to the result of the first completed `CompletableFuture` between `future1` and `future4`.
-  - `acceptEither()`: Consumes the result of the first completed `CompletableFuture` between `future1` and `future4`.
-  - `allOf()`: Waits for `future1`, `future2`, and `future3` to complete.
-  - `anyOf()`: Waits for any of `future1` or `future3` to complete.
-
-- **Exception Handling**:
-  - `exceptionally()`: Handles any exception from `future5` and returns a default value.
-  - `handle()`: Handles both result and exception for `future5`.
-  - `whenComplete()`: Performs an action after `future1` completes, regardless of success or failure.
-
-- **Completion Methods**:
-  - `obtrudeValue()`: Overwrites the result of `future1` with `100`.
-  - `obtrudeException()`: Forces an exception in `future1` and handles it using `exceptionally()`.
-  - `join()`: Waits for `future1` to complete and returns the result.
-  - `get()`: Waits for `future1` to complete and returns the result, with exception handling.
-  - `getNow()`: Returns the result of `future1` if it is completed, otherwise returns a default value.
-
-- **Completion State**:
-  - `isDone()`: Checks if `future1` is completed.
-  - `isCompletedExceptionally()`: Checks if `future1` completed exceptionally.
-  - `cancel()`: Attempts to cancel `future1`.
-
-### Expected Output:
-
-```
-Task 1: Running asynchronously
-Task 2: Running asynchronously without a result
-Task 1 result doubled: 10
-Task 1 result consumed: 5
-Task 1: Completed successfully, running post-task
-Combined result: 8
-Task 1 and 3 results consumed together: 8
-First completed result: 5
-First completed result consumed: 5
-All futures completed
-Any future completed with result: 5
-Handled exception: Exception occurred
-Handled exception in handle: Exception occurred
-Task 1 completed with result: 5
-Obtruded value: 100
-Obtruded exception handled: Forced exception
-Result from join: 100
-Result from get: 100
-
-
-Result from getNow: 100
-Is future1 done? true
-Did future1 complete exceptionally? true
-Was future1 cancelled? false
-```
-
-This program demonstrates the usage of **all the methods** from the table in various combinations. It shows how to manage asynchronous tasks, handle results and exceptions, and combine multiple `CompletableFuture` instances.
-
----
-
-## New features introduced in Java 8 Collections Framework
-
-Java 8 introduced several enhancements and new features to the Java Collections Framework, making it more powerful and easier to use. Here are some of the key updates:
-
-### 1. **Stream API**
-- **Description**: Allows for functional-style operations on streams of elements (like collections). You can perform operations such as filtering, mapping, and reducing.
-- **Example**:
-  ```java
-  List<String> names = Arrays.asList("Alice", "Bob", "Charlie");
-  List<String> filteredNames = names.stream()
-                                     .filter(name -> name.startsWith("A"))
-                                     .collect(Collectors.toList());
-  ```
-
-### 2. **Default Methods in Interfaces**
-- **Description**: Interfaces in the collections framework can now have default methods, providing additional functionality without breaking existing implementations.
-- **Example**:
-  ```java
-  interface MyCollection<E> extends Collection<E> {
-      default void printAll() {
-          for (E element : this) {
-              System.out.println(element);
-          }
-      }
-  }
-  ```
-
-### 3. **Optional Class**
-- **Description**: While not specifically part of the collections framework, `Optional` is used with collections to avoid `NullPointerException` when dealing with optional values.
-- **Example**:
-  ```java
-  Optional<String> nameOpt = names.stream()
-                                   .filter(name -> name.startsWith("A"))
-                                   .findFirst();
-  ```
-
-### 4. **New Methods in Collection Interfaces**
-- **Description**: Several interfaces in the collections framework received new default methods:
-  - **forEach**: Iterates over the elements and applies a specified action.
-  - **spliterator**: Creates a `Spliterator` for parallel processing of collections.
-  - **removeIf**: Removes elements that satisfy a given predicate.
-  - **stream**: Returns a sequential stream with the collection as its source.
-
-- **Example**:
-  ```java
-  List<String> names = new ArrayList<>(Arrays.asList("Alice", "Bob", "Charlie"));
-  names.removeIf(name -> name.startsWith("B")); // Removes names starting with 'B'
-  ```
-
-### 5. **New `Collectors` Utility**
-- **Description**: The `Collectors` utility class provides various static methods for collecting results from streams, such as:
-  - `toList()`
-  - `toSet()`
-  - `toMap()`
-  - `joining()`
-  - `groupingBy()`
-  - `partitioningBy()`
-
-- **Example**:
-  ```java
-  Map<Character, List<String>> groupedByFirstLetter = names.stream()
-      .collect(Collectors.groupingBy(name -> name.charAt(0)));
-  ```
-
-### 6. **Concurrent Collections Enhancements**
-- **Description**: Improvements to concurrent collections, including `ConcurrentHashMap` having new methods like `forEach`, `reduce`, and more for better parallelism and performance.
-
-### 7. **Deque Interface Enhancements**
-- **Description**: The `Deque` interface has methods like `offerFirst`, `offerLast`, `pollFirst`, and `pollLast` to simplify operations on double-ended queues.
-
-### Summary
-Java 8 significantly enhanced the Java Collections Framework, particularly through the introduction of the Stream API, default methods, and various utility methods for easier data manipulation. These improvements have made it simpler to perform complex data operations while maintaining readability and conciseness.
 
 ## Java Thread
 
@@ -3216,6 +1934,1289 @@ A memory leak in Java occurs when the Java Virtual Machine (JVM) retains referen
 ### Conclusion
 
 By being mindful of object references, employing the right patterns, and regularly profiling your application, you can effectively prevent memory leaks and maintain optimal memory management in your Java applications.
+
+---
+
+Java 8 and beyond introduced several important updates and improvements to the **Java Collections Framework**. These updates enhance the flexibility, performance, and ease of use of collections in Java. Below are the key updates and new features related to the Collections Framework:
+
+---
+
+### **1. Stream API (Java 8)**
+One of the most significant additions to the Collections Framework in Java 8 is the **Stream API**. The Stream API allows you to process sequences of elements (such as collections, arrays, or I/O channels) in a functional style, enabling efficient, declarative operations on data.
+
+#### Key Features of Streams:
+- **Declarative Operations**: Perform operations like filtering, mapping, reducing, sorting, and collecting in a clean, readable, and functional way.
+- **Parallel Processing**: Streams can be processed in parallel, making it easier to leverage multi-core processors.
+- **Laziness**: Streams are lazy, meaning computations are only performed when a terminal operation (like `collect()`, `forEach()`, or `reduce()`) is invoked.
+
+#### Example:
+```java
+List<String> words = Arrays.asList("apple", "banana", "cherry", "date");
+// Filter and print words starting with "b"
+words.stream()
+     .filter(word -> word.startsWith("b"))
+     .forEach(System.out::println);  // Output: banana
+```
+Streams can also be processed in parallel:
+```java
+words.parallelStream()
+     .filter(word -> word.startsWith("b"))
+     .forEach(System.out::println);
+```
+
+---
+
+### **2. Default and Static Methods in Interfaces (Java 8)**
+Java 8 introduced **default** and **static** methods in interfaces, allowing developers to add methods to interfaces without breaking the existing implementation.
+#### a) **Default Methods**
+A **default method** in an interface allows you to provide a default implementation for a method. This is especially useful for adding new methods to interfaces without breaking existing implementations.
+```java
+interface MyList {
+    default void printList() {
+        System.out.println("Printing list");
+    }
+}
+class MyListImpl implements MyList {
+    // No need to implement printList() since it has a default implementation
+}
+```
+
+#### b) **Static Methods**
+Static methods in interfaces allow you to define utility methods that can be invoked without creating an instance of the implementing class.
+```java
+interface MyList {
+    static void printListStatic() {
+        System.out.println("Printing static list");
+    }
+}
+```
+
+---
+
+### **3. New Collection Classes (Java 8)**
+Java 8 introduced new classes and methods to the **`java.util.concurrent`** package, which enhances concurrency support and adds more powerful utilities for managing collections in a multi-threaded environment.
+
+#### a) **ConcurrentMap** Enhancements
+`ConcurrentMap` is an interface that extends `Map` and adds atomic operations for thread-safe modifications. Java 8 added new methods such as:
+- `compute()`, `computeIfAbsent()`, `computeIfPresent()`
+- `merge()`
+Example using `computeIfAbsent()`:
+```java
+ConcurrentMap<String, Integer> map = new ConcurrentHashMap<>();
+map.computeIfAbsent("key", k -> 42);  // Only computes if absent, else returns the existing value.
+```
+
+#### b) **CopyOnWriteArrayList and CopyOnWriteArraySet**
+These thread-safe variants of `ArrayList` and `HashSet` are optimized for scenarios where read operations dominate and few modifications are made. The data structure creates a new copy of the list or set whenever it's modified, ensuring thread safety without synchronization overhead.
+
+---
+### **4. The `forEach` Method (Java 8)**
+Java 8 introduced the `forEach()` method to the `Collection` interface, enabling a more concise and readable way to iterate over collections using lambdas. It replaces the traditional `for` loop or `Iterator` pattern.
+```java
+List<String> words = Arrays.asList("apple", "banana", "cherry");
+words.forEach(word -> System.out.println(word));  // Output: apple, banana, cherry
+```
+Internally, `forEach()` uses the `Consumer` functional interface, which allows you to process each element in the collection.
+
+---
+### **5. `List`, `Set`, and `Map` Enhancements (Java 8)**
+Java 8 added several new methods to the `List`, `Set`, and `Map` interfaces to improve functionality and usability.
+#### a) **List Interface Enhancements**
+- **`replaceAll()`**: A method to replace each element of the list using the given operator.
+  
+```java
+List<Integer> numbers = Arrays.asList(1, 2, 3, 4, 5);
+numbers.replaceAll(n -> n * 2);  // Doubles each element in the list
+```
+- **`sort()`**: A method to sort the list in-place using the specified comparator.
+```java
+List<Integer> numbers = Arrays.asList(5, 3, 8, 1);
+numbers.sort(Integer::compareTo);  // Sort in ascending order
+```
+#### b) **Set Interface Enhancements**
+- **`removeIf()`**: A method that removes elements based on a predicate.
+  
+```java
+Set<Integer> numbers = new HashSet<>(Arrays.asList(1, 2, 3, 4, 5));
+numbers.removeIf(n -> n % 2 == 0);  // Removes even numbers
+```
+#### c) **Map Interface Enhancements**
+- **`forEach()`**: This method allows you to iterate over key-value pairs.
+  
+```java
+Map<String, Integer> map = new HashMap<>();
+map.put("a", 1);
+map.put("b", 2);
+map.forEach((key, value) -> System.out.println(key + " = " + value));
+```
+- **`compute()`, `computeIfAbsent()`, and `computeIfPresent()`**: These methods provide atomic operations for modifying values in a map.
+Example using `computeIfAbsent()`:
+```java
+Map<String, Integer> map = new HashMap<>();
+map.computeIfAbsent("key", k -> 42);  // Computes a value if the key is absent
+```
+---
+### **6. `Collectors` Utility Class (Java 8)**
+Java 8 introduced the **`Collectors`** utility class in the `java.util.stream` package, which provides various predefined collection strategies for reducing and collecting the results of a stream operation.
+#### Common Collectors:
+- **`toList()`**: Collects the stream into a `List`.
+- **`toSet()`**: Collects the stream into a `Set`.
+- **`joining()`**: Concatenates the elements of a stream into a single `String`.
+- **`groupingBy()`**: Groups the elements of a stream by a classifier function.
+Example:
+```java
+List<String> words = Arrays.asList("apple", "banana", "cherry");
+String result = words.stream().collect(Collectors.joining(", "));  // "apple, banana, cherry"
+```
+- **`groupingBy()`**: Groups the stream elements by a given key.
+```java
+Map<Integer, List<String>> grouped = words.stream()
+    .collect(Collectors.groupingBy(String::length));
+```
+---
+### **7. `Spliterator` (Java 8)**
+Java 8 introduced **`Spliterator`**, a new interface that helps in efficiently dividing and processing large datasets in parallel. The `Spliterator` can be used for parallel stream processing, making it more efficient for large collections.
+It provides methods such as:
+- `trySplit()`: Splits the data into smaller parts for parallel processing.
+- `forEachRemaining()`: Processes the remaining elements.
+Example:
+```java
+List<String> words = Arrays.asList("apple", "banana", "cherry");
+Spliterator<String> spliterator = words.spliterator();
+spliterator.forEachRemaining(System.out::println);
+```
+---
+### **8. Immutable Collections (Java 9)**
+Java 9 introduced **immutable collections** with a convenient factory API for creating immutable lists, sets, and maps.
+#### Example of Immutable Collections:
+```java
+List<String> list = List.of("apple", "banana", "cherry");
+Set<String> set = Set.of("apple", "banana", "cherry");
+Map<String, Integer> map = Map.of("a", 1, "b", 2);
+list.add("date");  // Throws UnsupportedOperationException
+```
+- These collections are unmodifiable, which means once they are created, their contents cannot be modified.
+
+---
+
+### **9. `ConcurrentSkipListMap` and `ConcurrentSkipListSet` (Java 6)**
+
+Although not a feature of Java 8, the **`ConcurrentSkipListMap`** and **`ConcurrentSkipListSet`** are thread-safe, sorted collections introduced earlier in Java 6. These are a part of the `java.util.concurrent` package and are often used when you need thread-safe access to sorted data.
+
+---
+### **10. `var` Keyword (Java 10)**
+Java 10 introduced **local variable type inference** via the `var` keyword. This allows you to omit the explicit type declaration for local variables when it can be inferred from the context.
+Example:
+```java
+var list = new ArrayList<String>();  // Type is inferred as ArrayList<String>
+```
+This makes working with collections more concise.
+---
+### **Summary of Key Collection Framework Updates:**
+- **Stream API**: Provides a functional approach to working with collections (filtering, mapping, reducing).
+- **Default and Static Methods in Interfaces**: Added default behavior and utility methods to interfaces.
+- **Enhanced Methods in `List
+`, `Set`, and `Map`**: New methods like `replaceAll()`, `removeIf()`, and `forEach()` for more functional-style operations.
+- **Immutable Collections**: Java 9 introduced factory methods to create unmodifiable collections.
+- **Concurrency Utilities**: Enhancements in `ConcurrentMap`, `CopyOnWriteArrayList`, etc., for more efficient multi-threaded access.
+- **Collectors**: A utility class for collecting stream results with predefined strategies like `groupingBy()`, `joining()`, etc.
+- **Spliterator**: Supports parallel processing of collections with a customizable splitting mechanism.
+These updates provide developers with more flexible, efficient, and functional tools for managing collections and parallelism in Java.
+
+---
+
+## New features introduced in Java 8
+
+Java 8 introduced several significant features and enhancements that greatly improved the language and the Java Development Kit (JDK). Here are some of the key features:
+
+### 1. Lambda Expressions
+- **Description**: Provides a clear and concise way to represent a function as an object. It enables functional programming in Java, allowing you to pass behavior as a parameter.
+- **Example**:
+  ```java
+  (a, b) -> a + b; // A simple lambda expression that adds two numbers.
+  ```
+
+Lambda expressions, introduced in Java 8, provide a clear and concise way to represent functional interfaces (interfaces with a single abstract method). They enable functional programming capabilities in Java, allowing you to treat behavior as a parameter and pass around functionality.
+
+### 1. Basic Syntax
+The syntax of a lambda expression is as follows:
+```java
+(parameters) -> expression
+```
+or, for more complex bodies:
+```java
+(parameters) -> { statements; }
+```
+
+### 2. Functional Interfaces
+A functional interface is an interface that contains exactly one abstract method. Lambda expressions can be used to create instances of functional interfaces. Common examples include:
+- `Runnable`
+- `Callable`
+- `Comparator`
+- `Consumer`
+- `Supplier`
+- `Function`
+- `Predicate`
+
+#### Example:
+```java
+@FunctionalInterface
+interface MyFunctionalInterface {
+    void execute();
+}
+
+MyFunctionalInterface myLambda = () -> System.out.println("Executing...");
+myLambda.execute();
+```
+
+### 3. Types of Lambda Expressions
+Lambda expressions can be categorized based on the number of parameters and the type of body:
+
+- **No Parameters**:
+  ```java
+  () -> System.out.println("Hello, World!");
+  ```
+
+- **Single Parameter (Type Inference)**:
+  ```java
+  x -> x * x; // No need for parentheses for a single parameter
+  ```
+
+- **Multiple Parameters**:
+  ```java
+  (x, y) -> x + y;
+  ```
+
+- **Block Body**:
+  ```java
+  (int x, int y) -> {
+      int sum = x + y;
+      return sum;
+  };
+  ```
+
+### 4. Using Lambda Expressions
+Lambda expressions can be used with Java's Collections Framework, particularly with the Stream API, to perform operations like filtering, mapping, and reducing.
+
+#### Example with Streams:
+```java
+List<String> names = Arrays.asList("Alice", "Bob", "Charlie", "David");
+names.stream()
+     .filter(name -> name.startsWith("A"))
+     .forEach(name -> System.out.println(name));
+```
+
+### 5. Method References
+Lambda expressions can often be replaced with method references for improved readability. Method references are a shorthand notation for calling methods.
+
+#### Syntax:
+- **Static Method Reference**: `ClassName::methodName`
+- **Instance Method Reference**: `instance::methodName`
+- **Constructor Reference**: `ClassName::new`
+
+#### Example:
+```java
+names.forEach(System.out::println); // Method reference instead of lambda
+```
+
+### 6. Benefits of Lambda Expressions
+- **Conciseness**: Reduces boilerplate code, especially for simple implementations.
+- **Readability**: Makes the code more readable and expressive.
+- **Enhanced Functionality**: Facilitates functional programming constructs such as higher-order functions.
+
+### 7. Capturing Variables
+Lambda expressions can capture variables from their enclosing context (effectively final variables).
+
+#### Example:
+```java
+int threshold = 5;
+Predicate<Integer> filter = num -> num > threshold; // Captures `threshold`
+```
+
+### 8. Scope and `this`
+Within a lambda expression, `this` refers to the enclosing class instance, not the lambda itself.
+
+#### Example:
+```java
+class Outer {
+    void outerMethod() {
+        Runnable r = () -> System.out.println(this); // Refers to Outer instance
+    }
+}
+```
+
+### 9. Limitations
+- **No `this` or `super`**: Lambda expressions cannot declare their own `this` or `super`, as they inherit from the enclosing context.
+- **No checked exceptions**: You cannot throw checked exceptions from a lambda unless they are handled.
+
+### 10. Use Cases
+- **Event Handling**: Useful in GUI applications for handling events.
+- **Functional Programming**: Streamlining functional operations on collections.
+- **Parallel Processing**: Using streams to process collections in parallel.
+
+### Conclusion
+Lambda expressions in Java 8 represent a powerful addition to the language, allowing for more expressive, concise, and functional-style programming. By enabling the use of functional interfaces, they significantly enhance the way Java developers can write code, particularly when working with collections and streams. 
+
+---
+
+In Java 8, **lambda expressions** were introduced as a way to provide a clear and concise syntax for writing anonymous methods (i.e., methods without a name). They are primarily used to implement functional interfaces (interfaces with a single abstract method), and they simplify the syntax for passing behavior as parameters.
+
+### Key Characteristics of Lambda Expressions:
+1. **Concise Syntax**: Lambda expressions allow you to write code more compactly, eliminating the need for boilerplate code (such as anonymous classes).
+2. **Functional Interface**: A lambda expression works with functional interfaces, which are interfaces that contain exactly one abstract method. These interfaces are typically used to represent behavior that can be passed around as parameters to methods.
+3. **First-Class Function**: Lambdas allow you to treat behavior as a parameter (e.g., passing functions as arguments to methods), making it easier to pass functionality around in Java.
+
+### Basic Syntax of Lambda Expression:
+
+The general syntax of a lambda expression is:
+
+```java
+(parameter1, parameter2, ...) -> expression
+```
+
+Alternatively, it can have a block of code as the body:
+
+```java
+(parameter1, parameter2, ...) -> {
+    // body with multiple statements
+}
+```
+
+### Example 1: Simple Lambda Expression
+
+Suppose we have a functional interface:
+
+```java
+@FunctionalInterface
+interface Greeting {
+    void greet(String name);
+}
+```
+
+Using a lambda expression to implement the interface:
+
+```java
+public class LambdaExample {
+    public static void main(String[] args) {
+        // Using a lambda expression to implement the greet method
+        Greeting greeting = (name) -> System.out.println("Hello, " + name);
+        greeting.greet("John");
+    }
+}
+```
+
+**Output**:
+
+```
+Hello, John
+```
+
+### Example 2: Lambda with Multiple Parameters
+
+A lambda expression can take multiple parameters. Here's an example of adding two integers:
+
+```java
+@FunctionalInterface
+interface MathOperation {
+    int operation(int a, int b);
+}
+
+public class LambdaExample {
+    public static void main(String[] args) {
+        // Using lambda expression to add two numbers
+        MathOperation addition = (a, b) -> a + b;
+        System.out.println("Addition: " + addition.operation(10, 5)); // Output: 15
+    }
+}
+```
+
+**Output**:
+
+```
+Addition: 15
+```
+
+### Example 3: Lambda Expression with Block of Code
+
+When the lambda expression has more than one statement, it needs to be enclosed in braces `{}`.
+
+```java
+@FunctionalInterface
+interface MathOperation {
+    int operation(int a, int b);
+}
+
+public class LambdaExample {
+    public static void main(String[] args) {
+        // Using lambda with a block of code
+        MathOperation multiplication = (a, b) -> {
+            int result = a * b;
+            return result; // Return the result
+        };
+        System.out.println("Multiplication: " + multiplication.operation(10, 5)); // Output: 50
+    }
+}
+```
+
+**Output**:
+
+```
+Multiplication: 50
+```
+
+### Benefits of Lambda Expressions:
+1. **Concise and Readable Code**: Lambda expressions allow you to write more concise and readable code, reducing the need for boilerplate code such as anonymous inner classes.
+2. **Functional Programming**: Lambda expressions are a key part of functional programming in Java, enabling you to pass behavior as arguments and return values from methods more naturally.
+3. **Parallel Processing**: Lambdas, combined with streams, make it easier to perform operations like filtering, mapping, and reducing data in parallel.
+
+### Example 4: Lambda with `Streams` API
+
+Java 8 introduced the `Streams` API, which allows you to perform functional-style operations on collections of objects.
+
+```java
+import java.util.Arrays;
+import java.util.List;
+
+public class LambdaExample {
+    public static void main(String[] args) {
+        List<String> names = Arrays.asList("Alice", "Bob", "Charlie", "David");
+
+        // Using lambda with Streams API to filter and print names that start with 'A'
+        names.stream()
+             .filter(name -> name.startsWith("A"))
+             .forEach(name -> System.out.println(name));
+    }
+}
+```
+
+**Output**:
+
+```
+Alice
+```
+
+### Example 5: Lambda with `Comparator`
+
+Lambdas are frequently used with `Comparator` to sort collections:
+
+```java
+import java.util.Arrays;
+import java.util.List;
+
+public class LambdaExample {
+    public static void main(String[] args) {
+        List<Integer> numbers = Arrays.asList(3, 2, 1, 4, 5);
+
+        // Using lambda expression to sort the list
+        numbers.sort((a, b) -> a.compareTo(b));
+
+        System.out.println(numbers); // Output: [1, 2, 3, 4, 5]
+    }
+}
+```
+
+**Output**:
+
+```
+[1, 2, 3, 4, 5]
+```
+
+### Summary of Lambda Syntax:
+- **Single parameter**: `(param) -> expression`
+- **Multiple parameters**: `(param1, param2) -> expression`
+- **Block of code**: `(param1, param2) -> { code }`
+- **No parameter**: `() -> expression`
+
+### Conclusion:
+Lambda expressions in Java 8 are a powerful feature that simplifies the process of writing clean, efficient, and readable code. They enable functional programming capabilities by allowing you to pass behavior as parameters, work with `Streams`, and manipulate data in a concise way.
+
+---
+### 2. Streams API
+- **Description**: Introduces a new abstraction for processing sequences of elements (collections, arrays, etc.) in a functional style. It supports operations like filtering, mapping, and reducing.
+- **Example**:
+  ```java
+  List<String> names = Arrays.asList("Alice", "Bob", "Charlie");
+  List<String> filteredNames = names.stream()
+                                     .filter(name -> name.startsWith("A"))
+                                     .collect(Collectors.toList());
+  ```
+
+### 3. Default Methods
+- **Description**: Allows you to add new methods to interfaces with an implementation. This helps in evolving interfaces without breaking existing implementations.
+- **Example**:
+  ```java
+  interface MyInterface {
+      default void myDefaultMethod() {
+          System.out.println("Default implementation");
+      }
+  }
+  ```
+
+### 4. Method References
+- **Description**: A shorthand notation of a lambda expression to call a method. They enhance readability and can be used when you want to refer to a method without executing it.
+- **Example**:
+  ```java
+  List<String> names = Arrays.asList("Alice", "Bob", "Charlie");
+  names.forEach(System.out::println); // Method reference to print each name.
+  ```
+
+### 5. Optional Class
+- **Description**: A container object which may or may not contain a value, designed to help avoid `NullPointerException` and to provide a more expressive way of dealing with optional values.
+- **Example**:
+  ```java
+  Optional<String> optionalName = Optional.ofNullable(getName());
+  optionalName.ifPresent(name -> System.out.println(name));
+  ```
+
+### 6. New Date and Time API
+- **Description**: Introduces a comprehensive and immutable date and time API (java.time package) to handle dates and times more effectively than the old `java.util.Date` and `java.util.Calendar`.
+- **Example**:
+  ```java
+  LocalDate today = LocalDate.now();
+  LocalDate birthday = LocalDate.of(1990, Month.JANUARY, 1);
+  Period age = Period.between(birthday, today);
+  ```
+
+### 7. Nashorn JavaScript Engine
+- **Description**: A new lightweight JavaScript engine that allows you to execute JavaScript code on the Java Virtual Machine (JVM).
+- **Example**:
+  ```java
+  ScriptEngine engine = new ScriptEngineManager().getEngineByName("Nashorn");
+  engine.eval("print('Hello, Nashorn!');");
+  ```
+
+### 8. CompletableFuture
+- **Description**: A new class that represents a future result of an asynchronous computation. It allows you to write non-blocking code using a functional style.
+- **Example**:
+  ```java
+  CompletableFuture.supplyAsync(() -> {
+      return "Hello, World!";
+  }).thenAccept(result -> {
+      System.out.println(result);
+  });
+  ```
+
+## CompletableFuture: Depth Concept and Methods
+
+`CompletableFuture` in Java is part of the `java.util.concurrent` package and provides a powerful and flexible mechanism to handle asynchronous programming. It allows you to run code asynchronously, write non-blocking applications, and handle future results or exceptions. Unlike `Future`, which represents a task that will be completed at some point, `CompletableFuture` allows you to **explicitly complete** the future and also handle the result asynchronously.
+
+### Depth Concept of `CompletableFuture`
+
+1. **Asynchronous Execution**:  
+   The main feature of `CompletableFuture` is its ability to execute code asynchronously. A `CompletableFuture` represents a future result that may not be available yet. It can be completed at some point in the future by another thread.
+
+2. **Completing Futures**:  
+   The key aspect of `CompletableFuture` is its ability to be manually completed. You can complete it either normally (by providing a value) or exceptionally (by providing an exception). This is different from the regular `Future`, which is typically completed by the thread executing the task.
+
+3. **Chaining and Composition**:  
+   You can chain multiple asynchronous tasks together using methods like `thenApply`, `thenCompose`, and `thenAccept`, which allow you to compose asynchronous tasks that execute one after another.
+
+4. **Handling Results and Exceptions**:  
+   `CompletableFuture` provides methods to handle results and exceptions asynchronously, so you don’t have to block waiting for results.
+
+### Key Methods of `CompletableFuture`
+
+Here’s an overview of the main methods available in `CompletableFuture`:
+
+#### 1. **`supplyAsync(Supplier<U> supplier)`**
+   - **Description**: This method is used to asynchronously execute a task and return a result. It accepts a `Supplier` and runs it asynchronously, returning a `CompletableFuture<U>`.
+   - **Example**:
+     ```java
+     CompletableFuture<Integer> future = CompletableFuture.supplyAsync(() -> {
+         return 5 * 5;
+     });
+     ```
+
+#### 2. **`runAsync(Runnable runnable)`**
+   - **Description**: This method executes a `Runnable` asynchronously but does not return a result. It’s useful when you need to perform side-effects (e.g., logging or updating some state).
+   - **Example**:
+     ```java
+     CompletableFuture<Void> future = CompletableFuture.runAsync(() -> {
+         System.out.println("Running task asynchronously.");
+     });
+     ```
+
+#### 3. **`thenApply(Function<? super T,? extends U> fn)`**
+   - **Description**: This method is used to apply a function to the result of the future when it completes. It transforms the result and returns a new `CompletableFuture<U>`.
+   - **Example**:
+     ```java
+     CompletableFuture<Integer> result = CompletableFuture.supplyAsync(() -> 5)
+         .thenApply(value -> value * 2);
+     // result will contain 10
+     ```
+
+#### 4. **`thenAccept(Consumer<? super T> action)`**
+   - **Description**: This method is used when you just want to consume the result of a completed `CompletableFuture` without changing it. It applies a `Consumer` to the result.
+   - **Example**:
+     ```java
+     CompletableFuture<Void> result = CompletableFuture.supplyAsync(() -> 10)
+         .thenAccept(value -> System.out.println("Value: " + value));
+     // Output: "Value: 10"
+     ```
+
+#### 5. **`thenCompose(Function<? super T, ? extends CompletableFuture<U>> fn)`**
+   - **Description**: This method allows you to chain two asynchronous operations. Unlike `thenApply`, which returns a transformed result, `thenCompose` returns a new `CompletableFuture<U>`. It's useful for dependent asynchronous tasks.
+   - **Example**:
+     ```java
+     CompletableFuture<Integer> result = CompletableFuture.supplyAsync(() -> 5)
+         .thenCompose(value -> CompletableFuture.supplyAsync(() -> value * 2));
+     // result will contain 10
+     ```
+
+#### 6. **`exceptionally(Function<Throwable, ? extends T> fn)`**
+   - **Description**: This method allows you to handle exceptions that occur during asynchronous execution. If the `CompletableFuture` completes exceptionally, it will invoke the provided function to handle the exception and return a fallback value.
+   - **Example**:
+     ```java
+     CompletableFuture<Integer> result = CompletableFuture.supplyAsync(() -> {
+         if (true) throw new RuntimeException("Failure");
+         return 5;
+     }).exceptionally(ex -> {
+         System.out.println("Exception: " + ex.getMessage());
+         return 0;
+     });
+     // Output: Exception: Failure
+     // result will contain 0
+     ```
+
+#### 7. **`handle(BiFunction<? super T, Throwable, ? extends U> fn)`**
+   - **Description**: This method allows you to handle both the result and the exception in one step. It’s similar to `exceptionally`, but provides both the result and the exception (if any) to the handler.
+   - **Example**:
+     ```java
+     CompletableFuture<Integer> result = CompletableFuture.supplyAsync(() -> {
+         if (true) throw new RuntimeException("Failure");
+         return 5;
+     }).handle((res, ex) -> {
+         if (ex != null) {
+             System.out.println("Exception: " + ex.getMessage());
+             return 0;
+         }
+         return res * 2;
+     });
+     // Output: Exception: Failure
+     // result will contain 0
+     ```
+
+#### 8. **`whenComplete(BiConsumer<? super T, ? super Throwable> action)`**
+   - **Description**: Similar to `handle`, but doesn't allow you to modify the result. It just lets you observe the completion (whether successful or exceptionally).
+   - **Example**:
+     ```java
+     CompletableFuture<Integer> result = CompletableFuture.supplyAsync(() -> 5)
+         .whenComplete((res, ex) -> {
+             if (ex != null) {
+                 System.out.println("Exception: " + ex.getMessage());
+             } else {
+                 System.out.println("Result: " + res);
+             }
+         });
+     // Output: Result: 5
+     ```
+
+#### 9. **`join()`**
+   - **Description**: This method blocks the current thread and waits for the completion of the `CompletableFuture`. If it completes exceptionally, it throws an exception.
+   - **Example**:
+     ```java
+     Integer result = CompletableFuture.supplyAsync(() -> 5).join();
+     // result will contain 5
+     ```
+
+#### 10. **`get()`**
+   - **Description**: Similar to `join()`, but throws checked exceptions (`ExecutionException` or `InterruptedException`) if something goes wrong during the execution of the future.
+   - **Example**:
+     ```java
+     try {
+         Integer result = CompletableFuture.supplyAsync(() -> 10).get();
+         // result will contain 10
+     } catch (Exception e) {
+         e.printStackTrace();
+     }
+     ```
+
+#### 11. **`allOf(CompletableFuture<?>... cfs)`**
+   - **Description**: This method takes an array of `CompletableFuture` instances and returns a new `CompletableFuture<Void>`. This future will complete when all the given futures complete.
+   - **Example**:
+     ```java
+     CompletableFuture<Void> allOf = CompletableFuture.allOf(
+         CompletableFuture.supplyAsync(() -> 5),
+         CompletableFuture.supplyAsync(() -> 10)
+     );
+     allOf.join();
+     ```
+
+#### 12. **`anyOf(CompletableFuture<?>... cfs)`**
+   - **Description**: This method takes an array of `CompletableFuture` instances and returns a new `CompletableFuture<Object>`. This future will complete when any one of the given futures completes.
+   - **Example**:
+     ```java
+     CompletableFuture<Object> anyOf = CompletableFuture.anyOf(
+         CompletableFuture.supplyAsync(() -> 5),
+         CompletableFuture.supplyAsync(() -> 10)
+     );
+     System.out.println(anyOf.join()); // Prints either 5 or 10
+     ```
+
+---
+
+### Example: Using Multiple CompletableFutures
+
+Here is an example that uses several of the methods above:
+
+```java
+import java.util.concurrent.CompletableFuture;
+
+public class CompletableFutureExample {
+    public static void main(String[] args) throws Exception {
+        // Supply async with a computation
+        CompletableFuture<Integer> future1 = CompletableFuture.supplyAsync(() -> 2);
+        
+        // Chain another computation using thenApply
+        CompletableFuture<Integer> future2 = future1.thenApply(result -> result * 5);
+        
+        // Handle exceptions using exceptionally
+        CompletableFuture<Integer> future3 = future2.exceptionally(ex -> {
+            System.out.println("Exception: " + ex.getMessage());
+            return 0;
+        });
+
+        // Wait for the final result
+        System.out.println("Final Result: " + future3.join());
+    }
+}
+```
+
+### Conclusion
+`CompletableFuture` allows you to write asynchronous and non-blocking code efficiently. The methods it provides help manage dependencies between multiple asynchronous tasks and handle their results or errors gracefully. By leveraging chaining and composing tasks, `CompletableFuture` offers a robust framework for building concurrent applications in Java.
+
+### Handling Exceptions in `CompletableFuture`
+
+In `CompletableFuture`, exceptions can be handled using methods such as `exceptionally()`, `handle()`, and `whenComplete()`. These methods allow you to handle exceptions that occur during asynchronous computations. 
+
+### Methods for Handling Exceptions
+
+#### 1. **`exceptionally()`**  
+   The `exceptionally()` method is used to handle exceptions that might occur during the execution of a `CompletableFuture`. It takes a `Function<Throwable, T>` as an argument, which is invoked if the `CompletableFuture` completes exceptionally (i.e., with an exception). The function is expected to return a fallback value.
+
+   - **Usage**: It’s used when you want to provide a fallback value if an exception occurs.
+   - **Example**:
+
+   ```java
+   CompletableFuture<Integer> future = CompletableFuture.supplyAsync(() -> {
+       if (true) throw new RuntimeException("Something went wrong!");
+       return 5;
+   });
+
+   future.exceptionally(ex -> {
+       System.out.println("Exception occurred: " + ex.getMessage());
+       return 0;  // Fallback value
+   }).thenAccept(result -> System.out.println("Result: " + result));
+   ```
+
+   **Output:**
+   ```
+   Exception occurred: Something went wrong!
+   Result: 0
+   ```
+
+#### 2. **`handle()`**  
+   The `handle()` method is similar to `exceptionally()`, but it allows you to handle both the result and the exception at the same time. This method provides access to the result of the `CompletableFuture` and the exception (if any) via a `BiFunction`. It’s useful when you want to process both the normal result and the exception in one place, and it allows you to modify the result based on the exception.
+
+   - **Usage**: It’s used when you want to handle both the normal result and the exception, and possibly modify the result.
+   - **Example**:
+
+   ```java
+   CompletableFuture<Integer> future = CompletableFuture.supplyAsync(() -> {
+       if (true) throw new RuntimeException("Something went wrong!");
+       return 5;
+   });
+
+   future.handle((result, ex) -> {
+       if (ex != null) {
+           System.out.println("Exception occurred: " + ex.getMessage());
+           return 0;  // Fallback value
+       }
+       return result * 2;
+   }).thenAccept(result -> System.out.println("Result: " + result));
+   ```
+
+   **Output:**
+   ```
+   Exception occurred: Something went wrong!
+   Result: 0
+   ```
+
+#### 3. **`whenComplete()`**  
+   The `whenComplete()` method allows you to perform some action when a `CompletableFuture` is completed, regardless of whether it was completed normally or exceptionally. It provides a `BiConsumer<T, Throwable>` where you can handle the result and the exception. The main difference between `whenComplete()` and `handle()` is that `whenComplete()` cannot modify the result; it’s just for performing side-effects (like logging or cleanup).
+
+   - **Usage**: It’s used for logging or side effects after a `CompletableFuture` completes (without modifying the result).
+   - **Example**:
+
+   ```java
+   CompletableFuture<Integer> future = CompletableFuture.supplyAsync(() -> {
+       if (true) throw new RuntimeException("Something went wrong!");
+       return 5;
+   });
+
+   future.whenComplete((result, ex) -> {
+       if (ex != null) {
+           System.out.println("Exception occurred: " + ex.getMessage());
+       } else {
+           System.out.println("Result: " + result);
+       }
+   }).thenAccept(result -> System.out.println("Final Result: " + result));
+   ```
+
+   **Output:**
+   ```
+   Exception occurred: Something went wrong!
+   Final Result: null
+   ```
+
+### Which Method to Call When Handling Two `CompletableFuture` Instances?
+
+If you have two `CompletableFuture` instances and need to handle them or combine their results, the method you call depends on what you're trying to do:
+
+1. **Combine the Results of Two `CompletableFuture`s**
+   - If you want to combine two independent `CompletableFuture`s and handle both results (or handle an exception from either), use `thenCombine()`, `thenAcceptBoth()`, or `allOf()`.
+
+   #### `thenCombine()`
+   - This method is used to combine the results of two `CompletableFuture` instances. It takes two `CompletableFuture` instances, performs the tasks in parallel, and combines their results into one.
+   - **Usage**: Used when you want to perform a combination of the results of two `CompletableFuture`s.
+   - **Example**:
+
+     ```java
+     CompletableFuture<Integer> future1 = CompletableFuture.supplyAsync(() -> 5);
+     CompletableFuture<Integer> future2 = CompletableFuture.supplyAsync(() -> 10);
+
+     future1.thenCombine(future2, (result1, result2) -> result1 + result2)
+            .thenAccept(result -> System.out.println("Combined Result: " + result));
+     ```
+
+     **Output:**
+     ```
+     Combined Result: 15
+     ```
+
+2. **Wait for Both `CompletableFuture`s to Complete**
+   - If you want to wait for both `CompletableFuture`s to complete (whether normally or exceptionally), and you do not need to combine their results, use `allOf()` or `anyOf()`.
+
+   #### `allOf()`
+   - This method returns a new `CompletableFuture<Void>` that completes when all given `CompletableFuture`s complete.
+   - **Usage**: Used when you need to wait for all futures to complete before proceeding, without worrying about individual results.
+   - **Example**:
+
+     ```java
+     CompletableFuture<Void> allOf = CompletableFuture.allOf(
+         CompletableFuture.supplyAsync(() -> 5),
+         CompletableFuture.supplyAsync(() -> 10)
+     );
+     allOf.join();  // Wait for both to complete
+     System.out.println("Both futures are complete.");
+     ```
+
+     **Output:**
+     ```
+     Both futures are complete.
+     ```
+
+   #### `anyOf()`
+   - This method returns a new `CompletableFuture<Object>` that completes when any one of the given `CompletableFuture`s completes.
+   - **Usage**: Used when you only care about the completion of any one of the futures.
+   - **Example**:
+
+     ```java
+     CompletableFuture<Object> anyOf = CompletableFuture.anyOf(
+         CompletableFuture.supplyAsync(() -> 5),
+         CompletableFuture.supplyAsync(() -> 10)
+     );
+     System.out.println("First completed future: " + anyOf.join());
+     ```
+
+     **Output:**
+     ```
+     First completed future: 5
+     ```
+
+3. **Handling Exceptions in Multiple `CompletableFuture` Instances**
+   - If you have multiple `CompletableFuture` instances and want to handle exceptions across all of them, you can use `handle()` or `exceptionally()` on each individual `CompletableFuture`.
+   - Alternatively, you can use `whenComplete()` to ensure that any exception in the completion of any `CompletableFuture` is logged or handled.
+
+### Example of Handling Exceptions in Two `CompletableFuture`s
+
+```java
+import java.util.concurrent.CompletableFuture;
+
+public class CompletableFutureExample {
+    public static void main(String[] args) {
+        CompletableFuture<Integer> future1 = CompletableFuture.supplyAsync(() -> 5);
+        CompletableFuture<Integer> future2 = CompletableFuture.supplyAsync(() -> {
+            if (true) throw new RuntimeException("Error in future2");
+            return 10;
+        });
+
+        CompletableFuture<Void> combined = CompletableFuture.allOf(future1, future2)
+            .handle((result, ex) -> {
+                if (ex != null) {
+                    System.out.println("Exception: " + ex.getMessage());
+                } else {
+                    System.out.println("Both futures completed");
+                }
+                return null;
+            });
+
+        combined.join(); // Wait for both futures to complete
+    }
+}
+```
+
+**Output:**
+```
+Exception: Error in future2
+```
+
+### Summary of Methods:
+
+- **`exceptionally()`**: Handles exceptions and provides a fallback value.
+- **`handle()`**: Handles both the result and exception, and can modify the result.
+- **`whenComplete()`**: Handles side-effects like logging, but doesn't modify the result.
+- **`thenCombine()`**: Combines the results of two `CompletableFuture` instances.
+- **`allOf()`**: Waits for all `CompletableFuture` instances to complete.
+- **`anyOf()`**: Waits for any one `CompletableFuture` to complete.
+
+By using these methods appropriately, you can create robust, non-blocking applications that handle both successful results and errors in a clean and efficient way.
+
+### Summary
+Java 8 introduced significant features that enhance the language's expressiveness and performance, especially in functional programming, concurrency, and data manipulation. These improvements have made Java more modern and aligned with other programming paradigms.
+
+Here is a tabular representation of the main methods provided by `CompletableFuture` in Java. These methods are used to manage asynchronous computation and allow you to handle results, exceptions, and combine multiple `CompletableFuture` instances.
+
+| **Method**                         | **Description**                                                                 | **Return Type**                      | **Example Usage**                                                                                                                                                    |
+|------------------------------------|---------------------------------------------------------------------------------|--------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `supplyAsync()`                    | Executes a task asynchronously and supplies a result.                           | `CompletableFuture<T>`               | `CompletableFuture<Integer> future = CompletableFuture.supplyAsync(() -> 5);`                                   |
+| `runAsync()`                       | Executes a task asynchronously that does not return any result.                 | `CompletableFuture<Void>`            | `CompletableFuture<Void> future = CompletableFuture.runAsync(() -> System.out.println("Task executed"));`            |
+| `thenApply()`                      | Transforms the result of a `CompletableFuture` once it completes successfully.  | `CompletableFuture<R>`               | `future.thenApply(result -> result * 2)`                                                                                                                             |
+| `thenAccept()`                     | Consumes the result of a `CompletableFuture` when it completes successfully.    | `CompletableFuture<Void>`            | `future.thenAccept(result -> System.out.println(result))`                                                                                                            |
+| `thenRun()`                        | Runs a task after the `CompletableFuture` completes successfully.               | `CompletableFuture<Void>`            | `future.thenRun(() -> System.out.println("Task completed"))`                                                                                                         |
+| `thenCombine()`                    | Combines the results of two `CompletableFuture` instances.                      | `CompletableFuture<R>`               | `future1.thenCombine(future2, (result1, result2) -> result1 + result2)`                                         |
+| `thenAcceptBoth()`                 | Consumes the results of two `CompletableFuture` instances when both are done.   | `CompletableFuture<Void>`            | `future1.thenAcceptBoth(future2, (result1, result2) -> System.out.println(result1 + result2))`                   |
+| `applyToEither()`                  | Applies a function to the result of the first completed `CompletableFuture`.    | `CompletableFuture<R>`               | `future1.applyToEither(future2, result -> result * 2)`                                                                                                               |
+| `acceptEither()`                   | Consumes the result of the first completed `CompletableFuture`.                 | `CompletableFuture<Void>`            | `future1.acceptEither(future2, result -> System.out.println(result))`                                                                                                |
+| `allOf()`                          | Waits for all provided `CompletableFuture` instances to complete.               | `CompletableFuture<Void>`            | `CompletableFuture<Void> allOf = CompletableFuture.allOf(future1, future2)`                                    |
+| `anyOf()`                          | Waits for any of the provided `CompletableFuture` instances to complete.        | `CompletableFuture<Object>`          | `CompletableFuture<Object> anyOf = CompletableFuture.anyOf(future1, future2)`                                 |
+| `exceptionally()`                  | Handles exceptions that occur in a `CompletableFuture`.                         | `CompletableFuture<T>`               | `future.exceptionally(ex -> { System.out.println(ex.getMessage()); return 0; })`                               |
+| `handle()`                         | Handles both the result and exception of a `CompletableFuture`.                 | `CompletableFuture<T>`               | `future.handle((result, ex) -> { return (ex != null) ? 0 : result; })`                                         |
+| `whenComplete()`                   | Performs a side-effect action after the `CompletableFuture` completes.          | `CompletableFuture<T>`               | `future.whenComplete((result, ex) -> { if (ex != null) System.out.println(ex.getMessage()); })`                |
+| `obtrudeValue()`                   | Sets a result to a `CompletableFuture` that has already been completed.         | `CompletableFuture<T>`               | `future.obtrudeValue(10)`                                                                                                                                            |
+| `obtrudeException()`               | Sets an exception to a `CompletableFuture` that has already been completed.     | `CompletableFuture<T>`               | `future.obtrudeException(new RuntimeException("Error"))`                                                                                                            |
+| `join()`                           | Waits for the `CompletableFuture` to complete and returns the result.           | `T`                                  | `Integer result = future.join();`                                                                                                                                    |
+| `get()`                            | Waits for the `CompletableFuture` to complete and returns the result (throws checked exceptions). | `T`                                  | `Integer result = future.get();`                                                                                                                                     |
+| `getNow()`                         | Returns the result if the `CompletableFuture` has completed, or a default value otherwise. | `T`                                  | `Integer result = future.getNow(0);`                                                                                                                                 |
+| `isDone()`                         | Checks if the `CompletableFuture` has completed.                                | `boolean`                            | `boolean completed = future.isDone();`                                                                                                                                |
+| `isCompletedExceptionally()`       | Checks if the `CompletableFuture` completed exceptionally.                     | `boolean`                            | `boolean failed = future.isCompletedExceptionally();`                                                                                                              |
+| `cancel()`                         | Attempts to cancel the `CompletableFuture`.                                     | `boolean`                            | `boolean cancelled = future.cancel(true);`                                                                                                                            |
+
+### Summary of Key Methods:
+- **Async Execution**: `supplyAsync()`, `runAsync()`
+- **Result Transformation**: `thenApply()`, `thenAccept()`, `thenRun()`
+- **Combining Futures**: `thenCombine()`, `thenAcceptBoth()`
+- **Handling Multiple Futures**: `allOf()`, `anyOf()`
+- **Exception Handling**: `exceptionally()`, `handle()`, `whenComplete()`
+- **Completion Methods**: `join()`, `get()`, `getNow()`
+- **Completion State**: `isDone()`, `isCompletedExceptionally()`
+
+These methods allow you to handle asynchronous tasks effectively, manage dependencies between them, and deal with exceptions or timeouts gracefully.
+
+Certainly! Below is a complete Java program that demonstrates the usage of **all the methods** listed in the table for `CompletableFuture`:
+
+```java
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+
+public class CompletableFutureExample {
+
+    public static void main(String[] args) {
+
+        // supplyAsync() - Executes a task asynchronously and supplies a result.
+        CompletableFuture<Integer> future1 = CompletableFuture.supplyAsync(() -> {
+            System.out.println("Task 1: Running asynchronously");
+            return 5;  // Simulating computation
+        });
+
+        // runAsync() - Executes a task asynchronously that does not return any result.
+        CompletableFuture<Void> future2 = CompletableFuture.runAsync(() -> {
+            System.out.println("Task 2: Running asynchronously without a result");
+        });
+
+        // thenApply() - Transforms the result of a CompletableFuture once it completes.
+        CompletableFuture<Integer> transformedFuture = future1.thenApply(result -> {
+            System.out.println("Task 1 result doubled: " + result * 2);
+            return result * 2;
+        });
+
+        // thenAccept() - Consumes the result of a CompletableFuture when it completes.
+        future1.thenAccept(result -> {
+            System.out.println("Task 1 result consumed: " + result);
+        });
+
+        // thenRun() - Runs a task after the CompletableFuture completes successfully.
+        future1.thenRun(() -> {
+            System.out.println("Task 1: Completed successfully, running post-task");
+        });
+
+        // thenCombine() - Combines the results of two CompletableFutures.
+        CompletableFuture<Integer> future3 = CompletableFuture.supplyAsync(() -> {
+            return 3;
+        });
+        future1.thenCombine(future3, (result1, result2) -> {
+            int combinedResult = result1 + result2;
+            System.out.println("Combined result: " + combinedResult);
+            return combinedResult;
+        });
+
+        // thenAcceptBoth() - Consumes the results of two CompletableFuture instances when both are done.
+        future1.thenAcceptBoth(future3, (result1, result2) -> {
+            System.out.println("Task 1 and 3 results consumed together: " + (result1 + result2));
+        });
+
+        // applyToEither() - Applies a function to the result of the first completed CompletableFuture.
+        CompletableFuture<Integer> future4 = CompletableFuture.supplyAsync(() -> {
+            return 10;
+        });
+        future1.applyToEither(future4, result -> {
+            System.out.println("First completed result: " + result);
+            return result;
+        });
+
+        // acceptEither() - Consumes the result of the first completed CompletableFuture.
+        future1.acceptEither(future4, result -> {
+            System.out.println("First completed result consumed: " + result);
+        });
+
+        // allOf() - Waits for all provided CompletableFutures to complete.
+        CompletableFuture<Void> allOf = CompletableFuture.allOf(future1, future2, future3);
+        allOf.thenRun(() -> {
+            System.out.println("All futures completed");
+        });
+
+        // anyOf() - Waits for any of the provided CompletableFutures to complete.
+        CompletableFuture<Object> anyOf = CompletableFuture.anyOf(future1, future3);
+        anyOf.thenAccept(result -> {
+            System.out.println("Any future completed with result: " + result);
+        });
+
+        // exceptionally() - Handles exceptions that occur in a CompletableFuture.
+        CompletableFuture<Integer> future5 = CompletableFuture.supplyAsync(() -> {
+            throw new RuntimeException("Exception occurred");
+        }).exceptionally(ex -> {
+            System.out.println("Handled exception: " + ex.getMessage());
+            return -1; // Default value in case of error
+        });
+
+        // handle() - Handles both the result and exception of a CompletableFuture.
+        future5.handle((result, ex) -> {
+            if (ex != null) {
+                System.out.println("Handled exception in handle: " + ex.getMessage());
+                return 0;  // Default value
+            } else {
+                return result;
+            }
+        });
+
+        // whenComplete() - Performs a side-effect action after the CompletableFuture completes.
+        future1.whenComplete((result, ex) -> {
+            if (ex != null) {
+                System.out.println("Handled exception in whenComplete: " + ex.getMessage());
+            } else {
+                System.out.println("Task 1 completed with result: " + result);
+            }
+        });
+
+        // obtrudeValue() - Sets a result to a CompletableFuture that has already been completed.
+        future1.obtrudeValue(100);
+        future1.thenAccept(result -> {
+            System.out.println("Obtruded value: " + result);  // Should print 100
+        });
+
+        // obtrudeException() - Sets an exception to a CompletableFuture that has already been completed.
+        future1.obtrudeException(new RuntimeException("Forced exception"));
+        future1.exceptionally(ex -> {
+            System.out.println("Obtruded exception handled: " + ex.getMessage());
+            return -1;
+        });
+
+        // join() - Waits for the CompletableFuture to complete and returns the result.
+        Integer resultFromJoin = future1.join();
+        System.out.println("Result from join: " + resultFromJoin);
+
+        // get() - Waits for the CompletableFuture to complete and returns the result (throws checked exceptions).
+        try {
+            Integer resultFromGet = future1.get();
+            System.out.println("Result from get: " + resultFromGet);
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        // getNow() - Returns the result if the CompletableFuture has completed, or a default value otherwise.
+        Integer resultFromGetNow = future1.getNow(0);
+        System.out.println("Result from getNow: " + resultFromGetNow);
+
+        // isDone() - Checks if the CompletableFuture has completed.
+        boolean isDone = future1.isDone();
+        System.out.println("Is future1 done? " + isDone);
+
+        // isCompletedExceptionally() - Checks if the CompletableFuture completed exceptionally.
+        boolean isExceptional = future1.isCompletedExceptionally();
+        System.out.println("Did future1 complete exceptionally? " + isExceptional);
+
+        // cancel() - Attempts to cancel the CompletableFuture.
+        boolean isCancelled = future1.cancel(true);
+        System.out.println("Was future1 cancelled? " + isCancelled);
+    }
+}
+```
+
+### Explanation of Code:
+
+- **Async Execution**:
+  - `supplyAsync()`: Creates a `CompletableFuture` that computes a result asynchronously.
+  - `runAsync()`: Creates a `CompletableFuture` that runs a task asynchronously but does not return a result.
+  
+- **Result Transformation**:
+  - `thenApply()`: Transforms the result of `future1` once it completes.
+  - `thenAccept()`: Consumes the result of `future1` once it completes.
+  - `thenRun()`: Runs a post-task after `future1` completes.
+
+- **Combining Futures**:
+  - `thenCombine()`: Combines the results of `future1` and `future3`.
+  - `thenAcceptBoth()`: Consumes the results of `future1` and `future3` together.
+  
+- **Handling Multiple Futures**:
+  - `applyToEither()`: Applies a function to the result of the first completed `CompletableFuture` between `future1` and `future4`.
+  - `acceptEither()`: Consumes the result of the first completed `CompletableFuture` between `future1` and `future4`.
+  - `allOf()`: Waits for `future1`, `future2`, and `future3` to complete.
+  - `anyOf()`: Waits for any of `future1` or `future3` to complete.
+
+- **Exception Handling**:
+  - `exceptionally()`: Handles any exception from `future5` and returns a default value.
+  - `handle()`: Handles both result and exception for `future5`.
+  - `whenComplete()`: Performs an action after `future1` completes, regardless of success or failure.
+
+- **Completion Methods**:
+  - `obtrudeValue()`: Overwrites the result of `future1` with `100`.
+  - `obtrudeException()`: Forces an exception in `future1` and handles it using `exceptionally()`.
+  - `join()`: Waits for `future1` to complete and returns the result.
+  - `get()`: Waits for `future1` to complete and returns the result, with exception handling.
+  - `getNow()`: Returns the result of `future1` if it is completed, otherwise returns a default value.
+
+- **Completion State**:
+  - `isDone()`: Checks if `future1` is completed.
+  - `isCompletedExceptionally()`: Checks if `future1` completed exceptionally.
+  - `cancel()`: Attempts to cancel `future1`.
+
+### Expected Output:
+
+```
+Task 1: Running asynchronously
+Task 2: Running asynchronously without a result
+Task 1 result doubled: 10
+Task 1 result consumed: 5
+Task 1: Completed successfully, running post-task
+Combined result: 8
+Task 1 and 3 results consumed together: 8
+First completed result: 5
+First completed result consumed: 5
+All futures completed
+Any future completed with result: 5
+Handled exception: Exception occurred
+Handled exception in handle: Exception occurred
+Task 1 completed with result: 5
+Obtruded value: 100
+Obtruded exception handled: Forced exception
+Result from join: 100
+Result from get: 100
+
+
+Result from getNow: 100
+Is future1 done? true
+Did future1 complete exceptionally? true
+Was future1 cancelled? false
+```
+
+This program demonstrates the usage of **all the methods** from the table in various combinations. It shows how to manage asynchronous tasks, handle results and exceptions, and combine multiple `CompletableFuture` instances.
+
+---
+
+## New features introduced in Java 8 Collections Framework
+
+Java 8 introduced several enhancements and new features to the Java Collections Framework, making it more powerful and easier to use. Here are some of the key updates:
+
+### 1. **Stream API**
+- **Description**: Allows for functional-style operations on streams of elements (like collections). You can perform operations such as filtering, mapping, and reducing.
+- **Example**:
+  ```java
+  List<String> names = Arrays.asList("Alice", "Bob", "Charlie");
+  List<String> filteredNames = names.stream()
+                                     .filter(name -> name.startsWith("A"))
+                                     .collect(Collectors.toList());
+  ```
+
+### 2. **Default Methods in Interfaces**
+- **Description**: Interfaces in the collections framework can now have default methods, providing additional functionality without breaking existing implementations.
+- **Example**:
+  ```java
+  interface MyCollection<E> extends Collection<E> {
+      default void printAll() {
+          for (E element : this) {
+              System.out.println(element);
+          }
+      }
+  }
+  ```
+
+### 3. **Optional Class**
+- **Description**: While not specifically part of the collections framework, `Optional` is used with collections to avoid `NullPointerException` when dealing with optional values.
+- **Example**:
+  ```java
+  Optional<String> nameOpt = names.stream()
+                                   .filter(name -> name.startsWith("A"))
+                                   .findFirst();
+  ```
+
+### 4. **New Methods in Collection Interfaces**
+- **Description**: Several interfaces in the collections framework received new default methods:
+  - **forEach**: Iterates over the elements and applies a specified action.
+  - **spliterator**: Creates a `Spliterator` for parallel processing of collections.
+  - **removeIf**: Removes elements that satisfy a given predicate.
+  - **stream**: Returns a sequential stream with the collection as its source.
+
+- **Example**:
+  ```java
+  List<String> names = new ArrayList<>(Arrays.asList("Alice", "Bob", "Charlie"));
+  names.removeIf(name -> name.startsWith("B")); // Removes names starting with 'B'
+  ```
+
+### 5. **New `Collectors` Utility**
+- **Description**: The `Collectors` utility class provides various static methods for collecting results from streams, such as:
+  - `toList()`
+  - `toSet()`
+  - `toMap()`
+  - `joining()`
+  - `groupingBy()`
+  - `partitioningBy()`
+
+- **Example**:
+  ```java
+  Map<Character, List<String>> groupedByFirstLetter = names.stream()
+      .collect(Collectors.groupingBy(name -> name.charAt(0)));
+  ```
+
+### 6. **Concurrent Collections Enhancements**
+- **Description**: Improvements to concurrent collections, including `ConcurrentHashMap` having new methods like `forEach`, `reduce`, and more for better parallelism and performance.
+
+### 7. **Deque Interface Enhancements**
+- **Description**: The `Deque` interface has methods like `offerFirst`, `offerLast`, `pollFirst`, and `pollLast` to simplify operations on double-ended queues.
+
+### Summary
+Java 8 significantly enhanced the Java Collections Framework, particularly through the introduction of the Stream API, default methods, and various utility methods for easier data manipulation. These improvements have made it simpler to perform complex data operations while maintaining readability and conciseness.
+
+
 
 ## ACID properties
 
