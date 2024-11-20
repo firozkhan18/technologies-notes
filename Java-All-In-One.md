@@ -794,8 +794,6 @@ React Hooks provide a powerful, declarative way to manage state, side effects, p
 Each hook serves a specific purpose, and understanding their use cases allows developers to write cleaner, more maintainable code in React. The introduction of hooks marked a major shift in React development, promoting functional components as the go-to pattern for building UIs.
 
 
-```
-
 Let's go through each concept step by step to give you a thorough understanding of **REST API principles**, **HTTP methods**, and key **REST considerations**. We'll cover the core principles of REST, the HTTP methods used for interacting with resources, and various best practices and considerations when designing RESTful services.
 
 ---
