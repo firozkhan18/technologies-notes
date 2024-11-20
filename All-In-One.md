@@ -62,7 +62,30 @@ Here's a table of contents with navigation links for the topics you've listed:
 47. [Tricky Java Interview Questions](#tricky-java-interview-questions)
 48. [POJO (Plain Old Java Object) Classes](#pojo-plain-old-java-object-classes)
 
-This format will allow you to easily navigate the various topics within the table of contents.
+### Table of Contents
+
+1. [Serialization and Deserialization](#serialization-and-deserialization)
+2. [Microservice Design Patterns](#microservice-design-patterns)
+3. [Load Testing](#load-testing)
+4. [Virtual Threads in Java 19](#virtual-threads-in-java-19)
+5. [Memory Leak in Microservices: Understanding and Resolution](#memory-leak-in-microservices-understanding-and-resolution)
+6. [Permanent Generation (PermGen)](#permanent-generation-permgen)
+7. [Analyze and Identify Memory Leaks](#analyze-and-identify-memory-leaks)
+8. [Immutable Classes in Java](#immutable-classes-in-java)
+9. [How to Implement Asynchronous Programming in Spring Boot](#how-to-implement-asynchronous-programming-in-spring-boot)
+10. [New Features Introduced in Java 8](#new-features-introduced-in-java-8)
+11. [Thread Management and Synchronization](#thread-management-and-synchronization)
+12. [Detecting and Recovering from Deadlocks](#detecting-and-recovering-from-deadlocks)
+13. [Garbage Collection (GC) Algorithms](#garbage-collection-gc-algorithms)
+14. [ACID Properties](#acid-properties)
+15. [Transaction Isolation Levels](#transaction-isolation-levels)
+16. [Java Design Patterns](#java-design-patterns)
+17. [Overview of `Hashtable` & `ConcurrentHashMap`](#overview-of-hashtable-concurrenthashmap)
+18. [Hashing in `Hashtable & ConcurrentHashMap`](#hashing-in-hashtable-concurrenthashmap)
+19. [Ambiguities in Java Technologies](#ambiguities-in-java-technologies)
+20. [An Overview of Angular, React, Microservices, and Threading, Along with Their Interactions and Use Cases](#an-overview-of-angular-react-microservices-and-threading-along-with-their-interactions-and-use-cases)
+21. [Sharding in MongoDB](#sharding-in-mongodb)
+
 ## JAVA
 
 ---
@@ -13630,6 +13653,8 @@ public class Person implements Serializable {
 
 These rules help in designing clean, maintainable, and efficient POJO classes that fit well within Java’s object-oriented paradigm.
 
+---
+
 Certainly! Here's an in-depth overview covering Java concepts related to inheritance, abstract classes, interfaces, final, `this`, `super`, exception handling, garbage collection, string manipulation, threads, functional programming, collections framework, and file handling, with explanations, code examples, and interview questions.
 
 ### **1. Inheritance**
@@ -14056,6 +14081,8 @@ public class FileHandlingExample {
 
 These topics cover a broad range of essential Java concepts and practices that are commonly encountered in interviews and practical applications. Understanding these principles, along with the associated code examples, will help you effectively address various Java-related questions and scenarios.
 
+---
+
 Certainly! Let’s break down the various methods for reading and writing files using Java IO and NIO, explain serialization and deserialization with examples, and discuss synchronization.
 
 ### **Java IO and NIO File Reading and Writing**
@@ -14316,7 +14343,7 @@ public class WordFrequency {
 }
 ```
 
-### **Serialization and Deserialization**
+## Serialization and Deserialization
 
 **Serialization**: Converting an object into a byte stream for storage or transmission. **Deserialization**: Reconstructing the object from the byte stream.
 
@@ -14471,6 +14498,8 @@ public class SynchronizationBlockExample {
 ```
 
 This comprehensive guide covers various Java topics, including file handling with IO and NIO, serialization and deserialization, and synchronization, along with coding examples and explanations to help you understand and prepare for interview scenarios.
+
+---
 
 Certainly! Here’s a detailed explanation of the various Java concepts and terms you’ve mentioned, including coding examples where applicable:
 
@@ -14740,6 +14769,8 @@ public final class ImmutableClass {
 - **String Pool**: Cache of `String` objects to optimize memory usage by reusing immutable `String` literals.
 - **Object Pool**: General technique to reuse objects to reduce overhead of object creation and garbage collection.
 
+---
+
 In Java, memory management and resource allocation involve several concepts, including the heap, stack, string pool, object pool, instance pool, and connection pool. Here’s a detailed explanation of each:
 
 ### 1. Heap
@@ -14874,6 +14905,8 @@ class MyObject {
 ### Summary
 A resource pool is a powerful design pattern for managing collections of reusable resources, improving performance, and optimizing resource management in applications. Common implementations include connection pools, thread pools, and object pools, each tailored for specific types of resources.
 
+---
+
 ### **13. Exception Handling**
 
 **Definition**: Mechanism to handle runtime errors to maintain the normal flow of application.
@@ -14980,6 +15013,8 @@ public class LambdaExample {
 ```
 
 This summary covers the key aspects of Java, including file handling, multithreading, synchronization, exception handling, OOP principles, and various collection frameworks. Each section provides a foundational understanding and examples to illustrate concepts effectively.
+
+---
 
 In Java, `HashMap`, `Hashtable`, and `HashSet` are fundamental collections that implement the `Map` and `Set` interfaces, respectively. They are all based on hashing mechanisms but have different internal implementations and characteristics. Here's an in-depth look at how each of these works internally:
 
@@ -15115,6 +15150,8 @@ public class HashSetExample {
 - **HashSet**: Use when you need a set that does not allow duplicates and is backed by a `HashMap`.
 
 Each of these collections is optimized for different use cases, and understanding their internal workings can help you choose the right one for your specific needs.
+
+---
 
 The Java Collection Framework provides a set of classes and interfaces to manage groups of objects. It includes various collections that are used to store, retrieve, manipulate, and communicate aggregate data. The framework is divided into several parts: interfaces, implementations, and algorithms.
 
@@ -15283,6 +15320,7 @@ public class HashMapExample {
 
 The Java Collection Framework offers various interfaces and classes to handle different types of collections, each with its own use cases and performance characteristics. Understanding these collections and their behaviors, along with their implementation details, can significantly impact the performance and scalability of your Java applications.
 
+---
 
 ### **3. Class Loaders and Types of Class Loading**
 
@@ -15332,7 +15370,7 @@ public class CustomClassLoader extends ClassLoader {
 }
 ```
 
-
+---
 
 Threads are a fundamental concept in computer science, particularly in the context of programming and concurrent processing. In Java, threads allow you to run multiple tasks simultaneously within a single process, which can lead to more efficient use of resources and improved performance. Here's an in-depth explanation of threads in Java:
 
@@ -15570,6 +15608,8 @@ public class ConcurrentHashMapExample {
 - **Concurrency Utilities**: Include atomic variables and concurrent collections for thread-safe operations.
 
 Understanding these concepts helps in writing efficient, concurrent applications in Java, enabling better resource utilization and improved performance.
+
+---
 
 Java Collections and Maps are fundamental data structures that provide a way to store, manage, and manipulate groups of objects. Understanding the different types and their use cases is crucial for writing efficient and effective Java code. Here's an in-depth explanation of Java Collections and Maps, including their features, use cases, and examples.
 
@@ -15893,6 +15933,8 @@ Maps store key-value pairs, where each key is associated with a single value.
 
 Understanding the Java Collections Framework and Maps allows developers to choose the right data structures for their applications, optimizing performance and efficiency.
 
+---
+
 In Java, the `final` keyword can be applied to variables, methods, and classes to restrict their modification in different ways. Understanding how `final` works with variables and objects is crucial for proper usage. Let’s break down what happens with `final` variables and why an object referenced by a `final` variable can still be modified.
 
 ### **1. Final Variables**
@@ -15967,10 +16009,11 @@ public class FinalExample {
 
 In summary, `final` ensures immutability of the reference but not the object itself. The reference to an object marked as `final` cannot be changed to refer to another object, but the content or state of the object itself can be modified if the class does not restrict it.
 
+---
+
 Sure! Here’s a step-by-step guide on how to use some popular Java profiling tools: **VisualVM**, **YourKit**, and **JProfiler**.
 
 ### 1. VisualVM
-
 
 - **VisualVM**: You can find it at [visualvm.github.io](https://visualvm.github.io). This site provides information about the tool, including download links and documentation.
 
@@ -16063,6 +16106,8 @@ The JDK to run VisualVM can be customized either using visualvm --jdkhome <JDK_H
 ### Conclusion
 
 Each of these profiling tools has its strengths and unique features. By following these steps, you can effectively profile your Java application and identify performance bottlenecks. Make sure to consult the official documentation of each tool for more advanced features and best practices! If you have further questions or need clarification on specific steps, feel free to ask!
+
+---
 
 Core Java Interview Questions:
 
@@ -16235,6 +16280,8 @@ class B {
 
 This combination of concepts is essential for writing robust, maintainable, and efficient Java applications and microservices.
 
+---
+
 ### Functional Interfaces in Java
 
 A **functional interface** is an interface that contains exactly one abstract method, which can be implemented using a lambda expression or method reference. Java 8 introduced the ability to include **default** and **static** methods in interfaces.
@@ -16325,6 +16372,8 @@ public class Main {
 
 This pattern ensures that the implementing class clearly defines its behavior, avoiding ambiguity and potential runtime errors.
 
+---
+
 In Java, you can have multiple interfaces, each with default methods, and you can implement both interfaces in a single class. When a class implements multiple interfaces that have default methods with the same signature, you might run into conflicts. Here's a guide on how to handle such situations:
 
 ### Example Interfaces
@@ -16384,6 +16433,8 @@ If you run the `main` method in `MyClass`, the output will depend on how you res
 - If you provide a new implementation, you'll see "MyClass display".
 
 This way, you have the flexibility to manage multiple interface implementations and their default methods effectively.
+
+---
 
 In Java, functional interfaces are interfaces with a single abstract method. They are used primarily for lambda expressions and method references. Although functional interfaces are primarily defined by their single abstract method, they can also contain default and static methods. Here’s how to work with default and static methods in functional interfaces and what they’re used for in real-time scenarios.
 
@@ -16473,6 +16524,8 @@ public class MyClass implements FunctionalA, FunctionalB {
    - **Factory Methods:** You might use static methods in interfaces to provide factory methods for creating instances of implementing classes. This is often seen in design patterns like the Factory Method or Singleton.
 
 By understanding how to use default and static methods in functional interfaces, you can leverage the flexibility of Java interfaces while maintaining clean and effective code architecture.
+
+---
 
 ### **What is On-Premises?**
 
@@ -16680,6 +16733,8 @@ public class EmployeeController {
 - The example provided shows how to set up a simple **Spring Boot** web application that runs on a server and connects to a local **MySQL database** for data access.
   
 On-premises solutions are typically chosen for security, control, or regulatory compliance reasons, though they come with increased maintenance responsibilities and higher upfront costs.
+
+---
 
 To run **Apache JMeter**, **JProfiler**, and **VisualVM** in Docker, you'll need to create Docker containers for each of these tools, install them in the container, and configure them for use. Below is a guide on how to set up and install each of these tools in Docker containers.
 
@@ -16927,6 +16982,8 @@ This will build and start the containers for JMeter, JProfiler, and VisualVM. Yo
 - **VisualVM**: A monitoring and profiling tool that connects to Java applications using JMX, also running in a Docker container.
 
 By using Docker, you can containerize these tools and run them in isolated environments, making it easier to set up, configure, and manage your Java profiling and testing setups.
+
+---
 
 To run **JMeter**, **JProfiler**, and **VisualVM** in Docker for **Java 17**, the process is largely the same as with earlier Java versions, but we'll be using **OpenJDK 17** as the base image and modifying the Dockerfiles to be compatible with Java 17. Here's how you can set up each of these tools for Java 17 in Docker.
 
@@ -17283,6 +17340,8 @@ This change is optional for functionality but will help avoid the warnings.
 
 Your Docker image `jmeter-java17-image` is built and ready for use. You can run JMeter in the container, execute tests, and interact with it using the methods above. If you run into any further issues, feel free to ask!
 
+---
+
 Apache JMeter is a powerful tool used for load testing, performance testing, and stress testing web applications. It can simulate multiple users to test the performance of various services such as web servers, databases, or RESTful APIs.
 
 Here’s a detailed guide on **how to work with JMeter** to get you started with your testing needs.
@@ -17562,7 +17621,7 @@ This script will process the `.jtl` file generated by JMeter and print out the r
 Let me know if you need help setting up distributed testing or automating your results!
 
 
-===================================================
+---
 
 To build a scalable, fault-tolerant, high-performance system, while ensuring secure memory management, managing large amounts of data, handling multiple client requests, and preventing unauthorized access in a React and Spring Boot application, there are several best practices you can follow. Let’s break down the main concerns you raised and address them in detail.
 
@@ -17693,6 +17752,8 @@ Security is crucial to protect your app from malicious users.
 ---
 
 By combining these strategies, you'll create a system that's scalable, fault-tolerant, high-performance, and secure. Each aspect—scalability, fault tolerance, memory management, and security—requires attention both in terms of architecture and implementation.
+
+---
 
 Writing unit tests is a critical part of ensuring the reliability and correctness of your application. Unit tests help verify that individual components of your code work as expected and can make it easier to detect bugs and regressions early in development. Below is a guide on how to write unit tests using **JUnit 5** (the latest version of JUnit) for a **Spring Boot** application and **Mockito** for mocking dependencies.
 
@@ -18179,6 +18240,8 @@ Most teams use online Git hosting platforms like **GitHub**, **GitLab**, or **Bi
 
 Version control with Git is essential for modern software development, providing a structured way to track changes, collaborate with others, and maintain the history of your project. By following Git best practices, such as frequent commits, clear commit messages, proper branching strategies, and regular synchronization with the main codebase, you can ensure a smooth and efficient development process for both solo projects and team collaborations.
 
+---
+
 Clear and concise documentation is an essential aspect of writing maintainable code and ensuring that others (or even your future self) can understand, modify, and contribute to a project. Good documentation involves:
 
 1. **Inline Comments**: Explaining complex or non-obvious code logic within the code itself.
@@ -18402,6 +18465,8 @@ Documentation is crucial for any project, as it helps others (and yourself) unde
 
 You can ensure that your code is easier to understand and maintain over time. Good documentation is key for collaborating with others, onboarding new developers, and providing users with an intuitive experience when interacting with your project.
 
+---
+
 **Code Reviews** and **Pair Programming** are two critical practices in modern software development that improve code quality, foster knowledge sharing, and promote best practices. Both are valuable tools for creating a collaborative, productive, and continuous learning environment in development teams. Let’s dive into how both practices can be applied effectively and why they’re important.
 
 ---
@@ -18505,6 +18570,8 @@ Both **code reviews** and **pair programming** are powerful practices that can s
 - **Pair programming** will boost collaboration, foster real-time knowledge transfer, improve design decisions, and accelerate problem-solving.
 
 Both practices encourage continuous improvement and are key components of a healthy development process that prioritizes code quality, team cohesion, and developer growth. Whether you’re working in-person or remotely, regularly incorporating code reviews and pair programming into your workflow will lead to better, more maintainable software and stronger development teams.
+
+---
 
 **Performance Optimization** is a critical aspect of software development, especially for applications that need to handle large-scale traffic or deal with complex data processing. By identifying performance bottlenecks, optimizing your code, and managing memory effectively, you can significantly improve your application's responsiveness, scalability, and overall efficiency.
 
@@ -18641,6 +18708,8 @@ Additionally:
 - Tune the JVM and monitor performance regularly to ensure your application performs optimally as it scales.
 
 By integrating these performance best practices into your development cycle, you’ll ensure your application runs efficiently even under high load, providing a smooth user experience.
+
+---
 
 **Security Practices** are essential for building secure applications that protect sensitive data, ensure privacy, and prevent vulnerabilities from being exploited. Security issues, if not addressed properly, can lead to data breaches, unauthorized access, and compromised systems. Following industry-standard security practices helps mitigate common threats and ensures the integrity of your application.
 
@@ -18788,6 +18857,8 @@ Implementing strong **security practices** is vital to protect applications from
 
 By following these best practices, you can significantly reduce the attack surface of your application and protect it from common threats. Security is an ongoing process, so be sure to continuously audit your application, stay informed about new security vulnerabilities, and apply security patches as needed.
 
+---
+
 **Security Practices** are fundamental to ensuring that your applications are safe from common threats like data breaches, injection attacks, and unauthorized access. By following best practices, you can significantly reduce the risk of vulnerabilities in your system. Here are some key security practices that you should incorporate into your development process:
 
 ---
@@ -18917,6 +18988,8 @@ Hard-coding sensitive data (e.g., passwords, API keys, database credentials) dir
 Security should be a top priority at every stage of your software development lifecycle. By following best practices like input validation, using secure connections (HTTPS), avoiding hard-coded sensitive data, and enforcing proper authentication and authorization, you can significantly reduce the risk of vulnerabilities in your application. Security is a continuously evolving field, so it's essential to stay up to date with the latest practices and threats to ensure your application remains secure.
 
 Do you have any specific concerns regarding any of the security practices mentioned, or are there areas where you'd like further clarification? Feel free to ask!
+
+---
 
 To generate an **SSL certificate** and configure **SSL/TLS** using **keytool** (for Java applications) and **OpenSSL** (for general purposes), I'll walk you through the process for each tool, focusing on generating the certificates, creating a **PKCS#12** or **JKS keystore**, and configuring your server to use the certificates.
 
@@ -19096,7 +19169,7 @@ This will ensure that any HTTP requests (on port 8080) are redirected to HTTPS (
 - **Spring Boot** can easily be configured to use SSL certificates in either **PKCS#12** or **JKS** format by updating the `application.properties` file.
 - Use **HTTP to HTTPS redirection** to enforce secure connections.
 
-Let me know if you need further clarification on any step or if you encounter any issues!
+---
 
 To generate an SSL certificate and convert it between formats using **OpenSSL** and **keytool**, I'll walk you through the process of:
 
@@ -19293,6 +19366,8 @@ You can also use online tools like **SSL Labs' SSL Test** to verify your certifi
 
 By following these steps, you can set up SSL for your Java or Spring Boot applications using **OpenSSL** and **keytool**. Let me know if you need further clarification on any of the steps!
 
+---
+
 Creating a certificate using `keytool` involves several steps. `keytool` is a utility provided by Java for managing keystores, which store cryptographic keys and certificates. Here's a step-by-step guide to creating a certificate using **`keytool`**:
 
 ### **Overview of Steps:**
@@ -19477,7 +19552,7 @@ You can use this truststore in a client application to verify the server's certi
 - You can generate **self-signed certificates**, **CSR** for CA signing, and import/export certificates.
 - For production environments, it's better to get your certificate signed by a trusted **Certificate Authority (CA)**, but for development and testing, self-signed certificates are commonly used.
 
-Let me know if you need more clarification on any of the steps!
+---
 
 ### **Continuous Integration and Deployment (CI/CD)**
 
@@ -19728,13 +19803,10 @@ GitHub Actions allows you to automate your build, test, and deployment pipelines
 
 By integrating **CI/CD pipelines** into your development workflow, you can automate the building, testing, and deployment of your application, resulting in faster releases and higher code quality. Whether you use **Jenkins**, **GitLab CI**, or **GitHub Actions**, the key steps are:
 1. Automate your code integration and deployment process
-
-.
 2. Write effective pipeline configuration files.
 3. Monitor and improve the pipeline over time.
 
-Let me know if you need further details on any of these tools or more in-depth guidance on setting up a specific CI/CD pipeline!
-
+----
 
 ### **Stay Updated with Java Developments and Best Practices**
 
@@ -19869,9 +19941,9 @@ Java is constantly evolving, and new features are introduced with every new vers
 
 ### **Conclusion**
 
-Staying updated with Java developments and best practices is crucial for maintaining and enhancing your skills as a developer. By
+Staying updated with Java developments and best practices is crucial for maintaining and enhancing your skills as a developer. By following blogs, forums, attending conferences, participating in online communities, contributing to open-source projects, and experimenting with new Java features, you'll remain at the forefront of the Java ecosystem. Continuously learning and adapting to changes will not only help you write better code but also keep you competitive in the ever-evolving tech landscape.
 
- following blogs, forums, attending conferences, participating in online communities, contributing to open-source projects, and experimenting with new Java features, you'll remain at the forefront of the Java ecosystem. Continuously learning and adapting to changes will not only help you write better code but also keep you competitive in the ever-evolving tech landscape.
+---
 
 ### **Aspect-Oriented Programming (AOP) in Depth**
 
@@ -20113,9 +20185,9 @@ Let’s briefly go over the different types of AOP advice that can be used in Sp
 
 ### **Conclusion**
 
-Aspect-Oriented Programming (AOP) allows you to separate concerns that cross-cut your application, such as logging, security, and transaction management, into reusable aspects. With Spring AOP, you can define aspects and advice that are automatically applied to methods
+Aspect-Oriented Programming (AOP) allows you to separate concerns that cross-cut your application, such as logging, security, and transaction management, into reusable aspects. With Spring AOP, you can define aspects and advice that are automatically applied to methods matching specific pointcuts. This modular approach makes your code cleaner, more maintainable, and decouples the concerns from your core business logic.
 
- matching specific pointcuts. This modular approach makes your code cleaner, more maintainable, and decouples the concerns from your core business logic.
+---
 
 ### **Core Java Concepts: Mastering the Fundamentals**
 
@@ -20473,6 +20545,8 @@ public class ExecutorServiceExample {
 
 Mastering these core Java concepts—**data types, control structures, collections, exception handling, and concurrency**—is fundamental to becoming a proficient Java developer. Understanding how to work with collections, manage exceptions properly, handle concurrency, and leverage object-oriented principles will provide a solid foundation for building more complex applications.
 
+---
+
 ### **Concurrency in Java: In-Depth Explanation**
 
 Concurrency in Java refers to the ability of a program to execute multiple tasks (or threads) simultaneously. With the rise of multi-core processors, concurrent programming has become an essential skill for building efficient, high-performance applications.
@@ -20798,6 +20872,7 @@ class SharedResource {
 
 Concurrency is a vital concept in modern programming. Java provides powerful abstractions to work with threads, manage thread safety, and optimize the performance of applications. By mastering the various tools and concepts, such as **Thread**, **ExecutorService**, **Synchronization**, and **Locks**, you can write highly efficient, scalable, and thread-safe applications. However, it is crucial to also understand the challenges like **deadlocks** and **starvation**, as well as the **Java Memory Model** to ensure correct behavior in multi-threaded environments.
 
+---
 
 ### **Digital Marketing: A Deep Dive**
 
@@ -21049,6 +21124,7 @@ axios.interceptors.request.use(config => {
 
 Creating a scalable, secure, and performant marketing dashboard with **React** and **Spring Boot** requires integrating best practices for both the frontend and backend. Using **microservices**, **JWT for security**, **scalable architecture**, and **advanced performance optimizations**, you can build a high-performing application. With modern tools and deployment practices such as **Docker**, **Kubernetes**, and **CI/CD**, your application will be ready for real-world traffic and can scale seamlessly.
 
+---
 
 ### Implementing Redux for Efficient State Management in Complex React Applications
 
@@ -21524,6 +21600,8 @@ const updatedUser = { ...initialState.user, age: 26 };
 
 The spread operator is an essential tool for working with immutable data and managing state in modern JavaScript applications. It helps in making your code more concise and readable while ensuring data integrity by avoiding mutations.
 
+---
+
 To convert a number (e.g., `23`) to its English word representation (e.g., `"twenty three"`) using Java Stream API, you can follow these steps:
 
 1. **Create a mapping of numbers to words**.
@@ -21595,6 +21673,7 @@ twenty three
 
 This code effectively converts the number `23` into its word representation "twenty three" using Java Stream API and a combination of `Map`, `Stream`, and `Collectors`.
 
+---
 
 A **Full-Stack Developer** role that combines **Java** (with technologies like **Spring Boot**, **Kafka**, and **MongoDB**) for the back-end and **ReactJS** for the front-end requires a broad set of skills and responsibilities. This combination is typically seen in microservices architectures, where different parts of the application are loosely coupled but can communicate efficiently using RESTful APIs, message queues (like **Kafka**), and databases (like **MongoDB**).
 
@@ -21756,6 +21835,8 @@ export const fetchProducts = () => async dispatch => {
 ### Conclusion
 
 A Full-Stack Developer with expertise in Java, Spring Boot, Kafka, MongoDB, and ReactJS plays a crucial role in designing, building, and maintaining scalable, efficient, and secure web applications. You will need to be proficient in both back-end and front-end technologies, as well as be comfortable with the tools and processes related to CI/CD, testing, version control, and system design. Communication, problem-solving skills, and the ability to collaborate across teams are essential to succeed in this role.
+
+---
 
 To pass data (like a color) from a **child component** to a **parent component** using a **callback function** in React, you can follow a similar pattern as explained earlier. In this case, the child component will allow the user to select a color, and the parent component will receive that color through a callback and display it.
 
@@ -21984,6 +22065,8 @@ When you type something in the input field and click "Send to Parent", the data 
 
 This approach follows the core principles of **React's unidirectional data flow**, where data flows down the component tree (from parent to child), and events or changes in child components can communicate changes back up to the parent.
 
+---
+
 To find duplicates based on a particular column in SQL, you can use the `GROUP BY` clause along with the `HAVING` clause to filter groups that have more than one occurrence of the specified column. Here is the general approach:
 
 ### General SQL Query to Find Duplicates Based on a Column
@@ -22089,6 +22172,8 @@ This approach is very efficient for finding duplicate data based on any column i
 
 
 ---
+
+## Microservice design patterns
 
 Microservices architecture is a design pattern that allows applications to be developed as a collection of loosely coupled, independently deployable services. Each microservice focuses on a specific business functionality, typically corresponding to a business domain or capability. The goal is to break down large, monolithic applications into smaller, more manageable services that can be developed, deployed, and scaled independently.
 
@@ -22260,6 +22345,8 @@ The **Sidecar Pattern** is used to deploy auxiliary components (such as logging,
 Microservice architectures require careful design to ensure that services are independently scalable, resilient, and loosely coupled. The patterns outlined here provide proven strategies for building such architectures, including **decomposition patterns** for breaking down monolithic applications, **database patterns** for managing data consistency, **communication patterns** for inter-service communication, **resilience patterns** for handling failures, and **deployment patterns** for managing release cycles and scaling.
 
 By understanding and applying these patterns, you can build scalable, resilient, and maintainable microservices that are easy to evolve and adapt over time.
+
+---
 
 ### **Rate Limiting in Microservices**
 
@@ -23165,6 +23252,10 @@ By implementing rate limiting in your **Spring Boot microservice**, you can ensu
 
 This solution can be extended to other strategies or added to more complex architectures like **API Gateways** or **Service Meshes** for centralized rate limiting across all microservices.
 
+---
+
+## Load testing
+
 **Load testing** of RESTful services is an essential part of performance engineering. It helps determine how your system behaves under stress, the maximum load it can handle, and how it performs under different levels of traffic. Here’s a detailed guide on how to perform **load testing** of **REST services** using various tools and approaches.
 
 ### **1. Understanding Load Testing**
@@ -23362,7 +23453,9 @@ Be sure to:
 - Monitor system resources alongside response times.
 - Analyze the test results to improve scalability and performance.
 
-### **Virtual Threads in Java 19:**
+---
+
+## Virtual Threads in Java 19
 
 Java 19 introduced **virtual threads** as part of the **Project Loom** initiative. Virtual threads are designed to address the challenges associated with **highly concurrent** applications, such as the traditional thread model's performance overhead and scalability issues. Virtual threads allow Java applications to efficiently handle thousands or even millions of concurrent tasks with minimal overhead.
 
@@ -23519,7 +23612,9 @@ Virtual threads in Java 19 provide a powerful and lightweight way to achieve **h
 - **`Executors.newVirtualThreadPerTaskExecutor()`** makes it easy to manage virtual threads for concurrent tasks.
 - Virtual threads allow Java to scale to **millions of concurrent requests** without suffering from the limitations of traditional threads.
 
-### **Memory Leak in Microservices: Understanding and Resolution**
+---
+
+## **Memory Leak in Microservices: Understanding and Resolution**
 
 A **memory leak** in a microservice occurs when the service consumes memory over time without releasing it back to the operating system or JVM. This gradual increase in memory usage can eventually lead to **OutOfMemoryErrors**, poor performance, and potential crashes. Addressing memory leaks early in the development lifecycle is crucial to ensure the system is robust and scalable.
 
@@ -23683,6 +23778,8 @@ Memory leaks are a significant concern in microservices because they can silentl
 
 By identifying and addressing memory leaks early, and using proper monitoring and diagnostics, you can significantly improve the reliability, scalability, and performance of your microservices.
 
+---
+
 The **Permanent Generation (PermGen)** was a memory area in the JVM used to store metadata related to classes and methods. In older versions of Java (before **Java 8**), PermGen was part of the **Heap Memory** but had its own space for storing class definitions, method data, and other internal JVM structures. However, **PermGen** had some limitations that could lead to **OutOfMemoryError** under certain conditions, particularly in long-running applications or applications with dynamic class loading, such as web servers and application servers (e.g., Tomcat or JBoss).
 
 ### **Why PermGen Was a Temporary Solution**
@@ -23780,6 +23877,10 @@ Although **Metaspace** has its own garbage collection mechanism, the overall gar
 
 By combining these strategies, you can ensure that your microservices running on Java don't suffer from memory-related issues that might compromise performance and stability.
 
+---
+
+## Permanent Generation (PermGen)
+
 The **Permanent Generation (PermGen)** in the Java Virtual Machine (JVM) was introduced to manage the storage of **class metadata** (such as class definitions, method data, and other internal structures) separately from the **heap memory** where regular objects reside. While it was a functional solution for a long time, it eventually became a **temporary solution** for several key reasons:
 
 ### 1. **Fixed Size and Lack of Dynamic Scaling**
@@ -23857,9 +23958,11 @@ Thus, **PermGen** was phased out because of these limitations, and **Metaspace**
 
 Analyzing memory leaks in a service or application code is critical for maintaining performance and stability, particularly for long-running systems like microservices. **Memory leaks** occur when objects are no longer used but are still being referenced, preventing the garbage collector from reclaiming that memory. This can lead to **increased memory usage**, **OutOfMemoryError**, and **performance degradation** over time.
 
-To **analyze and identify memory leaks**, especially in **Java applications** (like microservices or Spring Boot services), there are several steps and tools you can use. Below is a comprehensive guide on how to approach memory leak detection:
-
 ---
+
+## Aanalyze and identify memory leaks
+
+To **analyze and identify memory leaks**, especially in **Java applications** (like microservices or Spring Boot services), there are several steps and tools you can use. Below is a comprehensive guide on how to approach memory leak detection:
 
 ### **1. Enable and Monitor Garbage Collection (GC) Logs**
 
@@ -23994,6 +24097,7 @@ Java **Flight Recorder (JFR)**, available in Oracle JDK and OpenJDK, is a diagno
 
 By carefully monitoring your application’s memory usage, analyzing GC logs, and using profiling and leak detection tools, you can effectively identify and resolve memory leaks before they impact your application's stability or performance.
 
+---
 
 ## Immutable Classes in Java
 
@@ -24157,10 +24261,12 @@ always have “failure atomicity” (a term used by Joshua Bloch) : if an immuta
 We also saw the benefits which immutable classes bring in an application. As a design best practice, always aim to make your application Java classes to be immutable. In this way, you can always worry less about concurrency related defects in your program.
 
 
+---
 
 In Java, **`async`** and **`await`** are not built-in language features like they are in JavaScript. However, Java provides **asynchronous programming support** through other mechanisms such as **`CompletableFuture`**, **`ExecutorService`**, and **`@Async`** in Spring.
 
-### How to Implement Asynchronous Programming in Spring Boot:
+
+## How to Implement Asynchronous Programming in Spring Boot
 
 In Spring Boot, you can use the **`@Async`** annotation to run methods asynchronously, similar to how `async` and `await` work in JavaScript. You can use **`CompletableFuture`** or **`ListenableFuture`** to handle the result of an asynchronous task.
 
@@ -25559,7 +25665,7 @@ These properties are crucial for maintaining the integrity and reliability of a 
 
 Transaction isolation in Spring Boot is an essential aspect of managing database transactions to ensure data consistency and integrity, especially in concurrent environments. In Spring, you can control transaction isolation levels using the `@Transactional` annotation.
 
-### Transaction Isolation Levels
+## Transaction Isolation Levels
 
 There are several transaction isolation levels defined by the SQL standard, which dictate how transaction integrity is visible to other transactions. The levels are:
 
@@ -25685,6 +25791,7 @@ The SOLID principles are a set of design principles aimed at making software des
 ### Summary
 The SOLID principles guide developers in creating systems that are easy to manage, extend, and maintain. By adhering to these principles, you can reduce complexity and improve the overall design of your software architecture.
 
+---
 
 ## Java design patterns
 
@@ -26372,7 +26479,7 @@ graph TD
 
 This diagram illustrates how both `Hashtable` and `ConcurrentHashMap` use hashing and handle collisions, without unsupported comments. If you have any further questions or need more modifications, feel free to ask!
 
-### Hashing in `Hashtable &  `ConcurrentHashMap`
+## Hashing in `Hashtable &  `ConcurrentHashMap`
 
 Hashing in a `Hashtable` and the concept of buckets in a `ConcurrentHashMap` are fundamental to how these data structures manage their data. Here’s an overview of each:
 
@@ -26793,7 +26900,7 @@ By adopting these best practices and using the provided code examples, you can e
 
 ---
 
-**Here’s an overview of Angular, React, microservices, and threading, along with their interactions and use cases.**
+## An overview of Angular, React, microservices, and threading, along with their interactions and use cases.
 
 ### Angular
 
@@ -26872,6 +26979,8 @@ Debugging React and Angular code involves various tools and techniques. Here’s
 - **Network Monitoring**: Use the Network tab to check API calls and responses.
 
 By using these strategies and tools, you can efficiently debug both React and Angular applications.
+
+## Sharding in MongoDB (Firoz)
 
 Sharding in MongoDB is a method used to distribute data across multiple servers, allowing for horizontal scaling. It helps manage large datasets and high-throughput applications by breaking up the data into smaller, more manageable pieces called "shards."
 
