@@ -52,13 +52,13 @@ Hide/Show table of contents
 | No. | Topics |
 |---- | ---------|
 |1 | [**Q&A-Design-Patterns**](conceptsI/FAQ-Design-Patterns.md)|
-|2 | [**Java Thread & Concurrency**](conceptsIII/java-basic-fundamental-lambda-expressions.md)|
-|3 | [**Java Thread & Concurrency**](conceptsIII/java-basic-fundamental-functional-interfaces.md)|
-|4 | [**Java Thread & Concurrency**](conceptsIII/java-basic-fundamental-method-references.md)|
-|5 | [**Java Thread & Concurrency**](conceptsIII/java-basic-fundamental-Stream.md)|
-|6 | [**Java Thread & Concurrency**](conceptsIII/java-basic-fundamental-Collection.md)|
-|7 | [**Java Thread & Concurrency**](conceptsIII/java-basic-fundamental-Collections-And-Streams.md)|
-|8 | [**Java Thread & Concurrency**](conceptsIII/java-basic-fundamental-optional.md)|
+|2 | [**Java Lambda Expressions**](conceptsIII/java-basic-fundamental-lambda-expressions.md)|
+|3 | [**Java Functional Interfaces**](conceptsIII/java-basic-fundamental-functional-interfaces.md)|
+|4 | [**Java Method References**](conceptsIII/java-basic-fundamental-method-references.md)|
+|5 | [**Java Stream API**](conceptsIII/java-basic-fundamental-Stream.md)|
+|6 | [**Java Collection**](conceptsIII/java-basic-fundamental-Collection.md)|
+|7 | [**Java Collections & Streams**](conceptsIII/java-basic-fundamental-Collections-And-Streams.md)|
+|8 | [**Java 8 Optional**](conceptsIII/java-basic-fundamental-optional.md)|
 |9 | [**Java Basic Differences & Comparisions**](java-basic-differences-and-comparisions.md)|
 |10 | [**Java Thread & Concurrency**](conceptsIII/java-basic-fundamental-Concurrency.md)|
 |11 | [**Java Collection Framework**](Java-Collection-Framework.md)|
