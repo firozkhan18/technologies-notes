@@ -377,3 +377,174 @@ public class BookService {
 }
 
 ```
+
+In Java 8, **lambda expressions** were introduced as a way to provide a clear and concise syntax for writing anonymous methods (i.e., methods without a name). They are primarily used to implement functional interfaces (interfaces with a single abstract method), and they simplify the syntax for passing behavior as parameters.
+
+### Key Characteristics of Lambda Expressions:
+1. **Concise Syntax**: Lambda expressions allow you to write code more compactly, eliminating the need for boilerplate code (such as anonymous classes).
+2. **Functional Interface**: A lambda expression works with functional interfaces, which are interfaces that contain exactly one abstract method. These interfaces are typically used to represent behavior that can be passed around as parameters to methods.
+3. **First-Class Function**: Lambdas allow you to treat behavior as a parameter (e.g., passing functions as arguments to methods), making it easier to pass functionality around in Java.
+
+### Basic Syntax of Lambda Expression:
+
+The general syntax of a lambda expression is:
+
+```java
+(parameter1, parameter2, ...) -> expression
+```
+
+Alternatively, it can have a block of code as the body:
+
+```java
+(parameter1, parameter2, ...) -> {
+    // body with multiple statements
+}
+```
+
+### Example 1: Simple Lambda Expression
+
+Suppose we have a functional interface:
+
+```java
+@FunctionalInterface
+interface Greeting {
+    void greet(String name);
+}
+```
+
+Using a lambda expression to implement the interface:
+
+```java
+public class LambdaExample {
+    public static void main(String[] args) {
+        // Using a lambda expression to implement the greet method
+        Greeting greeting = (name) -> System.out.println("Hello, " + name);
+        greeting.greet("John");
+    }
+}
+```
+
+**Output**:
+
+```
+Hello, John
+```
+
+### Example 2: Lambda with Multiple Parameters
+
+A lambda expression can take multiple parameters. Here's an example of adding two integers:
+
+```java
+@FunctionalInterface
+interface MathOperation {
+    int operation(int a, int b);
+}
+
+public class LambdaExample {
+    public static void main(String[] args) {
+        // Using lambda expression to add two numbers
+        MathOperation addition = (a, b) -> a + b;
+        System.out.println("Addition: " + addition.operation(10, 5)); // Output: 15
+    }
+}
+```
+
+**Output**:
+
+```
+Addition: 15
+```
+
+### Example 3: Lambda Expression with Block of Code
+
+When the lambda expression has more than one statement, it needs to be enclosed in braces `{}`.
+
+```java
+@FunctionalInterface
+interface MathOperation {
+    int operation(int a, int b);
+}
+
+public class LambdaExample {
+    public static void main(String[] args) {
+        // Using lambda with a block of code
+        MathOperation multiplication = (a, b) -> {
+            int result = a * b;
+            return result; // Return the result
+        };
+        System.out.println("Multiplication: " + multiplication.operation(10, 5)); // Output: 50
+    }
+}
+```
+
+**Output**:
+
+```
+Multiplication: 50
+```
+
+### Benefits of Lambda Expressions:
+1. **Concise and Readable Code**: Lambda expressions allow you to write more concise and readable code, reducing the need for boilerplate code such as anonymous inner classes.
+2. **Functional Programming**: Lambda expressions are a key part of functional programming in Java, enabling you to pass behavior as arguments and return values from methods more naturally.
+3. **Parallel Processing**: Lambdas, combined with streams, make it easier to perform operations like filtering, mapping, and reducing data in parallel.
+
+### Example 4: Lambda with `Streams` API
+
+Java 8 introduced the `Streams` API, which allows you to perform functional-style operations on collections of objects.
+
+```java
+import java.util.Arrays;
+import java.util.List;
+
+public class LambdaExample {
+    public static void main(String[] args) {
+        List<String> names = Arrays.asList("Alice", "Bob", "Charlie", "David");
+
+        // Using lambda with Streams API to filter and print names that start with 'A'
+        names.stream()
+             .filter(name -> name.startsWith("A"))
+             .forEach(name -> System.out.println(name));
+    }
+}
+```
+
+**Output**:
+
+```
+Alice
+```
+
+### Example 5: Lambda with `Comparator`
+
+Lambdas are frequently used with `Comparator` to sort collections:
+
+```java
+import java.util.Arrays;
+import java.util.List;
+
+public class LambdaExample {
+    public static void main(String[] args) {
+        List<Integer> numbers = Arrays.asList(3, 2, 1, 4, 5);
+
+        // Using lambda expression to sort the list
+        numbers.sort((a, b) -> a.compareTo(b));
+
+        System.out.println(numbers); // Output: [1, 2, 3, 4, 5]
+    }
+}
+```
+
+**Output**:
+
+```
+[1, 2, 3, 4, 5]
+```
+
+### Summary of Lambda Syntax:
+- **Single parameter**: `(param) -> expression`
+- **Multiple parameters**: `(param1, param2) -> expression`
+- **Block of code**: `(param1, param2) -> { code }`
+- **No parameter**: `() -> expression`
+
+### Conclusion:
+Lambda expressions in Java 8 are a powerful feature that simplifies the process of writing clean, efficient, and readable code. They enable functional programming capabilities by allowing you to pass behavior as parameters, work with `Streams`, and manipulate data in a concise way.
