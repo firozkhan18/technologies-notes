@@ -1,3 +1,1136 @@
+# Table of Contents
+1. [Class and Object](#class-and-object)
+2. [Encapsulation](#encapsulation)
+3. [Inheritance](#inheritance)
+4. [Polymorphism](#polymorphism)
+5. [Abstraction](#abstraction)
+6. [Composition](#composition)
+7. [Abstract Class](#abstract-class)
+8. [Regular Interface](#regular-interface)
+9. [Functional Interface](#functional-interface)
+10. [Class Components](#class-components)
+11. [Functional Components](#functional-components)
+12. [Pure Components](#pure-components)
+13. [Higher-Order Components (HOCs)](#higher-order-components-hocs)
+14. [Stateless Functional Components](#stateless-functional-components)
+15. [Controlled Components](#controlled-components)
+16. [Uncontrolled Components](#uncontrolled-components)
+17. [Render Props Components](#render-props-components)
+18. [Context Provider Components](#context-provider-components)
+## JAVA
+
+---
+### **Object-Oriented Programming (OOP) Concepts**
+Object-Oriented Programming (OOP) is a programming paradigm based on the concept of **objects**, which are instances of **classes**. OOP focuses on using objects and their interactions to design and implement software. It helps in organizing and structuring code efficiently, making it more maintainable, reusable, and scalable.
+Here are the **core OOP concepts**:
+---
+### 1. **Class and Object**
+- **Class**: A blueprint or template for creating objects. It defines properties (fields) and behaviors (methods) that the objects created from the class will have.
+  
+  **Example**: 
+  ```java
+  class Car {
+      String make;
+      String model;
+      int year;
+      void start() {
+          System.out.println("Car is starting");
+      }
+  }
+  ```
+- **Object**: An instance of a class. It contains actual values for the properties and can invoke methods defined in the class.
+  **Example**:
+  ```java
+  public class Main {
+      public static void main(String[] args) {
+          Car car1 = new Car();  // Creating an object of the Car class
+          car1.make = "Toyota";
+          car1.model = "Corolla";
+          car1.year = 2020;
+          car1.start();  // Calling the method of the Car object
+      }
+  }
+  ```
+---
+### 2. **Encapsulation**
+Encapsulation is the concept of bundling the data (fields) and methods (functions) that operate on the data into a single unit (class), and restricting access to some of the object's components. This is done using access modifiers (like `private`, `protected`, `public`) to control access to the object's state and behavior.
+#### **Benefits**:
+- **Data Hiding**: The internal state of the object is hidden from the outside world, which helps in protecting the data.
+- **Controlled Access**: Only the methods (getters and setters) defined by the class are allowed to access or modify the internal state.
+**Example**:
+```java
+class Employee {
+    private String name;  // Private field, cannot be accessed directly
+    private int age;
+    // Public getter method to access private field
+    public String getName() {
+        return name;
+    }
+    // Public setter method to modify private field
+    public void setName(String name) {
+        this.name = name;
+    }
+    public int getAge() {
+        return age;
+    }
+    public void setAge(int age) {
+        if (age > 0) {
+            this.age = age;
+        }
+    }
+}
+```
+In the above example, `name` and `age` are encapsulated (private), and access to them is controlled through public getter and setter methods.
+---
+### 3. **Inheritance**
+Inheritance allows a new class (called the **subclass** or **child class**) to inherit the properties and behaviors (fields and methods) from an existing class (called the **superclass** or **parent class**). This allows for **reusability** of code and establishing a relationship between classes.
+#### **Key Points**:
+- The subclass inherits all the public and protected fields and methods of the parent class.
+- A subclass can override methods of the superclass to provide its own implementation.
+- In Java, a class can only **extend** one superclass (single inheritance), but it can implement multiple interfaces.
+**Example**:
+```java
+class Animal {
+    void eat() {
+        System.out.println("Animal is eating");
+    }
+}
+class Dog extends Animal {
+    void bark() {
+        System.out.println("Dog is barking");
+    }
+    @Override
+    void eat() {
+        System.out.println("Dog is eating");
+    }
+}
+public class Main {
+    public static void main(String[] args) {
+        Dog dog = new Dog();
+        dog.eat();  // Outputs: Dog is eating (overridden method)
+        dog.bark(); // Outputs: Dog is barking
+    }
+}
+```
+In this example:
+- The `Dog` class inherits the `eat()` method from the `Animal` class, but overrides it to provide its own implementation.
+---
+### 4. **Polymorphism**
+Polymorphism means "many forms" and allows objects of different classes to be treated as objects of a common superclass. It enables the same method or operation to behave differently based on the object it is acting upon.
+There are two types of polymorphism:
+1. **Compile-time Polymorphism** (Method Overloading): This occurs when multiple methods have the same name but different parameter lists (number, type, or both).
+2. **Runtime Polymorphism** (Method Overriding): This occurs when a subclass provides a specific implementation for a method already defined in its superclass.
+#### **Example of Method Overloading (Compile-time Polymorphism)**:
+```java
+class MathOperation {
+    int add(int a, int b) {
+        return a + b;
+    }
+    double add(double a, double b) {
+        return a + b;
+    }
+}
+public class Main {
+    public static void main(String[] args) {
+        MathOperation operation = new MathOperation();
+        System.out.println(operation.add(5, 3));       // Outputs: 8
+        System.out.println(operation.add(5.5, 3.2));   // Outputs: 8.7
+    }
+}
+```
+#### **Example of Method Overriding (Runtime Polymorphism)**:
+```java
+class Animal {
+    void sound() {
+        System.out.println("Animal makes a sound");
+    }
+}
+class Dog extends Animal {
+    @Override
+    void sound() {
+        System.out.println("Dog barks");
+    }
+}
+public class Main {
+    public static void main(String[] args) {
+        Animal myAnimal = new Animal();  // Parent class reference
+        myAnimal.sound();  // Outputs: Animal makes a sound
+        myAnimal = new Dog();  // Child class reference
+        myAnimal.sound();  // Outputs: Dog barks (Runtime Polymorphism)
+    }
+}
+```
+In this example, the `sound()` method is overridden in the `Dog` class, and at runtime, the method of the actual object type (`Dog`) is called, even though the reference type is `Animal`.
+---
+### 5. **Abstraction**
+Abstraction is the process of hiding the implementation details and showing only the essential features of an object. It allows focusing on what an object **does**, rather than **how** it does it. In Java, abstraction is achieved using **abstract classes** and **interfaces**.
+#### **Key Points**:
+- **Abstract Class**: Can have both abstract (no implementation) and concrete (with implementation) methods.
+- **Interface**: A contract that only defines method signatures (until Java 8, now can have default methods with implementation).
+#### **Example**:
+```java
+abstract class Animal {
+    abstract void sound();  // Abstract method, no implementation
+}
+class Dog extends Animal {
+    @Override
+    void sound() {
+        System.out.println("Woof!");
+    }
+}
+public class Main {
+    public static void main(String[] args) {
+        Animal dog = new Dog();
+        dog.sound();  // Outputs: Woof!
+    }
+}
+```
+In this example, the `sound()` method is abstract in the `Animal` class, and the `Dog` class provides its specific implementation.
+---
+### 6. **Composition**
+Composition is the practice of building complex objects by combining simpler ones. Unlike inheritance, which is an **"is-a"** relationship, composition represents a **"has-a"** relationship. In composition, objects of other classes are used as fields in a class.
+#### **Example of Composition**:
+```java
+class Engine {
+    void start() {
+        System.out.println("Engine is starting");
+    }
+}
+class Car {
+    private Engine engine;  // Composition: Car "has-a" Engine
+    Car() {
+        engine = new Engine();  // Car contains an Engine
+    }
+    void startCar() {
+        engine.start();  // Using the engine object
+        System.out.println("Car is starting");
+    }
+}
+public class Main {
+    public static void main(String[] args) {
+        Car car = new Car();
+        car.startCar();  // Outputs: Engine is starting, Car is starting
+    }
+}
+```
+In this example, `Car` **has an** `Engine`, so it's a composition relationship. The `Car` class uses the `Engine` object as a part of its functionality.
+---
+### **Summary of OOP Concepts**:
+- **Class and Object**: Classes define objects, and objects are instances of classes.
+- **Encapsulation**: Hides the internal state of an object and provides controlled access via methods.
+- **Inheritance**: Allows one class to inherit fields and methods from another class, facilitating code reuse.
+- **Polymorphism**: Enables one interface to be used for different underlying forms (method overloading/overriding).
+- **Abstraction**: Hides the implementation details and shows only the essential features of an object.
+- **Composition**: Represents a "has-a" relationship, where one class contains objects of other classes.
+These core principles of **OOP** help in building robust, maintainable, and reusable code. They allow developers to structure programs that are easier to understand and modify over time.
+You're right! I missed covering **Aggregation** and **Association** in the previous explanation. Let me provide a more comprehensive overview of these concepts, alongside the previously mentioned ones like **Inheritance**, **Polymorphism**, **Abstraction**, and **Encapsulation**.
+---
+### **OOP Concepts with Aggregation, Composition, and Association**
+In addition to the primary Object-Oriented Programming (OOP) principles, there are important design relationships between classes that are useful when modeling real-world problems. These are **Association**, **Aggregation**, and **Composition**, which represent different types of "has-a" relationships.
+Let's break these concepts down:
+---
+### **1. Association**
+**Association** is the most general form of relationship between objects. It represents a situation where objects of one class are associated with objects of another class, but neither class owns the other. In other words, objects are linked, but they can exist independently.
+#### **Types of Association**:
+- **One-to-one**: One object of a class is associated with one object of another class.
+- **One-to-many**: One object of a class is associated with many objects of another class.
+- **Many-to-many**: Many objects of a class are associated with many objects of another class.
+#### **Example of Association**:
+```java
+class Person {
+    String name;
+    Person(String name) {
+        this.name = name;
+    }
+}
+class Address {
+    String city;
+    Address(String city) {
+        this.city = city;
+    }
+}
+public class Main {
+    public static void main(String[] args) {
+        Person person = new Person("John");
+        Address address = new Address("New York");
+        // Association: A person can have an address, but they exist independently
+        System.out.println(person.name + " lives in " + address.city);
+    }
+}
+```
+Here, `Person` and `Address` have a simple association. A person can have an address, but they are independent entities, so this is a one-to-one association.
+---
+### **2. Aggregation**
+**Aggregation** is a special form of association where one object is a part of another object, but the lifetime of the aggregated object is independent of the lifetime of the parent object. In other words, objects that are part of an aggregate can exist without the parent object.
+- Aggregation represents a **"has-a"** relationship, but the contained object can exist on its own.
+- It is sometimes referred to as a **"whole-part"** relationship.
+#### **Example of Aggregation**:
+```java
+class Department {
+    String name;
+    // Aggregation: Department has employees, but employees can exist independently
+    Employee employee;
+    Department(String name, Employee employee) {
+        this.name = name;
+        this.employee = employee;
+    }
+}
+class Employee {
+    String name;
+    Employee(String name) {
+        this.name = name;
+    }
+}
+public class Main {
+    public static void main(String[] args) {
+        Employee emp1 = new Employee("Alice");
+        Department dept1 = new Department("HR", emp1);
+        
+        System.out.println(dept1.name + " department has " + dept1.employee.name + " as an employee.");
+        // Employee exists independently of the department
+    }
+}
+```
+In this case, `Employee` can exist independently of `Department`, which is characteristic of aggregation. The `Department` "has-a" `Employee`, but the `Employee` could be moved to another department or exist without any department.
+---
+### **3. Composition**
+**Composition** is a stronger form of aggregation. In composition, the contained objects **cannot exist independently** of the parent object. When the parent object is destroyed, all its contained objects are destroyed as well. Composition represents a **"contains-a"** or **"part-of"** relationship, where the child objects cannot exist outside the parent.
+#### **Key Characteristics of Composition**:
+- **Stronger lifecycle dependency**: If the parent object is destroyed, the child objects are also destroyed.
+- **"Has-a" relationship** with a strong ownership relationship between the parent and child.
+#### **Example of Composition**:
+```java
+class Library {
+    String name;
+    // Composition: Library contains Books, and Books cannot exist without the Library
+    Book book;
+    Library(String name, Book book) {
+        this.name = name;
+        this.book = book;
+    }
+}
+class Book {
+    String title;
+    Book(String title) {
+        this.title = title;
+    }
+}
+public class Main {
+    public static void main(String[] args) {
+        Book book1 = new Book("Java Programming");
+        Library library = new Library("City Library", book1);
+        
+        System.out.println(library.name + " has a book titled " + library.book.title);
+        // If the library is destroyed, the book will be destroyed as well.
+    }
+}
+```
+In this example, the `Book` class cannot exist independently of the `Library`. When the `Library` object is destroyed, its `Book` object is also destroyed. This strong relationship is a hallmark of composition.
+---
+### **4. Inheritance**
+As already explained, **Inheritance** allows one class to inherit the properties and methods of another class. It enables code reuse and establishes a "is-a" relationship.
+- **"is-a" relationship**: The subclass is a type of the superclass.
+  
+#### **Example of Inheritance**:
+```java
+class Animal {
+    void sound() {
+        System.out.println("Animal makes a sound");
+    }
+}
+class Dog extends Animal {
+    void sound() {
+        System.out.println("Dog barks");
+    }
+}
+public class Main {
+    public static void main(String[] args) {
+        Dog dog = new Dog();
+        dog.sound();  // Outputs: Dog barks
+    }
+}
+```
+The `Dog` class inherits from `Animal` and overrides the `sound()` method.
+---
+### **5. Polymorphism**
+Polymorphism allows one interface to be used for different underlying forms. It allows methods to do different things based on the object it is acting upon, enabling method overloading and method overriding.
+#### **Method Overloading** (Compile-time Polymorphism):
+```java
+class MathOperation {
+    int add(int a, int b) {
+        return a + b;
+    }
+    double add(double a, double b) {
+        return a + b;
+    }
+}
+public class Main {
+    public static void main(String[] args) {
+        MathOperation op = new MathOperation();
+        System.out.println(op.add(3, 4));    // Outputs: 7
+        System.out.println(op.add(3.5, 4.5));  // Outputs: 8.0
+    }
+}
+```
+#### **Method Overriding** (Runtime Polymorphism):
+```java
+class Animal {
+    void sound() {
+        System.out.println("Animal makes a sound");
+    }
+}
+class Dog extends Animal {
+    @Override
+    void sound() {
+        System.out.println("Dog barks");
+    }
+}
+public class Main {
+    public static void main(String[] args) {
+        Animal dog = new Dog();
+        dog.sound();  // Outputs: Dog barks
+    }
+}
+```
+Here, the `sound()` method is overridden in the `Dog` class, demonstrating runtime polymorphism.
+---
+### **6. Abstraction**
+Abstraction is the process of hiding implementation details and showing only the essential features of an object. In Java, you achieve abstraction using **abstract classes** and **interfaces**.
+#### **Example of Abstraction**:
+```java
+abstract class Animal {
+    abstract void sound();  // Abstract method (no implementation)
+}
+class Dog extends Animal {
+    @Override
+    void sound() {
+        System.out.println("Woof!");
+    }
+}
+public class Main {
+    public static void main(String[] args) {
+        Animal dog = new Dog();
+        dog.sound();  // Outputs: Woof!
+    }
+}
+```
+In this example, the `sound()` method is abstract in the `Animal` class, and the `Dog` class provides a specific implementation.
+---
+### **7. Encapsulation**
+Encapsulation is the concept of hiding an object's internal state and requiring all interaction to be performed through well-defined methods. This is usually done by making fields `private` and providing public getter and setter methods.
+#### **Example of Encapsulation**:
+```java
+class Person {
+    private String name;
+    private int age;
+    // Getter and Setter methods
+    public String getName() {
+        return name;
+    }
+    public void setName(String name) {
+        this.name = name;
+    }
+    public int getAge() {
+        return age;
+    }
+    public void setAge(int age) {
+        if (age > 0) {
+            this.age = age;
+        }
+    }
+}
+```
+In this example, the `Person` class encapsulates the `name` and `age` fields and provides controlled access to them via getter and setter methods.
+---
+### **Summary of OOP Concepts**:
+| Concept         | Description                                                                 | Example                                                         |
+|-----------------|-----------------------------------------------------------------------------|-------------------------------------------------------------|
+| **Association**  | Represents a general relationship between objects.                          | A `Person` can have an `Address` (independent objects).      |
+| **Aggregation**  | A form of association where the child can exist independently of the parent. | A `Department` "has" an `Employee`, but employees can exist independently. |
+| **Composition**  | A stronger form of aggregation where the child cannot exist without the parent. | A `Library` "contains" a `Book`, and books cannot exist outside the library. |
+| **Inheritance**  | Allows a class to inherit fields and methods from another class.            | A `Dog` "is a" type of `Animal` and inherits
+ its methods.     |
+| **Polymorphism** | Allows one interface to be used for different underlying forms.              | A `Dog` class overrides the `sound()` method of `Animal`.     |
+| **Abstraction**  | Hides the implementation details and shows only essential features.         | An `Animal` class defines an abstract `sound()` method.       |
+| **Encapsulation**| Hides the internal state of an object and provides controlled access.       | `Person` class has private fields with public getter and setter methods. |
+Understanding these principles will help you design more maintainable and flexible object-oriented software.
+### **Abstract Class, Regular Interface, and Functional Interface in Java**
+In Java, **abstract classes** and **interfaces** are fundamental concepts for defining common behavior and structure across different classes. They allow for abstraction and polymorphism in object-oriented programming. However, abstract classes and interfaces serve different purposes and have different characteristics. Let’s explore the differences and use cases for each.
+---
+### **1. Abstract Class**
+An **abstract class** is a class that cannot be instantiated on its own but can be subclassed by other classes. It is used when you want to provide a common base for other classes to extend while allowing subclasses to provide their own specific implementations.
+#### **Key Characteristics of Abstract Class:**
+- **Cannot be instantiated**: You cannot create an instance of an abstract class directly.
+- **Can have both abstract and concrete methods**: An abstract class can have abstract methods (methods without implementation) and concrete methods (methods with implementation).
+- **Can have instance variables**: Abstract classes can have instance variables (fields) and constructors.
+- **Supports inheritance**: Abstract classes are inherited by other classes using the `extends` keyword.
+- **Can have access modifiers**: The methods in an abstract class can have various access modifiers like `private`, `protected`, and `public`.
+- **Can provide default behavior**: Concrete methods in abstract classes can provide default behavior, so subclasses don’t always need to implement them.
+#### **Example of Abstract Class**:
+```java
+abstract class Animal {
+    // Abstract method (no implementation)
+    abstract void sound();
+    // Concrete method (with implementation)
+    void sleep() {
+        System.out.println("This animal is sleeping.");
+    }
+}
+class Dog extends Animal {
+    // Providing implementation for the abstract method
+    void sound() {
+        System.out.println("Woof!");
+    }
+}
+public class TestAbstractClass {
+    public static void main(String[] args) {
+        Animal dog = new Dog();
+        dog.sound();  // Outputs: Woof!
+        dog.sleep();  // Outputs: This animal is sleeping.
+    }
+}
+```
+#### **When to use Abstract Class:**
+- When you have a common base class with some common behavior that can be shared by multiple subclasses.
+- When you need to define default behavior (concrete methods) along with abstract methods that subclasses must implement.
+- When you want to define instance variables and constructors that can be used by subclasses.
+---
+### **2. Regular Interface**
+A **regular interface** is a contract that defines methods that must be implemented by any class that chooses to implement the interface. Unlike abstract classes, interfaces are primarily used to define **a contract for behaviors** without providing any implementation (except for default methods starting from Java 8).
+#### **Key Characteristics of Regular Interface:**
+- **Cannot have instance variables**: Interfaces cannot have instance variables, but they can have constants (`public static final` fields).
+- **All methods are implicitly abstract**: Methods in interfaces are abstract by default (except for default methods or static methods).
+- **Can be implemented by any class**: A class implements an interface using the `implements` keyword, and a class can implement multiple interfaces.
+- **Supports multiple inheritance**: Unlike classes, a class can implement multiple interfaces.
+- **No constructors**: Interfaces do not have constructors.
+- **Can have default and static methods** (since Java 8): You can define default methods with implementation and static methods in an interface, which wasn’t possible in earlier versions of Java.
+#### **Example of Regular Interface**:
+```java
+interface Animal {
+    // Abstract method (no implementation)
+    void sound();
+    // Default method with implementation
+    default void sleep() {
+        System.out.println("This animal is sleeping.");
+    }
+}
+class Dog implements Animal {
+    // Providing implementation for the abstract method
+    public void sound() {
+        System.out.println("Woof!");
+    }
+}
+public class TestInterface {
+    public static void main(String[] args) {
+        Animal dog = new Dog();
+        dog.sound();  // Outputs: Woof!
+        dog.sleep();  // Outputs: This animal is sleeping.
+    }
+}
+```
+#### **When to use Regular Interface:**
+- When you want to define a contract for behavior that can be implemented by multiple classes.
+- When you need multiple inheritance of behavior (i.e., a class can implement multiple interfaces).
+- When you only want to define method signatures and leave the implementation to the classes that implement the interface.
+---
+### **3. Functional Interface**
+A **functional interface** is a special type of interface in Java that has **exactly one abstract method**. Functional interfaces are used primarily to support lambda expressions and method references in Java 8 and beyond.
+#### **Key Characteristics of Functional Interface:**
+- **Exactly one abstract method**: A functional interface can have only one abstract method, but it can have multiple default or static methods.
+- **Used with Lambda Expressions**: Functional interfaces are used primarily to represent **single-method** interfaces that can be implemented using lambda expressions.
+- **`@FunctionalInterface` annotation**: This annotation is not mandatory, but it’s recommended because it helps the compiler ensure the interface conforms to the rules of a functional interface (i.e., it has only one abstract method).
+#### **Example of Functional Interface**:
+```java
+@FunctionalInterface
+interface Calculator {
+    int add(int a, int b);  // Single abstract method
+    // Default method
+    default int subtract(int a, int b) {
+        return a - b;
+    }
+}
+public class TestFunctionalInterface {
+    public static void main(String[] args) {
+        // Using a lambda expression to implement the functional interface
+        Calculator calculator = (a, b) -> a + b;
+        // Calling the method using the lambda implementation
+        System.out.println("Sum: " + calculator.add(5, 3));  // Outputs: Sum: 8
+        // Calling the default method
+        System.out.println("Difference: " + calculator.subtract(5, 3));  // Outputs: Difference: 2
+    }
+}
+```
+#### **When to use Functional Interface:**
+- When you want to represent a single action or behavior that can be implemented using a lambda expression or method reference.
+- When working with Java’s **Stream API** or **java.util.function** package, which heavily relies on functional interfaces (e.g., `Predicate`, `Function`, `Consumer`, etc.).
+---
+### **Key Differences Between Abstract Class, Regular Interface, and Functional Interface:**
+| Feature                        | **Abstract Class**                               | **Regular Interface**                                  | **Functional Interface**                              |
+|---------------------------------|--------------------------------------------------|--------------------------------------------------------|--------------------------------------------------------|
+| **Methods**                     | Can have both abstract and concrete methods.     | All methods are abstract by default (except default/static methods). | Exactly one abstract method, can have multiple default/static methods. |
+| **Fields**                       | Can have instance variables (fields).            | Cannot have instance variables (only constants).       | Cannot have instance variables (only constants).       |
+| **Inheritance**                  | Can inherit from one class, can implement interfaces. | Can implement multiple interfaces.                    | Can implement multiple interfaces (like a regular interface). |
+| **Constructors**                 | Can have constructors.                           | No constructors allowed.                               | No constructors allowed.                               |
+| **Use Case**                     | When you want to share behavior with some common implementation. | When you want to define a contract for behavior without implementation. | When you want to define a single method interface for lambda expressions. |
+| **Multiple Inheritance**         | Not supported (can extend only one class).       | Supported (a class can implement multiple interfaces).  | Supported (same as regular interfaces).                 |
+| **Default Methods**              | Can provide default behavior with concrete methods. | Can provide default methods (since Java 8).            | Can have default methods (optional).                   |
+| **Annotations**                  | No special annotation required.                  | No special annotation required.                        | `@FunctionalInterface` annotation to indicate it is a functional interface. |
+---
+### **Summary:**
+- **Abstract Class**: Used for sharing common behavior between classes, can have both abstract and concrete methods, allows instance variables and constructors.
+- **Regular Interface**: Defines a contract for behavior, can be implemented by multiple classes, and can have default methods (since Java 8).
+- **Functional Interface**: A special type of interface that has exactly one abstract method and can be used with lambda expressions, ideal for representing single-function behaviors.
+Java 8 introduced several powerful features that significantly changed the way developers write Java code. These features improve readability, maintainability, and performance by introducing functional programming concepts and new language constructs. Here's an in-depth look at the major features introduced in Java 8:
+### 1. **Lambda Expressions**
+Lambda expressions allow you to write instances of single-method interfaces (functional interfaces) more concisely. They provide a way to pass behavior as a parameter to methods or to execute operations on data without explicitly writing classes or implementing interfaces.
+#### Syntax of Lambda Expression:
+```java
+(parameters) -> expression
+```
+For example:
+```java
+// Traditional anonymous class
+Runnable r = new Runnable() {
+    public void run() {
+        System.out.println("Hello from Runnable!");
+    }
+};
+// Lambda expression
+Runnable r2 = () -> System.out.println("Hello from Runnable!");
+```
+#### Key Points:
+- Lambdas enable functional programming.
+- They eliminate boilerplate code such as anonymous inner classes.
+- Lambda expressions can be passed as arguments to methods or returned as values.
+### 2. **Functional Interfaces**
+A **functional interface** is an interface that has only one abstract method (but can have multiple default or static methods). These interfaces are used as the target types for lambda expressions.
+#### Example of a Functional Interface:
+```java
+@FunctionalInterface
+interface MyFunctionalInterface {
+    void myMethod();
+}
+```
+Java 8 has several built-in functional interfaces in the `java.util.function` package, such as:
+- `Function<T, R>`: Takes a parameter of type `T` and returns a result of type `R`.
+- `Predicate<T>`: Represents a boolean-valued function of one argument.
+- `Consumer<T>`: Represents an operation that takes an argument and returns nothing.
+- `Supplier<T>`: Represents a supplier of results.
+- `BinaryOperator<T>`: Represents an operation on two operands of the same type.
+### 3. **Streams API**
+The **Streams API** is a major addition to Java 8 that allows you to process sequences of elements (such as collections, arrays, or I/O channels) in a functional way. Streams provide a high-level abstraction for performing operations like filtering, mapping, sorting, and reducing over a set of data.
+#### Stream Creation:
+You can create streams from collections, arrays, or other sources:
+```java
+List<String> list = Arrays.asList("apple", "banana", "cherry");
+// Creating a stream from a list
+Stream<String> stream = list.stream();
+// Creating a stream from an array
+Stream<Integer> intStream = Stream.of(1, 2, 3, 4, 5);
+```
+#### Common Stream Operations:
+- **filter()**: Filters elements based on a condition.
+- **map()**: Transforms each element in the stream.
+- **collect()**: Collects the results of stream processing into a collection or other data structures.
+- **reduce()**: Reduces the stream to a single value (e.g., sum, max).
+- **forEach()**: Iterates over each element in the stream.
+- **sorted()**: Sorts elements in the stream.
+Example:
+```java
+List<String> words = Arrays.asList("apple", "banana", "cherry", "date");
+List<String> filteredWords = words.stream()
+                                  .filter(word -> word.startsWith("b"))
+                                  .collect(Collectors.toList());
+```
+Streams can also be **parallelized** for concurrent processing:
+```java
+List<String> parallelWords = words.parallelStream()
+                                  .filter(word -> word.startsWith("b"))
+                                  .collect(Collectors.toList());
+```
+### 4. **Default Methods in Interfaces**
+Java 8 allows **default methods** in interfaces. A default method is a method with a body defined in an interface, which can provide a default implementation.
+#### Example:
+```java
+interface MyInterface {
+    default void defaultMethod() {
+        System.out.println("This is a default method");
+    }
+    
+    void abstractMethod(); // abstract method
+}
+class MyClass implements MyInterface {
+    public void abstractMethod() {
+        System.out.println("Implementing abstract method");
+    }
+}
+public class Main {
+    public static void main(String[] args) {
+        MyClass obj = new MyClass();
+        obj.defaultMethod(); // Access default method
+    }
+}
+```
+- Default methods allow you to add methods to interfaces without breaking existing implementations.
+- They also enable interfaces to evolve without forcing implementing classes to update their code.
+### 5. **Method References**
+Method references are a shorthand notation of a lambda expression that refers to a method directly by its name. They are used primarily to refer to methods of existing classes or objects.
+#### Types of Method References:
+- **Static methods**: `ClassName::methodName`
+- **Instance methods**: `instance::methodName`
+- **Constructor references**: `ClassName::new`
+Example:
+```java
+// Using lambda expression
+List<String> list = Arrays.asList("apple", "banana", "cherry");
+list.forEach(s -> System.out.println(s));
+// Using method reference
+list.forEach(System.out::println);
+```
+Method references are concise and often more readable than equivalent lambda expressions.
+### 6. **Optional**
+The `Optional` class is a container object which may or may not contain a value. It is introduced to reduce `NullPointerException` by explicitly handling the absence of values.
+#### Example:
+```java
+Optional<String> optional = Optional.of("Hello");
+System.out.println(optional.get()); // prints "Hello"
+Optional<String> emptyOptional = Optional.empty();
+System.out.println(emptyOptional.orElse("Default")); // prints "Default"
+```
+You can also use methods like `map()`, `flatMap()`, `filter()`, and `ifPresent()` to perform operations safely without needing null checks.
+### 7. **New Date and Time API (java.time)**
+Java 8 introduced a new, more comprehensive and immutable **Date and Time API** in the `java.time` package, which addresses many issues with the old `Date` and `Calendar` classes.
+#### Key Classes:
+- `LocalDate`: Represents a date (year, month, day) without time.
+- `LocalTime`: Represents a time without a date.
+- `LocalDateTime`: Combines date and time.
+- `ZonedDateTime`: Includes time-zone-specific date and time.
+- `Instant`: Represents a point on the timeline (useful for timestamps).
+#### Example:
+```java
+LocalDate date = LocalDate.now(); // Current date
+LocalDate specificDate = LocalDate.of(2020, 1, 1); // Specific date
+LocalTime time = LocalTime.now(); // Current time
+LocalDateTime dateTime = LocalDateTime.now(); // Current date and time
+ZonedDateTime zonedDateTime = ZonedDateTime.now(); // Date and time with timezone
+```
+The new API is more consistent, thread-safe, and easier to use compared to the old `java.util.Date` and `java.util.Calendar` classes.
+### 8. **Nashorn JavaScript Engine**
+Java 8 introduced the **Nashorn JavaScript Engine**, which replaced the older Rhino JavaScript engine. Nashorn provides better performance and allows developers to run JavaScript code from within Java applications.
+Example of using Nashorn:
+```java
+import javax.script.*;
+public class NashornExample {
+    public static void main(String[] args) throws Exception {
+        ScriptEngine engine = new ScriptEngineManager().getEngineByName("nashorn");
+        engine.eval("print('Hello from JavaScript!')");
+    }
+}
+```
+### 9. **Streams and Parallel Streams**
+In addition to the standard stream API, Java 8 introduced **parallel streams**, which allow streams to be processed concurrently. This can significantly improve performance for large datasets, though it requires careful consideration regarding thread safety.
+```java
+List<Integer> numbers = Arrays.asList(1, 2, 3, 4, 5);
+numbers.parallelStream()
+       .map(n -> n * 2)
+       .forEach(System.out::println);
+```
+### 10. **New Collectors and the `Collectors` Utility Class**
+The `Collectors` utility class provides factory methods for common operations on collections like joining, grouping, partitioning, and collecting into a map.
+Examples:
+- **toList()**: Collects the stream elements into a list.
+- **joining()**: Concatenates the elements into a single string.
+- **groupingBy()**: Groups elements by a classifier function.
+- **partitioningBy()**: Partitions elements into two groups.
+Example:
+```java
+List<String> words = Arrays.asList("apple", "banana", "cherry");
+String result = words.stream()
+                     .collect(Collectors.joining(", "));
+System.out.println(result);  // Output: apple, banana, cherry
+```
+---
+### Summary of Java 8 Features:
+- **Lambda Expressions**: Concise way to define anonymous functions.
+- **Functional Interfaces**: Interfaces with a single abstract method, typically used with lambda expressions.
+- **Streams API**: High-level abstraction for processing sequences of data.
+- **Default Methods**: Methods in interfaces with a default implementation.
+- **Method References**: Shorthand for lambdas that refer to existing methods.
+- **Optional**: A container that can either contain a value or be empty, reducing null checks.
+- **New Date/Time API**: A new, immutable, and more comprehensive date-time API.
+- **Nashorn JavaScript Engine**: A new engine for running JavaScript code in Java.
+- **Collectors**: Utilities to collect and manipulate streams in various ways.
+These Java 8 features represent a major shift towards functional programming in Java, enhancing both code readability and performance. By leveraging these features, developers can write more concise, expressive, and maintainable Java code.
+In Java, **threads** and **concurrency** are critical concepts that enable parallel execution and efficient resource utilization, particularly in multi-core processors. Understanding how threads work, how to manage concurrency, and how to avoid common pitfalls like race conditions is key to writing efficient, thread-safe applications.
+Let’s break this down into key concepts:
+---
+### **1. What is a Thread?**
+A **thread** is a lightweight unit of execution within a process. In Java, a thread is a single path of execution, and a program can have multiple threads running simultaneously. Each thread runs independently but shares the same memory space of the parent process.
+- **Thread**: A sequence of instructions that can be executed independently.
+- **Process**: A program in execution, consisting of one or more threads.
+Java provides built-in support for multi-threading, meaning you can create and manage multiple threads for parallel execution.
+---
+### **2. Thread Creation in Java**
+You can create and manage threads in Java in two main ways:
+#### a) **By Extending the `Thread` Class**
+You can create a new thread by subclassing the `Thread` class and overriding its `run()` method.
+```java
+class MyThread extends Thread {
+    @Override
+    public void run() {
+        System.out.println("Thread is running");
+    }
+}
+public class Main {
+    public static void main(String[] args) {
+        MyThread thread = new MyThread();
+        thread.start();  // Start the thread
+    }
+}
+```
+- **`start()`**: This method creates a new thread and invokes the `run()` method asynchronously.
+- **`run()`**: Contains the code that the thread will execute.
+#### b) **By Implementing the `Runnable` Interface**
+Instead of extending `Thread`, you can implement the `Runnable` interface, which is a more flexible approach because it allows the class to extend another class (since Java supports single inheritance only).
+```java
+class MyRunnable implements Runnable {
+    @Override
+    public void run() {
+        System.out.println("Thread is running");
+    }
+}
+public class Main {
+    public static void main(String[] args) {
+        Runnable runnable = new MyRunnable();
+        Thread thread = new Thread(runnable);
+        thread.start();
+    }
+}
+```
+- `Runnable` is an interface with a single method, `run()`, which contains the code that will be executed by the thread.
+- By passing a `Runnable` instance to a `Thread` object, you can start a thread without subclassing `Thread`.
+---
+### **3. Thread Lifecycle**
+A thread in Java goes through several states during its lifecycle:
+1. **New**: A thread is created but hasn't started yet.
+2. **Runnable**: A thread is ready to run and is waiting for the CPU to schedule it for execution.
+3. **Blocked**: A thread is waiting for a resource, such as IO or a lock.
+4. **Waiting**: A thread is waiting indefinitely for another thread to perform a specific action (e.g., `Thread.join()` or `Object.wait()`).
+5. **Timed Waiting**: A thread is waiting for a specified time (e.g., `Thread.sleep(1000)`).
+6. **Terminated**: A thread has finished executing.
+---
+### **4. Concurrency in Java**
+**Concurrency** refers to the ability of a system to handle multiple tasks simultaneously. Java provides several mechanisms to help developers manage concurrent execution of threads, and to ensure that shared resources are accessed in a thread-safe manner.
+#### a) **Thread Synchronization**
+When multiple threads access shared resources, there is a risk of data inconsistency if threads modify the resource simultaneously. Java provides synchronization mechanisms to ensure that only one thread accesses a resource at a time.
+- **Synchronized Methods**: You can synchronize a method to ensure that only one thread can execute it at a time.
+```java
+class Counter {
+    private int count = 0;
+    public synchronized void increment() {
+        count++;
+    }
+}
+```
+- **Synchronized Blocks**: You can also use synchronized blocks to limit the scope of synchronization to specific parts of your code, which can improve performance.
+```java
+class Counter {
+    private int count = 0;
+    public void increment() {
+        synchronized(this) {
+            count++;
+        }
+    }
+}
+```
+- **Locks**: Java also provides explicit locking mechanisms via the `java.util.concurrent.locks.Lock` interface, which allows finer control over thread synchronization (e.g., `ReentrantLock`).
+```java
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+class Counter {
+    private int count = 0;
+    private Lock lock = new ReentrantLock();
+    public void increment() {
+        lock.lock(); // Acquires the lock
+        try {
+            count++;
+        } finally {
+            lock.unlock(); // Releases the lock
+        }
+    }
+}
+```
+#### b) **Deadlock**
+Deadlock is a situation where two or more threads are blocked indefinitely, waiting for each other to release a resource. This typically happens when two threads hold locks on different resources and each is waiting for the other to release its lock.
+Example of Deadlock:
+```java
+class A {
+    synchronized void methodA(B b) {
+        b.last();
+    }
+    synchronized void last() {}
+}
+class B {
+    synchronized void methodB(A a) {
+        a.last();
+    }
+    synchronized void last() {}
+}
+public class Deadlock {
+    public static void main(String[] args) {
+        A a = new A();
+        B b = new B();
+        
+        new Thread(() -> a.methodA(b)).start();
+        new Thread(() -> b.methodB(a)).start();
+    }
+}
+```
+To avoid deadlocks:
+- Avoid holding multiple locks at once.
+- Use a timeout for acquiring locks (`ReentrantLock.lock(long timeout)`).
+- Always acquire locks in a consistent order.
+---
+### **5. Executor Framework**
+The **Executor Framework** introduced in Java 5 provides a higher-level replacement for managing threads. Instead of manually creating and managing threads, you use executor services that abstract away the details.
+#### Executor Types:
+1. **SingleThreadExecutor**: Uses a single worker thread to process tasks.
+2. **FixedThreadPool**: Uses a fixed number of threads to process a queue of tasks.
+3. **CachedThreadPool**: Creates new threads as needed, but reuses existing ones if available.
+4. **ScheduledThreadPool**: A pool of threads that can execute tasks after a delay or periodically.
+Example of using `ExecutorService`:
+```java
+import java.util.concurrent.*;
+public class ExecutorExample {
+    public static void main(String[] args) {
+        ExecutorService executor = Executors.newFixedThreadPool(2);
+        
+        executor.submit(() -> System.out.println("Task 1"));
+        executor.submit(() -> System.out.println("Task 2"));
+        
+        executor.shutdown(); // Initiates an orderly shutdown
+    }
+}
+```
+- **`submit()`**: Submits a task for execution.
+- **`shutdown()`**: Initiates an orderly shutdown in which previously submitted tasks are executed, but no new tasks will be accepted.
+---
+### **6. Future and Callable**
+When you need to submit a task that returns a result or may throw an exception, you use **`Callable`** instead of `Runnable`. `Callable` is similar to `Runnable`, but it can return a result or throw an exception.
+You can submit `Callable` tasks via an `ExecutorService`, which returns a **`Future`** object.
+#### Example:
+```java
+import java.util.concurrent.*;
+public class CallableExample {
+    public static void main(String[] args) throws ExecutionException, InterruptedException {
+        ExecutorService executor = Executors.newCachedThreadPool();
+        
+        Callable<Integer> task = () -> {
+            return 42;  // Task that returns a value
+        };
+        
+        Future<Integer> future = executor.submit(task);
+        System.out.println("Result: " + future.get());  // Block until the task is done
+        
+        executor.shutdown();
+    }
+}
+```
+- **`Future.get()`**: Blocks the calling thread until the task completes and returns the result.
+- **`Future.isDone()`**: Returns `true` if the task is completed.
+---
+### **7. Concurrency Utilities (java.util.concurrent)**
+Java 8 introduced several concurrency utilities in the `java.util.concurrent` package that simplify working with threads and synchronization.
+#### a) **CountDownLatch**
+A **CountDownLatch** is used to block one or more threads until a set of operations being performed in other threads completes.
+```java
+CountDownLatch latch = new CountDownLatch(3); // Wait for 3 events to occur
+latch.await();  // Blocks until the count reaches 0
+```
+#### b) **CyclicBarrier**
+A **CyclicBarrier** is similar to a CountDownLatch but allows threads to repeatedly meet at a common barrier point.
+#### c) **Semaphore**
+A **Semaphore** controls access to a particular resource by multiple threads by using a set number of permits.
+---
+### **Conclusion**
+- **Thread**: A lightweight process that can run concurrently with others.
+- **Concurrency**: The ability of a system to execute multiple tasks simultaneously, improving performance.
+- **Thread Management**: Java provides multiple ways to create threads (via `Thread` class, `Runnable`, or `Executor` framework).
+- **Synchronization**: Ensures thread-safe access to shared resources using mechanisms like `synchronized` blocks and `Lock`.
+- **Executor Framework**: Provides a higher-level API for managing thread pools and scheduling tasks.
+- **Deadlocks**: Careful attention is needed to avoid deadlocks by properly managing resource locking.
+By understanding these concepts and applying best practices, Java developers can efficiently manage concurrency, improve application performance, and avoid common multi-threading pitfalls.
+Java 8 and beyond introduced several important updates and improvements to the **Java Collections Framework**. These updates enhance the flexibility, performance, and ease of use of collections in Java. Below are the key updates and new features related to the Collections Framework:
+---
+### **1. Stream API (Java 8)**
+One of the most significant additions to the Collections Framework in Java 8 is the **Stream API**. The Stream API allows you to process sequences of elements (such as collections, arrays, or I/O channels) in a functional style, enabling efficient, declarative operations on data.
+#### Key Features of Streams:
+- **Declarative Operations**: Perform operations like filtering, mapping, reducing, sorting, and collecting in a clean, readable, and functional way.
+- **Parallel Processing**: Streams can be processed in parallel, making it easier to leverage multi-core processors.
+- **Laziness**: Streams are lazy, meaning computations are only performed when a terminal operation (like `collect()`, `forEach()`, or `reduce()`) is invoked.
+#### Example:
+```java
+List<String> words = Arrays.asList("apple", "banana", "cherry", "date");
+// Filter and print words starting with "b"
+words.stream()
+     .filter(word -> word.startsWith("b"))
+     .forEach(System.out::println);  // Output: banana
+```
+Streams can also be processed in parallel:
+```java
+words.parallelStream()
+     .filter(word -> word.startsWith("b"))
+     .forEach(System.out::println);
+```
+---
+### **2. Default and Static Methods in Interfaces (Java 8)**
+Java 8 introduced **default** and **static** methods in interfaces, allowing developers to add methods to interfaces without breaking the existing implementation.
+#### a) **Default Methods**
+A **default method** in an interface allows you to provide a default implementation for a method. This is especially useful for adding new methods to interfaces without breaking existing implementations.
+```java
+interface MyList {
+    default void printList() {
+        System.out.println("Printing list");
+    }
+}
+class MyListImpl implements MyList {
+    // No need to implement printList() since it has a default implementation
+}
+```
+#### b) **Static Methods**
+Static methods in interfaces allow you to define utility methods that can be invoked without creating an instance of the implementing class.
+```java
+interface MyList {
+    static void printListStatic() {
+        System.out.println("Printing static list");
+    }
+}
+```
+---
+### **3. New Collection Classes (Java 8)**
+Java 8 introduced new classes and methods to the **`java.util.concurrent`** package, which enhances concurrency support and adds more powerful utilities for managing collections in a multi-threaded environment.
+#### a) **ConcurrentMap** Enhancements
+`ConcurrentMap` is an interface that extends `Map` and adds atomic operations for thread-safe modifications. Java 8 added new methods such as:
+- `compute()`, `computeIfAbsent()`, `computeIfPresent()`
+- `merge()`
+Example using `computeIfAbsent()`:
+```java
+ConcurrentMap<String, Integer> map = new ConcurrentHashMap<>();
+map.computeIfAbsent("key", k -> 42);  // Only computes if absent, else returns the existing value.
+```
+#### b) **CopyOnWriteArrayList and CopyOnWriteArraySet**
+These thread-safe variants of `ArrayList` and `HashSet` are optimized for scenarios where read operations dominate and few modifications are made. The data structure creates a new copy of the list or set whenever it's modified, ensuring thread safety without synchronization overhead.
+---
+### **4. The `forEach` Method (Java 8)**
+Java 8 introduced the `forEach()` method to the `Collection` interface, enabling a more concise and readable way to iterate over collections using lambdas. It replaces the traditional `for` loop or `Iterator` pattern.
+```java
+List<String> words = Arrays.asList("apple", "banana", "cherry");
+words.forEach(word -> System.out.println(word));  // Output: apple, banana, cherry
+```
+Internally, `forEach()` uses the `Consumer` functional interface, which allows you to process each element in the collection.
+---
+### **5. `List`, `Set`, and `Map` Enhancements (Java 8)**
+Java 8 added several new methods to the `List`, `Set`, and `Map` interfaces to improve functionality and usability.
+#### a) **List Interface Enhancements**
+- **`replaceAll()`**: A method to replace each element of the list using the given operator.
+  
+```java
+List<Integer> numbers = Arrays.asList(1, 2, 3, 4, 5);
+numbers.replaceAll(n -> n * 2);  // Doubles each element in the list
+```
+- **`sort()`**: A method to sort the list in-place using the specified comparator.
+```java
+List<Integer> numbers = Arrays.asList(5, 3, 8, 1);
+numbers.sort(Integer::compareTo);  // Sort in ascending order
+```
+#### b) **Set Interface Enhancements**
+- **`removeIf()`**: A method that removes elements based on a predicate.
+  
+```java
+Set<Integer> numbers = new HashSet<>(Arrays.asList(1, 2, 3, 4, 5));
+numbers.removeIf(n -> n % 2 == 0);  // Removes even numbers
+```
+#### c) **Map Interface Enhancements**
+- **`forEach()`**: This method allows you to iterate over key-value pairs.
+  
+```java
+Map<String, Integer> map = new HashMap<>();
+map.put("a", 1);
+map.put("b", 2);
+map.forEach((key, value) -> System.out.println(key + " = " + value));
+```
+- **`compute()`, `computeIfAbsent()`, and `computeIfPresent()`**: These methods provide atomic operations for modifying values in a map.
+Example using `computeIfAbsent()`:
+```java
+Map<String, Integer> map = new HashMap<>();
+map.computeIfAbsent("key", k -> 42);  // Computes a value if the key is absent
+```
+---
+### **6. `Collectors` Utility Class (Java 8)**
+Java 8 introduced the **`Collectors`** utility class in the `java.util.stream` package, which provides various predefined collection strategies for reducing and collecting the results of a stream operation.
+#### Common Collectors:
+- **`toList()`**: Collects the stream into a `List`.
+- **`toSet()`**: Collects the stream into a `Set`.
+- **`joining()`**: Concatenates the elements of a stream into a single `String`.
+- **`groupingBy()`**: Groups the elements of a stream by a classifier function.
+Example:
+```java
+List<String> words = Arrays.asList("apple", "banana", "cherry");
+String result = words.stream().collect(Collectors.joining(", "));  // "apple, banana, cherry"
+```
+- **`groupingBy()`**: Groups the stream elements by a given key.
+```java
+Map<Integer, List<String>> grouped = words.stream()
+    .collect(Collectors.groupingBy(String::length));
+```
+---
+### **7. `Spliterator` (Java 8)**
+Java 8 introduced **`Spliterator`**, a new interface that helps in efficiently dividing and processing large datasets in parallel. The `Spliterator` can be used for parallel stream processing, making it more efficient for large collections.
+It provides methods such as:
+- `trySplit()`: Splits the data into smaller parts for parallel processing.
+- `forEachRemaining()`: Processes the remaining elements.
+Example:
+```java
+List<String> words = Arrays.asList("apple", "banana", "cherry");
+Spliterator<String> spliterator = words.spliterator();
+spliterator.forEachRemaining(System.out::println);
+```
+---
+### **8. Immutable Collections (Java 9)**
+Java 9 introduced **immutable collections** with a convenient factory API for creating immutable lists, sets, and maps.
+#### Example of Immutable Collections:
+```java
+List<String> list = List.of("apple", "banana", "cherry");
+Set<String> set = Set.of("apple", "banana", "cherry");
+Map<String, Integer> map = Map.of("a", 1, "b", 2);
+list.add("date");  // Throws UnsupportedOperationException
+```
+- These collections are unmodifiable, which means once they are created, their contents cannot be modified.
+---
+### **9. `ConcurrentSkipListMap` and `ConcurrentSkipListSet` (Java 6)**
+Although not a feature of Java 8, the **`ConcurrentSkipListMap`** and **`ConcurrentSkipListSet`** are thread-safe, sorted collections introduced earlier in Java 6. These are a part of the `java.util.concurrent` package and are often used when you need thread-safe access to sorted data.
+---
+### **10. `var` Keyword (Java 10)**
+Java 10 introduced **local variable type inference** via the `var` keyword. This allows you to omit the explicit type declaration for local variables when it can be inferred from the context.
+Example:
+```java
+var list = new ArrayList<String>();  // Type is inferred as ArrayList<String>
+```
+This makes working with collections more concise.
+---
+### **Summary of Key Collection Framework Updates:**
+- **Stream API**: Provides a functional approach to working with collections (filtering, mapping, reducing).
+- **Default and Static Methods in Interfaces**: Added default behavior and utility methods to interfaces.
+- **Enhanced Methods in `List
+`, `Set`, and `Map`**: New methods like `replaceAll()`, `removeIf()`, and `forEach()` for more functional-style operations.
+- **Immutable Collections**: Java 9 introduced factory methods to create unmodifiable collections.
+- **Concurrency Utilities**: Enhancements in `ConcurrentMap`, `CopyOnWriteArrayList`, etc., for more efficient multi-threaded access.
+- **Collectors**: A utility class for collecting stream results with predefined strategies like `groupingBy()`, `joining()`, etc.
+- **Spliterator**: Supports parallel processing of collections with a customizable splitting mechanism.
+These updates provide developers with more flexible, efficient, and functional tools for managing collections and parallelism in Java.
+
+---
+
 ## New features introduced in Java 8
 
 Java 8 introduced several significant features and enhancements that greatly improved the language and the Java Development Kit (JDK). Here are some of the key features:
