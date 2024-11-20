@@ -582,7 +582,47 @@ Exception: Error in future2
 By using these methods appropriately, you can create robust, non-blocking applications that handle both successful results and errors in a clean and efficient way.
 
 ### Summary
-Java 8 introduced significant features that enhance the language's expressiveness and performance, especially in functional programming, concurrency, and data manipulation. These improvements have made Java more modern and aligned with other programming paradigms. If you have specific features you'd like to dive deeper into, feel free to ask!
+Java 8 introduced significant features that enhance the language's expressiveness and performance, especially in functional programming, concurrency, and data manipulation. These improvements have made Java more modern and aligned with other programming paradigms.
+
+Here is a tabular representation of the main methods provided by `CompletableFuture` in Java. These methods are used to manage asynchronous computation and allow you to handle results, exceptions, and combine multiple `CompletableFuture` instances.
+
+| **Method**                         | **Description**                                                                 | **Return Type**                      | **Example Usage**                                                                                                                                                    |
+|------------------------------------|---------------------------------------------------------------------------------|--------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `supplyAsync()`                    | Executes a task asynchronously and supplies a result.                           | `CompletableFuture<T>`               | `CompletableFuture<Integer> future = CompletableFuture.supplyAsync(() -> 5);`                                   |
+| `runAsync()`                       | Executes a task asynchronously that does not return any result.                 | `CompletableFuture<Void>`            | `CompletableFuture<Void> future = CompletableFuture.runAsync(() -> System.out.println("Task executed"));`            |
+| `thenApply()`                      | Transforms the result of a `CompletableFuture` once it completes successfully.  | `CompletableFuture<R>`               | `future.thenApply(result -> result * 2)`                                                                                                                             |
+| `thenAccept()`                     | Consumes the result of a `CompletableFuture` when it completes successfully.    | `CompletableFuture<Void>`            | `future.thenAccept(result -> System.out.println(result))`                                                                                                            |
+| `thenRun()`                        | Runs a task after the `CompletableFuture` completes successfully.               | `CompletableFuture<Void>`            | `future.thenRun(() -> System.out.println("Task completed"))`                                                                                                         |
+| `thenCombine()`                    | Combines the results of two `CompletableFuture` instances.                      | `CompletableFuture<R>`               | `future1.thenCombine(future2, (result1, result2) -> result1 + result2)`                                         |
+| `thenAcceptBoth()`                 | Consumes the results of two `CompletableFuture` instances when both are done.   | `CompletableFuture<Void>`            | `future1.thenAcceptBoth(future2, (result1, result2) -> System.out.println(result1 + result2))`                   |
+| `applyToEither()`                  | Applies a function to the result of the first completed `CompletableFuture`.    | `CompletableFuture<R>`               | `future1.applyToEither(future2, result -> result * 2)`                                                                                                               |
+| `acceptEither()`                   | Consumes the result of the first completed `CompletableFuture`.                 | `CompletableFuture<Void>`            | `future1.acceptEither(future2, result -> System.out.println(result))`                                                                                                |
+| `allOf()`                          | Waits for all provided `CompletableFuture` instances to complete.               | `CompletableFuture<Void>`            | `CompletableFuture<Void> allOf = CompletableFuture.allOf(future1, future2)`                                    |
+| `anyOf()`                          | Waits for any of the provided `CompletableFuture` instances to complete.        | `CompletableFuture<Object>`          | `CompletableFuture<Object> anyOf = CompletableFuture.anyOf(future1, future2)`                                 |
+| `exceptionally()`                  | Handles exceptions that occur in a `CompletableFuture`.                         | `CompletableFuture<T>`               | `future.exceptionally(ex -> { System.out.println(ex.getMessage()); return 0; })`                               |
+| `handle()`                         | Handles both the result and exception of a `CompletableFuture`.                 | `CompletableFuture<T>`               | `future.handle((result, ex) -> { return (ex != null) ? 0 : result; })`                                         |
+| `whenComplete()`                   | Performs a side-effect action after the `CompletableFuture` completes.          | `CompletableFuture<T>`               | `future.whenComplete((result, ex) -> { if (ex != null) System.out.println(ex.getMessage()); })`                |
+| `obtrudeValue()`                   | Sets a result to a `CompletableFuture` that has already been completed.         | `CompletableFuture<T>`               | `future.obtrudeValue(10)`                                                                                                                                            |
+| `obtrudeException()`               | Sets an exception to a `CompletableFuture` that has already been completed.     | `CompletableFuture<T>`               | `future.obtrudeException(new RuntimeException("Error"))`                                                                                                            |
+| `join()`                           | Waits for the `CompletableFuture` to complete and returns the result.           | `T`                                  | `Integer result = future.join();`                                                                                                                                    |
+| `get()`                            | Waits for the `CompletableFuture` to complete and returns the result (throws checked exceptions). | `T`                                  | `Integer result = future.get();`                                                                                                                                     |
+| `getNow()`                         | Returns the result if the `CompletableFuture` has completed, or a default value otherwise. | `T`                                  | `Integer result = future.getNow(0);`                                                                                                                                 |
+| `isDone()`                         | Checks if the `CompletableFuture` has completed.                                | `boolean`                            | `boolean completed = future.isDone();`                                                                                                                                |
+| `isCompletedExceptionally()`       | Checks if the `CompletableFuture` completed exceptionally.                     | `boolean`                            | `boolean failed = future.isCompletedExceptionally();`                                                                                                              |
+| `cancel()`                         | Attempts to cancel the `CompletableFuture`.                                     | `boolean`                            | `boolean cancelled = future.cancel(true);`                                                                                                                            |
+
+### Summary of Key Methods:
+- **Async Execution**: `supplyAsync()`, `runAsync()`
+- **Result Transformation**: `thenApply()`, `thenAccept()`, `thenRun()`
+- **Combining Futures**: `thenCombine()`, `thenAcceptBoth()`
+- **Handling Multiple Futures**: `allOf()`, `anyOf()`
+- **Exception Handling**: `exceptionally()`, `handle()`, `whenComplete()`
+- **Completion Methods**: `join()`, `get()`, `getNow()`
+- **Completion State**: `isDone()`, `isCompletedExceptionally()`
+
+These methods allow you to handle asynchronous tasks effectively, manage dependencies between them, and deal with exceptions or timeouts gracefully.
+
+---
 
 ## New features introduced in Java 8 Collections Framework
 
