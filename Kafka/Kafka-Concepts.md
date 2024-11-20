@@ -3257,7 +3257,7 @@ If a **producer** fails to send a message, Kafka has mechanisms to ensure that t
 
 Kafka is designed with **fault tolerance** and **high availability** in mind. Failures in brokers, partitions, consumers, and producers are handled by built-in mechanisms such as **replication**, **leader election**, **consumer group rebalancing**, and **producer retries**. By properly configuring these features and monitoring your Kafka cluster, you can ensure that your Kafka system remains highly available and resilient to failures.
 
-```maermaid
+```mermaid
 graph TD
     A[1. What is Kafka?] --> B[2. What is a Message?]
     B --> C[Record]
