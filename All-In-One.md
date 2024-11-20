@@ -839,6 +839,7 @@ Was future1 cancelled? false
 ```
 
 This program demonstrates the usage of **all the methods** from the table in various combinations. It shows how to manage asynchronous tasks, handle results and exceptions, and combine multiple `CompletableFuture` instances.
+
 ---
 
 ## New features introduced in Java 8 Collections Framework
