@@ -1027,6 +1027,141 @@ Together, these features help modernize Java, especially in the context of **fun
      System.out.println(count);  // Output: 2
      ```
 
+In Java 8, **Streams** are a core part of the new **Stream API** that allows for functional-style processing of sequences of elements, such as collections. Streams can be classified into two broad categories based on how operations on them are executed: **Intermediate operations** and **Terminal operations**.
+
+### **1. Intermediate Operations**
+- **Definition**: Intermediate operations are **lazy** operations that transform a stream into another stream. They are not executed until a **terminal operation** is invoked. They can be chained together to form a sequence of operations.
+- **Characteristics**:
+  - **Lazy Evaluation**: Intermediate operations do not get executed immediately. Instead, they are **intermediate steps** that get **set up** in the background and are executed only when a terminal operation is performed on the stream.
+  - **Return Type**: Intermediate operations always return a new stream.
+  - **Can be chained**: You can chain multiple intermediate operations together, creating a pipeline.
+  
+  Examples of intermediate operations:
+  - `filter()`: Filters elements based on a condition.
+  - `map()`: Transforms each element in the stream.
+  - `distinct()`: Removes duplicate elements from the stream.
+  - `sorted()`: Sorts the elements of the stream.
+  - `peek()`: Provides a way to observe the elements as they pass through the stream.
+  
+  **Example**:
+  ```java
+  List<String> names = Arrays.asList("John", "Jane", "Steve", "Mark");
+
+  // Example of intermediate operations (filter and map)
+  List<String> upperCaseNames = names.stream()
+      .filter(name -> name.startsWith("J"))  // Intermediate operation
+      .map(String::toUpperCase)              // Intermediate operation
+      .collect(Collectors.toList());         // Terminal operation
+  System.out.println(upperCaseNames);  // Output: [JOHN, JANE]
+  ```
+
+  In the above example, `filter()` and `map()` are intermediate operations that return a new stream. They don't do anything until the `collect()` terminal operation is invoked.
+
+---
+
+### **2. Terminal Operations**
+- **Definition**: Terminal operations are operations that trigger the **actual execution** of the stream pipeline. Once a terminal operation is invoked on a stream, the stream is considered **consumed**, and no further operations can be applied to it.
+- **Characteristics**:
+  - **Eager Evaluation**: Unlike intermediate operations, terminal operations are **eager**—they **consume** the stream and trigger the processing of data.
+  - **Returns a non-stream result**: Terminal operations do not return a stream. Instead, they usually return a **primitive**, **object**, or **side-effect** (like printing to the console).
+  
+  Examples of terminal operations:
+  - `collect()`: Collects the results of the stream into a collection (e.g., a List, Set, Map).
+  - `forEach()`: Performs an action for each element in the stream.
+  - `reduce()`: Combines the elements of the stream into a single result.
+  - `count()`: Returns the number of elements in the stream.
+  - `anyMatch()`, `allMatch()`, `noneMatch()`: Performs a predicate-based test on the elements.
+  - `findFirst()`, `findAny()`: Retrieves an element from the stream (if any).
+  
+  **Example**:
+  ```java
+  List<String> names = Arrays.asList("John", "Jane", "Steve", "Mark");
+
+  // Terminal operation (collect)
+  long count = names.stream()
+      .filter(name -> name.startsWith("J"))  // Intermediate operation
+      .count();                              // Terminal operation
+  System.out.println(count);  // Output: 2
+  ```
+
+  In this example, the `count()` is a terminal operation that processes the stream and returns the number of elements matching the filter.
+
+---
+
+### **Key Differences Between Intermediate and Terminal Operations**
+
+| **Aspect**               | **Intermediate Operations**                             | **Terminal Operations**                                       |
+|--------------------------|----------------------------------------------------------|---------------------------------------------------------------|
+| **Execution**             | **Lazy**: Operations are not executed until a terminal operation is invoked | **Eager**: Triggers the processing of the stream and consumes it |
+| **Return Type**           | Returns a new stream (another intermediate operation can be chained) | Returns a non-stream result (e.g., `int`, `long`, `List`, etc.) |
+| **Effect on Stream**      | Does not modify the underlying stream, just prepares it for execution | Consumes the stream and cannot be used after a terminal operation |
+| **Example**               | `filter()`, `map()`, `sorted()`, `distinct()`             | `collect()`, `forEach()`, `reduce()`, `count()`                |
+| **Usage**                 | Intermediate operations are used to transform or filter elements | Terminal operations are used to produce a result or side-effect |
+
+---
+
+### **Example of Intermediate and Terminal Operations in a Stream Pipeline**
+
+```java
+import java.util.*;
+import java.util.stream.*;
+
+public class StreamExample {
+    public static void main(String[] args) {
+        List<String> names = Arrays.asList("John", "Jane", "Steve", "Mark", "Andrew");
+
+        // Intermediate operations
+        List<String> filteredAndUpperCaseNames = names.stream()
+            .filter(name -> name.length() > 4)  // Intermediate operation
+            .map(String::toUpperCase)           // Intermediate operation
+            .sorted()                           // Intermediate operation
+            .collect(Collectors.toList());      // Terminal operation
+
+        System.out.println(filteredAndUpperCaseNames);
+    }
+}
+```
+
+### **Breakdown**:
+1. **Intermediate Operations**:
+   - `filter(name -> name.length() > 4)`: Filters names with length greater than 4.
+   - `map(String::toUpperCase)`: Converts the remaining names to uppercase.
+   - `sorted()`: Sorts the names alphabetically.
+   
+2. **Terminal Operation**:
+   - `collect(Collectors.toList())`: Collects the results into a list and terminates the stream.
+
+### **Output**:
+```
+[ANDREW, JOHN, STEVE]
+```
+
+Here, the intermediate operations are executed lazily and only when the terminal operation (`collect`) is invoked.
+
+---
+
+### **Performance Considerations**:
+- **Lazy Evaluation of Intermediate Operations**: Since intermediate operations are lazy, they are only applied to the elements that are needed by the terminal operation. This can result in improved performance, especially when combined with short-circuiting terminal operations like `findFirst()` or `anyMatch()`.
+  
+  Example:
+  ```java
+  List<Integer> numbers = Arrays.asList(1, 2, 3, 4, 5);
+  boolean anyEven = numbers.stream()
+                           .filter(n -> n % 2 == 0)
+                           .anyMatch(n -> n > 4);  // Short-circuiting terminal operation
+  System.out.println(anyEven);  // Output: false
+  ```
+
+- **Pipeline Optimization**: Java 8 streams can optimize intermediate operations (such as combining filter and map into one pass through the data). This means that even though there may be multiple intermediate operations, they are processed efficiently, reducing unnecessary work.
+
+---
+
+### **Summary**
+- **Intermediate Operations** are **lazy**, **return a stream**, and can be chained. They prepare data but don't process it until a terminal operation is executed.
+- **Terminal Operations** are **eager**, **consume the stream**, and produce a **final result**. They trigger the computation of the entire pipeline.
+
+Understanding the distinction between these operations is important for writing efficient stream-based code in Java, as it helps in controlling when and how the processing is done.
+
 ---
 
 ### 4. **Default Methods**
