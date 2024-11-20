@@ -832,6 +832,182 @@ Java 8, released in **March 2014**, introduced several significant features that
      }
      ```
 
+In Java 8, **default** and **static** methods were introduced in **functional interfaces** to solve specific design problems while maintaining backward compatibility. Let's explore the reasons why these methods are needed and how they address certain challenges.
+
+---
+
+### **1. Default Methods in Functional Interfaces**
+
+#### **What is a Default Method?**
+A **default method** is a method in an interface that has a body. This allows interfaces to provide method implementations, something that was not possible prior to Java 8 (except for constants and abstract methods).
+
+**Syntax**:
+```java
+interface MyFunctionalInterface {
+    default void defaultMethod() {
+        System.out.println("This is a default method");
+    }
+}
+```
+
+#### **Why Default Methods?**
+
+- **Backward Compatibility**:
+  - In Java prior to Java 8, interfaces could only have abstract methods (without implementation). If new methods were added to an interface, it would break all existing implementations of that interface.
+  - With **default methods**, new methods can be added to interfaces without breaking existing implementations. This allows for **backward compatibility** while still evolving the API.
+  
+  For example, consider an existing interface:
+  ```java
+  interface Vehicle {
+      void start();
+      void stop();
+  }
+  ```
+  If we wanted to add a new method (e.g., `isRunning()`), we could do this without breaking existing classes that implement `Vehicle`, by providing a default implementation:
+  ```java
+  interface Vehicle {
+      void start();
+      void stop();
+      default boolean isRunning() {
+          return true; // Default implementation
+      }
+  }
+  ```
+
+  **Without default methods**, adding a method to an interface would require all implementing classes to implement that method, which could be cumbersome and error-prone.
+
+- **Method Sharing Across Implementations**:
+  - Default methods allow the interface to provide a **shared behavior** that can be used across all implementing classes without requiring each class to implement it. This promotes **code reuse** and reduces the need for boilerplate code.
+  - For example, many interfaces could have a method to log activity, and you could define this behavior once in the interface as a default method.
+
+- **Interoperability with Functional Interfaces**:
+  - Functional interfaces are a key part of Java 8's support for functional programming (e.g., using lambdas). By allowing default methods, functional interfaces can have method implementations that help maintain the behavior of the interface while still enabling lambda expressions and functional programming features.
+
+---
+
+### **2. Static Methods in Functional Interfaces**
+
+#### **What is a Static Method?**
+A **static method** in an interface is a method that is associated with the interface itself rather than an instance of the implementing class. A static method cannot be overridden in implementing classes but can be called directly on the interface.
+
+**Syntax**:
+```java
+interface MyFunctionalInterface {
+    static void staticMethod() {
+        System.out.println("This is a static method");
+    }
+}
+```
+
+#### **Why Static Methods?**
+
+- **Utility Functions in Interfaces**:
+  - Static methods in interfaces provide a way to define **utility methods** that are relevant to the interface, but not tied to a particular instance. These methods are often used for helper functions or factory methods that are useful for users of the interface but don't belong to any specific instance of the interface.
+  
+  For example, an interface `Comparable` might provide a utility to compare two objects in a way that does not depend on any specific instance:
+  ```java
+  interface MyComparable {
+      static int compare(String a, String b) {
+          return a.compareTo(b);
+      }
+  }
+  ```
+
+- **Encapsulation of Common Logic**:
+  - Just like in classes, static methods in interfaces allow you to encapsulate common functionality within the interface. These methods don’t require an instance of the implementing class to be invoked. For example, you can provide utility methods like `compare()`, `validate()`, or other methods that operate on the inputs rather than the instance itself.
+  
+  This is especially useful in **functional programming** scenarios, where the interface may need to provide **factory methods** or other utilities that don’t require instance-specific data.
+
+- **Better API Design**:
+  - Static methods enable better API design by grouping logically related methods under an interface. For example, in the `java.util.function` package, many interfaces, such as `Predicate`, `Function`, etc., have static utility methods that are helpful for users of the interface:
+  
+    ```java
+    interface Predicate<T> {
+        boolean test(T t);
+        
+        static <T> Predicate<T> isEqual(Object targetRef) {
+            return (t) -> (targetRef == null ? t == null : targetRef.equals(t));
+        }
+    }
+    ```
+
+- **Factory Methods**:
+  - Interfaces can also define **factory methods** to create instances of themselves. This is a common use case for static methods in interfaces.
+  
+    Example:
+    ```java
+    interface MyInterface {
+        static MyInterface create() {
+            return new MyImplementation();
+        }
+    }
+    ```
+
+---
+
+### **Summary of Why We Need Default and Static Methods**
+
+| **Aspect**               | **Default Methods**                                     | **Static Methods**                                       |
+|--------------------------|--------------------------------------------------------|---------------------------------------------------------|
+| **Backward Compatibility** | Allows the addition of new methods without breaking old code | Not directly related to backward compatibility, but can provide utility methods |
+| **Code Reusability**     | Enables shared behavior across implementing classes | Encapsulates utility methods and common logic            |
+| **Interoperability**     | Works with functional programming concepts (lambdas, etc.) | Provides static helper methods or factory methods        |
+| **Encapsulation**        | Provides default behavior within the interface          | Helps in providing common functionality or utilities     |
+| **Use Case**             | Adds default behavior that implementing classes can use | Defines logic that doesn't depend on an instance, like utility or factory methods |
+
+---
+
+### **Examples of Default and Static Methods in Functional Interfaces**
+
+1. **Default Method Example**:
+   ```java
+   @FunctionalInterface
+   interface Calculator {
+       int add(int a, int b);
+       
+       default int multiply(int a, int b) {
+           return a * b;  // Default implementation
+       }
+   }
+   
+   public class Main {
+       public static void main(String[] args) {
+           Calculator calculator = (a, b) -> a + b;
+           System.out.println(calculator.add(2, 3));  // Output: 5
+           System.out.println(calculator.multiply(2, 3));  // Output: 6 (using default method)
+       }
+   }
+   ```
+
+2. **Static Method Example**:
+   ```java
+   @FunctionalInterface
+   interface StringUtils {
+       String convertToUpper(String input);
+       
+       static boolean isEmpty(String str) {
+           return str == null || str.isEmpty();
+       }
+   }
+   
+   public class Main {
+       public static void main(String[] args) {
+           System.out.println(StringUtils.isEmpty(""));  // Output: true
+           StringUtils utils = (input) -> input.toUpperCase();
+           System.out.println(utils.convertToUpper("hello"));  // Output: HELLO
+       }
+   }
+   ```
+
+---
+
+### Conclusion:
+
+- **Default methods** provide **default behavior** that can be inherited by implementing classes, helping avoid breaking changes when evolving APIs.
+- **Static methods** enable **utility and factory methods** in interfaces, allowing for reusable code that doesn’t rely on instances.
+
+Together, these features help modernize Java, especially in the context of **functional programming** and **API evolution**, making the language more powerful, flexible, and backward-compatible.
+
 ---
 
 ### 3. **Streams API**
