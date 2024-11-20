@@ -924,9 +924,7 @@ When designing a RESTful API, several best practices and considerations should b
   - **CORS (Cross-Origin Resource Sharing)**: Allows web applications from different domains to access your API, but only under certain conditions.
   - **Idempotence**: Certain methods like PUT and DELETE should be idempotent, meaning multiple identical requests will have the same effect as a single request.
   - **Input Validation**: Validate all user inputs to avoid security issues like SQL injection or XSS (cross-site scripting).
-  - **Auth**
-
-: Implement proper authentication (e.g., OAuth, JWT) to ensure secure access to resources.
+  - **Auth**: Implement proper authentication (e.g., OAuth, JWT) to ensure secure access to resources.
   - **Logging**: Keep logs of API requests for debugging, monitoring, and security.
   - **TLS (Transport Layer Security)**: Use HTTPS (TLS) to encrypt data in transit.
   - **Rate Limiting**: Protect the API from abuse by limiting the number of requests a client can make within a certain time frame.
