@@ -4573,6 +4573,10 @@ In a **`CopyOnWriteArrayList`**, the underlying array is **copied** whenever a m
 
 This is in contrast to non-concurrent collections like `ArrayList`, where modifications made to the collection during iteration may cause a **`ConcurrentModificationException`** or unexpected results.
 
+### **Summary**
+
+A **snapshot** is essentially a **frozen copy** of a data structure or collection at a specific point in time. It ensures consistency during iteration or access, particularly in concurrent environments where data may be modified while it is being accessed. While the underlying collection may continue to change, the snapshot allows safe, consistent operations on the data, without the need to worry about the changes being made by other threads or processes.
+
 ---
 
 ## Ambiguities in Java technologies
