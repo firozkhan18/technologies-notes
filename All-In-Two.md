@@ -4556,5 +4556,3 @@ public class MyClass implements FunctionalA, FunctionalB {
 By understanding how to use default and static methods in functional interfaces, you can leverage the flexibility of Java interfaces while maintaining clean and effective code architecture.
 
 ---
-
-
