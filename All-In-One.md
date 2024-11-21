@@ -11,68 +11,72 @@
 8. [Regular Interface](#regular-interface)  
 9. [Functional Interface](#functional-interface)  
 10. [Java Thread & Concurrency](#java-thread-concurrency)  
-11. [Garbage Collection in Java](#garbage-collection-in-java)  
-12. [Memory Management in Java](#memory-management-in-java)  
-13. [Garbage Collection vs Semaphore](#garbage-collection-vs-semaphore)  
-14. [Garbage Collection Algorithms in Java](#garbage-collection-algorithms-in-java)  
-15. [Algorithms and Data Structures](#algorithms-and-data-structures)  
-16. [Ambiguities in Java](#ambiguities-in-java)  
-17. [Java Interview Questions](#java-interview-questions)  
+11. [Garbage Collection in Java](#garbage-collection-in-java)
+12. [Garbage Collection vs Semaphore](#garbage-collection-vs-semaphore)
+13. [Main Garbage Collection Algorithms](#main-garbage-collection-algorithms)
+14. [Memory Management in Java](#memory-management-in-java)
+15. [Memory Management and Resource Allocation](#memory-management-and-resource-allocation)
+16. [Garbage Collection vs Semaphore](#garbage-collection-vs-semaphore)
+17. [Garbage Collection Algorithms in Java](#garbage-collection-algorithms-in-java)  
+18. [Algorithms and Data Structures](#algorithms-and-data-structures)  
+19. [Ambiguities in Java](#ambiguities-in-java)  
+20. [Java Interview Questions](#java-interview-questions)  
     1. [List of Common Java Interview Questions](#common-java-interview-questions)  
     2. [Java 8 Interview Questions and Answers](#java-8-interview-questions)  
-18. [Features Introduced in Java 8](#features-in-java-8)  
-19. [Java Multithreading & Concurrency Interview Questions](#java-multithreading-concurrency-interview-questions)  
-20. [Comparison of Java Concepts](#comparison-of-java-concepts)  
-21. [Tricky Java Interview Questions](#tricky-java-interview-questions)  
-22. [POJO (Plain Old Java Object)](#pojo)  
-23. [Java Core Concepts Overview](#java-core-concepts-overview)  
-24. [Java IO and NIO File Handling](#java-io-and-nio)  
-25. [Serialization and Deserialization](#serialization-and-deserialization)  
-26. [Memory Management and Resource Allocation](#memory-management-and-resource-allocation)  
-27. [Exception Handling in Java](#exception-handling-in-java)  
-28. [HashMap, Hashtable, and HashSet](#hashmap-hashtable-hashset)  
-29. [Java Collection Framework](#java-collection-framework)  
-30. [Java Thread Management & Synchronization](#java-thread-management)  
-31. [Executor Framework](#executor-framework)  
-32. [Deadlock Detection & Recovery](#deadlock-detection-recovery)  
-33. [Semaphore & Snapshot](#semaphore-snapshot)  
-34. [Concurrency Issues](#concurrency-issues)  
-35. [Garbage Collection Algorithms](#garbage-collection-algorithms)  
-36. [Java 8 Updated Collections Framework](#java-8-updated-collections-framework)  
-37. [Java 8 Lambda Expressions](#java-8-lambda-expressions)  
-38. [CompletableFuture: Depth Concept and Methods](#completablefuture-depth-concept)  
-39. [Java Design Patterns](#java-design-patterns)  
-40. [Microservice Design Patterns](#microservice-design-patterns)  
-41. [ACID Properties & Transaction Isolation](#acid-properties-transaction-isolation)
-42. [ACID Properties](#acid-properties)
-43. [Transaction Isolation](#transaction-isolation)  
-44. [SOLID Principles](#solid-principles)  
-45. [Hashtable vs. ConcurrentHashMap](#hashtable-vs-concurrenthashmap)  
-46. [Fail-Fast vs. Fail-Safe](#fail-fast-vs-fail-safe)  
-47. [Sharding in MongoDB](#sharding-in-mongodb)  
-48. [Horizontal and Vertical Scaling](#horizontal-vertical-scaling)  
-49. [Types of ClassLoaders](#types-of-classloaders)  
-50. [Creating Objects in Java](#creating-objects-in-java)  
-51. [Concurrency Methods in Java](#concurrency-methods-in-java)  
+21. [Features Introduced in Java 8](#features-in-java-8)  
+22. [Java Multithreading & Concurrency Interview Questions](#java-multithreading-concurrency-interview-questions)  
+23. [Comparison of Java Concepts](#comparison-of-java-concepts)  
+24. [Tricky Java Interview Questions](#tricky-java-interview-questions)  
+25. [POJO (Plain Old Java Object)](#pojo)  
+26. [Java Core Concepts Overview](#java-core-concepts-overview)  
+27. [Java IO and NIO File Handling](#java-io-and-nio)  
+28. [Serialization and Deserialization](#serialization-and-deserialization)    
+29. [Exception Handling in Java](#exception-handling-in-java)  
+30. [HashMap, Hashtable, and HashSet](#hashmap-hashtable-hashset)  
+31. [Java Collection Framework](#java-collection-framework)  
+32. [Java Thread Management & Synchronization](#java-thread-management)  
+33. [Executor Framework](#executor-framework)  
+34. [Deadlock Detection & Recovery](#deadlock-detection-recovery)  
+35. [Semaphore & Snapshot](#semaphore-snapshot)  
+36. [Concurrency Issues](#concurrency-issues)  
+37. [Garbage Collection Algorithms](#garbage-collection-algorithms)  
+38. [Java 8 Updated Collections Framework](#java-8-updated-collections-framework)
+39. [New Features Introduced in Java 8 Collections Framework](#new-features-introduced-in-java-8-collections-framework)  
+40. [Java 8 Lambda Expressions](#java-8-lambda-expressions)  
+41. [CompletableFuture: Depth Concept and Methods](#completablefuture-depth-concept)  
+42. [Java Design Patterns](#java-design-patterns)  
+43. [Microservice Design Patterns](#microservice-design-patterns)  
+44. [ACID Properties & Transaction Isolation](#acid-properties-transaction-isolation)
+45. [ACID Properties](#acid-properties)
+46. [Transaction Isolation](#transaction-isolation)  
+47. [SOLID Principles](#solid-principles)  
+48. [Hashtable vs. ConcurrentHashMap](#hashtable-vs-concurrenthashmap)  
+49. [Fail-Fast vs. Fail-Safe](#fail-fast-vs-fail-safe)
+50. [Fail-Fast and Fail-Safe](#fail-fast-and-fail-safe
+51. [Sharding in MongoDB](#sharding-in-mongodb)  
+52. [Horizontal and Vertical Scaling](#horizontal-vertical-scaling)  
+53. [Types of ClassLoaders](#types-of-classloaders)  
+54. [Creating Objects in Java](#creating-objects-in-java)  
+55. [Concurrency Methods in Java](#concurrency-methods-in-java)  
     1. [wait(), sleep(), join(), yield()](#wait-sleep-join-yield)  
-52. [Immutable Classes in Java](#immutable-classes-in-java)  
-53. [Concurrency Issues: Deadlock, Starvation, Race Condition](#concurrency-issues)  
-54. [Void vs. void](#void-vs-void)  
-55. [Default & Static Methods](#default-static-methods)  
-56. [Diamond Problem](#diamond-problem)  
-57. [ReentrantLock & Conditions](#reentrantlock-conditions)  
-58. [On-Premises Concepts](#on-premises-concepts)  
-59. [Java Profiling Tools](#java-profiling-tools)  
-60. [SSL/TLS Configuration in Java](#ssl-tls-configuration)  
-61. [CI/CD Pipelines in Java](#ci-cd-pipelines)  
-62. [Aspect-Oriented Programming (AOP)](#aspect-oriented-programming)  
-63. [Concurrency in Java](#concurrency-in-java)  
-64. [Digital Marketing & Backend Development](#digital-marketing-backend-development)  
-65. [Microservice Rate Limiting](#microservice-rate-limiting)  
-66. [Load Testing with JMeter](#load-testing-with-jmeter)  
-67. [Virtual Threads in Java 19](#virtual-threads-java-19)  
-68. [Memory Leaks in Microservices](#memory-leaks-microservices)  
-69. [Asynchronous Programming in Spring Boot](#asynchronous-programming-spring-boot)  
+56. [Immutable Classes in Java](#immutable-classes-in-java)  
+57. [Concurrency Issues: Deadlock, Starvation, Race Condition](#concurrency-issues)  
+58. [Void vs. void](#void-vs-void)  
+59. [Default & Static Methods](#default-static-methods)  
+60. [Diamond Problem](#diamond-problem)  
+61. [ReentrantLock & Conditions](#reentrantlock-conditions)  
+62. [On-Premises Concepts](#on-premises-concepts)  
+63. [Java Profiling Tools](#java-profiling-tools)  
+64. [SSL/TLS Configuration in Java](#ssl-tls-configuration)  
+65. [CI/CD Pipelines in Java](#ci-cd-pipelines)  
+66. [Aspect-Oriented Programming (AOP)](#aspect-oriented-programming)  
+67. [Concurrency in Java](#concurrency-in-java)  
+68. [Digital Marketing & Backend Development](#digital-marketing-backend-development)  
+69. [Microservice Rate Limiting](#microservice-rate-limiting)  
+70. [Load Testing with JMeter](#load-testing-with-jmeter)  
+71. [Virtual Threads in Java 19](#virtual-threads-java-19)  
+72. [Memory Leaks in Microservices](#memory-leaks-microservices)  
+73. [Asynchronous Programming in Spring Boot](#asynchronous-programming-spring-boot)  
 
 ---
 
@@ -82,20 +86,18 @@
 12. [CompletableFuture: Depth Concept and Methods](#completablefuture-depth-concept-and-methods)  
 13. [Java 8 Lambda Expressions](#java-8-lambda-expressions)  
 14. [Java 8 Features Introduced](#java-8-features-introduced)  
-15. [New Features Introduced in Java 8 Collections Framework](#new-features-introduced-in-java-8-collections-framework)  
-16. [ACID Properties](#acid-properties)  
-17. [Transaction Isolation Levels](#transaction-isolation-levels)  
-18. [SOLID Principles](#solid-principles)  
+
+  
+  
 19. [Java Design Patterns](#java-design-patterns)  
-20. [Microservice Design Patterns](#microservice-design-patterns)  
 21. [Overview of `Hashtable` & `ConcurrentHashMap`](#overview-of-hashtable-concurrenthashmap)  
 22. [Hashing in `Hashtable & ConcurrentHashMap`](#hashing-in-hashtable-concurrenthashmap)  
 23. [Comparison of HashMap and ConcurrentHashMap](#comparison-of-hashmap-and-concurrenthashmap)  
-24. [Fail-Fast and Fail-Safe](#fail-fast-and-fail-safe)  
+  
 25. [Snapshot](#snapshot)  
 26. [Ambiguities in Java Technologies](#ambiguities-in-java-technologies)  
 27. [An Overview of Angular, React, Microservices, and Threading, along with Their Interactions and Use Cases](#an-overview-of-angular-react-microservices-and-threading-along-with-their-interactions-and-use-cases)  
-28. [Sharding in MongoDB](#sharding-in-mongodb)  
+  
 29. [Horizontal and Vertical Scaling](#horizontal-and-vertical-scaling)  
 30. [Types of ClassLoaders](#types-of-classloaders)  
 31. [Java Ways to Create Objects](#java-ways-to-create-objects)  
@@ -112,10 +114,8 @@
 42. [Interfaces in Java (Post-Java 8)](#interfaces-in-java-post-java-8)  
 43. [The Diamond Problem in Java](#the-diamond-problem-in-java)  
 44. [ForkJoinPool](#forkjoinpool)  
-45. [Threads and Concurrency](#threads-and-concurrency)  
-46. [Garbage Collection in Java](#garbage-collection-in-java)  
-47. [Garbage Collection vs Semaphore](#garbage-collection-vs-semaphore)  
-48. [Main Garbage Collection Algorithms](#main-garbage-collection-algorithms)  
+45. [Threads and Concurrency](#threads-and-concurrency)
+46. [Rate Limiting in Microservices](#rate-limiting--microservices)
 
 ---
 
@@ -4573,161 +4573,6 @@ A thread in Java goes through several states during its lifecycle:
 
 ---
 
-### **4. Concurrency in Java**
-**Concurrency** refers to the ability of a system to handle multiple tasks simultaneously. Java provides several mechanisms to help developers manage concurrent execution of threads, and to ensure that shared resources are accessed in a thread-safe manner.
-
-#### a) **Thread Synchronization**
-When multiple threads access shared resources, there is a risk of data inconsistency if threads modify the resource simultaneously. Java provides synchronization mechanisms to ensure that only one thread accesses a resource at a time.
-- **Synchronized Methods**: You can synchronize a method to ensure that only one thread can execute it at a time.
-```java
-class Counter {
-    private int count = 0;
-    public synchronized void increment() {
-        count++;
-    }
-}
-```
-- **Synchronized Blocks**: You can also use synchronized blocks to limit the scope of synchronization to specific parts of your code, which can improve performance.
-```java
-class Counter {
-    private int count = 0;
-    public void increment() {
-        synchronized(this) {
-            count++;
-        }
-    }
-}
-```
-- **Locks**: Java also provides explicit locking mechanisms via the `java.util.concurrent.locks.Lock` interface, which allows finer control over thread synchronization (e.g., `ReentrantLock`).
-```java
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
-class Counter {
-    private int count = 0;
-    private Lock lock = new ReentrantLock();
-    public void increment() {
-        lock.lock(); // Acquires the lock
-        try {
-            count++;
-        } finally {
-            lock.unlock(); // Releases the lock
-        }
-    }
-}
-```
-#### b) **Deadlock**
-Deadlock is a situation where two or more threads are blocked indefinitely, waiting for each other to release a resource. This typically happens when two threads hold locks on different resources and each is waiting for the other to release its lock.
-Example of Deadlock:
-```java
-class A {
-    synchronized void methodA(B b) {
-        b.last();
-    }
-    synchronized void last() {}
-}
-class B {
-    synchronized void methodB(A a) {
-        a.last();
-    }
-    synchronized void last() {}
-}
-public class Deadlock {
-    public static void main(String[] args) {
-        A a = new A();
-        B b = new B();
-        
-        new Thread(() -> a.methodA(b)).start();
-        new Thread(() -> b.methodB(a)).start();
-    }
-}
-```
-To avoid deadlocks:
-- Avoid holding multiple locks at once.
-- Use a timeout for acquiring locks (`ReentrantLock.lock(long timeout)`).
-- Always acquire locks in a consistent order.
-
----
-
-### **5. Executor Framework**
-The **Executor Framework** introduced in Java 5 provides a higher-level replacement for managing threads. Instead of manually creating and managing threads, you use executor services that abstract away the details.
-#### Executor Types:
-1. **SingleThreadExecutor**: Uses a single worker thread to process tasks.
-2. **FixedThreadPool**: Uses a fixed number of threads to process a queue of tasks.
-3. **CachedThreadPool**: Creates new threads as needed, but reuses existing ones if available.
-4. **ScheduledThreadPool**: A pool of threads that can execute tasks after a delay or periodically.
-Example of using `ExecutorService`:
-```java
-import java.util.concurrent.*;
-public class ExecutorExample {
-    public static void main(String[] args) {
-        ExecutorService executor = Executors.newFixedThreadPool(2);
-        
-        executor.submit(() -> System.out.println("Task 1"));
-        executor.submit(() -> System.out.println("Task 2"));
-        
-        executor.shutdown(); // Initiates an orderly shutdown
-    }
-}
-```
-- **`submit()`**: Submits a task for execution.
-- **`shutdown()`**: Initiates an orderly shutdown in which previously submitted tasks are executed, but no new tasks will be accepted.
-
----
-
-### **6. Future and Callable**
-When you need to submit a task that returns a result or may throw an exception, you use **`Callable`** instead of `Runnable`. `Callable` is similar to `Runnable`, but it can return a result or throw an exception.
-You can submit `Callable` tasks via an `ExecutorService`, which returns a **`Future`** object.
-#### Example:
-```java
-import java.util.concurrent.*;
-public class CallableExample {
-    public static void main(String[] args) throws ExecutionException, InterruptedException {
-        ExecutorService executor = Executors.newCachedThreadPool();
-        
-        Callable<Integer> task = () -> {
-            return 42;  // Task that returns a value
-        };
-        
-        Future<Integer> future = executor.submit(task);
-        System.out.println("Result: " + future.get());  // Block until the task is done
-        
-        executor.shutdown();
-    }
-}
-```
-- **`Future.get()`**: Blocks the calling thread until the task completes and returns the result.
-- **`Future.isDone()`**: Returns `true` if the task is completed.
-
----
-
-### **7. Concurrency Utilities (java.util.concurrent)**
-Java 8 introduced several concurrency utilities in the `java.util.concurrent` package that simplify working with threads and synchronization.
-
-#### a) **CountDownLatch**
-A **CountDownLatch** is used to block one or more threads until a set of operations being performed in other threads completes.
-```java
-CountDownLatch latch = new CountDownLatch(3); // Wait for 3 events to occur
-latch.await();  // Blocks until the count reaches 0
-```
-
-#### b) **CyclicBarrier**
-A **CyclicBarrier** is similar to a CountDownLatch but allows threads to repeatedly meet at a common barrier point.
-#### c) **Semaphore**
-A **Semaphore** controls access to a particular resource by multiple threads by using a set number of permits.
-
----
-
-### **Conclusion**
-- **Thread**: A lightweight process that can run concurrently with others.
-- **Concurrency**: The ability of a system to execute multiple tasks simultaneously, improving performance.
-- **Thread Management**: Java provides multiple ways to create threads (via `Thread` class, `Runnable`, or `Executor` framework).
-- **Synchronization**: Ensures thread-safe access to shared resources using mechanisms like `synchronized` blocks and `Lock`.
-- **Executor Framework**: Provides a higher-level API for managing thread pools and scheduling tasks.
-- **Deadlocks**: Careful attention is needed to avoid deadlocks by properly managing resource locking.
-
-By understanding these concepts and applying best practices, Java developers can efficiently manage concurrency, improve application performance, and avoid common multi-threading pitfalls.
-
-
 ## Java Thread
 
 The lifecycle of a thread in Java consists of several states, each representing the different stages of a thread's execution. Understanding these states helps in effectively managing thread behavior. Here's an overview of the thread lifecycle:
@@ -4790,10 +4635,6 @@ A simplified diagram might look like this:
                 v
              [Waiting] <--- [Timed Waiting]
 ```
-
-### Conclusion
-
-Understanding the thread lifecycle is essential for effective multi-threaded programming. It helps in managing thread synchronization, avoiding deadlocks, and improving performance in concurrent applications.
 
 ## Thread management and synchronization
 
@@ -4878,6 +4719,85 @@ In Java, `sleep()`, `wait()`, `join()`, and `LockSupport.park()` are all methods
   - `LockSupport.park()` releases the lock if used in a synchronized context.
 
 Understanding these methods helps in managing thread synchronization and ensuring proper thread behavior in concurrent applications.
+
+### Conclusion
+
+Understanding the thread lifecycle is essential for effective multi-threaded programming. It helps in managing thread synchronization, avoiding deadlocks, and improving performance in concurrent applications.
+
+### **4. Concurrency in Java**
+**Concurrency** refers to the ability of a system to handle multiple tasks simultaneously. Java provides several mechanisms to help developers manage concurrent execution of threads, and to ensure that shared resources are accessed in a thread-safe manner.
+
+#### a) **Thread Synchronization**
+When multiple threads access shared resources, there is a risk of data inconsistency if threads modify the resource simultaneously. Java provides synchronization mechanisms to ensure that only one thread accesses a resource at a time.
+- **Synchronized Methods**: You can synchronize a method to ensure that only one thread can execute it at a time.
+```java
+class Counter {
+    private int count = 0;
+    public synchronized void increment() {
+        count++;
+    }
+}
+```
+- **Synchronized Blocks**: You can also use synchronized blocks to limit the scope of synchronization to specific parts of your code, which can improve performance.
+```java
+class Counter {
+    private int count = 0;
+    public void increment() {
+        synchronized(this) {
+            count++;
+        }
+    }
+}
+```
+- **Locks**: Java also provides explicit locking mechanisms via the `java.util.concurrent.locks.Lock` interface, which allows finer control over thread synchronization (e.g., `ReentrantLock`).
+```java
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+class Counter {
+    private int count = 0;
+    private Lock lock = new ReentrantLock();
+    public void increment() {
+        lock.lock(); // Acquires the lock
+        try {
+            count++;
+        } finally {
+            lock.unlock(); // Releases the lock
+        }
+    }
+}
+```
+#### b) **Deadlock**
+Deadlock is a situation where two or more threads are blocked indefinitely, waiting for each other to release a resource. This typically happens when two threads hold locks on different resources and each is waiting for the other to release its lock.
+Example of Deadlock:
+```java
+class A {
+    synchronized void methodA(B b) {
+        b.last();
+    }
+    synchronized void last() {}
+}
+class B {
+    synchronized void methodB(A a) {
+        a.last();
+    }
+    synchronized void last() {}
+}
+public class Deadlock {
+    public static void main(String[] args) {
+        A a = new A();
+        B b = new B();
+        
+        new Thread(() -> a.methodA(b)).start();
+        new Thread(() -> b.methodB(a)).start();
+    }
+}
+```
+To avoid deadlocks:
+- Avoid holding multiple locks at once.
+- Use a timeout for acquiring locks (`ReentrantLock.lock(long timeout)`).
+- Always acquire locks in a consistent order.
+
+---
 
 ## Executor Framework
 
@@ -4980,9 +4900,91 @@ In Java, the `ExecutorService` interface, part of the `java.util.concurrent` pac
     });
     ```
 
+
+
+### **5. Executor Framework**
+The **Executor Framework** introduced in Java 5 provides a higher-level replacement for managing threads. Instead of manually creating and managing threads, you use executor services that abstract away the details.
+#### Executor Types:
+1. **SingleThreadExecutor**: Uses a single worker thread to process tasks.
+2. **FixedThreadPool**: Uses a fixed number of threads to process a queue of tasks.
+3. **CachedThreadPool**: Creates new threads as needed, but reuses existing ones if available.
+4. **ScheduledThreadPool**: A pool of threads that can execute tasks after a delay or periodically.
+Example of using `ExecutorService`:
+```java
+import java.util.concurrent.*;
+public class ExecutorExample {
+    public static void main(String[] args) {
+        ExecutorService executor = Executors.newFixedThreadPool(2);
+        
+        executor.submit(() -> System.out.println("Task 1"));
+        executor.submit(() -> System.out.println("Task 2"));
+        
+        executor.shutdown(); // Initiates an orderly shutdown
+    }
+}
+```
+- **`submit()`**: Submits a task for execution.
+- **`shutdown()`**: Initiates an orderly shutdown in which previously submitted tasks are executed, but no new tasks will be accepted.
+
 ### Summary
 
 The `ExecutorService` interface provides a robust framework for concurrent programming in Java, making it easier to manage threads and execute tasks asynchronously. By using these methods, you can effectively handle task submission, execution, and lifecycle management in a multi-threaded environment.
+
+---
+
+### **6. Future and Callable**
+When you need to submit a task that returns a result or may throw an exception, you use **`Callable`** instead of `Runnable`. `Callable` is similar to `Runnable`, but it can return a result or throw an exception.
+You can submit `Callable` tasks via an `ExecutorService`, which returns a **`Future`** object.
+#### Example:
+```java
+import java.util.concurrent.*;
+public class CallableExample {
+    public static void main(String[] args) throws ExecutionException, InterruptedException {
+        ExecutorService executor = Executors.newCachedThreadPool();
+        
+        Callable<Integer> task = () -> {
+            return 42;  // Task that returns a value
+        };
+        
+        Future<Integer> future = executor.submit(task);
+        System.out.println("Result: " + future.get());  // Block until the task is done
+        
+        executor.shutdown();
+    }
+}
+```
+- **`Future.get()`**: Blocks the calling thread until the task completes and returns the result.
+- **`Future.isDone()`**: Returns `true` if the task is completed.
+
+---
+
+### **7. Concurrency Utilities (java.util.concurrent)**
+Java 8 introduced several concurrency utilities in the `java.util.concurrent` package that simplify working with threads and synchronization.
+
+#### a) **CountDownLatch**
+A **CountDownLatch** is used to block one or more threads until a set of operations being performed in other threads completes.
+```java
+CountDownLatch latch = new CountDownLatch(3); // Wait for 3 events to occur
+latch.await();  // Blocks until the count reaches 0
+```
+
+#### b) **CyclicBarrier**
+A **CyclicBarrier** is similar to a CountDownLatch but allows threads to repeatedly meet at a common barrier point.
+#### c) **Semaphore**
+A **Semaphore** controls access to a particular resource by multiple threads by using a set number of permits.
+
+---
+
+### **Conclusion**
+- **Thread**: A lightweight process that can run concurrently with others.
+- **Concurrency**: The ability of a system to execute multiple tasks simultaneously, improving performance.
+- **Thread Management**: Java provides multiple ways to create threads (via `Thread` class, `Runnable`, or `Executor` framework).
+- **Synchronization**: Ensures thread-safe access to shared resources using mechanisms like `synchronized` blocks and `Lock`.
+- **Executor Framework**: Provides a higher-level API for managing thread pools and scheduling tasks.
+- **Deadlocks**: Careful attention is needed to avoid deadlocks by properly managing resource locking.
+
+By understanding these concepts and applying best practices, Java developers can efficiently manage concurrency, improve application performance, and avoid common multi-threading pitfalls.
+
 
 ## Detecting and recovering from deadlocks
 
@@ -5285,6 +5287,90 @@ Your definitions of **Semaphore** and **Snapshot** are accurate! Here’s a bit 
 - **Snapshot**: A concept that helps maintain consistent views of data in a concurrent environment, crucial for ensuring data integrity during concurrent reads and writes.
 
 Both of these concepts are essential in building robust concurrent applications in Java.
+
+## Snapshot
+
+In the context of **data structures** and **collections**, a **snapshot** refers to a **static copy** of a collection (or data structure) at a specific point in time. When a snapshot is created, the collection is **frozen** and does not reflect any subsequent modifications to the original collection. This concept is commonly used in **fail-safe iterators** and in systems where **concurrent modifications** to the collection might occur during iteration.
+
+A snapshot allows you to work with a consistent view of the data at the time the snapshot was taken, while changes in the underlying collection (such as adding or removing elements) do not affect the snapshot.
+
+### **Snapshot in Different Contexts**
+
+1. **In Java Collections (Fail-Safe Iterators)**:
+   - In some **concurrent collections**, a snapshot is used to create an iterator that operates on a consistent, read-only view of the collection, even if the original collection is being modified by other threads.
+   - For example, in a `CopyOnWriteArrayList` or `ConcurrentHashMap`, when you create an iterator, it iterates over a snapshot of the collection at the time the iterator was created. Even if other threads modify the collection (e.g., add or remove elements), the snapshot seen by the iterator remains unchanged.
+   
+   #### Example of Snapshot in `CopyOnWriteArrayList`:
+   ```java
+   import java.util.concurrent.CopyOnWriteArrayList;
+   import java.util.Iterator;
+
+   public class SnapshotExample {
+       public static void main(String[] args) {
+           // Create a CopyOnWriteArrayList
+           CopyOnWriteArrayList<String> list = new CopyOnWriteArrayList<>();
+           list.add("A");
+           list.add("B");
+           list.add("C");
+
+           // Create an iterator (snapshot of the list)
+           Iterator<String> iterator = list.iterator();
+
+           // Modify the list during iteration
+           list.add("D");
+
+           // Iterate over the snapshot (original state of the list when iterator was created)
+           while (iterator.hasNext()) {
+               System.out.println(iterator.next());  // This will print A, B, C, not D
+           }
+       }
+   }
+   ```
+
+   **Output**:
+   ```
+   A
+   B
+   C
+   ```
+
+   In the above example, even though `"D"` is added to the list during iteration, the iterator still sees the snapshot of the list at the time it was created, which only contains `"A"`, `"B"`, and `"C"`.
+
+2. **In Databases**:
+   - A snapshot can also refer to a **consistent copy of the database** at a specific moment in time. This is often used in databases to perform **backups** or to allow **read-only access** to a consistent view of the database while it is being modified.
+   - For example, in some database systems, you can take a snapshot of the database at a specific point in time and query it without affecting the ongoing changes in the live database.
+
+3. **In Version Control Systems**:
+   - A snapshot in version control (e.g., **Git**, **SVN**) refers to a **commit** or a **version** of the repository at a specific point in time. It captures the state of the repository (files, directories, etc.) at that point.
+   - This snapshot allows developers to revisit or revert to a previous state of the codebase.
+
+### **Key Characteristics of a Snapshot**
+
+- **Consistency**: The snapshot represents the state of the data at a particular point in time, so even if the original data structure changes afterward, the snapshot will remain consistent and unaffected by those changes.
+  
+- **Read-Only**: Once a snapshot is created, it is usually a **read-only view** of the data. Any modification to the underlying collection does not affect the snapshot.
+
+- **Performance Overhead**: Creating a snapshot, especially in concurrent collections, may involve some overhead, as the system might need to create a copy of the data or track changes independently to ensure consistency.
+
+### **When Are Snapshots Used?**
+
+1. **Concurrency Control**: In systems with concurrent access, snapshots provide a way to safely iterate over a collection or perform operations without being affected by ongoing changes made by other threads or processes.
+   
+2. **Backups**: In databases and file systems, snapshots are used to create a backup of the system without locking it or interrupting ongoing operations.
+
+3. **Versioning**: In version control systems, snapshots are used to capture the state of a project at specific commits, allowing developers to revert to or review past versions of the project.
+
+### **Example in Concurrent Collections:**
+
+In a **`CopyOnWriteArrayList`**, the underlying array is **copied** whenever a modification is made (such as adding or removing an element). Therefore, when an iterator is created, it operates on a **snapshot** of the original array, meaning the iterator will not reflect the changes made to the list after the iterator was created.
+
+This is in contrast to non-concurrent collections like `ArrayList`, where modifications made to the collection during iteration may cause a **`ConcurrentModificationException`** or unexpected results.
+
+### **Summary**
+
+A **snapshot** is essentially a **frozen copy** of a data structure or collection at a specific point in time. It ensures consistency during iteration or access, particularly in concurrent environments where data may be modified while it is being accessed. While the underlying collection may continue to change, the snapshot allows safe, consistent operations on the data, without the need to worry about the changes being made by other threads or processes.
+
+---
 
 ## ForkJoinPool
 
@@ -8810,89 +8896,7 @@ In summary, **Fail-Fast** is useful for catching bugs early in single-threaded o
 
 ---
 
-## Snapshot
 
-In the context of **data structures** and **collections**, a **snapshot** refers to a **static copy** of a collection (or data structure) at a specific point in time. When a snapshot is created, the collection is **frozen** and does not reflect any subsequent modifications to the original collection. This concept is commonly used in **fail-safe iterators** and in systems where **concurrent modifications** to the collection might occur during iteration.
-
-A snapshot allows you to work with a consistent view of the data at the time the snapshot was taken, while changes in the underlying collection (such as adding or removing elements) do not affect the snapshot.
-
-### **Snapshot in Different Contexts**
-
-1. **In Java Collections (Fail-Safe Iterators)**:
-   - In some **concurrent collections**, a snapshot is used to create an iterator that operates on a consistent, read-only view of the collection, even if the original collection is being modified by other threads.
-   - For example, in a `CopyOnWriteArrayList` or `ConcurrentHashMap`, when you create an iterator, it iterates over a snapshot of the collection at the time the iterator was created. Even if other threads modify the collection (e.g., add or remove elements), the snapshot seen by the iterator remains unchanged.
-   
-   #### Example of Snapshot in `CopyOnWriteArrayList`:
-   ```java
-   import java.util.concurrent.CopyOnWriteArrayList;
-   import java.util.Iterator;
-
-   public class SnapshotExample {
-       public static void main(String[] args) {
-           // Create a CopyOnWriteArrayList
-           CopyOnWriteArrayList<String> list = new CopyOnWriteArrayList<>();
-           list.add("A");
-           list.add("B");
-           list.add("C");
-
-           // Create an iterator (snapshot of the list)
-           Iterator<String> iterator = list.iterator();
-
-           // Modify the list during iteration
-           list.add("D");
-
-           // Iterate over the snapshot (original state of the list when iterator was created)
-           while (iterator.hasNext()) {
-               System.out.println(iterator.next());  // This will print A, B, C, not D
-           }
-       }
-   }
-   ```
-
-   **Output**:
-   ```
-   A
-   B
-   C
-   ```
-
-   In the above example, even though `"D"` is added to the list during iteration, the iterator still sees the snapshot of the list at the time it was created, which only contains `"A"`, `"B"`, and `"C"`.
-
-2. **In Databases**:
-   - A snapshot can also refer to a **consistent copy of the database** at a specific moment in time. This is often used in databases to perform **backups** or to allow **read-only access** to a consistent view of the database while it is being modified.
-   - For example, in some database systems, you can take a snapshot of the database at a specific point in time and query it without affecting the ongoing changes in the live database.
-
-3. **In Version Control Systems**:
-   - A snapshot in version control (e.g., **Git**, **SVN**) refers to a **commit** or a **version** of the repository at a specific point in time. It captures the state of the repository (files, directories, etc.) at that point.
-   - This snapshot allows developers to revisit or revert to a previous state of the codebase.
-
-### **Key Characteristics of a Snapshot**
-
-- **Consistency**: The snapshot represents the state of the data at a particular point in time, so even if the original data structure changes afterward, the snapshot will remain consistent and unaffected by those changes.
-  
-- **Read-Only**: Once a snapshot is created, it is usually a **read-only view** of the data. Any modification to the underlying collection does not affect the snapshot.
-
-- **Performance Overhead**: Creating a snapshot, especially in concurrent collections, may involve some overhead, as the system might need to create a copy of the data or track changes independently to ensure consistency.
-
-### **When Are Snapshots Used?**
-
-1. **Concurrency Control**: In systems with concurrent access, snapshots provide a way to safely iterate over a collection or perform operations without being affected by ongoing changes made by other threads or processes.
-   
-2. **Backups**: In databases and file systems, snapshots are used to create a backup of the system without locking it or interrupting ongoing operations.
-
-3. **Versioning**: In version control systems, snapshots are used to capture the state of a project at specific commits, allowing developers to revert to or review past versions of the project.
-
-### **Example in Concurrent Collections:**
-
-In a **`CopyOnWriteArrayList`**, the underlying array is **copied** whenever a modification is made (such as adding or removing an element). Therefore, when an iterator is created, it operates on a **snapshot** of the original array, meaning the iterator will not reflect the changes made to the list after the iterator was created.
-
-This is in contrast to non-concurrent collections like `ArrayList`, where modifications made to the collection during iteration may cause a **`ConcurrentModificationException`** or unexpected results.
-
-### **Summary**
-
-A **snapshot** is essentially a **frozen copy** of a data structure or collection at a specific point in time. It ensures consistency during iteration or access, particularly in concurrent environments where data may be modified while it is being accessed. While the underlying collection may continue to change, the snapshot allows safe, consistent operations on the data, without the need to worry about the changes being made by other threads or processes.
-
----
 
 ## Ambiguities in Java technologies
 
@@ -18331,6 +18335,8 @@ By identifying and addressing memory leaks early, and using proper monitoring an
 
 ---
 
+## Permanent Generation (PermGen)
+
 The **Permanent Generation (PermGen)** was a memory area in the JVM used to store metadata related to classes and methods. In older versions of Java (before **Java 8**), PermGen was part of the **Heap Memory** but had its own space for storing class definitions, method data, and other internal JVM structures. However, **PermGen** had some limitations that could lead to **OutOfMemoryError** under certain conditions, particularly in long-running applications or applications with dynamic class loading, such as web servers and application servers (e.g., Tomcat or JBoss).
 
 ### **Why PermGen Was a Temporary Solution**
@@ -18429,8 +18435,6 @@ Although **Metaspace** has its own garbage collection mechanism, the overall gar
 By combining these strategies, you can ensure that your microservices running on Java don't suffer from memory-related issues that might compromise performance and stability.
 
 ---
-
-## Permanent Generation (PermGen)
 
 The **Permanent Generation (PermGen)** in the Java Virtual Machine (JVM) was introduced to manage the storage of **class metadata** (such as class definitions, method data, and other internal structures) separately from the **heap memory** where regular objects reside. While it was a functional solution for a long time, it eventually became a **temporary solution** for several key reasons:
 
