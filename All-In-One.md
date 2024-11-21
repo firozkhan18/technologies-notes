@@ -75,15 +75,8 @@
 10. [New Features Introduced in Java 8](#new-features-introduced-in-java-8)
 11. [Thread Management and Synchronization](#thread-management-and-synchronization)
 12. [Detecting and Recovering from Deadlocks](#detecting-and-recovering-from-deadlocks)
-
-)
 15. [Transaction Isolation Levels](#transaction-isolation-levels)
-16. [Java Design Patterns](#java-design-patterns)
-17. [Overview of `Hashtable` & `ConcurrentHashMap`](#overview-of-hashtable-concurrenthashmap)
-18. [Hashing in `Hashtable & ConcurrentHashMap`](#hashing-in-hashtable-concurrenthashmap)
-19. [Ambiguities in Java Technologies](#ambiguities-in-java-technologies)
-20. [An Overview of Angular, React, Microservices, and Threading, Along with Their Interactions and Use Cases](#an-overview-of-angular-react-microservices-and-threading-along-with-their-interactions-and-use-cases)
-21. [Sharding in MongoDB](#sharding-in-mongodb)
+
 
 ## JAVA
 
@@ -2544,6 +2537,79 @@ By being mindful of object references, employing the right patterns, and regular
 
 ---
 
+Choosing the right garbage collector depends on the specific requirements of your application, such as throughput, latency, and memory usage patterns.
+
+### Spring Boot and REST APIs
+3. **Question**: How do you create a REST API using Spring Boot?
+   **Answer**: You can create a REST API by defining a `@RestController` and using `@RequestMapping` or `@GetMapping`, `@PostMapping`, etc. annotations.
+
+   ```java
+   @RestController
+   @RequestMapping("/api")
+   public class UserController {
+
+       @GetMapping("/users")
+       public List<User> getAllUsers() {
+           return userService.findAllUsers();
+       }
+       
+       @PostMapping("/users")
+       public User createUser(@RequestBody User user) {
+           return userService.saveUser(user);
+       }
+   }
+   ```
+
+### JMS and EJB
+4. **Question**: What is JMS, and how do you use it in a Spring Boot application?
+   **Answer**: Java Message Service (JMS) is a messaging standard that allows application components to create, send, receive, and read messages. In Spring Boot, you can use Spring JMS to configure and use JMS easily.
+
+   ```java
+   @Service
+   public class MessageSender {
+
+       @Autowired
+       private JmsTemplate jmsTemplate;
+
+       public void sendMessage(String message) {
+           jmsTemplate.convertAndSend("myQueue", message);
+       }
+   }
+   ```
+
+### DevSecOps and Tools
+5. **Question**: How do you implement CI/CD using Jenkins?
+   **Answer**: You can set up a Jenkins pipeline using a `Jenkinsfile`. The pipeline can define stages for building, testing, and deploying your application.
+
+   ```groovy
+   pipeline {
+       agent any
+       stages {
+           stage('Build') {
+               steps {
+                   sh 'mvn clean package'
+               }
+           }
+           stage('Test') {
+               steps {
+                   sh 'mvn test'
+               }
+           }
+           stage('Deploy') {
+               steps {
+                   deployToServer()
+               }
+           }
+       }
+   }
+   ```
+
+### Database Concepts
+6. **Question**: What are the differences between RDBMS and NoSQL databases?
+   **Answer**: RDBMS (Relational Database Management System) uses structured schemas and SQL for querying, supporting ACID properties. NoSQL databases are schema-less, designed for horizontal scalability, and often use key-value, document, or column-family data models.
+
+---
+
 ## Java 8 Updated Collections Framework:
 
 ### **1. Stream API (Java 8)**
@@ -4758,7 +4824,7 @@ graph TD
 - The diagram visually represents how both data structures handle hashing and storage of key-value pairs, with emphasis on the differences in their collision resolution and concurrent access mechanisms. 
 - `Hashtable` uses a straightforward approach with linked lists for collisions, while `ConcurrentHashMap` optimizes for concurrency and performance with segmented locking and improved collision handling using trees or linked lists.
 
-Concepts of `HashMap` and `HashSet`, highlighting how they manage data using hashing.
+## Concepts of `HashMap` and `HashSet`, highlighting how they manage data using hashing.
 
 ###  `HashMap` and `HashSet` Diagram
 
@@ -4805,7 +4871,6 @@ graph TD
 - **`HashSet`**: A collection that stores unique values (no duplicates) and does not associate values with keys. It also uses hashing and manages collisions similarly to `HashMap`.
 
 This diagram helps illustrate the structural similarities and differences between `HashMap` and `HashSet`, particularly in how they use hashing and handle collisions.
-
 
 ---
 
