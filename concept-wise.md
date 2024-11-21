@@ -3910,6 +3910,492 @@ public final class ImmutableClass {
 - **String Pool**: Cache of `String` objects to optimize memory usage by reusing immutable `String` literals.
 - **Object Pool**: General technique to reuse objects to reduce overhead of object creation and garbage collection.
 
+
+## **Memory Leak in Microservices: Understanding and Resolution**
+
+A **memory leak** in a microservice occurs when the service consumes memory over time without releasing it back to the operating system or JVM. This gradual increase in memory usage can eventually lead to **OutOfMemoryErrors**, poor performance, and potential crashes. Addressing memory leaks early in the development lifecycle is crucial to ensure the system is robust and scalable.
+
+### **1. Causes of Memory Leaks in Microservices**
+
+In the context of **microservices** (whether they're written in Java, Node.js, Python, etc.), memory leaks can occur due to various reasons, such as:
+
+- **Unclosed resources**: Not closing database connections, file streams, HTTP connections, or sockets.
+- **Improperly managed caches**: Over-retaining objects in in-memory caches or failing to evict stale objects.
+- **Poor garbage collection**: Objects not being collected because they are still referenced, even though they are no longer needed.
+- **Large objects in heap**: Storing large objects in memory and not freeing them once they are no longer needed.
+- **Unintentional object references**: Holding on to references (like static references) which prevent objects from being garbage collected.
+- **Improper handling of threads**: If threads are created dynamically and never cleaned up, they can cause memory leaks.
+- **Memory leaks in third-party libraries**: Sometimes the issue may not lie within your code but in a dependency or a third-party library.
+
+### **2. Identifying Memory Leaks**
+
+Before you can resolve a memory leak, you need to **identify** it. Here are a few approaches for detecting and diagnosing memory leaks in microservices:
+
+#### **A. Monitoring Tools**
+
+You can use monitoring tools to track memory usage and detect trends that may indicate memory leaks:
+
+- **Prometheus & Grafana**: Set up custom metrics to track heap memory, non-heap memory, and garbage collection statistics. Track JVM memory usage over time to see if memory is steadily growing.
+- **JVM Metrics**: Monitor JVM heap size, garbage collection cycles, and memory consumption using **JMX** (Java Management Extensions).
+  
+  Example of memory metrics with **Prometheus**:
+  ```yaml
+  - job_name: 'java-microservice'
+    static_configs:
+      - targets: ['localhost:8080']
+    metrics_path: /actuator/prometheus
+  ```
+
+- **Heap Dumps**: In Java, heap dumps can be captured to inspect memory usage. A **heap dump** provides a snapshot of the memory usage of your application and helps in analyzing memory leaks.
+
+#### **B. JVM Profiling and Diagnostics**
+
+- **VisualVM**: VisualVM is a great tool to monitor memory usage and track potential memory leaks. You can visualize heap usage, see memory consumption, and monitor garbage collection performance.
+  
+  - Connect VisualVM to your running microservice to view memory consumption, heap dumps, and object references.
+  
+- **JProfiler**: JProfiler is another powerful tool for analyzing memory leaks in Java applications. It provides heap analysis, thread monitoring, and garbage collection tracking.
+
+#### **C. Log-based Detection**
+
+Set up logging for heap dumps on OutOfMemoryError or when memory consumption crosses a certain threshold.
+
+```java
+public class MemoryLogger {
+    static {
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            // Dump heap memory when JVM shuts down
+            try {
+                String heapDumpFile = "/tmp/heapdump.hprof";
+                HotSpotDiagnosticMXBean diagnosticMXBean = ManagementFactory.getPlatformMXBean(HotSpotDiagnosticMXBean.class);
+                diagnosticMXBean.dumpHeap(heapDumpFile, true);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }));
+    }
+}
+```
+
+#### **D. Profiling in Production with Tools like Flight Recorder**
+
+- **Java Flight Recorder (JFR)** can be enabled in production environments to record JVM events, garbage collection metrics, and memory usage. This allows detailed analysis of performance issues over time, including potential memory leaks.
+
+---
+
+### **3. Resolving Memory Leaks**
+
+Once you've identified a memory leak, resolving it typically involves finding the root cause and making changes to your code, architecture, or configurations.
+
+#### **A. Common Approaches for Resolving Memory Leaks**
+
+##### **1. Resource Management**
+- **Close Resources Properly**: Always close database connections, file streams, sockets, and other external resources when they are no longer needed. For example, use **try-with-resources** (Java) to ensure automatic closing of resources.
+
+  Example in Java:
+  ```java
+  try (Connection connection = dataSource.getConnection()) {
+      // Use connection
+  } catch (SQLException e) {
+      // Handle exception
+  }
+  ```
+  
+##### **2. Use Weak References for Caching**
+- When dealing with caching, use **WeakReference** or **SoftReference** to store objects. These references allow the garbage collector to reclaim memory if the object is no longer in use but is still referenced in the cache.
+  
+  Example:
+  ```java
+  WeakReference<MyObject> weakRef = new WeakReference<>(myObject);
+  ```
+
+##### **3. Proper Cache Management**
+- Implement **cache eviction policies** to remove stale or unneeded objects. This is crucial for in-memory caches (e.g., **Ehcache**, **Redis**). 
+
+  Example in **Redis**:
+  - Use an **expiration time** for cache keys (TTL).
+  - Consider using **LRU (Least Recently Used)** eviction policies for large datasets.
+
+##### **4. Thread Management**
+- Make sure that any threads or **thread pools** are properly managed. If you create threads dynamically (e.g., through `ExecutorService`), ensure that you shut down unused threads after they finish their work. Not doing so will cause memory leaks by holding on to thread objects.
+  
+  Example:
+  ```java
+  executorService.shutdown();  // Always shut down when done
+  ```
+
+##### **5. Fix Circular References**
+- Ensure that your objects do not have **circular references** that are unintentionally preventing garbage collection. This can happen when two or more objects reference each other, making it impossible for the garbage collector to clean them up.
+
+##### **6. Reduce Object Retention**
+- Avoid retaining references to large objects after they are no longer necessary. For instance, holding large collections or data buffers in memory unnecessarily can cause memory growth. Always clear references to large objects explicitly when they are no longer needed.
+
+##### **7. Fixing Third-party Library Leaks**
+- If the memory leak is caused by third-party libraries, ensure:
+  - You are using the latest stable version of the library (which might have fixed memory leaks).
+  - The library is properly initialized and cleaned up (some libraries require explicit shutdown or cleanup calls).
+  - Report the issue to the maintainers if you cannot resolve it yourself.
+
+#### **B. Improving Garbage Collection**
+
+- **Tune Garbage Collection (GC)**: Sometimes memory leaks are caused by inefficient garbage collection. You can improve garbage collection by tuning the JVM’s GC parameters:
+  - **Increase heap size**: Increase the heap memory if you're running into memory constraints.
+  - **GC logging**: Enable **GC logs** to analyze performance.
+  
+  Example of JVM GC options:
+  ```bash
+  -XX:+PrintGCDetails -XX:+PrintGCDateStamps -Xloggc:/tmp/gc.log
+  ```
+
+- **Garbage Collector Selection**: Depending on your application's characteristics (e.g., high throughput vs. low latency), you can experiment with different garbage collectors, such as **G1 GC**, **ZGC**, or **Shenandoah GC**.
+
+---
+
+### **4. Preventive Measures for Future**
+
+To minimize the risk of memory leaks in the future, consider implementing the following best practices:
+
+#### **A. Code Reviews and Static Analysis**
+- Regularly perform **code reviews** focused on memory management. Ensure resources are correctly closed and no unnecessary references are retained.
+- Use **static analysis tools** like **FindBugs** or **SonarQube** to detect potential memory leaks in the codebase.
+
+#### **B. Automated Testing with Profiling**
+- Implement **automated testing** for memory leaks, where tests are run to check memory usage during and after specific operations.
+- Tools like **JVM profilers** (VisualVM, JProfiler) and **Heap Dump Analysis** can be automated as part of the test suite to track memory usage.
+
+#### **C. Scaling and Distributed Design**
+- If your microservices run in a **distributed environment** (e.g., Kubernetes, Docker), consider **auto-scaling** to scale services horizontally, rather than allowing a service to grow to the point of memory exhaustion.
+- Leverage **circuit breakers** and **resilience patterns** to avoid overwhelming services with requests that might lead to memory pressure.
+
+---
+
+### **5. Conclusion**
+
+Memory leaks are a significant concern in microservices because they can silently degrade the performance of the system and cause crashes. In **Java-based microservices**, tools like **VisualVM**, **JProfiler**, and **heap dumps** can help in detecting memory leaks, while best practices like proper **resource management**, **cache eviction**, and **object retention** can prevent them.
+
+By identifying and addressing memory leaks early, and using proper monitoring and diagnostics, you can significantly improve the reliability, scalability, and performance of your microservices.
+
+---
+
+## Permanent Generation (PermGen)
+
+The **Permanent Generation (PermGen)** was a memory area in the JVM used to store metadata related to classes and methods. In older versions of Java (before **Java 8**), PermGen was part of the **Heap Memory** but had its own space for storing class definitions, method data, and other internal JVM structures. However, **PermGen** had some limitations that could lead to **OutOfMemoryError** under certain conditions, particularly in long-running applications or applications with dynamic class loading, such as web servers and application servers (e.g., Tomcat or JBoss).
+
+### **Why PermGen Was a Temporary Solution**
+
+The introduction of **PermGen** was a temporary solution because:
+- **Limited Size**: PermGen had a fixed size, which couldn't be adjusted dynamically (until Java 8 with Metaspace).
+- **Garbage Collection Issues**: PermGen wasn't managed well by the JVM's garbage collector. This caused class loaders to leak classes and result in memory leaks over time.
+- **Class Loading**: For applications that dynamically load and unload classes (e.g., web applications with hot deployment), the PermGen space could get filled up, causing the `OutOfMemoryError: PermGen space` error.
+
+### **Java 8 and Beyond: The Shift to Metaspace**
+
+Since **Java 8**, the **PermGen** space was replaced with **Metaspace**. This change was introduced to address the limitations of PermGen, and it comes with several improvements:
+
+1. **Dynamic Sizing**: 
+   - **Metaspace** grows and shrinks dynamically, unlike **PermGen**, which had a fixed size. This means that the JVM can adjust the size of Metaspace based on application needs and available system resources.
+   - The JVM automatically manages the Metaspace memory, reducing the likelihood of `OutOfMemoryError` due to class-loading behavior.
+
+2. **More Efficient Garbage Collection**:
+   - **Metaspace** is not part of the heap memory anymore, and it has its own garbage collection mechanism. This makes it easier for the JVM to clean up metadata and class data when it’s no longer needed.
+
+3. **Control via JVM Parameters**:
+   - In Java 8 and later, **Metaspace** can grow indefinitely (until the system runs out of native memory). However, the size can be controlled via JVM parameters.
+   - Example JVM options to tune **Metaspace**:
+     - **`-XX:MetaspaceSize=<size>`**: The initial size of Metaspace. When the Metaspace is full, the JVM will attempt to expand it.
+     - **`-XX:MaxMetaspaceSize=<size>`**: The maximum size of Metaspace. The JVM will never expand Metaspace beyond this size. If not specified, the JVM will dynamically allocate it based on system resources.
+     - **`-XX:MinMetaspaceFreeRatio`** and **`-XX:MaxMetaspaceFreeRatio`**: These options define the desired percentage of free space in Metaspace when it is resized.
+
+### **Fixing Memory Leaks in Metaspace (Java 8 and Later)**
+
+While **Metaspace** resolves many of the issues that were present with **PermGen**, **memory leaks** can still occur in the form of **class loader leaks**, which can cause the **Metaspace** to fill up.
+
+Here are the key fixes and approaches for handling memory leaks related to **Metaspace** in modern Java applications:
+
+### **1. Class Loader Leaks**
+In long-running Java applications (especially web applications, application servers, etc.), class loaders can retain references to classes that should be garbage collected. This can lead to the Metaspace growing uncontrollably.
+
+#### **Fixes for Class Loader Leaks:**
+- **Properly Dereference Class Loaders**: If your application uses custom class loaders, ensure that the class loaders are dereferenced when they are no longer needed. This can be a common issue in applications that dynamically load classes, such as in servlet containers (Tomcat, Jetty) or OSGi frameworks.
+  - Use tools like **JVM profilers** (VisualVM, JProfiler) or heap dump analysis tools to identify class loaders that are holding references to classes.
+  
+- **Close Resources**: Ensure that resources (like database connections, threads, and caches) are properly closed and cleaned up when they are no longer in use. Often, memory leaks can occur when these resources are not cleaned up properly, which in turn can cause class loader leaks.
+
+- **Use Memory Leak Detection Tools**: Use tools like **JProfiler** or **YourKit** to inspect the live heap and analyze references to class loaders. These tools can help pinpoint which class loaders and associated classes are not being unloaded properly.
+
+### **2. Dynamic Class Loading**
+If your application is dynamically loading and unloading classes, make sure that classes are unloaded appropriately. Often, when classes are dynamically loaded in an app server or a framework (like Spring), the class loaders might not release the classes if they are not properly unloaded, leading to memory leaks.
+
+#### **Fixes for Dynamic Class Loading Issues**:
+- **Use a Thread-Safe Class Loading Mechanism**: Ensure that the class loading mechanism used by your framework or server is thread-safe and does not keep references to loaded classes unnecessarily.
+- **Check Framework Configurations**: Many modern Java frameworks (Spring, Hibernate, etc.) offer mechanisms for **reloading** or **reinitializing** beans and classes dynamically. Ensure these mechanisms are being used correctly.
+
+### **3. Monitoring Metaspace Usage**
+Regularly monitor **Metaspace** usage to detect when it is growing unexpectedly. If **Metaspace** is consistently growing and approaching its limit, you need to investigate the root cause (usually class loader leaks or excessive dynamic class loading).
+
+- **JVM Metrics**: Use JVM metrics to track **Metaspace usage** over time. This can be done through monitoring tools like **Prometheus** and **Grafana**, or **JMX**.
+  
+- **Garbage Collection Logs**: Enable **GC logging** to monitor how Metaspace is being handled by the JVM. Look for signs of the Metaspace growing excessively without proper reclamation.
+
+#### Example of enabling GC logs in Java:
+```bash
+-XX:+PrintGCDetails -XX:+PrintGCDateStamps -Xloggc:/path/to/gc.log
+```
+
+### **4. JVM Tuning**
+Adjust JVM parameters to limit the growth of **Metaspace**. While allowing the JVM to dynamically manage Metaspace can be beneficial, you can control its upper bounds if the application consumes too much memory.
+
+- **Tune Metaspace Size**: 
+  ```bash
+  -XX:MetaspaceSize=128m  # Initial size of Metaspace
+  -XX:MaxMetaspaceSize=512m  # Maximum size of Metaspace
+  ```
+
+  You can set `MaxMetaspaceSize` to prevent the Metaspace from growing uncontrollably, which can help prevent JVM crashes due to memory exhaustion.
+
+### **5. Restart Strategies for Long-running Applications**
+In **long-running services** (such as microservices running for months or years), periodically **restarting** the application can be a practical mitigation. This avoids long-term memory buildup, but it is not a permanent solution. To ensure minimal disruption, this can be handled via **rolling deployments** in Kubernetes or similar orchestration platforms.
+
+### **6. Garbage Collection Tuning**
+Although **Metaspace** has its own garbage collection mechanism, the overall garbage collection strategy still impacts how well Metaspace is managed. Fine-tuning the garbage collection algorithm and memory allocation strategies can improve the efficiency of memory management.
+
+- **Use G1 GC or ZGC**: If you're experiencing memory leaks or performance issues with Metaspace, consider using more modern garbage collectors like **G1 GC** or **ZGC**, which are designed for low-latency and large memory management.
+  
+  Example:
+  ```bash
+  -XX:+UseG1GC  # G1 Garbage Collector
+  ```
+
+### **Summary**
+
+- **PermGen** has been replaced by **Metaspace** starting with Java 8. Metaspace is more flexible and handles dynamic memory allocation better, but it still needs to be properly managed.
+- **Memory leaks** in the form of **class loader leaks** can still occur in Java applications, leading to Metaspace filling up over time.
+- The best way to **resolve memory leaks** related to Metaspace is to ensure proper **class loader management**, **resource cleanup**, and **dynamic class unloading**.
+- **Monitoring tools** (like VisualVM, Prometheus, etc.) can help track **Metaspace** usage and identify potential issues.
+- **JVM tuning** options like `-XX:MaxMetaspaceSize` and using modern garbage collectors (e.g., **G1 GC**, **ZGC**) can help mitigate some issues related to memory leaks.
+
+By combining these strategies, you can ensure that your microservices running on Java don't suffer from memory-related issues that might compromise performance and stability.
+
+---
+
+The **Permanent Generation (PermGen)** in the Java Virtual Machine (JVM) was introduced to manage the storage of **class metadata** (such as class definitions, method data, and other internal structures) separately from the **heap memory** where regular objects reside. While it was a functional solution for a long time, it eventually became a **temporary solution** for several key reasons:
+
+### 1. **Fixed Size and Lack of Dynamic Scaling**
+
+- **Fixed Size**: PermGen had a fixed size that could be set at the JVM startup using the `-XX:PermSize` and `-XX:MaxPermSize` options. However, the size could not dynamically grow based on the application's needs.
+  
+- **Memory Exhaustion**: In applications that used dynamic class loading and unloading, especially large-scale applications like web servers (e.g., Tomcat, JBoss), or frameworks like **Spring**, **OSGi**, or **Hibernate**, the PermGen space could easily get filled up with metadata as classes were loaded dynamically but not unloaded properly.
+  
+- **No Adaptive Sizing**: The lack of automatic resizing in PermGen meant that the JVM couldn’t handle situations where more memory was needed, leading to `OutOfMemoryError: PermGen space`. The only solution was to manually increase the PermGen space, which was not always a scalable or efficient approach.
+
+### 2. **Garbage Collection Issues**
+
+- **Infrequent Garbage Collection**: Unlike the heap memory, which is managed by garbage collectors (GC) that reclaim unused objects, PermGen had its own collection mechanism. However, PermGen's GC was **not as efficient** as the heap memory's garbage collection.
+  
+- **Class Metadata Retention**: Class definitions, method data, and static variables were stored in PermGen. Over time, applications that dynamically load and unload classes might not properly remove them from PermGen, leading to memory leaks or **classloader leaks**. These references to class objects prevented the JVM from collecting garbage properly.
+
+- **Full GC Impact**: To reclaim memory from PermGen, the JVM needed to run a **full garbage collection (GC)**, which would halt application threads for a period (known as a "stop-the-world" event). This was inefficient for long-running applications, especially in high-throughput systems, and added unnecessary complexity.
+
+### 3. **Limited Memory for Dynamic Class Loading**
+
+- **Dynamic Class Loading**: Many Java applications dynamically load and unload classes, particularly in web applications, enterprise applications, and frameworks. Examples include **hot deployment**, **Spring Beans**, or **Java EE containers**. With **PermGen**, if too many classes were dynamically loaded over time (e.g., by a web server), the fixed-size PermGen would eventually run out of space, even with correct object management in the heap.
+  
+- **Frequent Class Loading**: In microservices, containers, or hot-redeploy scenarios, where classes are reloaded often (e.g., in application servers), the **PermGen** could grow rapidly and then cause an **OutOfMemoryError** if not tuned carefully.
+
+### 4. **Classloader Leaks**
+
+- **Classloader Leaks**: A common problem with PermGen space was **classloader leaks**. In web servers and application servers, each web application typically had its own **classloader**. If classloaders weren't properly unloaded when the application was stopped or redeployed, they could hold onto references to classes, leading to **memory leaks** in PermGen.
+  
+- **No Automatic Cleanup**: PermGen didn't have a built-in mechanism to automatically clean up classloader references, leading to class metadata accumulating in memory, preventing garbage collection.
+
+### 5. **Better Alternatives Introduced in Java 8: Metaspace**
+
+In **Java 8**, **PermGen** was replaced by **Metaspace**, which fixed many of the issues inherent in PermGen:
+
+#### **Key Improvements in Metaspace**:
+
+1. **Dynamic Sizing**:
+   - **Metaspace** no longer has a fixed size. The JVM dynamically grows and shrinks the Metaspace based on the system's available native memory and the application's needs.
+   - There is no need to manually configure the memory size via `-XX:PermSize` and `-XX:MaxPermSize` as in PermGen.
+
+2. **Native Memory**:
+   - **Metaspace** is stored in native memory (outside of the Java heap), which means that it is managed separately from the heap and does not interfere with heap-related garbage collection.
+   - The JVM automatically expands Metaspace as needed, making it more adaptable to applications that load many classes or use frameworks that dynamically load classes.
+
+3. **Garbage Collection**:
+   - **Metaspace** is subject to automatic garbage collection. Unlike PermGen, where garbage collection was often delayed, Metaspace benefits from the same **garbage collection** mechanisms that manage the heap, improving overall memory management.
+
+4. **Class Unloading**:
+   - Metaspace allows for better class unloading. When classes are no longer used, they can be safely unloaded, and the memory can be reclaimed. This solves the classloader leak issues that were common with **PermGen**.
+
+5. **More Control**:
+   - While Metaspace dynamically grows, it can still be limited using the `-XX:MaxMetaspaceSize` JVM parameter if required, offering a balance between flexibility and control.
+
+#### Example of configuring Metaspace in Java 8 and later:
+```bash
+-XX:MetaspaceSize=128m   # Initial size of Metaspace
+-XX:MaxMetaspaceSize=512m # Maximum size of Metaspace
+```
+
+### **Conclusion: Why PermGen Was Temporary**
+
+**PermGen** was considered a temporary solution because:
+1. It had a **fixed size**, which led to memory exhaustion if the application required more space.
+2. It lacked the ability to **dynamically resize** based on memory demand.
+3. It had **garbage collection issues** and was inefficient in handling dynamic class loading/unloading.
+4. It was not well-suited to handle **long-running applications** or modern Java frameworks that use dynamic class loading, leading to memory leaks.
+
+With **Java 8**, the **Metaspace** introduced significant improvements by:
+- Allowing for **dynamic sizing**.
+- Using **native memory** for better management.
+- Providing better garbage collection for **class metadata**.
+- Fixing issues related to **class loader leaks**.
+
+Thus, **PermGen** was phased out because of these limitations, and **Metaspace** is the recommended solution for managing class metadata efficiently in modern Java applications.
+
+Analyzing memory leaks in a service or application code is critical for maintaining performance and stability, particularly for long-running systems like microservices. **Memory leaks** occur when objects are no longer used but are still being referenced, preventing the garbage collector from reclaiming that memory. This can lead to **increased memory usage**, **OutOfMemoryError**, and **performance degradation** over time.
+
+---
+
+## Aanalyze and identify memory leaks
+
+To **analyze and identify memory leaks**, especially in **Java applications** (like microservices or Spring Boot services), there are several steps and tools you can use. Below is a comprehensive guide on how to approach memory leak detection:
+
+### **1. Enable and Monitor Garbage Collection (GC) Logs**
+
+The first step to identify potential memory leaks is to monitor how the JVM’s **garbage collector** is behaving. JVM provides detailed logging options that help in tracking memory usage over time and the effectiveness of garbage collection.
+
+#### Steps:
+- **Enable GC logging** by adding JVM flags to your application:
+  
+  ```bash
+  -XX:+PrintGCDetails -XX:+PrintGCDateStamps -Xloggc:/path/to/gc.log
+  ```
+  
+- **Explanation**:
+  - `-XX:+PrintGCDetails`: Provides detailed information about garbage collection.
+  - `-XX:+PrintGCDateStamps`: Includes timestamps for each garbage collection event.
+  - `-Xloggc:/path/to/gc.log`: Saves the GC logs to a file for further analysis.
+  
+- **What to look for**:
+  - Increasing frequency of garbage collection cycles.
+  - Consistently increasing heap size after garbage collection (indicative of objects not being freed).
+  - Look for any "GC overhead limit exceeded" messages, which could indicate that the JVM spends too much time in garbage collection and is not reclaiming enough memory.
+
+---
+
+### **2. Use Profiling Tools to Inspect Memory Usage**
+
+Profiling tools are very useful for identifying memory leaks. They provide real-time insights into memory consumption and allow you to track objects allocated in memory.
+
+#### Popular profiling tools for memory leak detection:
+- **VisualVM** (free and comes bundled with JDK)
+- **JProfiler**
+- **YourKit**
+- **Eclipse MAT (Memory Analyzer Tool)**
+  
+#### How to use VisualVM:
+1. **Connect VisualVM to your running application** (you can do this via JMX or attach the profiler remotely).
+2. Open the **Memory** tab and watch the memory usage over time.
+3. In the **Heap Dump** section, take snapshots at different times to compare memory allocations.
+4. Look for **objects that grow unexpectedly** in the heap or **unusual memory growth patterns**.
+5. Look for **unused objects** that aren’t being garbage collected.
+
+#### Key indicators in profiling:
+- **Increasing memory consumption** without corresponding object deletion.
+- **Retained objects** that should have been garbage collected (e.g., listeners, large collections, caches, thread pools).
+- Objects **retained by static references**, which often indicate a memory leak.
+
+---
+
+### **3. Heap Dumps and Leak Analysis**
+
+A **heap dump** is a snapshot of the heap memory at a specific point in time. It provides a detailed view of all objects in memory, their references, and the memory they consume.
+
+#### Steps for heap dump analysis:
+1. **Trigger a heap dump** when you suspect a memory leak. You can do this using the following JVM option:
+   ```bash
+   -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/path/to/dump.hprof
+   ```
+2. Once the heap dump is generated, analyze it with tools like **Eclipse MAT** or **VisualVM**.
+3. **Look for suspicious objects** that retain more memory than expected. You can also look for **root causes** of memory leaks by tracing object references.
+
+#### Example analysis:
+- **Large object retainers**: Identify objects that are holding large amounts of memory.
+- **Unreachable objects**: Check for objects that should have been garbage collected but are still present in memory due to reference cycles or strong references.
+- **Thread leaks**: Investigate thread pools or background threads that may not have been shut down properly, leading to retained memory.
+
+---
+
+### **4. Track and Review the Code for Memory Leak Patterns**
+
+Look through your code for common patterns that might lead to memory leaks. These include:
+
+#### Common sources of memory leaks in Java:
+- **Static references**: Static fields can easily cause memory leaks, especially if they hold references to objects that are not cleaned up.
+  - **Example**: A static `List` that holds references to all objects throughout the lifetime of the application.
+
+- **Unclosed resources**: Failing to close resources such as database connections, file handles, or network connections can cause memory leaks.
+  - **Example**: Not closing `InputStream`, `OutputStream`, or `Connection` objects in the `finally` block.
+
+- **Listener and Observer leaks**: Objects like event listeners, observers, or callbacks can lead to memory leaks if they are not properly removed or unregistered.
+  - **Example**: Adding event listeners in a UI framework or web server but not removing them when they are no longer needed.
+
+- **Large object graphs**: Large collections or caches that grow over time and are not properly managed can cause memory leaks.
+  - **Example**: Using a static map (`Map<String, Object> cache`) and never clearing it.
+
+- **Thread pool leaks**: Threads that are not shut down correctly or whose references are held in global static variables.
+
+---
+
+### **5. Use Leak Detection Libraries**
+
+Some libraries and frameworks offer built-in mechanisms to detect memory leaks. You can use them to enhance your application’s memory management.
+
+- **Apache Commons Pool** (for managing resources like database connections, socket pools, etc.) helps in pooling resources efficiently.
+- **Soft references or Weak references**: Use Java's `SoftReference` or `WeakReference` for objects that are okay to be garbage collected but still need to be referenced temporarily.
+
+---
+
+### **6. Look for High Allocation Rate**
+
+Memory leaks can sometimes be identified by looking at the **allocation rate** of objects. If certain objects are continuously allocated over time but not garbage collected, they may be contributing to the memory leak.
+
+#### Tools to monitor allocation rate:
+- **JVM profilers** (e.g., **YourKit**, **JProfiler**)
+- **GC logs**: You can track the allocation rate indirectly by observing how often garbage collections occur and how much heap memory is being reclaimed.
+  
+### **7. Use Memory Leak Detection in CI/CD**
+
+- **Automated Leak Detection**: Integrate memory leak detection into your **CI/CD pipeline** using tools like **Heap Dumps** or **JVM profilers**.
+- **Stress testing and load testing**: Tools like **JMeter** or **Gatling** can simulate high traffic to detect issues related to memory consumption during high load.
+
+---
+
+### **8. Use Java Flight Recorder (JFR) and Mission Control**
+
+Java **Flight Recorder (JFR)**, available in Oracle JDK and OpenJDK, is a diagnostic tool that collects a continuous stream of data about the JVM’s runtime behavior.
+
+- **JFR** provides insights into memory usage patterns, garbage collection, thread activity, and can help in identifying memory leaks.
+- **Mission Control** is a tool that analyzes JFR recordings and helps in identifying performance bottlenecks and memory leaks.
+
+---
+
+### **Summary: Steps for Analyzing Memory Leaks**
+
+1. **Enable GC Logs**: Monitor garbage collection details for unusual patterns.
+2. **Use Profiling Tools**: Use tools like VisualVM or JProfiler to track memory usage over time.
+3. **Take Heap Dumps**: Analyze heap dumps with tools like Eclipse MAT to look for retained objects.
+4. **Inspect the Code**: Look for common memory leak patterns like unclosed resources or static references.
+5. **Use Leak Detection Libraries**: Use libraries and techniques like `WeakReference` to manage memory better.
+6. **Monitor Allocation Rate**: Keep track of object allocation patterns that may indicate leaks.
+7. **Run Stress Tests**: Simulate heavy traffic and usage to detect leaks during peak loads.
+8. **Use JFR**: Java Flight Recorder and Mission Control offer deep insights into memory usage and performance.
+
+By carefully monitoring your application’s memory usage, analyzing GC logs, and using profiling and leak detection tools, you can effectively identify and resolve memory leaks before they impact your application's stability or performance.
+
+---
+
 ---
 
 ## Java Collection Framework
@@ -9735,6 +10221,1638 @@ class BoundedBuffer {
 ### Conclusion
 
 Using `Condition` objects provides a powerful way to handle inter-thread communication and synchronization in a flexible manner. It's especially useful for implementing producer-consumer scenarios and other complex threading patterns.
+
+
+## Virtual Threads in Java 19
+
+Java 19 introduced **virtual threads** as part of the **Project Loom** initiative. Virtual threads are designed to address the challenges associated with **highly concurrent** applications, such as the traditional thread model's performance overhead and scalability issues. Virtual threads allow Java applications to efficiently handle thousands or even millions of concurrent tasks with minimal overhead.
+
+Let's explore **virtual threads** in more detail:
+
+### **1. What Are Virtual Threads?**
+
+Virtual threads are lightweight threads that are managed by the **Java Virtual Machine (JVM)** rather than the underlying operating system (OS). They are different from **platform threads** (the traditional threads in Java) in several key aspects:
+- **Low Overhead**: Virtual threads are much lighter than platform threads. The JVM can manage a huge number of virtual threads, enabling scalable concurrency without the burden of OS-managed threads.
+- **Concurrency**: Virtual threads are ideal for applications that require high concurrency, such as web servers, I/O-bound tasks, or systems that need to handle a large number of simultaneous connections (e.g., REST APIs, message queues).
+
+In contrast to **platform threads**, which are mapped directly to OS threads, **virtual threads** are scheduled and managed by the JVM, and their lifecycle is independent of the operating system.
+
+### **2. Benefits of Virtual Threads**
+
+- **Scalability**: Virtual threads allow you to handle **millions of concurrent tasks** in a much more memory- and CPU-efficient manner compared to platform threads. This is especially beneficial for applications like servers that need to manage many simultaneous requests.
+  
+- **Simpler Concurrency Model**: Virtual threads make it easier to write **concurrent programs** by allowing developers to use the same programming model as synchronous code. They eliminate the need for complex thread pools or manual management of thread lifecycles.
+
+- **Low Memory Overhead**: Traditional threads consume a large amount of memory due to stack space allocation (typically 1MB per thread). In contrast, virtual threads have a much smaller memory footprint because their stacks can grow and shrink dynamically.
+
+- **Reduced Context Switching**: Since virtual threads are managed by the JVM and are lightweight, switching between virtual threads is less expensive than traditional OS-level context switching.
+
+### **3. How Virtual Threads Work**
+
+- **Scheduling**: The JVM schedules virtual threads in a non-blocking, cooperative way. The JVM can decide when to "yield" (switch) from one virtual thread to another, often when a virtual thread is blocked on I/O or waiting for a task to complete.
+  
+- **Concurrency and Parallelism**: Virtual threads are ideal for **concurrent** tasks (tasks that can run independently). However, they do not provide automatic parallelism; if you want tasks to run in parallel (on multiple CPU cores), you can use **platform threads** (traditional threads) within virtual threads, or leverage parallelism frameworks like **ForkJoinPool**.
+
+- **Stack Management**: Virtual threads are designed with **dynamic stack allocation**. Their stack size is much smaller than the stack size of platform threads, which can grow dynamically based on the need of the thread.
+
+- **Integration with Existing Code**: Virtual threads are designed to work seamlessly with existing Java code that uses **blocking I/O** and **synchronous programming models**. You don't need to change your code significantly to take advantage of virtual threads.
+
+### **4. Virtual Threads in Java 19 – Key Features**
+
+- **`Thread.ofVirtual()` API**: Java 19 introduced a new API for creating virtual threads.
+  
+  Example:
+  ```java
+  Thread virtualThread = Thread.ofVirtual().start(() -> {
+      // Your concurrent task here
+  });
+  ```
+
+  This creates a virtual thread to run the task asynchronously. Virtual threads can be created just like normal threads, but with much less overhead.
+
+- **`Executors.newVirtualThreadPerTaskExecutor()`**: This utility method provides a simple way to create an **executor** for running tasks with virtual threads.
+  
+  Example:
+  ```java
+  ExecutorService executor = Executors.newVirtualThreadPerTaskExecutor();
+  executor.submit(() -> {
+      // Task to be executed by a virtual thread
+  });
+  ```
+
+  This makes it easy to offload tasks to virtual threads without needing to manage them manually.
+
+- **`VirtualThread` Class**: In Java 19, the `Thread` class is enhanced with the ability to distinguish between **platform threads** and **virtual threads**. The `Thread` class now includes methods that allow developers to manage virtual threads easily.
+
+### **5. Use Cases for Virtual Threads**
+
+Virtual threads are especially suited for applications that need to handle a large number of **I/O-bound** tasks concurrently. These tasks typically include:
+- **Web servers**: Handling many simultaneous HTTP requests (e.g., Spring Boot-based REST APIs, microservices).
+- **Real-time messaging systems**: Applications that need to handle many messages concurrently.
+- **Streaming applications**: Systems that stream data to multiple consumers, such as Kafka or event-driven systems.
+- **Database access**: Applications that spend time waiting for database responses.
+
+In these scenarios, virtual threads can help achieve **high concurrency** while maintaining low memory usage and reduced complexity.
+
+### **6. Virtual Threads vs. Platform Threads**
+
+| Aspect               | **Virtual Threads**                            | **Platform Threads**                          |
+|----------------------|-----------------------------------------------|-----------------------------------------------|
+| **Management**        | Managed by the JVM                            | Managed by the OS                             |
+| **Memory Consumption**| Low (dynamic stack allocation)                | High (typically 1 MB per thread)              |
+| **Scalability**       | High – Millions of virtual threads can be created | Limited – OS-level thread creation is more expensive |
+| **Context Switching** | Low overhead for switching between threads    | High overhead due to OS context switching     |
+| **Suitability**       | Best for I/O-bound tasks with high concurrency | Best for CPU-bound tasks (parallelism)        |
+
+### **7. Virtual Threads and the ForkJoinPool**
+
+- **ForkJoinPool**: The ForkJoinPool in Java is optimized for parallel computing. With virtual threads, you can create a `ForkJoinPool` that uses virtual threads. This means you can have thousands of tasks being executed in parallel without the overhead of creating thousands of platform threads.
+  
+  Example:
+  ```java
+  ForkJoinPool pool = new ForkJoinPool(ForkJoinPool.getCommonPoolParallelism(), ForkJoinPool.defaultForkJoinWorkerThreadFactory,
+                                       null, true);
+  pool.submit(() -> {
+      // Your concurrent task here
+  });
+  ```
+
+  By integrating virtual threads with `ForkJoinPool`, you can efficiently handle tasks that can run concurrently, but still benefit from parallel execution.
+
+### **8. How to Use Virtual Threads**
+
+Here's a simple example to illustrate how virtual threads can be used in a Java program.
+
+#### Example: Simple Use of Virtual Threads
+
+```java
+public class VirtualThreadExample {
+    public static void main(String[] args) {
+        // Create a virtual thread and start a task
+        Thread virtualThread = Thread.ofVirtual().start(() -> {
+            try {
+                System.out.println("Virtual thread started");
+                Thread.sleep(1000);  // Simulate a blocking task
+                System.out.println("Virtual thread completed");
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        });
+
+        // Wait for the virtual thread to finish
+        try {
+            virtualThread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+#### Example: Using `ExecutorService` with Virtual Threads
+
+```java
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+public class VirtualThreadExecutorExample {
+    public static void main(String[] args) {
+        ExecutorService executorService = Executors.newVirtualThreadPerTaskExecutor();
+
+        executorService.submit(() -> {
+            System.out.println("Task running on virtual thread.");
+        });
+
+        executorService.shutdown();
+    }
+}
+```
+
+In this example, the `ExecutorService` creates a virtual thread for each task and submits it for execution. This allows your application to handle many tasks concurrently without worrying about creating and managing individual threads.
+
+### **9. Conclusion**
+
+Virtual threads in Java 19 provide a powerful and lightweight way to achieve **high concurrency** and better **scalability**. They are particularly useful for I/O-bound tasks and applications that need to handle many concurrent requests without the overhead of managing numerous platform threads. With Project Loom, Java is becoming more capable of handling modern concurrency challenges, making it easier to write efficient and scalable applications.
+
+**Key Takeaways**:
+- **Virtual threads** are lightweight, JVM-managed threads that have much less memory overhead compared to platform threads.
+- They are ideal for applications with **high concurrency** and **I/O-bound tasks**.
+- **`Executors.newVirtualThreadPerTaskExecutor()`** makes it easy to manage virtual threads for concurrent tasks.
+- Virtual threads allow Java to scale to **millions of concurrent requests** without suffering from the limitations of traditional threads.
+
+---
+
+## Asynchronous programming support
+
+In Java, **`async`** and **`await`** are not built-in language features like they are in JavaScript. However, Java provides **asynchronous programming support** through other mechanisms such as **`CompletableFuture`**, **`ExecutorService`**, and **`@Async`** in Spring.
+
+
+## How to Implement Asynchronous Programming in Spring Boot
+
+In Spring Boot, you can use the **`@Async`** annotation to run methods asynchronously, similar to how `async` and `await` work in JavaScript. You can use **`CompletableFuture`** or **`ListenableFuture`** to handle the result of an asynchronous task.
+
+Let’s break it down step-by-step:
+
+### 1. **Setting Up Asynchronous Support in Spring Boot**
+First, to use asynchronous processing, you need to enable it in your Spring Boot application by adding the `@EnableAsync` annotation in your configuration class.
+
+```java
+@SpringBootApplication
+@EnableAsync
+public class MySpringBootApplication {
+    public static void main(String[] args) {
+        SpringApplication.run(MySpringBootApplication.class, args);
+    }
+}
+```
+
+This enables Spring's `@Async` support, which allows methods to be executed asynchronously.
+
+### 2. **Using `@Async` in Spring Boot**
+
+You can annotate a method with `@Async` to make it execute in a separate thread, allowing your application to handle other tasks while the method is running.
+
+#### 2.1. **Example: Using `@Async` with `CompletableFuture`**
+
+Here’s an example that simulates a time-consuming operation (like calling an external API or querying a database) asynchronously.
+
+##### Service Class with `@Async`
+
+```java
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.stereotype.Service;
+import java.util.concurrent.CompletableFuture;
+
+@Service
+public class MyAsyncService {
+
+    @Async
+    public CompletableFuture<String> processTask1() throws InterruptedException {
+        // Simulate a time-consuming task
+        Thread.sleep(2000); // Simulate a delay of 2 seconds
+        return CompletableFuture.completedFuture("Task 1 completed");
+    }
+
+    @Async
+    public CompletableFuture<String> processTask2() throws InterruptedException {
+        // Simulate a time-consuming task
+        Thread.sleep(3000); // Simulate a delay of 3 seconds
+        return CompletableFuture.completedFuture("Task 2 completed");
+    }
+
+    @Async
+    public CompletableFuture<String> processTask3() throws InterruptedException {
+        // Simulate a time-consuming task
+        Thread.sleep(1000); // Simulate a delay of 1 second
+        return CompletableFuture.completedFuture("Task 3 completed");
+    }
+}
+```
+
+In this example, the methods `processTask1()`, `processTask2()`, and `processTask3()` are annotated with `@Async`. These methods will execute asynchronously, meaning that the caller doesn’t have to wait for their completion before moving on.
+
+#### 2.2. **Controller to Trigger Async Tasks**
+
+Now, create a REST controller that will trigger the asynchronous tasks.
+
+```java
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.concurrent.CompletableFuture;
+
+@RestController
+public class AsyncController {
+
+    @Autowired
+    private MyAsyncService myAsyncService;
+
+    @GetMapping("/run-tasks")
+    public CompletableFuture<String> runTasks() throws InterruptedException {
+        // Call async methods
+        CompletableFuture<String> task1 = myAsyncService.processTask1();
+        CompletableFuture<String> task2 = myAsyncService.processTask2();
+        CompletableFuture<String> task3 = myAsyncService.processTask3();
+
+        // Wait for all tasks to complete and return their results
+        return CompletableFuture.allOf(task1, task2, task3)
+                .thenApply(v -> task1.join() + " | " + task2.join() + " | " + task3.join());
+    }
+}
+```
+
+#### Explanation:
+1. **Async Methods**: Methods annotated with `@Async` return a `CompletableFuture`. This is a type of Future that can be used to handle the result of an asynchronous computation.
+2. **Controller**: The `runTasks` method in the `AsyncController` triggers all three asynchronous tasks (`processTask1`, `processTask2`, `processTask3`). After calling them, it uses `CompletableFuture.allOf()` to wait for all tasks to finish and then combines their results using `join()`.
+
+### 3. **Waiting for Async Tasks (Similar to `await`)**
+
+While you don’t have `await` in Java, you can use **`CompletableFuture.join()`** or **`CompletableFuture.get()`** to block and wait for the asynchronous tasks to complete.
+
+- **`join()`**: Returns the result of the computation, or throws an unchecked exception if the computation failed.
+- **`get()`**: Similar to `join()`, but throws a checked exception (like `ExecutionException` or `InterruptedException`), which you need to handle.
+
+In the example above, we used **`join()`** in `runTasks()` to block and wait for all tasks to complete before combining their results.
+
+### 4. **Thread Pool Configuration (Optional)**
+
+By default, Spring Boot uses a simple thread pool to manage async tasks. However, you can configure a custom thread pool by creating a `TaskExecutor` bean.
+
+```java
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
+
+@Configuration
+public class AsyncConfig {
+
+    @Bean
+    public ThreadPoolTaskExecutor taskExecutor() {
+        ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
+        executor.setCorePoolSize(5); // Minimum number of threads
+        executor.setMaxPoolSize(10); // Maximum number of threads
+        executor.setQueueCapacity(100); // Queue size for tasks waiting to be executed
+        executor.setThreadNamePrefix("Async-"); // Thread name prefix
+        executor.initialize();
+        return executor;
+    }
+}
+```
+
+This configuration allows you to control the size of the thread pool used for executing async tasks. You can adjust the core pool size, max pool size, and queue capacity based on your application's needs.
+
+### 5. **Handling Errors in Async Methods**
+
+If an asynchronous task fails (e.g., due to an exception), you can handle errors within the async method by adding error handling inside the method itself.
+
+```java
+@Async
+public CompletableFuture<String> processTaskWithErrorHandling() {
+    try {
+        // Simulate task processing
+        Thread.sleep(2000);
+        // Throwing an exception for demonstration
+        throw new RuntimeException("Task failed!");
+    } catch (Exception e) {
+        return CompletableFuture.completedFuture("Error occurred: " + e.getMessage());
+    }
+}
+```
+
+Alternatively, you can use **`handle()`** or **`exceptionally()`** methods of `CompletableFuture` to manage errors in the controller or wherever the `CompletableFuture` is processed.
+
+### 6. **Handling Multiple Async Operations (Parallel Execution)**
+
+As shown in the `runTasks()` method, you can execute multiple tasks in parallel and wait for all of them to complete using `CompletableFuture.allOf()`. Another option for handling multiple asynchronous tasks is to use **`thenCombine()`** or **`thenCompose()`** to combine the results of asynchronous computations.
+
+```java
+public CompletableFuture<String> runTasks() {
+    CompletableFuture<String> task1 = myAsyncService.processTask1();
+    CompletableFuture<String> task2 = myAsyncService.processTask2();
+    return task1.thenCombine(task2, (result1, result2) -> result1 + " | " + result2);
+}
+```
+
+This example demonstrates how to combine the results of two asynchronous tasks once both are completed.
+
+### 7. **Timeout Handling**
+
+You can also handle timeouts when dealing with async operations by setting a timeout for the `CompletableFuture`.
+
+```java
+CompletableFuture<String> future = myAsyncService.processTask1();
+String result = future.get(5, TimeUnit.SECONDS); // This will throw TimeoutException if it takes more than 5 seconds.
+```
+
+### Conclusion
+
+In Spring Boot, while Java does not have built-in `async/await` syntax like JavaScript, it provides powerful asynchronous programming tools such as `@Async`, `CompletableFuture`, and `ExecutorService`. By using these, you can perform asynchronous operations, manage concurrency, and ensure your system remains responsive even when handling long-running tasks.
+
+To summarize:
+- **Use `@Async`** to mark methods as asynchronous in Spring.
+- **`CompletableFuture`** is commonly used to manage and return results of asynchronous operations.
+- **`join()`** and **`get()`** are used to block and wait for asynchronous tasks to complete (similar to `await`).
+- **Thread pool configuration** ensures that your application can handle multiple concurrent asynchronous tasks effectively.
+
+By applying these techniques, you can build highly responsive and scalable applications in Spring Boot.
+
+---
+
+## Java Interview Questions
+## List of Common Java Interview Questions
+
+### **Java Core Concepts**
+
+**1. What is the difference between `==` and `.equals()` in Java?**
+
+**Answer**:
+- `==` compares the memory addresses of two objects, i.e., whether they point to the same location in memory.
+- `.equals()` is a method defined in the `Object` class and is meant to compare the contents or logical equality of two objects.
+
+**Example**:
+```java
+String s1 = new String("hello");
+String s2 = new String("hello");
+System.out.println(s1 == s2);        // false, different memory locations
+System.out.println(s1.equals(s2));   // true, same content
+```
+
+**2. What is the difference between `ArrayList` and `LinkedList`?**
+
+**Answer**:
+- `ArrayList` is backed by a dynamic array and provides constant-time access for get and set operations. However, insertions and deletions are costly (O(n) in the worst case) because elements need to be shifted.
+- `LinkedList` is backed by a doubly-linked list. It provides constant-time insertions and deletions but linear-time access operations (O(n)) because you need to traverse the list.
+
+**Example**:
+```java
+List<String> arrayList = new ArrayList<>();
+List<String> linkedList = new LinkedList<>();
+```
+
+**3. What is the purpose of the `final` keyword in Java?**
+
+**Answer**:
+- `final` can be applied to variables, methods, and classes.
+  - **Variables**: When a variable is declared as `final`, its value cannot be changed once initialized.
+  - **Methods**: When a method is declared as `final`, it cannot be overridden by subclasses.
+  - **Classes**: When a class is declared as `final`, it cannot be subclassed.
+
+**Example**:
+```java
+final int MAX_VALUE = 100;
+class Base {
+    public final void display() {
+        System.out.println("Base display");
+    }
+}
+```
+
+**4. Explain the concept of inheritance and how it is implemented in Java.**
+
+**Answer**:
+- **Inheritance** is a mechanism where a new class (subclass) inherits properties and behaviors (methods) from an existing class (superclass).
+- In Java, inheritance is implemented using the `extends` keyword. A subclass inherits all public and protected members from the superclass but can have its own methods and fields.
+
+**Example**:
+```java
+class Animal {
+    void eat() {
+        System.out.println("This animal eats food.");
+    }
+}
+
+class Dog extends Animal {
+    void bark() {
+        System.out.println("Dog barks.");
+    }
+}
+```
+
+**5. What is polymorphism in Java?**
+
+**Answer**:
+- **Polymorphism** allows objects to be treated as instances of their parent class rather than their actual class. It comes in two forms:
+  - **Compile-time Polymorphism** (Method Overloading): Multiple methods with the same name but different parameters.
+  - **Runtime Polymorphism** (Method Overriding): Subclasses provide specific implementations of methods that are already defined in their parent class.
+
+**Example**:
+```java
+class Animal {
+    void makeSound() {
+        System.out.println("Animal makes a sound");
+    }
+}
+
+class Dog extends Animal {
+    @Override
+    void makeSound() {
+        System.out.println("Dog barks");
+    }
+}
+
+public class TestPolymorphism {
+    public static void main(String[] args) {
+        Animal a = new Dog();  // Reference of Animal, object of Dog
+        a.makeSound();  // Dog barks
+    }
+}
+```
+
+### **Java Advanced Concepts**
+
+**6. What is a Java `Thread` and how do you create one?**
+
+**Answer**:
+- A `Thread` is a lightweight process that allows concurrent execution of code.
+- You can create a thread by either extending the `Thread` class or implementing the `Runnable` interface.
+
+**Example**:
+```java
+// Extending Thread class
+class MyThread extends Thread {
+    public void run() {
+        System.out.println("Thread is running");
+    }
+}
+
+// Implementing Runnable interface
+class MyRunnable implements Runnable {
+    public void run() {
+        System.out.println("Runnable is running");
+    }
+}
+```
+
+**7. What is the difference between `synchronized` and `volatile` in Java?**
+
+**Answer**:
+- `synchronized` is used to ensure that only one thread can execute a block of code or method at a time, providing mutual exclusion.
+- `volatile` ensures that changes to a variable are visible to all threads immediately, but does not provide mutual exclusion.
+
+**Example**:
+```java
+// Using synchronized
+synchronized (this) {
+    // synchronized block
+}
+
+// Using volatile
+private volatile boolean flag = false;
+```
+
+**8. What is the Java memory model and how does garbage collection work?**
+
+**Answer**:
+- The **Java Memory Model (JMM)** defines how threads interact through memory and how changes made by one thread are visible to others.
+- **Garbage Collection (GC)** is the process by which Java automatically frees up memory by removing objects that are no longer referenced. The JVM performs garbage collection to reclaim memory.
+
+**9. What are the different types of exception handling in Java?**
+
+**Answer**:
+- **Checked Exceptions**: Exceptions that are checked at compile-time (e.g., `IOException`, `SQLException`).
+- **Unchecked Exceptions**: Exceptions that are not checked at compile-time (e.g., `NullPointerException`, `ArithmeticException`).
+- **Error**: Represents serious problems that applications should not catch (e.g., `OutOfMemoryError`, `StackOverflowError`).
+
+**Example**:
+```java
+try {
+    // code that might throw an exception
+} catch (IOException e) {
+    // handle exception
+} finally {
+    // code that will run regardless of exception
+}
+```
+
+**10. What is a `Java Stream` and how does it work?**
+
+**Answer**:
+- A `Stream` is a sequence of elements supporting sequential and parallel aggregate operations. It can be used to process collections of objects in a functional style.
+- Streams can be created from collections using the `stream()` method and offer various operations such as `filter()`, `map()`, `reduce()`, and `collect()`.
+
+**Example**:
+```java
+List<String> names = Arrays.asList("John", "Jane", "Tom");
+names.stream()
+     .filter(name -> name.startsWith("J"))
+     .forEach(System.out::println);  // Output: John, Jane
+```
+
+---
+
+## Java 8 Interview Questions and Answers
+
+#### **1. What are the main features introduced in Java 8?**
+
+**Answer**:
+Java 8 introduced several key features:
+- **Lambda Expressions**: Allow you to write concise code for functional interfaces.
+- **Streams API**: Provides a way to process sequences of elements (like collections) in a functional style.
+- **Functional Interfaces**: Interfaces with a single abstract method, such as `Runnable`, `Callable`, `Function`, `Consumer`, `Supplier`, and `Predicate`.
+- **Method References**: Allows you to refer to methods without executing them.
+- **Default Methods**: Enable you to add new methods to interfaces with a default implementation.
+- **Optional Class**: Provides a way to avoid `NullPointerException` by encapsulating optional values.
+- **New Date and Time API**: Provides a comprehensive date and time library, replacing the old `java.util.Date` and `java.util.Calendar`.
+
+#### **2. Explain Lambda Expressions with an example.**
+
+**Answer**:
+- **Lambda Expressions** provide a clear and concise way to represent one method interface using an expression. They are used primarily to define the method of a functional interface.
+
+**Syntax**:
+```java
+(parameters) -> expression
+```
+
+**Example**:
+```java
+@FunctionalInterface
+interface MathOperation {
+    int operate(int a, int b);
+}
+
+public class LambdaExample {
+    public static void main(String[] args) {
+        MathOperation addition = (a, b) -> a + b;
+        System.out.println(addition.operate(5, 3)); // Output: 8
+    }
+}
+```
+
+#### **3. How does the Streams API work in Java 8?**
+
+**Answer**:
+- **Streams API** provides a way to process sequences of elements (such as collections) in a functional style, supporting operations like filtering, mapping, and reducing.
+
+**Example**:
+```java
+import java.util.Arrays;
+import java.util.List;
+
+public class StreamsExample {
+    public static void main(String[] args) {
+        List<String> names = Arrays.asList("John", "Jane", "Tom", "Jerry");
+
+        names.stream()
+             .filter(name -> name.startsWith("J"))
+             .sorted()
+             .forEach(System.out::println);  // Output: Jane, Jerry, John
+    }
+}
+```
+
+#### **4. What is the purpose of the `Optional` class in Java 8?**
+
+**Answer**:
+- **Optional** is a container object which may or may not contain a value. It is used to avoid `NullPointerException` by providing methods to handle values that may be absent.
+
+**Example**:
+```java
+import java.util.Optional;
+
+public class OptionalExample {
+    public static void main(String[] args) {
+        Optional<String> optionalValue = Optional.ofNullable("Hello, World!");
+
+        optionalValue.ifPresent(value -> System.out.println("Value: " + value)); // Output: Value: Hello, World!
+
+        String defaultValue = optionalValue.orElse("Default Value");
+        System.out.println(defaultValue);  // Output: Hello, World!
+    }
+}
+```
+
+#### **5. Explain functional interfaces in Java 8 with examples.**
+
+**Answer**:
+- **Functional Interfaces** are interfaces with exactly one abstract method. They can have multiple default or static methods. They can be used as the target type for lambda expressions and method references.
+
+**Examples**:
+```java
+@FunctionalInterface
+interface MyFunctionalInterface {
+    void singleAbstractMethod();
+    
+    default void defaultMethod() {
+        System.out.println("Default method in functional interface");
+    }
+    
+    static void staticMethod() {
+        System.out.println("Static method in functional interface");
+    }
+}
+
+public class FunctionalInterfaceExample {
+    public static void main(String[] args) {
+        MyFunctionalInterface myFunc = () -> System.out.println("Lambda expression");
+        myFunc.singleAbstractMethod();  // Output: Lambda expression
+        
+        myFunc.defaultMethod();         // Output: Default method in functional interface
+        MyFunctionalInterface.staticMethod(); // Output: Static method in functional interface
+    }
+}
+```
+
+#### **6. How do method references work in Java 8?**
+
+**Answer**:
+- **Method References** are a shorthand notation of a lambda expression to call a method. They improve code readability and reduce verbosity.
+
+**Syntax**:
+```java
+ClassName::methodName
+```
+
+**Example**:
+```java
+import java.util.Arrays;
+import java.util.List;
+
+public class MethodReferenceExample {
+    public static void main(String[] args) {
+        List<String> names = Arrays.asList("John", "Jane", "Tom", "Jerry");
+
+        // Using method reference
+        names.forEach(System.out::println); // Output: John, Jane, Tom, Jerry
+    }
+}
+```
+
+#### **7. Demonstrate the use of `Collectors` in Java 8 Streams API.**
+
+**Answer**:
+- **Collectors** are utility classes that implement the `Collector` interface to collect elements of a stream into collections or other forms.
+
+**Example**:
+```java
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+public class CollectorsExample {
+    public static void main(String[] args) {
+        List<String> names = Arrays.asList("John", "Jane", "Tom", "Jerry");
+
+        // Collect names into a List
+        List<String> nameList = names.stream().collect(Collectors.toList());
+        System.out.println(nameList); // Output: [John, Jane, Tom, Jerry]
+
+        // Collect names into a Map with name length as the key
+        Map<Integer, String> nameMap = names.stream()
+                                             .collect(Collectors.toMap(String::length, name -> name));
+        System.out.println(nameMap); // Output: {3=Tom, 4=John, 4=Jane, 5=Jerry}
+    }
+}
+```
+
+#### **8. What are default methods in interfaces and why are they useful?**
+
+**Answer**:
+- **Default Methods** are methods in interfaces that have a body. They allow you to add new methods to interfaces with a default implementation without affecting classes that implement the interface.
+
+**Example**:
+```java
+interface MyInterface {
+    void existingMethod();
+    
+    default void defaultMethod() {
+        System.out.println("Default method implementation");
+    }
+}
+
+public class DefaultMethodExample implements MyInterface {
+    public void existingMethod() {
+        System.out.println("Existing method implementation");
+    }
+
+    public static void main(String[] args) {
+        DefaultMethodExample example = new DefaultMethodExample();
+        example.existingMethod();   // Output: Existing method implementation
+        example.defaultMethod();    // Output: Default method implementation
+    }
+}
+```
+
+#### **9. What are `Function`, `Consumer`, `Supplier`, and `Predicate` interfaces in Java 8?**
+
+**Answer**:
+- **Function<T, R>**: Represents a function that accepts one argument and produces a result.
+- **Consumer<T>**: Represents an operation that takes a single input argument and returns no result.
+- **Supplier<T>**: Represents a supplier of results. It takes no arguments and returns a result.
+- **Predicate<T>**: Represents a predicate (boolean-valued function) of one argument.
+
+**Examples**:
+```java
+import java.util.function.Function;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
+import java.util.function.Predicate;
+
+public class FunctionalInterfacesExample {
+    public static void main(String[] args) {
+        // Function
+        Function<String, Integer> lengthFunction = s -> s.length();
+        System.out.println(lengthFunction.apply("Hello")); // Output: 5
+        
+        // Consumer
+        Consumer<String> printConsumer = s -> System.out.println(s);
+        printConsumer.accept("Hello"); // Output: Hello
+        
+        // Supplier
+        Supplier<String> stringSupplier = () -> "Hello World";
+        System.out.println(stringSupplier.get()); // Output: Hello World
+        
+        // Predicate
+        Predicate<String> isEmptyPredicate = s -> s.isEmpty();
+        System.out.println(isEmptyPredicate.test("")); // Output: true
+    }
+}
+```
+
+#### **10. How do you handle exceptions in Java 8 Streams API?**
+
+**Answer**:
+- Handling exceptions within Streams can be tricky since Streams are designed to work with lambda expressions. One common approach is to use a utility method to wrap code that can throw exceptions.
+
+**Example**:
+```java
+import java.util.Arrays;
+import java.util.List;
+import java.util.function.Function;
+
+public class StreamExceptionHandlingExample {
+    public static void main(String[] args) {
+        List<String> numbers = Arrays.asList("1", "2", "three", "4");
+
+        // Process numbers, handling NumberFormatException
+        numbers.stream()
+               .map(convertToInt("0"))
+               .forEach(System.out::println);
+    }
+
+    private static Function<String, Integer> convertToInt(Integer defaultValue) {
+        return str -> {
+            try {
+                return Integer.valueOf(str);
+            } catch (NumberFormatException e) {
+                return defaultValue;
+            }
+        };
+    }
+}
+```
+
+These questions cover a wide range of Java 8 features, from lambda expressions and the Streams API to the `Optional` class and functional interfaces. Understanding these concepts and being able to apply them in coding scenarios will help you perform well in Java 8 interviews.
+
+---
+## Java Multithreading & Concurrency Interview Questions
+
+### **1. What is the difference between `Thread` and `Runnable`?**
+
+**Answer**:
+- **Thread**: A `Thread` is a class in Java that provides a way to create and manage threads. You can extend the `Thread` class and override its `run()` method to define the thread's behavior.
+- **Runnable**: `Runnable` is a functional interface that represents a task that can be executed concurrently. You implement the `Runnable` interface and define the `run()` method. Then, you pass an instance of `Runnable` to a `Thread` object to execute it.
+
+**Example**:
+```java
+// Using Thread
+class MyThread extends Thread {
+    public void run() {
+        System.out.println("Thread is running");
+    }
+}
+
+public class ThreadExample {
+    public static void main(String[] args) {
+        MyThread thread = new MyThread();
+        thread.start();
+    }
+}
+
+// Using Runnable
+class MyRunnable implements Runnable {
+    public void run() {
+        System.out.println("Runnable is running");
+    }
+}
+
+public class RunnableExample {
+    public static void main(String[] args) {
+        Thread thread = new Thread(new MyRunnable());
+        thread.start();
+    }
+}
+```
+
+### **2. How do you create a thread-safe singleton class in Java?**
+
+**Answer**:
+- A thread-safe singleton class ensures that only one instance of the class is created, even in a multithreaded environment. The common way to implement this is using the **Bill Pugh Singleton Design** or **Double-Checked Locking**.
+
+**Example (Bill Pugh Singleton)**:
+```java
+public class Singleton {
+    private Singleton() {}
+
+    private static class SingletonHelper {
+        private static final Singleton INSTANCE = new Singleton();
+    }
+
+    public static Singleton getInstance() {
+        return SingletonHelper.INSTANCE;
+    }
+}
+```
+
+### **3. What is the difference between `synchronized` block and `synchronized` method?**
+
+**Answer**:
+- **Synchronized Method**: Synchronizes the entire method, preventing multiple threads from executing the method simultaneously on the same object.
+- **Synchronized Block**: Allows more granular control by synchronizing only a block of code within a method, reducing the scope of synchronization.
+
+**Example**:
+```java
+class Counter {
+    private int count = 0;
+
+    // Synchronized Method
+    public synchronized void increment() {
+        count++;
+    }
+
+    // Synchronized Block
+    public void incrementWithBlock() {
+        synchronized (this) {
+            count++;
+        }
+    }
+}
+```
+
+### **4. Explain the concept of a `volatile` variable in Java.**
+
+**Answer**:
+- A `volatile` variable ensures that changes to the variable are visible to all threads immediately. It prevents caching of variables and ensures that updates made by one thread are visible to other threads.
+
+**Example**:
+```java
+public class VolatileExample {
+    private volatile boolean running = true;
+
+    public void stop() {
+        running = false;
+    }
+
+    public void work() {
+        while (running) {
+            // Do some work
+        }
+        System.out.println("Stopped working");
+    }
+
+    public static void main(String[] args) {
+        VolatileExample example = new VolatileExample();
+        new Thread(example::work).start();
+        new Thread(() -> {
+            try { Thread.sleep(1000); } catch (InterruptedException e) {}
+            example.stop();
+        }).start();
+    }
+}
+```
+
+### **5. What is the purpose of `CountDownLatch` and how does it work?**
+
+**Answer**:
+- `CountDownLatch` is a concurrency utility that allows one or more threads to wait until a set of operations performed by other threads completes. It is initialized with a count that is decremented by each operation.
+
+**Example**:
+```java
+import java.util.concurrent.CountDownLatch;
+
+public class CountDownLatchExample {
+    public static void main(String[] args) throws InterruptedException {
+        CountDownLatch latch = new CountDownLatch(3);
+
+        Runnable task = () -> {
+            System.out.println("Task completed");
+            latch.countDown();
+        };
+
+        new Thread(task).start();
+        new Thread(task).start();
+        new Thread(task).start();
+
+        latch.await(); // Waits for the count to reach zero
+        System.out.println("All tasks completed");
+    }
+}
+```
+
+### **6. How does `ExecutorService` help in managing threads?**
+
+**Answer**:
+- `ExecutorService` is part of the Java Concurrency framework and provides a higher-level replacement for the traditional way of managing threads. It simplifies thread management by providing thread pools and various utility methods for task execution and lifecycle management.
+
+**Example**:
+```java
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+public class ExecutorServiceExample {
+    public static void main(String[] args) {
+        ExecutorService executor = Executors.newFixedThreadPool(3);
+
+        Runnable task = () -> {
+            System.out.println("Task executed by: " + Thread.currentThread().getName());
+        };
+
+        for (int i = 0; i < 5; i++) {
+            executor.execute(task);
+        }
+
+        executor.shutdown(); // Initiates an orderly shutdown
+    }
+}
+```
+
+### **7. What is the purpose of `Future` and `Callable`?**
+
+**Answer**:
+- **Callable**: A functional interface similar to `Runnable` but can return a result and throw checked exceptions. It is used with `ExecutorService` to submit tasks.
+- **Future**: Represents the result of an asynchronous computation. You can use it to check if the task is complete, retrieve the result, or cancel the task.
+
+**Example**:
+```java
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+
+public class CallableFutureExample {
+    public static void main(String[] args) throws InterruptedException, ExecutionException {
+        ExecutorService executor = Executors.newFixedThreadPool(1);
+
+        Callable<Integer> task = () -> {
+            Thread.sleep(2000); // Simulate long-running task
+            return 123;
+        };
+
+        Future<Integer> future = executor.submit(task);
+        System.out.println("Task submitted");
+
+        // Perform other operations while waiting
+        Integer result = future.get(); // This will block until the task completes
+        System.out.println("Task result: " + result);
+
+        executor.shutdown();
+    }
+}
+```
+
+### **8. What are `synchronized` collections and how do they work?**
+
+**Answer**:
+- `Synchronized` collections are thread-safe versions of standard collections. They are created by wrapping standard collections with methods from the `Collections` class.
+
+**Example**:
+```java
+import java.util.Collections;
+import java.util.List;
+import java.util.ArrayList;
+
+public class SynchronizedCollectionsExample {
+    public static void main(String[] args) {
+        List<Integer> list = Collections.synchronizedList(new ArrayList<>());
+
+        // Adding elements to the list
+        list.add(1);
+        list.add(2);
+        list.add(3);
+
+        // Synchronizing access to the list
+        synchronized (list) {
+            for (Integer number : list) {
+                System.out.println(number);
+            }
+        }
+    }
+}
+```
+
+### **9. What is the difference between `notify()`, `notifyAll()`, and `wait()` in Java?**
+
+**Answer**:
+- **`wait()`**: Causes the current thread to wait until another thread invokes `notify()` or `notifyAll()` on the same object. It releases the lock on the object.
+- **`notify()`**: Wakes up a single thread that is waiting on the object’s monitor.
+- **`notifyAll()`**: Wakes up all threads that are waiting on the object’s monitor.
+
+**Example**:
+```java
+class WaitNotifyExample {
+    private final Object lock = new Object();
+    private boolean isAvailable = false;
+
+    public void produce() throws InterruptedException {
+        synchronized (lock) {
+            while (isAvailable) {
+                lock.wait();
+            }
+            System.out.println("Produced");
+            isAvailable = true;
+            lock.notify(); // Notify consumer
+        }
+    }
+
+    public void consume() throws InterruptedException {
+        synchronized (lock) {
+            while (!isAvailable) {
+                lock.wait();
+            }
+            System.out.println("Consumed");
+            isAvailable = false;
+            lock.notify(); // Notify producer
+        }
+    }
+
+    public static void main(String[] args) {
+        WaitNotifyExample example = new WaitNotifyExample();
+
+        Thread producer = new Thread(() -> {
+            try {
+                example.produce();
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        });
+
+        Thread consumer = new Thread(() -> {
+            try {
+                example.consume();
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        });
+
+        producer.start();
+        consumer.start();
+    }
+}
+```
+
+### **10. What are `Semaphore` and `ReentrantLock`? How are they used?**
+
+**Answer**:
+- **Semaphore**: A synchronization aid that controls access to a shared resource through a set of permits. It can be used to limit the number of threads that can access a resource simultaneously.
+
+**Example**:
+```java
+import java.util.concurrent.Semaphore;
+
+public class SemaphoreExample {
+    private static final Semaphore semaphore = new Semaphore(2);
+
+    public static void main(String[] args) {
+        Runnable task = () -> {
+            try {
+                semaphore.acquire();
+                System.out.println("Semaphore acquired by " + Thread.currentThread().getName());
+                Thread.sleep(2000); // Simulate work
+
+
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            } finally {
+                semaphore.release();
+                System.out.println("Semaphore released by " + Thread.currentThread().getName());
+            }
+        };
+
+        for (int i = 0; i < 5; i++) {
+            new Thread(task).start();
+        }
+    }
+}
+```
+
+- **ReentrantLock**: A `Lock` implementation that allows threads to acquire the lock multiple times by the same thread and provides more sophisticated thread synchronization.
+
+**Example**:
+```java
+import java.util.concurrent.locks.ReentrantLock;
+
+public class ReentrantLockExample {
+    private final ReentrantLock lock = new ReentrantLock();
+
+    public void doWork() {
+        lock.lock();
+        try {
+            System.out.println("Lock acquired by " + Thread.currentThread().getName());
+            Thread.sleep(1000); // Simulate work
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        } finally {
+            lock.unlock();
+            System.out.println("Lock released by " + Thread.currentThread().getName());
+        }
+    }
+
+    public static void main(String[] args) {
+        ReentrantLockExample example = new ReentrantLockExample();
+
+        Runnable task = example::doWork;
+
+        for (int i = 0; i < 3; i++) {
+            new Thread(task).start();
+        }
+    }
+}
+```
+
+These questions cover fundamental aspects of multithreading and concurrency in Java, from basic thread management to advanced synchronization mechanisms. Understanding these concepts and their applications is crucial for writing efficient and thread-safe Java applications.
+
+Certainly! Below is a tabular comparison of common Java concepts and features that are frequently asked about in interviews. This comparison highlights the key differences between each pair or group.
+
+| **Aspect**                 | **Concept 1**               | **Concept 2**               | **Difference**                                                                                           |
+|----------------------------|------------------------------|------------------------------|----------------------------------------------------------------------------------------------------------|
+| **Thread vs Runnable**     | `Thread`                     | `Runnable`                   | - `Thread` is a class, while `Runnable` is an interface.<br>- `Thread` requires extending, while `Runnable` can be implemented and passed to a `Thread`. |
+| **synchronized Method vs synchronized Block** | Synchronized Method          | Synchronized Block           | - Synchronized Method locks the entire method, while Synchronized Block locks only a specific block of code.<br>- Blocks allow more granular control of synchronization. |
+| **Volatile vs synchronized** | `volatile`                   | `synchronized`               | - `volatile` ensures visibility of changes across threads without locking.<br>- `synchronized` ensures both visibility and atomicity through locking. |
+| **Callable vs Runnable**   | `Callable`                   | `Runnable`                   | - `Callable` returns a result and can throw checked exceptions.<br>- `Runnable` does not return a result and cannot throw checked exceptions. |
+| **Future vs CompletableFuture** | `Future`                    | `CompletableFuture`          | - `Future` represents the result of an asynchronous computation but has limited methods.<br>- `CompletableFuture` extends `Future` with more functionality and support for asynchronous programming. |
+| **CountDownLatch vs CyclicBarrier** | `CountDownLatch`            | `CyclicBarrier`              | - `CountDownLatch` allows threads to wait until a count reaches zero.<br>- `CyclicBarrier` allows a set of threads to wait for each other to reach a common barrier point. |
+| **Semaphore vs ReentrantLock** | `Semaphore`                 | `ReentrantLock`              | - `Semaphore` controls access to a shared resource with a set of permits.<br>- `ReentrantLock` provides explicit lock and unlock methods with advanced features like try-lock and timed lock. |
+| **ConcurrentHashMap vs Hashtable** | `ConcurrentHashMap`        | `Hashtable`                  | - `ConcurrentHashMap` is designed for concurrent access and is not synchronized.<br>- `Hashtable` is synchronized but may be less performant in high-concurrency scenarios. |
+| **Java 8 Streams vs Collections** | Streams                    | Collections                   | - Streams provide a functional approach to processing collections with operations like filter, map, and reduce.<br>- Collections are the traditional way of storing and manipulating data. |
+| **Default Method vs Static Method** | Default Method              | Static Method                | - Default methods can be overridden and provide a default implementation in interfaces.<br>- Static methods belong to the interface itself and cannot be overridden. |
+| **String vs StringBuilder vs StringBuffer** | `String`                    | `StringBuilder` / `StringBuffer` | - `String` is immutable, `StringBuilder` is mutable and not synchronized, and `StringBuffer` is mutable and synchronized.<br>- Use `StringBuilder` or `StringBuffer` for frequent modifications. |
+| **Abstract Class vs Interface** | Abstract Class              | Interface                     | - An abstract class can have fields and constructors, while an interface cannot.<br>- An abstract class can provide implementation for some methods, while interfaces in Java 7 and earlier cannot (except default methods in Java 8). |
+| **ArrayList vs LinkedList** | `ArrayList`                  | `LinkedList`                 | - `ArrayList` is backed by a dynamic array and provides faster access but slower insertions/deletions.<br>- `LinkedList` is backed by a doubly linked list and provides faster insertions/deletions but slower access. |
+| **Hashtable vs HashMap**   | `Hashtable`                  | `HashMap`                    | - `Hashtable` is synchronized and does not allow null keys/values.<br>- `HashMap` is not synchronized and allows one null key and multiple null values. |
+| **TreeMap vs HashMap**     | `TreeMap`                    | `HashMap`                    | - `TreeMap` is sorted based on natural ordering or a provided comparator, while `HashMap` is unordered.<br>- `TreeMap` is slower due to sorting but maintains order. |
+| **LinkedHashMap vs HashMap** | `LinkedHashMap`             | `HashMap`                    | - `LinkedHashMap` maintains insertion order, while `HashMap` does not.<br>- `LinkedHashMap` has slightly slower performance due to maintaining order. |
+| **String vs StringBuilder** | `String`                    | `StringBuilder`              | - `String` is immutable, meaning every modification creates a new instance.<br>- `StringBuilder` is mutable and allows modification without creating new instances. |
+
+### Example Code for Some Differences
+
+**1. Thread vs Runnable**
+
+```java
+// Thread
+class MyThread extends Thread {
+    public void run() {
+        System.out.println("Thread running");
+    }
+}
+
+public class ThreadExample {
+    public static void main(String[] args) {
+        new MyThread().start();
+    }
+}
+
+// Runnable
+class MyRunnable implements Runnable {
+    public void run() {
+        System.out.println("Runnable running");
+    }
+}
+
+public class RunnableExample {
+    public static void main(String[] args) {
+        new Thread(new MyRunnable()).start();
+    }
+}
+```
+
+**2. Default Method vs Static Method**
+
+```java
+interface MyInterface {
+    // Default method
+    default void defaultMethod() {
+        System.out.println("Default method");
+    }
+
+    // Static method
+    static void staticMethod() {
+        System.out.println("Static method");
+    }
+}
+
+public class InterfaceExample {
+    public static void main(String[] args) {
+        MyInterface.staticMethod(); // Static method called on interface
+
+        MyInterface instance = new MyInterface() {}; // Anonymous class to implement default method
+        instance.defaultMethod(); // Default method called on instance
+    }
+}
+```
+
+**3. String vs StringBuilder**
+
+```java
+public class StringBuilderExample {
+    public static void main(String[] args) {
+        // String (immutable)
+        String str = "Hello";
+        str = str + " World";
+        System.out.println(str); // Output: Hello World
+
+        // StringBuilder (mutable)
+        StringBuilder sb = new StringBuilder("Hello");
+        sb.append(" World");
+        System.out.println(sb.toString()); // Output: Hello World
+    }
+}
+```
+
+These questions and answers should provide a comprehensive overview of fundamental Java concepts and help you prepare for interviews effectively.
+
+---
+
+## Tricky Java interview questions
+
+Here are some tricky Java interview questions related to strings, arrays, inheritance, access specifiers, and keywords. Each question is accompanied by its answer and an explanation.
+
+### **1. String Immutability and Interning**
+
+**Question**: What will be the output of the following code snippet?
+
+```java
+public class StringTest {
+    public static void main(String[] args) {
+        String s1 = new String("hello");
+        String s2 = "hello";
+        String s3 = s1.intern();
+        System.out.println(s1 == s2); // Output?
+        System.out.println(s2 == s3); // Output?
+    }
+}
+```
+
+**Answer**:
+```
+false
+true
+```
+
+**Explanation**:
+- `s1` is created using the `new` keyword, so it refers to a new object in the heap, whereas `s2` refers to a string literal in the string pool.
+- `s3` is obtained using `s1.intern()`, which returns the reference to the string literal from the string pool.
+- `s1 == s2` is `false` because `s1` and `s2` refer to different objects.
+- `s2 == s3` is `true` because `s3` is interned and thus refers to the same object as `s2`.
+
+### **2. Array Index Out Of Bounds**
+
+**Question**: What will be the output of the following code snippet?
+
+```java
+public class ArrayTest {
+    public static void main(String[] args) {
+        int[] arr = new int[5];
+        arr[5] = 10; // ArrayIndexOutOfBoundsException
+        System.out.println("This will not be printed");
+    }
+}
+```
+
+**Answer**:
+```
+Exception in thread "main" java.lang.ArrayIndexOutOfBoundsException: Index 5 out of bounds for length 5
+```
+
+**Explanation**:
+- Arrays in Java are zero-based, meaning indices range from `0` to `length-1`.
+- Attempting to access or assign a value at index `5` in an array of length `5` results in an `ArrayIndexOutOfBoundsException`.
+
+### **3. Inheritance and Overriding**
+
+**Question**: What will be the output of the following code snippet?
+
+```java
+class A {
+    public void display() {
+        System.out.println("Display in A");
+    }
+}
+
+class B extends A {
+    public void display() {
+        System.out.println("Display in B");
+    }
+}
+
+public class TestInheritance {
+    public static void main(String[] args) {
+        A obj = new B();
+        obj.display();
+    }
+}
+```
+
+**Answer**:
+```
+Display in B
+```
+
+**Explanation**:
+- This demonstrates **runtime polymorphism** (method overriding). The reference variable `obj` of type `A` points to an object of type `B`.
+- The `display()` method of class `B` is called, which overrides the method in class `A`.
+
+### **4. Access Specifiers and Static**
+
+**Question**: What will be the output of the following code snippet?
+
+```java
+class Parent {
+    private static void show() {
+        System.out.println("Parent show()");
+    }
+}
+
+class Child extends Parent {
+    public static void show() {
+        System.out.println("Child show()");
+    }
+}
+
+public class TestAccess {
+    public static void main(String[] args) {
+        Parent.show();
+        Child.show();
+    }
+}
+```
+
+**Answer**:
+```
+Parent show()
+Child show()
+```
+
+**Explanation**:
+- Static methods are not polymorphic and are resolved at compile-time. 
+- The method `show()` in `Parent` is hidden by the `show()` method in `Child`.
+- The calls to `Parent.show()` and `Child.show()` are resolved to the respective static methods in `Parent` and `Child`.
+
+### **5. Keywords and Control Flow**
+
+**Question**: What will be the output of the following code snippet?
+
+```java
+public class TestKeywords {
+    public static void main(String[] args) {
+        int x = 10;
+        switch (x) {
+            case 10:
+                System.out.println("Ten");
+            case 20:
+                System.out.println("Twenty");
+            default:
+                System.out.println("Default");
+        }
+    }
+}
+```
+
+**Answer**:
+```
+Ten
+Twenty
+Default
+```
+
+**Explanation**:
+- The `switch` statement does not have `break` statements, so after matching `case 10`, it continues to execute subsequent cases (including `case 20` and `default`).
+
+### **6. Method Overloading with Varargs**
+
+**Question**: What will be the output of the following code snippet?
+
+```java
+public class VarargsTest {
+    public static void test(int... numbers) {
+        System.out.println("Varargs method");
+    }
+
+    public static void test(int number) {
+        System.out.println("Single int method");
+    }
+
+    public static void main(String[] args) {
+        test(1);
+        test(1, 2, 3);
+    }
+}
+```
+
+**Answer**:
+```
+Single int method
+Varargs method
+```
+
+**Explanation**:
+- When calling `test(1)`, the method `test(int number)` is selected because it matches a single integer exactly.
+- When calling `test(1, 2, 3)`, the varargs method `test(int... numbers)` is chosen because it can accept multiple integers.
+
+### **7. Constructor vs Static Block**
+
+**Question**: What will be the output of the following code snippet?
+
+```java
+public class TestBlocks {
+    static {
+        System.out.println("Static block");
+    }
+
+    {
+        System.out.println("Instance block");
+    }
+
+    public TestBlocks() {
+        System.out.println("Constructor");
+    }
+
+    public static void main(String[] args) {
+        new TestBlocks();
+    }
+}
+```
+
+**Answer**:
+```
+Static block
+Instance block
+Constructor
+```
+
+**Explanation**:
+- The static block runs once when the class is loaded.
+- The instance block runs every time an object is created, before the constructor.
+- The constructor runs last when the object is created.
+
+### **8. Final Keyword**
+
+**Question**: What will be the output of the following code snippet?
+
+```java
+class A {
+    final void display() {
+        System.out.println("Display in A");
+    }
+}
+
+class B extends A {
+    // Uncommenting the following method will cause a compilation error
+    // void display() {
+    //     System.out.println("Display in B");
+    // }
+}
+
+public class TestFinal {
+    public static void main(String[] args) {
+        new B().display();
+    }
+}
+```
+
+**Answer**:
+```
+Display in A
+```
+
+**Explanation**:
+- The `final` keyword in a method declaration means that the method cannot be overridden in any subclass.
+- Therefore, class `B` inherits the `display()` method from class `A` and cannot override it.
+
+These questions test various aspects of Java, including string handling, inheritance, access control, and keywords. Understanding these tricky scenarios helps in mastering Java and preparing for complex interview questions.
+
+---
+
+Ambiguities in Java and Spring Boot can arise from various sources. 
+
+## Ambiguities In Java
+
+1. **Method Overloading vs. Method Overriding**:
+   - **Overloading**: Same method name, different parameters within the same class.
+   - **Overriding**: Redefining a method in a subclass with the same name and parameters. The distinction can sometimes confuse developers regarding which method is being called.
+
+2. **Generics**:
+   - Understanding the bounds and wildcards (`? extends T`, `? super T`) can be confusing. The purpose and usage of these wildcards might not be immediately clear, leading to ambiguity in generic type handling.
+
+3. **Null Handling**:
+   - The behavior of `null` in Java can be ambiguous, especially with method calls or when using Optional. Understanding how null values are treated in various contexts is crucial to avoid `NullPointerExceptions`.
+
+4. **Static vs. Instance Context**:
+   - Distinguishing when to use static methods vs. instance methods can be ambiguous. Static methods belong to the class, while instance methods belong to instances of the class, which can lead to confusion regarding state management.
+
+5. **Final Keyword**:
+   - The meaning of `final` can be ambiguous depending on its context: a final variable cannot be reassigned, a final method cannot be overridden, and a final class cannot be subclassed.
+
+### To avoid ambiguities In Java, here are some practical strategies:
+
+1. **Method Overloading vs. Method Overriding**:
+   - **Clear Naming Conventions**: Use descriptive names for methods, particularly in overloaded scenarios, to make their purposes clear.
+   - **Comments and Documentation**: Document method signatures clearly, specifying whether a method is overloaded or overridden.
+   - **IDE Features**: Leverage your IDE's capabilities (like method hints) to show which method is being referenced.
+
+2. **Generics**:
+   - **Use Clear Type Names**: When defining generic types, use clear and descriptive names for type parameters (e.g., `<T extends Comparable<T>>`).
+   - **Educate Yourself**: Familiarize yourself with generics through resources like Java documentation and tutorials to understand wildcards thoroughly.
+   - **Examples and Practice**: Implement simple examples and gradually increase complexity to solidify understanding.
+
+3. **Null Handling**:
+   - **Use `Optional`**: Favor `Optional<T>` for return types that might be null to make the absence of a value explicit.
+   - **Consistent Null Checks**: Implement consistent null checks throughout your code to prevent `NullPointerExceptions`.
+   - **Code Reviews**: Encourage code reviews focusing on null handling practices.
+
+4. **Static vs. Instance Context**:
+   - **Use Static Wisely**: Only use static methods when state management is not required. For instance-specific behavior, prefer instance methods.
+   - **Document Intent**: Clearly document the reason for using static methods when applicable, particularly in shared utility classes.
+
+5. **Final Keyword**:
+   - **Educate on Usage**: Provide guidelines on using `final` for variables, methods, and classes to convey intent and immutability clearly.
+   - **Consistent Style**: Establish a coding style that favors immutability (using `final`) where appropriate.
+
+### Ambiguities In Spring Boot
+
+1. **Bean Scopes**:
+   - Confusion can arise between different bean scopes (`singleton`, `prototype`, `request`, `session`, etc.). Understanding when to use each scope is critical, especially in web applications.
+
+2. **Configuration Properties**:
+   - The distinction between `@ConfigurationProperties` and `@Value` can be ambiguous. Both are used for external configuration, but their use cases differ, which can lead to confusion.
+
+3. **AOP (Aspect-Oriented Programming)**:
+   - Understanding how and when aspects are applied can be ambiguous, particularly with pointcuts and advice types. Misconfiguration can lead to unexpected behaviors.
+
+4. **Spring Profiles**:
+   - Using profiles to manage different environments can be ambiguous if not documented properly. Understanding how to activate and use profiles correctly is essential.
+
+5. **Exception Handling**:
+   - The various ways to handle exceptions in Spring (e.g., `@ControllerAdvice`, `@ExceptionHandler`) can create ambiguity about the best practices and proper configurations.
+
+6. **Dependency Injection**:
+   - The different forms of dependency injection (constructor injection, setter injection, method injection) can be ambiguous, especially regarding their implications for immutability and testing.
+
+### Conclusion
+
+To minimize ambiguity, it’s essential to have a strong understanding of both Java and Spring Boot fundamentals. Consistent code practices, thorough documentation, and leveraging community resources can also help clarify these ambiguities. If you have specific scenarios or questions in mind, feel free to ask!
+
+### To avoid ambiguities In Spring Boot, here are some practical strategies:
+
+1. **Bean Scopes**:
+   - **Documentation**: Maintain comprehensive documentation on when to use each bean scope, including examples.
+   - **Use Annotations**: Clearly annotate your beans with their scopes and provide comments on their intended use.
+
+2. **Configuration Properties**:
+   - **Standardize Usage**: Decide when to use `@ConfigurationProperties` vs. `@Value` in your projects and stick to that standard across the team.
+   - **Educate the Team**: Share best practices and examples through team meetings or documentation.
+
+3. **AOP (Aspect-Oriented Programming)**:
+   - **Clear Documentation**: Document aspects, pointcuts, and advice types clearly in your codebase.
+   - **Start Simple**: Begin with simple aspects and gradually incorporate more complex AOP patterns as understanding improves.
+
+4. **Spring Profiles**:
+   - **Clear Naming Conventions**: Use descriptive names for profiles that reflect their purpose (e.g., `dev`, `prod`).
+   - **Documentation**: Maintain a guide on how to activate and use profiles, including examples and typical use cases.
+
+5. **Exception Handling**:
+   - **Unified Exception Strategy**: Establish a consistent strategy for handling exceptions (e.g., always use `@ControllerAdvice` for REST APIs).
+   - **Code Examples**: Share code snippets and examples of proper exception handling during team knowledge-sharing sessions.
+
+6. **Dependency Injection**:
+   - **Prefer Constructor Injection**: Encourage the use of constructor injection for mandatory dependencies to improve immutability.
+   - **Document Injection Types**: Provide documentation explaining the implications of each type of injection and when to use them.
+
+### Conclusion
+
+By implementing these strategies, you can significantly reduce ambiguity in Java and Spring Boot development. Regular training, consistent documentation, and fostering a culture of knowledge sharing within your team can also help clarify these areas. If you have specific scenarios where ambiguity arises, feel free to share, and we can address them further!
 
 ---
 
@@ -16761,2124 +18879,6 @@ Be sure to:
 - Use a **realistic load model**.
 - Monitor system resources alongside response times.
 - Analyze the test results to improve scalability and performance.
-
----
-
-## Virtual Threads in Java 19
-
-Java 19 introduced **virtual threads** as part of the **Project Loom** initiative. Virtual threads are designed to address the challenges associated with **highly concurrent** applications, such as the traditional thread model's performance overhead and scalability issues. Virtual threads allow Java applications to efficiently handle thousands or even millions of concurrent tasks with minimal overhead.
-
-Let's explore **virtual threads** in more detail:
-
-### **1. What Are Virtual Threads?**
-
-Virtual threads are lightweight threads that are managed by the **Java Virtual Machine (JVM)** rather than the underlying operating system (OS). They are different from **platform threads** (the traditional threads in Java) in several key aspects:
-- **Low Overhead**: Virtual threads are much lighter than platform threads. The JVM can manage a huge number of virtual threads, enabling scalable concurrency without the burden of OS-managed threads.
-- **Concurrency**: Virtual threads are ideal for applications that require high concurrency, such as web servers, I/O-bound tasks, or systems that need to handle a large number of simultaneous connections (e.g., REST APIs, message queues).
-
-In contrast to **platform threads**, which are mapped directly to OS threads, **virtual threads** are scheduled and managed by the JVM, and their lifecycle is independent of the operating system.
-
-### **2. Benefits of Virtual Threads**
-
-- **Scalability**: Virtual threads allow you to handle **millions of concurrent tasks** in a much more memory- and CPU-efficient manner compared to platform threads. This is especially beneficial for applications like servers that need to manage many simultaneous requests.
-  
-- **Simpler Concurrency Model**: Virtual threads make it easier to write **concurrent programs** by allowing developers to use the same programming model as synchronous code. They eliminate the need for complex thread pools or manual management of thread lifecycles.
-
-- **Low Memory Overhead**: Traditional threads consume a large amount of memory due to stack space allocation (typically 1MB per thread). In contrast, virtual threads have a much smaller memory footprint because their stacks can grow and shrink dynamically.
-
-- **Reduced Context Switching**: Since virtual threads are managed by the JVM and are lightweight, switching between virtual threads is less expensive than traditional OS-level context switching.
-
-### **3. How Virtual Threads Work**
-
-- **Scheduling**: The JVM schedules virtual threads in a non-blocking, cooperative way. The JVM can decide when to "yield" (switch) from one virtual thread to another, often when a virtual thread is blocked on I/O or waiting for a task to complete.
-  
-- **Concurrency and Parallelism**: Virtual threads are ideal for **concurrent** tasks (tasks that can run independently). However, they do not provide automatic parallelism; if you want tasks to run in parallel (on multiple CPU cores), you can use **platform threads** (traditional threads) within virtual threads, or leverage parallelism frameworks like **ForkJoinPool**.
-
-- **Stack Management**: Virtual threads are designed with **dynamic stack allocation**. Their stack size is much smaller than the stack size of platform threads, which can grow dynamically based on the need of the thread.
-
-- **Integration with Existing Code**: Virtual threads are designed to work seamlessly with existing Java code that uses **blocking I/O** and **synchronous programming models**. You don't need to change your code significantly to take advantage of virtual threads.
-
-### **4. Virtual Threads in Java 19 – Key Features**
-
-- **`Thread.ofVirtual()` API**: Java 19 introduced a new API for creating virtual threads.
-  
-  Example:
-  ```java
-  Thread virtualThread = Thread.ofVirtual().start(() -> {
-      // Your concurrent task here
-  });
-  ```
-
-  This creates a virtual thread to run the task asynchronously. Virtual threads can be created just like normal threads, but with much less overhead.
-
-- **`Executors.newVirtualThreadPerTaskExecutor()`**: This utility method provides a simple way to create an **executor** for running tasks with virtual threads.
-  
-  Example:
-  ```java
-  ExecutorService executor = Executors.newVirtualThreadPerTaskExecutor();
-  executor.submit(() -> {
-      // Task to be executed by a virtual thread
-  });
-  ```
-
-  This makes it easy to offload tasks to virtual threads without needing to manage them manually.
-
-- **`VirtualThread` Class**: In Java 19, the `Thread` class is enhanced with the ability to distinguish between **platform threads** and **virtual threads**. The `Thread` class now includes methods that allow developers to manage virtual threads easily.
-
-### **5. Use Cases for Virtual Threads**
-
-Virtual threads are especially suited for applications that need to handle a large number of **I/O-bound** tasks concurrently. These tasks typically include:
-- **Web servers**: Handling many simultaneous HTTP requests (e.g., Spring Boot-based REST APIs, microservices).
-- **Real-time messaging systems**: Applications that need to handle many messages concurrently.
-- **Streaming applications**: Systems that stream data to multiple consumers, such as Kafka or event-driven systems.
-- **Database access**: Applications that spend time waiting for database responses.
-
-In these scenarios, virtual threads can help achieve **high concurrency** while maintaining low memory usage and reduced complexity.
-
-### **6. Virtual Threads vs. Platform Threads**
-
-| Aspect               | **Virtual Threads**                            | **Platform Threads**                          |
-|----------------------|-----------------------------------------------|-----------------------------------------------|
-| **Management**        | Managed by the JVM                            | Managed by the OS                             |
-| **Memory Consumption**| Low (dynamic stack allocation)                | High (typically 1 MB per thread)              |
-| **Scalability**       | High – Millions of virtual threads can be created | Limited – OS-level thread creation is more expensive |
-| **Context Switching** | Low overhead for switching between threads    | High overhead due to OS context switching     |
-| **Suitability**       | Best for I/O-bound tasks with high concurrency | Best for CPU-bound tasks (parallelism)        |
-
-### **7. Virtual Threads and the ForkJoinPool**
-
-- **ForkJoinPool**: The ForkJoinPool in Java is optimized for parallel computing. With virtual threads, you can create a `ForkJoinPool` that uses virtual threads. This means you can have thousands of tasks being executed in parallel without the overhead of creating thousands of platform threads.
-  
-  Example:
-  ```java
-  ForkJoinPool pool = new ForkJoinPool(ForkJoinPool.getCommonPoolParallelism(), ForkJoinPool.defaultForkJoinWorkerThreadFactory,
-                                       null, true);
-  pool.submit(() -> {
-      // Your concurrent task here
-  });
-  ```
-
-  By integrating virtual threads with `ForkJoinPool`, you can efficiently handle tasks that can run concurrently, but still benefit from parallel execution.
-
-### **8. How to Use Virtual Threads**
-
-Here's a simple example to illustrate how virtual threads can be used in a Java program.
-
-#### Example: Simple Use of Virtual Threads
-
-```java
-public class VirtualThreadExample {
-    public static void main(String[] args) {
-        // Create a virtual thread and start a task
-        Thread virtualThread = Thread.ofVirtual().start(() -> {
-            try {
-                System.out.println("Virtual thread started");
-                Thread.sleep(1000);  // Simulate a blocking task
-                System.out.println("Virtual thread completed");
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-            }
-        });
-
-        // Wait for the virtual thread to finish
-        try {
-            virtualThread.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-}
-```
-
-#### Example: Using `ExecutorService` with Virtual Threads
-
-```java
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
-public class VirtualThreadExecutorExample {
-    public static void main(String[] args) {
-        ExecutorService executorService = Executors.newVirtualThreadPerTaskExecutor();
-
-        executorService.submit(() -> {
-            System.out.println("Task running on virtual thread.");
-        });
-
-        executorService.shutdown();
-    }
-}
-```
-
-In this example, the `ExecutorService` creates a virtual thread for each task and submits it for execution. This allows your application to handle many tasks concurrently without worrying about creating and managing individual threads.
-
-### **9. Conclusion**
-
-Virtual threads in Java 19 provide a powerful and lightweight way to achieve **high concurrency** and better **scalability**. They are particularly useful for I/O-bound tasks and applications that need to handle many concurrent requests without the overhead of managing numerous platform threads. With Project Loom, Java is becoming more capable of handling modern concurrency challenges, making it easier to write efficient and scalable applications.
-
-**Key Takeaways**:
-- **Virtual threads** are lightweight, JVM-managed threads that have much less memory overhead compared to platform threads.
-- They are ideal for applications with **high concurrency** and **I/O-bound tasks**.
-- **`Executors.newVirtualThreadPerTaskExecutor()`** makes it easy to manage virtual threads for concurrent tasks.
-- Virtual threads allow Java to scale to **millions of concurrent requests** without suffering from the limitations of traditional threads.
-
----
-
-## **Memory Leak in Microservices: Understanding and Resolution**
-
-A **memory leak** in a microservice occurs when the service consumes memory over time without releasing it back to the operating system or JVM. This gradual increase in memory usage can eventually lead to **OutOfMemoryErrors**, poor performance, and potential crashes. Addressing memory leaks early in the development lifecycle is crucial to ensure the system is robust and scalable.
-
-### **1. Causes of Memory Leaks in Microservices**
-
-In the context of **microservices** (whether they're written in Java, Node.js, Python, etc.), memory leaks can occur due to various reasons, such as:
-
-- **Unclosed resources**: Not closing database connections, file streams, HTTP connections, or sockets.
-- **Improperly managed caches**: Over-retaining objects in in-memory caches or failing to evict stale objects.
-- **Poor garbage collection**: Objects not being collected because they are still referenced, even though they are no longer needed.
-- **Large objects in heap**: Storing large objects in memory and not freeing them once they are no longer needed.
-- **Unintentional object references**: Holding on to references (like static references) which prevent objects from being garbage collected.
-- **Improper handling of threads**: If threads are created dynamically and never cleaned up, they can cause memory leaks.
-- **Memory leaks in third-party libraries**: Sometimes the issue may not lie within your code but in a dependency or a third-party library.
-
-### **2. Identifying Memory Leaks**
-
-Before you can resolve a memory leak, you need to **identify** it. Here are a few approaches for detecting and diagnosing memory leaks in microservices:
-
-#### **A. Monitoring Tools**
-
-You can use monitoring tools to track memory usage and detect trends that may indicate memory leaks:
-
-- **Prometheus & Grafana**: Set up custom metrics to track heap memory, non-heap memory, and garbage collection statistics. Track JVM memory usage over time to see if memory is steadily growing.
-- **JVM Metrics**: Monitor JVM heap size, garbage collection cycles, and memory consumption using **JMX** (Java Management Extensions).
-  
-  Example of memory metrics with **Prometheus**:
-  ```yaml
-  - job_name: 'java-microservice'
-    static_configs:
-      - targets: ['localhost:8080']
-    metrics_path: /actuator/prometheus
-  ```
-
-- **Heap Dumps**: In Java, heap dumps can be captured to inspect memory usage. A **heap dump** provides a snapshot of the memory usage of your application and helps in analyzing memory leaks.
-
-#### **B. JVM Profiling and Diagnostics**
-
-- **VisualVM**: VisualVM is a great tool to monitor memory usage and track potential memory leaks. You can visualize heap usage, see memory consumption, and monitor garbage collection performance.
-  
-  - Connect VisualVM to your running microservice to view memory consumption, heap dumps, and object references.
-  
-- **JProfiler**: JProfiler is another powerful tool for analyzing memory leaks in Java applications. It provides heap analysis, thread monitoring, and garbage collection tracking.
-
-#### **C. Log-based Detection**
-
-Set up logging for heap dumps on OutOfMemoryError or when memory consumption crosses a certain threshold.
-
-```java
-public class MemoryLogger {
-    static {
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            // Dump heap memory when JVM shuts down
-            try {
-                String heapDumpFile = "/tmp/heapdump.hprof";
-                HotSpotDiagnosticMXBean diagnosticMXBean = ManagementFactory.getPlatformMXBean(HotSpotDiagnosticMXBean.class);
-                diagnosticMXBean.dumpHeap(heapDumpFile, true);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }));
-    }
-}
-```
-
-#### **D. Profiling in Production with Tools like Flight Recorder**
-
-- **Java Flight Recorder (JFR)** can be enabled in production environments to record JVM events, garbage collection metrics, and memory usage. This allows detailed analysis of performance issues over time, including potential memory leaks.
-
----
-
-### **3. Resolving Memory Leaks**
-
-Once you've identified a memory leak, resolving it typically involves finding the root cause and making changes to your code, architecture, or configurations.
-
-#### **A. Common Approaches for Resolving Memory Leaks**
-
-##### **1. Resource Management**
-- **Close Resources Properly**: Always close database connections, file streams, sockets, and other external resources when they are no longer needed. For example, use **try-with-resources** (Java) to ensure automatic closing of resources.
-
-  Example in Java:
-  ```java
-  try (Connection connection = dataSource.getConnection()) {
-      // Use connection
-  } catch (SQLException e) {
-      // Handle exception
-  }
-  ```
-  
-##### **2. Use Weak References for Caching**
-- When dealing with caching, use **WeakReference** or **SoftReference** to store objects. These references allow the garbage collector to reclaim memory if the object is no longer in use but is still referenced in the cache.
-  
-  Example:
-  ```java
-  WeakReference<MyObject> weakRef = new WeakReference<>(myObject);
-  ```
-
-##### **3. Proper Cache Management**
-- Implement **cache eviction policies** to remove stale or unneeded objects. This is crucial for in-memory caches (e.g., **Ehcache**, **Redis**). 
-
-  Example in **Redis**:
-  - Use an **expiration time** for cache keys (TTL).
-  - Consider using **LRU (Least Recently Used)** eviction policies for large datasets.
-
-##### **4. Thread Management**
-- Make sure that any threads or **thread pools** are properly managed. If you create threads dynamically (e.g., through `ExecutorService`), ensure that you shut down unused threads after they finish their work. Not doing so will cause memory leaks by holding on to thread objects.
-  
-  Example:
-  ```java
-  executorService.shutdown();  // Always shut down when done
-  ```
-
-##### **5. Fix Circular References**
-- Ensure that your objects do not have **circular references** that are unintentionally preventing garbage collection. This can happen when two or more objects reference each other, making it impossible for the garbage collector to clean them up.
-
-##### **6. Reduce Object Retention**
-- Avoid retaining references to large objects after they are no longer necessary. For instance, holding large collections or data buffers in memory unnecessarily can cause memory growth. Always clear references to large objects explicitly when they are no longer needed.
-
-##### **7. Fixing Third-party Library Leaks**
-- If the memory leak is caused by third-party libraries, ensure:
-  - You are using the latest stable version of the library (which might have fixed memory leaks).
-  - The library is properly initialized and cleaned up (some libraries require explicit shutdown or cleanup calls).
-  - Report the issue to the maintainers if you cannot resolve it yourself.
-
-#### **B. Improving Garbage Collection**
-
-- **Tune Garbage Collection (GC)**: Sometimes memory leaks are caused by inefficient garbage collection. You can improve garbage collection by tuning the JVM’s GC parameters:
-  - **Increase heap size**: Increase the heap memory if you're running into memory constraints.
-  - **GC logging**: Enable **GC logs** to analyze performance.
-  
-  Example of JVM GC options:
-  ```bash
-  -XX:+PrintGCDetails -XX:+PrintGCDateStamps -Xloggc:/tmp/gc.log
-  ```
-
-- **Garbage Collector Selection**: Depending on your application's characteristics (e.g., high throughput vs. low latency), you can experiment with different garbage collectors, such as **G1 GC**, **ZGC**, or **Shenandoah GC**.
-
----
-
-### **4. Preventive Measures for Future**
-
-To minimize the risk of memory leaks in the future, consider implementing the following best practices:
-
-#### **A. Code Reviews and Static Analysis**
-- Regularly perform **code reviews** focused on memory management. Ensure resources are correctly closed and no unnecessary references are retained.
-- Use **static analysis tools** like **FindBugs** or **SonarQube** to detect potential memory leaks in the codebase.
-
-#### **B. Automated Testing with Profiling**
-- Implement **automated testing** for memory leaks, where tests are run to check memory usage during and after specific operations.
-- Tools like **JVM profilers** (VisualVM, JProfiler) and **Heap Dump Analysis** can be automated as part of the test suite to track memory usage.
-
-#### **C. Scaling and Distributed Design**
-- If your microservices run in a **distributed environment** (e.g., Kubernetes, Docker), consider **auto-scaling** to scale services horizontally, rather than allowing a service to grow to the point of memory exhaustion.
-- Leverage **circuit breakers** and **resilience patterns** to avoid overwhelming services with requests that might lead to memory pressure.
-
----
-
-### **5. Conclusion**
-
-Memory leaks are a significant concern in microservices because they can silently degrade the performance of the system and cause crashes. In **Java-based microservices**, tools like **VisualVM**, **JProfiler**, and **heap dumps** can help in detecting memory leaks, while best practices like proper **resource management**, **cache eviction**, and **object retention** can prevent them.
-
-By identifying and addressing memory leaks early, and using proper monitoring and diagnostics, you can significantly improve the reliability, scalability, and performance of your microservices.
-
----
-
-## Permanent Generation (PermGen)
-
-The **Permanent Generation (PermGen)** was a memory area in the JVM used to store metadata related to classes and methods. In older versions of Java (before **Java 8**), PermGen was part of the **Heap Memory** but had its own space for storing class definitions, method data, and other internal JVM structures. However, **PermGen** had some limitations that could lead to **OutOfMemoryError** under certain conditions, particularly in long-running applications or applications with dynamic class loading, such as web servers and application servers (e.g., Tomcat or JBoss).
-
-### **Why PermGen Was a Temporary Solution**
-
-The introduction of **PermGen** was a temporary solution because:
-- **Limited Size**: PermGen had a fixed size, which couldn't be adjusted dynamically (until Java 8 with Metaspace).
-- **Garbage Collection Issues**: PermGen wasn't managed well by the JVM's garbage collector. This caused class loaders to leak classes and result in memory leaks over time.
-- **Class Loading**: For applications that dynamically load and unload classes (e.g., web applications with hot deployment), the PermGen space could get filled up, causing the `OutOfMemoryError: PermGen space` error.
-
-### **Java 8 and Beyond: The Shift to Metaspace**
-
-Since **Java 8**, the **PermGen** space was replaced with **Metaspace**. This change was introduced to address the limitations of PermGen, and it comes with several improvements:
-
-1. **Dynamic Sizing**: 
-   - **Metaspace** grows and shrinks dynamically, unlike **PermGen**, which had a fixed size. This means that the JVM can adjust the size of Metaspace based on application needs and available system resources.
-   - The JVM automatically manages the Metaspace memory, reducing the likelihood of `OutOfMemoryError` due to class-loading behavior.
-
-2. **More Efficient Garbage Collection**:
-   - **Metaspace** is not part of the heap memory anymore, and it has its own garbage collection mechanism. This makes it easier for the JVM to clean up metadata and class data when it’s no longer needed.
-
-3. **Control via JVM Parameters**:
-   - In Java 8 and later, **Metaspace** can grow indefinitely (until the system runs out of native memory). However, the size can be controlled via JVM parameters.
-   - Example JVM options to tune **Metaspace**:
-     - **`-XX:MetaspaceSize=<size>`**: The initial size of Metaspace. When the Metaspace is full, the JVM will attempt to expand it.
-     - **`-XX:MaxMetaspaceSize=<size>`**: The maximum size of Metaspace. The JVM will never expand Metaspace beyond this size. If not specified, the JVM will dynamically allocate it based on system resources.
-     - **`-XX:MinMetaspaceFreeRatio`** and **`-XX:MaxMetaspaceFreeRatio`**: These options define the desired percentage of free space in Metaspace when it is resized.
-
-### **Fixing Memory Leaks in Metaspace (Java 8 and Later)**
-
-While **Metaspace** resolves many of the issues that were present with **PermGen**, **memory leaks** can still occur in the form of **class loader leaks**, which can cause the **Metaspace** to fill up.
-
-Here are the key fixes and approaches for handling memory leaks related to **Metaspace** in modern Java applications:
-
-### **1. Class Loader Leaks**
-In long-running Java applications (especially web applications, application servers, etc.), class loaders can retain references to classes that should be garbage collected. This can lead to the Metaspace growing uncontrollably.
-
-#### **Fixes for Class Loader Leaks:**
-- **Properly Dereference Class Loaders**: If your application uses custom class loaders, ensure that the class loaders are dereferenced when they are no longer needed. This can be a common issue in applications that dynamically load classes, such as in servlet containers (Tomcat, Jetty) or OSGi frameworks.
-  - Use tools like **JVM profilers** (VisualVM, JProfiler) or heap dump analysis tools to identify class loaders that are holding references to classes.
-  
-- **Close Resources**: Ensure that resources (like database connections, threads, and caches) are properly closed and cleaned up when they are no longer in use. Often, memory leaks can occur when these resources are not cleaned up properly, which in turn can cause class loader leaks.
-
-- **Use Memory Leak Detection Tools**: Use tools like **JProfiler** or **YourKit** to inspect the live heap and analyze references to class loaders. These tools can help pinpoint which class loaders and associated classes are not being unloaded properly.
-
-### **2. Dynamic Class Loading**
-If your application is dynamically loading and unloading classes, make sure that classes are unloaded appropriately. Often, when classes are dynamically loaded in an app server or a framework (like Spring), the class loaders might not release the classes if they are not properly unloaded, leading to memory leaks.
-
-#### **Fixes for Dynamic Class Loading Issues**:
-- **Use a Thread-Safe Class Loading Mechanism**: Ensure that the class loading mechanism used by your framework or server is thread-safe and does not keep references to loaded classes unnecessarily.
-- **Check Framework Configurations**: Many modern Java frameworks (Spring, Hibernate, etc.) offer mechanisms for **reloading** or **reinitializing** beans and classes dynamically. Ensure these mechanisms are being used correctly.
-
-### **3. Monitoring Metaspace Usage**
-Regularly monitor **Metaspace** usage to detect when it is growing unexpectedly. If **Metaspace** is consistently growing and approaching its limit, you need to investigate the root cause (usually class loader leaks or excessive dynamic class loading).
-
-- **JVM Metrics**: Use JVM metrics to track **Metaspace usage** over time. This can be done through monitoring tools like **Prometheus** and **Grafana**, or **JMX**.
-  
-- **Garbage Collection Logs**: Enable **GC logging** to monitor how Metaspace is being handled by the JVM. Look for signs of the Metaspace growing excessively without proper reclamation.
-
-#### Example of enabling GC logs in Java:
-```bash
--XX:+PrintGCDetails -XX:+PrintGCDateStamps -Xloggc:/path/to/gc.log
-```
-
-### **4. JVM Tuning**
-Adjust JVM parameters to limit the growth of **Metaspace**. While allowing the JVM to dynamically manage Metaspace can be beneficial, you can control its upper bounds if the application consumes too much memory.
-
-- **Tune Metaspace Size**: 
-  ```bash
-  -XX:MetaspaceSize=128m  # Initial size of Metaspace
-  -XX:MaxMetaspaceSize=512m  # Maximum size of Metaspace
-  ```
-
-  You can set `MaxMetaspaceSize` to prevent the Metaspace from growing uncontrollably, which can help prevent JVM crashes due to memory exhaustion.
-
-### **5. Restart Strategies for Long-running Applications**
-In **long-running services** (such as microservices running for months or years), periodically **restarting** the application can be a practical mitigation. This avoids long-term memory buildup, but it is not a permanent solution. To ensure minimal disruption, this can be handled via **rolling deployments** in Kubernetes or similar orchestration platforms.
-
-### **6. Garbage Collection Tuning**
-Although **Metaspace** has its own garbage collection mechanism, the overall garbage collection strategy still impacts how well Metaspace is managed. Fine-tuning the garbage collection algorithm and memory allocation strategies can improve the efficiency of memory management.
-
-- **Use G1 GC or ZGC**: If you're experiencing memory leaks or performance issues with Metaspace, consider using more modern garbage collectors like **G1 GC** or **ZGC**, which are designed for low-latency and large memory management.
-  
-  Example:
-  ```bash
-  -XX:+UseG1GC  # G1 Garbage Collector
-  ```
-
-### **Summary**
-
-- **PermGen** has been replaced by **Metaspace** starting with Java 8. Metaspace is more flexible and handles dynamic memory allocation better, but it still needs to be properly managed.
-- **Memory leaks** in the form of **class loader leaks** can still occur in Java applications, leading to Metaspace filling up over time.
-- The best way to **resolve memory leaks** related to Metaspace is to ensure proper **class loader management**, **resource cleanup**, and **dynamic class unloading**.
-- **Monitoring tools** (like VisualVM, Prometheus, etc.) can help track **Metaspace** usage and identify potential issues.
-- **JVM tuning** options like `-XX:MaxMetaspaceSize` and using modern garbage collectors (e.g., **G1 GC**, **ZGC**) can help mitigate some issues related to memory leaks.
-
-By combining these strategies, you can ensure that your microservices running on Java don't suffer from memory-related issues that might compromise performance and stability.
-
----
-
-The **Permanent Generation (PermGen)** in the Java Virtual Machine (JVM) was introduced to manage the storage of **class metadata** (such as class definitions, method data, and other internal structures) separately from the **heap memory** where regular objects reside. While it was a functional solution for a long time, it eventually became a **temporary solution** for several key reasons:
-
-### 1. **Fixed Size and Lack of Dynamic Scaling**
-
-- **Fixed Size**: PermGen had a fixed size that could be set at the JVM startup using the `-XX:PermSize` and `-XX:MaxPermSize` options. However, the size could not dynamically grow based on the application's needs.
-  
-- **Memory Exhaustion**: In applications that used dynamic class loading and unloading, especially large-scale applications like web servers (e.g., Tomcat, JBoss), or frameworks like **Spring**, **OSGi**, or **Hibernate**, the PermGen space could easily get filled up with metadata as classes were loaded dynamically but not unloaded properly.
-  
-- **No Adaptive Sizing**: The lack of automatic resizing in PermGen meant that the JVM couldn’t handle situations where more memory was needed, leading to `OutOfMemoryError: PermGen space`. The only solution was to manually increase the PermGen space, which was not always a scalable or efficient approach.
-
-### 2. **Garbage Collection Issues**
-
-- **Infrequent Garbage Collection**: Unlike the heap memory, which is managed by garbage collectors (GC) that reclaim unused objects, PermGen had its own collection mechanism. However, PermGen's GC was **not as efficient** as the heap memory's garbage collection.
-  
-- **Class Metadata Retention**: Class definitions, method data, and static variables were stored in PermGen. Over time, applications that dynamically load and unload classes might not properly remove them from PermGen, leading to memory leaks or **classloader leaks**. These references to class objects prevented the JVM from collecting garbage properly.
-
-- **Full GC Impact**: To reclaim memory from PermGen, the JVM needed to run a **full garbage collection (GC)**, which would halt application threads for a period (known as a "stop-the-world" event). This was inefficient for long-running applications, especially in high-throughput systems, and added unnecessary complexity.
-
-### 3. **Limited Memory for Dynamic Class Loading**
-
-- **Dynamic Class Loading**: Many Java applications dynamically load and unload classes, particularly in web applications, enterprise applications, and frameworks. Examples include **hot deployment**, **Spring Beans**, or **Java EE containers**. With **PermGen**, if too many classes were dynamically loaded over time (e.g., by a web server), the fixed-size PermGen would eventually run out of space, even with correct object management in the heap.
-  
-- **Frequent Class Loading**: In microservices, containers, or hot-redeploy scenarios, where classes are reloaded often (e.g., in application servers), the **PermGen** could grow rapidly and then cause an **OutOfMemoryError** if not tuned carefully.
-
-### 4. **Classloader Leaks**
-
-- **Classloader Leaks**: A common problem with PermGen space was **classloader leaks**. In web servers and application servers, each web application typically had its own **classloader**. If classloaders weren't properly unloaded when the application was stopped or redeployed, they could hold onto references to classes, leading to **memory leaks** in PermGen.
-  
-- **No Automatic Cleanup**: PermGen didn't have a built-in mechanism to automatically clean up classloader references, leading to class metadata accumulating in memory, preventing garbage collection.
-
-### 5. **Better Alternatives Introduced in Java 8: Metaspace**
-
-In **Java 8**, **PermGen** was replaced by **Metaspace**, which fixed many of the issues inherent in PermGen:
-
-#### **Key Improvements in Metaspace**:
-
-1. **Dynamic Sizing**:
-   - **Metaspace** no longer has a fixed size. The JVM dynamically grows and shrinks the Metaspace based on the system's available native memory and the application's needs.
-   - There is no need to manually configure the memory size via `-XX:PermSize` and `-XX:MaxPermSize` as in PermGen.
-
-2. **Native Memory**:
-   - **Metaspace** is stored in native memory (outside of the Java heap), which means that it is managed separately from the heap and does not interfere with heap-related garbage collection.
-   - The JVM automatically expands Metaspace as needed, making it more adaptable to applications that load many classes or use frameworks that dynamically load classes.
-
-3. **Garbage Collection**:
-   - **Metaspace** is subject to automatic garbage collection. Unlike PermGen, where garbage collection was often delayed, Metaspace benefits from the same **garbage collection** mechanisms that manage the heap, improving overall memory management.
-
-4. **Class Unloading**:
-   - Metaspace allows for better class unloading. When classes are no longer used, they can be safely unloaded, and the memory can be reclaimed. This solves the classloader leak issues that were common with **PermGen**.
-
-5. **More Control**:
-   - While Metaspace dynamically grows, it can still be limited using the `-XX:MaxMetaspaceSize` JVM parameter if required, offering a balance between flexibility and control.
-
-#### Example of configuring Metaspace in Java 8 and later:
-```bash
--XX:MetaspaceSize=128m   # Initial size of Metaspace
--XX:MaxMetaspaceSize=512m # Maximum size of Metaspace
-```
-
-### **Conclusion: Why PermGen Was Temporary**
-
-**PermGen** was considered a temporary solution because:
-1. It had a **fixed size**, which led to memory exhaustion if the application required more space.
-2. It lacked the ability to **dynamically resize** based on memory demand.
-3. It had **garbage collection issues** and was inefficient in handling dynamic class loading/unloading.
-4. It was not well-suited to handle **long-running applications** or modern Java frameworks that use dynamic class loading, leading to memory leaks.
-
-With **Java 8**, the **Metaspace** introduced significant improvements by:
-- Allowing for **dynamic sizing**.
-- Using **native memory** for better management.
-- Providing better garbage collection for **class metadata**.
-- Fixing issues related to **class loader leaks**.
-
-Thus, **PermGen** was phased out because of these limitations, and **Metaspace** is the recommended solution for managing class metadata efficiently in modern Java applications.
-
-Analyzing memory leaks in a service or application code is critical for maintaining performance and stability, particularly for long-running systems like microservices. **Memory leaks** occur when objects are no longer used but are still being referenced, preventing the garbage collector from reclaiming that memory. This can lead to **increased memory usage**, **OutOfMemoryError**, and **performance degradation** over time.
-
----
-
-## Aanalyze and identify memory leaks
-
-To **analyze and identify memory leaks**, especially in **Java applications** (like microservices or Spring Boot services), there are several steps and tools you can use. Below is a comprehensive guide on how to approach memory leak detection:
-
-### **1. Enable and Monitor Garbage Collection (GC) Logs**
-
-The first step to identify potential memory leaks is to monitor how the JVM’s **garbage collector** is behaving. JVM provides detailed logging options that help in tracking memory usage over time and the effectiveness of garbage collection.
-
-#### Steps:
-- **Enable GC logging** by adding JVM flags to your application:
-  
-  ```bash
-  -XX:+PrintGCDetails -XX:+PrintGCDateStamps -Xloggc:/path/to/gc.log
-  ```
-  
-- **Explanation**:
-  - `-XX:+PrintGCDetails`: Provides detailed information about garbage collection.
-  - `-XX:+PrintGCDateStamps`: Includes timestamps for each garbage collection event.
-  - `-Xloggc:/path/to/gc.log`: Saves the GC logs to a file for further analysis.
-  
-- **What to look for**:
-  - Increasing frequency of garbage collection cycles.
-  - Consistently increasing heap size after garbage collection (indicative of objects not being freed).
-  - Look for any "GC overhead limit exceeded" messages, which could indicate that the JVM spends too much time in garbage collection and is not reclaiming enough memory.
-
----
-
-### **2. Use Profiling Tools to Inspect Memory Usage**
-
-Profiling tools are very useful for identifying memory leaks. They provide real-time insights into memory consumption and allow you to track objects allocated in memory.
-
-#### Popular profiling tools for memory leak detection:
-- **VisualVM** (free and comes bundled with JDK)
-- **JProfiler**
-- **YourKit**
-- **Eclipse MAT (Memory Analyzer Tool)**
-  
-#### How to use VisualVM:
-1. **Connect VisualVM to your running application** (you can do this via JMX or attach the profiler remotely).
-2. Open the **Memory** tab and watch the memory usage over time.
-3. In the **Heap Dump** section, take snapshots at different times to compare memory allocations.
-4. Look for **objects that grow unexpectedly** in the heap or **unusual memory growth patterns**.
-5. Look for **unused objects** that aren’t being garbage collected.
-
-#### Key indicators in profiling:
-- **Increasing memory consumption** without corresponding object deletion.
-- **Retained objects** that should have been garbage collected (e.g., listeners, large collections, caches, thread pools).
-- Objects **retained by static references**, which often indicate a memory leak.
-
----
-
-### **3. Heap Dumps and Leak Analysis**
-
-A **heap dump** is a snapshot of the heap memory at a specific point in time. It provides a detailed view of all objects in memory, their references, and the memory they consume.
-
-#### Steps for heap dump analysis:
-1. **Trigger a heap dump** when you suspect a memory leak. You can do this using the following JVM option:
-   ```bash
-   -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/path/to/dump.hprof
-   ```
-2. Once the heap dump is generated, analyze it with tools like **Eclipse MAT** or **VisualVM**.
-3. **Look for suspicious objects** that retain more memory than expected. You can also look for **root causes** of memory leaks by tracing object references.
-
-#### Example analysis:
-- **Large object retainers**: Identify objects that are holding large amounts of memory.
-- **Unreachable objects**: Check for objects that should have been garbage collected but are still present in memory due to reference cycles or strong references.
-- **Thread leaks**: Investigate thread pools or background threads that may not have been shut down properly, leading to retained memory.
-
----
-
-### **4. Track and Review the Code for Memory Leak Patterns**
-
-Look through your code for common patterns that might lead to memory leaks. These include:
-
-#### Common sources of memory leaks in Java:
-- **Static references**: Static fields can easily cause memory leaks, especially if they hold references to objects that are not cleaned up.
-  - **Example**: A static `List` that holds references to all objects throughout the lifetime of the application.
-
-- **Unclosed resources**: Failing to close resources such as database connections, file handles, or network connections can cause memory leaks.
-  - **Example**: Not closing `InputStream`, `OutputStream`, or `Connection` objects in the `finally` block.
-
-- **Listener and Observer leaks**: Objects like event listeners, observers, or callbacks can lead to memory leaks if they are not properly removed or unregistered.
-  - **Example**: Adding event listeners in a UI framework or web server but not removing them when they are no longer needed.
-
-- **Large object graphs**: Large collections or caches that grow over time and are not properly managed can cause memory leaks.
-  - **Example**: Using a static map (`Map<String, Object> cache`) and never clearing it.
-
-- **Thread pool leaks**: Threads that are not shut down correctly or whose references are held in global static variables.
-
----
-
-### **5. Use Leak Detection Libraries**
-
-Some libraries and frameworks offer built-in mechanisms to detect memory leaks. You can use them to enhance your application’s memory management.
-
-- **Apache Commons Pool** (for managing resources like database connections, socket pools, etc.) helps in pooling resources efficiently.
-- **Soft references or Weak references**: Use Java's `SoftReference` or `WeakReference` for objects that are okay to be garbage collected but still need to be referenced temporarily.
-
----
-
-### **6. Look for High Allocation Rate**
-
-Memory leaks can sometimes be identified by looking at the **allocation rate** of objects. If certain objects are continuously allocated over time but not garbage collected, they may be contributing to the memory leak.
-
-#### Tools to monitor allocation rate:
-- **JVM profilers** (e.g., **YourKit**, **JProfiler**)
-- **GC logs**: You can track the allocation rate indirectly by observing how often garbage collections occur and how much heap memory is being reclaimed.
-  
-### **7. Use Memory Leak Detection in CI/CD**
-
-- **Automated Leak Detection**: Integrate memory leak detection into your **CI/CD pipeline** using tools like **Heap Dumps** or **JVM profilers**.
-- **Stress testing and load testing**: Tools like **JMeter** or **Gatling** can simulate high traffic to detect issues related to memory consumption during high load.
-
----
-
-### **8. Use Java Flight Recorder (JFR) and Mission Control**
-
-Java **Flight Recorder (JFR)**, available in Oracle JDK and OpenJDK, is a diagnostic tool that collects a continuous stream of data about the JVM’s runtime behavior.
-
-- **JFR** provides insights into memory usage patterns, garbage collection, thread activity, and can help in identifying memory leaks.
-- **Mission Control** is a tool that analyzes JFR recordings and helps in identifying performance bottlenecks and memory leaks.
-
----
-
-### **Summary: Steps for Analyzing Memory Leaks**
-
-1. **Enable GC Logs**: Monitor garbage collection details for unusual patterns.
-2. **Use Profiling Tools**: Use tools like VisualVM or JProfiler to track memory usage over time.
-3. **Take Heap Dumps**: Analyze heap dumps with tools like Eclipse MAT to look for retained objects.
-4. **Inspect the Code**: Look for common memory leak patterns like unclosed resources or static references.
-5. **Use Leak Detection Libraries**: Use libraries and techniques like `WeakReference` to manage memory better.
-6. **Monitor Allocation Rate**: Keep track of object allocation patterns that may indicate leaks.
-7. **Run Stress Tests**: Simulate heavy traffic and usage to detect leaks during peak loads.
-8. **Use JFR**: Java Flight Recorder and Mission Control offer deep insights into memory usage and performance.
-
-By carefully monitoring your application’s memory usage, analyzing GC logs, and using profiling and leak detection tools, you can effectively identify and resolve memory leaks before they impact your application's stability or performance.
-
----
-
-## Asynchronous programming support
-
-In Java, **`async`** and **`await`** are not built-in language features like they are in JavaScript. However, Java provides **asynchronous programming support** through other mechanisms such as **`CompletableFuture`**, **`ExecutorService`**, and **`@Async`** in Spring.
-
-
-## How to Implement Asynchronous Programming in Spring Boot
-
-In Spring Boot, you can use the **`@Async`** annotation to run methods asynchronously, similar to how `async` and `await` work in JavaScript. You can use **`CompletableFuture`** or **`ListenableFuture`** to handle the result of an asynchronous task.
-
-Let’s break it down step-by-step:
-
-### 1. **Setting Up Asynchronous Support in Spring Boot**
-First, to use asynchronous processing, you need to enable it in your Spring Boot application by adding the `@EnableAsync` annotation in your configuration class.
-
-```java
-@SpringBootApplication
-@EnableAsync
-public class MySpringBootApplication {
-    public static void main(String[] args) {
-        SpringApplication.run(MySpringBootApplication.class, args);
-    }
-}
-```
-
-This enables Spring's `@Async` support, which allows methods to be executed asynchronously.
-
-### 2. **Using `@Async` in Spring Boot**
-
-You can annotate a method with `@Async` to make it execute in a separate thread, allowing your application to handle other tasks while the method is running.
-
-#### 2.1. **Example: Using `@Async` with `CompletableFuture`**
-
-Here’s an example that simulates a time-consuming operation (like calling an external API or querying a database) asynchronously.
-
-##### Service Class with `@Async`
-
-```java
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.stereotype.Service;
-import java.util.concurrent.CompletableFuture;
-
-@Service
-public class MyAsyncService {
-
-    @Async
-    public CompletableFuture<String> processTask1() throws InterruptedException {
-        // Simulate a time-consuming task
-        Thread.sleep(2000); // Simulate a delay of 2 seconds
-        return CompletableFuture.completedFuture("Task 1 completed");
-    }
-
-    @Async
-    public CompletableFuture<String> processTask2() throws InterruptedException {
-        // Simulate a time-consuming task
-        Thread.sleep(3000); // Simulate a delay of 3 seconds
-        return CompletableFuture.completedFuture("Task 2 completed");
-    }
-
-    @Async
-    public CompletableFuture<String> processTask3() throws InterruptedException {
-        // Simulate a time-consuming task
-        Thread.sleep(1000); // Simulate a delay of 1 second
-        return CompletableFuture.completedFuture("Task 3 completed");
-    }
-}
-```
-
-In this example, the methods `processTask1()`, `processTask2()`, and `processTask3()` are annotated with `@Async`. These methods will execute asynchronously, meaning that the caller doesn’t have to wait for their completion before moving on.
-
-#### 2.2. **Controller to Trigger Async Tasks**
-
-Now, create a REST controller that will trigger the asynchronous tasks.
-
-```java
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import java.util.concurrent.CompletableFuture;
-
-@RestController
-public class AsyncController {
-
-    @Autowired
-    private MyAsyncService myAsyncService;
-
-    @GetMapping("/run-tasks")
-    public CompletableFuture<String> runTasks() throws InterruptedException {
-        // Call async methods
-        CompletableFuture<String> task1 = myAsyncService.processTask1();
-        CompletableFuture<String> task2 = myAsyncService.processTask2();
-        CompletableFuture<String> task3 = myAsyncService.processTask3();
-
-        // Wait for all tasks to complete and return their results
-        return CompletableFuture.allOf(task1, task2, task3)
-                .thenApply(v -> task1.join() + " | " + task2.join() + " | " + task3.join());
-    }
-}
-```
-
-#### Explanation:
-1. **Async Methods**: Methods annotated with `@Async` return a `CompletableFuture`. This is a type of Future that can be used to handle the result of an asynchronous computation.
-2. **Controller**: The `runTasks` method in the `AsyncController` triggers all three asynchronous tasks (`processTask1`, `processTask2`, `processTask3`). After calling them, it uses `CompletableFuture.allOf()` to wait for all tasks to finish and then combines their results using `join()`.
-
-### 3. **Waiting for Async Tasks (Similar to `await`)**
-
-While you don’t have `await` in Java, you can use **`CompletableFuture.join()`** or **`CompletableFuture.get()`** to block and wait for the asynchronous tasks to complete.
-
-- **`join()`**: Returns the result of the computation, or throws an unchecked exception if the computation failed.
-- **`get()`**: Similar to `join()`, but throws a checked exception (like `ExecutionException` or `InterruptedException`), which you need to handle.
-
-In the example above, we used **`join()`** in `runTasks()` to block and wait for all tasks to complete before combining their results.
-
-### 4. **Thread Pool Configuration (Optional)**
-
-By default, Spring Boot uses a simple thread pool to manage async tasks. However, you can configure a custom thread pool by creating a `TaskExecutor` bean.
-
-```java
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
-
-@Configuration
-public class AsyncConfig {
-
-    @Bean
-    public ThreadPoolTaskExecutor taskExecutor() {
-        ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
-        executor.setCorePoolSize(5); // Minimum number of threads
-        executor.setMaxPoolSize(10); // Maximum number of threads
-        executor.setQueueCapacity(100); // Queue size for tasks waiting to be executed
-        executor.setThreadNamePrefix("Async-"); // Thread name prefix
-        executor.initialize();
-        return executor;
-    }
-}
-```
-
-This configuration allows you to control the size of the thread pool used for executing async tasks. You can adjust the core pool size, max pool size, and queue capacity based on your application's needs.
-
-### 5. **Handling Errors in Async Methods**
-
-If an asynchronous task fails (e.g., due to an exception), you can handle errors within the async method by adding error handling inside the method itself.
-
-```java
-@Async
-public CompletableFuture<String> processTaskWithErrorHandling() {
-    try {
-        // Simulate task processing
-        Thread.sleep(2000);
-        // Throwing an exception for demonstration
-        throw new RuntimeException("Task failed!");
-    } catch (Exception e) {
-        return CompletableFuture.completedFuture("Error occurred: " + e.getMessage());
-    }
-}
-```
-
-Alternatively, you can use **`handle()`** or **`exceptionally()`** methods of `CompletableFuture` to manage errors in the controller or wherever the `CompletableFuture` is processed.
-
-### 6. **Handling Multiple Async Operations (Parallel Execution)**
-
-As shown in the `runTasks()` method, you can execute multiple tasks in parallel and wait for all of them to complete using `CompletableFuture.allOf()`. Another option for handling multiple asynchronous tasks is to use **`thenCombine()`** or **`thenCompose()`** to combine the results of asynchronous computations.
-
-```java
-public CompletableFuture<String> runTasks() {
-    CompletableFuture<String> task1 = myAsyncService.processTask1();
-    CompletableFuture<String> task2 = myAsyncService.processTask2();
-    return task1.thenCombine(task2, (result1, result2) -> result1 + " | " + result2);
-}
-```
-
-This example demonstrates how to combine the results of two asynchronous tasks once both are completed.
-
-### 7. **Timeout Handling**
-
-You can also handle timeouts when dealing with async operations by setting a timeout for the `CompletableFuture`.
-
-```java
-CompletableFuture<String> future = myAsyncService.processTask1();
-String result = future.get(5, TimeUnit.SECONDS); // This will throw TimeoutException if it takes more than 5 seconds.
-```
-
-### Conclusion
-
-In Spring Boot, while Java does not have built-in `async/await` syntax like JavaScript, it provides powerful asynchronous programming tools such as `@Async`, `CompletableFuture`, and `ExecutorService`. By using these, you can perform asynchronous operations, manage concurrency, and ensure your system remains responsive even when handling long-running tasks.
-
-To summarize:
-- **Use `@Async`** to mark methods as asynchronous in Spring.
-- **`CompletableFuture`** is commonly used to manage and return results of asynchronous operations.
-- **`join()`** and **`get()`** are used to block and wait for asynchronous tasks to complete (similar to `await`).
-- **Thread pool configuration** ensures that your application can handle multiple concurrent asynchronous tasks effectively.
-
-By applying these techniques, you can build highly responsive and scalable applications in Spring Boot.
-
----
-
-## Java Interview Questions
-## List of Common Java Interview Questions
-
-### **Java Core Concepts**
-
-**1. What is the difference between `==` and `.equals()` in Java?**
-
-**Answer**:
-- `==` compares the memory addresses of two objects, i.e., whether they point to the same location in memory.
-- `.equals()` is a method defined in the `Object` class and is meant to compare the contents or logical equality of two objects.
-
-**Example**:
-```java
-String s1 = new String("hello");
-String s2 = new String("hello");
-System.out.println(s1 == s2);        // false, different memory locations
-System.out.println(s1.equals(s2));   // true, same content
-```
-
-**2. What is the difference between `ArrayList` and `LinkedList`?**
-
-**Answer**:
-- `ArrayList` is backed by a dynamic array and provides constant-time access for get and set operations. However, insertions and deletions are costly (O(n) in the worst case) because elements need to be shifted.
-- `LinkedList` is backed by a doubly-linked list. It provides constant-time insertions and deletions but linear-time access operations (O(n)) because you need to traverse the list.
-
-**Example**:
-```java
-List<String> arrayList = new ArrayList<>();
-List<String> linkedList = new LinkedList<>();
-```
-
-**3. What is the purpose of the `final` keyword in Java?**
-
-**Answer**:
-- `final` can be applied to variables, methods, and classes.
-  - **Variables**: When a variable is declared as `final`, its value cannot be changed once initialized.
-  - **Methods**: When a method is declared as `final`, it cannot be overridden by subclasses.
-  - **Classes**: When a class is declared as `final`, it cannot be subclassed.
-
-**Example**:
-```java
-final int MAX_VALUE = 100;
-class Base {
-    public final void display() {
-        System.out.println("Base display");
-    }
-}
-```
-
-**4. Explain the concept of inheritance and how it is implemented in Java.**
-
-**Answer**:
-- **Inheritance** is a mechanism where a new class (subclass) inherits properties and behaviors (methods) from an existing class (superclass).
-- In Java, inheritance is implemented using the `extends` keyword. A subclass inherits all public and protected members from the superclass but can have its own methods and fields.
-
-**Example**:
-```java
-class Animal {
-    void eat() {
-        System.out.println("This animal eats food.");
-    }
-}
-
-class Dog extends Animal {
-    void bark() {
-        System.out.println("Dog barks.");
-    }
-}
-```
-
-**5. What is polymorphism in Java?**
-
-**Answer**:
-- **Polymorphism** allows objects to be treated as instances of their parent class rather than their actual class. It comes in two forms:
-  - **Compile-time Polymorphism** (Method Overloading): Multiple methods with the same name but different parameters.
-  - **Runtime Polymorphism** (Method Overriding): Subclasses provide specific implementations of methods that are already defined in their parent class.
-
-**Example**:
-```java
-class Animal {
-    void makeSound() {
-        System.out.println("Animal makes a sound");
-    }
-}
-
-class Dog extends Animal {
-    @Override
-    void makeSound() {
-        System.out.println("Dog barks");
-    }
-}
-
-public class TestPolymorphism {
-    public static void main(String[] args) {
-        Animal a = new Dog();  // Reference of Animal, object of Dog
-        a.makeSound();  // Dog barks
-    }
-}
-```
-
-### **Java Advanced Concepts**
-
-**6. What is a Java `Thread` and how do you create one?**
-
-**Answer**:
-- A `Thread` is a lightweight process that allows concurrent execution of code.
-- You can create a thread by either extending the `Thread` class or implementing the `Runnable` interface.
-
-**Example**:
-```java
-// Extending Thread class
-class MyThread extends Thread {
-    public void run() {
-        System.out.println("Thread is running");
-    }
-}
-
-// Implementing Runnable interface
-class MyRunnable implements Runnable {
-    public void run() {
-        System.out.println("Runnable is running");
-    }
-}
-```
-
-**7. What is the difference between `synchronized` and `volatile` in Java?**
-
-**Answer**:
-- `synchronized` is used to ensure that only one thread can execute a block of code or method at a time, providing mutual exclusion.
-- `volatile` ensures that changes to a variable are visible to all threads immediately, but does not provide mutual exclusion.
-
-**Example**:
-```java
-// Using synchronized
-synchronized (this) {
-    // synchronized block
-}
-
-// Using volatile
-private volatile boolean flag = false;
-```
-
-**8. What is the Java memory model and how does garbage collection work?**
-
-**Answer**:
-- The **Java Memory Model (JMM)** defines how threads interact through memory and how changes made by one thread are visible to others.
-- **Garbage Collection (GC)** is the process by which Java automatically frees up memory by removing objects that are no longer referenced. The JVM performs garbage collection to reclaim memory.
-
-**9. What are the different types of exception handling in Java?**
-
-**Answer**:
-- **Checked Exceptions**: Exceptions that are checked at compile-time (e.g., `IOException`, `SQLException`).
-- **Unchecked Exceptions**: Exceptions that are not checked at compile-time (e.g., `NullPointerException`, `ArithmeticException`).
-- **Error**: Represents serious problems that applications should not catch (e.g., `OutOfMemoryError`, `StackOverflowError`).
-
-**Example**:
-```java
-try {
-    // code that might throw an exception
-} catch (IOException e) {
-    // handle exception
-} finally {
-    // code that will run regardless of exception
-}
-```
-
-**10. What is a `Java Stream` and how does it work?**
-
-**Answer**:
-- A `Stream` is a sequence of elements supporting sequential and parallel aggregate operations. It can be used to process collections of objects in a functional style.
-- Streams can be created from collections using the `stream()` method and offer various operations such as `filter()`, `map()`, `reduce()`, and `collect()`.
-
-**Example**:
-```java
-List<String> names = Arrays.asList("John", "Jane", "Tom");
-names.stream()
-     .filter(name -> name.startsWith("J"))
-     .forEach(System.out::println);  // Output: John, Jane
-```
-
----
-
-## Java 8 Interview Questions and Answers
-
-#### **1. What are the main features introduced in Java 8?**
-
-**Answer**:
-Java 8 introduced several key features:
-- **Lambda Expressions**: Allow you to write concise code for functional interfaces.
-- **Streams API**: Provides a way to process sequences of elements (like collections) in a functional style.
-- **Functional Interfaces**: Interfaces with a single abstract method, such as `Runnable`, `Callable`, `Function`, `Consumer`, `Supplier`, and `Predicate`.
-- **Method References**: Allows you to refer to methods without executing them.
-- **Default Methods**: Enable you to add new methods to interfaces with a default implementation.
-- **Optional Class**: Provides a way to avoid `NullPointerException` by encapsulating optional values.
-- **New Date and Time API**: Provides a comprehensive date and time library, replacing the old `java.util.Date` and `java.util.Calendar`.
-
-#### **2. Explain Lambda Expressions with an example.**
-
-**Answer**:
-- **Lambda Expressions** provide a clear and concise way to represent one method interface using an expression. They are used primarily to define the method of a functional interface.
-
-**Syntax**:
-```java
-(parameters) -> expression
-```
-
-**Example**:
-```java
-@FunctionalInterface
-interface MathOperation {
-    int operate(int a, int b);
-}
-
-public class LambdaExample {
-    public static void main(String[] args) {
-        MathOperation addition = (a, b) -> a + b;
-        System.out.println(addition.operate(5, 3)); // Output: 8
-    }
-}
-```
-
-#### **3. How does the Streams API work in Java 8?**
-
-**Answer**:
-- **Streams API** provides a way to process sequences of elements (such as collections) in a functional style, supporting operations like filtering, mapping, and reducing.
-
-**Example**:
-```java
-import java.util.Arrays;
-import java.util.List;
-
-public class StreamsExample {
-    public static void main(String[] args) {
-        List<String> names = Arrays.asList("John", "Jane", "Tom", "Jerry");
-
-        names.stream()
-             .filter(name -> name.startsWith("J"))
-             .sorted()
-             .forEach(System.out::println);  // Output: Jane, Jerry, John
-    }
-}
-```
-
-#### **4. What is the purpose of the `Optional` class in Java 8?**
-
-**Answer**:
-- **Optional** is a container object which may or may not contain a value. It is used to avoid `NullPointerException` by providing methods to handle values that may be absent.
-
-**Example**:
-```java
-import java.util.Optional;
-
-public class OptionalExample {
-    public static void main(String[] args) {
-        Optional<String> optionalValue = Optional.ofNullable("Hello, World!");
-
-        optionalValue.ifPresent(value -> System.out.println("Value: " + value)); // Output: Value: Hello, World!
-
-        String defaultValue = optionalValue.orElse("Default Value");
-        System.out.println(defaultValue);  // Output: Hello, World!
-    }
-}
-```
-
-#### **5. Explain functional interfaces in Java 8 with examples.**
-
-**Answer**:
-- **Functional Interfaces** are interfaces with exactly one abstract method. They can have multiple default or static methods. They can be used as the target type for lambda expressions and method references.
-
-**Examples**:
-```java
-@FunctionalInterface
-interface MyFunctionalInterface {
-    void singleAbstractMethod();
-    
-    default void defaultMethod() {
-        System.out.println("Default method in functional interface");
-    }
-    
-    static void staticMethod() {
-        System.out.println("Static method in functional interface");
-    }
-}
-
-public class FunctionalInterfaceExample {
-    public static void main(String[] args) {
-        MyFunctionalInterface myFunc = () -> System.out.println("Lambda expression");
-        myFunc.singleAbstractMethod();  // Output: Lambda expression
-        
-        myFunc.defaultMethod();         // Output: Default method in functional interface
-        MyFunctionalInterface.staticMethod(); // Output: Static method in functional interface
-    }
-}
-```
-
-#### **6. How do method references work in Java 8?**
-
-**Answer**:
-- **Method References** are a shorthand notation of a lambda expression to call a method. They improve code readability and reduce verbosity.
-
-**Syntax**:
-```java
-ClassName::methodName
-```
-
-**Example**:
-```java
-import java.util.Arrays;
-import java.util.List;
-
-public class MethodReferenceExample {
-    public static void main(String[] args) {
-        List<String> names = Arrays.asList("John", "Jane", "Tom", "Jerry");
-
-        // Using method reference
-        names.forEach(System.out::println); // Output: John, Jane, Tom, Jerry
-    }
-}
-```
-
-#### **7. Demonstrate the use of `Collectors` in Java 8 Streams API.**
-
-**Answer**:
-- **Collectors** are utility classes that implement the `Collector` interface to collect elements of a stream into collections or other forms.
-
-**Example**:
-```java
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
-public class CollectorsExample {
-    public static void main(String[] args) {
-        List<String> names = Arrays.asList("John", "Jane", "Tom", "Jerry");
-
-        // Collect names into a List
-        List<String> nameList = names.stream().collect(Collectors.toList());
-        System.out.println(nameList); // Output: [John, Jane, Tom, Jerry]
-
-        // Collect names into a Map with name length as the key
-        Map<Integer, String> nameMap = names.stream()
-                                             .collect(Collectors.toMap(String::length, name -> name));
-        System.out.println(nameMap); // Output: {3=Tom, 4=John, 4=Jane, 5=Jerry}
-    }
-}
-```
-
-#### **8. What are default methods in interfaces and why are they useful?**
-
-**Answer**:
-- **Default Methods** are methods in interfaces that have a body. They allow you to add new methods to interfaces with a default implementation without affecting classes that implement the interface.
-
-**Example**:
-```java
-interface MyInterface {
-    void existingMethod();
-    
-    default void defaultMethod() {
-        System.out.println("Default method implementation");
-    }
-}
-
-public class DefaultMethodExample implements MyInterface {
-    public void existingMethod() {
-        System.out.println("Existing method implementation");
-    }
-
-    public static void main(String[] args) {
-        DefaultMethodExample example = new DefaultMethodExample();
-        example.existingMethod();   // Output: Existing method implementation
-        example.defaultMethod();    // Output: Default method implementation
-    }
-}
-```
-
-#### **9. What are `Function`, `Consumer`, `Supplier`, and `Predicate` interfaces in Java 8?**
-
-**Answer**:
-- **Function<T, R>**: Represents a function that accepts one argument and produces a result.
-- **Consumer<T>**: Represents an operation that takes a single input argument and returns no result.
-- **Supplier<T>**: Represents a supplier of results. It takes no arguments and returns a result.
-- **Predicate<T>**: Represents a predicate (boolean-valued function) of one argument.
-
-**Examples**:
-```java
-import java.util.function.Function;
-import java.util.function.Consumer;
-import java.util.function.Supplier;
-import java.util.function.Predicate;
-
-public class FunctionalInterfacesExample {
-    public static void main(String[] args) {
-        // Function
-        Function<String, Integer> lengthFunction = s -> s.length();
-        System.out.println(lengthFunction.apply("Hello")); // Output: 5
-        
-        // Consumer
-        Consumer<String> printConsumer = s -> System.out.println(s);
-        printConsumer.accept("Hello"); // Output: Hello
-        
-        // Supplier
-        Supplier<String> stringSupplier = () -> "Hello World";
-        System.out.println(stringSupplier.get()); // Output: Hello World
-        
-        // Predicate
-        Predicate<String> isEmptyPredicate = s -> s.isEmpty();
-        System.out.println(isEmptyPredicate.test("")); // Output: true
-    }
-}
-```
-
-#### **10. How do you handle exceptions in Java 8 Streams API?**
-
-**Answer**:
-- Handling exceptions within Streams can be tricky since Streams are designed to work with lambda expressions. One common approach is to use a utility method to wrap code that can throw exceptions.
-
-**Example**:
-```java
-import java.util.Arrays;
-import java.util.List;
-import java.util.function.Function;
-
-public class StreamExceptionHandlingExample {
-    public static void main(String[] args) {
-        List<String> numbers = Arrays.asList("1", "2", "three", "4");
-
-        // Process numbers, handling NumberFormatException
-        numbers.stream()
-               .map(convertToInt("0"))
-               .forEach(System.out::println);
-    }
-
-    private static Function<String, Integer> convertToInt(Integer defaultValue) {
-        return str -> {
-            try {
-                return Integer.valueOf(str);
-            } catch (NumberFormatException e) {
-                return defaultValue;
-            }
-        };
-    }
-}
-```
-
-These questions cover a wide range of Java 8 features, from lambda expressions and the Streams API to the `Optional` class and functional interfaces. Understanding these concepts and being able to apply them in coding scenarios will help you perform well in Java 8 interviews.
-
----
-## Java Multithreading & Concurrency Interview Questions
-
-### **1. What is the difference between `Thread` and `Runnable`?**
-
-**Answer**:
-- **Thread**: A `Thread` is a class in Java that provides a way to create and manage threads. You can extend the `Thread` class and override its `run()` method to define the thread's behavior.
-- **Runnable**: `Runnable` is a functional interface that represents a task that can be executed concurrently. You implement the `Runnable` interface and define the `run()` method. Then, you pass an instance of `Runnable` to a `Thread` object to execute it.
-
-**Example**:
-```java
-// Using Thread
-class MyThread extends Thread {
-    public void run() {
-        System.out.println("Thread is running");
-    }
-}
-
-public class ThreadExample {
-    public static void main(String[] args) {
-        MyThread thread = new MyThread();
-        thread.start();
-    }
-}
-
-// Using Runnable
-class MyRunnable implements Runnable {
-    public void run() {
-        System.out.println("Runnable is running");
-    }
-}
-
-public class RunnableExample {
-    public static void main(String[] args) {
-        Thread thread = new Thread(new MyRunnable());
-        thread.start();
-    }
-}
-```
-
-### **2. How do you create a thread-safe singleton class in Java?**
-
-**Answer**:
-- A thread-safe singleton class ensures that only one instance of the class is created, even in a multithreaded environment. The common way to implement this is using the **Bill Pugh Singleton Design** or **Double-Checked Locking**.
-
-**Example (Bill Pugh Singleton)**:
-```java
-public class Singleton {
-    private Singleton() {}
-
-    private static class SingletonHelper {
-        private static final Singleton INSTANCE = new Singleton();
-    }
-
-    public static Singleton getInstance() {
-        return SingletonHelper.INSTANCE;
-    }
-}
-```
-
-### **3. What is the difference between `synchronized` block and `synchronized` method?**
-
-**Answer**:
-- **Synchronized Method**: Synchronizes the entire method, preventing multiple threads from executing the method simultaneously on the same object.
-- **Synchronized Block**: Allows more granular control by synchronizing only a block of code within a method, reducing the scope of synchronization.
-
-**Example**:
-```java
-class Counter {
-    private int count = 0;
-
-    // Synchronized Method
-    public synchronized void increment() {
-        count++;
-    }
-
-    // Synchronized Block
-    public void incrementWithBlock() {
-        synchronized (this) {
-            count++;
-        }
-    }
-}
-```
-
-### **4. Explain the concept of a `volatile` variable in Java.**
-
-**Answer**:
-- A `volatile` variable ensures that changes to the variable are visible to all threads immediately. It prevents caching of variables and ensures that updates made by one thread are visible to other threads.
-
-**Example**:
-```java
-public class VolatileExample {
-    private volatile boolean running = true;
-
-    public void stop() {
-        running = false;
-    }
-
-    public void work() {
-        while (running) {
-            // Do some work
-        }
-        System.out.println("Stopped working");
-    }
-
-    public static void main(String[] args) {
-        VolatileExample example = new VolatileExample();
-        new Thread(example::work).start();
-        new Thread(() -> {
-            try { Thread.sleep(1000); } catch (InterruptedException e) {}
-            example.stop();
-        }).start();
-    }
-}
-```
-
-### **5. What is the purpose of `CountDownLatch` and how does it work?**
-
-**Answer**:
-- `CountDownLatch` is a concurrency utility that allows one or more threads to wait until a set of operations performed by other threads completes. It is initialized with a count that is decremented by each operation.
-
-**Example**:
-```java
-import java.util.concurrent.CountDownLatch;
-
-public class CountDownLatchExample {
-    public static void main(String[] args) throws InterruptedException {
-        CountDownLatch latch = new CountDownLatch(3);
-
-        Runnable task = () -> {
-            System.out.println("Task completed");
-            latch.countDown();
-        };
-
-        new Thread(task).start();
-        new Thread(task).start();
-        new Thread(task).start();
-
-        latch.await(); // Waits for the count to reach zero
-        System.out.println("All tasks completed");
-    }
-}
-```
-
-### **6. How does `ExecutorService` help in managing threads?**
-
-**Answer**:
-- `ExecutorService` is part of the Java Concurrency framework and provides a higher-level replacement for the traditional way of managing threads. It simplifies thread management by providing thread pools and various utility methods for task execution and lifecycle management.
-
-**Example**:
-```java
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
-public class ExecutorServiceExample {
-    public static void main(String[] args) {
-        ExecutorService executor = Executors.newFixedThreadPool(3);
-
-        Runnable task = () -> {
-            System.out.println("Task executed by: " + Thread.currentThread().getName());
-        };
-
-        for (int i = 0; i < 5; i++) {
-            executor.execute(task);
-        }
-
-        executor.shutdown(); // Initiates an orderly shutdown
-    }
-}
-```
-
-### **7. What is the purpose of `Future` and `Callable`?**
-
-**Answer**:
-- **Callable**: A functional interface similar to `Runnable` but can return a result and throw checked exceptions. It is used with `ExecutorService` to submit tasks.
-- **Future**: Represents the result of an asynchronous computation. You can use it to check if the task is complete, retrieve the result, or cancel the task.
-
-**Example**:
-```java
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-
-public class CallableFutureExample {
-    public static void main(String[] args) throws InterruptedException, ExecutionException {
-        ExecutorService executor = Executors.newFixedThreadPool(1);
-
-        Callable<Integer> task = () -> {
-            Thread.sleep(2000); // Simulate long-running task
-            return 123;
-        };
-
-        Future<Integer> future = executor.submit(task);
-        System.out.println("Task submitted");
-
-        // Perform other operations while waiting
-        Integer result = future.get(); // This will block until the task completes
-        System.out.println("Task result: " + result);
-
-        executor.shutdown();
-    }
-}
-```
-
-### **8. What are `synchronized` collections and how do they work?**
-
-**Answer**:
-- `Synchronized` collections are thread-safe versions of standard collections. They are created by wrapping standard collections with methods from the `Collections` class.
-
-**Example**:
-```java
-import java.util.Collections;
-import java.util.List;
-import java.util.ArrayList;
-
-public class SynchronizedCollectionsExample {
-    public static void main(String[] args) {
-        List<Integer> list = Collections.synchronizedList(new ArrayList<>());
-
-        // Adding elements to the list
-        list.add(1);
-        list.add(2);
-        list.add(3);
-
-        // Synchronizing access to the list
-        synchronized (list) {
-            for (Integer number : list) {
-                System.out.println(number);
-            }
-        }
-    }
-}
-```
-
-### **9. What is the difference between `notify()`, `notifyAll()`, and `wait()` in Java?**
-
-**Answer**:
-- **`wait()`**: Causes the current thread to wait until another thread invokes `notify()` or `notifyAll()` on the same object. It releases the lock on the object.
-- **`notify()`**: Wakes up a single thread that is waiting on the object’s monitor.
-- **`notifyAll()`**: Wakes up all threads that are waiting on the object’s monitor.
-
-**Example**:
-```java
-class WaitNotifyExample {
-    private final Object lock = new Object();
-    private boolean isAvailable = false;
-
-    public void produce() throws InterruptedException {
-        synchronized (lock) {
-            while (isAvailable) {
-                lock.wait();
-            }
-            System.out.println("Produced");
-            isAvailable = true;
-            lock.notify(); // Notify consumer
-        }
-    }
-
-    public void consume() throws InterruptedException {
-        synchronized (lock) {
-            while (!isAvailable) {
-                lock.wait();
-            }
-            System.out.println("Consumed");
-            isAvailable = false;
-            lock.notify(); // Notify producer
-        }
-    }
-
-    public static void main(String[] args) {
-        WaitNotifyExample example = new WaitNotifyExample();
-
-        Thread producer = new Thread(() -> {
-            try {
-                example.produce();
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-            }
-        });
-
-        Thread consumer = new Thread(() -> {
-            try {
-                example.consume();
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-            }
-        });
-
-        producer.start();
-        consumer.start();
-    }
-}
-```
-
-### **10. What are `Semaphore` and `ReentrantLock`? How are they used?**
-
-**Answer**:
-- **Semaphore**: A synchronization aid that controls access to a shared resource through a set of permits. It can be used to limit the number of threads that can access a resource simultaneously.
-
-**Example**:
-```java
-import java.util.concurrent.Semaphore;
-
-public class SemaphoreExample {
-    private static final Semaphore semaphore = new Semaphore(2);
-
-    public static void main(String[] args) {
-        Runnable task = () -> {
-            try {
-                semaphore.acquire();
-                System.out.println("Semaphore acquired by " + Thread.currentThread().getName());
-                Thread.sleep(2000); // Simulate work
-
-
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-            } finally {
-                semaphore.release();
-                System.out.println("Semaphore released by " + Thread.currentThread().getName());
-            }
-        };
-
-        for (int i = 0; i < 5; i++) {
-            new Thread(task).start();
-        }
-    }
-}
-```
-
-- **ReentrantLock**: A `Lock` implementation that allows threads to acquire the lock multiple times by the same thread and provides more sophisticated thread synchronization.
-
-**Example**:
-```java
-import java.util.concurrent.locks.ReentrantLock;
-
-public class ReentrantLockExample {
-    private final ReentrantLock lock = new ReentrantLock();
-
-    public void doWork() {
-        lock.lock();
-        try {
-            System.out.println("Lock acquired by " + Thread.currentThread().getName());
-            Thread.sleep(1000); // Simulate work
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        } finally {
-            lock.unlock();
-            System.out.println("Lock released by " + Thread.currentThread().getName());
-        }
-    }
-
-    public static void main(String[] args) {
-        ReentrantLockExample example = new ReentrantLockExample();
-
-        Runnable task = example::doWork;
-
-        for (int i = 0; i < 3; i++) {
-            new Thread(task).start();
-        }
-    }
-}
-```
-
-These questions cover fundamental aspects of multithreading and concurrency in Java, from basic thread management to advanced synchronization mechanisms. Understanding these concepts and their applications is crucial for writing efficient and thread-safe Java applications.
-
-Certainly! Below is a tabular comparison of common Java concepts and features that are frequently asked about in interviews. This comparison highlights the key differences between each pair or group.
-
-| **Aspect**                 | **Concept 1**               | **Concept 2**               | **Difference**                                                                                           |
-|----------------------------|------------------------------|------------------------------|----------------------------------------------------------------------------------------------------------|
-| **Thread vs Runnable**     | `Thread`                     | `Runnable`                   | - `Thread` is a class, while `Runnable` is an interface.<br>- `Thread` requires extending, while `Runnable` can be implemented and passed to a `Thread`. |
-| **synchronized Method vs synchronized Block** | Synchronized Method          | Synchronized Block           | - Synchronized Method locks the entire method, while Synchronized Block locks only a specific block of code.<br>- Blocks allow more granular control of synchronization. |
-| **Volatile vs synchronized** | `volatile`                   | `synchronized`               | - `volatile` ensures visibility of changes across threads without locking.<br>- `synchronized` ensures both visibility and atomicity through locking. |
-| **Callable vs Runnable**   | `Callable`                   | `Runnable`                   | - `Callable` returns a result and can throw checked exceptions.<br>- `Runnable` does not return a result and cannot throw checked exceptions. |
-| **Future vs CompletableFuture** | `Future`                    | `CompletableFuture`          | - `Future` represents the result of an asynchronous computation but has limited methods.<br>- `CompletableFuture` extends `Future` with more functionality and support for asynchronous programming. |
-| **CountDownLatch vs CyclicBarrier** | `CountDownLatch`            | `CyclicBarrier`              | - `CountDownLatch` allows threads to wait until a count reaches zero.<br>- `CyclicBarrier` allows a set of threads to wait for each other to reach a common barrier point. |
-| **Semaphore vs ReentrantLock** | `Semaphore`                 | `ReentrantLock`              | - `Semaphore` controls access to a shared resource with a set of permits.<br>- `ReentrantLock` provides explicit lock and unlock methods with advanced features like try-lock and timed lock. |
-| **ConcurrentHashMap vs Hashtable** | `ConcurrentHashMap`        | `Hashtable`                  | - `ConcurrentHashMap` is designed for concurrent access and is not synchronized.<br>- `Hashtable` is synchronized but may be less performant in high-concurrency scenarios. |
-| **Java 8 Streams vs Collections** | Streams                    | Collections                   | - Streams provide a functional approach to processing collections with operations like filter, map, and reduce.<br>- Collections are the traditional way of storing and manipulating data. |
-| **Default Method vs Static Method** | Default Method              | Static Method                | - Default methods can be overridden and provide a default implementation in interfaces.<br>- Static methods belong to the interface itself and cannot be overridden. |
-| **String vs StringBuilder vs StringBuffer** | `String`                    | `StringBuilder` / `StringBuffer` | - `String` is immutable, `StringBuilder` is mutable and not synchronized, and `StringBuffer` is mutable and synchronized.<br>- Use `StringBuilder` or `StringBuffer` for frequent modifications. |
-| **Abstract Class vs Interface** | Abstract Class              | Interface                     | - An abstract class can have fields and constructors, while an interface cannot.<br>- An abstract class can provide implementation for some methods, while interfaces in Java 7 and earlier cannot (except default methods in Java 8). |
-| **ArrayList vs LinkedList** | `ArrayList`                  | `LinkedList`                 | - `ArrayList` is backed by a dynamic array and provides faster access but slower insertions/deletions.<br>- `LinkedList` is backed by a doubly linked list and provides faster insertions/deletions but slower access. |
-| **Hashtable vs HashMap**   | `Hashtable`                  | `HashMap`                    | - `Hashtable` is synchronized and does not allow null keys/values.<br>- `HashMap` is not synchronized and allows one null key and multiple null values. |
-| **TreeMap vs HashMap**     | `TreeMap`                    | `HashMap`                    | - `TreeMap` is sorted based on natural ordering or a provided comparator, while `HashMap` is unordered.<br>- `TreeMap` is slower due to sorting but maintains order. |
-| **LinkedHashMap vs HashMap** | `LinkedHashMap`             | `HashMap`                    | - `LinkedHashMap` maintains insertion order, while `HashMap` does not.<br>- `LinkedHashMap` has slightly slower performance due to maintaining order. |
-| **String vs StringBuilder** | `String`                    | `StringBuilder`              | - `String` is immutable, meaning every modification creates a new instance.<br>- `StringBuilder` is mutable and allows modification without creating new instances. |
-
-### Example Code for Some Differences
-
-**1. Thread vs Runnable**
-
-```java
-// Thread
-class MyThread extends Thread {
-    public void run() {
-        System.out.println("Thread running");
-    }
-}
-
-public class ThreadExample {
-    public static void main(String[] args) {
-        new MyThread().start();
-    }
-}
-
-// Runnable
-class MyRunnable implements Runnable {
-    public void run() {
-        System.out.println("Runnable running");
-    }
-}
-
-public class RunnableExample {
-    public static void main(String[] args) {
-        new Thread(new MyRunnable()).start();
-    }
-}
-```
-
-**2. Default Method vs Static Method**
-
-```java
-interface MyInterface {
-    // Default method
-    default void defaultMethod() {
-        System.out.println("Default method");
-    }
-
-    // Static method
-    static void staticMethod() {
-        System.out.println("Static method");
-    }
-}
-
-public class InterfaceExample {
-    public static void main(String[] args) {
-        MyInterface.staticMethod(); // Static method called on interface
-
-        MyInterface instance = new MyInterface() {}; // Anonymous class to implement default method
-        instance.defaultMethod(); // Default method called on instance
-    }
-}
-```
-
-**3. String vs StringBuilder**
-
-```java
-public class StringBuilderExample {
-    public static void main(String[] args) {
-        // String (immutable)
-        String str = "Hello";
-        str = str + " World";
-        System.out.println(str); // Output: Hello World
-
-        // StringBuilder (mutable)
-        StringBuilder sb = new StringBuilder("Hello");
-        sb.append(" World");
-        System.out.println(sb.toString()); // Output: Hello World
-    }
-}
-```
-
-These questions and answers should provide a comprehensive overview of fundamental Java concepts and help you prepare for interviews effectively.
-
----
-
-## Tricky Java interview questions
-
-Here are some tricky Java interview questions related to strings, arrays, inheritance, access specifiers, and keywords. Each question is accompanied by its answer and an explanation.
-
-### **1. String Immutability and Interning**
-
-**Question**: What will be the output of the following code snippet?
-
-```java
-public class StringTest {
-    public static void main(String[] args) {
-        String s1 = new String("hello");
-        String s2 = "hello";
-        String s3 = s1.intern();
-        System.out.println(s1 == s2); // Output?
-        System.out.println(s2 == s3); // Output?
-    }
-}
-```
-
-**Answer**:
-```
-false
-true
-```
-
-**Explanation**:
-- `s1` is created using the `new` keyword, so it refers to a new object in the heap, whereas `s2` refers to a string literal in the string pool.
-- `s3` is obtained using `s1.intern()`, which returns the reference to the string literal from the string pool.
-- `s1 == s2` is `false` because `s1` and `s2` refer to different objects.
-- `s2 == s3` is `true` because `s3` is interned and thus refers to the same object as `s2`.
-
-### **2. Array Index Out Of Bounds**
-
-**Question**: What will be the output of the following code snippet?
-
-```java
-public class ArrayTest {
-    public static void main(String[] args) {
-        int[] arr = new int[5];
-        arr[5] = 10; // ArrayIndexOutOfBoundsException
-        System.out.println("This will not be printed");
-    }
-}
-```
-
-**Answer**:
-```
-Exception in thread "main" java.lang.ArrayIndexOutOfBoundsException: Index 5 out of bounds for length 5
-```
-
-**Explanation**:
-- Arrays in Java are zero-based, meaning indices range from `0` to `length-1`.
-- Attempting to access or assign a value at index `5` in an array of length `5` results in an `ArrayIndexOutOfBoundsException`.
-
-### **3. Inheritance and Overriding**
-
-**Question**: What will be the output of the following code snippet?
-
-```java
-class A {
-    public void display() {
-        System.out.println("Display in A");
-    }
-}
-
-class B extends A {
-    public void display() {
-        System.out.println("Display in B");
-    }
-}
-
-public class TestInheritance {
-    public static void main(String[] args) {
-        A obj = new B();
-        obj.display();
-    }
-}
-```
-
-**Answer**:
-```
-Display in B
-```
-
-**Explanation**:
-- This demonstrates **runtime polymorphism** (method overriding). The reference variable `obj` of type `A` points to an object of type `B`.
-- The `display()` method of class `B` is called, which overrides the method in class `A`.
-
-### **4. Access Specifiers and Static**
-
-**Question**: What will be the output of the following code snippet?
-
-```java
-class Parent {
-    private static void show() {
-        System.out.println("Parent show()");
-    }
-}
-
-class Child extends Parent {
-    public static void show() {
-        System.out.println("Child show()");
-    }
-}
-
-public class TestAccess {
-    public static void main(String[] args) {
-        Parent.show();
-        Child.show();
-    }
-}
-```
-
-**Answer**:
-```
-Parent show()
-Child show()
-```
-
-**Explanation**:
-- Static methods are not polymorphic and are resolved at compile-time. 
-- The method `show()` in `Parent` is hidden by the `show()` method in `Child`.
-- The calls to `Parent.show()` and `Child.show()` are resolved to the respective static methods in `Parent` and `Child`.
-
-### **5. Keywords and Control Flow**
-
-**Question**: What will be the output of the following code snippet?
-
-```java
-public class TestKeywords {
-    public static void main(String[] args) {
-        int x = 10;
-        switch (x) {
-            case 10:
-                System.out.println("Ten");
-            case 20:
-                System.out.println("Twenty");
-            default:
-                System.out.println("Default");
-        }
-    }
-}
-```
-
-**Answer**:
-```
-Ten
-Twenty
-Default
-```
-
-**Explanation**:
-- The `switch` statement does not have `break` statements, so after matching `case 10`, it continues to execute subsequent cases (including `case 20` and `default`).
-
-### **6. Method Overloading with Varargs**
-
-**Question**: What will be the output of the following code snippet?
-
-```java
-public class VarargsTest {
-    public static void test(int... numbers) {
-        System.out.println("Varargs method");
-    }
-
-    public static void test(int number) {
-        System.out.println("Single int method");
-    }
-
-    public static void main(String[] args) {
-        test(1);
-        test(1, 2, 3);
-    }
-}
-```
-
-**Answer**:
-```
-Single int method
-Varargs method
-```
-
-**Explanation**:
-- When calling `test(1)`, the method `test(int number)` is selected because it matches a single integer exactly.
-- When calling `test(1, 2, 3)`, the varargs method `test(int... numbers)` is chosen because it can accept multiple integers.
-
-### **7. Constructor vs Static Block**
-
-**Question**: What will be the output of the following code snippet?
-
-```java
-public class TestBlocks {
-    static {
-        System.out.println("Static block");
-    }
-
-    {
-        System.out.println("Instance block");
-    }
-
-    public TestBlocks() {
-        System.out.println("Constructor");
-    }
-
-    public static void main(String[] args) {
-        new TestBlocks();
-    }
-}
-```
-
-**Answer**:
-```
-Static block
-Instance block
-Constructor
-```
-
-**Explanation**:
-- The static block runs once when the class is loaded.
-- The instance block runs every time an object is created, before the constructor.
-- The constructor runs last when the object is created.
-
-### **8. Final Keyword**
-
-**Question**: What will be the output of the following code snippet?
-
-```java
-class A {
-    final void display() {
-        System.out.println("Display in A");
-    }
-}
-
-class B extends A {
-    // Uncommenting the following method will cause a compilation error
-    // void display() {
-    //     System.out.println("Display in B");
-    // }
-}
-
-public class TestFinal {
-    public static void main(String[] args) {
-        new B().display();
-    }
-}
-```
-
-**Answer**:
-```
-Display in A
-```
-
-**Explanation**:
-- The `final` keyword in a method declaration means that the method cannot be overridden in any subclass.
-- Therefore, class `B` inherits the `display()` method from class `A` and cannot override it.
-
-These questions test various aspects of Java, including string handling, inheritance, access control, and keywords. Understanding these tricky scenarios helps in mastering Java and preparing for complex interview questions.
-
----
-
-Ambiguities in Java and Spring Boot can arise from various sources. 
-
-## Ambiguities In Java
-
-1. **Method Overloading vs. Method Overriding**:
-   - **Overloading**: Same method name, different parameters within the same class.
-   - **Overriding**: Redefining a method in a subclass with the same name and parameters. The distinction can sometimes confuse developers regarding which method is being called.
-
-2. **Generics**:
-   - Understanding the bounds and wildcards (`? extends T`, `? super T`) can be confusing. The purpose and usage of these wildcards might not be immediately clear, leading to ambiguity in generic type handling.
-
-3. **Null Handling**:
-   - The behavior of `null` in Java can be ambiguous, especially with method calls or when using Optional. Understanding how null values are treated in various contexts is crucial to avoid `NullPointerExceptions`.
-
-4. **Static vs. Instance Context**:
-   - Distinguishing when to use static methods vs. instance methods can be ambiguous. Static methods belong to the class, while instance methods belong to instances of the class, which can lead to confusion regarding state management.
-
-5. **Final Keyword**:
-   - The meaning of `final` can be ambiguous depending on its context: a final variable cannot be reassigned, a final method cannot be overridden, and a final class cannot be subclassed.
-
-### To avoid ambiguities In Java, here are some practical strategies:
-
-1. **Method Overloading vs. Method Overriding**:
-   - **Clear Naming Conventions**: Use descriptive names for methods, particularly in overloaded scenarios, to make their purposes clear.
-   - **Comments and Documentation**: Document method signatures clearly, specifying whether a method is overloaded or overridden.
-   - **IDE Features**: Leverage your IDE's capabilities (like method hints) to show which method is being referenced.
-
-2. **Generics**:
-   - **Use Clear Type Names**: When defining generic types, use clear and descriptive names for type parameters (e.g., `<T extends Comparable<T>>`).
-   - **Educate Yourself**: Familiarize yourself with generics through resources like Java documentation and tutorials to understand wildcards thoroughly.
-   - **Examples and Practice**: Implement simple examples and gradually increase complexity to solidify understanding.
-
-3. **Null Handling**:
-   - **Use `Optional`**: Favor `Optional<T>` for return types that might be null to make the absence of a value explicit.
-   - **Consistent Null Checks**: Implement consistent null checks throughout your code to prevent `NullPointerExceptions`.
-   - **Code Reviews**: Encourage code reviews focusing on null handling practices.
-
-4. **Static vs. Instance Context**:
-   - **Use Static Wisely**: Only use static methods when state management is not required. For instance-specific behavior, prefer instance methods.
-   - **Document Intent**: Clearly document the reason for using static methods when applicable, particularly in shared utility classes.
-
-5. **Final Keyword**:
-   - **Educate on Usage**: Provide guidelines on using `final` for variables, methods, and classes to convey intent and immutability clearly.
-   - **Consistent Style**: Establish a coding style that favors immutability (using `final`) where appropriate.
-
-### Ambiguities In Spring Boot
-
-1. **Bean Scopes**:
-   - Confusion can arise between different bean scopes (`singleton`, `prototype`, `request`, `session`, etc.). Understanding when to use each scope is critical, especially in web applications.
-
-2. **Configuration Properties**:
-   - The distinction between `@ConfigurationProperties` and `@Value` can be ambiguous. Both are used for external configuration, but their use cases differ, which can lead to confusion.
-
-3. **AOP (Aspect-Oriented Programming)**:
-   - Understanding how and when aspects are applied can be ambiguous, particularly with pointcuts and advice types. Misconfiguration can lead to unexpected behaviors.
-
-4. **Spring Profiles**:
-   - Using profiles to manage different environments can be ambiguous if not documented properly. Understanding how to activate and use profiles correctly is essential.
-
-5. **Exception Handling**:
-   - The various ways to handle exceptions in Spring (e.g., `@ControllerAdvice`, `@ExceptionHandler`) can create ambiguity about the best practices and proper configurations.
-
-6. **Dependency Injection**:
-   - The different forms of dependency injection (constructor injection, setter injection, method injection) can be ambiguous, especially regarding their implications for immutability and testing.
-
-### Conclusion
-
-To minimize ambiguity, it’s essential to have a strong understanding of both Java and Spring Boot fundamentals. Consistent code practices, thorough documentation, and leveraging community resources can also help clarify these ambiguities. If you have specific scenarios or questions in mind, feel free to ask!
-
-### To avoid ambiguities In Spring Boot, here are some practical strategies:
-
-1. **Bean Scopes**:
-   - **Documentation**: Maintain comprehensive documentation on when to use each bean scope, including examples.
-   - **Use Annotations**: Clearly annotate your beans with their scopes and provide comments on their intended use.
-
-2. **Configuration Properties**:
-   - **Standardize Usage**: Decide when to use `@ConfigurationProperties` vs. `@Value` in your projects and stick to that standard across the team.
-   - **Educate the Team**: Share best practices and examples through team meetings or documentation.
-
-3. **AOP (Aspect-Oriented Programming)**:
-   - **Clear Documentation**: Document aspects, pointcuts, and advice types clearly in your codebase.
-   - **Start Simple**: Begin with simple aspects and gradually incorporate more complex AOP patterns as understanding improves.
-
-4. **Spring Profiles**:
-   - **Clear Naming Conventions**: Use descriptive names for profiles that reflect their purpose (e.g., `dev`, `prod`).
-   - **Documentation**: Maintain a guide on how to activate and use profiles, including examples and typical use cases.
-
-5. **Exception Handling**:
-   - **Unified Exception Strategy**: Establish a consistent strategy for handling exceptions (e.g., always use `@ControllerAdvice` for REST APIs).
-   - **Code Examples**: Share code snippets and examples of proper exception handling during team knowledge-sharing sessions.
-
-6. **Dependency Injection**:
-   - **Prefer Constructor Injection**: Encourage the use of constructor injection for mandatory dependencies to improve immutability.
-   - **Document Injection Types**: Provide documentation explaining the implications of each type of injection and when to use them.
-
-### Conclusion
-
-By implementing these strategies, you can significantly reduce ambiguity in Java and Spring Boot development. Regular training, consistent documentation, and fostering a culture of knowledge sharing within your team can also help clarify these areas. If you have specific scenarios where ambiguity arises, feel free to share, and we can address them further!
 
 ---
 
