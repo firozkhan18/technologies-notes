@@ -155,9 +155,7 @@
 100. [Java Interview Questions and Concepts](#java-interview-questions-and-concepts)  
 101. [Java 8 Interview Questions and Answers](#java-8-interview-questions-and-answers)  
 102. [List of Common Java Interview Questions](#list-of-common-java-interview-questions)  
-103. [List of Common Java Interview Questions Along with Detailed Answers](#list-of-common-java-interview-questions-along-with-d
-
-etailed-answers)  
+103. [List of Common Java Interview Questions Along with Detailed Answers](#list-of-common-java-interview-questions-along-with-detailed-answers)  
 104. [Java Multithreading & Concurrency Interview Questions](#java-multithreading-concurrency-interview-questions)  
 105. [Common Interview Questions Related to Java Multithreading and Concurrency, Along with Detailed Answers and Code Examples](#common-interview-questions-related-to-java-multithreading-and-concurrency-along-with-detailed-answers-and-code-examples)  
 
