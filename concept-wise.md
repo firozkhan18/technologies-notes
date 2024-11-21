@@ -1874,6 +1874,321 @@ This comprehensive guide covers various Java topics, including file handling wit
 
 ---
 
+## Exception Handling in Java
+
+
+### **13. Exception Handling**
+
+**Definition**: Mechanism to handle runtime errors to maintain the normal flow of application.
+
+**Keywords**:
+- **`try`**: Block where exceptions might occur.
+- **`catch`**: Block to handle exceptions.
+- **`finally`**: Block that executes after `try`/`catch`, regardless of an exception.
+- **`throw`**: Used to explicitly throw an exception.
+- **`throws`**: Declares that a method can throw exceptions.
+
+**Example**:
+```java
+try {
+    int result = 10 / 0;
+} catch (ArithmeticException e) {
+    System.out.println("Cannot divide by zero.");
+} finally {
+    System.out.println("This will always execute.");
+}
+```
+
+### **14. Object-Oriented Programming Concepts**
+
+- **Abstraction**: Hiding implementation details and showing only functionality. Achieved through abstract classes and interfaces.
+- **Polymorphism**: Ability of an object to take on many forms. Achieved through method overriding and overloading.
+- **Inheritance**: Mechanism where one class inherits fields and methods from another class.
+- **Encapsulation**: Bundling of data and methods that operate on the data into a single unit, usually a class.
+
+**Method Overriding vs Overloading**:
+- **Overriding**: Redefining a method in a subclass with the same name and parameters.
+- **Overloading**: Defining multiple methods in the same class with the same name but different parameters.
+
+### **15. Collections and Differences**
+
+**List vs Set**:
+- **List**: Ordered collection that allows duplicate elements (e.g., `ArrayList`, `LinkedList`).
+- **Set**: Unordered collection that does not allow duplicate elements (e.g., `HashSet`, `LinkedHashSet`).
+
+**Set vs SortedSet**:
+- **Set**: No order guarantee (e.g., `HashSet`).
+- **SortedSet**: Orders elements (e.g., `TreeSet`).
+
+**Map vs HashMap vs ConcurrentHashMap vs TreeMap**:
+- **Map**: Interface for key-value pairs.
+- **HashMap**: Unordered, allows null keys
+
+/values, not thread-safe.
+- **ConcurrentHashMap**: Thread-safe version of `HashMap`.
+- **TreeMap**: Sorted by natural ordering or comparator, implements `NavigableMap`.
+
+**ArrayList vs LinkedList**:
+- **ArrayList**: Backed by an array, fast access, slow insertions/removals.
+- **LinkedList**: Doubly linked list, fast insertions/removals, slow access.
+
+**Vector vs Stack**:
+- **Vector**: Synchronized version of `ArrayList`, legacy class.
+- **Stack**: Subclass of `Vector`, implements stack operations (push, pop).
+
+**Queue vs Deque**:
+- **Queue**: Represents a queue data structure, supports FIFO operations.
+- **Deque**: Double-ended queue, supports FIFO and LIFO operations.
+
+**Fail-Safe vs Fail-Fast**:
+- **Fail-Safe**: Iterators operate on a copy of the collection, not affected by structural changes.
+- **Fail-Fast**: Iterators throw `ConcurrentModificationException` if the collection is modified during iteration.
+
+### **16. Diamond Problem**
+
+The diamond problem occurs in multiple inheritance where a class inherits from two classes that have a common ancestor, leading to ambiguity.
+
+**Java Solution**:
+- Java avoids multiple inheritance of classes but allows multiple inheritance through interfaces.
+
+### **17. Lambda Expressions and Functional Interfaces**
+
+**Lambda Expressions**: Anonymous functions to provide implementation of functional interfaces (interfaces with a single abstract method).
+
+**Functional Interface**: An interface with a single abstract method. Can have multiple default or static methods.
+
+**Example**:
+```java
+@FunctionalInterface
+interface MyFunctionalInterface {
+    void apply(int x);
+
+    default void defaultMethod() {
+        System.out.println("Default Method");
+    }
+
+    static void staticMethod() {
+        System.out.println("Static Method");
+    }
+}
+
+public class LambdaExample {
+    public static void main(String[] args) {
+        MyFunctionalInterface myFunc = (x) -> System.out.println(x * 2);
+        myFunc.apply(10); // Output: 20
+        myFunc.defaultMethod(); // Output: Default Method
+        MyFunctionalInterface.staticMethod(); // Output: Static Method
+    }
+}
+```
+
+This summary covers the key aspects of Java, including file handling, multithreading, synchronization, exception handling, OOP principles, and various collection frameworks. Each section provides a foundational understanding and examples to illustrate concepts effectively.
+
+---
+## Features Introduced in Java 8
+
+### 1. **Lambda Expressions**
+Lambda expressions allow you to write instances of single-method interfaces (functional interfaces) more concisely. They provide a way to pass behavior as a parameter to methods or to execute operations on data without explicitly writing classes or implementing interfaces.
+#### Syntax of Lambda Expression:
+```java
+(parameters) -> expression
+```
+For example:
+```java
+// Traditional anonymous class
+Runnable r = new Runnable() {
+    public void run() {
+        System.out.println("Hello from Runnable!");
+    }
+};
+// Lambda expression
+Runnable r2 = () -> System.out.println("Hello from Runnable!");
+```
+#### Key Points:
+- Lambdas enable functional programming.
+- They eliminate boilerplate code such as anonymous inner classes.
+- Lambda expressions can be passed as arguments to methods or returned as values.
+
+### 2. **Functional Interfaces**
+A **functional interface** is an interface that has only one abstract method (but can have multiple default or static methods). These interfaces are used as the target types for lambda expressions.
+
+#### Example of a Functional Interface:
+```java
+@FunctionalInterface
+interface MyFunctionalInterface {
+    void myMethod();
+}
+```
+Java 8 has several built-in functional interfaces in the `java.util.function` package, such as:
+- `Function<T, R>`: Takes a parameter of type `T` and returns a result of type `R`.
+- `Predicate<T>`: Represents a boolean-valued function of one argument.
+- `Consumer<T>`: Represents an operation that takes an argument and returns nothing.
+- `Supplier<T>`: Represents a supplier of results.
+- `BinaryOperator<T>`: Represents an operation on two operands of the same type.
+
+### 3. **Streams API**
+The **Streams API** is a major addition to Java 8 that allows you to process sequences of elements (such as collections, arrays, or I/O channels) in a functional way. Streams provide a high-level abstraction for performing operations like filtering, mapping, sorting, and reducing over a set of data.
+
+#### Stream Creation:
+You can create streams from collections, arrays, or other sources:
+```java
+List<String> list = Arrays.asList("apple", "banana", "cherry");
+// Creating a stream from a list
+Stream<String> stream = list.stream();
+// Creating a stream from an array
+Stream<Integer> intStream = Stream.of(1, 2, 3, 4, 5);
+```
+
+#### Common Stream Operations:
+- **filter()**: Filters elements based on a condition.
+- **map()**: Transforms each element in the stream.
+- **collect()**: Collects the results of stream processing into a collection or other data structures.
+- **reduce()**: Reduces the stream to a single value (e.g., sum, max).
+- **forEach()**: Iterates over each element in the stream.
+- **sorted()**: Sorts elements in the stream.
+Example:
+```java
+List<String> words = Arrays.asList("apple", "banana", "cherry", "date");
+List<String> filteredWords = words.stream()
+                                  .filter(word -> word.startsWith("b"))
+                                  .collect(Collectors.toList());
+```
+Streams can also be **parallelized** for concurrent processing:
+```java
+List<String> parallelWords = words.parallelStream()
+                                  .filter(word -> word.startsWith("b"))
+                                  .collect(Collectors.toList());
+```
+
+### 4. **Default Methods in Interfaces**
+Java 8 allows **default methods** in interfaces. A default method is a method with a body defined in an interface, which can provide a default implementation.
+
+#### Example:
+```java
+interface MyInterface {
+    default void defaultMethod() {
+        System.out.println("This is a default method");
+    }
+    
+    void abstractMethod(); // abstract method
+}
+class MyClass implements MyInterface {
+    public void abstractMethod() {
+        System.out.println("Implementing abstract method");
+    }
+}
+public class Main {
+    public static void main(String[] args) {
+        MyClass obj = new MyClass();
+        obj.defaultMethod(); // Access default method
+    }
+}
+```
+- Default methods allow you to add methods to interfaces without breaking existing implementations.
+- They also enable interfaces to evolve without forcing implementing classes to update their code.
+
+### 5. **Method References**
+Method references are a shorthand notation of a lambda expression that refers to a method directly by its name. They are used primarily to refer to methods of existing classes or objects.
+
+#### Types of Method References:
+- **Static methods**: `ClassName::methodName`
+- **Instance methods**: `instance::methodName`
+- **Constructor references**: `ClassName::new`
+Example:
+```java
+// Using lambda expression
+List<String> list = Arrays.asList("apple", "banana", "cherry");
+list.forEach(s -> System.out.println(s));
+// Using method reference
+list.forEach(System.out::println);
+```
+Method references are concise and often more readable than equivalent lambda expressions.
+
+### 6. **Optional**
+The `Optional` class is a container object which may or may not contain a value. It is introduced to reduce `NullPointerException` by explicitly handling the absence of values.
+
+#### Example:
+```java
+Optional<String> optional = Optional.of("Hello");
+System.out.println(optional.get()); // prints "Hello"
+Optional<String> emptyOptional = Optional.empty();
+System.out.println(emptyOptional.orElse("Default")); // prints "Default"
+```
+You can also use methods like `map()`, `flatMap()`, `filter()`, and `ifPresent()` to perform operations safely without needing null checks.
+
+### 7. **New Date and Time API (java.time)**
+Java 8 introduced a new, more comprehensive and immutable **Date and Time API** in the `java.time` package, which addresses many issues with the old `Date` and `Calendar` classes.
+
+#### Key Classes:
+- `LocalDate`: Represents a date (year, month, day) without time.
+- `LocalTime`: Represents a time without a date.
+- `LocalDateTime`: Combines date and time.
+- `ZonedDateTime`: Includes time-zone-specific date and time.
+- `Instant`: Represents a point on the timeline (useful for timestamps).
+
+#### Example:
+```java
+LocalDate date = LocalDate.now(); // Current date
+LocalDate specificDate = LocalDate.of(2020, 1, 1); // Specific date
+LocalTime time = LocalTime.now(); // Current time
+LocalDateTime dateTime = LocalDateTime.now(); // Current date and time
+ZonedDateTime zonedDateTime = ZonedDateTime.now(); // Date and time with timezone
+```
+The new API is more consistent, thread-safe, and easier to use compared to the old `java.util.Date` and `java.util.Calendar` classes.
+
+### 8. **Nashorn JavaScript Engine**
+Java 8 introduced the **Nashorn JavaScript Engine**, which replaced the older Rhino JavaScript engine. Nashorn provides better performance and allows developers to run JavaScript code from within Java applications.
+Example of using Nashorn:
+```java
+import javax.script.*;
+public class NashornExample {
+    public static void main(String[] args) throws Exception {
+        ScriptEngine engine = new ScriptEngineManager().getEngineByName("nashorn");
+        engine.eval("print('Hello from JavaScript!')");
+    }
+}
+```
+
+### 9. **Streams and Parallel Streams**
+In addition to the standard stream API, Java 8 introduced **parallel streams**, which allow streams to be processed concurrently. This can significantly improve performance for large datasets, though it requires careful consideration regarding thread safety.
+```java
+List<Integer> numbers = Arrays.asList(1, 2, 3, 4, 5);
+numbers.parallelStream()
+       .map(n -> n * 2)
+       .forEach(System.out::println);
+```
+
+### 10. **New Collectors and the `Collectors` Utility Class**
+The `Collectors` utility class provides factory methods for common operations on collections like joining, grouping, partitioning, and collecting into a map.
+Examples:
+- **toList()**: Collects the stream elements into a list.
+- **joining()**: Concatenates the elements into a single string.
+- **groupingBy()**: Groups elements by a classifier function.
+- **partitioningBy()**: Partitions elements into two groups.
+Example:
+```java
+List<String> words = Arrays.asList("apple", "banana", "cherry");
+String result = words.stream()
+                     .collect(Collectors.joining(", "));
+System.out.println(result);  // Output: apple, banana, cherry
+```
+
+---
+
+### Summary of Java 8 Features:
+- **Lambda Expressions**: Concise way to define anonymous functions.
+- **Functional Interfaces**: Interfaces with a single abstract method, typically used with lambda expressions.
+- **Streams API**: High-level abstraction for processing sequences of data.
+- **Default Methods**: Methods in interfaces with a default implementation.
+- **Method References**: Shorthand for lambdas that refer to existing methods.
+- **Optional**: A container that can either contain a value or be empty, reducing null checks.
+- **New Date/Time API**: A new, immutable, and more comprehensive date-time API.
+- **Nashorn JavaScript Engine**: A new engine for running JavaScript code in Java.
+- **Collectors**: Utilities to collect and manipulate streams in various ways.
+
+These Java 8 features represent a major shift towards functional programming in Java, enhancing both code readability and performance. By leveraging these features, developers can write more concise, expressive, and maintainable Java code.
+
+---
 ## Garbage Collection in Java
 
 **Garbage Collection (GC)** in Java is the process by which the Java Virtual Machine (JVM) automatically reclaims memory that is no longer in use or referenced by any part of the program. It helps in managing memory automatically and preventing memory leaks, which can cause a program to consume more memory than necessary or even crash due to an **OutOfMemoryError**.
@@ -2139,8 +2454,6 @@ Garbage collection algorithms in Java vary in terms of their performance charact
 
 ---
 
-
-
 ### Algorithms and Data Structures
 7. **Question**: Can you explain how a HashMap works in Java?
    **Answer**: A `HashMap` stores key-value pairs and uses a hash function to compute an index into an array of buckets or slots, from which the desired value can be found. If two keys hash to the same index, a collision occurs, and the `HashMap` uses linked lists or balanced trees (Java 8+) to resolve this.
@@ -2179,1488 +2492,10 @@ Garbage collection algorithms in Java vary in terms of their performance charact
 ### Conclusion
 These questions and answers cover a broad range of topics relevant to the skills listed in your request. Tailor your responses and examples based on your own experiences to make them more personal and impactful. Good luck with your interview preparation!
 
-Ambiguities in Java and Spring Boot can arise from various sources. 
 
-## Ambiguities In Java
 
-1. **Method Overloading vs. Method Overriding**:
-   - **Overloading**: Same method name, different parameters within the same class.
-   - **Overriding**: Redefining a method in a subclass with the same name and parameters. The distinction can sometimes confuse developers regarding which method is being called.
 
-2. **Generics**:
-   - Understanding the bounds and wildcards (`? extends T`, `? super T`) can be confusing. The purpose and usage of these wildcards might not be immediately clear, leading to ambiguity in generic type handling.
 
-3. **Null Handling**:
-   - The behavior of `null` in Java can be ambiguous, especially with method calls or when using Optional. Understanding how null values are treated in various contexts is crucial to avoid `NullPointerExceptions`.
-
-4. **Static vs. Instance Context**:
-   - Distinguishing when to use static methods vs. instance methods can be ambiguous. Static methods belong to the class, while instance methods belong to instances of the class, which can lead to confusion regarding state management.
-
-5. **Final Keyword**:
-   - The meaning of `final` can be ambiguous depending on its context: a final variable cannot be reassigned, a final method cannot be overridden, and a final class cannot be subclassed.
-
-### To avoid ambiguities In Java, here are some practical strategies:
-
-1. **Method Overloading vs. Method Overriding**:
-   - **Clear Naming Conventions**: Use descriptive names for methods, particularly in overloaded scenarios, to make their purposes clear.
-   - **Comments and Documentation**: Document method signatures clearly, specifying whether a method is overloaded or overridden.
-   - **IDE Features**: Leverage your IDE's capabilities (like method hints) to show which method is being referenced.
-
-2. **Generics**:
-   - **Use Clear Type Names**: When defining generic types, use clear and descriptive names for type parameters (e.g., `<T extends Comparable<T>>`).
-   - **Educate Yourself**: Familiarize yourself with generics through resources like Java documentation and tutorials to understand wildcards thoroughly.
-   - **Examples and Practice**: Implement simple examples and gradually increase complexity to solidify understanding.
-
-3. **Null Handling**:
-   - **Use `Optional`**: Favor `Optional<T>` for return types that might be null to make the absence of a value explicit.
-   - **Consistent Null Checks**: Implement consistent null checks throughout your code to prevent `NullPointerExceptions`.
-   - **Code Reviews**: Encourage code reviews focusing on null handling practices.
-
-4. **Static vs. Instance Context**:
-   - **Use Static Wisely**: Only use static methods when state management is not required. For instance-specific behavior, prefer instance methods.
-   - **Document Intent**: Clearly document the reason for using static methods when applicable, particularly in shared utility classes.
-
-5. **Final Keyword**:
-   - **Educate on Usage**: Provide guidelines on using `final` for variables, methods, and classes to convey intent and immutability clearly.
-   - **Consistent Style**: Establish a coding style that favors immutability (using `final`) where appropriate.
-
-### Ambiguities In Spring Boot
-
-1. **Bean Scopes**:
-   - Confusion can arise between different bean scopes (`singleton`, `prototype`, `request`, `session`, etc.). Understanding when to use each scope is critical, especially in web applications.
-
-2. **Configuration Properties**:
-   - The distinction between `@ConfigurationProperties` and `@Value` can be ambiguous. Both are used for external configuration, but their use cases differ, which can lead to confusion.
-
-3. **AOP (Aspect-Oriented Programming)**:
-   - Understanding how and when aspects are applied can be ambiguous, particularly with pointcuts and advice types. Misconfiguration can lead to unexpected behaviors.
-
-4. **Spring Profiles**:
-   - Using profiles to manage different environments can be ambiguous if not documented properly. Understanding how to activate and use profiles correctly is essential.
-
-5. **Exception Handling**:
-   - The various ways to handle exceptions in Spring (e.g., `@ControllerAdvice`, `@ExceptionHandler`) can create ambiguity about the best practices and proper configurations.
-
-6. **Dependency Injection**:
-   - The different forms of dependency injection (constructor injection, setter injection, method injection) can be ambiguous, especially regarding their implications for immutability and testing.
-
-### Conclusion
-
-To minimize ambiguity, it’s essential to have a strong understanding of both Java and Spring Boot fundamentals. Consistent code practices, thorough documentation, and leveraging community resources can also help clarify these ambiguities. If you have specific scenarios or questions in mind, feel free to ask!
-
-### To avoid ambiguities In Spring Boot, here are some practical strategies:
-
-1. **Bean Scopes**:
-   - **Documentation**: Maintain comprehensive documentation on when to use each bean scope, including examples.
-   - **Use Annotations**: Clearly annotate your beans with their scopes and provide comments on their intended use.
-
-2. **Configuration Properties**:
-   - **Standardize Usage**: Decide when to use `@ConfigurationProperties` vs. `@Value` in your projects and stick to that standard across the team.
-   - **Educate the Team**: Share best practices and examples through team meetings or documentation.
-
-3. **AOP (Aspect-Oriented Programming)**:
-   - **Clear Documentation**: Document aspects, pointcuts, and advice types clearly in your codebase.
-   - **Start Simple**: Begin with simple aspects and gradually incorporate more complex AOP patterns as understanding improves.
-
-4. **Spring Profiles**:
-   - **Clear Naming Conventions**: Use descriptive names for profiles that reflect their purpose (e.g., `dev`, `prod`).
-   - **Documentation**: Maintain a guide on how to activate and use profiles, including examples and typical use cases.
-
-5. **Exception Handling**:
-   - **Unified Exception Strategy**: Establish a consistent strategy for handling exceptions (e.g., always use `@ControllerAdvice` for REST APIs).
-   - **Code Examples**: Share code snippets and examples of proper exception handling during team knowledge-sharing sessions.
-
-6. **Dependency Injection**:
-   - **Prefer Constructor Injection**: Encourage the use of constructor injection for mandatory dependencies to improve immutability.
-   - **Document Injection Types**: Provide documentation explaining the implications of each type of injection and when to use them.
-
-### Conclusion
-
-By implementing these strategies, you can significantly reduce ambiguity in Java and Spring Boot development. Regular training, consistent documentation, and fostering a culture of knowledge sharing within your team can also help clarify these areas. If you have specific scenarios where ambiguity arises, feel free to share, and we can address them further!
-
----
-
-## Java Interview Questions
-## List of Common Java Interview Questions
-
-### **Java Core Concepts**
-
-**1. What is the difference between `==` and `.equals()` in Java?**
-
-**Answer**:
-- `==` compares the memory addresses of two objects, i.e., whether they point to the same location in memory.
-- `.equals()` is a method defined in the `Object` class and is meant to compare the contents or logical equality of two objects.
-
-**Example**:
-```java
-String s1 = new String("hello");
-String s2 = new String("hello");
-System.out.println(s1 == s2);        // false, different memory locations
-System.out.println(s1.equals(s2));   // true, same content
-```
-
-**2. What is the difference between `ArrayList` and `LinkedList`?**
-
-**Answer**:
-- `ArrayList` is backed by a dynamic array and provides constant-time access for get and set operations. However, insertions and deletions are costly (O(n) in the worst case) because elements need to be shifted.
-- `LinkedList` is backed by a doubly-linked list. It provides constant-time insertions and deletions but linear-time access operations (O(n)) because you need to traverse the list.
-
-**Example**:
-```java
-List<String> arrayList = new ArrayList<>();
-List<String> linkedList = new LinkedList<>();
-```
-
-**3. What is the purpose of the `final` keyword in Java?**
-
-**Answer**:
-- `final` can be applied to variables, methods, and classes.
-  - **Variables**: When a variable is declared as `final`, its value cannot be changed once initialized.
-  - **Methods**: When a method is declared as `final`, it cannot be overridden by subclasses.
-  - **Classes**: When a class is declared as `final`, it cannot be subclassed.
-
-**Example**:
-```java
-final int MAX_VALUE = 100;
-class Base {
-    public final void display() {
-        System.out.println("Base display");
-    }
-}
-```
-
-**4. Explain the concept of inheritance and how it is implemented in Java.**
-
-**Answer**:
-- **Inheritance** is a mechanism where a new class (subclass) inherits properties and behaviors (methods) from an existing class (superclass).
-- In Java, inheritance is implemented using the `extends` keyword. A subclass inherits all public and protected members from the superclass but can have its own methods and fields.
-
-**Example**:
-```java
-class Animal {
-    void eat() {
-        System.out.println("This animal eats food.");
-    }
-}
-
-class Dog extends Animal {
-    void bark() {
-        System.out.println("Dog barks.");
-    }
-}
-```
-
-**5. What is polymorphism in Java?**
-
-**Answer**:
-- **Polymorphism** allows objects to be treated as instances of their parent class rather than their actual class. It comes in two forms:
-  - **Compile-time Polymorphism** (Method Overloading): Multiple methods with the same name but different parameters.
-  - **Runtime Polymorphism** (Method Overriding): Subclasses provide specific implementations of methods that are already defined in their parent class.
-
-**Example**:
-```java
-class Animal {
-    void makeSound() {
-        System.out.println("Animal makes a sound");
-    }
-}
-
-class Dog extends Animal {
-    @Override
-    void makeSound() {
-        System.out.println("Dog barks");
-    }
-}
-
-public class TestPolymorphism {
-    public static void main(String[] args) {
-        Animal a = new Dog();  // Reference of Animal, object of Dog
-        a.makeSound();  // Dog barks
-    }
-}
-```
-
-### **Java Advanced Concepts**
-
-**6. What is a Java `Thread` and how do you create one?**
-
-**Answer**:
-- A `Thread` is a lightweight process that allows concurrent execution of code.
-- You can create a thread by either extending the `Thread` class or implementing the `Runnable` interface.
-
-**Example**:
-```java
-// Extending Thread class
-class MyThread extends Thread {
-    public void run() {
-        System.out.println("Thread is running");
-    }
-}
-
-// Implementing Runnable interface
-class MyRunnable implements Runnable {
-    public void run() {
-        System.out.println("Runnable is running");
-    }
-}
-```
-
-**7. What is the difference between `synchronized` and `volatile` in Java?**
-
-**Answer**:
-- `synchronized` is used to ensure that only one thread can execute a block of code or method at a time, providing mutual exclusion.
-- `volatile` ensures that changes to a variable are visible to all threads immediately, but does not provide mutual exclusion.
-
-**Example**:
-```java
-// Using synchronized
-synchronized (this) {
-    // synchronized block
-}
-
-// Using volatile
-private volatile boolean flag = false;
-```
-
-**8. What is the Java memory model and how does garbage collection work?**
-
-**Answer**:
-- The **Java Memory Model (JMM)** defines how threads interact through memory and how changes made by one thread are visible to others.
-- **Garbage Collection (GC)** is the process by which Java automatically frees up memory by removing objects that are no longer referenced. The JVM performs garbage collection to reclaim memory.
-
-**9. What are the different types of exception handling in Java?**
-
-**Answer**:
-- **Checked Exceptions**: Exceptions that are checked at compile-time (e.g., `IOException`, `SQLException`).
-- **Unchecked Exceptions**: Exceptions that are not checked at compile-time (e.g., `NullPointerException`, `ArithmeticException`).
-- **Error**: Represents serious problems that applications should not catch (e.g., `OutOfMemoryError`, `StackOverflowError`).
-
-**Example**:
-```java
-try {
-    // code that might throw an exception
-} catch (IOException e) {
-    // handle exception
-} finally {
-    // code that will run regardless of exception
-}
-```
-
-**10. What is a `Java Stream` and how does it work?**
-
-**Answer**:
-- A `Stream` is a sequence of elements supporting sequential and parallel aggregate operations. It can be used to process collections of objects in a functional style.
-- Streams can be created from collections using the `stream()` method and offer various operations such as `filter()`, `map()`, `reduce()`, and `collect()`.
-
-**Example**:
-```java
-List<String> names = Arrays.asList("John", "Jane", "Tom");
-names.stream()
-     .filter(name -> name.startsWith("J"))
-     .forEach(System.out::println);  // Output: John, Jane
-```
-
----
-
-## Java 8 Interview Questions and Answers
-
-#### **1. What are the main features introduced in Java 8?**
-
-**Answer**:
-Java 8 introduced several key features:
-- **Lambda Expressions**: Allow you to write concise code for functional interfaces.
-- **Streams API**: Provides a way to process sequences of elements (like collections) in a functional style.
-- **Functional Interfaces**: Interfaces with a single abstract method, such as `Runnable`, `Callable`, `Function`, `Consumer`, `Supplier`, and `Predicate`.
-- **Method References**: Allows you to refer to methods without executing them.
-- **Default Methods**: Enable you to add new methods to interfaces with a default implementation.
-- **Optional Class**: Provides a way to avoid `NullPointerException` by encapsulating optional values.
-- **New Date and Time API**: Provides a comprehensive date and time library, replacing the old `java.util.Date` and `java.util.Calendar`.
-
-#### **2. Explain Lambda Expressions with an example.**
-
-**Answer**:
-- **Lambda Expressions** provide a clear and concise way to represent one method interface using an expression. They are used primarily to define the method of a functional interface.
-
-**Syntax**:
-```java
-(parameters) -> expression
-```
-
-**Example**:
-```java
-@FunctionalInterface
-interface MathOperation {
-    int operate(int a, int b);
-}
-
-public class LambdaExample {
-    public static void main(String[] args) {
-        MathOperation addition = (a, b) -> a + b;
-        System.out.println(addition.operate(5, 3)); // Output: 8
-    }
-}
-```
-
-#### **3. How does the Streams API work in Java 8?**
-
-**Answer**:
-- **Streams API** provides a way to process sequences of elements (such as collections) in a functional style, supporting operations like filtering, mapping, and reducing.
-
-**Example**:
-```java
-import java.util.Arrays;
-import java.util.List;
-
-public class StreamsExample {
-    public static void main(String[] args) {
-        List<String> names = Arrays.asList("John", "Jane", "Tom", "Jerry");
-
-        names.stream()
-             .filter(name -> name.startsWith("J"))
-             .sorted()
-             .forEach(System.out::println);  // Output: Jane, Jerry, John
-    }
-}
-```
-
-#### **4. What is the purpose of the `Optional` class in Java 8?**
-
-**Answer**:
-- **Optional** is a container object which may or may not contain a value. It is used to avoid `NullPointerException` by providing methods to handle values that may be absent.
-
-**Example**:
-```java
-import java.util.Optional;
-
-public class OptionalExample {
-    public static void main(String[] args) {
-        Optional<String> optionalValue = Optional.ofNullable("Hello, World!");
-
-        optionalValue.ifPresent(value -> System.out.println("Value: " + value)); // Output: Value: Hello, World!
-
-        String defaultValue = optionalValue.orElse("Default Value");
-        System.out.println(defaultValue);  // Output: Hello, World!
-    }
-}
-```
-
-#### **5. Explain functional interfaces in Java 8 with examples.**
-
-**Answer**:
-- **Functional Interfaces** are interfaces with exactly one abstract method. They can have multiple default or static methods. They can be used as the target type for lambda expressions and method references.
-
-**Examples**:
-```java
-@FunctionalInterface
-interface MyFunctionalInterface {
-    void singleAbstractMethod();
-    
-    default void defaultMethod() {
-        System.out.println("Default method in functional interface");
-    }
-    
-    static void staticMethod() {
-        System.out.println("Static method in functional interface");
-    }
-}
-
-public class FunctionalInterfaceExample {
-    public static void main(String[] args) {
-        MyFunctionalInterface myFunc = () -> System.out.println("Lambda expression");
-        myFunc.singleAbstractMethod();  // Output: Lambda expression
-        
-        myFunc.defaultMethod();         // Output: Default method in functional interface
-        MyFunctionalInterface.staticMethod(); // Output: Static method in functional interface
-    }
-}
-```
-
-#### **6. How do method references work in Java 8?**
-
-**Answer**:
-- **Method References** are a shorthand notation of a lambda expression to call a method. They improve code readability and reduce verbosity.
-
-**Syntax**:
-```java
-ClassName::methodName
-```
-
-**Example**:
-```java
-import java.util.Arrays;
-import java.util.List;
-
-public class MethodReferenceExample {
-    public static void main(String[] args) {
-        List<String> names = Arrays.asList("John", "Jane", "Tom", "Jerry");
-
-        // Using method reference
-        names.forEach(System.out::println); // Output: John, Jane, Tom, Jerry
-    }
-}
-```
-
-#### **7. Demonstrate the use of `Collectors` in Java 8 Streams API.**
-
-**Answer**:
-- **Collectors** are utility classes that implement the `Collector` interface to collect elements of a stream into collections or other forms.
-
-**Example**:
-```java
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
-public class CollectorsExample {
-    public static void main(String[] args) {
-        List<String> names = Arrays.asList("John", "Jane", "Tom", "Jerry");
-
-        // Collect names into a List
-        List<String> nameList = names.stream().collect(Collectors.toList());
-        System.out.println(nameList); // Output: [John, Jane, Tom, Jerry]
-
-        // Collect names into a Map with name length as the key
-        Map<Integer, String> nameMap = names.stream()
-                                             .collect(Collectors.toMap(String::length, name -> name));
-        System.out.println(nameMap); // Output: {3=Tom, 4=John, 4=Jane, 5=Jerry}
-    }
-}
-```
-
-#### **8. What are default methods in interfaces and why are they useful?**
-
-**Answer**:
-- **Default Methods** are methods in interfaces that have a body. They allow you to add new methods to interfaces with a default implementation without affecting classes that implement the interface.
-
-**Example**:
-```java
-interface MyInterface {
-    void existingMethod();
-    
-    default void defaultMethod() {
-        System.out.println("Default method implementation");
-    }
-}
-
-public class DefaultMethodExample implements MyInterface {
-    public void existingMethod() {
-        System.out.println("Existing method implementation");
-    }
-
-    public static void main(String[] args) {
-        DefaultMethodExample example = new DefaultMethodExample();
-        example.existingMethod();   // Output: Existing method implementation
-        example.defaultMethod();    // Output: Default method implementation
-    }
-}
-```
-
-#### **9. What are `Function`, `Consumer`, `Supplier`, and `Predicate` interfaces in Java 8?**
-
-**Answer**:
-- **Function<T, R>**: Represents a function that accepts one argument and produces a result.
-- **Consumer<T>**: Represents an operation that takes a single input argument and returns no result.
-- **Supplier<T>**: Represents a supplier of results. It takes no arguments and returns a result.
-- **Predicate<T>**: Represents a predicate (boolean-valued function) of one argument.
-
-**Examples**:
-```java
-import java.util.function.Function;
-import java.util.function.Consumer;
-import java.util.function.Supplier;
-import java.util.function.Predicate;
-
-public class FunctionalInterfacesExample {
-    public static void main(String[] args) {
-        // Function
-        Function<String, Integer> lengthFunction = s -> s.length();
-        System.out.println(lengthFunction.apply("Hello")); // Output: 5
-        
-        // Consumer
-        Consumer<String> printConsumer = s -> System.out.println(s);
-        printConsumer.accept("Hello"); // Output: Hello
-        
-        // Supplier
-        Supplier<String> stringSupplier = () -> "Hello World";
-        System.out.println(stringSupplier.get()); // Output: Hello World
-        
-        // Predicate
-        Predicate<String> isEmptyPredicate = s -> s.isEmpty();
-        System.out.println(isEmptyPredicate.test("")); // Output: true
-    }
-}
-```
-
-#### **10. How do you handle exceptions in Java 8 Streams API?**
-
-**Answer**:
-- Handling exceptions within Streams can be tricky since Streams are designed to work with lambda expressions. One common approach is to use a utility method to wrap code that can throw exceptions.
-
-**Example**:
-```java
-import java.util.Arrays;
-import java.util.List;
-import java.util.function.Function;
-
-public class StreamExceptionHandlingExample {
-    public static void main(String[] args) {
-        List<String> numbers = Arrays.asList("1", "2", "three", "4");
-
-        // Process numbers, handling NumberFormatException
-        numbers.stream()
-               .map(convertToInt("0"))
-               .forEach(System.out::println);
-    }
-
-    private static Function<String, Integer> convertToInt(Integer defaultValue) {
-        return str -> {
-            try {
-                return Integer.valueOf(str);
-            } catch (NumberFormatException e) {
-                return defaultValue;
-            }
-        };
-    }
-}
-```
-
-These questions cover a wide range of Java 8 features, from lambda expressions and the Streams API to the `Optional` class and functional interfaces. Understanding these concepts and being able to apply them in coding scenarios will help you perform well in Java 8 interviews.
-
----
-
-## Features Introduced in Java 8
-
-### 1. **Lambda Expressions**
-Lambda expressions allow you to write instances of single-method interfaces (functional interfaces) more concisely. They provide a way to pass behavior as a parameter to methods or to execute operations on data without explicitly writing classes or implementing interfaces.
-#### Syntax of Lambda Expression:
-```java
-(parameters) -> expression
-```
-For example:
-```java
-// Traditional anonymous class
-Runnable r = new Runnable() {
-    public void run() {
-        System.out.println("Hello from Runnable!");
-    }
-};
-// Lambda expression
-Runnable r2 = () -> System.out.println("Hello from Runnable!");
-```
-#### Key Points:
-- Lambdas enable functional programming.
-- They eliminate boilerplate code such as anonymous inner classes.
-- Lambda expressions can be passed as arguments to methods or returned as values.
-
-### 2. **Functional Interfaces**
-A **functional interface** is an interface that has only one abstract method (but can have multiple default or static methods). These interfaces are used as the target types for lambda expressions.
-
-#### Example of a Functional Interface:
-```java
-@FunctionalInterface
-interface MyFunctionalInterface {
-    void myMethod();
-}
-```
-Java 8 has several built-in functional interfaces in the `java.util.function` package, such as:
-- `Function<T, R>`: Takes a parameter of type `T` and returns a result of type `R`.
-- `Predicate<T>`: Represents a boolean-valued function of one argument.
-- `Consumer<T>`: Represents an operation that takes an argument and returns nothing.
-- `Supplier<T>`: Represents a supplier of results.
-- `BinaryOperator<T>`: Represents an operation on two operands of the same type.
-
-### 3. **Streams API**
-The **Streams API** is a major addition to Java 8 that allows you to process sequences of elements (such as collections, arrays, or I/O channels) in a functional way. Streams provide a high-level abstraction for performing operations like filtering, mapping, sorting, and reducing over a set of data.
-
-#### Stream Creation:
-You can create streams from collections, arrays, or other sources:
-```java
-List<String> list = Arrays.asList("apple", "banana", "cherry");
-// Creating a stream from a list
-Stream<String> stream = list.stream();
-// Creating a stream from an array
-Stream<Integer> intStream = Stream.of(1, 2, 3, 4, 5);
-```
-
-#### Common Stream Operations:
-- **filter()**: Filters elements based on a condition.
-- **map()**: Transforms each element in the stream.
-- **collect()**: Collects the results of stream processing into a collection or other data structures.
-- **reduce()**: Reduces the stream to a single value (e.g., sum, max).
-- **forEach()**: Iterates over each element in the stream.
-- **sorted()**: Sorts elements in the stream.
-Example:
-```java
-List<String> words = Arrays.asList("apple", "banana", "cherry", "date");
-List<String> filteredWords = words.stream()
-                                  .filter(word -> word.startsWith("b"))
-                                  .collect(Collectors.toList());
-```
-Streams can also be **parallelized** for concurrent processing:
-```java
-List<String> parallelWords = words.parallelStream()
-                                  .filter(word -> word.startsWith("b"))
-                                  .collect(Collectors.toList());
-```
-
-### 4. **Default Methods in Interfaces**
-Java 8 allows **default methods** in interfaces. A default method is a method with a body defined in an interface, which can provide a default implementation.
-
-#### Example:
-```java
-interface MyInterface {
-    default void defaultMethod() {
-        System.out.println("This is a default method");
-    }
-    
-    void abstractMethod(); // abstract method
-}
-class MyClass implements MyInterface {
-    public void abstractMethod() {
-        System.out.println("Implementing abstract method");
-    }
-}
-public class Main {
-    public static void main(String[] args) {
-        MyClass obj = new MyClass();
-        obj.defaultMethod(); // Access default method
-    }
-}
-```
-- Default methods allow you to add methods to interfaces without breaking existing implementations.
-- They also enable interfaces to evolve without forcing implementing classes to update their code.
-
-### 5. **Method References**
-Method references are a shorthand notation of a lambda expression that refers to a method directly by its name. They are used primarily to refer to methods of existing classes or objects.
-
-#### Types of Method References:
-- **Static methods**: `ClassName::methodName`
-- **Instance methods**: `instance::methodName`
-- **Constructor references**: `ClassName::new`
-Example:
-```java
-// Using lambda expression
-List<String> list = Arrays.asList("apple", "banana", "cherry");
-list.forEach(s -> System.out.println(s));
-// Using method reference
-list.forEach(System.out::println);
-```
-Method references are concise and often more readable than equivalent lambda expressions.
-
-### 6. **Optional**
-The `Optional` class is a container object which may or may not contain a value. It is introduced to reduce `NullPointerException` by explicitly handling the absence of values.
-
-#### Example:
-```java
-Optional<String> optional = Optional.of("Hello");
-System.out.println(optional.get()); // prints "Hello"
-Optional<String> emptyOptional = Optional.empty();
-System.out.println(emptyOptional.orElse("Default")); // prints "Default"
-```
-You can also use methods like `map()`, `flatMap()`, `filter()`, and `ifPresent()` to perform operations safely without needing null checks.
-
-### 7. **New Date and Time API (java.time)**
-Java 8 introduced a new, more comprehensive and immutable **Date and Time API** in the `java.time` package, which addresses many issues with the old `Date` and `Calendar` classes.
-
-#### Key Classes:
-- `LocalDate`: Represents a date (year, month, day) without time.
-- `LocalTime`: Represents a time without a date.
-- `LocalDateTime`: Combines date and time.
-- `ZonedDateTime`: Includes time-zone-specific date and time.
-- `Instant`: Represents a point on the timeline (useful for timestamps).
-
-#### Example:
-```java
-LocalDate date = LocalDate.now(); // Current date
-LocalDate specificDate = LocalDate.of(2020, 1, 1); // Specific date
-LocalTime time = LocalTime.now(); // Current time
-LocalDateTime dateTime = LocalDateTime.now(); // Current date and time
-ZonedDateTime zonedDateTime = ZonedDateTime.now(); // Date and time with timezone
-```
-The new API is more consistent, thread-safe, and easier to use compared to the old `java.util.Date` and `java.util.Calendar` classes.
-
-### 8. **Nashorn JavaScript Engine**
-Java 8 introduced the **Nashorn JavaScript Engine**, which replaced the older Rhino JavaScript engine. Nashorn provides better performance and allows developers to run JavaScript code from within Java applications.
-Example of using Nashorn:
-```java
-import javax.script.*;
-public class NashornExample {
-    public static void main(String[] args) throws Exception {
-        ScriptEngine engine = new ScriptEngineManager().getEngineByName("nashorn");
-        engine.eval("print('Hello from JavaScript!')");
-    }
-}
-```
-
-### 9. **Streams and Parallel Streams**
-In addition to the standard stream API, Java 8 introduced **parallel streams**, which allow streams to be processed concurrently. This can significantly improve performance for large datasets, though it requires careful consideration regarding thread safety.
-```java
-List<Integer> numbers = Arrays.asList(1, 2, 3, 4, 5);
-numbers.parallelStream()
-       .map(n -> n * 2)
-       .forEach(System.out::println);
-```
-
-### 10. **New Collectors and the `Collectors` Utility Class**
-The `Collectors` utility class provides factory methods for common operations on collections like joining, grouping, partitioning, and collecting into a map.
-Examples:
-- **toList()**: Collects the stream elements into a list.
-- **joining()**: Concatenates the elements into a single string.
-- **groupingBy()**: Groups elements by a classifier function.
-- **partitioningBy()**: Partitions elements into two groups.
-Example:
-```java
-List<String> words = Arrays.asList("apple", "banana", "cherry");
-String result = words.stream()
-                     .collect(Collectors.joining(", "));
-System.out.println(result);  // Output: apple, banana, cherry
-```
-
----
-
-### Summary of Java 8 Features:
-- **Lambda Expressions**: Concise way to define anonymous functions.
-- **Functional Interfaces**: Interfaces with a single abstract method, typically used with lambda expressions.
-- **Streams API**: High-level abstraction for processing sequences of data.
-- **Default Methods**: Methods in interfaces with a default implementation.
-- **Method References**: Shorthand for lambdas that refer to existing methods.
-- **Optional**: A container that can either contain a value or be empty, reducing null checks.
-- **New Date/Time API**: A new, immutable, and more comprehensive date-time API.
-- **Nashorn JavaScript Engine**: A new engine for running JavaScript code in Java.
-- **Collectors**: Utilities to collect and manipulate streams in various ways.
-
-These Java 8 features represent a major shift towards functional programming in Java, enhancing both code readability and performance. By leveraging these features, developers can write more concise, expressive, and maintainable Java code.
-
----
-
-## Java Multithreading & Concurrency Interview Questions
-
-### **1. What is the difference between `Thread` and `Runnable`?**
-
-**Answer**:
-- **Thread**: A `Thread` is a class in Java that provides a way to create and manage threads. You can extend the `Thread` class and override its `run()` method to define the thread's behavior.
-- **Runnable**: `Runnable` is a functional interface that represents a task that can be executed concurrently. You implement the `Runnable` interface and define the `run()` method. Then, you pass an instance of `Runnable` to a `Thread` object to execute it.
-
-**Example**:
-```java
-// Using Thread
-class MyThread extends Thread {
-    public void run() {
-        System.out.println("Thread is running");
-    }
-}
-
-public class ThreadExample {
-    public static void main(String[] args) {
-        MyThread thread = new MyThread();
-        thread.start();
-    }
-}
-
-// Using Runnable
-class MyRunnable implements Runnable {
-    public void run() {
-        System.out.println("Runnable is running");
-    }
-}
-
-public class RunnableExample {
-    public static void main(String[] args) {
-        Thread thread = new Thread(new MyRunnable());
-        thread.start();
-    }
-}
-```
-
-### **2. How do you create a thread-safe singleton class in Java?**
-
-**Answer**:
-- A thread-safe singleton class ensures that only one instance of the class is created, even in a multithreaded environment. The common way to implement this is using the **Bill Pugh Singleton Design** or **Double-Checked Locking**.
-
-**Example (Bill Pugh Singleton)**:
-```java
-public class Singleton {
-    private Singleton() {}
-
-    private static class SingletonHelper {
-        private static final Singleton INSTANCE = new Singleton();
-    }
-
-    public static Singleton getInstance() {
-        return SingletonHelper.INSTANCE;
-    }
-}
-```
-
-### **3. What is the difference between `synchronized` block and `synchronized` method?**
-
-**Answer**:
-- **Synchronized Method**: Synchronizes the entire method, preventing multiple threads from executing the method simultaneously on the same object.
-- **Synchronized Block**: Allows more granular control by synchronizing only a block of code within a method, reducing the scope of synchronization.
-
-**Example**:
-```java
-class Counter {
-    private int count = 0;
-
-    // Synchronized Method
-    public synchronized void increment() {
-        count++;
-    }
-
-    // Synchronized Block
-    public void incrementWithBlock() {
-        synchronized (this) {
-            count++;
-        }
-    }
-}
-```
-
-### **4. Explain the concept of a `volatile` variable in Java.**
-
-**Answer**:
-- A `volatile` variable ensures that changes to the variable are visible to all threads immediately. It prevents caching of variables and ensures that updates made by one thread are visible to other threads.
-
-**Example**:
-```java
-public class VolatileExample {
-    private volatile boolean running = true;
-
-    public void stop() {
-        running = false;
-    }
-
-    public void work() {
-        while (running) {
-            // Do some work
-        }
-        System.out.println("Stopped working");
-    }
-
-    public static void main(String[] args) {
-        VolatileExample example = new VolatileExample();
-        new Thread(example::work).start();
-        new Thread(() -> {
-            try { Thread.sleep(1000); } catch (InterruptedException e) {}
-            example.stop();
-        }).start();
-    }
-}
-```
-
-### **5. What is the purpose of `CountDownLatch` and how does it work?**
-
-**Answer**:
-- `CountDownLatch` is a concurrency utility that allows one or more threads to wait until a set of operations performed by other threads completes. It is initialized with a count that is decremented by each operation.
-
-**Example**:
-```java
-import java.util.concurrent.CountDownLatch;
-
-public class CountDownLatchExample {
-    public static void main(String[] args) throws InterruptedException {
-        CountDownLatch latch = new CountDownLatch(3);
-
-        Runnable task = () -> {
-            System.out.println("Task completed");
-            latch.countDown();
-        };
-
-        new Thread(task).start();
-        new Thread(task).start();
-        new Thread(task).start();
-
-        latch.await(); // Waits for the count to reach zero
-        System.out.println("All tasks completed");
-    }
-}
-```
-
-### **6. How does `ExecutorService` help in managing threads?**
-
-**Answer**:
-- `ExecutorService` is part of the Java Concurrency framework and provides a higher-level replacement for the traditional way of managing threads. It simplifies thread management by providing thread pools and various utility methods for task execution and lifecycle management.
-
-**Example**:
-```java
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
-public class ExecutorServiceExample {
-    public static void main(String[] args) {
-        ExecutorService executor = Executors.newFixedThreadPool(3);
-
-        Runnable task = () -> {
-            System.out.println("Task executed by: " + Thread.currentThread().getName());
-        };
-
-        for (int i = 0; i < 5; i++) {
-            executor.execute(task);
-        }
-
-        executor.shutdown(); // Initiates an orderly shutdown
-    }
-}
-```
-
-### **7. What is the purpose of `Future` and `Callable`?**
-
-**Answer**:
-- **Callable**: A functional interface similar to `Runnable` but can return a result and throw checked exceptions. It is used with `ExecutorService` to submit tasks.
-- **Future**: Represents the result of an asynchronous computation. You can use it to check if the task is complete, retrieve the result, or cancel the task.
-
-**Example**:
-```java
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-
-public class CallableFutureExample {
-    public static void main(String[] args) throws InterruptedException, ExecutionException {
-        ExecutorService executor = Executors.newFixedThreadPool(1);
-
-        Callable<Integer> task = () -> {
-            Thread.sleep(2000); // Simulate long-running task
-            return 123;
-        };
-
-        Future<Integer> future = executor.submit(task);
-        System.out.println("Task submitted");
-
-        // Perform other operations while waiting
-        Integer result = future.get(); // This will block until the task completes
-        System.out.println("Task result: " + result);
-
-        executor.shutdown();
-    }
-}
-```
-
-### **8. What are `synchronized` collections and how do they work?**
-
-**Answer**:
-- `Synchronized` collections are thread-safe versions of standard collections. They are created by wrapping standard collections with methods from the `Collections` class.
-
-**Example**:
-```java
-import java.util.Collections;
-import java.util.List;
-import java.util.ArrayList;
-
-public class SynchronizedCollectionsExample {
-    public static void main(String[] args) {
-        List<Integer> list = Collections.synchronizedList(new ArrayList<>());
-
-        // Adding elements to the list
-        list.add(1);
-        list.add(2);
-        list.add(3);
-
-        // Synchronizing access to the list
-        synchronized (list) {
-            for (Integer number : list) {
-                System.out.println(number);
-            }
-        }
-    }
-}
-```
-
-### **9. What is the difference between `notify()`, `notifyAll()`, and `wait()` in Java?**
-
-**Answer**:
-- **`wait()`**: Causes the current thread to wait until another thread invokes `notify()` or `notifyAll()` on the same object. It releases the lock on the object.
-- **`notify()`**: Wakes up a single thread that is waiting on the object’s monitor.
-- **`notifyAll()`**: Wakes up all threads that are waiting on the object’s monitor.
-
-**Example**:
-```java
-class WaitNotifyExample {
-    private final Object lock = new Object();
-    private boolean isAvailable = false;
-
-    public void produce() throws InterruptedException {
-        synchronized (lock) {
-            while (isAvailable) {
-                lock.wait();
-            }
-            System.out.println("Produced");
-            isAvailable = true;
-            lock.notify(); // Notify consumer
-        }
-    }
-
-    public void consume() throws InterruptedException {
-        synchronized (lock) {
-            while (!isAvailable) {
-                lock.wait();
-            }
-            System.out.println("Consumed");
-            isAvailable = false;
-            lock.notify(); // Notify producer
-        }
-    }
-
-    public static void main(String[] args) {
-        WaitNotifyExample example = new WaitNotifyExample();
-
-        Thread producer = new Thread(() -> {
-            try {
-                example.produce();
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-            }
-        });
-
-        Thread consumer = new Thread(() -> {
-            try {
-                example.consume();
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-            }
-        });
-
-        producer.start();
-        consumer.start();
-    }
-}
-```
-
-### **10. What are `Semaphore` and `ReentrantLock`? How are they used?**
-
-**Answer**:
-- **Semaphore**: A synchronization aid that controls access to a shared resource through a set of permits. It can be used to limit the number of threads that can access a resource simultaneously.
-
-**Example**:
-```java
-import java.util.concurrent.Semaphore;
-
-public class SemaphoreExample {
-    private static final Semaphore semaphore = new Semaphore(2);
-
-    public static void main(String[] args) {
-        Runnable task = () -> {
-            try {
-                semaphore.acquire();
-                System.out.println("Semaphore acquired by " + Thread.currentThread().getName());
-                Thread.sleep(2000); // Simulate work
-
-
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-            } finally {
-                semaphore.release();
-                System.out.println("Semaphore released by " + Thread.currentThread().getName());
-            }
-        };
-
-        for (int i = 0; i < 5; i++) {
-            new Thread(task).start();
-        }
-    }
-}
-```
-
-- **ReentrantLock**: A `Lock` implementation that allows threads to acquire the lock multiple times by the same thread and provides more sophisticated thread synchronization.
-
-**Example**:
-```java
-import java.util.concurrent.locks.ReentrantLock;
-
-public class ReentrantLockExample {
-    private final ReentrantLock lock = new ReentrantLock();
-
-    public void doWork() {
-        lock.lock();
-        try {
-            System.out.println("Lock acquired by " + Thread.currentThread().getName());
-            Thread.sleep(1000); // Simulate work
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        } finally {
-            lock.unlock();
-            System.out.println("Lock released by " + Thread.currentThread().getName());
-        }
-    }
-
-    public static void main(String[] args) {
-        ReentrantLockExample example = new ReentrantLockExample();
-
-        Runnable task = example::doWork;
-
-        for (int i = 0; i < 3; i++) {
-            new Thread(task).start();
-        }
-    }
-}
-```
-
-These questions cover fundamental aspects of multithreading and concurrency in Java, from basic thread management to advanced synchronization mechanisms. Understanding these concepts and their applications is crucial for writing efficient and thread-safe Java applications.
-
-Certainly! Below is a tabular comparison of common Java concepts and features that are frequently asked about in interviews. This comparison highlights the key differences between each pair or group.
-
-| **Aspect**                 | **Concept 1**               | **Concept 2**               | **Difference**                                                                                           |
-|----------------------------|------------------------------|------------------------------|----------------------------------------------------------------------------------------------------------|
-| **Thread vs Runnable**     | `Thread`                     | `Runnable`                   | - `Thread` is a class, while `Runnable` is an interface.<br>- `Thread` requires extending, while `Runnable` can be implemented and passed to a `Thread`. |
-| **synchronized Method vs synchronized Block** | Synchronized Method          | Synchronized Block           | - Synchronized Method locks the entire method, while Synchronized Block locks only a specific block of code.<br>- Blocks allow more granular control of synchronization. |
-| **Volatile vs synchronized** | `volatile`                   | `synchronized`               | - `volatile` ensures visibility of changes across threads without locking.<br>- `synchronized` ensures both visibility and atomicity through locking. |
-| **Callable vs Runnable**   | `Callable`                   | `Runnable`                   | - `Callable` returns a result and can throw checked exceptions.<br>- `Runnable` does not return a result and cannot throw checked exceptions. |
-| **Future vs CompletableFuture** | `Future`                    | `CompletableFuture`          | - `Future` represents the result of an asynchronous computation but has limited methods.<br>- `CompletableFuture` extends `Future` with more functionality and support for asynchronous programming. |
-| **CountDownLatch vs CyclicBarrier** | `CountDownLatch`            | `CyclicBarrier`              | - `CountDownLatch` allows threads to wait until a count reaches zero.<br>- `CyclicBarrier` allows a set of threads to wait for each other to reach a common barrier point. |
-| **Semaphore vs ReentrantLock** | `Semaphore`                 | `ReentrantLock`              | - `Semaphore` controls access to a shared resource with a set of permits.<br>- `ReentrantLock` provides explicit lock and unlock methods with advanced features like try-lock and timed lock. |
-| **ConcurrentHashMap vs Hashtable** | `ConcurrentHashMap`        | `Hashtable`                  | - `ConcurrentHashMap` is designed for concurrent access and is not synchronized.<br>- `Hashtable` is synchronized but may be less performant in high-concurrency scenarios. |
-| **Java 8 Streams vs Collections** | Streams                    | Collections                   | - Streams provide a functional approach to processing collections with operations like filter, map, and reduce.<br>- Collections are the traditional way of storing and manipulating data. |
-| **Default Method vs Static Method** | Default Method              | Static Method                | - Default methods can be overridden and provide a default implementation in interfaces.<br>- Static methods belong to the interface itself and cannot be overridden. |
-| **String vs StringBuilder vs StringBuffer** | `String`                    | `StringBuilder` / `StringBuffer` | - `String` is immutable, `StringBuilder` is mutable and not synchronized, and `StringBuffer` is mutable and synchronized.<br>- Use `StringBuilder` or `StringBuffer` for frequent modifications. |
-| **Abstract Class vs Interface** | Abstract Class              | Interface                     | - An abstract class can have fields and constructors, while an interface cannot.<br>- An abstract class can provide implementation for some methods, while interfaces in Java 7 and earlier cannot (except default methods in Java 8). |
-| **ArrayList vs LinkedList** | `ArrayList`                  | `LinkedList`                 | - `ArrayList` is backed by a dynamic array and provides faster access but slower insertions/deletions.<br>- `LinkedList` is backed by a doubly linked list and provides faster insertions/deletions but slower access. |
-| **Hashtable vs HashMap**   | `Hashtable`                  | `HashMap`                    | - `Hashtable` is synchronized and does not allow null keys/values.<br>- `HashMap` is not synchronized and allows one null key and multiple null values. |
-| **TreeMap vs HashMap**     | `TreeMap`                    | `HashMap`                    | - `TreeMap` is sorted based on natural ordering or a provided comparator, while `HashMap` is unordered.<br>- `TreeMap` is slower due to sorting but maintains order. |
-| **LinkedHashMap vs HashMap** | `LinkedHashMap`             | `HashMap`                    | - `LinkedHashMap` maintains insertion order, while `HashMap` does not.<br>- `LinkedHashMap` has slightly slower performance due to maintaining order. |
-| **String vs StringBuilder** | `String`                    | `StringBuilder`              | - `String` is immutable, meaning every modification creates a new instance.<br>- `StringBuilder` is mutable and allows modification without creating new instances. |
-
-### Example Code for Some Differences
-
-**1. Thread vs Runnable**
-
-```java
-// Thread
-class MyThread extends Thread {
-    public void run() {
-        System.out.println("Thread running");
-    }
-}
-
-public class ThreadExample {
-    public static void main(String[] args) {
-        new MyThread().start();
-    }
-}
-
-// Runnable
-class MyRunnable implements Runnable {
-    public void run() {
-        System.out.println("Runnable running");
-    }
-}
-
-public class RunnableExample {
-    public static void main(String[] args) {
-        new Thread(new MyRunnable()).start();
-    }
-}
-```
-
-**2. Default Method vs Static Method**
-
-```java
-interface MyInterface {
-    // Default method
-    default void defaultMethod() {
-        System.out.println("Default method");
-    }
-
-    // Static method
-    static void staticMethod() {
-        System.out.println("Static method");
-    }
-}
-
-public class InterfaceExample {
-    public static void main(String[] args) {
-        MyInterface.staticMethod(); // Static method called on interface
-
-        MyInterface instance = new MyInterface() {}; // Anonymous class to implement default method
-        instance.defaultMethod(); // Default method called on instance
-    }
-}
-```
-
-**3. String vs StringBuilder**
-
-```java
-public class StringBuilderExample {
-    public static void main(String[] args) {
-        // String (immutable)
-        String str = "Hello";
-        str = str + " World";
-        System.out.println(str); // Output: Hello World
-
-        // StringBuilder (mutable)
-        StringBuilder sb = new StringBuilder("Hello");
-        sb.append(" World");
-        System.out.println(sb.toString()); // Output: Hello World
-    }
-}
-```
-
-These questions and answers should provide a comprehensive overview of fundamental Java concepts and help you prepare for interviews effectively.
-
----
-
-## Tricky Java interview questions
-
-Here are some tricky Java interview questions related to strings, arrays, inheritance, access specifiers, and keywords. Each question is accompanied by its answer and an explanation.
-
-### **1. String Immutability and Interning**
-
-**Question**: What will be the output of the following code snippet?
-
-```java
-public class StringTest {
-    public static void main(String[] args) {
-        String s1 = new String("hello");
-        String s2 = "hello";
-        String s3 = s1.intern();
-        System.out.println(s1 == s2); // Output?
-        System.out.println(s2 == s3); // Output?
-    }
-}
-```
-
-**Answer**:
-```
-false
-true
-```
-
-**Explanation**:
-- `s1` is created using the `new` keyword, so it refers to a new object in the heap, whereas `s2` refers to a string literal in the string pool.
-- `s3` is obtained using `s1.intern()`, which returns the reference to the string literal from the string pool.
-- `s1 == s2` is `false` because `s1` and `s2` refer to different objects.
-- `s2 == s3` is `true` because `s3` is interned and thus refers to the same object as `s2`.
-
-### **2. Array Index Out Of Bounds**
-
-**Question**: What will be the output of the following code snippet?
-
-```java
-public class ArrayTest {
-    public static void main(String[] args) {
-        int[] arr = new int[5];
-        arr[5] = 10; // ArrayIndexOutOfBoundsException
-        System.out.println("This will not be printed");
-    }
-}
-```
-
-**Answer**:
-```
-Exception in thread "main" java.lang.ArrayIndexOutOfBoundsException: Index 5 out of bounds for length 5
-```
-
-**Explanation**:
-- Arrays in Java are zero-based, meaning indices range from `0` to `length-1`.
-- Attempting to access or assign a value at index `5` in an array of length `5` results in an `ArrayIndexOutOfBoundsException`.
-
-### **3. Inheritance and Overriding**
-
-**Question**: What will be the output of the following code snippet?
-
-```java
-class A {
-    public void display() {
-        System.out.println("Display in A");
-    }
-}
-
-class B extends A {
-    public void display() {
-        System.out.println("Display in B");
-    }
-}
-
-public class TestInheritance {
-    public static void main(String[] args) {
-        A obj = new B();
-        obj.display();
-    }
-}
-```
-
-**Answer**:
-```
-Display in B
-```
-
-**Explanation**:
-- This demonstrates **runtime polymorphism** (method overriding). The reference variable `obj` of type `A` points to an object of type `B`.
-- The `display()` method of class `B` is called, which overrides the method in class `A`.
-
-### **4. Access Specifiers and Static**
-
-**Question**: What will be the output of the following code snippet?
-
-```java
-class Parent {
-    private static void show() {
-        System.out.println("Parent show()");
-    }
-}
-
-class Child extends Parent {
-    public static void show() {
-        System.out.println("Child show()");
-    }
-}
-
-public class TestAccess {
-    public static void main(String[] args) {
-        Parent.show();
-        Child.show();
-    }
-}
-```
-
-**Answer**:
-```
-Parent show()
-Child show()
-```
-
-**Explanation**:
-- Static methods are not polymorphic and are resolved at compile-time. 
-- The method `show()` in `Parent` is hidden by the `show()` method in `Child`.
-- The calls to `Parent.show()` and `Child.show()` are resolved to the respective static methods in `Parent` and `Child`.
-
-### **5. Keywords and Control Flow**
-
-**Question**: What will be the output of the following code snippet?
-
-```java
-public class TestKeywords {
-    public static void main(String[] args) {
-        int x = 10;
-        switch (x) {
-            case 10:
-                System.out.println("Ten");
-            case 20:
-                System.out.println("Twenty");
-            default:
-                System.out.println("Default");
-        }
-    }
-}
-```
-
-**Answer**:
-```
-Ten
-Twenty
-Default
-```
-
-**Explanation**:
-- The `switch` statement does not have `break` statements, so after matching `case 10`, it continues to execute subsequent cases (including `case 20` and `default`).
-
-### **6. Method Overloading with Varargs**
-
-**Question**: What will be the output of the following code snippet?
-
-```java
-public class VarargsTest {
-    public static void test(int... numbers) {
-        System.out.println("Varargs method");
-    }
-
-    public static void test(int number) {
-        System.out.println("Single int method");
-    }
-
-    public static void main(String[] args) {
-        test(1);
-        test(1, 2, 3);
-    }
-}
-```
-
-**Answer**:
-```
-Single int method
-Varargs method
-```
-
-**Explanation**:
-- When calling `test(1)`, the method `test(int number)` is selected because it matches a single integer exactly.
-- When calling `test(1, 2, 3)`, the varargs method `test(int... numbers)` is chosen because it can accept multiple integers.
-
-### **7. Constructor vs Static Block**
-
-**Question**: What will be the output of the following code snippet?
-
-```java
-public class TestBlocks {
-    static {
-        System.out.println("Static block");
-    }
-
-    {
-        System.out.println("Instance block");
-    }
-
-    public TestBlocks() {
-        System.out.println("Constructor");
-    }
-
-    public static void main(String[] args) {
-        new TestBlocks();
-    }
-}
-```
-
-**Answer**:
-```
-Static block
-Instance block
-Constructor
-```
-
-**Explanation**:
-- The static block runs once when the class is loaded.
-- The instance block runs every time an object is created, before the constructor.
-- The constructor runs last when the object is created.
-
-### **8. Final Keyword**
-
-**Question**: What will be the output of the following code snippet?
-
-```java
-class A {
-    final void display() {
-        System.out.println("Display in A");
-    }
-}
-
-class B extends A {
-    // Uncommenting the following method will cause a compilation error
-    // void display() {
-    //     System.out.println("Display in B");
-    // }
-}
-
-public class TestFinal {
-    public static void main(String[] args) {
-        new B().display();
-    }
-}
-```
-
-**Answer**:
-```
-Display in A
-```
-
-**Explanation**:
-- The `final` keyword in a method declaration means that the method cannot be overridden in any subclass.
-- Therefore, class `B` inherits the `display()` method from class `A` and cannot override it.
-
-These questions test various aspects of Java, including string handling, inheritance, access control, and keywords. Understanding these tricky scenarios helps in mastering Java and preparing for complex interview questions.
-
----
 
 
 Certainly! Here’s a detailed explanation of the various Java concepts and terms you’ve mentioned, including coding examples where applicable:
@@ -4071,117 +2906,6 @@ A resource pool is a powerful design pattern for managing collections of reusabl
 
 ---
 
-## Exception Handling in Java
-
-
-### **13. Exception Handling**
-
-**Definition**: Mechanism to handle runtime errors to maintain the normal flow of application.
-
-**Keywords**:
-- **`try`**: Block where exceptions might occur.
-- **`catch`**: Block to handle exceptions.
-- **`finally`**: Block that executes after `try`/`catch`, regardless of an exception.
-- **`throw`**: Used to explicitly throw an exception.
-- **`throws`**: Declares that a method can throw exceptions.
-
-**Example**:
-```java
-try {
-    int result = 10 / 0;
-} catch (ArithmeticException e) {
-    System.out.println("Cannot divide by zero.");
-} finally {
-    System.out.println("This will always execute.");
-}
-```
-
-### **14. Object-Oriented Programming Concepts**
-
-- **Abstraction**: Hiding implementation details and showing only functionality. Achieved through abstract classes and interfaces.
-- **Polymorphism**: Ability of an object to take on many forms. Achieved through method overriding and overloading.
-- **Inheritance**: Mechanism where one class inherits fields and methods from another class.
-- **Encapsulation**: Bundling of data and methods that operate on the data into a single unit, usually a class.
-
-**Method Overriding vs Overloading**:
-- **Overriding**: Redefining a method in a subclass with the same name and parameters.
-- **Overloading**: Defining multiple methods in the same class with the same name but different parameters.
-
-### **15. Collections and Differences**
-
-**List vs Set**:
-- **List**: Ordered collection that allows duplicate elements (e.g., `ArrayList`, `LinkedList`).
-- **Set**: Unordered collection that does not allow duplicate elements (e.g., `HashSet`, `LinkedHashSet`).
-
-**Set vs SortedSet**:
-- **Set**: No order guarantee (e.g., `HashSet`).
-- **SortedSet**: Orders elements (e.g., `TreeSet`).
-
-**Map vs HashMap vs ConcurrentHashMap vs TreeMap**:
-- **Map**: Interface for key-value pairs.
-- **HashMap**: Unordered, allows null keys
-
-/values, not thread-safe.
-- **ConcurrentHashMap**: Thread-safe version of `HashMap`.
-- **TreeMap**: Sorted by natural ordering or comparator, implements `NavigableMap`.
-
-**ArrayList vs LinkedList**:
-- **ArrayList**: Backed by an array, fast access, slow insertions/removals.
-- **LinkedList**: Doubly linked list, fast insertions/removals, slow access.
-
-**Vector vs Stack**:
-- **Vector**: Synchronized version of `ArrayList`, legacy class.
-- **Stack**: Subclass of `Vector`, implements stack operations (push, pop).
-
-**Queue vs Deque**:
-- **Queue**: Represents a queue data structure, supports FIFO operations.
-- **Deque**: Double-ended queue, supports FIFO and LIFO operations.
-
-**Fail-Safe vs Fail-Fast**:
-- **Fail-Safe**: Iterators operate on a copy of the collection, not affected by structural changes.
-- **Fail-Fast**: Iterators throw `ConcurrentModificationException` if the collection is modified during iteration.
-
-### **16. Diamond Problem**
-
-The diamond problem occurs in multiple inheritance where a class inherits from two classes that have a common ancestor, leading to ambiguity.
-
-**Java Solution**:
-- Java avoids multiple inheritance of classes but allows multiple inheritance through interfaces.
-
-### **17. Lambda Expressions and Functional Interfaces**
-
-**Lambda Expressions**: Anonymous functions to provide implementation of functional interfaces (interfaces with a single abstract method).
-
-**Functional Interface**: An interface with a single abstract method. Can have multiple default or static methods.
-
-**Example**:
-```java
-@FunctionalInterface
-interface MyFunctionalInterface {
-    void apply(int x);
-
-    default void defaultMethod() {
-        System.out.println("Default Method");
-    }
-
-    static void staticMethod() {
-        System.out.println("Static Method");
-    }
-}
-
-public class LambdaExample {
-    public static void main(String[] args) {
-        MyFunctionalInterface myFunc = (x) -> System.out.println(x * 2);
-        myFunc.apply(10); // Output: 20
-        myFunc.defaultMethod(); // Output: Default Method
-        MyFunctionalInterface.staticMethod(); // Output: Static Method
-    }
-}
-```
-
-This summary covers the key aspects of Java, including file handling, multithreading, synchronization, exception handling, OOP principles, and various collection frameworks. Each section provides a foundational understanding and examples to illustrate concepts effectively.
-
----
 
 ## HashMap, Hashtable, and HashSet
 
@@ -22263,3 +20987,1284 @@ Here's a consolidated overview of the concepts related to interfaces, including 
 
 
 This approach enables developers to combine behaviors from different interfaces while maintaining clean and organized code.
+
+
+===================
+
+
+## Java Interview Questions
+## List of Common Java Interview Questions
+
+### **Java Core Concepts**
+
+**1. What is the difference between `==` and `.equals()` in Java?**
+
+**Answer**:
+- `==` compares the memory addresses of two objects, i.e., whether they point to the same location in memory.
+- `.equals()` is a method defined in the `Object` class and is meant to compare the contents or logical equality of two objects.
+
+**Example**:
+```java
+String s1 = new String("hello");
+String s2 = new String("hello");
+System.out.println(s1 == s2);        // false, different memory locations
+System.out.println(s1.equals(s2));   // true, same content
+```
+
+**2. What is the difference between `ArrayList` and `LinkedList`?**
+
+**Answer**:
+- `ArrayList` is backed by a dynamic array and provides constant-time access for get and set operations. However, insertions and deletions are costly (O(n) in the worst case) because elements need to be shifted.
+- `LinkedList` is backed by a doubly-linked list. It provides constant-time insertions and deletions but linear-time access operations (O(n)) because you need to traverse the list.
+
+**Example**:
+```java
+List<String> arrayList = new ArrayList<>();
+List<String> linkedList = new LinkedList<>();
+```
+
+**3. What is the purpose of the `final` keyword in Java?**
+
+**Answer**:
+- `final` can be applied to variables, methods, and classes.
+  - **Variables**: When a variable is declared as `final`, its value cannot be changed once initialized.
+  - **Methods**: When a method is declared as `final`, it cannot be overridden by subclasses.
+  - **Classes**: When a class is declared as `final`, it cannot be subclassed.
+
+**Example**:
+```java
+final int MAX_VALUE = 100;
+class Base {
+    public final void display() {
+        System.out.println("Base display");
+    }
+}
+```
+
+**4. Explain the concept of inheritance and how it is implemented in Java.**
+
+**Answer**:
+- **Inheritance** is a mechanism where a new class (subclass) inherits properties and behaviors (methods) from an existing class (superclass).
+- In Java, inheritance is implemented using the `extends` keyword. A subclass inherits all public and protected members from the superclass but can have its own methods and fields.
+
+**Example**:
+```java
+class Animal {
+    void eat() {
+        System.out.println("This animal eats food.");
+    }
+}
+
+class Dog extends Animal {
+    void bark() {
+        System.out.println("Dog barks.");
+    }
+}
+```
+
+**5. What is polymorphism in Java?**
+
+**Answer**:
+- **Polymorphism** allows objects to be treated as instances of their parent class rather than their actual class. It comes in two forms:
+  - **Compile-time Polymorphism** (Method Overloading): Multiple methods with the same name but different parameters.
+  - **Runtime Polymorphism** (Method Overriding): Subclasses provide specific implementations of methods that are already defined in their parent class.
+
+**Example**:
+```java
+class Animal {
+    void makeSound() {
+        System.out.println("Animal makes a sound");
+    }
+}
+
+class Dog extends Animal {
+    @Override
+    void makeSound() {
+        System.out.println("Dog barks");
+    }
+}
+
+public class TestPolymorphism {
+    public static void main(String[] args) {
+        Animal a = new Dog();  // Reference of Animal, object of Dog
+        a.makeSound();  // Dog barks
+    }
+}
+```
+
+### **Java Advanced Concepts**
+
+**6. What is a Java `Thread` and how do you create one?**
+
+**Answer**:
+- A `Thread` is a lightweight process that allows concurrent execution of code.
+- You can create a thread by either extending the `Thread` class or implementing the `Runnable` interface.
+
+**Example**:
+```java
+// Extending Thread class
+class MyThread extends Thread {
+    public void run() {
+        System.out.println("Thread is running");
+    }
+}
+
+// Implementing Runnable interface
+class MyRunnable implements Runnable {
+    public void run() {
+        System.out.println("Runnable is running");
+    }
+}
+```
+
+**7. What is the difference between `synchronized` and `volatile` in Java?**
+
+**Answer**:
+- `synchronized` is used to ensure that only one thread can execute a block of code or method at a time, providing mutual exclusion.
+- `volatile` ensures that changes to a variable are visible to all threads immediately, but does not provide mutual exclusion.
+
+**Example**:
+```java
+// Using synchronized
+synchronized (this) {
+    // synchronized block
+}
+
+// Using volatile
+private volatile boolean flag = false;
+```
+
+**8. What is the Java memory model and how does garbage collection work?**
+
+**Answer**:
+- The **Java Memory Model (JMM)** defines how threads interact through memory and how changes made by one thread are visible to others.
+- **Garbage Collection (GC)** is the process by which Java automatically frees up memory by removing objects that are no longer referenced. The JVM performs garbage collection to reclaim memory.
+
+**9. What are the different types of exception handling in Java?**
+
+**Answer**:
+- **Checked Exceptions**: Exceptions that are checked at compile-time (e.g., `IOException`, `SQLException`).
+- **Unchecked Exceptions**: Exceptions that are not checked at compile-time (e.g., `NullPointerException`, `ArithmeticException`).
+- **Error**: Represents serious problems that applications should not catch (e.g., `OutOfMemoryError`, `StackOverflowError`).
+
+**Example**:
+```java
+try {
+    // code that might throw an exception
+} catch (IOException e) {
+    // handle exception
+} finally {
+    // code that will run regardless of exception
+}
+```
+
+**10. What is a `Java Stream` and how does it work?**
+
+**Answer**:
+- A `Stream` is a sequence of elements supporting sequential and parallel aggregate operations. It can be used to process collections of objects in a functional style.
+- Streams can be created from collections using the `stream()` method and offer various operations such as `filter()`, `map()`, `reduce()`, and `collect()`.
+
+**Example**:
+```java
+List<String> names = Arrays.asList("John", "Jane", "Tom");
+names.stream()
+     .filter(name -> name.startsWith("J"))
+     .forEach(System.out::println);  // Output: John, Jane
+```
+
+---
+
+## Java 8 Interview Questions and Answers
+
+#### **1. What are the main features introduced in Java 8?**
+
+**Answer**:
+Java 8 introduced several key features:
+- **Lambda Expressions**: Allow you to write concise code for functional interfaces.
+- **Streams API**: Provides a way to process sequences of elements (like collections) in a functional style.
+- **Functional Interfaces**: Interfaces with a single abstract method, such as `Runnable`, `Callable`, `Function`, `Consumer`, `Supplier`, and `Predicate`.
+- **Method References**: Allows you to refer to methods without executing them.
+- **Default Methods**: Enable you to add new methods to interfaces with a default implementation.
+- **Optional Class**: Provides a way to avoid `NullPointerException` by encapsulating optional values.
+- **New Date and Time API**: Provides a comprehensive date and time library, replacing the old `java.util.Date` and `java.util.Calendar`.
+
+#### **2. Explain Lambda Expressions with an example.**
+
+**Answer**:
+- **Lambda Expressions** provide a clear and concise way to represent one method interface using an expression. They are used primarily to define the method of a functional interface.
+
+**Syntax**:
+```java
+(parameters) -> expression
+```
+
+**Example**:
+```java
+@FunctionalInterface
+interface MathOperation {
+    int operate(int a, int b);
+}
+
+public class LambdaExample {
+    public static void main(String[] args) {
+        MathOperation addition = (a, b) -> a + b;
+        System.out.println(addition.operate(5, 3)); // Output: 8
+    }
+}
+```
+
+#### **3. How does the Streams API work in Java 8?**
+
+**Answer**:
+- **Streams API** provides a way to process sequences of elements (such as collections) in a functional style, supporting operations like filtering, mapping, and reducing.
+
+**Example**:
+```java
+import java.util.Arrays;
+import java.util.List;
+
+public class StreamsExample {
+    public static void main(String[] args) {
+        List<String> names = Arrays.asList("John", "Jane", "Tom", "Jerry");
+
+        names.stream()
+             .filter(name -> name.startsWith("J"))
+             .sorted()
+             .forEach(System.out::println);  // Output: Jane, Jerry, John
+    }
+}
+```
+
+#### **4. What is the purpose of the `Optional` class in Java 8?**
+
+**Answer**:
+- **Optional** is a container object which may or may not contain a value. It is used to avoid `NullPointerException` by providing methods to handle values that may be absent.
+
+**Example**:
+```java
+import java.util.Optional;
+
+public class OptionalExample {
+    public static void main(String[] args) {
+        Optional<String> optionalValue = Optional.ofNullable("Hello, World!");
+
+        optionalValue.ifPresent(value -> System.out.println("Value: " + value)); // Output: Value: Hello, World!
+
+        String defaultValue = optionalValue.orElse("Default Value");
+        System.out.println(defaultValue);  // Output: Hello, World!
+    }
+}
+```
+
+#### **5. Explain functional interfaces in Java 8 with examples.**
+
+**Answer**:
+- **Functional Interfaces** are interfaces with exactly one abstract method. They can have multiple default or static methods. They can be used as the target type for lambda expressions and method references.
+
+**Examples**:
+```java
+@FunctionalInterface
+interface MyFunctionalInterface {
+    void singleAbstractMethod();
+    
+    default void defaultMethod() {
+        System.out.println("Default method in functional interface");
+    }
+    
+    static void staticMethod() {
+        System.out.println("Static method in functional interface");
+    }
+}
+
+public class FunctionalInterfaceExample {
+    public static void main(String[] args) {
+        MyFunctionalInterface myFunc = () -> System.out.println("Lambda expression");
+        myFunc.singleAbstractMethod();  // Output: Lambda expression
+        
+        myFunc.defaultMethod();         // Output: Default method in functional interface
+        MyFunctionalInterface.staticMethod(); // Output: Static method in functional interface
+    }
+}
+```
+
+#### **6. How do method references work in Java 8?**
+
+**Answer**:
+- **Method References** are a shorthand notation of a lambda expression to call a method. They improve code readability and reduce verbosity.
+
+**Syntax**:
+```java
+ClassName::methodName
+```
+
+**Example**:
+```java
+import java.util.Arrays;
+import java.util.List;
+
+public class MethodReferenceExample {
+    public static void main(String[] args) {
+        List<String> names = Arrays.asList("John", "Jane", "Tom", "Jerry");
+
+        // Using method reference
+        names.forEach(System.out::println); // Output: John, Jane, Tom, Jerry
+    }
+}
+```
+
+#### **7. Demonstrate the use of `Collectors` in Java 8 Streams API.**
+
+**Answer**:
+- **Collectors** are utility classes that implement the `Collector` interface to collect elements of a stream into collections or other forms.
+
+**Example**:
+```java
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+public class CollectorsExample {
+    public static void main(String[] args) {
+        List<String> names = Arrays.asList("John", "Jane", "Tom", "Jerry");
+
+        // Collect names into a List
+        List<String> nameList = names.stream().collect(Collectors.toList());
+        System.out.println(nameList); // Output: [John, Jane, Tom, Jerry]
+
+        // Collect names into a Map with name length as the key
+        Map<Integer, String> nameMap = names.stream()
+                                             .collect(Collectors.toMap(String::length, name -> name));
+        System.out.println(nameMap); // Output: {3=Tom, 4=John, 4=Jane, 5=Jerry}
+    }
+}
+```
+
+#### **8. What are default methods in interfaces and why are they useful?**
+
+**Answer**:
+- **Default Methods** are methods in interfaces that have a body. They allow you to add new methods to interfaces with a default implementation without affecting classes that implement the interface.
+
+**Example**:
+```java
+interface MyInterface {
+    void existingMethod();
+    
+    default void defaultMethod() {
+        System.out.println("Default method implementation");
+    }
+}
+
+public class DefaultMethodExample implements MyInterface {
+    public void existingMethod() {
+        System.out.println("Existing method implementation");
+    }
+
+    public static void main(String[] args) {
+        DefaultMethodExample example = new DefaultMethodExample();
+        example.existingMethod();   // Output: Existing method implementation
+        example.defaultMethod();    // Output: Default method implementation
+    }
+}
+```
+
+#### **9. What are `Function`, `Consumer`, `Supplier`, and `Predicate` interfaces in Java 8?**
+
+**Answer**:
+- **Function<T, R>**: Represents a function that accepts one argument and produces a result.
+- **Consumer<T>**: Represents an operation that takes a single input argument and returns no result.
+- **Supplier<T>**: Represents a supplier of results. It takes no arguments and returns a result.
+- **Predicate<T>**: Represents a predicate (boolean-valued function) of one argument.
+
+**Examples**:
+```java
+import java.util.function.Function;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
+import java.util.function.Predicate;
+
+public class FunctionalInterfacesExample {
+    public static void main(String[] args) {
+        // Function
+        Function<String, Integer> lengthFunction = s -> s.length();
+        System.out.println(lengthFunction.apply("Hello")); // Output: 5
+        
+        // Consumer
+        Consumer<String> printConsumer = s -> System.out.println(s);
+        printConsumer.accept("Hello"); // Output: Hello
+        
+        // Supplier
+        Supplier<String> stringSupplier = () -> "Hello World";
+        System.out.println(stringSupplier.get()); // Output: Hello World
+        
+        // Predicate
+        Predicate<String> isEmptyPredicate = s -> s.isEmpty();
+        System.out.println(isEmptyPredicate.test("")); // Output: true
+    }
+}
+```
+
+#### **10. How do you handle exceptions in Java 8 Streams API?**
+
+**Answer**:
+- Handling exceptions within Streams can be tricky since Streams are designed to work with lambda expressions. One common approach is to use a utility method to wrap code that can throw exceptions.
+
+**Example**:
+```java
+import java.util.Arrays;
+import java.util.List;
+import java.util.function.Function;
+
+public class StreamExceptionHandlingExample {
+    public static void main(String[] args) {
+        List<String> numbers = Arrays.asList("1", "2", "three", "4");
+
+        // Process numbers, handling NumberFormatException
+        numbers.stream()
+               .map(convertToInt("0"))
+               .forEach(System.out::println);
+    }
+
+    private static Function<String, Integer> convertToInt(Integer defaultValue) {
+        return str -> {
+            try {
+                return Integer.valueOf(str);
+            } catch (NumberFormatException e) {
+                return defaultValue;
+            }
+        };
+    }
+}
+```
+
+These questions cover a wide range of Java 8 features, from lambda expressions and the Streams API to the `Optional` class and functional interfaces. Understanding these concepts and being able to apply them in coding scenarios will help you perform well in Java 8 interviews.
+
+---
+## Java Multithreading & Concurrency Interview Questions
+
+### **1. What is the difference between `Thread` and `Runnable`?**
+
+**Answer**:
+- **Thread**: A `Thread` is a class in Java that provides a way to create and manage threads. You can extend the `Thread` class and override its `run()` method to define the thread's behavior.
+- **Runnable**: `Runnable` is a functional interface that represents a task that can be executed concurrently. You implement the `Runnable` interface and define the `run()` method. Then, you pass an instance of `Runnable` to a `Thread` object to execute it.
+
+**Example**:
+```java
+// Using Thread
+class MyThread extends Thread {
+    public void run() {
+        System.out.println("Thread is running");
+    }
+}
+
+public class ThreadExample {
+    public static void main(String[] args) {
+        MyThread thread = new MyThread();
+        thread.start();
+    }
+}
+
+// Using Runnable
+class MyRunnable implements Runnable {
+    public void run() {
+        System.out.println("Runnable is running");
+    }
+}
+
+public class RunnableExample {
+    public static void main(String[] args) {
+        Thread thread = new Thread(new MyRunnable());
+        thread.start();
+    }
+}
+```
+
+### **2. How do you create a thread-safe singleton class in Java?**
+
+**Answer**:
+- A thread-safe singleton class ensures that only one instance of the class is created, even in a multithreaded environment. The common way to implement this is using the **Bill Pugh Singleton Design** or **Double-Checked Locking**.
+
+**Example (Bill Pugh Singleton)**:
+```java
+public class Singleton {
+    private Singleton() {}
+
+    private static class SingletonHelper {
+        private static final Singleton INSTANCE = new Singleton();
+    }
+
+    public static Singleton getInstance() {
+        return SingletonHelper.INSTANCE;
+    }
+}
+```
+
+### **3. What is the difference between `synchronized` block and `synchronized` method?**
+
+**Answer**:
+- **Synchronized Method**: Synchronizes the entire method, preventing multiple threads from executing the method simultaneously on the same object.
+- **Synchronized Block**: Allows more granular control by synchronizing only a block of code within a method, reducing the scope of synchronization.
+
+**Example**:
+```java
+class Counter {
+    private int count = 0;
+
+    // Synchronized Method
+    public synchronized void increment() {
+        count++;
+    }
+
+    // Synchronized Block
+    public void incrementWithBlock() {
+        synchronized (this) {
+            count++;
+        }
+    }
+}
+```
+
+### **4. Explain the concept of a `volatile` variable in Java.**
+
+**Answer**:
+- A `volatile` variable ensures that changes to the variable are visible to all threads immediately. It prevents caching of variables and ensures that updates made by one thread are visible to other threads.
+
+**Example**:
+```java
+public class VolatileExample {
+    private volatile boolean running = true;
+
+    public void stop() {
+        running = false;
+    }
+
+    public void work() {
+        while (running) {
+            // Do some work
+        }
+        System.out.println("Stopped working");
+    }
+
+    public static void main(String[] args) {
+        VolatileExample example = new VolatileExample();
+        new Thread(example::work).start();
+        new Thread(() -> {
+            try { Thread.sleep(1000); } catch (InterruptedException e) {}
+            example.stop();
+        }).start();
+    }
+}
+```
+
+### **5. What is the purpose of `CountDownLatch` and how does it work?**
+
+**Answer**:
+- `CountDownLatch` is a concurrency utility that allows one or more threads to wait until a set of operations performed by other threads completes. It is initialized with a count that is decremented by each operation.
+
+**Example**:
+```java
+import java.util.concurrent.CountDownLatch;
+
+public class CountDownLatchExample {
+    public static void main(String[] args) throws InterruptedException {
+        CountDownLatch latch = new CountDownLatch(3);
+
+        Runnable task = () -> {
+            System.out.println("Task completed");
+            latch.countDown();
+        };
+
+        new Thread(task).start();
+        new Thread(task).start();
+        new Thread(task).start();
+
+        latch.await(); // Waits for the count to reach zero
+        System.out.println("All tasks completed");
+    }
+}
+```
+
+### **6. How does `ExecutorService` help in managing threads?**
+
+**Answer**:
+- `ExecutorService` is part of the Java Concurrency framework and provides a higher-level replacement for the traditional way of managing threads. It simplifies thread management by providing thread pools and various utility methods for task execution and lifecycle management.
+
+**Example**:
+```java
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+public class ExecutorServiceExample {
+    public static void main(String[] args) {
+        ExecutorService executor = Executors.newFixedThreadPool(3);
+
+        Runnable task = () -> {
+            System.out.println("Task executed by: " + Thread.currentThread().getName());
+        };
+
+        for (int i = 0; i < 5; i++) {
+            executor.execute(task);
+        }
+
+        executor.shutdown(); // Initiates an orderly shutdown
+    }
+}
+```
+
+### **7. What is the purpose of `Future` and `Callable`?**
+
+**Answer**:
+- **Callable**: A functional interface similar to `Runnable` but can return a result and throw checked exceptions. It is used with `ExecutorService` to submit tasks.
+- **Future**: Represents the result of an asynchronous computation. You can use it to check if the task is complete, retrieve the result, or cancel the task.
+
+**Example**:
+```java
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+
+public class CallableFutureExample {
+    public static void main(String[] args) throws InterruptedException, ExecutionException {
+        ExecutorService executor = Executors.newFixedThreadPool(1);
+
+        Callable<Integer> task = () -> {
+            Thread.sleep(2000); // Simulate long-running task
+            return 123;
+        };
+
+        Future<Integer> future = executor.submit(task);
+        System.out.println("Task submitted");
+
+        // Perform other operations while waiting
+        Integer result = future.get(); // This will block until the task completes
+        System.out.println("Task result: " + result);
+
+        executor.shutdown();
+    }
+}
+```
+
+### **8. What are `synchronized` collections and how do they work?**
+
+**Answer**:
+- `Synchronized` collections are thread-safe versions of standard collections. They are created by wrapping standard collections with methods from the `Collections` class.
+
+**Example**:
+```java
+import java.util.Collections;
+import java.util.List;
+import java.util.ArrayList;
+
+public class SynchronizedCollectionsExample {
+    public static void main(String[] args) {
+        List<Integer> list = Collections.synchronizedList(new ArrayList<>());
+
+        // Adding elements to the list
+        list.add(1);
+        list.add(2);
+        list.add(3);
+
+        // Synchronizing access to the list
+        synchronized (list) {
+            for (Integer number : list) {
+                System.out.println(number);
+            }
+        }
+    }
+}
+```
+
+### **9. What is the difference between `notify()`, `notifyAll()`, and `wait()` in Java?**
+
+**Answer**:
+- **`wait()`**: Causes the current thread to wait until another thread invokes `notify()` or `notifyAll()` on the same object. It releases the lock on the object.
+- **`notify()`**: Wakes up a single thread that is waiting on the object’s monitor.
+- **`notifyAll()`**: Wakes up all threads that are waiting on the object’s monitor.
+
+**Example**:
+```java
+class WaitNotifyExample {
+    private final Object lock = new Object();
+    private boolean isAvailable = false;
+
+    public void produce() throws InterruptedException {
+        synchronized (lock) {
+            while (isAvailable) {
+                lock.wait();
+            }
+            System.out.println("Produced");
+            isAvailable = true;
+            lock.notify(); // Notify consumer
+        }
+    }
+
+    public void consume() throws InterruptedException {
+        synchronized (lock) {
+            while (!isAvailable) {
+                lock.wait();
+            }
+            System.out.println("Consumed");
+            isAvailable = false;
+            lock.notify(); // Notify producer
+        }
+    }
+
+    public static void main(String[] args) {
+        WaitNotifyExample example = new WaitNotifyExample();
+
+        Thread producer = new Thread(() -> {
+            try {
+                example.produce();
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        });
+
+        Thread consumer = new Thread(() -> {
+            try {
+                example.consume();
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        });
+
+        producer.start();
+        consumer.start();
+    }
+}
+```
+
+### **10. What are `Semaphore` and `ReentrantLock`? How are they used?**
+
+**Answer**:
+- **Semaphore**: A synchronization aid that controls access to a shared resource through a set of permits. It can be used to limit the number of threads that can access a resource simultaneously.
+
+**Example**:
+```java
+import java.util.concurrent.Semaphore;
+
+public class SemaphoreExample {
+    private static final Semaphore semaphore = new Semaphore(2);
+
+    public static void main(String[] args) {
+        Runnable task = () -> {
+            try {
+                semaphore.acquire();
+                System.out.println("Semaphore acquired by " + Thread.currentThread().getName());
+                Thread.sleep(2000); // Simulate work
+
+
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            } finally {
+                semaphore.release();
+                System.out.println("Semaphore released by " + Thread.currentThread().getName());
+            }
+        };
+
+        for (int i = 0; i < 5; i++) {
+            new Thread(task).start();
+        }
+    }
+}
+```
+
+- **ReentrantLock**: A `Lock` implementation that allows threads to acquire the lock multiple times by the same thread and provides more sophisticated thread synchronization.
+
+**Example**:
+```java
+import java.util.concurrent.locks.ReentrantLock;
+
+public class ReentrantLockExample {
+    private final ReentrantLock lock = new ReentrantLock();
+
+    public void doWork() {
+        lock.lock();
+        try {
+            System.out.println("Lock acquired by " + Thread.currentThread().getName());
+            Thread.sleep(1000); // Simulate work
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        } finally {
+            lock.unlock();
+            System.out.println("Lock released by " + Thread.currentThread().getName());
+        }
+    }
+
+    public static void main(String[] args) {
+        ReentrantLockExample example = new ReentrantLockExample();
+
+        Runnable task = example::doWork;
+
+        for (int i = 0; i < 3; i++) {
+            new Thread(task).start();
+        }
+    }
+}
+```
+
+These questions cover fundamental aspects of multithreading and concurrency in Java, from basic thread management to advanced synchronization mechanisms. Understanding these concepts and their applications is crucial for writing efficient and thread-safe Java applications.
+
+Certainly! Below is a tabular comparison of common Java concepts and features that are frequently asked about in interviews. This comparison highlights the key differences between each pair or group.
+
+| **Aspect**                 | **Concept 1**               | **Concept 2**               | **Difference**                                                                                           |
+|----------------------------|------------------------------|------------------------------|----------------------------------------------------------------------------------------------------------|
+| **Thread vs Runnable**     | `Thread`                     | `Runnable`                   | - `Thread` is a class, while `Runnable` is an interface.<br>- `Thread` requires extending, while `Runnable` can be implemented and passed to a `Thread`. |
+| **synchronized Method vs synchronized Block** | Synchronized Method          | Synchronized Block           | - Synchronized Method locks the entire method, while Synchronized Block locks only a specific block of code.<br>- Blocks allow more granular control of synchronization. |
+| **Volatile vs synchronized** | `volatile`                   | `synchronized`               | - `volatile` ensures visibility of changes across threads without locking.<br>- `synchronized` ensures both visibility and atomicity through locking. |
+| **Callable vs Runnable**   | `Callable`                   | `Runnable`                   | - `Callable` returns a result and can throw checked exceptions.<br>- `Runnable` does not return a result and cannot throw checked exceptions. |
+| **Future vs CompletableFuture** | `Future`                    | `CompletableFuture`          | - `Future` represents the result of an asynchronous computation but has limited methods.<br>- `CompletableFuture` extends `Future` with more functionality and support for asynchronous programming. |
+| **CountDownLatch vs CyclicBarrier** | `CountDownLatch`            | `CyclicBarrier`              | - `CountDownLatch` allows threads to wait until a count reaches zero.<br>- `CyclicBarrier` allows a set of threads to wait for each other to reach a common barrier point. |
+| **Semaphore vs ReentrantLock** | `Semaphore`                 | `ReentrantLock`              | - `Semaphore` controls access to a shared resource with a set of permits.<br>- `ReentrantLock` provides explicit lock and unlock methods with advanced features like try-lock and timed lock. |
+| **ConcurrentHashMap vs Hashtable** | `ConcurrentHashMap`        | `Hashtable`                  | - `ConcurrentHashMap` is designed for concurrent access and is not synchronized.<br>- `Hashtable` is synchronized but may be less performant in high-concurrency scenarios. |
+| **Java 8 Streams vs Collections** | Streams                    | Collections                   | - Streams provide a functional approach to processing collections with operations like filter, map, and reduce.<br>- Collections are the traditional way of storing and manipulating data. |
+| **Default Method vs Static Method** | Default Method              | Static Method                | - Default methods can be overridden and provide a default implementation in interfaces.<br>- Static methods belong to the interface itself and cannot be overridden. |
+| **String vs StringBuilder vs StringBuffer** | `String`                    | `StringBuilder` / `StringBuffer` | - `String` is immutable, `StringBuilder` is mutable and not synchronized, and `StringBuffer` is mutable and synchronized.<br>- Use `StringBuilder` or `StringBuffer` for frequent modifications. |
+| **Abstract Class vs Interface** | Abstract Class              | Interface                     | - An abstract class can have fields and constructors, while an interface cannot.<br>- An abstract class can provide implementation for some methods, while interfaces in Java 7 and earlier cannot (except default methods in Java 8). |
+| **ArrayList vs LinkedList** | `ArrayList`                  | `LinkedList`                 | - `ArrayList` is backed by a dynamic array and provides faster access but slower insertions/deletions.<br>- `LinkedList` is backed by a doubly linked list and provides faster insertions/deletions but slower access. |
+| **Hashtable vs HashMap**   | `Hashtable`                  | `HashMap`                    | - `Hashtable` is synchronized and does not allow null keys/values.<br>- `HashMap` is not synchronized and allows one null key and multiple null values. |
+| **TreeMap vs HashMap**     | `TreeMap`                    | `HashMap`                    | - `TreeMap` is sorted based on natural ordering or a provided comparator, while `HashMap` is unordered.<br>- `TreeMap` is slower due to sorting but maintains order. |
+| **LinkedHashMap vs HashMap** | `LinkedHashMap`             | `HashMap`                    | - `LinkedHashMap` maintains insertion order, while `HashMap` does not.<br>- `LinkedHashMap` has slightly slower performance due to maintaining order. |
+| **String vs StringBuilder** | `String`                    | `StringBuilder`              | - `String` is immutable, meaning every modification creates a new instance.<br>- `StringBuilder` is mutable and allows modification without creating new instances. |
+
+### Example Code for Some Differences
+
+**1. Thread vs Runnable**
+
+```java
+// Thread
+class MyThread extends Thread {
+    public void run() {
+        System.out.println("Thread running");
+    }
+}
+
+public class ThreadExample {
+    public static void main(String[] args) {
+        new MyThread().start();
+    }
+}
+
+// Runnable
+class MyRunnable implements Runnable {
+    public void run() {
+        System.out.println("Runnable running");
+    }
+}
+
+public class RunnableExample {
+    public static void main(String[] args) {
+        new Thread(new MyRunnable()).start();
+    }
+}
+```
+
+**2. Default Method vs Static Method**
+
+```java
+interface MyInterface {
+    // Default method
+    default void defaultMethod() {
+        System.out.println("Default method");
+    }
+
+    // Static method
+    static void staticMethod() {
+        System.out.println("Static method");
+    }
+}
+
+public class InterfaceExample {
+    public static void main(String[] args) {
+        MyInterface.staticMethod(); // Static method called on interface
+
+        MyInterface instance = new MyInterface() {}; // Anonymous class to implement default method
+        instance.defaultMethod(); // Default method called on instance
+    }
+}
+```
+
+**3. String vs StringBuilder**
+
+```java
+public class StringBuilderExample {
+    public static void main(String[] args) {
+        // String (immutable)
+        String str = "Hello";
+        str = str + " World";
+        System.out.println(str); // Output: Hello World
+
+        // StringBuilder (mutable)
+        StringBuilder sb = new StringBuilder("Hello");
+        sb.append(" World");
+        System.out.println(sb.toString()); // Output: Hello World
+    }
+}
+```
+
+These questions and answers should provide a comprehensive overview of fundamental Java concepts and help you prepare for interviews effectively.
+
+---
+
+## Tricky Java interview questions
+
+Here are some tricky Java interview questions related to strings, arrays, inheritance, access specifiers, and keywords. Each question is accompanied by its answer and an explanation.
+
+### **1. String Immutability and Interning**
+
+**Question**: What will be the output of the following code snippet?
+
+```java
+public class StringTest {
+    public static void main(String[] args) {
+        String s1 = new String("hello");
+        String s2 = "hello";
+        String s3 = s1.intern();
+        System.out.println(s1 == s2); // Output?
+        System.out.println(s2 == s3); // Output?
+    }
+}
+```
+
+**Answer**:
+```
+false
+true
+```
+
+**Explanation**:
+- `s1` is created using the `new` keyword, so it refers to a new object in the heap, whereas `s2` refers to a string literal in the string pool.
+- `s3` is obtained using `s1.intern()`, which returns the reference to the string literal from the string pool.
+- `s1 == s2` is `false` because `s1` and `s2` refer to different objects.
+- `s2 == s3` is `true` because `s3` is interned and thus refers to the same object as `s2`.
+
+### **2. Array Index Out Of Bounds**
+
+**Question**: What will be the output of the following code snippet?
+
+```java
+public class ArrayTest {
+    public static void main(String[] args) {
+        int[] arr = new int[5];
+        arr[5] = 10; // ArrayIndexOutOfBoundsException
+        System.out.println("This will not be printed");
+    }
+}
+```
+
+**Answer**:
+```
+Exception in thread "main" java.lang.ArrayIndexOutOfBoundsException: Index 5 out of bounds for length 5
+```
+
+**Explanation**:
+- Arrays in Java are zero-based, meaning indices range from `0` to `length-1`.
+- Attempting to access or assign a value at index `5` in an array of length `5` results in an `ArrayIndexOutOfBoundsException`.
+
+### **3. Inheritance and Overriding**
+
+**Question**: What will be the output of the following code snippet?
+
+```java
+class A {
+    public void display() {
+        System.out.println("Display in A");
+    }
+}
+
+class B extends A {
+    public void display() {
+        System.out.println("Display in B");
+    }
+}
+
+public class TestInheritance {
+    public static void main(String[] args) {
+        A obj = new B();
+        obj.display();
+    }
+}
+```
+
+**Answer**:
+```
+Display in B
+```
+
+**Explanation**:
+- This demonstrates **runtime polymorphism** (method overriding). The reference variable `obj` of type `A` points to an object of type `B`.
+- The `display()` method of class `B` is called, which overrides the method in class `A`.
+
+### **4. Access Specifiers and Static**
+
+**Question**: What will be the output of the following code snippet?
+
+```java
+class Parent {
+    private static void show() {
+        System.out.println("Parent show()");
+    }
+}
+
+class Child extends Parent {
+    public static void show() {
+        System.out.println("Child show()");
+    }
+}
+
+public class TestAccess {
+    public static void main(String[] args) {
+        Parent.show();
+        Child.show();
+    }
+}
+```
+
+**Answer**:
+```
+Parent show()
+Child show()
+```
+
+**Explanation**:
+- Static methods are not polymorphic and are resolved at compile-time. 
+- The method `show()` in `Parent` is hidden by the `show()` method in `Child`.
+- The calls to `Parent.show()` and `Child.show()` are resolved to the respective static methods in `Parent` and `Child`.
+
+### **5. Keywords and Control Flow**
+
+**Question**: What will be the output of the following code snippet?
+
+```java
+public class TestKeywords {
+    public static void main(String[] args) {
+        int x = 10;
+        switch (x) {
+            case 10:
+                System.out.println("Ten");
+            case 20:
+                System.out.println("Twenty");
+            default:
+                System.out.println("Default");
+        }
+    }
+}
+```
+
+**Answer**:
+```
+Ten
+Twenty
+Default
+```
+
+**Explanation**:
+- The `switch` statement does not have `break` statements, so after matching `case 10`, it continues to execute subsequent cases (including `case 20` and `default`).
+
+### **6. Method Overloading with Varargs**
+
+**Question**: What will be the output of the following code snippet?
+
+```java
+public class VarargsTest {
+    public static void test(int... numbers) {
+        System.out.println("Varargs method");
+    }
+
+    public static void test(int number) {
+        System.out.println("Single int method");
+    }
+
+    public static void main(String[] args) {
+        test(1);
+        test(1, 2, 3);
+    }
+}
+```
+
+**Answer**:
+```
+Single int method
+Varargs method
+```
+
+**Explanation**:
+- When calling `test(1)`, the method `test(int number)` is selected because it matches a single integer exactly.
+- When calling `test(1, 2, 3)`, the varargs method `test(int... numbers)` is chosen because it can accept multiple integers.
+
+### **7. Constructor vs Static Block**
+
+**Question**: What will be the output of the following code snippet?
+
+```java
+public class TestBlocks {
+    static {
+        System.out.println("Static block");
+    }
+
+    {
+        System.out.println("Instance block");
+    }
+
+    public TestBlocks() {
+        System.out.println("Constructor");
+    }
+
+    public static void main(String[] args) {
+        new TestBlocks();
+    }
+}
+```
+
+**Answer**:
+```
+Static block
+Instance block
+Constructor
+```
+
+**Explanation**:
+- The static block runs once when the class is loaded.
+- The instance block runs every time an object is created, before the constructor.
+- The constructor runs last when the object is created.
+
+### **8. Final Keyword**
+
+**Question**: What will be the output of the following code snippet?
+
+```java
+class A {
+    final void display() {
+        System.out.println("Display in A");
+    }
+}
+
+class B extends A {
+    // Uncommenting the following method will cause a compilation error
+    // void display() {
+    //     System.out.println("Display in B");
+    // }
+}
+
+public class TestFinal {
+    public static void main(String[] args) {
+        new B().display();
+    }
+}
+```
+
+**Answer**:
+```
+Display in A
+```
+
+**Explanation**:
+- The `final` keyword in a method declaration means that the method cannot be overridden in any subclass.
+- Therefore, class `B` inherits the `display()` method from class `A` and cannot override it.
+
+These questions test various aspects of Java, including string handling, inheritance, access control, and keywords. Understanding these tricky scenarios helps in mastering Java and preparing for complex interview questions.
+
+---
+
+Ambiguities in Java and Spring Boot can arise from various sources. 
+
+## Ambiguities In Java
+
+1. **Method Overloading vs. Method Overriding**:
+   - **Overloading**: Same method name, different parameters within the same class.
+   - **Overriding**: Redefining a method in a subclass with the same name and parameters. The distinction can sometimes confuse developers regarding which method is being called.
+
+2. **Generics**:
+   - Understanding the bounds and wildcards (`? extends T`, `? super T`) can be confusing. The purpose and usage of these wildcards might not be immediately clear, leading to ambiguity in generic type handling.
+
+3. **Null Handling**:
+   - The behavior of `null` in Java can be ambiguous, especially with method calls or when using Optional. Understanding how null values are treated in various contexts is crucial to avoid `NullPointerExceptions`.
+
+4. **Static vs. Instance Context**:
+   - Distinguishing when to use static methods vs. instance methods can be ambiguous. Static methods belong to the class, while instance methods belong to instances of the class, which can lead to confusion regarding state management.
+
+5. **Final Keyword**:
+   - The meaning of `final` can be ambiguous depending on its context: a final variable cannot be reassigned, a final method cannot be overridden, and a final class cannot be subclassed.
+
+### To avoid ambiguities In Java, here are some practical strategies:
+
+1. **Method Overloading vs. Method Overriding**:
+   - **Clear Naming Conventions**: Use descriptive names for methods, particularly in overloaded scenarios, to make their purposes clear.
+   - **Comments and Documentation**: Document method signatures clearly, specifying whether a method is overloaded or overridden.
+   - **IDE Features**: Leverage your IDE's capabilities (like method hints) to show which method is being referenced.
+
+2. **Generics**:
+   - **Use Clear Type Names**: When defining generic types, use clear and descriptive names for type parameters (e.g., `<T extends Comparable<T>>`).
+   - **Educate Yourself**: Familiarize yourself with generics through resources like Java documentation and tutorials to understand wildcards thoroughly.
+   - **Examples and Practice**: Implement simple examples and gradually increase complexity to solidify understanding.
+
+3. **Null Handling**:
+   - **Use `Optional`**: Favor `Optional<T>` for return types that might be null to make the absence of a value explicit.
+   - **Consistent Null Checks**: Implement consistent null checks throughout your code to prevent `NullPointerExceptions`.
+   - **Code Reviews**: Encourage code reviews focusing on null handling practices.
+
+4. **Static vs. Instance Context**:
+   - **Use Static Wisely**: Only use static methods when state management is not required. For instance-specific behavior, prefer instance methods.
+   - **Document Intent**: Clearly document the reason for using static methods when applicable, particularly in shared utility classes.
+
+5. **Final Keyword**:
+   - **Educate on Usage**: Provide guidelines on using `final` for variables, methods, and classes to convey intent and immutability clearly.
+   - **Consistent Style**: Establish a coding style that favors immutability (using `final`) where appropriate.
+
+### Ambiguities In Spring Boot
+
+1. **Bean Scopes**:
+   - Confusion can arise between different bean scopes (`singleton`, `prototype`, `request`, `session`, etc.). Understanding when to use each scope is critical, especially in web applications.
+
+2. **Configuration Properties**:
+   - The distinction between `@ConfigurationProperties` and `@Value` can be ambiguous. Both are used for external configuration, but their use cases differ, which can lead to confusion.
+
+3. **AOP (Aspect-Oriented Programming)**:
+   - Understanding how and when aspects are applied can be ambiguous, particularly with pointcuts and advice types. Misconfiguration can lead to unexpected behaviors.
+
+4. **Spring Profiles**:
+   - Using profiles to manage different environments can be ambiguous if not documented properly. Understanding how to activate and use profiles correctly is essential.
+
+5. **Exception Handling**:
+   - The various ways to handle exceptions in Spring (e.g., `@ControllerAdvice`, `@ExceptionHandler`) can create ambiguity about the best practices and proper configurations.
+
+6. **Dependency Injection**:
+   - The different forms of dependency injection (constructor injection, setter injection, method injection) can be ambiguous, especially regarding their implications for immutability and testing.
+
+### Conclusion
+
+To minimize ambiguity, it’s essential to have a strong understanding of both Java and Spring Boot fundamentals. Consistent code practices, thorough documentation, and leveraging community resources can also help clarify these ambiguities. If you have specific scenarios or questions in mind, feel free to ask!
+
+### To avoid ambiguities In Spring Boot, here are some practical strategies:
+
+1. **Bean Scopes**:
+   - **Documentation**: Maintain comprehensive documentation on when to use each bean scope, including examples.
+   - **Use Annotations**: Clearly annotate your beans with their scopes and provide comments on their intended use.
+
+2. **Configuration Properties**:
+   - **Standardize Usage**: Decide when to use `@ConfigurationProperties` vs. `@Value` in your projects and stick to that standard across the team.
+   - **Educate the Team**: Share best practices and examples through team meetings or documentation.
+
+3. **AOP (Aspect-Oriented Programming)**:
+   - **Clear Documentation**: Document aspects, pointcuts, and advice types clearly in your codebase.
+   - **Start Simple**: Begin with simple aspects and gradually incorporate more complex AOP patterns as understanding improves.
+
+4. **Spring Profiles**:
+   - **Clear Naming Conventions**: Use descriptive names for profiles that reflect their purpose (e.g., `dev`, `prod`).
+   - **Documentation**: Maintain a guide on how to activate and use profiles, including examples and typical use cases.
+
+5. **Exception Handling**:
+   - **Unified Exception Strategy**: Establish a consistent strategy for handling exceptions (e.g., always use `@ControllerAdvice` for REST APIs).
+   - **Code Examples**: Share code snippets and examples of proper exception handling during team knowledge-sharing sessions.
+
+6. **Dependency Injection**:
+   - **Prefer Constructor Injection**: Encourage the use of constructor injection for mandatory dependencies to improve immutability.
+   - **Document Injection Types**: Provide documentation explaining the implications of each type of injection and when to use them.
+
+### Conclusion
+
+By implementing these strategies, you can significantly reduce ambiguity in Java and Spring Boot development. Regular training, consistent documentation, and fostering a culture of knowledge sharing within your team can also help clarify these areas. If you have specific scenarios where ambiguity arises, feel free to share, and we can address them further!
+
+---
