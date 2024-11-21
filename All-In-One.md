@@ -52,7 +52,7 @@
 47. [SOLID Principles](#solid-principles)  
 48. [Hashtable vs. ConcurrentHashMap](#hashtable-vs-concurrenthashmap)  
 49. [Fail-Fast vs. Fail-Safe](#fail-fast-vs-fail-safe)
-50. [Fail-Fast and Fail-Safe](#fail-fast-and-fail-safe
+50. [Fail-Fast and Fail-Safe](#fail-fast-and-fail-safe)
 51. [Sharding in MongoDB](#sharding-in-mongodb)  
 52. [Horizontal and Vertical Scaling](#horizontal-vertical-scaling)  
 53. [Types of ClassLoaders](#types-of-classloaders)  
