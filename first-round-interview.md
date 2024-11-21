@@ -23320,7 +23320,7 @@ graph TD
     B --> D{Shared Resource}
     C --> D
     D -->|Synchronized| E[Accessing Resource]
-    D -->|Waiting for lock| F[Blocked (Thread 3)]
+    D -->|Waiting for lock| F[Blocked - Thread 3]
     E --> G[Finished Task 1]
     F --> G
     D --> H[Thread 1 completes Task]
