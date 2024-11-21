@@ -890,6 +890,2676 @@ System.out.println(result);  // Output: apple, banana, cherry
 
 These Java 8 features represent a major shift towards functional programming in Java, enhancing both code readability and performance. By leveraging these features, developers can write more concise, expressive, and maintainable Java code.
 
+---
+
+## Common interview questions related to Java multithreading and concurrency, along with detailed answers and code examples.
+
+### **1. What is the difference between `Thread` and `Runnable`?**
+
+**Answer**:
+- **Thread**: A `Thread` is a class in Java that provides a way to create and manage threads. You can extend the `Thread` class and override its `run()` method to define the thread's behavior.
+- **Runnable**: `Runnable` is a functional interface that represents a task that can be executed concurrently. You implement the `Runnable` interface and define the `run()` method. Then, you pass an instance of `Runnable` to a `Thread` object to execute it.
+
+**Example**:
+```java
+// Using Thread
+class MyThread extends Thread {
+    public void run() {
+        System.out.println("Thread is running");
+    }
+}
+
+public class ThreadExample {
+    public static void main(String[] args) {
+        MyThread thread = new MyThread();
+        thread.start();
+    }
+}
+
+// Using Runnable
+class MyRunnable implements Runnable {
+    public void run() {
+        System.out.println("Runnable is running");
+    }
+}
+
+public class RunnableExample {
+    public static void main(String[] args) {
+        Thread thread = new Thread(new MyRunnable());
+        thread.start();
+    }
+}
+```
+
+### **2. How do you create a thread-safe singleton class in Java?**
+
+**Answer**:
+- A thread-safe singleton class ensures that only one instance of the class is created, even in a multithreaded environment. The common way to implement this is using the **Bill Pugh Singleton Design** or **Double-Checked Locking**.
+
+**Example (Bill Pugh Singleton)**:
+```java
+public class Singleton {
+    private Singleton() {}
+
+    private static class SingletonHelper {
+        private static final Singleton INSTANCE = new Singleton();
+    }
+
+    public static Singleton getInstance() {
+        return SingletonHelper.INSTANCE;
+    }
+}
+```
+
+### **3. What is the difference between `synchronized` block and `synchronized` method?**
+
+**Answer**:
+- **Synchronized Method**: Synchronizes the entire method, preventing multiple threads from executing the method simultaneously on the same object.
+- **Synchronized Block**: Allows more granular control by synchronizing only a block of code within a method, reducing the scope of synchronization.
+
+**Example**:
+```java
+class Counter {
+    private int count = 0;
+
+    // Synchronized Method
+    public synchronized void increment() {
+        count++;
+    }
+
+    // Synchronized Block
+    public void incrementWithBlock() {
+        synchronized (this) {
+            count++;
+        }
+    }
+}
+```
+
+### **4. Explain the concept of a `volatile` variable in Java.**
+
+**Answer**:
+- A `volatile` variable ensures that changes to the variable are visible to all threads immediately. It prevents caching of variables and ensures that updates made by one thread are visible to other threads.
+
+**Example**:
+```java
+public class VolatileExample {
+    private volatile boolean running = true;
+
+    public void stop() {
+        running = false;
+    }
+
+    public void work() {
+        while (running) {
+            // Do some work
+        }
+        System.out.println("Stopped working");
+    }
+
+    public static void main(String[] args) {
+        VolatileExample example = new VolatileExample();
+        new Thread(example::work).start();
+        new Thread(() -> {
+            try { Thread.sleep(1000); } catch (InterruptedException e) {}
+            example.stop();
+        }).start();
+    }
+}
+```
+
+### **5. What is the purpose of `CountDownLatch` and how does it work?**
+
+**Answer**:
+- `CountDownLatch` is a concurrency utility that allows one or more threads to wait until a set of operations performed by other threads completes. It is initialized with a count that is decremented by each operation.
+
+**Example**:
+```java
+import java.util.concurrent.CountDownLatch;
+
+public class CountDownLatchExample {
+    public static void main(String[] args) throws InterruptedException {
+        CountDownLatch latch = new CountDownLatch(3);
+
+        Runnable task = () -> {
+            System.out.println("Task completed");
+            latch.countDown();
+        };
+
+        new Thread(task).start();
+        new Thread(task).start();
+        new Thread(task).start();
+
+        latch.await(); // Waits for the count to reach zero
+        System.out.println("All tasks completed");
+    }
+}
+```
+
+### **6. How does `ExecutorService` help in managing threads?**
+
+**Answer**:
+- `ExecutorService` is part of the Java Concurrency framework and provides a higher-level replacement for the traditional way of managing threads. It simplifies thread management by providing thread pools and various utility methods for task execution and lifecycle management.
+
+**Example**:
+```java
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+public class ExecutorServiceExample {
+    public static void main(String[] args) {
+        ExecutorService executor = Executors.newFixedThreadPool(3);
+
+        Runnable task = () -> {
+            System.out.println("Task executed by: " + Thread.currentThread().getName());
+        };
+
+        for (int i = 0; i < 5; i++) {
+            executor.execute(task);
+        }
+
+        executor.shutdown(); // Initiates an orderly shutdown
+    }
+}
+```
+
+### **7. What is the purpose of `Future` and `Callable`?**
+
+**Answer**:
+- **Callable**: A functional interface similar to `Runnable` but can return a result and throw checked exceptions. It is used with `ExecutorService` to submit tasks.
+- **Future**: Represents the result of an asynchronous computation. You can use it to check if the task is complete, retrieve the result, or cancel the task.
+
+**Example**:
+```java
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+
+public class CallableFutureExample {
+    public static void main(String[] args) throws InterruptedException, ExecutionException {
+        ExecutorService executor = Executors.newFixedThreadPool(1);
+
+        Callable<Integer> task = () -> {
+            Thread.sleep(2000); // Simulate long-running task
+            return 123;
+        };
+
+        Future<Integer> future = executor.submit(task);
+        System.out.println("Task submitted");
+
+        // Perform other operations while waiting
+        Integer result = future.get(); // This will block until the task completes
+        System.out.println("Task result: " + result);
+
+        executor.shutdown();
+    }
+}
+```
+
+### **8. What are `synchronized` collections and how do they work?**
+
+**Answer**:
+- `Synchronized` collections are thread-safe versions of standard collections. They are created by wrapping standard collections with methods from the `Collections` class.
+
+**Example**:
+```java
+import java.util.Collections;
+import java.util.List;
+import java.util.ArrayList;
+
+public class SynchronizedCollectionsExample {
+    public static void main(String[] args) {
+        List<Integer> list = Collections.synchronizedList(new ArrayList<>());
+
+        // Adding elements to the list
+        list.add(1);
+        list.add(2);
+        list.add(3);
+
+        // Synchronizing access to the list
+        synchronized (list) {
+            for (Integer number : list) {
+                System.out.println(number);
+            }
+        }
+    }
+}
+```
+
+### **9. What is the difference between `notify()`, `notifyAll()`, and `wait()` in Java?**
+
+**Answer**:
+- **`wait()`**: Causes the current thread to wait until another thread invokes `notify()` or `notifyAll()` on the same object. It releases the lock on the object.
+- **`notify()`**: Wakes up a single thread that is waiting on the object’s monitor.
+- **`notifyAll()`**: Wakes up all threads that are waiting on the object’s monitor.
+
+**Example**:
+```java
+class WaitNotifyExample {
+    private final Object lock = new Object();
+    private boolean isAvailable = false;
+
+    public void produce() throws InterruptedException {
+        synchronized (lock) {
+            while (isAvailable) {
+                lock.wait();
+            }
+            System.out.println("Produced");
+            isAvailable = true;
+            lock.notify(); // Notify consumer
+        }
+    }
+
+    public void consume() throws InterruptedException {
+        synchronized (lock) {
+            while (!isAvailable) {
+                lock.wait();
+            }
+            System.out.println("Consumed");
+            isAvailable = false;
+            lock.notify(); // Notify producer
+        }
+    }
+
+    public static void main(String[] args) {
+        WaitNotifyExample example = new WaitNotifyExample();
+
+        Thread producer = new Thread(() -> {
+            try {
+                example.produce();
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        });
+
+        Thread consumer = new Thread(() -> {
+            try {
+                example.consume();
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        });
+
+        producer.start();
+        consumer.start();
+    }
+}
+```
+
+### **10. What are `Semaphore` and `ReentrantLock`? How are they used?**
+
+**Answer**:
+- **Semaphore**: A synchronization aid that controls access to a shared resource through a set of permits. It can be used to limit the number of threads that can access a resource simultaneously.
+
+**Example**:
+```java
+import java.util.concurrent.Semaphore;
+
+public class SemaphoreExample {
+    private static final Semaphore semaphore = new Semaphore(2);
+
+    public static void main(String[] args) {
+        Runnable task = () -> {
+            try {
+                semaphore.acquire();
+                System.out.println("Semaphore acquired by " + Thread.currentThread().getName());
+                Thread.sleep(2000); // Simulate work
+
+
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            } finally {
+                semaphore.release();
+                System.out.println("Semaphore released by " + Thread.currentThread().getName());
+            }
+        };
+
+        for (int i = 0; i < 5; i++) {
+            new Thread(task).start();
+        }
+    }
+}
+```
+
+- **ReentrantLock**: A `Lock` implementation that allows threads to acquire the lock multiple times by the same thread and provides more sophisticated thread synchronization.
+
+**Example**:
+```java
+import java.util.concurrent.locks.ReentrantLock;
+
+public class ReentrantLockExample {
+    private final ReentrantLock lock = new ReentrantLock();
+
+    public void doWork() {
+        lock.lock();
+        try {
+            System.out.println("Lock acquired by " + Thread.currentThread().getName());
+            Thread.sleep(1000); // Simulate work
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        } finally {
+            lock.unlock();
+            System.out.println("Lock released by " + Thread.currentThread().getName());
+        }
+    }
+
+    public static void main(String[] args) {
+        ReentrantLockExample example = new ReentrantLockExample();
+
+        Runnable task = example::doWork;
+
+        for (int i = 0; i < 3; i++) {
+            new Thread(task).start();
+        }
+    }
+}
+```
+
+These questions cover fundamental aspects of multithreading and concurrency in Java, from basic thread management to advanced synchronization mechanisms. Understanding these concepts and their applications is crucial for writing efficient and thread-safe Java applications.
+
+Certainly! Below is a tabular comparison of common Java concepts and features that are frequently asked about in interviews. This comparison highlights the key differences between each pair or group.
+
+| **Aspect**                 | **Concept 1**               | **Concept 2**               | **Difference**                                                                                           |
+|----------------------------|------------------------------|------------------------------|----------------------------------------------------------------------------------------------------------|
+| **Thread vs Runnable**     | `Thread`                     | `Runnable`                   | - `Thread` is a class, while `Runnable` is an interface.<br>- `Thread` requires extending, while `Runnable` can be implemented and passed to a `Thread`. |
+| **synchronized Method vs synchronized Block** | Synchronized Method          | Synchronized Block           | - Synchronized Method locks the entire method, while Synchronized Block locks only a specific block of code.<br>- Blocks allow more granular control of synchronization. |
+| **Volatile vs synchronized** | `volatile`                   | `synchronized`               | - `volatile` ensures visibility of changes across threads without locking.<br>- `synchronized` ensures both visibility and atomicity through locking. |
+| **Callable vs Runnable**   | `Callable`                   | `Runnable`                   | - `Callable` returns a result and can throw checked exceptions.<br>- `Runnable` does not return a result and cannot throw checked exceptions. |
+| **Future vs CompletableFuture** | `Future`                    | `CompletableFuture`          | - `Future` represents the result of an asynchronous computation but has limited methods.<br>- `CompletableFuture` extends `Future` with more functionality and support for asynchronous programming. |
+| **CountDownLatch vs CyclicBarrier** | `CountDownLatch`            | `CyclicBarrier`              | - `CountDownLatch` allows threads to wait until a count reaches zero.<br>- `CyclicBarrier` allows a set of threads to wait for each other to reach a common barrier point. |
+| **Semaphore vs ReentrantLock** | `Semaphore`                 | `ReentrantLock`              | - `Semaphore` controls access to a shared resource with a set of permits.<br>- `ReentrantLock` provides explicit lock and unlock methods with advanced features like try-lock and timed lock. |
+| **ConcurrentHashMap vs Hashtable** | `ConcurrentHashMap`        | `Hashtable`                  | - `ConcurrentHashMap` is designed for concurrent access and is not synchronized.<br>- `Hashtable` is synchronized but may be less performant in high-concurrency scenarios. |
+| **Java 8 Streams vs Collections** | Streams                    | Collections                   | - Streams provide a functional approach to processing collections with operations like filter, map, and reduce.<br>- Collections are the traditional way of storing and manipulating data. |
+| **Default Method vs Static Method** | Default Method              | Static Method                | - Default methods can be overridden and provide a default implementation in interfaces.<br>- Static methods belong to the interface itself and cannot be overridden. |
+| **String vs StringBuilder vs StringBuffer** | `String`                    | `StringBuilder` / `StringBuffer` | - `String` is immutable, `StringBuilder` is mutable and not synchronized, and `StringBuffer` is mutable and synchronized.<br>- Use `StringBuilder` or `StringBuffer` for frequent modifications. |
+| **Abstract Class vs Interface** | Abstract Class              | Interface                     | - An abstract class can have fields and constructors, while an interface cannot.<br>- An abstract class can provide implementation for some methods, while interfaces in Java 7 and earlier cannot (except default methods in Java 8). |
+| **ArrayList vs LinkedList** | `ArrayList`                  | `LinkedList`                 | - `ArrayList` is backed by a dynamic array and provides faster access but slower insertions/deletions.<br>- `LinkedList` is backed by a doubly linked list and provides faster insertions/deletions but slower access. |
+| **Hashtable vs HashMap**   | `Hashtable`                  | `HashMap`                    | - `Hashtable` is synchronized and does not allow null keys/values.<br>- `HashMap` is not synchronized and allows one null key and multiple null values. |
+| **TreeMap vs HashMap**     | `TreeMap`                    | `HashMap`                    | - `TreeMap` is sorted based on natural ordering or a provided comparator, while `HashMap` is unordered.<br>- `TreeMap` is slower due to sorting but maintains order. |
+| **LinkedHashMap vs HashMap** | `LinkedHashMap`             | `HashMap`                    | - `LinkedHashMap` maintains insertion order, while `HashMap` does not.<br>- `LinkedHashMap` has slightly slower performance due to maintaining order. |
+| **String vs StringBuilder** | `String`                    | `StringBuilder`              | - `String` is immutable, meaning every modification creates a new instance.<br>- `StringBuilder` is mutable and allows modification without creating new instances. |
+
+### Example Code for Some Differences
+
+**1. Thread vs Runnable**
+
+```java
+// Thread
+class MyThread extends Thread {
+    public void run() {
+        System.out.println("Thread running");
+    }
+}
+
+public class ThreadExample {
+    public static void main(String[] args) {
+        new MyThread().start();
+    }
+}
+
+// Runnable
+class MyRunnable implements Runnable {
+    public void run() {
+        System.out.println("Runnable running");
+    }
+}
+
+public class RunnableExample {
+    public static void main(String[] args) {
+        new Thread(new MyRunnable()).start();
+    }
+}
+```
+
+**2. Default Method vs Static Method**
+
+```java
+interface MyInterface {
+    // Default method
+    default void defaultMethod() {
+        System.out.println("Default method");
+    }
+
+    // Static method
+    static void staticMethod() {
+        System.out.println("Static method");
+    }
+}
+
+public class InterfaceExample {
+    public static void main(String[] args) {
+        MyInterface.staticMethod(); // Static method called on interface
+
+        MyInterface instance = new MyInterface() {}; // Anonymous class to implement default method
+        instance.defaultMethod(); // Default method called on instance
+    }
+}
+```
+
+**3. String vs StringBuilder**
+
+```java
+public class StringBuilderExample {
+    public static void main(String[] args) {
+        // String (immutable)
+        String str = "Hello";
+        str = str + " World";
+        System.out.println(str); // Output: Hello World
+
+        // StringBuilder (mutable)
+        StringBuilder sb = new StringBuilder("Hello");
+        sb.append(" World");
+        System.out.println(sb.toString()); // Output: Hello World
+    }
+}
+```
+
+These questions and answers should provide a comprehensive overview of fundamental Java concepts and help you prepare for interviews effectively.
+
+---
+
+## Tricky Java interview questions
+
+Here are some tricky Java interview questions related to strings, arrays, inheritance, access specifiers, and keywords. Each question is accompanied by its answer and an explanation.
+
+### **1. String Immutability and Interning**
+
+**Question**: What will be the output of the following code snippet?
+
+```java
+public class StringTest {
+    public static void main(String[] args) {
+        String s1 = new String("hello");
+        String s2 = "hello";
+        String s3 = s1.intern();
+        System.out.println(s1 == s2); // Output?
+        System.out.println(s2 == s3); // Output?
+    }
+}
+```
+
+**Answer**:
+```
+false
+true
+```
+
+**Explanation**:
+- `s1` is created using the `new` keyword, so it refers to a new object in the heap, whereas `s2` refers to a string literal in the string pool.
+- `s3` is obtained using `s1.intern()`, which returns the reference to the string literal from the string pool.
+- `s1 == s2` is `false` because `s1` and `s2` refer to different objects.
+- `s2 == s3` is `true` because `s3` is interned and thus refers to the same object as `s2`.
+
+### **2. Array Index Out Of Bounds**
+
+**Question**: What will be the output of the following code snippet?
+
+```java
+public class ArrayTest {
+    public static void main(String[] args) {
+        int[] arr = new int[5];
+        arr[5] = 10; // ArrayIndexOutOfBoundsException
+        System.out.println("This will not be printed");
+    }
+}
+```
+
+**Answer**:
+```
+Exception in thread "main" java.lang.ArrayIndexOutOfBoundsException: Index 5 out of bounds for length 5
+```
+
+**Explanation**:
+- Arrays in Java are zero-based, meaning indices range from `0` to `length-1`.
+- Attempting to access or assign a value at index `5` in an array of length `5` results in an `ArrayIndexOutOfBoundsException`.
+
+### **3. Inheritance and Overriding**
+
+**Question**: What will be the output of the following code snippet?
+
+```java
+class A {
+    public void display() {
+        System.out.println("Display in A");
+    }
+}
+
+class B extends A {
+    public void display() {
+        System.out.println("Display in B");
+    }
+}
+
+public class TestInheritance {
+    public static void main(String[] args) {
+        A obj = new B();
+        obj.display();
+    }
+}
+```
+
+**Answer**:
+```
+Display in B
+```
+
+**Explanation**:
+- This demonstrates **runtime polymorphism** (method overriding). The reference variable `obj` of type `A` points to an object of type `B`.
+- The `display()` method of class `B` is called, which overrides the method in class `A`.
+
+### **4. Access Specifiers and Static**
+
+**Question**: What will be the output of the following code snippet?
+
+```java
+class Parent {
+    private static void show() {
+        System.out.println("Parent show()");
+    }
+}
+
+class Child extends Parent {
+    public static void show() {
+        System.out.println("Child show()");
+    }
+}
+
+public class TestAccess {
+    public static void main(String[] args) {
+        Parent.show();
+        Child.show();
+    }
+}
+```
+
+**Answer**:
+```
+Parent show()
+Child show()
+```
+
+**Explanation**:
+- Static methods are not polymorphic and are resolved at compile-time. 
+- The method `show()` in `Parent` is hidden by the `show()` method in `Child`.
+- The calls to `Parent.show()` and `Child.show()` are resolved to the respective static methods in `Parent` and `Child`.
+
+### **5. Keywords and Control Flow**
+
+**Question**: What will be the output of the following code snippet?
+
+```java
+public class TestKeywords {
+    public static void main(String[] args) {
+        int x = 10;
+        switch (x) {
+            case 10:
+                System.out.println("Ten");
+            case 20:
+                System.out.println("Twenty");
+            default:
+                System.out.println("Default");
+        }
+    }
+}
+```
+
+**Answer**:
+```
+Ten
+Twenty
+Default
+```
+
+**Explanation**:
+- The `switch` statement does not have `break` statements, so after matching `case 10`, it continues to execute subsequent cases (including `case 20` and `default`).
+
+### **6. Method Overloading with Varargs**
+
+**Question**: What will be the output of the following code snippet?
+
+```java
+public class VarargsTest {
+    public static void test(int... numbers) {
+        System.out.println("Varargs method");
+    }
+
+    public static void test(int number) {
+        System.out.println("Single int method");
+    }
+
+    public static void main(String[] args) {
+        test(1);
+        test(1, 2, 3);
+    }
+}
+```
+
+**Answer**:
+```
+Single int method
+Varargs method
+```
+
+**Explanation**:
+- When calling `test(1)`, the method `test(int number)` is selected because it matches a single integer exactly.
+- When calling `test(1, 2, 3)`, the varargs method `test(int... numbers)` is chosen because it can accept multiple integers.
+
+### **7. Constructor vs Static Block**
+
+**Question**: What will be the output of the following code snippet?
+
+```java
+public class TestBlocks {
+    static {
+        System.out.println("Static block");
+    }
+
+    {
+        System.out.println("Instance block");
+    }
+
+    public TestBlocks() {
+        System.out.println("Constructor");
+    }
+
+    public static void main(String[] args) {
+        new TestBlocks();
+    }
+}
+```
+
+**Answer**:
+```
+Static block
+Instance block
+Constructor
+```
+
+**Explanation**:
+- The static block runs once when the class is loaded.
+- The instance block runs every time an object is created, before the constructor.
+- The constructor runs last when the object is created.
+
+### **8. Final Keyword**
+
+**Question**: What will be the output of the following code snippet?
+
+```java
+class A {
+    final void display() {
+        System.out.println("Display in A");
+    }
+}
+
+class B extends A {
+    // Uncommenting the following method will cause a compilation error
+    // void display() {
+    //     System.out.println("Display in B");
+    // }
+}
+
+public class TestFinal {
+    public static void main(String[] args) {
+        new B().display();
+    }
+}
+```
+
+**Answer**:
+```
+Display in A
+```
+
+**Explanation**:
+- The `final` keyword in a method declaration means that the method cannot be overridden in any subclass.
+- Therefore, class `B` inherits the `display()` method from class `A` and cannot override it.
+
+These questions test various aspects of Java, including string handling, inheritance, access control, and keywords. Understanding these tricky scenarios helps in mastering Java and preparing for complex interview questions.
+
+---
+
+## POJO (Plain Old Java Object) classes
+
+POJO (Plain Old Java Object) classes are fundamental in Java programming, especially when working with frameworks like Spring and Hibernate, or in JavaBeans conventions. POJOs are used to encapsulate data in a simple and straightforward manner without imposing unnecessary constraints or requiring complex structures. Here are the key rules and conventions for creating POJO classes:
+
+### **1. **Class Declaration**
+
+- **No Special Inheritance**: POJOs should not extend any specialized classes or implement interfaces that impose constraints. They should be simple and not require inheritance from any specific base class.
+- **Public Class**: Typically, the class should be `public` so it can be accessed from other packages.
+
+**Example**:
+```java
+public class Person {
+    // Class body
+}
+```
+
+### **2. **Private Fields**
+
+- **Encapsulation**: Fields should be private to enforce encapsulation. This prevents direct access to the fields from outside the class.
+- **Field Declaration**: Fields should have a `private` access modifier to ensure they can only be accessed through getter and setter methods.
+
+**Example**:
+```java
+public class Person {
+    private String name;
+    private int age;
+}
+```
+
+### **3. **No-Argument Constructor**
+
+- **Default Constructor**: A POJO class should have a no-argument (default) constructor. This allows for object creation without any initial values. Many frameworks require a no-argument constructor to create instances via reflection.
+
+**Example**:
+```java
+public class Person {
+    private String name;
+    private int age;
+
+    // No-argument constructor
+    public Person() {
+    }
+}
+```
+
+### **4. **Getters and Setters**
+
+- **Accessors**: Provide public getter and setter methods for accessing and modifying the private fields. This adheres to the principle of encapsulation and allows controlled access to the fields.
+
+**Example**:
+```java
+public class Person {
+    private String name;
+    private int age;
+
+    // No-argument constructor
+    public Person() {
+    }
+
+    // Getter for name
+    public String getName() {
+        return name;
+    }
+
+    // Setter for name
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    // Getter for age
+    public int getAge() {
+        return age;
+    }
+
+    // Setter for age
+    public void setAge(int age) {
+        this.age = age;
+    }
+}
+```
+
+### **5. **Override `toString()`, `equals()`, and `hashCode()`**
+
+- **`toString()`**: Override `toString()` method to provide a string representation of the object. This is helpful for debugging and logging.
+- **`equals()`** and **`hashCode()`**: Override `equals()` and `hashCode()` methods to ensure correct behavior in collections like `HashSet` and `HashMap`, especially if you need to compare POJO instances or use them as keys in a map.
+
+**Example**:
+```java
+public class Person {
+    private String name;
+    private int age;
+
+    // No-argument constructor
+    public Person() {
+    }
+
+    // Getters and setters
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    @Override
+    public String toString() {
+        return "Person{name='" + name + "', age=" + age + "}";
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        Person person = (Person) obj;
+        return age == person.age && name.equals(person.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, age);
+    }
+}
+```
+
+### **6. **No Business Logic**
+
+- **Simplicity**: POJOs should not contain business logic. They should only serve as data carriers or models. Business logic should be handled by separate service classes or methods.
+
+**Example**:
+```java
+// POJO Class
+public class Person {
+    private String name;
+    private int age;
+
+    // No-argument constructor
+    public Person() {
+    }
+
+    // Getters and setters
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+}
+
+// Business Logic Class
+public class PersonService {
+    public void celebrateBirthday(Person person) {
+        person.setAge(person.getAge() + 1);
+    }
+}
+```
+
+### **7. **Serializable (Optional)**
+
+- **Serialization**: If the POJO needs to be serialized (e.g., for sending over a network or saving to a file), implement `Serializable` interface. This is optional and depends on the use case.
+
+**Example**:
+```java
+import java.io.Serializable;
+
+public class Person implements Serializable {
+    private static final long serialVersionUID = 1L; // Recommended for serialization
+    private String name;
+    private int age;
+
+    // No-argument constructor
+    public Person() {
+    }
+
+    // Getters and setters
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+}
+```
+
+### **Summary Table**
+
+| **Rule**                       | **Description**                                                                                  | **Example**                                |
+|--------------------------------|--------------------------------------------------------------------------------------------------|--------------------------------------------|
+| **Class Declaration**          | The class should be public and not extend any specific class.                                    | `public class Person`                     |
+| **Private Fields**             | Fields should be private to ensure encapsulation.                                                | `private String name;`                    |
+| **No-Argument Constructor**    | Should have a no-argument constructor.                                                            | `public Person() {}`                      |
+| **Getters and Setters**         | Provide public getter and setter methods for private fields.                                      | `public String getName() { return name; }` |
+| **Override `toString()`, `equals()`, and `hashCode()`** | Provide meaningful implementations of these methods for better behavior in collections and debugging. | `@Override public String toString() {}`   |
+| **No Business Logic**          | POJOs should not contain business logic; only data.                                                | Business logic should be in other classes.|
+| **Serializable (Optional)**    | Implement `Serializable` if needed for serialization.                                             | `implements Serializable`                  |
+
+These rules help in designing clean, maintainable, and efficient POJO classes that fit well within Java’s object-oriented paradigm.
+
+---
+
+Certainly! Here's an in-depth overview covering Java concepts related to inheritance, abstract classes, interfaces, final, `this`, `super`, exception handling, garbage collection, string manipulation, threads, functional programming, collections framework, and file handling, with explanations, code examples, and interview questions.
+
+### **1. Inheritance**
+
+**Definition**: Inheritance is a mechanism where a new class (subclass) inherits the properties and behaviors of an existing class (superclass). It supports code reuse and establishes a hierarchical relationship.
+
+**Example**:
+```java
+class Animal {
+    void eat() {
+        System.out.println("Animal eats");
+    }
+}
+
+class Dog extends Animal {
+    void bark() {
+        System.out.println("Dog barks");
+    }
+}
+
+public class TestInheritance {
+    public static void main(String[] args) {
+        Dog dog = new Dog();
+        dog.eat();  // Inherited method
+        dog.bark(); // Specific method
+    }
+}
+```
+
+**Interview Question**:
+- **Q**: What is the difference between `extends` and `implements` in Java?
+- **A**: `extends` is used for class inheritance, while `implements` is used for implementing interfaces. A class can extend only one class but can implement multiple interfaces.
+
+### **2. Abstract Class**
+
+**Definition**: An abstract class cannot be instantiated and may contain abstract methods (methods without implementations) as well as concrete methods (methods with implementations).
+
+**Example**:
+```java
+abstract class Shape {
+    abstract void draw(); // Abstract method
+
+    void color() {
+        System.out.println("Coloring shape");
+    }
+}
+
+class Circle extends Shape {
+    void draw() {
+        System.out.println("Drawing Circle");
+    }
+}
+
+public class TestAbstractClass {
+    public static void main(String[] args) {
+        Shape shape = new Circle();
+        shape.draw();  // Concrete implementation in Circle
+        shape.color(); // Concrete method from Shape
+    }
+}
+```
+
+**Interview Question**:
+- **Q**: Can you instantiate an abstract class?
+- **A**: No, you cannot instantiate an abstract class directly. You need to create a subclass that provides implementations for all abstract methods.
+
+### **3. Interface**
+
+**Definition**: An interface is an abstract type that contains only abstract methods (until Java 8) and constants. From Java 8 onwards, interfaces can have default and static methods with implementations.
+
+**Example**:
+```java
+interface Animal {
+    void eat();
+
+    default void sleep() {
+        System.out.println("Animal sleeps");
+    }
+}
+
+class Dog implements Animal {
+    public void eat() {
+        System.out.println("Dog eats");
+    }
+}
+
+public class TestInterface {
+    public static void main(String[] args) {
+        Dog dog = new Dog();
+        dog.eat();   // Implementation in Dog
+        dog.sleep(); // Default method from Animal
+    }
+}
+```
+
+**Interview Question**:
+- **Q**: What is the difference between an abstract class and an interface?
+- **A**: An abstract class can have concrete methods and fields, while an interface cannot (except static and default methods from Java 8). A class can implement multiple interfaces but can extend only one class.
+
+### **4. Final**
+
+**Definition**: The `final` keyword in Java can be applied to classes, methods, and variables:
+- **Final Class**: Cannot be subclassed.
+- **Final Method**: Cannot be overridden.
+- **Final Variable**: Its value cannot be changed once initialized.
+
+**Example**:
+```java
+final class Constants {
+    static final int MAX_VALUE = 100;
+}
+
+// Uncommenting the following code will cause a compilation error
+// class ExtendedConstants extends Constants { }
+
+public class TestFinal {
+    public static void main(String[] args) {
+        System.out.println(Constants.MAX_VALUE);
+    }
+}
+```
+
+**Interview Question**:
+- **Q**: Can a final class have a constructor?
+- **A**: Yes, a final class can have a constructor. It just cannot be subclassed.
+
+### **5. `this` and `super`**
+
+- **`this`**: Refers to the current instance of the class. It is used to access members (fields, methods) of the current class and can be used to invoke other constructors in the same class.
+- **`super`**: Refers to the superclass of the current object. It is used to access superclass members and to invoke superclass constructors.
+
+**Example**:
+```java
+class Parent {
+    void show() {
+        System.out.println("Parent class");
+    }
+}
+
+class Child extends Parent {
+    void show() {
+        super.show();  // Calls show() method of Parent
+        System.out.println("Child class");
+    }
+}
+
+public class TestThisSuper {
+    public static void main(String[] args) {
+        Child child = new Child();
+        child.show(); // Outputs both Parent and Child class messages
+    }
+}
+```
+
+**Interview Question**:
+- **Q**: What is the difference between `this()` and `super()` in constructors?
+- **A**: `this()` is used to call another constructor in the same class, while `super()` is used to call a constructor from the superclass.
+
+### **6. Finally and Finalize**
+
+- **`finally`**: A block that follows `try-catch` and is executed regardless of whether an exception is thrown or not. It is used for code that must execute, such as closing resources.
+
+- **`finalize()`**: A method in `Object` class, which is called by the garbage collector before an object is removed from memory. It is not recommended to use it for releasing resources.
+
+**Example**:
+```java
+public class TestFinally {
+    public static void main(String[] args) {
+        try {
+            System.out.println("Inside try block");
+            throw new Exception("Exception thrown");
+        } catch (Exception e) {
+            System.out.println("Exception caught");
+        } finally {
+            System.out.println("Finally block executed");
+        }
+    }
+}
+```
+
+**Interview Question**:
+- **Q**: What is the difference between `finally` and `finalize()`?
+- **A**: `finally` is used for code that must execute after a `try-catch` block, while `finalize()` is used for cleanup before an object is garbage-collected.
+
+### **7. Garbage Collection and Memory Management**
+
+**Definition**: Java uses garbage collection to automatically manage memory. The JVM identifies and reclaims memory occupied by objects that are no longer in use.
+
+- **Garbage Collector Types**: Minor GC, Major GC, Full GC.
+- **Memory Areas**: Heap (used for object storage), Stack (used for method execution), and Metaspace (used for class metadata).
+
+**Interview Question**:
+- **Q**: How can you force garbage collection in Java?
+- **A**: You can suggest garbage collection by calling `System.gc()`, but there is no guarantee that garbage collection will occur immediately.
+
+### **8. Type Conversions**
+
+**Definition**: Type conversion refers to converting one data type to another.
+
+- **Widening Conversion**: Implicit conversion (e.g., `int` to `float`).
+- **Narrowing Conversion**: Explicit conversion (e.g., `float` to `int`).
+
+**Example**:
+```java
+public class TypeConversion {
+    public static void main(String[] args) {
+        int num = 10;
+        double d = num; // Widening conversion
+
+        double d2 = 10.5;
+        int num2 = (int) d2; // Narrowing conversion
+        System.out.println(num2); // Outputs 10
+    }
+}
+```
+
+**Interview Question**:
+- **Q**: What is the difference between implicit and explicit type conversion?
+- **A**: Implicit conversion (widening) is automatic and safe, while explicit conversion (narrowing) requires casting and may result in data loss.
+
+### **9. Checked and Unchecked Exceptions**
+
+**Checked Exceptions**: Must be either caught or declared in the method signature using `throws`.
+
+**Unchecked Exceptions**: Do not need to be declared or caught. They are subclasses of `RuntimeException`.
+
+**Example**:
+```java
+// Checked Exception
+public class CheckedException {
+    public static void main(String[] args) throws IOException {
+        FileReader file = new FileReader("test.txt");
+        BufferedReader reader = new BufferedReader(file);
+        reader.close();
+    }
+}
+
+// Unchecked Exception
+public class UncheckedException {
+    public static void main(String[] args) {
+        int[] arr = new int[5];
+        System.out.println(arr[10]); // ArrayIndexOutOfBoundsException
+    }
+}
+```
+
+**Interview Question**:
+- **Q**: Can you give an example of a checked and unchecked exception in Java?
+- **A**: Checked exceptions include `IOException` and `SQLException`. Unchecked exceptions include `NullPointerException` and `ArrayIndexOutOfBoundsException`.
+
+### **10. String, StringBuffer, StringBuilder**
+
+**String**: Immutable and thread-safe. Can be used for constant string operations.
+
+**StringBuffer**: Mutable and thread-safe. Used for scenarios where the string changes frequently in a multi-threaded environment.
+
+**StringBuilder**: Mutable and not thread-safe. Preferred when string changes are made in a single-threaded environment.
+
+**Example**:
+```java
+public class StringExample {
+    public static void main(String[] args) {
+        // String
+        String str1 = "Hello";
+        str1 = str1 + " World";
+        System.out.println(str1);
+
+        // StringBuffer
+        StringBuffer sb = new StringBuffer("Hello");
+        sb.append(" World");
+        System.out.println(sb);
+
+        // StringBuilder
+        StringBuilder sb2 = new
+
+ StringBuilder("Hello");
+        sb2.append(" World");
+        System.out.println(sb2);
+    }
+}
+```
+
+**Interview Question**:
+- **Q**: When would you use `StringBuilder` over `StringBuffer`?
+- **A**: Use `StringBuilder` when working in a single-threaded environment for better performance and `StringBuffer` when working in a multi-threaded environment where thread safety is a concern.
+
+### **11. Threads and Thread Lifecycle**
+
+**Definition**: Threads represent independent paths of execution within a program. The lifecycle includes states like `New`, `Runnable`, `Blocked`, `Waiting`, `Timed Waiting`, and `Terminated`.
+
+**Example**:
+```java
+class MyThread extends Thread {
+    public void run() {
+        System.out.println("Thread is running");
+    }
+}
+
+public class ThreadExample {
+    public static void main(String[] args) {
+        MyThread t = new MyThread();
+        t.start(); // Starts the thread
+    }
+}
+```
+
+**Interview Question**:
+- **Q**: What are the different states of a thread in Java?
+- **A**: New, Runnable, Blocked, Waiting, Timed Waiting, and Terminated.
+
+### **12. Functional Programming in Java**
+
+**Definition**: Functional programming focuses on using functions as first-class citizens and treating computations as the evaluation of mathematical functions. Java 8 introduced functional programming concepts like lambdas and streams.
+
+**Example**:
+```java
+import java.util.Arrays;
+import java.util.List;
+
+public class FunctionalProgramming {
+    public static void main(String[] args) {
+        List<String> names = Arrays.asList("Alice", "Bob", "Charlie");
+        
+        // Using lambda expression
+        names.forEach(name -> System.out.println(name));
+
+        // Using streams
+        names.stream()
+             .filter(name -> name.startsWith("A"))
+             .forEach(System.out::println);
+    }
+}
+```
+
+**Interview Question**:
+- **Q**: Why is functional programming beneficial in Java?
+- **A**: Functional programming promotes immutability, declarative code, and can lead to more concise and readable code, especially when using streams and lambda expressions.
+
+### **13. Collection Framework and Differences**
+
+**Definition**: The Java Collection Framework provides data structures and algorithms to store and manipulate collections of objects.
+
+- **List**: Ordered collection (e.g., `ArrayList`, `LinkedList`).
+- **Set**: Unordered collection with no duplicate elements (e.g., `HashSet`, `LinkedHashSet`, `TreeSet`).
+- **Map**: Collection of key-value pairs (e.g., `HashMap`, `LinkedHashMap`, `TreeMap`).
+- **Queue**: Collection designed for holding elements prior to processing (e.g., `PriorityQueue`, `LinkedList`).
+
+**Interview Question**:
+- **Q**: What is the difference between `HashMap` and `TreeMap`?
+- **A**: `HashMap` does not guarantee any order of elements and is not sorted. `TreeMap` stores keys in a sorted order based on their natural ordering or a comparator provided at map creation.
+
+### **14. Handling Inheritance in Java 8**
+
+Java 8 added several features that can be used in conjunction with inheritance:
+
+- **Default Methods in Interfaces**: Allow you to add new methods to interfaces with a default implementation.
+- **Lambda Expressions**: Enable more concise implementations of interface methods.
+
+**Example**:
+```java
+interface Animal {
+    void eat();
+
+    default void sleep() {
+        System.out.println("Animal sleeps");
+    }
+}
+
+class Dog implements Animal {
+    public void eat() {
+        System.out.println("Dog eats");
+    }
+}
+
+public class TestJava8Features {
+    public static void main(String[] args) {
+        Dog dog = new Dog();
+        dog.eat();
+        dog.sleep(); // Default method from Animal
+    }
+}
+```
+
+**Interview Question**:
+- **Q**: How do default methods in interfaces affect inheritance in Java 8?
+- **A**: Default methods allow interfaces to have methods with implementations, which can be inherited by implementing classes. This avoids breaking existing classes when new methods are added to interfaces.
+
+### **15. File Handling**
+
+**Definition**: File handling involves reading from and writing to files using classes from the `java.io` and `java.nio` packages.
+
+**Example**:
+```java
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+
+public class FileHandlingExample {
+    public static void main(String[] args) {
+        // Writing to a file
+        try (FileWriter writer = new FileWriter("example.txt")) {
+            writer.write("Hello, world!");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // Reading from a file
+        try (BufferedReader reader = new BufferedReader(new FileReader("example.txt"))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                System.out.println(line);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+**Interview Question**:
+- **Q**: What is the difference between `FileReader` and `BufferedReader`?
+- **A**: `FileReader` reads data as a stream of characters, while `BufferedReader` reads data from a `FileReader` (or other reader) and buffers it to provide efficient reading of characters, arrays, and lines.
+
+These topics cover a broad range of essential Java concepts and practices that are commonly encountered in interviews and practical applications. Understanding these principles, along with the associated code examples, will help you effectively address various Java-related questions and scenarios.
+
+---
+
+Certainly! Let’s break down the various methods for reading and writing files using Java IO and NIO, explain serialization and deserialization with examples, and discuss synchronization.
+
+### **Java IO and NIO File Reading and Writing**
+
+#### **1. Java IO (Input/Output)**
+
+Java IO provides several ways to read from and write to files:
+
+**Reading Files:**
+
+1. **Using `FileInputStream` and `FileOutputStream`**
+   - For binary files or raw bytes.
+
+   ```java
+   import java.io.FileInputStream;
+   import java.io.FileOutputStream;
+   import java.io.IOException;
+
+   public class IOExample {
+       public static void main(String[] args) {
+           try (FileInputStream fis = new FileInputStream("input.txt");
+                FileOutputStream fos = new FileOutputStream("output.txt")) {
+
+               int byteData;
+               while ((byteData = fis.read()) != -1) {
+                   fos.write(byteData);
+               }
+
+           } catch (IOException e) {
+               e.printStackTrace();
+           }
+       }
+   }
+   ```
+
+2. **Using `BufferedReader` and `BufferedWriter`**
+   - For reading and writing text with buffering for efficiency.
+
+   ```java
+   import java.io.BufferedReader;
+   import java.io.BufferedWriter;
+   import java.io.FileReader;
+   import java.io.FileWriter;
+   import java.io.IOException;
+
+   public class IOBufferedExample {
+       public static void main(String[] args) {
+           try (BufferedReader reader = new BufferedReader(new FileReader("input.txt"));
+                BufferedWriter writer = new BufferedWriter(new FileWriter("output.txt"))) {
+
+               String line;
+               while ((line = reader.readLine()) != null) {
+                   writer.write(line);
+                   writer.newLine();
+               }
+
+           } catch (IOException e) {
+               e.printStackTrace();
+           }
+       }
+   }
+   ```
+
+3. **Using `FileReader` and `FileWriter`**
+   - For simple text file operations without buffering.
+
+   ```java
+   import java.io.FileReader;
+   import java.io.FileWriter;
+   import java.io.IOException;
+
+   public class IOFileExample {
+       public static void main(String[] args) {
+           try (FileReader fr = new FileReader("input.txt");
+                FileWriter fw = new FileWriter("output.txt")) {
+
+               int charData;
+               while ((charData = fr.read()) != -1) {
+                   fw.write(charData);
+               }
+
+           } catch (IOException e) {
+               e.printStackTrace();
+           }
+       }
+   }
+   ```
+
+**Writing Files:**
+
+1. **Using `PrintWriter`**
+   - Simplifies writing formatted text.
+
+   ```java
+   import java.io.FileWriter;
+   import java.io.IOException;
+   import java.io.PrintWriter;
+
+   public class IOPrintWriterExample {
+       public static void main(String[] args) {
+           try (PrintWriter writer = new PrintWriter(new FileWriter("output.txt"))) {
+               writer.println("Hello, World!");
+               writer.printf("Number: %d%n", 123);
+           } catch (IOException e) {
+               e.printStackTrace();
+           }
+       }
+   }
+   ```
+
+#### **2. Java NIO (New Input/Output)**
+
+Java NIO provides more advanced file I/O operations, including non-blocking operations.
+
+**Reading Files:**
+
+1. **Using `Files.readAllLines()`**
+   - Reads all lines from a file into a `List<String>`.
+
+   ```java
+   import java.io.IOException;
+   import java.nio.file.Files;
+   import java.nio.file.Paths;
+   import java.util.List;
+
+   public class NIOReadExample {
+       public static void main(String[] args) {
+           try {
+               List<String> lines = Files.readAllLines(Paths.get("input.txt"));
+               lines.forEach(System.out::println);
+           } catch (IOException e) {
+               e.printStackTrace();
+           }
+       }
+   }
+   ```
+
+2. **Using `BufferedReader` with `Files.newBufferedReader()`**
+   - For reading text files with buffering.
+
+   ```java
+   import java.io.BufferedReader;
+   import java.io.IOException;
+   import java.nio.file.Files;
+   import java.nio.file.Paths;
+
+   public class NIOBufferedReaderExample {
+       public static void main(String[] args) {
+           try (BufferedReader reader = Files.newBufferedReader(Paths.get("input.txt"))) {
+               String line;
+               while ((line = reader.readLine()) != null) {
+                   System.out.println(line);
+               }
+           } catch (IOException e) {
+               e.printStackTrace();
+           }
+       }
+   }
+   ```
+
+**Writing Files:**
+
+1. **Using `Files.write()`**
+   - Write bytes or text to a file.
+
+   ```java
+   import java.io.IOException;
+   import java.nio.file.Files;
+   import java.nio.file.Paths;
+   import java.util.List;
+
+   public class NIOWriteExample {
+       public static void main(String[] args) {
+           List<String> lines = List.of("Hello", "World");
+
+           try {
+               Files.write(Paths.get("output.txt"), lines);
+           } catch (IOException e) {
+               e.printStackTrace();
+           }
+       }
+   }
+   ```
+
+2. **Using `Files.newBufferedWriter()`**
+   - For writing text with buffering.
+
+   ```java
+   import java.io.IOException;
+   import java.nio.file.Files;
+   import java.nio.file.Paths;
+   import java.nio.file.StandardOpenOption;
+   import java.nio.file.StandardOpenOption;
+   import java.util.List;
+
+   public class NIOBufferedWriterExample {
+       public static void main(String[] args) {
+           List<String> lines = List.of("Hello", "World");
+
+           try (var writer = Files.newBufferedWriter(Paths.get("output.txt"), StandardOpenOption.CREATE)) {
+               for (String line : lines) {
+                   writer.write(line);
+                   writer.newLine();
+               }
+           } catch (IOException e) {
+               e.printStackTrace();
+           }
+       }
+   }
+   ```
+
+### **Counting Words and Finding Words Used More than 50%**
+
+Here’s how you can count words and find those used more than 50%:
+
+```java
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+public class WordFrequency {
+    public static void main(String[] args) {
+        try {
+            List<String> lines = Files.readAllLines(Paths.get("input.txt"));
+            Map<String, Integer> wordCount = new HashMap<>();
+
+            // Count words
+            for (String line : lines) {
+                String[] words = line.split("\\s+");
+                for (String word : words) {
+                    word = word.toLowerCase();
+                    wordCount.put(word, wordCount.getOrDefault(word, 0) + 1);
+                }
+            }
+
+            int totalWords = wordCount.values().stream().mapToInt(Integer::intValue).sum();
+            Map<String, Double> wordPercentage = new HashMap<>();
+
+            // Calculate percentages
+            for (Map.Entry<String, Integer> entry : wordCount.entrySet()) {
+                double percentage = (entry.getValue() / (double) totalWords) * 100;
+                if (percentage > 50) {
+                    wordPercentage.put(entry.getKey(), percentage);
+                }
+            }
+
+            // Print results
+            wordPercentage.forEach((word, percentage) -> System.out.println(word + ": " + percentage + "%"));
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+## Serialization and Deserialization
+
+**Serialization**: Converting an object into a byte stream for storage or transmission. **Deserialization**: Reconstructing the object from the byte stream.
+
+**Example**:
+
+**Serialization:**
+
+```java
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+
+class Person implements Serializable {
+    private static final long serialVersionUID = 1L;
+    String name;
+    int age;
+
+    Person(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+}
+
+public class SerializationExample {
+    public static void main(String[] args) {
+        Person person = new Person("John Doe", 30);
+
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("person.ser"))) {
+            oos.writeObject(person);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+**Deserialization:**
+
+```java
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+
+public class DeserializationExample {
+    public static void main(String[] args) {
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("person.ser"))) {
+            Person person = (Person) ois.readObject();
+            System.out.println("Name: " + person.name);
+            System.out.println("Age: " + person.age);
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+### **Synchronization**
+
+Synchronization is a mechanism to control access to shared resources by multiple threads to avoid data inconsistency.
+
+**Example:**
+
+**Synchronized Method:**
+
+```java
+public class Counter {
+    private int count = 0;
+
+    public synchronized void increment() {
+        count++;
+    }
+
+    public synchronized int getCount() {
+        return count;
+    }
+}
+
+public class SynchronizationExample {
+    public static void main(String[] args) {
+        Counter counter = new Counter();
+
+        Runnable task = () -> {
+            for (int i = 0; i < 1000; i++) {
+                counter.increment();
+            }
+        };
+
+        Thread t1 =
+
+ new Thread(task);
+        Thread t2 = new Thread(task);
+
+        t1.start();
+        t2.start();
+
+        try {
+            t1.join();
+            t2.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        System.out.println("Count: " + counter.getCount());
+    }
+}
+```
+
+**Synchronized Block:**
+
+```java
+public class Counter {
+    private int count = 0;
+
+    public void increment() {
+        synchronized (this) {
+            count++;
+        }
+    }
+
+    public int getCount() {
+        return count;
+    }
+}
+
+public class SynchronizationBlockExample {
+    public static void main(String[] args) {
+        Counter counter = new Counter();
+
+        Runnable task = () -> {
+            for (int i = 0; i < 1000; i++) {
+                counter.increment();
+            }
+        };
+
+        Thread t1 = new Thread(task);
+        Thread t2 = new Thread(task);
+
+        t1.start();
+        t2.start();
+
+        try {
+            t1.join();
+            t2.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        System.out.println("Count: " + counter.getCount());
+    }
+}
+```
+
+This comprehensive guide covers various Java topics, including file handling with IO and NIO, serialization and deserialization, and synchronization, along with coding examples and explanations to help you understand and prepare for interview scenarios.
+
+---
+
+Certainly! Here’s a detailed explanation of the various Java concepts and terms you’ve mentioned, including coding examples where applicable:
+
+### **1. Thread Safety**
+
+**Definition**: Thread safety ensures that shared data structures or resources are accessed by only one thread at a time to prevent data corruption and inconsistency.
+
+**Example**: Using synchronized methods or blocks to ensure only one thread can execute a critical section at a time.
+
+```java
+public class Counter {
+    private int count = 0;
+
+    public synchronized void increment() {
+        count++;
+    }
+
+    public synchronized int getCount() {
+        return count;
+    }
+}
+```
+
+### **2. Multithreading and Inter-Thread Communication**
+
+**Inter-Thread Communication**: Mechanism for threads to communicate and synchronize with each other.
+
+**Methods**:
+- **`wait()`**: Causes the current thread to wait until another thread invokes `notify()` or `notifyAll()` on the same object.
+- **`notify()`**: Wakes up a single thread waiting on the object.
+- **`notifyAll()`**: Wakes up all threads waiting on the object.
+
+**Example**:
+```java
+class SharedResource {
+    private boolean available = false;
+
+    public synchronized void produce() throws InterruptedException {
+        while (available) {
+            wait();
+        }
+        // Produce item
+        available = true;
+        notify();
+    }
+
+    public synchronized void consume() throws InterruptedException {
+        while (!available) {
+            wait();
+        }
+        // Consume item
+        available = false;
+        notify();
+    }
+}
+```
+
+**Wait vs Sleep**:
+- **`wait()`**: Releases the lock and waits until notified.
+- **`sleep()`**: Keeps the lock but pauses execution for a specified time.
+
+### **3. Synchronized Method vs Synchronized Block**
+
+**Synchronized Method**:
+- Locks the entire method.
+- Simplifies code but may lock more code than necessary.
+
+```java
+public synchronized void method() {
+    // critical section
+}
+```
+
+**Synchronized Block**:
+- Locks a specific block of code.
+- More granular control, can improve performance.
+
+```java
+public void method() {
+    synchronized (this) {
+        // critical section
+    }
+}
+```
+
+### **4. Finally vs Final vs Finalize**
+
+- **`final`**: Keyword that defines constants, prevents method overriding, and inheritance.
+  ```java
+  final int MAX = 100; // constant
+  ```
+
+- **`finally`**: Block that executes after a `try` block, regardless of whether an exception was thrown.
+  ```java
+  try {
+      // code
+  } finally {
+      // cleanup code
+  }
+  ```
+
+- **`finalize()`**: Method called by the garbage collector before an object is collected. Not recommended for critical resource release.
+  ```java
+  @Override
+  protected void finalize() throws Throwable {
+      // cleanup code
+  }
+  ```
+
+### **5. Garbage Collection**
+
+**Garbage Collection**: Automatic memory management feature that reclaims memory used by objects that are no longer reachable.
+
+**Handling GC**:
+- Java handles garbage collection automatically.
+- Use `System.gc()` to suggest garbage collection, but it’s not guaranteed to run.
+
+### **6. String vs StringBuffer vs StringBuilder**
+
+- **`String`**: Immutable, thread-safe, and can be used in a multi-threaded environment but is less performant due to frequent object creation.
+
+- **`StringBuffer`**: Mutable and thread-safe, designed for use in multi-threaded environments.
+
+- **`StringBuilder`**: Mutable but not thread-safe, used in single-threaded environments for better performance.
+
+**Example**:
+```java
+// String (immutable)
+String str = "Hello";
+str = str.concat(" World");
+
+// StringBuilder (mutable)
+StringBuilder sb = new StringBuilder("Hello");
+sb.append(" World");
+
+// StringBuffer (mutable and thread-safe)
+StringBuffer sbf = new StringBuffer("Hello");
+sbf.append(" World");
+```
+
+### **7. Final vs Static**
+
+- **`final`**: Used to define constants, prevent method overriding, and inheritance.
+  ```java
+  final int MAX = 100; // constant
+  ```
+
+- **`static`**: Used to define class-level fields and methods, which are shared among all instances of the class.
+  ```java
+  static int count = 0; // shared among all instances
+  ```
+
+### **8. This vs Super**
+
+- **`this`**: Refers to the current instance of a class.
+- **`super`**: Refers to the parent class’s instance and can be used to call parent class methods and constructors.
+
+**Example**:
+```java
+class Parent {
+    int value = 10;
+
+    void display() {
+        System.out.println("Parent");
+    }
+}
+
+class Child extends Parent {
+    int value = 20;
+
+    void display() {
+        super.display(); // Calls Parent's display method
+        System.out.println("Child");
+    }
+
+    void show() {
+        System.out.println(this.value); // 20
+        System.out.println(super.value); // 10
+    }
+}
+```
+
+### **9. Ways to Create Objects**
+
+1. **Using `new` Keyword**:
+   ```java
+   MyClass obj = new MyClass();
+   ```
+
+2. **Using Reflection**:
+   ```java
+   MyClass obj = (MyClass) Class.forName("MyClass").newInstance();
+   ```
+
+3. **Using `clone()` Method**:
+   ```java
+   MyClass obj1 = new MyClass();
+   MyClass obj2 = (MyClass) obj1.clone();
+   ```
+
+4. **Using Factory Methods**:
+   ```java
+   MyClass obj = MyClass.createInstance();
+   ```
+
+### **10. Deadlock and Prevention**
+
+**Deadlock**: Situation where two or more threads are blocked forever, each waiting for the other to release a lock.
+
+**Prevention**:
+- **Avoid Nested Locks**: Minimize the use of nested locks.
+- **Lock Ordering**: Ensure consistent order of acquiring locks.
+- **Timeouts**: Use timeouts when trying to acquire locks.
+
+**Example**:
+```java
+public class DeadlockExample {
+    private final Object lock1 = new Object();
+    private final Object lock2 = new Object();
+
+    public void method1() {
+        synchronized (lock1) {
+            synchronized (lock2) {
+                // critical section
+            }
+        }
+    }
+
+    public void method2() {
+        synchronized (lock2) {
+            synchronized (lock1) {
+                // critical section
+            }
+        }
+    }
+}
+```
+
+### **11. Immutable Class**
+
+**Definition**: An immutable class is one whose instances cannot be modified once created.
+
+**Features**:
+- All fields are `final`.
+- No setter methods.
+- Constructor initializes all fields.
+
+**Example**:
+```java
+public final class ImmutableClass {
+    private final int value;
+
+    public ImmutableClass(int value) {
+        this.value = value;
+    }
+
+    public int getValue() {
+        return value;
+    }
+}
+```
+
+### **12. Heap, Stack, String Pool, and Object Pool**
+
+- **Heap**: Memory area where objects are dynamically allocated.
+- **Stack**: Memory area for method calls, local variables, and function execution.
+- **String Pool**: Cache of `String` objects to optimize memory usage by reusing immutable `String` literals.
+- **Object Pool**: General technique to reuse objects to reduce overhead of object creation and garbage collection.
+
+---
+
+In Java, memory management and resource allocation involve several concepts, including the heap, stack, string pool, object pool, instance pool, and connection pool. Here’s a detailed explanation of each:
+
+### 1. Heap
+- **Definition**: The heap is a region of memory used for dynamic memory allocation. Objects created with the `new` keyword are stored here.
+- **Characteristics**:
+  - **Size**: The heap size can be adjusted with JVM parameters (e.g., `-Xms` for initial size, `-Xmx` for maximum size).
+  - **Garbage Collection**: Memory in the heap is managed by the garbage collector, which automatically frees up memory occupied by objects that are no longer referenced.
+  - **Accessibility**: Objects in the heap can be accessed from anywhere in the application, making it suitable for storing global variables and long-lived objects.
+
+### 2. Stack
+- **Definition**: The stack is a region of memory that stores method call frames, local variables, and method parameters.
+- **Characteristics**:
+  - **LIFO Structure**: The stack follows a Last In, First Out (LIFO) structure. Each method call creates a new frame on top of the stack.
+  - **Automatic Memory Management**: Memory is automatically allocated and deallocated when methods are called and return, respectively.
+  - **Limited Size**: The stack size is typically smaller than the heap and can lead to a `StackOverflowError` if too many method calls are made (e.g., deep recursion).
+
+### 3. String Pool
+- **Definition**: The string pool (or string intern pool) is a special area in the heap where Java stores string literals.
+- **Characteristics**:
+  - **Memory Efficiency**: When you create a string literal, Java checks the pool first. If an identical string already exists, it reuses that reference instead of creating a new object.
+  - **String Interning**: You can manually add strings to the pool using the `String.intern()` method, which allows for more efficient memory use.
+  - **Immutability**: Strings in Java are immutable, meaning once created, their values cannot be changed.
+
+### 4. Object Pool
+- **Definition**: An object pool is a design pattern that maintains a collection of reusable objects to improve performance by reducing the overhead of creating and destroying objects frequently.
+- **Characteristics**:
+  - **Reuse**: Objects are checked out and returned to the pool instead of being created and destroyed repeatedly.
+  - **Performance**: This pattern is useful for expensive-to-create objects, such as database connections or thread pools.
+  - **Implementation**: You typically implement an object pool by creating a class that manages the lifecycle of the pooled objects.
+
+### 5. Instance Pool
+- **Definition**: An instance pool is a specific type of object pool that maintains instances of a particular class, allowing for reuse of these instances.
+- **Characteristics**:
+  - **Specificity**: Unlike a general object pool, an instance pool typically focuses on a particular type of object.
+  - **Management**: The pool manages the creation, reuse, and destruction of instances to optimize resource use.
+  - **Use Cases**: Commonly used in applications where the creation of instances is resource-intensive.
+
+### 6. Connection Pool
+- **Definition**: A connection pool is a caching mechanism that maintains a pool of database connections to optimize the connection process in applications that frequently access a database.
+- **Characteristics**:
+  - **Performance**: It reduces the overhead of establishing a new database connection each time one is needed, improving performance.
+  - **Resource Management**: Connections are reused, which helps manage database resources efficiently and can prevent connection limits from being reached.
+  - **Configuration**: Connection pools can be configured to specify the maximum number of connections, idle time, and other parameters.
+
+### Summary
+- **Heap**: Dynamic memory allocation area for objects.
+- **Stack**: Memory for method calls and local variables.
+- **String Pool**: Special area for storing string literals to optimize memory usage.
+- **Object Pool**: Design pattern for reusing objects to improve performance.
+- **Instance Pool**: A specialized object pool for specific object instances.
+- **Connection Pool**: Caches database connections for efficient access.
+
+These concepts are fundamental in understanding how Java manages memory and resources, contributing to the efficiency and performance of Java applications.
+
+A **resource pool** is a design pattern that manages a collection of resources, allowing them to be reused rather than created and destroyed repeatedly. This approach helps improve performance, reduces resource consumption, and optimizes resource management.
+
+### Key Characteristics of Resource Pools
+
+1. **Reusability**:
+   - Resources (e.g., database connections, threads, sockets) are created once and reused multiple times.
+   - This reduces the overhead associated with the creation and destruction of resources.
+
+2. **Efficiency**:
+   - By managing a limited number of resources, a pool can help ensure that the application does not exceed resource limits (e.g., database connections).
+   - This can lead to improved performance, especially in high-load scenarios.
+
+3. **Configuration**:
+   - Resource pools can often be configured with parameters like maximum size, minimum size, idle time, and timeout values.
+   - This allows fine-tuning based on application requirements and expected load.
+
+4. **Lifecycle Management**:
+   - Resource pools manage the lifecycle of the resources, including creation, validation, and destruction.
+   - This can include checking if a resource is still valid before it is returned to the application.
+
+### Common Types of Resource Pools
+
+1. **Connection Pool**:
+   - Manages database connections, allowing applications to reuse existing connections instead of creating new ones for each request.
+   - Libraries like HikariCP and Apache DBCP are popular connection pool implementations in Java.
+
+2. **Thread Pool**:
+   - Manages a pool of worker threads to execute tasks concurrently.
+   - This avoids the overhead of creating and destroying threads and helps manage system resources effectively.
+   - The `ExecutorService` in Java provides built-in support for thread pooling.
+
+3. **Object Pool**:
+   - Maintains a pool of reusable objects, typically for objects that are expensive to create.
+   - Can be used for various objects, such as network connections, file handles, or complex data structures.
+
+4. **Socket Pool**:
+   - Manages a pool of reusable socket connections, which can be useful for applications that communicate over a network.
+   - Helps improve performance by reducing the overhead of establishing new socket connections.
+
+### Example of a Resource Pool Implementation
+
+Here’s a simplified example of an object pool in Java:
+
+```java
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
+
+class ObjectPool {
+    private final BlockingQueue<MyObject> pool;
+
+    public ObjectPool(int size) {
+        pool = new LinkedBlockingQueue<>(size);
+        for (int i = 0; i < size; i++) {
+            pool.offer(new MyObject()); // Pre-populate the pool
+        }
+    }
+
+    public MyObject acquire() throws InterruptedException {
+        return pool.take(); // Waits if necessary until an object becomes available
+    }
+
+    public void release(MyObject obj) {
+        pool.offer(obj); // Returns the object to the pool
+    }
+}
+
+class MyObject {
+    // Object details and methods
+}
+```
+
+### Benefits of Using Resource Pools
+
+- **Performance**: Reduces the overhead of creating and destroying resources frequently.
+- **Scalability**: Helps manage resource limits effectively, allowing applications to scale.
+- **Resource Management**: Facilitates better utilization of resources by tracking their usage and lifecycle.
+
+### Summary
+A resource pool is a powerful design pattern for managing collections of reusable resources, improving performance, and optimizing resource management in applications. Common implementations include connection pools, thread pools, and object pools, each tailored for specific types of resources.
+
+---
+
+### **13. Exception Handling**
+
+**Definition**: Mechanism to handle runtime errors to maintain the normal flow of application.
+
+**Keywords**:
+- **`try`**: Block where exceptions might occur.
+- **`catch`**: Block to handle exceptions.
+- **`finally`**: Block that executes after `try`/`catch`, regardless of an exception.
+- **`throw`**: Used to explicitly throw an exception.
+- **`throws`**: Declares that a method can throw exceptions.
+
+**Example**:
+```java
+try {
+    int result = 10 / 0;
+} catch (ArithmeticException e) {
+    System.out.println("Cannot divide by zero.");
+} finally {
+    System.out.println("This will always execute.");
+}
+```
+
+### **14. Object-Oriented Programming Concepts**
+
+- **Abstraction**: Hiding implementation details and showing only functionality. Achieved through abstract classes and interfaces.
+- **Polymorphism**: Ability of an object to take on many forms. Achieved through method overriding and overloading.
+- **Inheritance**: Mechanism where one class inherits fields and methods from another class.
+- **Encapsulation**: Bundling of data and methods that operate on the data into a single unit, usually a class.
+
+**Method Overriding vs Overloading**:
+- **Overriding**: Redefining a method in a subclass with the same name and parameters.
+- **Overloading**: Defining multiple methods in the same class with the same name but different parameters.
+
+### **15. Collections and Differences**
+
+**List vs Set**:
+- **List**: Ordered collection that allows duplicate elements (e.g., `ArrayList`, `LinkedList`).
+- **Set**: Unordered collection that does not allow duplicate elements (e.g., `HashSet`, `LinkedHashSet`).
+
+**Set vs SortedSet**:
+- **Set**: No order guarantee (e.g., `HashSet`).
+- **SortedSet**: Orders elements (e.g., `TreeSet`).
+
+**Map vs HashMap vs ConcurrentHashMap vs TreeMap**:
+- **Map**: Interface for key-value pairs.
+- **HashMap**: Unordered, allows null keys
+
+/values, not thread-safe.
+- **ConcurrentHashMap**: Thread-safe version of `HashMap`.
+- **TreeMap**: Sorted by natural ordering or comparator, implements `NavigableMap`.
+
+**ArrayList vs LinkedList**:
+- **ArrayList**: Backed by an array, fast access, slow insertions/removals.
+- **LinkedList**: Doubly linked list, fast insertions/removals, slow access.
+
+**Vector vs Stack**:
+- **Vector**: Synchronized version of `ArrayList`, legacy class.
+- **Stack**: Subclass of `Vector`, implements stack operations (push, pop).
+
+**Queue vs Deque**:
+- **Queue**: Represents a queue data structure, supports FIFO operations.
+- **Deque**: Double-ended queue, supports FIFO and LIFO operations.
+
+**Fail-Safe vs Fail-Fast**:
+- **Fail-Safe**: Iterators operate on a copy of the collection, not affected by structural changes.
+- **Fail-Fast**: Iterators throw `ConcurrentModificationException` if the collection is modified during iteration.
+
+### **16. Diamond Problem**
+
+The diamond problem occurs in multiple inheritance where a class inherits from two classes that have a common ancestor, leading to ambiguity.
+
+**Java Solution**:
+- Java avoids multiple inheritance of classes but allows multiple inheritance through interfaces.
+
+### **17. Lambda Expressions and Functional Interfaces**
+
+**Lambda Expressions**: Anonymous functions to provide implementation of functional interfaces (interfaces with a single abstract method).
+
+**Functional Interface**: An interface with a single abstract method. Can have multiple default or static methods.
+
+**Example**:
+```java
+@FunctionalInterface
+interface MyFunctionalInterface {
+    void apply(int x);
+
+    default void defaultMethod() {
+        System.out.println("Default Method");
+    }
+
+    static void staticMethod() {
+        System.out.println("Static Method");
+    }
+}
+
+public class LambdaExample {
+    public static void main(String[] args) {
+        MyFunctionalInterface myFunc = (x) -> System.out.println(x * 2);
+        myFunc.apply(10); // Output: 20
+        myFunc.defaultMethod(); // Output: Default Method
+        MyFunctionalInterface.staticMethod(); // Output: Static Method
+    }
+}
+```
+
+This summary covers the key aspects of Java, including file handling, multithreading, synchronization, exception handling, OOP principles, and various collection frameworks. Each section provides a foundational understanding and examples to illustrate concepts effectively.
+
+---
+
+In Java, `HashMap`, `Hashtable`, and `HashSet` are fundamental collections that implement the `Map` and `Set` interfaces, respectively. They are all based on hashing mechanisms but have different internal implementations and characteristics. Here's an in-depth look at how each of these works internally:
+
+### **1. HashMap**
+
+**Internal Structure**:
+- **HashMap** uses an array of buckets (also called a hash table) to store entries. Each bucket can hold multiple entries, which are linked together in a list.
+
+**Key Points**:
+- **Hashing**: The key's `hashCode()` is used to determine which bucket an entry belongs to. The hash code is then adjusted using a hash function to index into the array.
+- **Buckets**: Each bucket is a linked list or a balanced tree (introduced in Java 8 for performance optimization when the bucket size exceeds a certain threshold).
+- **Handling Collisions**: When two keys hash to the same bucket, their entries are stored in a linked list or a tree structure within that bucket.
+
+**Code Example**:
+```java
+import java.util.HashMap;
+
+public class HashMapExample {
+    public static void main(String[] args) {
+        HashMap<String, Integer> map = new HashMap<>();
+        map.put("one", 1);
+        map.put("two", 2);
+        map.put("three", 3);
+        
+        System.out.println(map.get("two")); // Output: 2
+    }
+}
+```
+
+**Detailed Working**:
+1. **Insertion**:
+   - Compute hash code for the key.
+   - Use the hash code to determine the bucket index.
+   - Place the entry in the appropriate bucket. If the bucket already contains entries, append the new entry to the linked list or insert it into the tree.
+
+2. **Retrieval**:
+   - Compute the hash code and determine the bucket.
+   - Traverse the bucket (linked list or tree) to find the entry with the matching key.
+
+3. **Resizing**:
+   - When the number of entries exceeds a threshold, the `HashMap` is resized (i.e., the array of buckets is increased) and entries are rehashed to the new bucket array.
+
+### **2. Hashtable**
+
+**Internal Structure**:
+- **Hashtable** also uses an array of buckets to store key-value pairs, similar to `HashMap`.
+
+**Key Points**:
+- **Thread Safety**: `Hashtable` is synchronized, which means it is thread-safe and can be used safely in a multi-threaded environment.
+- **Null Keys/Values**: `Hashtable` does not allow null keys or values, unlike `HashMap`.
+
+**Code Example**:
+```java
+import java.util.Hashtable;
+
+public class HashtableExample {
+    public static void main(String[] args) {
+        Hashtable<String, Integer> table = new Hashtable<>();
+        table.put("one", 1);
+        table.put("two", 2);
+        table.put("three", 3);
+        
+        System.out.println(table.get("two")); // Output: 2
+    }
+}
+```
+
+**Detailed Working**:
+1. **Insertion**:
+   - Compute the hash code for the key.
+   - Determine the bucket index and handle collisions using linked lists.
+   - Insert the entry, ensuring thread safety by acquiring a lock on the table.
+
+2. **Retrieval**:
+   - Compute the hash code and bucket index.
+   - Traverse the bucket to find the entry, with thread safety maintained.
+
+3. **Synchronization**:
+   - `Hashtable` uses synchronized methods for all operations to ensure that multiple threads can safely access and modify the table.
+
+### **3. HashSet**
+
+**Internal Structure**:
+- **HashSet** is a collection that implements the `Set` interface and is backed by a `HashMap`.
+
+**Key Points**:
+- **Hashing**: Internally uses a `HashMap` to store elements. The elements are stored as keys in the map, with dummy values (usually `Boolean.TRUE`).
+- **Uniqueness**: Ensures that no duplicate elements are stored (since it uses the keys of the underlying `HashMap`).
+
+**Code Example**:
+```java
+import java.util.HashSet;
+
+public class HashSetExample {
+    public static void main(String[] args) {
+        HashSet<String> set = new HashSet<>();
+        set.add("one");
+        set.add("two");
+        set.add("three");
+        
+        System.out.println(set.contains("two")); // Output: true
+    }
+}
+```
+
+**Detailed Working**:
+1. **Insertion**:
+   - Hash the element to determine the bucket index.
+   - Use the `HashMap` to store the element as a key.
+   - If the element already exists in the map (based on hash code and equality check), it will not be added again.
+
+2. **Retrieval**:
+   - Hash the element to find the corresponding bucket.
+   - Check for the existence of the element using the `HashMap`'s `containsKey()` method.
+
+3. **No Duplicates**:
+   - Duplicates are automatically handled by the `HashMap`'s key uniqueness.
+
+### **Summary of Differences**
+
+| Feature            | HashMap                   | Hashtable                 | HashSet                    |
+|--------------------|---------------------------|---------------------------|----------------------------|
+| **Thread Safety**  | Not synchronized           | Synchronized               | Not synchronized (backed by HashMap) |
+| **Null Keys/Values** | Allows one null key and multiple null values | No null keys or values    | Allows null elements (as it is backed by HashMap) |
+| **Internal Structure** | Array of buckets with linked lists or trees | Array of buckets with linked lists | Backed by HashMap, uses array of buckets |
+| **Performance**    | Generally faster due to lack of synchronization | Slower due to synchronization | Similar to HashMap for element operations |
+| **Usage**          | General-purpose map      | Legacy, thread-safe map   | Set implementation, ensures no duplicates |
+
+### **Conclusion**
+
+- **HashMap**: Ideal for most non-thread-safe scenarios where you need a map-like structure.
+- **Hashtable**: Use when you need a thread-safe map and are working with legacy code.
+- **HashSet**: Use when you need a set that does not allow duplicates and is backed by a `HashMap`.
+
+Each of these collections is optimized for different use cases, and understanding their internal workings can help you choose the right one for your specific needs.
+
+---
+
+The Java Collection Framework provides a set of classes and interfaces to manage groups of objects. It includes various collections that are used to store, retrieve, manipulate, and communicate aggregate data. The framework is divided into several parts: interfaces, implementations, and algorithms.
+
+### **1. Collection Framework Overview**
+
+#### **1.1. Interfaces**
+
+1. **Collection Interface**: The root interface of the collection hierarchy. It represents a group of objects known as elements.
+   - **List**: An ordered collection (sequence) that allows duplicate elements. Examples include `ArrayList`, `LinkedList`, and `Vector`.
+   - **Set**: A collection that does not allow duplicate elements. Examples include `HashSet`, `LinkedHashSet`, and `TreeSet`.
+   - **Queue**: A collection designed for holding elements prior to processing. Examples include `LinkedList` (also implements Queue), `PriorityQueue`, and `Deque`.
+   - **Deque**: A double-ended queue that allows elements to be added or removed from both ends. Examples include `ArrayDeque` and `LinkedList`.
+
+2. **Map Interface**: A collection of key-value pairs where each key is associated with exactly one value. Examples include `HashMap`, `LinkedHashMap`, and `TreeMap`.
+
+#### **1.2. Implementations**
+
+- **ArrayList**: Implements the `List` interface using a dynamic array. Allows fast random access but slower insertion and deletion.
+- **LinkedList**: Implements both `List` and `Deque` interfaces using a doubly-linked list. Allows fast insertion and deletion but slower random access.
+- **HashSet**: Implements the `Set` interface using a hash table. Does not guarantee the order of elements.
+- **LinkedHashSet**: Extends `HashSet` and maintains a linked list of the entries in the set, providing predictable iteration order.
+- **TreeSet**: Implements the `Set` interface using a Red-Black tree. Guarantees that elements are in sorted order.
+- **HashMap**: Implements the `Map` interface using a hash table. Does not guarantee the order of keys.
+- **LinkedHashMap**: Extends `HashMap` and maintains insertion order.
+- **TreeMap**: Implements the `Map` interface using a Red-Black tree. Guarantees that keys are in sorted order.
+- **PriorityQueue**: Implements the `Queue` interface and orders elements based on their natural ordering or a comparator provided at queue construction.
+- **ArrayDeque**: Implements the `Deque` interface using a resizable array.
+
+### **2. Examples**
+
+#### **ArrayList Example**
+```java
+import java.util.ArrayList;
+import java.util.List;
+
+public class ArrayListExample {
+    public static void main(String[] args) {
+        List<String> list = new ArrayList<>();
+        list.add("Apple");
+        list.add("Banana");
+        list.add("Cherry");
+
+        for (String fruit : list) {
+            System.out.println(fruit);
+        }
+    }
+}
+```
+
+#### **HashSet Example**
+```java
+import java.util.HashSet;
+import java.util.Set;
+
+public class HashSetExample {
+    public static void main(String[] args) {
+        Set<String> set = new HashSet<>();
+        set.add("Apple");
+        set.add("Banana");
+        set.add("Cherry");
+        set.add("Apple"); // Duplicate element, will not be added
+
+        for (String fruit : set) {
+            System.out.println(fruit);
+        }
+    }
+}
+```
+
+#### **HashMap Example**
+```java
+import java.util.HashMap;
+import java.util.Map;
+
+public class HashMapExample {
+    public static void main(String[] args) {
+        Map<String, Integer> map = new HashMap<>();
+        map.put("Apple", 1);
+        map.put("Banana", 2);
+        map.put("Cherry", 3);
+
+        for (Map.Entry<String, Integer> entry : map.entrySet()) {
+            System.out.println(entry.getKey() + ": " + entry.getValue());
+        }
+    }
+}
+```
+
+### **3. Interview Questions and Answers**
+
+#### **Q1: What is the difference between `ArrayList` and `LinkedList`?**
+
+**Answer**:
+- **ArrayList**:
+  - Backed by a dynamic array.
+  - Provides fast random access using index.
+  - Slow insertion and deletion operations, especially when done in the middle of the list.
+  - Better cache locality due to contiguous memory allocation.
+
+- **LinkedList**:
+  - Implemented as a doubly linked list.
+  - Provides fast insertion and deletion operations, especially at the beginning or end of the list.
+  - Slower random access since it requires traversing the list to reach an element.
+  - Uses more memory due to node pointers.
+
+#### **Q2: How does `HashSet` work internally?**
+
+**Answer**:
+- `HashSet` is backed by a `HashMap` instance. 
+- It stores elements using a hash table, which uses hashing to provide efficient lookup, insertion, and deletion operations.
+- The `HashSet` does not guarantee the order of elements.
+- It ensures that no duplicate elements are stored by using the `equals` method to check for element equality.
+
+#### **Q3: Explain the difference between `HashMap` and `TreeMap`.**
+
+**Answer**:
+- **HashMap**:
+  - Uses a hash table for storage.
+  - Provides constant-time performance for basic operations (`get`, `put`).
+  - Does not guarantee the order of keys.
+  - Allows null values and one null key.
+
+- **TreeMap**:
+  - Implements `NavigableMap` and is backed by a Red-Black tree.
+  - Provides log(n) time complexity for basic operations (`get`, `put`).
+  - Guarantees that the keys are sorted in natural order or by a comparator provided at map creation.
+  - Does not allow null keys but allows null values.
+
+#### **Q4: What is the difference between `HashMap` and `LinkedHashMap`?**
+
+**Answer**:
+- **HashMap**:
+  - Does not maintain any order of its entries.
+  - Faster performance for basic operations compared to `LinkedHashMap` due to lack of overhead for maintaining order.
+
+- **LinkedHashMap**:
+  - Maintains a doubly-linked list of entries in the map, preserving the order of insertion.
+  - Slightly slower performance due to additional overhead for maintaining order.
+  - Useful when you need predictable iteration order.
+
+#### **Q5: How does `PriorityQueue` work and when would you use it?**
+
+**Answer**:
+- `PriorityQueue` is a queue that orders elements based on their natural ordering or by a comparator provided at queue construction.
+- It does not guarantee the order of elements except that the head of the queue is the least element according to the ordering.
+- Useful for scenarios where you need to process elements based on priority, such as in task scheduling or implementing algorithms like Dijkstra’s shortest path.
+
+#### **Q6: What is the difference between `String`, `StringBuilder`, and `StringBuffer`?**
+
+**Answer**:
+- **String**:
+  - Immutable; once created, its value cannot be changed.
+  - Suitable for cases where the string value does not change frequently.
+
+- **StringBuilder**:
+  - Mutable; allows modification of the string value.
+  - Not thread-safe, which means it is generally faster in a single-threaded environment.
+  - Ideal for string manipulation in scenarios where thread safety is not a concern.
+
+- **StringBuffer**:
+  - Mutable; similar to `StringBuilder` but synchronized.
+  - Thread-safe, which means it is slower compared to `StringBuilder` due to synchronization overhead.
+  - Suitable for use in multi-threaded environments where thread safety is required.
+
+### **Summary**
+
+The Java Collection Framework offers various interfaces and classes to handle different types of collections, each with its own use cases and performance characteristics. Understanding these collections and their behaviors, along with their implementation details, can significantly impact the performance and scalability of your Java applications.
+
+---
+
+### **3. Class Loaders and Types of Class Loading**
+
+#### **3.1 Class Loader**
+
+A class loader in Java is responsible for loading classes into the Java Virtual Machine (JVM) at runtime. The class loader reads the binary data of a class file and converts it into a `Class` object.
+
+#### **3.2 Types of Class Loading**
+
+1. **Bootstrap Class Loader**: Loads core Java libraries located in the `<JAVA_HOME>/lib` directory. It is part of the JVM.
+2. **Platform Class Loader (or System Class Loader)**: Loads classes from the application's classpath, typically from the `CLASSPATH` environment variable or `-classpath` option.
+3. **Extension Class Loader**: Loads classes from the `jre/lib/ext` directory or from any other directory specified by the `java.ext.dirs` system property.
+4. **Custom Class Loaders**: Developers can create custom class loaders to load classes from specific locations or implement special loading behavior.
+
+#### **Example of a Custom Class Loader**
+
+```java
+import java.io.*;
+
+public class CustomClassLoader extends ClassLoader {
+    private String classPath;
+
+    public CustomClassLoader(String classPath) {
+        this.classPath = classPath;
+    }
+
+    @Override
+    public Class<?> findClass(String name) throws ClassNotFoundException {
+        byte[] b = loadClassData(name);
+        return defineClass(name, b, 0, b.length);
+    }
+
+    private byte[] loadClassData(String name) throws ClassNotFoundException {
+        String path = classPath + "/" + name.replace('.', '/') + ".class";
+        try (InputStream inputStream = new FileInputStream(path);
+             ByteArrayOutputStream buffer = new ByteArrayOutputStream()) {
+            int data = inputStream.read();
+            while (data != -1) {
+                buffer.write(data);
+                data = inputStream.read();
+            }
+            return buffer.toByteArray();
+        } catch (IOException e) {
+            throw new ClassNotFoundException("Class not found: " + name, e);
+        }
+    }
+}
+```
 
 ---
 
