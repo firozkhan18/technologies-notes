@@ -1,4 +1,6 @@
 
+
+
 ### **Table of Contents**
 
 1. [Class and Object](#class-and-object)  
@@ -10,139 +12,166 @@
 7. [Abstract Class](#abstract-class)  
 8. [Regular Interface](#regular-interface)  
 9. [Functional Interface](#functional-interface)  
-10. [Java Thread & Concurrency](#java-thread-concurrency)  
-11. [Garbage Collection in Java](#garbage-collection-in-java)
-12. [Garbage Collection vs Semaphore](#garbage-collection-vs-semaphore)
-13. [Main Garbage Collection Algorithms](#main-garbage-collection-algorithms)
-14. [Memory Management in Java](#memory-management-in-java)
-15. [Memory Management and Resource Allocation](#memory-management-and-resource-allocation)
-16. [Garbage Collection vs Semaphore](#garbage-collection-vs-semaphore)
-17. [Garbage Collection Algorithms in Java](#garbage-collection-algorithms-in-java)  
-18. [Algorithms and Data Structures](#algorithms-and-data-structures)  
-19. [Ambiguities in Java](#ambiguities-in-java)  
-20. [Java Interview Questions](#java-interview-questions)  
-    1. [List of Common Java Interview Questions](#common-java-interview-questions)  
-    2. [Java 8 Interview Questions and Answers](#java-8-interview-questions)  
-21. [Features Introduced in Java 8](#features-in-java-8)  
-22. [Java Multithreading & Concurrency Interview Questions](#java-multithreading-concurrency-interview-questions)  
-23. [Comparison of Java Concepts](#comparison-of-java-concepts)  
-24. [Tricky Java Interview Questions](#tricky-java-interview-questions)  
-25. [POJO (Plain Old Java Object)](#pojo)  
-26. [Java Core Concepts Overview](#java-core-concepts-overview)  
-27. [Java IO and NIO File Handling](#java-io-and-nio)  
-28. [Serialization and Deserialization](#serialization-and-deserialization)    
-29. [Exception Handling in Java](#exception-handling-in-java)  
-30. [HashMap, Hashtable, and HashSet](#hashmap-hashtable-hashset)  
-31. [Java Collection Framework](#java-collection-framework)  
-32. [Java Thread Management & Synchronization](#java-thread-management)  
-33. [Executor Framework](#executor-framework)  
-34. [Deadlock Detection & Recovery](#deadlock-detection-recovery)  
-35. [Semaphore & Snapshot](#semaphore-snapshot)  
-36. [Concurrency Issues](#concurrency-issues)  
-37. [Garbage Collection Algorithms](#garbage-collection-algorithms)  
-38. [Java 8 Updated Collections Framework](#java-8-updated-collections-framework)
-39. [New Features Introduced in Java 8 Collections Framework](#new-features-introduced-in-java-8-collections-framework)  
-40. [Java 8 Lambda Expressions](#java-8-lambda-expressions)  
-41. [CompletableFuture: Depth Concept and Methods](#completablefuture-depth-concept)  
-42. [Java Design Patterns](#java-design-patterns)  
-43. [Microservice Design Patterns](#microservice-design-patterns)  
-44. [ACID Properties & Transaction Isolation](#acid-properties-transaction-isolation)
-45. [ACID Properties](#acid-properties)
-46. [Transaction Isolation](#transaction-isolation)  
-47. [SOLID Principles](#solid-principles)  
-48. [Hashtable vs. ConcurrentHashMap](#hashtable-vs-concurrenthashmap)  
-49. [Fail-Fast vs. Fail-Safe](#fail-fast-vs-fail-safe)
-50. [Fail-Fast and Fail-Safe](#fail-fast-and-fail-safe)
-51. [Sharding in MongoDB](#sharding-in-mongodb)  
-52. [Horizontal and Vertical Scaling](#horizontal-vertical-scaling)  
-53. [Types of ClassLoaders](#types-of-classloaders)  
-54. [Creating Objects in Java](#creating-objects-in-java)  
-55. [Concurrency Methods in Java](#concurrency-methods-in-java)  
-    1. [wait(), sleep(), join(), yield()](#wait-sleep-join-yield)  
-56. [Immutable Classes in Java](#immutable-classes-in-java)  
-57. [Concurrency Issues: Deadlock, Starvation, Race Condition](#concurrency-issues)  
-58. [Void vs. void](#void-vs-void)  
-59. [Default & Static Methods](#default-static-methods)  
-60. [Diamond Problem](#diamond-problem)  
-61. [ReentrantLock & Conditions](#reentrantlock-conditions)  
-62. [On-Premises Concepts](#on-premises-concepts)  
-63. [Java Profiling Tools](#java-profiling-tools)  
-64. [SSL/TLS Configuration in Java](#ssl-tls-configuration)  
-65. [CI/CD Pipelines in Java](#ci-cd-pipelines)  
-66. [Aspect-Oriented Programming (AOP)](#aspect-oriented-programming)  
-67. [Concurrency in Java](#concurrency-in-java)  
-68. [Digital Marketing & Backend Development](#digital-marketing-backend-development)  
-69. [Microservice Rate Limiting](#microservice-rate-limiting)  
-70. [Load Testing with JMeter](#load-testing-with-jmeter)  
-71. [Virtual Threads in Java 19](#virtual-threads-java-19)  
-72. [Memory Leaks in Microservices](#memory-leaks-microservices)  
-73. [Asynchronous Programming in Spring Boot](#asynchronous-programming-spring-boot)  
+10. [POJO (Plain Old Java Object)](#pojo-plain-old-java-object)  
+11. [Java Core Concepts Overview](#java-core-concepts-overview)  
+12. [Core Java Concepts](#core-java-concepts)  
+13. [Comparison of Java Concepts](#comparison-of-java-concepts)  
+14. [Types of ClassLoaders](#types-of-classloaders)  
+15. [Creating Objects in Java](#creating-objects-in-java)  
+16. [Java Ways to Create Objects](#java-ways-to-create-objects)  
+17. [Java IO and NIO File Handling](#java-io-and-nio-file-handling)  
+18. [Serialization and Deserialization](#serialization-and-deserialization)  
+19. [Exception Handling in Java](#exception-handling-in-java)  
 
 ---
 
-### **Core Java Concepts**
+### **Java 8 Features**
 
-11. [Garbage Collection (GC) Algorithms](#garbage-collection-gc-algorithms)  
-12. [CompletableFuture: Depth Concept and Methods](#completablefuture-depth-concept-and-methods)  
-13. [Java 8 Lambda Expressions](#java-8-lambda-expressions)  
-14. [Java 8 Features Introduced](#java-8-features-introduced)  
-
-  
-  
-19. [Java Design Patterns](#java-design-patterns)  
-21. [Overview of `Hashtable` & `ConcurrentHashMap`](#overview-of-hashtable-concurrenthashmap)  
-22. [Hashing in `Hashtable & ConcurrentHashMap`](#hashing-in-hashtable-concurrenthashmap)  
-23. [Comparison of HashMap and ConcurrentHashMap](#comparison-of-hashmap-and-concurrenthashmap)  
-  
-25. [Snapshot](#snapshot)  
-26. [Ambiguities in Java Technologies](#ambiguities-in-java-technologies)  
-27. [An Overview of Angular, React, Microservices, and Threading, along with Their Interactions and Use Cases](#an-overview-of-angular-react-microservices-and-threading-along-with-their-interactions-and-use-cases)  
-  
-29. [Horizontal and Vertical Scaling](#horizontal-and-vertical-scaling)  
-30. [Types of ClassLoaders](#types-of-classloaders)  
-31. [Java Ways to Create Objects](#java-ways-to-create-objects)  
-32. [In Java, `wait()`, `sleep()`, `join()`, and `yield()` are Methods Used in Multi-threading to Manage Thread Behavior](#in-java-wait-sleep-join-and-yield-are-methods-used-in-multi-threading-to-manage-thread-behavior)  
-33. [Immutable Classes in Java](#immutable-classes-in-java)  
-34. [Concurrency Issues: Deadlock, Starvation, Race Condition, Fairness Policy](#concurrency-issues-deadlock-starvation-race-condition-fairness-policy)  
-35. [Breaking Singleton Pattern](#breaking-singleton-pattern)  
-36. [`void` and `Void`](#void-and-void)  
-37. [To Resolve the Diamond Problem in Java](#to-resolve-the-diamond-problem-in-java)  
-38. [Conditions](#conditions)  
-39. [Lifecycle of a Thread](#lifecycle-of-a-thread)  
-40. [Java, `sleep()`, `wait()`, `join()`, and `LockSupport.park()`](#java-sleep-wait-join-and-locksupportpark)  
-41. [Introduction of Default and Static Methods in Java](#introduction-of-default-and-static-methods-in-java)  
-42. [Interfaces in Java (Post-Java 8)](#interfaces-in-java-post-java-8)  
-43. [The Diamond Problem in Java](#the-diamond-problem-in-java)  
-44. [ForkJoinPool](#forkjoinpool)  
-45. [Threads and Concurrency](#threads-and-concurrency)
-46. [Rate Limiting in Microservices](#rate-limiting--microservices)
+20. [Features Introduced in Java 8](#features-introduced-in-java-8)  
+21. [Java 8 Features Introduced](#java-8-features-introduced)  
+22. [Java 8 Lambda Expressions](#java-8-lambda-expressions)  
+23. [Interfaces in Java (Post-Java 8)](#interfaces-in-java-post-java-8)  
+24. [Introduction of Default and Static Methods in Java](#introduction-of-default-and-static-methods-in-java)  
+25. [Default & Static Methods](#default-static-methods)  
+26. [Diamond Problem](#diamond-problem)  
+27. [The Diamond Problem in Java](#the-diamond-problem-in-java)  
+28. [To Resolve the Diamond Problem in Java](#to-resolve-the-diamond-problem-in-java)  
+29. [Immutable Classes in Java](#immutable-classes-in-java)  
+30. [Java Design Patterns](#java-design-patterns)  
+31. [Breaking Singleton Pattern](#breaking-singleton-pattern)  
 
 ---
 
-### **Java Interview Questions and Concepts**
+### **Garbage Collection & Memory Management**
 
-49. [List of Common Java Interview Questions Along with Detailed Answers](#list-of-common-java-interview-questions-along-with-detailed-answers)  
-50. [Java 8 Interview Questions and Answers](#java-8-interview-questions-and-answers)  
-51. [Features Introduced in Java 8](#features-introduced-in-java-8)  
-52. [Common Interview Questions Related to Java Multithreading and Concurrency, Along with Detailed Answers and Code Examples](#common-interview-questions-related-to-java-multithreading-and-concurrency-along-with-detailed-answers-and-code-examples)  
-53. [Tricky Java Interview Questions](#tricky-java-interview-questions)  
-54. [POJO (Plain Old Java Object) Classes](#pojo-plain-old-java-object-classes)  
+32. [Garbage Collection in Java](#garbage-collection-in-java)  
+33. [Garbage Collection vs Semaphore](#garbage-collection-vs-semaphore)  
+34. [Main Garbage Collection Algorithms](#main-garbage-collection-algorithms)  
+35. [Memory Management in Java](#memory-management-in-java)  
+36. [Memory Management and Resource Allocation](#memory-management-and-resource-allocation)  
+37. [Garbage Collection Algorithms in Java](#garbage-collection-algorithms-in-java)  
+38. [Garbage Collection (GC) Algorithms](#garbage-collection-gc-algorithms)  
+39. [Memory Leaks in Microservices](#memory-leaks-in-microservices)  
+40. [Memory Leak in Microservices: Understanding and Resolution](#memory-leak-in-microservices-understanding-and-resolution)  
+41. [Permanent Generation (PermGen)](#permanent-generation-permgen)  
+42. [Analyze and Identify Memory Leaks](#analyze-and-identify-memory-leaks)  
+
+---
+
+### **Algorithms and Data Structures**
+
+43. [Algorithms and Data Structures](#algorithms-and-data-structures)  
+
+---
+
+### **Java Thread & Concurrency**
+
+44. [Java Thread & Concurrency](#java-thread-concurrency)  
+45. [Threads and Concurrency](#threads-and-concurrency)  
+46. [Java Thread Management & Synchronization](#java-thread-management-synchronization)  
+47. [Executor Framework](#executor-framework)  
+48. [Semaphore & Snapshot](#semaphore-snapshot)  
+49. [Snapshot](#snapshot)  
+50. [ForkJoinPool](#forkjoinpool)  
+51. [ReentrantLock & Conditions](#reentrantlock-conditions)  
+52. [Conditions](#conditions)  
+53. [Lifecycle of a Thread](#lifecycle-of-a-thread)  
+54. [Java, sleep(), wait(), join(), and LockSupport.park()](#java-sleep-wait-join-and-locksupportpark)  
+55. [In Java, wait(), sleep(), join(), and yield() are Methods Used in Multi-threading to Manage Thread Behavior](#in-java-wait-sleep-join-and-yield-are-methods-used-in-multi-threading-to-manage-thread-behavior)  
+56. [wait(), sleep(), join(), yield()](#wait-sleep-join-yield)  
+57. [CompletableFuture: Depth Concept and Methods](#completablefuture-depth-concept-and-methods)  
+58. [Virtual Threads in Java 19](#virtual-threads-java-19)  
+59. [Concurrency in Java](#concurrency-in-java)  
+60. [Concurrency Issues](#concurrency-issues)  
+61. [Concurrency Issues: Deadlock, Starvation, Race Condition](#concurrency-issues-deadlock-starvation-race-condition)  
+62. [Concurrency Issues: Deadlock, Starvation, Race Condition, Fairness Policy](#concurrency-issues-deadlock-starvation-race-condition-fairness-policy)  
+63. [Deadlock Detection & Recovery](#deadlock-detection-recovery)  
+64. [Concurrency Methods in Java](#concurrency-methods-in-java)  
+65. [Thread Management and Synchronization](#thread-management-and-synchronization)  
+66. [Detecting and Recovering from Deadlocks](#detecting-and-recovering-from-deadlocks)  
+67. [Asynchronous programming support](#asynchronous-programming-support)  
+
+---
+
+### **Void, Data Types, and Collections**
+
+68. [Void vs. void](#void-vs-void)  
+69. [void and Void](#void-and-void)  
+
+---
+
+### **Java Collection Framework**
+
+70. [Java Collection Framework](#java-collection-framework)  
+71. [Java 8 Updated Collections Framework](#java-8-updated-collections-framework)  
+72. [New Features Introduced in Java 8 Collections Framework](#new-features-introduced-in-java-8-collections-framework)  
+73. [HashMap, Hashtable, and HashSet](#hashmap-hashtable-hashset)  
+74. [Overview of Hashtable & ConcurrentHashMap](#overview-of-hashtable-concurrenthashmap)  
+75. [Hashing in Hashtable & ConcurrentHashMap](#hashing-in-hashtable-concurrenthashmap)  
+76. [Hashtable vs. ConcurrentHashMap](#hashtable-vs-concurrenthashmap)  
+77. [Comparison of HashMap and ConcurrentHashMap](#comparison-of-hashmap-and-concurrenthashmap)  
+78. [Fail-Fast vs. Fail-Safe](#fail-fast-vs-fail-safe)  
+79. [Fail-Fast and Fail-Safe](#fail-fast-and-fail-safe)  
+
+---
+
+### **Microservices & Transaction Handling**
+
+80. [Microservice Design Patterns](#microservice-design-patterns)  
+81. [ACID Properties & Transaction Isolation](#acid-properties-transaction-isolation)  
+82. [ACID Properties](#acid-properties)  
+83. [Transaction Isolation](#transaction-isolation)  
+84. [SOLID Principles](#solid-principles)  
 
 ---
 
 ### **Advanced Topics**
 
-55. [Serialization and Deserialization](#serialization-and-deserialization)  
-56. [Load Testing](#load-testing)  
-57. [Virtual Threads in Java 19](#virtual-threads-in-java-19)  
-58. [Memory Leak in Microservices: Understanding and Resolution](#memory-leak-in-microservices-understanding-and-resolution)  
-59. [Permanent Generation (PermGen)](#permanent-generation-permgen)  
-60. [Analyze and Identify Memory Leaks](#analyze-and-identify-memory-leaks)  
-61. [How to Implement Asynchronous Programming in Spring Boot](#how-to-implement-asynchronous-programming-in-spring-boot)  
-62. [Thread Management and Synchronization](#thread-management-and-synchronization)  
-63. [Detecting and Recovering from Deadlocks](#detecting-and-recovering-from-deadlocks)
-64. [Asynchronous programming support](#asynchronous-programming-support)
+85. [Aspect-Oriented Programming (AOP)](#aspect-oriented-programming)  
+86. [Asynchronous Programming in Spring Boot](#asynchronous-programming-spring-boot)  
+87. [How to Implement Asynchronous Programming in Spring Boot](#how-to-implement-asynchronous-programming-in-spring-boot)  
+88. [Microservice Rate Limiting](#microservice-rate-limiting)  
+89. [Load Testing](#load-testing)  
+90. [Load Testing with JMeter](#load-testing-with-jmeter)  
+91. [Rate Limiting in Microservices](#rate-limiting-in-microservices)  
+92. [Sharding in MongoDB](#sharding-in-mongodb)  
+93. [Horizontal and Vertical Scaling](#horizontal-and-vertical-scaling)  
+
 ---
+
+### **On-Premises & Java Profiling**
+
+94. [On-Premises Concepts](#on-premises-concepts)  
+95. [Java Profiling Tools](#java-profiling-tools)  
+96. [SSL/TLS Configuration in Java](#ssl-tls-configuration-in-java)  
+97. [CI/CD Pipelines in Java](#ci-cd-pipelines-in-java)  
+
+---
+
+### **Java Interview Questions**
+
+98. [Tricky Java Interview Questions](#tricky-java-interview-questions)  
+99. [Java Interview Questions](#java-interview-questions)  
+100. [Java Interview Questions and Concepts](#java-interview-questions-and-concepts)  
+101. [Java 8 Interview Questions and Answers](#java-8-interview-questions-and-answers)  
+102. [List of Common Java Interview Questions](#list-of-common-java-interview-questions)  
+103. [List of Common Java Interview Questions Along with Detailed Answers](#list-of-common-java-interview-questions-along-with-d
+
+etailed-answers)  
+104. [Java Multithreading & Concurrency Interview Questions](#java-multithreading-concurrency-interview-questions)  
+105. [Common Interview Questions Related to Java Multithreading and Concurrency, Along with Detailed Answers and Code Examples](#common-interview-questions-related-to-java-multithreading-and-concurrency-along-with-detailed-answers-and-code-examples)  
+
+---
+
+### **Ambiguities and Use Cases**
+
+106. [Ambiguities in Java Technologies](#ambiguities-in-java-technologies)  
+107. [Ambiguities in Java](#ambiguities-in-java)  
+108. [An Overview of Angular, React, Microservices, and Threading, along with Their Interactions and Use Cases](#overview-angular-react-microservices-threading)  
+109. [Digital Marketing & Backend Development](#digital-marketing-backend-development)
+
+---
+
 
 This cleaned-up Table of Contents removes the duplicate entries while keeping all the relevant topics. The list is now grouped logically into sections: **Core Java Concepts**, **Java Interview Questions and Concepts**, and **Advanced Topics**. Let me know if you'd like any further adjustments!
 
