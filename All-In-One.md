@@ -86,6 +86,75 @@
 66. [Memory Leaks in Microservices](#memory-leaks-microservices)  
 67. [Asynchronous Programming in Spring Boot](#asynchronous-programming-spring-boot)  
 
+
+
+### **Core Java Concepts**
+
+11. [Garbage Collection (GC) Algorithms](#garbage-collection-gc-algorithms)  
+12. [CompletableFuture: Depth Concept and Methods](#completablefuture-depth-concept-and-methods)  
+13. [Java 8 Lambda Expressions](#java-8-lambda-expressions)  
+14. [Java 8 Features Introduced](#java-8-features-introduced)  
+15. [New Features Introduced in Java 8 Collections Framework](#new-features-introduced-in-java-8-collections-framework)  
+16. [ACID Properties](#acid-properties)  
+17. [Transaction Isolation Levels](#transaction-isolation-levels)  
+18. [SOLID Principles](#solid-principles)  
+19. [Java Design Patterns](#java-design-patterns)  
+20. [Microservice Design Patterns](#microservice-design-patterns)  
+21. [Overview of `Hashtable` & `ConcurrentHashMap`](#overview-of-hashtable-concurrenthashmap)  
+22. [Hashing in `Hashtable & ConcurrentHashMap`](#hashing-in-hashtable-concurrenthashmap)  
+23. [Comparison of HashMap and ConcurrentHashMap](#comparison-of-hashmap-and-concurrenthashmap)  
+24. [Fail-Fast and Fail-Safe](#fail-fast-and-fail-safe)  
+25. [Snapshot](#snapshot)  
+26. [Ambiguities in Java Technologies](#ambiguities-in-java-technologies)  
+27. [An Overview of Angular, React, Microservices, and Threading, along with Their Interactions and Use Cases](#an-overview-of-angular-react-microservices-and-threading-along-with-their-interactions-and-use-cases)  
+28. [Sharding in MongoDB](#sharding-in-mongodb)  
+29. [Horizontal and Vertical Scaling](#horizontal-and-vertical-scaling)  
+30. [Types of ClassLoaders](#types-of-classloaders)  
+31. [Java Ways to Create Objects](#java-ways-to-create-objects)  
+32. [In Java, `wait()`, `sleep()`, `join()`, and `yield()` are Methods Used in Multi-threading to Manage Thread Behavior](#in-java-wait-sleep-join-and-yield-are-methods-used-in-multi-threading-to-manage-thread-behavior)  
+33. [Immutable Classes in Java](#immutable-classes-in-java)  
+34. [Concurrency Issues: Deadlock, Starvation, Race Condition, Fairness Policy](#concurrency-issues-deadlock-starvation-race-condition-fairness-policy)  
+35. [Breaking Singleton Pattern](#breaking-singleton-pattern)  
+36. [`void` and `Void`](#void-and-void)  
+37. [To Resolve the Diamond Problem in Java](#to-resolve-the-diamond-problem-in-java)  
+38. [Conditions](#conditions)  
+39. [Lifecycle of a Thread](#lifecycle-of-a-thread)  
+40. [Java, `sleep()`, `wait()`, `join()`, and `LockSupport.park()`](#java-sleep-wait-join-and-locksupportpark)  
+41. [Introduction of Default and Static Methods in Java](#introduction-of-default-and-static-methods-in-java)  
+42. [Interfaces in Java (Post-Java 8)](#interfaces-in-java-post-java-8)  
+43. [The Diamond Problem in Java](#the-diamond-problem-in-java)  
+44. [ForkJoinPool](#forkjoinpool)  
+45. [Threads and Concurrency](#threads-and-concurrency)  
+46. [Garbage Collection in Java](#garbage-collection-in-java)  
+47. [Garbage Collection vs Semaphore](#garbage-collection-vs-semaphore)  
+48. [Main Garbage Collection Algorithms](#main-garbage-collection-algorithms)  
+
+---
+
+### **Java Interview Questions and Concepts**
+
+49. [List of Common Java Interview Questions Along with Detailed Answers](#list-of-common-java-interview-questions-along-with-detailed-answers)  
+50. [Java 8 Interview Questions and Answers](#java-8-interview-questions-and-answers)  
+51. [Features Introduced in Java 8](#features-introduced-in-java-8)  
+52. [Common Interview Questions Related to Java Multithreading and Concurrency, Along with Detailed Answers and Code Examples](#common-interview-questions-related-to-java-multithreading-and-concurrency-along-with-detailed-answers-and-code-examples)  
+53. [Tricky Java Interview Questions](#tricky-java-interview-questions)  
+54. [POJO (Plain Old Java Object) Classes](#pojo-plain-old-java-object-classes)  
+
+---
+
+### **Advanced Topics**
+
+55. [Serialization and Deserialization](#serialization-and-deserialization)  
+56. [Load Testing](#load-testing)  
+57. [Virtual Threads in Java 19](#virtual-threads-in-java-19)  
+58. [Memory Leak in Microservices: Understanding and Resolution](#memory-leak-in-microservices-understanding-and-resolution)  
+59. [Permanent Generation (PermGen)](#permanent-generation-permgen)  
+60. [Analyze and Identify Memory Leaks](#analyze-and-identify-memory-leaks)  
+61. [How to Implement Asynchronous Programming in Spring Boot](#how-to-implement-asynchronous-programming-in-spring-boot)  
+62. [Thread Management and Synchronization](#thread-management-and-synchronization)  
+63. [Detecting and Recovering from Deadlocks](#detecting-and-recovering-from-deadlocks)
+
+64. [Asynchronous programming support](#asynchronous-programming-support)
 ---
 
 This cleaned-up Table of Contents removes the duplicate entries while keeping all the relevant topics. The list is now grouped logically into sections: **Core Java Concepts**, **Java Interview Questions and Concepts**, and **Advanced Topics**. Let me know if you'd like any further adjustments!
@@ -1116,7 +1185,8 @@ By implementing these strategies, you can significantly reduce ambiguity in Java
 
 ---
 
-## List of common Java interview questions along with detailed answers
+## Java Interview Questions
+## List of Common Java Interview Questions
 
 ### **Java Core Concepts**
 
@@ -1564,7 +1634,7 @@ These questions cover a wide range of Java 8 features, from lambda expressions a
 
 ---
 
-## Features introduced in Java 8:
+## Features Introduced in Java 8
 
 ### 1. **Lambda Expressions**
 Lambda expressions allow you to write instances of single-method interfaces (functional interfaces) more concisely. They provide a way to pass behavior as a parameter to methods or to execute operations on data without explicitly writing classes or implementing interfaces.
@@ -1769,7 +1839,7 @@ These Java 8 features represent a major shift towards functional programming in 
 
 ---
 
-## Common interview questions related to Java multithreading and concurrency, along with detailed answers and code examples.
+## Java Multithreading & Concurrency Interview Questions
 
 ### **1. What is the difference between `Thread` and `Runnable`?**
 
@@ -2497,7 +2567,7 @@ These questions test various aspects of Java, including string handling, inherit
 
 ---
 
-## POJO (Plain Old Java Object) classes
+## POJO (Plain Old Java Object)
 
 POJO (Plain Old Java Object) classes are fundamental in Java programming, especially when working with frameworks like Spring and Hibernate, or in JavaBeans conventions. POJOs are used to encapsulate data in a simple and straightforward manner without imposing unnecessary constraints or requiring complex structures. Here are the key rules and conventions for creating POJO classes:
 
@@ -2722,6 +2792,8 @@ public class Person implements Serializable {
 These rules help in designing clean, maintainable, and efficient POJO classes that fit well within Java’s object-oriented paradigm.
 
 ---
+
+## Java Core Concepts Overview
 
 Certainly! Here's an in-depth overview covering Java concepts related to inheritance, abstract classes, interfaces, final, `this`, `super`, exception handling, garbage collection, string manipulation, threads, functional programming, collections framework, and file handling, with explanations, code examples, and interview questions.
 
@@ -3153,7 +3225,7 @@ These topics cover a broad range of essential Java concepts and practices that a
 
 Certainly! Let’s break down the various methods for reading and writing files using Java IO and NIO, explain serialization and deserialization with examples, and discuss synchronization.
 
-### **Java IO and NIO File Reading and Writing**
+## Java IO and NIO File Handling
 
 #### **1. Java IO (Input/Output)**
 
@@ -3839,6 +3911,8 @@ public final class ImmutableClass {
 
 ---
 
+## Memory Management and Resource Allocation
+
 In Java, memory management and resource allocation involve several concepts, including the heap, stack, string pool, object pool, instance pool, and connection pool. Here’s a detailed explanation of each:
 
 ### 1. Heap
@@ -3975,6 +4049,9 @@ A resource pool is a powerful design pattern for managing collections of reusabl
 
 ---
 
+## Exception Handling in Java
+
+
 ### **13. Exception Handling**
 
 **Definition**: Mechanism to handle runtime errors to maintain the normal flow of application.
@@ -4083,6 +4160,8 @@ public class LambdaExample {
 This summary covers the key aspects of Java, including file handling, multithreading, synchronization, exception handling, OOP principles, and various collection frameworks. Each section provides a foundational understanding and examples to illustrate concepts effectively.
 
 ---
+
+## HashMap, Hashtable, and HashSet
 
 In Java, `HashMap`, `Hashtable`, and `HashSet` are fundamental collections that implement the `Map` and `Set` interfaces, respectively. They are all based on hashing mechanisms but have different internal implementations and characteristics. Here's an in-depth look at how each of these works internally:
 
@@ -4220,6 +4299,8 @@ public class HashSetExample {
 Each of these collections is optimized for different use cases, and understanding their internal workings can help you choose the right one for your specific needs.
 
 ---
+
+## Java Collection Framework
 
 The Java Collection Framework provides a set of classes and interfaces to manage groups of objects. It includes various collections that are used to store, retrieve, manipulate, and communicate aggregate data. The framework is divided into several parts: interfaces, implementations, and algorithms.
 
@@ -5131,6 +5212,8 @@ public class ForceStopExample {
 
 By following these best practices, you can manage thread lifecycles more safely and effectively in your Java applications.
 
+## Semaphore & Snapshot
+
 Your definitions of **Semaphore** and **Snapshot** are accurate! Here’s a bit more detail on both concepts to enhance your understanding:
 
 ### 4. Semaphore
@@ -5470,7 +5553,7 @@ Using `Condition` objects provides a powerful way to handle inter-thread communi
 
 ---
 
-### Concurrency
+## Concurrency
 
 **Concurrency** is the ability to run multiple threads simultaneously, enabling tasks to be executed in overlapping time periods. It’s crucial for improving the efficiency and responsiveness of applications, especially in I/O-bound and CPU-bound operations.
 
@@ -5596,7 +5679,7 @@ ReentrantLock fairLock = new ReentrantLock(true); // Fair
 ReentrantLock unfairLock = new ReentrantLock(false); // Unfair
 ```
 
-### Concurrency
+## Concurrency
 
 **Concurrency** is the ability to run multiple threads simultaneously, enabling tasks to be executed in overlapping time periods. It’s crucial for improving the efficiency and responsiveness of applications, especially in I/O-bound and CPU-bound operations.
 
@@ -5707,6 +5790,8 @@ public class ExecutorFrameworkExample {
 5. **Executor Framework**: A high-level API for managing threads, providing various services for task execution.
 
 This framework helps manage resources efficiently, making it easier to build scalable and responsive applications in Java.
+
+## Synchronous and Asynchronous execution using threads
 
 To achieve synchronous and asynchronous execution using threads, concurrency, the Executor framework, and concurrent collections in Java, we can explore practical examples for each approach.
 
@@ -5890,6 +5975,8 @@ public class ConcurrentCollectionExample {
    - Use concurrent collections like `ConcurrentHashMap` to handle shared data safely in both synchronous and asynchronous tasks.
 
 These examples demonstrate how to manage synchronous and asynchronous execution effectively using Java's threading and concurrency features.
+
+## ExecutorService Interface
 
 In Java, the `ExecutorService` interface, part of the `java.util.concurrent` package, provides a high-level API for managing and controlling thread execution. It abstracts thread management, allowing developers to focus on task execution rather than thread lifecycle management. Here are some key methods provided by the `ExecutorService` interface:
 
@@ -6094,7 +6181,8 @@ By being mindful of object references, employing the right patterns, and regular
 
 Choosing the right garbage collector depends on the specific requirements of your application, such as throughput, latency, and memory usage patterns.
 
-### Spring Boot and REST APIs
+## Spring Boot and REST APIs
+
 3. **Question**: How do you create a REST API using Spring Boot?
    **Answer**: You can create a REST API by defining a `@RestController` and using `@RequestMapping` or `@GetMapping`, `@PostMapping`, etc. annotations.
 
@@ -6165,7 +6253,7 @@ Choosing the right garbage collector depends on the specific requirements of you
 
 ---
 
-## Java 8 Updated Collections Framework:
+## Java 8 Updated Collections Framework
 
 ### **1. Stream API (Java 8)**
 One of the most significant additions to the Collections Framework in Java 8 is the **Stream API**. The Stream API allows you to process sequences of elements (such as collections, arrays, or I/O channels) in a functional style, enabling efficient, declarative operations on data.
@@ -7151,7 +7239,7 @@ Here is a tabular representation of the main methods provided by `CompletableFut
 
 These methods allow you to handle asynchronous tasks effectively, manage dependencies between them, and deal with exceptions or timeouts gracefully.
 
-Certainly! Below is a complete Java program that demonstrates the usage of **all the methods** listed in the table for `CompletableFuture`:
+### Below is a complete Java program that demonstrates the usage of **all the methods** listed in the table for `CompletableFuture`:
 
 ```java
 import java.util.concurrent.CompletableFuture;
@@ -7446,6 +7534,8 @@ Java 8 significantly enhanced the Java Collections Framework, particularly throu
 
 ---
 
+## ACID Properties & Transaction Isolation
+
 ## ACID properties
 
 ACID properties are a set of principles that ensure reliable processing of database transactions. They are critical for maintaining data integrity and consistency. ACID stands for **Atomicity, Consistency, Isolation, and Durability**. Here’s a breakdown of each property:
@@ -7569,7 +7659,7 @@ Transaction isolation in Spring Boot plays a crucial role in ensuring that your 
 
 ---
 
-## SOLID principles (dup 1)
+## SOLID principles
 
 The SOLID principles are a set of design principles aimed at making software designs more understandable, flexible, and maintainable. The acronym SOLID stands for five key principles:
 
