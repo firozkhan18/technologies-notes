@@ -17,7 +17,6 @@
 12. [Core Java Concepts](#core-java-concepts)  
 13. [Comparison of Java Concepts](#comparison-of-java-concepts)  
 14. [Types of ClassLoaders](#types-of-classloaders)  
-15. [Creating Objects in Java](#creating-objects-in-java)  
 16. [Java Ways to Create Objects](#java-ways-to-create-objects)  
 17. [Java IO and NIO File Handling](#java-io-and-nio-file-handling)  
 18. [Serialization and Deserialization](#serialization-and-deserialization)  
