@@ -5348,6 +5348,74 @@ Understanding these methods helps in managing thread synchronization and ensurin
 
 Understanding the thread lifecycle is essential for effective multi-threaded programming. It helps in managing thread synchronization, avoiding deadlocks, and improving performance in concurrent applications.
 
+## In Java, `wait()`, `sleep()`, `join()`, and `yield()` are methods used in multi-threading to manage thread behavior.
+
+### 1. `wait()`
+- **Purpose**: Causes the current thread to wait until another thread invokes the `notify()` or `notifyAll()` method on the same object.
+- **Use Case**: Typically used for inter-thread communication, especially when a thread needs to wait for a condition to be fulfilled by another thread.
+- **How It Works**:
+  - Must be called from within a synchronized block or method.
+  - Releases the lock held by the thread, allowing other threads to access the synchronized block.
+
+**Example**:
+```java
+synchronized (object) {
+    while (conditionNotMet) {
+        object.wait(); // Waits for notification
+    }
+}
+```
+
+### 2. `sleep()`
+- **Purpose**: Pauses the execution of the current thread for a specified period.
+- **Use Case**: Often used to create delays in execution or simulate processing time.
+- **How It Works**:
+  - It does not release any locks held by the thread.
+  - It can throw `InterruptedException`.
+
+**Example**:
+```java
+try {
+    Thread.sleep(1000); // Sleeps for 1 second
+} catch (InterruptedException e) {
+    e.printStackTrace();
+}
+```
+
+### 3. `join()`
+- **Purpose**: Waits for a thread to die (i.e., finish its execution).
+- **Use Case**: Used when you want one thread to wait for another to complete its execution before continuing.
+- **How It Works**:
+  - It can take an optional timeout parameter.
+  - After calling `join()`, the current thread will be blocked until the thread it joins has completed.
+
+**Example**:
+```java
+Thread t1 = new Thread(() -> {
+    // Some work
+});
+t1.start();
+t1.join(); // Waits for t1 to finish
+```
+
+### 4. `yield()`
+- **Purpose**: Suggests that the current thread is willing to yield its current use of the CPU.
+- **Use Case**: Used to improve the efficiency of thread scheduling, allowing other threads of the same priority to run.
+- **How It Works**:
+  - It does not guarantee that the thread will relinquish the CPU; it merely makes a request to the thread scheduler.
+
+**Example**:
+```java
+Thread.yield(); // Suggests that the current thread yield
+```
+
+### Summary
+- **`wait()`**: Used for inter-thread communication, releases locks.
+- **`sleep()`**: Pauses the thread without releasing locks, for a specified time.
+- **`join()`**: Makes the calling thread wait for another thread to finish.
+- **`yield()`**: Suggests to the scheduler that the current thread can be paused to allow other threads to run.
+---
+
 ### **4. Concurrency in Java**
 **Concurrency** refers to the ability of a system to handle multiple tasks simultaneously. Java provides several mechanisms to help developers manage concurrent execution of threads, and to ensure that shared resources are accessed in a thread-safe manner.
 
@@ -6780,75 +6848,6 @@ The `ExecutorService` interface provides a robust framework for concurrent progr
 
 ---
 
-## In Java, `wait()`, `sleep()`, `join()`, and `yield()` are methods used in multi-threading to manage thread behavior.
-
-### 1. `wait()`
-- **Purpose**: Causes the current thread to wait until another thread invokes the `notify()` or `notifyAll()` method on the same object.
-- **Use Case**: Typically used for inter-thread communication, especially when a thread needs to wait for a condition to be fulfilled by another thread.
-- **How It Works**:
-  - Must be called from within a synchronized block or method.
-  - Releases the lock held by the thread, allowing other threads to access the synchronized block.
-
-**Example**:
-```java
-synchronized (object) {
-    while (conditionNotMet) {
-        object.wait(); // Waits for notification
-    }
-}
-```
-
-### 2. `sleep()`
-- **Purpose**: Pauses the execution of the current thread for a specified period.
-- **Use Case**: Often used to create delays in execution or simulate processing time.
-- **How It Works**:
-  - It does not release any locks held by the thread.
-  - It can throw `InterruptedException`.
-
-**Example**:
-```java
-try {
-    Thread.sleep(1000); // Sleeps for 1 second
-} catch (InterruptedException e) {
-    e.printStackTrace();
-}
-```
-
-### 3. `join()`
-- **Purpose**: Waits for a thread to die (i.e., finish its execution).
-- **Use Case**: Used when you want one thread to wait for another to complete its execution before continuing.
-- **How It Works**:
-  - It can take an optional timeout parameter.
-  - After calling `join()`, the current thread will be blocked until the thread it joins has completed.
-
-**Example**:
-```java
-Thread t1 = new Thread(() -> {
-    // Some work
-});
-t1.start();
-t1.join(); // Waits for t1 to finish
-```
-
-### 4. `yield()`
-- **Purpose**: Suggests that the current thread is willing to yield its current use of the CPU.
-- **Use Case**: Used to improve the efficiency of thread scheduling, allowing other threads of the same priority to run.
-- **How It Works**:
-  - It does not guarantee that the thread will relinquish the CPU; it merely makes a request to the thread scheduler.
-
-**Example**:
-```java
-Thread.yield(); // Suggests that the current thread yield
-```
-
-### Summary
-- **`wait()`**: Used for inter-thread communication, releases locks.
-- **`sleep()`**: Pauses the thread without releasing locks, for a specified time.
-- **`join()`**: Makes the calling thread wait for another thread to finish.
-- **`yield()`**: Suggests to the scheduler that the current thread can be paused to allow other threads to run.
-
----
-
 ## CompletableFuture: Depth Concept and Methods
 
 `CompletableFuture` in Java is part of the `java.util.concurrent` package and provides a powerful and flexible mechanism to handle asynchronous programming. It allows you to run code asynchronously, write non-blocking applications, and handle future results or exceptions. Unlike `Future`, which represents a task that will be completed at some point, `CompletableFuture` allows you to **explicitly complete** the future and also handle the result asynchronously.
@@ -7496,8 +7495,6 @@ This program demonstrates the usage of **all the methods** from the table in var
 
 ---
 
-
----
 Choosing the right garbage collector depends on the specific requirements of your application, such as throughput, latency, and memory usage patterns.
 
 ## Spring Boot and REST APIs
