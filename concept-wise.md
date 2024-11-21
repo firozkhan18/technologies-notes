@@ -1024,6 +1024,75 @@ public class Person implements Serializable {
 
 These rules help in designing clean, maintainable, and efficient POJO classes that fit well within Java’s object-oriented paradigm.
 
+
+## Java ways to create objects
+
+In Java, there are several ways to create objects. Here are the main methods:
+
+1. **Using the `new` Keyword**
+   - The most common way to create an object.
+   - Syntax:
+     ```java
+     ClassName obj = new ClassName();
+     ```
+
+2. **Using the `newInstance()` Method**
+   - This method is part of the `Class` class and can be used to create an instance of a class using reflection.
+   - Syntax:
+     ```java
+     ClassName obj = ClassName.class.newInstance();
+     ```
+
+3. **Using the `clone()` Method**
+   - If a class implements the `Cloneable` interface, you can create a new object as a copy of an existing object.
+   - Syntax:
+     ```java
+     ClassName obj1 = new ClassName();
+     ClassName obj2 = (ClassName) obj1.clone();
+     ```
+
+4. **Using Factory Methods**
+   - Classes can have static factory methods that return instances of the class. This is a common design pattern.
+   - Example:
+     ```java
+     ClassName obj = ClassName.createInstance();
+     ```
+
+5. **Using Deserialization**
+   - Objects can be created from a serialized state using the `ObjectInputStream` class.
+   - Syntax:
+     ```java
+     ObjectInputStream in = new ObjectInputStream(new FileInputStream("objectfile.ser"));
+     ClassName obj = (ClassName) in.readObject();
+     ```
+
+6. **Using Inner Classes**
+   - You can create an object of an inner class directly using an instance of the outer class.
+   - Syntax:
+     ```java
+     OuterClass outer = new OuterClass();
+     OuterClass.InnerClass inner = outer.new InnerClass();
+     ```
+
+7. **Using Anonymous Classes**
+   - Java allows you to create an object of a class without explicitly defining a class.
+   - Syntax:
+     ```java
+     ClassName obj = new ClassName() {
+         // Override methods here
+     };
+     ```
+
+### Summary
+
+- **`new` keyword**: Most common method.
+- **`newInstance()`**: Reflection-based object creation.
+- **`clone()`**: Create a copy of an existing object.
+- **Factory methods**: Static methods for instance creation.
+- **Deserialization**: Restore object state from a serialized format.
+- **Inner classes**: Instantiate inner classes using outer class objects.
+- **Anonymous classes**: Create instances without a separate class definition.
+
 ---
 
 ## Java Core Concepts Overview
@@ -2661,7 +2730,380 @@ System.out.println(result);  // Output: apple, banana, cherry
 
 These Java 8 features represent a major shift towards functional programming in Java, enhancing both code readability and performance. By leveraging these features, developers can write more concise, expressive, and maintainable Java code.
 
+## New features introduced in Java 8
+
+Java 8 introduced several significant features and enhancements that greatly improved the language and the Java Development Kit (JDK). Here are some of the key features:
+
+### 1. Lambda Expressions
+- **Description**: Provides a clear and concise way to represent a function as an object. It enables functional programming in Java, allowing you to pass behavior as a parameter.
+- **Example**:
+  ```java
+  (a, b) -> a + b; // A simple lambda expression that adds two numbers.
+  ```
+
+Lambda expressions, introduced in Java 8, provide a clear and concise way to represent functional interfaces (interfaces with a single abstract method). They enable functional programming capabilities in Java, allowing you to treat behavior as a parameter and pass around functionality.
+
+### 1. Basic Syntax
+The syntax of a lambda expression is as follows:
+```java
+(parameters) -> expression
+```
+or, for more complex bodies:
+```java
+(parameters) -> { statements; }
+```
+
+### 2. Functional Interfaces
+A functional interface is an interface that contains exactly one abstract method. Lambda expressions can be used to create instances of functional interfaces. Common examples include:
+- `Runnable`
+- `Callable`
+- `Comparator`
+- `Consumer`
+- `Supplier`
+- `Function`
+- `Predicate`
+
+#### Example:
+```java
+@FunctionalInterface
+interface MyFunctionalInterface {
+    void execute();
+}
+
+MyFunctionalInterface myLambda = () -> System.out.println("Executing...");
+myLambda.execute();
+```
+
+### 3. Types of Lambda Expressions
+Lambda expressions can be categorized based on the number of parameters and the type of body:
+
+- **No Parameters**:
+  ```java
+  () -> System.out.println("Hello, World!");
+  ```
+
+- **Single Parameter (Type Inference)**:
+  ```java
+  x -> x * x; // No need for parentheses for a single parameter
+  ```
+
+- **Multiple Parameters**:
+  ```java
+  (x, y) -> x + y;
+  ```
+
+- **Block Body**:
+  ```java
+  (int x, int y) -> {
+      int sum = x + y;
+      return sum;
+  };
+  ```
+
+### 4. Using Lambda Expressions
+Lambda expressions can be used with Java's Collections Framework, particularly with the Stream API, to perform operations like filtering, mapping, and reducing.
+
+#### Example with Streams:
+```java
+List<String> names = Arrays.asList("Alice", "Bob", "Charlie", "David");
+names.stream()
+     .filter(name -> name.startsWith("A"))
+     .forEach(name -> System.out.println(name));
+```
+
+### 5. Method References
+Lambda expressions can often be replaced with method references for improved readability. Method references are a shorthand notation for calling methods.
+
+#### Syntax:
+- **Static Method Reference**: `ClassName::methodName`
+- **Instance Method Reference**: `instance::methodName`
+- **Constructor Reference**: `ClassName::new`
+
+#### Example:
+```java
+names.forEach(System.out::println); // Method reference instead of lambda
+```
+
+### 6. Benefits of Lambda Expressions
+- **Conciseness**: Reduces boilerplate code, especially for simple implementations.
+- **Readability**: Makes the code more readable and expressive.
+- **Enhanced Functionality**: Facilitates functional programming constructs such as higher-order functions.
+
+### 7. Capturing Variables
+Lambda expressions can capture variables from their enclosing context (effectively final variables).
+
+#### Example:
+```java
+int threshold = 5;
+Predicate<Integer> filter = num -> num > threshold; // Captures `threshold`
+```
+
+### 8. Scope and `this`
+Within a lambda expression, `this` refers to the enclosing class instance, not the lambda itself.
+
+#### Example:
+```java
+class Outer {
+    void outerMethod() {
+        Runnable r = () -> System.out.println(this); // Refers to Outer instance
+    }
+}
+```
+
+### 9. Limitations
+- **No `this` or `super`**: Lambda expressions cannot declare their own `this` or `super`, as they inherit from the enclosing context.
+- **No checked exceptions**: You cannot throw checked exceptions from a lambda unless they are handled.
+
+### 10. Use Cases
+- **Event Handling**: Useful in GUI applications for handling events.
+- **Functional Programming**: Streamlining functional operations on collections.
+- **Parallel Processing**: Using streams to process collections in parallel.
+
+### Conclusion
+Lambda expressions in Java 8 represent a powerful addition to the language, allowing for more expressive, concise, and functional-style programming. By enabling the use of functional interfaces, they significantly enhance the way Java developers can write code, particularly when working with collections and streams. 
+
 ---
+
+## Java 8 Lambda Expressions 
+
+In Java 8, **lambda expressions** were introduced as a way to provide a clear and concise syntax for writing anonymous methods (i.e., methods without a name). They are primarily used to implement functional interfaces (interfaces with a single abstract method), and they simplify the syntax for passing behavior as parameters.
+
+### Key Characteristics of Lambda Expressions:
+1. **Concise Syntax**: Lambda expressions allow you to write code more compactly, eliminating the need for boilerplate code (such as anonymous classes).
+2. **Functional Interface**: A lambda expression works with functional interfaces, which are interfaces that contain exactly one abstract method. These interfaces are typically used to represent behavior that can be passed around as parameters to methods.
+3. **First-Class Function**: Lambdas allow you to treat behavior as a parameter (e.g., passing functions as arguments to methods), making it easier to pass functionality around in Java.
+
+### Basic Syntax of Lambda Expression:
+
+The general syntax of a lambda expression is:
+
+```java
+(parameter1, parameter2, ...) -> expression
+```
+
+Alternatively, it can have a block of code as the body:
+
+```java
+(parameter1, parameter2, ...) -> {
+    // body with multiple statements
+}
+```
+
+### Example 1: Simple Lambda Expression
+
+Suppose we have a functional interface:
+
+```java
+@FunctionalInterface
+interface Greeting {
+    void greet(String name);
+}
+```
+
+Using a lambda expression to implement the interface:
+
+```java
+public class LambdaExample {
+    public static void main(String[] args) {
+        // Using a lambda expression to implement the greet method
+        Greeting greeting = (name) -> System.out.println("Hello, " + name);
+        greeting.greet("John");
+    }
+}
+```
+
+**Output**:
+
+```
+Hello, John
+```
+
+### Example 2: Lambda with Multiple Parameters
+
+A lambda expression can take multiple parameters. Here's an example of adding two integers:
+
+```java
+@FunctionalInterface
+interface MathOperation {
+    int operation(int a, int b);
+}
+
+public class LambdaExample {
+    public static void main(String[] args) {
+        // Using lambda expression to add two numbers
+        MathOperation addition = (a, b) -> a + b;
+        System.out.println("Addition: " + addition.operation(10, 5)); // Output: 15
+    }
+}
+```
+
+**Output**:
+
+```
+Addition: 15
+```
+
+### Example 3: Lambda Expression with Block of Code
+
+When the lambda expression has more than one statement, it needs to be enclosed in braces `{}`.
+
+```java
+@FunctionalInterface
+interface MathOperation {
+    int operation(int a, int b);
+}
+
+public class LambdaExample {
+    public static void main(String[] args) {
+        // Using lambda with a block of code
+        MathOperation multiplication = (a, b) -> {
+            int result = a * b;
+            return result; // Return the result
+        };
+        System.out.println("Multiplication: " + multiplication.operation(10, 5)); // Output: 50
+    }
+}
+```
+
+**Output**:
+
+```
+Multiplication: 50
+```
+
+### Benefits of Lambda Expressions:
+1. **Concise and Readable Code**: Lambda expressions allow you to write more concise and readable code, reducing the need for boilerplate code such as anonymous inner classes.
+2. **Functional Programming**: Lambda expressions are a key part of functional programming in Java, enabling you to pass behavior as arguments and return values from methods more naturally.
+3. **Parallel Processing**: Lambdas, combined with streams, make it easier to perform operations like filtering, mapping, and reducing data in parallel.
+
+### Example 4: Lambda with `Streams` API
+
+Java 8 introduced the `Streams` API, which allows you to perform functional-style operations on collections of objects.
+
+```java
+import java.util.Arrays;
+import java.util.List;
+
+public class LambdaExample {
+    public static void main(String[] args) {
+        List<String> names = Arrays.asList("Alice", "Bob", "Charlie", "David");
+
+        // Using lambda with Streams API to filter and print names that start with 'A'
+        names.stream()
+             .filter(name -> name.startsWith("A"))
+             .forEach(name -> System.out.println(name));
+    }
+}
+```
+
+**Output**:
+
+```
+Alice
+```
+
+### Example 5: Lambda with `Comparator`
+
+Lambdas are frequently used with `Comparator` to sort collections:
+
+```java
+import java.util.Arrays;
+import java.util.List;
+
+public class LambdaExample {
+    public static void main(String[] args) {
+        List<Integer> numbers = Arrays.asList(3, 2, 1, 4, 5);
+
+        // Using lambda expression to sort the list
+        numbers.sort((a, b) -> a.compareTo(b));
+
+        System.out.println(numbers); // Output: [1, 2, 3, 4, 5]
+    }
+}
+```
+
+**Output**:
+
+```
+[1, 2, 3, 4, 5]
+```
+
+### Summary of Lambda Syntax:
+- **Single parameter**: `(param) -> expression`
+- **Multiple parameters**: `(param1, param2) -> expression`
+- **Block of code**: `(param1, param2) -> { code }`
+- **No parameter**: `() -> expression`
+
+### Conclusion:
+Lambda expressions in Java 8 are a powerful feature that simplifies the process of writing clean, efficient, and readable code. They enable functional programming capabilities by allowing you to pass behavior as parameters, work with `Streams`, and manipulate data in a concise way.
+
+---
+### 2. Streams API
+- **Description**: Introduces a new abstraction for processing sequences of elements (collections, arrays, etc.) in a functional style. It supports operations like filtering, mapping, and reducing.
+- **Example**:
+  ```java
+  List<String> names = Arrays.asList("Alice", "Bob", "Charlie");
+  List<String> filteredNames = names.stream()
+                                     .filter(name -> name.startsWith("A"))
+                                     .collect(Collectors.toList());
+  ```
+
+### 3. Default Methods
+- **Description**: Allows you to add new methods to interfaces with an implementation. This helps in evolving interfaces without breaking existing implementations.
+- **Example**:
+  ```java
+  interface MyInterface {
+      default void myDefaultMethod() {
+          System.out.println("Default implementation");
+      }
+  }
+  ```
+
+### 4. Method References
+- **Description**: A shorthand notation of a lambda expression to call a method. They enhance readability and can be used when you want to refer to a method without executing it.
+- **Example**:
+  ```java
+  List<String> names = Arrays.asList("Alice", "Bob", "Charlie");
+  names.forEach(System.out::println); // Method reference to print each name.
+  ```
+
+### 5. Optional Class
+- **Description**: A container object which may or may not contain a value, designed to help avoid `NullPointerException` and to provide a more expressive way of dealing with optional values.
+- **Example**:
+  ```java
+  Optional<String> optionalName = Optional.ofNullable(getName());
+  optionalName.ifPresent(name -> System.out.println(name));
+  ```
+
+### 6. New Date and Time API
+- **Description**: Introduces a comprehensive and immutable date and time API (java.time package) to handle dates and times more effectively than the old `java.util.Date` and `java.util.Calendar`.
+- **Example**:
+  ```java
+  LocalDate today = LocalDate.now();
+  LocalDate birthday = LocalDate.of(1990, Month.JANUARY, 1);
+  Period age = Period.between(birthday, today);
+  ```
+
+### 7. Nashorn JavaScript Engine
+- **Description**: A new lightweight JavaScript engine that allows you to execute JavaScript code on the Java Virtual Machine (JVM).
+- **Example**:
+  ```java
+  ScriptEngine engine = new ScriptEngineManager().getEngineByName("Nashorn");
+  engine.eval("print('Hello, Nashorn!');");
+  ```
+
+### 8. CompletableFuture
+- **Description**: A new class that represents a future result of an asynchronous computation. It allows you to write non-blocking code using a functional style.
+- **Example**:
+  ```java
+  CompletableFuture.supplyAsync(() -> {
+      return "Hello, World!";
+  }).thenAccept(result -> {
+      System.out.println(result);
+  });
+  ```
+---
+
 ## Garbage Collection in Java
 
 **Garbage Collection (GC)** in Java is the process by which the Java Virtual Machine (JVM) automatically reclaims memory that is no longer in use or referenced by any part of the program. It helps in managing memory automatically and preventing memory leaks, which can cause a program to consume more memory than necessary or even crash due to an **OutOfMemoryError**.
@@ -4615,6 +5057,81 @@ These collections implement fail-safe iterators.
 In summary, **Fail-Fast** is useful for catching bugs early in single-threaded or synchronized environments, while **Fail-Safe** is used in multi-threaded environments where modifications to the collection are expected during iteration.
 
 ---
+
+## New features introduced in Java 8 Collections Framework
+
+Java 8 introduced several enhancements and new features to the Java Collections Framework, making it more powerful and easier to use. Here are some of the key updates:
+
+### 1. **Stream API**
+- **Description**: Allows for functional-style operations on streams of elements (like collections). You can perform operations such as filtering, mapping, and reducing.
+- **Example**:
+  ```java
+  List<String> names = Arrays.asList("Alice", "Bob", "Charlie");
+  List<String> filteredNames = names.stream()
+                                     .filter(name -> name.startsWith("A"))
+                                     .collect(Collectors.toList());
+  ```
+
+### 2. **Default Methods in Interfaces**
+- **Description**: Interfaces in the collections framework can now have default methods, providing additional functionality without breaking existing implementations.
+- **Example**:
+  ```java
+  interface MyCollection<E> extends Collection<E> {
+      default void printAll() {
+          for (E element : this) {
+              System.out.println(element);
+          }
+      }
+  }
+  ```
+
+### 3. **Optional Class**
+- **Description**: While not specifically part of the collections framework, `Optional` is used with collections to avoid `NullPointerException` when dealing with optional values.
+- **Example**:
+  ```java
+  Optional<String> nameOpt = names.stream()
+                                   .filter(name -> name.startsWith("A"))
+                                   .findFirst();
+  ```
+
+### 4. **New Methods in Collection Interfaces**
+- **Description**: Several interfaces in the collections framework received new default methods:
+  - **forEach**: Iterates over the elements and applies a specified action.
+  - **spliterator**: Creates a `Spliterator` for parallel processing of collections.
+  - **removeIf**: Removes elements that satisfy a given predicate.
+  - **stream**: Returns a sequential stream with the collection as its source.
+
+- **Example**:
+  ```java
+  List<String> names = new ArrayList<>(Arrays.asList("Alice", "Bob", "Charlie"));
+  names.removeIf(name -> name.startsWith("B")); // Removes names starting with 'B'
+  ```
+
+### 5. **New `Collectors` Utility**
+- **Description**: The `Collectors` utility class provides various static methods for collecting results from streams, such as:
+  - `toList()`
+  - `toSet()`
+  - `toMap()`
+  - `joining()`
+  - `groupingBy()`
+  - `partitioningBy()`
+
+- **Example**:
+  ```java
+  Map<Character, List<String>> groupedByFirstLetter = names.stream()
+      .collect(Collectors.groupingBy(name -> name.charAt(0)));
+  ```
+
+### 6. **Concurrent Collections Enhancements**
+- **Description**: Improvements to concurrent collections, including `ConcurrentHashMap` having new methods like `forEach`, `reduce`, and more for better parallelism and performance.
+
+### 7. **Deque Interface Enhancements**
+- **Description**: The `Deque` interface has methods like `offerFirst`, `offerLast`, `pollFirst`, and `pollLast` to simplify operations on double-ended queues.
+
+### Summary
+Java 8 significantly enhanced the Java Collections Framework, particularly through the introduction of the Stream API, default methods, and various utility methods for easier data manipulation. These improvements have made it simpler to perform complex data operations while maintaining readability and conciseness.
+
+---
 ## Java Thread & Concurrency
 
 In Java, **threads** and **concurrency** are critical concepts that enable parallel execution and efficient resource utilization, particularly in multi-core processors. Understanding how threads work, how to manage concurrency, and how to avoid common pitfalls like race conditions is key to writing efficient, thread-safe applications.
@@ -6263,454 +6780,74 @@ The `ExecutorService` interface provides a robust framework for concurrent progr
 
 ---
 
-Choosing the right garbage collector depends on the specific requirements of your application, such as throughput, latency, and memory usage patterns.
+## In Java, `wait()`, `sleep()`, `join()`, and `yield()` are methods used in multi-threading to manage thread behavior.
 
-## Spring Boot and REST APIs
+### 1. `wait()`
+- **Purpose**: Causes the current thread to wait until another thread invokes the `notify()` or `notifyAll()` method on the same object.
+- **Use Case**: Typically used for inter-thread communication, especially when a thread needs to wait for a condition to be fulfilled by another thread.
+- **How It Works**:
+  - Must be called from within a synchronized block or method.
+  - Releases the lock held by the thread, allowing other threads to access the synchronized block.
 
-3. **Question**: How do you create a REST API using Spring Boot?
-   **Answer**: You can create a REST API by defining a `@RestController` and using `@RequestMapping` or `@GetMapping`, `@PostMapping`, etc. annotations.
+**Example**:
+```java
+synchronized (object) {
+    while (conditionNotMet) {
+        object.wait(); // Waits for notification
+    }
+}
+```
 
-   ```java
-   @RestController
-   @RequestMapping("/api")
-   public class UserController {
+### 2. `sleep()`
+- **Purpose**: Pauses the execution of the current thread for a specified period.
+- **Use Case**: Often used to create delays in execution or simulate processing time.
+- **How It Works**:
+  - It does not release any locks held by the thread.
+  - It can throw `InterruptedException`.
 
-       @GetMapping("/users")
-       public List<User> getAllUsers() {
-           return userService.findAllUsers();
-       }
-       
-       @PostMapping("/users")
-       public User createUser(@RequestBody User user) {
-           return userService.saveUser(user);
-       }
-   }
-   ```
+**Example**:
+```java
+try {
+    Thread.sleep(1000); // Sleeps for 1 second
+} catch (InterruptedException e) {
+    e.printStackTrace();
+}
+```
 
-### JMS and EJB
-4. **Question**: What is JMS, and how do you use it in a Spring Boot application?
-   **Answer**: Java Message Service (JMS) is a messaging standard that allows application components to create, send, receive, and read messages. In Spring Boot, you can use Spring JMS to configure and use JMS easily.
+### 3. `join()`
+- **Purpose**: Waits for a thread to die (i.e., finish its execution).
+- **Use Case**: Used when you want one thread to wait for another to complete its execution before continuing.
+- **How It Works**:
+  - It can take an optional timeout parameter.
+  - After calling `join()`, the current thread will be blocked until the thread it joins has completed.
 
-   ```java
-   @Service
-   public class MessageSender {
+**Example**:
+```java
+Thread t1 = new Thread(() -> {
+    // Some work
+});
+t1.start();
+t1.join(); // Waits for t1 to finish
+```
 
-       @Autowired
-       private JmsTemplate jmsTemplate;
+### 4. `yield()`
+- **Purpose**: Suggests that the current thread is willing to yield its current use of the CPU.
+- **Use Case**: Used to improve the efficiency of thread scheduling, allowing other threads of the same priority to run.
+- **How It Works**:
+  - It does not guarantee that the thread will relinquish the CPU; it merely makes a request to the thread scheduler.
 
-       public void sendMessage(String message) {
-           jmsTemplate.convertAndSend("myQueue", message);
-       }
-   }
-   ```
+**Example**:
+```java
+Thread.yield(); // Suggests that the current thread yield
+```
 
-### DevSecOps and Tools
-5. **Question**: How do you implement CI/CD using Jenkins?
-   **Answer**: You can set up a Jenkins pipeline using a `Jenkinsfile`. The pipeline can define stages for building, testing, and deploying your application.
-
-   ```groovy
-   pipeline {
-       agent any
-       stages {
-           stage('Build') {
-               steps {
-                   sh 'mvn clean package'
-               }
-           }
-           stage('Test') {
-               steps {
-                   sh 'mvn test'
-               }
-           }
-           stage('Deploy') {
-               steps {
-                   deployToServer()
-               }
-           }
-       }
-   }
-   ```
-
-### Database Concepts
-6. **Question**: What are the differences between RDBMS and NoSQL databases?
-   **Answer**: RDBMS (Relational Database Management System) uses structured schemas and SQL for querying, supporting ACID properties. NoSQL databases are schema-less, designed for horizontal scalability, and often use key-value, document, or column-family data models.
+### Summary
+- **`wait()`**: Used for inter-thread communication, releases locks.
+- **`sleep()`**: Pauses the thread without releasing locks, for a specified time.
+- **`join()`**: Makes the calling thread wait for another thread to finish.
+- **`yield()`**: Suggests to the scheduler that the current thread can be paused to allow other threads to run.
 
 ---
-
-
-
-## New features introduced in Java 8
-
-Java 8 introduced several significant features and enhancements that greatly improved the language and the Java Development Kit (JDK). Here are some of the key features:
-
-### 1. Lambda Expressions
-- **Description**: Provides a clear and concise way to represent a function as an object. It enables functional programming in Java, allowing you to pass behavior as a parameter.
-- **Example**:
-  ```java
-  (a, b) -> a + b; // A simple lambda expression that adds two numbers.
-  ```
-
-Lambda expressions, introduced in Java 8, provide a clear and concise way to represent functional interfaces (interfaces with a single abstract method). They enable functional programming capabilities in Java, allowing you to treat behavior as a parameter and pass around functionality.
-
-### 1. Basic Syntax
-The syntax of a lambda expression is as follows:
-```java
-(parameters) -> expression
-```
-or, for more complex bodies:
-```java
-(parameters) -> { statements; }
-```
-
-### 2. Functional Interfaces
-A functional interface is an interface that contains exactly one abstract method. Lambda expressions can be used to create instances of functional interfaces. Common examples include:
-- `Runnable`
-- `Callable`
-- `Comparator`
-- `Consumer`
-- `Supplier`
-- `Function`
-- `Predicate`
-
-#### Example:
-```java
-@FunctionalInterface
-interface MyFunctionalInterface {
-    void execute();
-}
-
-MyFunctionalInterface myLambda = () -> System.out.println("Executing...");
-myLambda.execute();
-```
-
-### 3. Types of Lambda Expressions
-Lambda expressions can be categorized based on the number of parameters and the type of body:
-
-- **No Parameters**:
-  ```java
-  () -> System.out.println("Hello, World!");
-  ```
-
-- **Single Parameter (Type Inference)**:
-  ```java
-  x -> x * x; // No need for parentheses for a single parameter
-  ```
-
-- **Multiple Parameters**:
-  ```java
-  (x, y) -> x + y;
-  ```
-
-- **Block Body**:
-  ```java
-  (int x, int y) -> {
-      int sum = x + y;
-      return sum;
-  };
-  ```
-
-### 4. Using Lambda Expressions
-Lambda expressions can be used with Java's Collections Framework, particularly with the Stream API, to perform operations like filtering, mapping, and reducing.
-
-#### Example with Streams:
-```java
-List<String> names = Arrays.asList("Alice", "Bob", "Charlie", "David");
-names.stream()
-     .filter(name -> name.startsWith("A"))
-     .forEach(name -> System.out.println(name));
-```
-
-### 5. Method References
-Lambda expressions can often be replaced with method references for improved readability. Method references are a shorthand notation for calling methods.
-
-#### Syntax:
-- **Static Method Reference**: `ClassName::methodName`
-- **Instance Method Reference**: `instance::methodName`
-- **Constructor Reference**: `ClassName::new`
-
-#### Example:
-```java
-names.forEach(System.out::println); // Method reference instead of lambda
-```
-
-### 6. Benefits of Lambda Expressions
-- **Conciseness**: Reduces boilerplate code, especially for simple implementations.
-- **Readability**: Makes the code more readable and expressive.
-- **Enhanced Functionality**: Facilitates functional programming constructs such as higher-order functions.
-
-### 7. Capturing Variables
-Lambda expressions can capture variables from their enclosing context (effectively final variables).
-
-#### Example:
-```java
-int threshold = 5;
-Predicate<Integer> filter = num -> num > threshold; // Captures `threshold`
-```
-
-### 8. Scope and `this`
-Within a lambda expression, `this` refers to the enclosing class instance, not the lambda itself.
-
-#### Example:
-```java
-class Outer {
-    void outerMethod() {
-        Runnable r = () -> System.out.println(this); // Refers to Outer instance
-    }
-}
-```
-
-### 9. Limitations
-- **No `this` or `super`**: Lambda expressions cannot declare their own `this` or `super`, as they inherit from the enclosing context.
-- **No checked exceptions**: You cannot throw checked exceptions from a lambda unless they are handled.
-
-### 10. Use Cases
-- **Event Handling**: Useful in GUI applications for handling events.
-- **Functional Programming**: Streamlining functional operations on collections.
-- **Parallel Processing**: Using streams to process collections in parallel.
-
-### Conclusion
-Lambda expressions in Java 8 represent a powerful addition to the language, allowing for more expressive, concise, and functional-style programming. By enabling the use of functional interfaces, they significantly enhance the way Java developers can write code, particularly when working with collections and streams. 
-
----
-
-## Java 8 Lambda Expressions 
-
-In Java 8, **lambda expressions** were introduced as a way to provide a clear and concise syntax for writing anonymous methods (i.e., methods without a name). They are primarily used to implement functional interfaces (interfaces with a single abstract method), and they simplify the syntax for passing behavior as parameters.
-
-### Key Characteristics of Lambda Expressions:
-1. **Concise Syntax**: Lambda expressions allow you to write code more compactly, eliminating the need for boilerplate code (such as anonymous classes).
-2. **Functional Interface**: A lambda expression works with functional interfaces, which are interfaces that contain exactly one abstract method. These interfaces are typically used to represent behavior that can be passed around as parameters to methods.
-3. **First-Class Function**: Lambdas allow you to treat behavior as a parameter (e.g., passing functions as arguments to methods), making it easier to pass functionality around in Java.
-
-### Basic Syntax of Lambda Expression:
-
-The general syntax of a lambda expression is:
-
-```java
-(parameter1, parameter2, ...) -> expression
-```
-
-Alternatively, it can have a block of code as the body:
-
-```java
-(parameter1, parameter2, ...) -> {
-    // body with multiple statements
-}
-```
-
-### Example 1: Simple Lambda Expression
-
-Suppose we have a functional interface:
-
-```java
-@FunctionalInterface
-interface Greeting {
-    void greet(String name);
-}
-```
-
-Using a lambda expression to implement the interface:
-
-```java
-public class LambdaExample {
-    public static void main(String[] args) {
-        // Using a lambda expression to implement the greet method
-        Greeting greeting = (name) -> System.out.println("Hello, " + name);
-        greeting.greet("John");
-    }
-}
-```
-
-**Output**:
-
-```
-Hello, John
-```
-
-### Example 2: Lambda with Multiple Parameters
-
-A lambda expression can take multiple parameters. Here's an example of adding two integers:
-
-```java
-@FunctionalInterface
-interface MathOperation {
-    int operation(int a, int b);
-}
-
-public class LambdaExample {
-    public static void main(String[] args) {
-        // Using lambda expression to add two numbers
-        MathOperation addition = (a, b) -> a + b;
-        System.out.println("Addition: " + addition.operation(10, 5)); // Output: 15
-    }
-}
-```
-
-**Output**:
-
-```
-Addition: 15
-```
-
-### Example 3: Lambda Expression with Block of Code
-
-When the lambda expression has more than one statement, it needs to be enclosed in braces `{}`.
-
-```java
-@FunctionalInterface
-interface MathOperation {
-    int operation(int a, int b);
-}
-
-public class LambdaExample {
-    public static void main(String[] args) {
-        // Using lambda with a block of code
-        MathOperation multiplication = (a, b) -> {
-            int result = a * b;
-            return result; // Return the result
-        };
-        System.out.println("Multiplication: " + multiplication.operation(10, 5)); // Output: 50
-    }
-}
-```
-
-**Output**:
-
-```
-Multiplication: 50
-```
-
-### Benefits of Lambda Expressions:
-1. **Concise and Readable Code**: Lambda expressions allow you to write more concise and readable code, reducing the need for boilerplate code such as anonymous inner classes.
-2. **Functional Programming**: Lambda expressions are a key part of functional programming in Java, enabling you to pass behavior as arguments and return values from methods more naturally.
-3. **Parallel Processing**: Lambdas, combined with streams, make it easier to perform operations like filtering, mapping, and reducing data in parallel.
-
-### Example 4: Lambda with `Streams` API
-
-Java 8 introduced the `Streams` API, which allows you to perform functional-style operations on collections of objects.
-
-```java
-import java.util.Arrays;
-import java.util.List;
-
-public class LambdaExample {
-    public static void main(String[] args) {
-        List<String> names = Arrays.asList("Alice", "Bob", "Charlie", "David");
-
-        // Using lambda with Streams API to filter and print names that start with 'A'
-        names.stream()
-             .filter(name -> name.startsWith("A"))
-             .forEach(name -> System.out.println(name));
-    }
-}
-```
-
-**Output**:
-
-```
-Alice
-```
-
-### Example 5: Lambda with `Comparator`
-
-Lambdas are frequently used with `Comparator` to sort collections:
-
-```java
-import java.util.Arrays;
-import java.util.List;
-
-public class LambdaExample {
-    public static void main(String[] args) {
-        List<Integer> numbers = Arrays.asList(3, 2, 1, 4, 5);
-
-        // Using lambda expression to sort the list
-        numbers.sort((a, b) -> a.compareTo(b));
-
-        System.out.println(numbers); // Output: [1, 2, 3, 4, 5]
-    }
-}
-```
-
-**Output**:
-
-```
-[1, 2, 3, 4, 5]
-```
-
-### Summary of Lambda Syntax:
-- **Single parameter**: `(param) -> expression`
-- **Multiple parameters**: `(param1, param2) -> expression`
-- **Block of code**: `(param1, param2) -> { code }`
-- **No parameter**: `() -> expression`
-
-### Conclusion:
-Lambda expressions in Java 8 are a powerful feature that simplifies the process of writing clean, efficient, and readable code. They enable functional programming capabilities by allowing you to pass behavior as parameters, work with `Streams`, and manipulate data in a concise way.
-
----
-### 2. Streams API
-- **Description**: Introduces a new abstraction for processing sequences of elements (collections, arrays, etc.) in a functional style. It supports operations like filtering, mapping, and reducing.
-- **Example**:
-  ```java
-  List<String> names = Arrays.asList("Alice", "Bob", "Charlie");
-  List<String> filteredNames = names.stream()
-                                     .filter(name -> name.startsWith("A"))
-                                     .collect(Collectors.toList());
-  ```
-
-### 3. Default Methods
-- **Description**: Allows you to add new methods to interfaces with an implementation. This helps in evolving interfaces without breaking existing implementations.
-- **Example**:
-  ```java
-  interface MyInterface {
-      default void myDefaultMethod() {
-          System.out.println("Default implementation");
-      }
-  }
-  ```
-
-### 4. Method References
-- **Description**: A shorthand notation of a lambda expression to call a method. They enhance readability and can be used when you want to refer to a method without executing it.
-- **Example**:
-  ```java
-  List<String> names = Arrays.asList("Alice", "Bob", "Charlie");
-  names.forEach(System.out::println); // Method reference to print each name.
-  ```
-
-### 5. Optional Class
-- **Description**: A container object which may or may not contain a value, designed to help avoid `NullPointerException` and to provide a more expressive way of dealing with optional values.
-- **Example**:
-  ```java
-  Optional<String> optionalName = Optional.ofNullable(getName());
-  optionalName.ifPresent(name -> System.out.println(name));
-  ```
-
-### 6. New Date and Time API
-- **Description**: Introduces a comprehensive and immutable date and time API (java.time package) to handle dates and times more effectively than the old `java.util.Date` and `java.util.Calendar`.
-- **Example**:
-  ```java
-  LocalDate today = LocalDate.now();
-  LocalDate birthday = LocalDate.of(1990, Month.JANUARY, 1);
-  Period age = Period.between(birthday, today);
-  ```
-
-### 7. Nashorn JavaScript Engine
-- **Description**: A new lightweight JavaScript engine that allows you to execute JavaScript code on the Java Virtual Machine (JVM).
-- **Example**:
-  ```java
-  ScriptEngine engine = new ScriptEngineManager().getEngineByName("Nashorn");
-  engine.eval("print('Hello, Nashorn!');");
-  ```
-
-### 8. CompletableFuture
-- **Description**: A new class that represents a future result of an asynchronous computation. It allows you to write non-blocking code using a functional style.
-- **Example**:
-  ```java
-  CompletableFuture.supplyAsync(() -> {
-      return "Hello, World!";
-  }).thenAccept(result -> {
-      System.out.println(result);
-  });
-  ```
 
 ## CompletableFuture: Depth Concept and Methods
 
@@ -7359,78 +7496,79 @@ This program demonstrates the usage of **all the methods** from the table in var
 
 ---
 
-## New features introduced in Java 8 Collections Framework
 
-Java 8 introduced several enhancements and new features to the Java Collections Framework, making it more powerful and easier to use. Here are some of the key updates:
+---
+Choosing the right garbage collector depends on the specific requirements of your application, such as throughput, latency, and memory usage patterns.
 
-### 1. **Stream API**
-- **Description**: Allows for functional-style operations on streams of elements (like collections). You can perform operations such as filtering, mapping, and reducing.
-- **Example**:
-  ```java
-  List<String> names = Arrays.asList("Alice", "Bob", "Charlie");
-  List<String> filteredNames = names.stream()
-                                     .filter(name -> name.startsWith("A"))
-                                     .collect(Collectors.toList());
-  ```
+## Spring Boot and REST APIs
 
-### 2. **Default Methods in Interfaces**
-- **Description**: Interfaces in the collections framework can now have default methods, providing additional functionality without breaking existing implementations.
-- **Example**:
-  ```java
-  interface MyCollection<E> extends Collection<E> {
-      default void printAll() {
-          for (E element : this) {
-              System.out.println(element);
-          }
-      }
-  }
-  ```
+3. **Question**: How do you create a REST API using Spring Boot?
+   **Answer**: You can create a REST API by defining a `@RestController` and using `@RequestMapping` or `@GetMapping`, `@PostMapping`, etc. annotations.
 
-### 3. **Optional Class**
-- **Description**: While not specifically part of the collections framework, `Optional` is used with collections to avoid `NullPointerException` when dealing with optional values.
-- **Example**:
-  ```java
-  Optional<String> nameOpt = names.stream()
-                                   .filter(name -> name.startsWith("A"))
-                                   .findFirst();
-  ```
+   ```java
+   @RestController
+   @RequestMapping("/api")
+   public class UserController {
 
-### 4. **New Methods in Collection Interfaces**
-- **Description**: Several interfaces in the collections framework received new default methods:
-  - **forEach**: Iterates over the elements and applies a specified action.
-  - **spliterator**: Creates a `Spliterator` for parallel processing of collections.
-  - **removeIf**: Removes elements that satisfy a given predicate.
-  - **stream**: Returns a sequential stream with the collection as its source.
+       @GetMapping("/users")
+       public List<User> getAllUsers() {
+           return userService.findAllUsers();
+       }
+       
+       @PostMapping("/users")
+       public User createUser(@RequestBody User user) {
+           return userService.saveUser(user);
+       }
+   }
+   ```
 
-- **Example**:
-  ```java
-  List<String> names = new ArrayList<>(Arrays.asList("Alice", "Bob", "Charlie"));
-  names.removeIf(name -> name.startsWith("B")); // Removes names starting with 'B'
-  ```
+### JMS and EJB
+4. **Question**: What is JMS, and how do you use it in a Spring Boot application?
+   **Answer**: Java Message Service (JMS) is a messaging standard that allows application components to create, send, receive, and read messages. In Spring Boot, you can use Spring JMS to configure and use JMS easily.
 
-### 5. **New `Collectors` Utility**
-- **Description**: The `Collectors` utility class provides various static methods for collecting results from streams, such as:
-  - `toList()`
-  - `toSet()`
-  - `toMap()`
-  - `joining()`
-  - `groupingBy()`
-  - `partitioningBy()`
+   ```java
+   @Service
+   public class MessageSender {
 
-- **Example**:
-  ```java
-  Map<Character, List<String>> groupedByFirstLetter = names.stream()
-      .collect(Collectors.groupingBy(name -> name.charAt(0)));
-  ```
+       @Autowired
+       private JmsTemplate jmsTemplate;
 
-### 6. **Concurrent Collections Enhancements**
-- **Description**: Improvements to concurrent collections, including `ConcurrentHashMap` having new methods like `forEach`, `reduce`, and more for better parallelism and performance.
+       public void sendMessage(String message) {
+           jmsTemplate.convertAndSend("myQueue", message);
+       }
+   }
+   ```
 
-### 7. **Deque Interface Enhancements**
-- **Description**: The `Deque` interface has methods like `offerFirst`, `offerLast`, `pollFirst`, and `pollLast` to simplify operations on double-ended queues.
+### DevSecOps and Tools
+5. **Question**: How do you implement CI/CD using Jenkins?
+   **Answer**: You can set up a Jenkins pipeline using a `Jenkinsfile`. The pipeline can define stages for building, testing, and deploying your application.
 
-### Summary
-Java 8 significantly enhanced the Java Collections Framework, particularly through the introduction of the Stream API, default methods, and various utility methods for easier data manipulation. These improvements have made it simpler to perform complex data operations while maintaining readability and conciseness.
+   ```groovy
+   pipeline {
+       agent any
+       stages {
+           stage('Build') {
+               steps {
+                   sh 'mvn clean package'
+               }
+           }
+           stage('Test') {
+               steps {
+                   sh 'mvn test'
+               }
+           }
+           stage('Deploy') {
+               steps {
+                   deployToServer()
+               }
+           }
+       }
+   }
+   ```
+
+### Database Concepts
+6. **Question**: What are the differences between RDBMS and NoSQL databases?
+   **Answer**: RDBMS (Relational Database Management System) uses structured schemas and SQL for querying, supporting ACID properties. NoSQL databases are schema-less, designed for horizontal scalability, and often use key-value, document, or column-family data models.
 
 ---
 
@@ -8647,144 +8785,6 @@ Bootstrap ClassLoader
 - **Custom ClassLoaders**: User-defined loaders for specialized class-loading requirements.
 
 ---
-
-## Java ways to create objects
-
-In Java, there are several ways to create objects. Here are the main methods:
-
-1. **Using the `new` Keyword**
-   - The most common way to create an object.
-   - Syntax:
-     ```java
-     ClassName obj = new ClassName();
-     ```
-
-2. **Using the `newInstance()` Method**
-   - This method is part of the `Class` class and can be used to create an instance of a class using reflection.
-   - Syntax:
-     ```java
-     ClassName obj = ClassName.class.newInstance();
-     ```
-
-3. **Using the `clone()` Method**
-   - If a class implements the `Cloneable` interface, you can create a new object as a copy of an existing object.
-   - Syntax:
-     ```java
-     ClassName obj1 = new ClassName();
-     ClassName obj2 = (ClassName) obj1.clone();
-     ```
-
-4. **Using Factory Methods**
-   - Classes can have static factory methods that return instances of the class. This is a common design pattern.
-   - Example:
-     ```java
-     ClassName obj = ClassName.createInstance();
-     ```
-
-5. **Using Deserialization**
-   - Objects can be created from a serialized state using the `ObjectInputStream` class.
-   - Syntax:
-     ```java
-     ObjectInputStream in = new ObjectInputStream(new FileInputStream("objectfile.ser"));
-     ClassName obj = (ClassName) in.readObject();
-     ```
-
-6. **Using Inner Classes**
-   - You can create an object of an inner class directly using an instance of the outer class.
-   - Syntax:
-     ```java
-     OuterClass outer = new OuterClass();
-     OuterClass.InnerClass inner = outer.new InnerClass();
-     ```
-
-7. **Using Anonymous Classes**
-   - Java allows you to create an object of a class without explicitly defining a class.
-   - Syntax:
-     ```java
-     ClassName obj = new ClassName() {
-         // Override methods here
-     };
-     ```
-
-### Summary
-
-- **`new` keyword**: Most common method.
-- **`newInstance()`**: Reflection-based object creation.
-- **`clone()`**: Create a copy of an existing object.
-- **Factory methods**: Static methods for instance creation.
-- **Deserialization**: Restore object state from a serialized format.
-- **Inner classes**: Instantiate inner classes using outer class objects.
-- **Anonymous classes**: Create instances without a separate class definition.
-
----
-
-## In Java, `wait()`, `sleep()`, `join()`, and `yield()` are methods used in multi-threading to manage thread behavior.
-
-### 1. `wait()`
-- **Purpose**: Causes the current thread to wait until another thread invokes the `notify()` or `notifyAll()` method on the same object.
-- **Use Case**: Typically used for inter-thread communication, especially when a thread needs to wait for a condition to be fulfilled by another thread.
-- **How It Works**:
-  - Must be called from within a synchronized block or method.
-  - Releases the lock held by the thread, allowing other threads to access the synchronized block.
-
-**Example**:
-```java
-synchronized (object) {
-    while (conditionNotMet) {
-        object.wait(); // Waits for notification
-    }
-}
-```
-
-### 2. `sleep()`
-- **Purpose**: Pauses the execution of the current thread for a specified period.
-- **Use Case**: Often used to create delays in execution or simulate processing time.
-- **How It Works**:
-  - It does not release any locks held by the thread.
-  - It can throw `InterruptedException`.
-
-**Example**:
-```java
-try {
-    Thread.sleep(1000); // Sleeps for 1 second
-} catch (InterruptedException e) {
-    e.printStackTrace();
-}
-```
-
-### 3. `join()`
-- **Purpose**: Waits for a thread to die (i.e., finish its execution).
-- **Use Case**: Used when you want one thread to wait for another to complete its execution before continuing.
-- **How It Works**:
-  - It can take an optional timeout parameter.
-  - After calling `join()`, the current thread will be blocked until the thread it joins has completed.
-
-**Example**:
-```java
-Thread t1 = new Thread(() -> {
-    // Some work
-});
-t1.start();
-t1.join(); // Waits for t1 to finish
-```
-
-### 4. `yield()`
-- **Purpose**: Suggests that the current thread is willing to yield its current use of the CPU.
-- **Use Case**: Used to improve the efficiency of thread scheduling, allowing other threads of the same priority to run.
-- **How It Works**:
-  - It does not guarantee that the thread will relinquish the CPU; it merely makes a request to the thread scheduler.
-
-**Example**:
-```java
-Thread.yield(); // Suggests that the current thread yield
-```
-
-### Summary
-- **`wait()`**: Used for inter-thread communication, releases locks.
-- **`sleep()`**: Pauses the thread without releasing locks, for a specified time.
-- **`join()`**: Makes the calling thread wait for another thread to finish.
-- **`yield()`**: Suggests to the scheduler that the current thread can be paused to allow other threads to run.
-
 
 
 In Java, prior to Java 8, interfaces could only declare abstract methods. However, with the introduction of Java 8, two significant features were added to interfaces: default methods and static methods. Here’s why they were introduced and their importance:
