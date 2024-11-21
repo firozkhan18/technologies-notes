@@ -153,7 +153,6 @@
 61. [How to Implement Asynchronous Programming in Spring Boot](#how-to-implement-asynchronous-programming-in-spring-boot)  
 62. [Thread Management and Synchronization](#thread-management-and-synchronization)  
 63. [Detecting and Recovering from Deadlocks](#detecting-and-recovering-from-deadlocks)
-
 64. [Asynchronous programming support](#asynchronous-programming-support)
 ---
 
