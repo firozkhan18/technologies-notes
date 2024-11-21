@@ -11,20 +11,6 @@
 8. [Regular Interface](#regular-interface)  
 9. [Functional Interface](#functional-interface)  
 10. [Java Thread & Concurrency](#java-thread-concurrency)  
-
-
-### **Table of Contents**
-
-1. [Class and Object](#class-and-object)  
-2. [Encapsulation](#encapsulation)  
-3. [Inheritance](#inheritance)  
-4. [Polymorphism](#polymorphism)  
-5. [Abstraction](#abstraction)  
-6. [Composition](#composition)  
-7. [Abstract Class](#abstract-class)  
-8. [Regular Interface](#regular-interface)  
-9. [Functional Interface](#functional-interface)  
-10. [Java Thread & Concurrency](#java-thread-concurrency)  
 11. [Garbage Collection in Java](#garbage-collection-in-java)  
 12. [Memory Management in Java](#memory-management-in-java)  
 13. [Garbage Collection vs Semaphore](#garbage-collection-vs-semaphore)  
