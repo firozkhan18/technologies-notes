@@ -27829,6 +27829,24 @@ The following is a high-level diagram that illustrates the JVM memory management
 +-------------------------------+
 ```
 
+```mermaid
+graph TD
+    A[Method Area (Metaspace)] -->|Stores class-level data| B[Heap Area (Main Memory)]
+    B --> C[Young Generation]
+    C --> D[Eden Space]
+    C --> E[Survivor Space]
+    B --> F[Old Generation]
+    B -->|Garbage Collection| G[GC]
+    H[Stack Memory (Thread-specific)] -->|Local variables, method calls| I[Each Thread's Stack Frame]
+    J[Program Counter (PC)] -->|Tracks instruction addresses| K[Each Thread's PC]
+    L[Native Method Stack] -->|Handles native methods| M[Non-Java methods]
+    
+    A -->|Class Definitions, Static Variables, Methods| N[Runtime Constant Pool]
+    F -->|Long-lived Objects| O[Survives GC]
+    I -->|Execution Context| P[Method Parameters & Return Addresses]
+    M -->|C/C++| Q[Non-Java Code]
+```
+
 ### **Detailed Explanation of Each Region:**
 
 #### **1. Method Area (Metaspace)**
