@@ -7620,7 +7620,7 @@ ACID properties are a set of principles that ensure reliable processing of datab
 
 - **Definition**: Ensures that a transaction is treated as a single, indivisible unit. It either completes in its entirety or does not execute at all.
 - **Example**: If a transaction involves transferring money from one account to another, both the debit from the first account and the credit to the second account must succeed; if one fails, the entire transaction is rolled back.
-- 
+
 ### 2. Consistency
 
 - **Definition**: A transaction must bring the database from one valid state to another valid state, maintaining all predefined rules, including constraints, cascades, and triggers.
@@ -7636,7 +7636,7 @@ ACID properties are a set of principles that ensure reliable processing of datab
 
 - **Definition**: Ensures that concurrent transactions do not interfere with each other. Each transaction should execute as if it is the only transaction in the system.
 - **Example**: If two transactions are trying to update the same data simultaneously, isolation prevents them from affecting each other's operations, ensuring data integrity.
-- 
+
 ### 4. Durability
 
 - **Definition**: Once a transaction has been committed, it will remain so, even in the event of a system failure (like a crash or power loss).
@@ -7644,7 +7644,7 @@ ACID properties are a set of principles that ensure reliable processing of datab
 
 - **Definition**: Guarantees that once a transaction has been committed, its effects are permanent, even in the event of a system failure.
 - **Example**: After a transaction to update a record is completed, the changes remain in the database even if there is a crash or power failure.
-- 
+
 ### Summary
 
 - **Atomicity**: All or nothing.
