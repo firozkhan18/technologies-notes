@@ -1984,6 +1984,479 @@ public class LambdaExample {
 
 This summary covers the key aspects of Java, including file handling, multithreading, synchronization, exception handling, OOP principles, and various collection frameworks. Each section provides a foundational understanding and examples to illustrate concepts effectively.
 
+## Immutable Classes in Java
+
+In Java, an immutable object is one whose state can not be changed once created. Immutable objects are persistent views of their data without a direct option to change it. To change the state, we must create a new copy of such an object with the intended changes. 
+
+In this post, we will learn immutability in detail, creating an immutable object and its advantages.
+
+### 1. What is Immutability?
+Immutability is a characteristic of Java objects that makes them immutable to future changes once they have been initialized. Its internal state cannot be changed in any way.
+
+Take the example of java.lang.String class which is an immutable class. Once a String is created, there is no way we can change the content of that String. Every public API in String class returns a new String with the modified content. The original String always remains the same.
+```java
+String string = "test";
+String newString = string.toLowerCase();  //Creates a new String
+```
+### 2. Immutability in Collections
+Similarly, for Collections, Java provides a certain degree of immutability with three options:
+```java
+Unmodifiable collections
+Immutable collection factory methods (Java 9+)
+Immutable copies (Java 10+)
+Collections.unmodifiableList(recordList);  //Unmodifiable list
+
+List.of(new Record(1, "test"));  //Factory methods in Java 9
+
+List.copyOf(recordList);  //Java 10
+```
+Note that such collections are only shallowly immutable, meaning that we can not add or remove any elements, but the collection elements themselves aren’t guaranteed to be immutable. If we hold the reference of a collection element, then we can change the element’s state without affecting the collection.
+
+In the following example, we cannot add or remove the list items, but we can change the state of an existing item in the list.
+```java
+List<Record> list = List.of(new Record(1, "value"));
+System.out.println(list);   //[Record(id=1, name=value)]
+
+//list.add(new Record()); //UnsupportedOperationException
+
+list.get(0).setName("modified-value");
+System.out.println(list); //[Record(id=1, name=modified-value)]
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+class Record {
+  long id;
+  String name;
+}
+```
+To ensure complete immutability, we must make sure that we only add immutable instances in the collections. This way, even if somebody gets a reference to an item in the collection, it cannot change anything.
+
+### 3. How to Create an Immutable Class?
+Java documentation itself has some guidelines identified to write immutable classes in this link. We will understand what these guidelines actually mean.
+
+Do not provide setter methods. Setter methods are meant to change an object’s state, which we want to prevent here.
+Make all fields final and private. Fields declared private will not be accessible outside the class, and making them final will ensure that we can not change them even accidentally.
+Do not allow subclasses to override methods. The easiest way is to declare the class as final. Final classes in Java can not be extended.
+Special attention to “immutable classes with mutable fields“. Always remember that member fields will be either mutable or immutable. Values of immutable members (primitives, wrapper classes, String etc) can be returned safely from the getter methods. For mutable members (POJO, collections etc), we must copy the content into a new Object before returning from the getter method.
+Let us apply all the above rules to create an immutable custom class. Notice that we are returning a new copy of ArrayList from the getTokens() method. By doing so, we are hiding the original tokens list so no one can even get a reference of it and change it.
+```java
+final class Record {
+
+  private final long id;
+  private final String name;
+  private final List<String> tokens;
+
+  public Record(long id, String name, List<String> tokens) {
+    this.id = id;
+    this.name = name;
+    this.tokens = tokens;
+  }
+
+  public long getId() {
+    return id;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public List<String> getTokens() {
+    return new ArrayList<>(tokens);
+  }
+
+  @Override
+  public String toString() {
+    return "Record{" +
+        "id=" + id +
+        ", name='" + name + '\'' +
+        ", tokens=" + tokens +
+        '}';
+  }
+}
+```
+Now it’s time to test our class. We tried to add a new item to the tokens list, but the original record and its list remain unchanged.
+```java
+ArrayList<String> tokens = new ArrayList<>();
+tokens.add("active");
+
+Record record = new Record(1, "value", tokens);
+System.out.println(record);   //Record{id=1, name='value', tokens=[active]}
+
+record.getTokens().add("new token"); 
+System.out.println(record);   //Record{id=1, name='value', tokens=[active]}
+```
+### 4. Immutability with Java Records
+Java records help reduce the boilerplate code by generating the constructors and getters at compile time. They can also help create immutable classes with very few lines of code.
+
+For example, we can rewrite the above Record class as follows. Note that records generate the standard getters, so if we want to return a new copy of a mutable reference, we must override the corresponding method.
+```java
+record Record(long id, String name, List<String> tokens){
+
+  public List<String> tokens() {
+    return new ArrayList<>(tokens);
+  }
+}
+```
+Now let us test the immutability again.
+```java
+ArrayList<String> tokens = new ArrayList<>();
+tokens.add("active");
+
+Record record = new Record(1, "value", tokens);
+System.out.println(record);   //Record{id=1, name='value', tokens=[active]}
+
+record.tokens().add("new token");
+System.out.println(record);   ////Record{id=1, name='value', tokens=[active]}
+```
+### 5. Immutable Classes in JDK
+Apart from your written classes, JDK itself has lots of immutable classes. Given is such a list of immutable classes in Java.
+
+- java.lang.String
+- Wrapper classes such as Integer, Long, Double etc
+- java.math.BigInteger and java.math.BigDecimal
+- Unmodifiable collections such as Collections.singletonMap()
+- java.lang.StackTraceElement
+- Java enums
+- java.util.Locale
+- java.util.UUID
+- Java 8 Date Time API – LocalDate, LocalTime etc.
+- record types
+## 6. Advantages
+Immutable objects provide a lot of advantages over mutable objects. Let us discuss them.
+
+- **Predictability**: guarantees that objects won’t change due to coding mistakes or by 3rd party libraries. As long as we reference a data structure, we know it is the same as at the time of its creation.
+- **Validity**: is not needed to be tested again and again. Once we create the immutable object and test its validity once, we know that it will be valid indefinitely.
+- **Thread-safety**: is achieved in the program as no thread can change immutable objects. It helps in writing code in a simple manner without accidentally corrupting the shared data objects.
+- **Cacheability**: can be applied to immutable objects without worrying about state changes in the future. Optimization techniques, like memoization, are only possible with immutable data structures.
+### 7. Conclusion
+This tutorial taught us to create an immutable java class with mutable objects and immutable fields.
+
+In Java, immutable classes are:
+
+are simple to construct, test, and use
+are automatically thread-safe and have no synchronization issues
+do not need a copy constructor
+do not need an implementation of clone()
+allow hashCode() to use lazy initialization, and to cache its return value
+do not need to be copied defensively when used as a field
+make good Map keys and Set elements (these objects must not change state while in the collection)
+have their class invariant established once upon construction, and it never needs to be checked again
+always have “failure atomicity” (a term used by Joshua Bloch) : if an immutable object throws an exception, it’s never left in an undesirable or indeterminate state
+We also saw the benefits which immutable classes bring in an application. As a design best practice, always aim to make your application Java classes to be immutable. In this way, you can always worry less about concurrency related defects in your program.
+
+---
+
+## **Concurrency Issues: Deadlock, Starvation, Race Condition, Fairness Policy**
+
+#### 1. **Deadlock**
+A **deadlock** is a situation in concurrent programming where two or more threads are blocked forever, waiting for each other to release resources that they need to continue execution. This can occur when:
+- **Thread A** holds resource 1 and is waiting for resource 2, while
+- **Thread B** holds resource 2 and is waiting for resource 1.
+
+**Example of Deadlock:**
+```java
+class A {
+    synchronized void methodA(B b) {
+        System.out.println("Thread 1 holding lock on A...");
+        try { Thread.sleep(100); } catch (Exception e) {}
+        b.last();
+    }
+
+    synchronized void last() { System.out.println("Inside A's last()"); }
+}
+
+class B {
+    synchronized void methodB(A a) {
+        System.out.println("Thread 2 holding lock on B...");
+        try { Thread.sleep(100); } catch (Exception e) {}
+        a.last();
+    }
+
+    synchronized void last() { System.out.println("Inside B's last()"); }
+}
+
+public class DeadlockExample {
+    public static void main(String[] args) {
+        final A a = new A();
+        final B b = new B();
+
+        Thread t1 = new Thread() {
+            public void run() {
+                a.methodA(b);
+            }
+        };
+        
+        Thread t2 = new Thread() {
+            public void run() {
+                b.methodB(a);
+            }
+        };
+
+        t1.start();
+        t2.start();
+    }
+}
+```
+
+**Prevention**:
+- **Lock ordering**: Always acquire locks in a predefined order to avoid circular dependencies.
+- **Timeouts**: Set a timeout for threads when acquiring locks, so they don’t wait indefinitely.
+- **Deadlock detection**: Some systems can detect deadlocks and handle them.
+
+---
+
+#### 2. **Starvation**
+**Starvation** occurs when a thread is indefinitely denied access to resources because other threads are constantly being given preference. This usually happens in systems where resources are not allocated in a fair manner, causing some threads to be ignored while others are continuously executed.
+
+**Example**:
+- If threads with higher priority are always executing, low-priority threads may not get a chance to run.
+
+**Prevention**:
+- Use a **fairness policy** like **fair locks** to ensure that every thread gets a chance to execute, and no thread is indefinitely starved.
+- **Thread prioritization** strategies can help avoid starvation.
+
+---
+
+#### 3. **Race Condition**
+A **race condition** happens when the outcome of a program depends on the non-deterministic ordering of events or thread execution. When two or more threads access shared data concurrently, and at least one thread modifies the data, the outcome can vary based on the order of execution.
+
+**Example of Race Condition**:
+```java
+class Counter {
+    private int count = 0;
+
+    public void increment() {
+        count++;
+    }
+
+    public int getCount() {
+        return count;
+    }
+}
+
+public class RaceConditionExample {
+    public static void main(String[] args) throws InterruptedException {
+        Counter counter = new Counter();
+        
+        // Two threads incrementing the counter
+        Thread t1 = new Thread(() -> {
+            for (int i = 0; i < 1000; i++) {
+                counter.increment();
+            }
+        });
+        Thread t2 = new Thread(() -> {
+            for (int i = 0; i < 1000; i++) {
+                counter.increment();
+            }
+        });
+
+        t1.start();
+        t2.start();
+        
+        t1.join();
+        t2.join();
+        
+        System.out.println("Final count: " + counter.getCount());  // Expected: 2000, actual: often less
+    }
+}
+```
+
+**Prevention**:
+- **Synchronization**: Use `synchronized` blocks or methods to ensure only one thread can access shared data at a time.
+- **Locks**: Use explicit locks (e.g., `ReentrantLock`) to coordinate access.
+
+---
+
+#### 4. **Fairness Policy**
+**Fairness** in concurrency ensures that threads get a fair chance to execute and resources are allocated in a balanced manner. A fairness policy is important to prevent **starvation**.
+
+- **Fair locks** ensure that threads acquire locks in the order in which they requested them, preventing **starvation**.
+- **Fair thread scheduling** is another concept, where threads are scheduled based on **first-come, first-served** or other **fair algorithms**.
+
+**Example**: Using **`ReentrantLock`** with fairness:
+```java
+Lock lock = new ReentrantLock(true);  // true means fair lock, false is default
+```
+
+---
+
+### **The Diamond Problem (in OOP)**
+The **Diamond Problem** occurs in languages that support multiple inheritance, like C++. It arises when a class inherits from two classes that both inherit from a common base class. This creates a **diamond shape** in the inheritance hierarchy.
+
+For example:
+```cpp
+class A { public: void display() { cout << "A" << endl; } };
+class B : public A { public: void display() { cout << "B" << endl; } };
+class C : public A { public: void display() { cout << "C" << endl; } };
+class D : public B, public C { public: void display() { cout << "D" << endl; } };
+
+int main() {
+    D d;
+    d.display();  // Which display() should be called?
+}
+```
+
+This causes ambiguity, as class **D** would inherit conflicting `display()` methods from both **B** and **C**. In Java, **multiple inheritance** of classes is not allowed, and interfaces are used instead, which avoids this problem.
+
+---
+
+## **Breaking Singleton Pattern**
+
+The **Singleton Pattern** ensures that a class has only one instance and provides a global point of access to that instance. However, in some cases, you may want to **break** the Singleton pattern (for example, in testing or to allow more flexibility).
+
+You can break the Singleton in the following ways:
+1. **Reflection**: Use reflection to access the private constructor and create another instance.
+2. **Serialization**: By serializing and deserializing an object, you can create another instance.
+3. **Cloning**: You can break the singleton by calling `clone()` on the Singleton instance.
+
+**Example using Reflection**:
+```java
+public class Singleton {
+    private static Singleton instance;
+
+    private Singleton() {}  // private constructor
+
+    public static Singleton getInstance() {
+        if (instance == null) {
+            instance = new Singleton();
+        }
+        return instance;
+    }
+}
+
+public class SingletonTest {
+    public static void main(String[] args) throws Exception {
+        Singleton s1 = Singleton.getInstance();
+        Singleton s2 = null;
+
+        // Use reflection to break the Singleton
+        Constructor<Singleton> constructor = Singleton.class.getDeclaredConstructor();
+        constructor.setAccessible(true);  // Disable access control checks
+        s2 = constructor.newInstance();  // Create a new instance
+
+        System.out.println(s1 == s2);  // false, we've created a second instance
+    }
+}
+```
+
+---
+
+## **Immutable Objects in Java**
+
+An **immutable object** is an object whose state cannot be changed once it is created. Immutable objects are inherently **thread-safe** because their state cannot be modified by multiple threads after they are created.
+
+- Common examples of immutable objects in Java: `String`, `Integer`, `LocalDate`, etc.
+
+#### **How to Create an Immutable Class**
+
+To write an immutable class in Java, follow these steps:
+1. Make the class `final` to prevent subclassing.
+2. Make all fields `private` and `final` to ensure they cannot be changed after initialization.
+3. Do not provide any setters for the fields.
+4. If the class has mutable fields (e.g., arrays or collections), ensure that these fields are deeply copied when returned or assigned to prevent external modification.
+
+**Example of an Immutable Class**:
+```java
+import java.util.Date;
+
+public final class Person {
+    private final String name;
+    private final int age;
+    private final Date birthDate;  // A mutable type
+
+    // Constructor that initializes all fields
+    public Person(String name, int age, Date birthDate) {
+        this.name = name;
+        this.age = age;
+        // Create a defensive copy of mutable objects
+        this.birthDate = new Date(birthDate.getTime());
+    }
+
+    // Getters for fields
+    public String getName() {
+        return name;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    // Return a defensive copy of the mutable field
+    public Date getBirthDate() {
+        return new Date(birthDate.getTime());
+    }
+
+    @Override
+    public String toString() {
+        return "Person{name='" + name + "', age=" + age + ", birthDate=" + birthDate + "}";
+    }
+}
+```
+
+In this example:
+- **The `Person` class is `final`**, preventing subclassing.
+- **Fields are `private` and `final`**, ensuring they cannot be changed after object creation.
+- **Defensive copies** are made of mutable objects like `Date` to ensure the immutability of the class.
+
+### **Summary**
+- **Deadlock**: When two or more threads are stuck waiting for each other to release resources.
+- **Starvation**: When a thread is unable to gain regular access to resources due to other threads continuously being given priority.
+- **Race Condition**: Occurs when the outcome depends on the unpredictable ordering of thread execution.
+- **Fairness Policy**:
+
+ Ensures that threads are treated fairly and are not starved or given excessive priority.
+- **Diamond Problem**: Occurs in multiple inheritance scenarios where the same method is inherited from different ancestors.
+- **Singleton Pattern**: Ensures only one instance of a class exists.
+- **Immutable Class**: A class that cannot be changed after creation, providing thread safety and consistency. 
+
+---
+
+##  `void` and `Void`
+
+In Java, `void` and `Void` are used in different contexts and have distinct meanings. Here’s a breakdown of the differences between them:
+
+### `void`
+
+- **Definition**: `void` is a primitive type used as a return type in methods to indicate that the method does not return a value.
+- **Usage**: When a method is declared with a return type of `void`, it cannot return any value.
+
+#### Example:
+```java
+public void doSomething() {
+    // Method logic here
+    // No return statement
+}
+```
+
+### `Void`
+
+- **Definition**: `Void` is a reference type (a class) in Java that is the wrapper for the `void` type. It is part of the `java.lang` package.
+- **Usage**: `Void` can be used as a type parameter in generic classes or methods, particularly in scenarios where a method needs to represent the absence of a return value but still participate in generics.
+
+#### Example:
+```java
+public Callable<Void> createTask() {
+    return () -> {
+        // Task logic here
+        return null; // Must return null for Void
+    };
+}
+```
+
+### Return Type
+
+- **`void`**: Indicates that a method does not return a value.
+- **`Void`**: Can be used as a return type in contexts where you want to use generics but have no actual value to return.
+
+### Summary
+
+- **`void`**: Primitive type; used in method signatures to indicate no return value.
+- **`Void`**: Reference type; used in generics or when a method needs to comply with an API that requires a return type but does not return a value.
+
+In essence, use `void` when defining methods that don’t return a value, and use `Void` when you need to work with generics or APIs that require a return type in a context where there is no actual return value.
+
+---
 ---
 ## Features Introduced in Java 8
 
@@ -3543,6 +4016,605 @@ These updates provide developers with more flexible, efficient, and functional t
 
 ---
 
+## Overview of `Hashtable` & `ConcurrentHashMap`
+
+Here’s a detailed overview of `Hashtable`, `ConcurrentHashMap`, and hashing itself, along with a Mermaid diagram to visualize their structures.
+
+### Internal Representation
+
+#### 1. Hashtable
+
+- **Array of Buckets**: Similar to `HashMap`, a `Hashtable` consists of an array of buckets.
+- **Entry Class**: Each bucket contains entries, typically stored in a linked list. Each entry consists of:
+  - The hash code of the key.
+  - The key itself.
+  - The value associated with the key.
+  - A reference to the next entry (for collision resolution).
+  
+- **Synchronized**: All operations are synchronized, making it thread-safe but potentially slower in high contention scenarios.
+
+#### 2. ConcurrentHashMap
+
+- **Segmented Structure**: A `ConcurrentHashMap` divides its internal structure into segments (or buckets), allowing concurrent access.
+- **Entry Class**: Each segment contains its own array of buckets. Each bucket can store:
+  - The hash of the key.
+  - The key itself.
+  - The value associated with the key.
+  - A reference to the next node (for collisions).
+  
+- **Locking Mechanism**: It uses a fine-grained locking mechanism, where only a specific segment is locked during write operations, allowing other segments to remain accessible for reads or writes.
+
+### What is Hashing?
+
+**Hashing** is the process of converting input (like a key) into a fixed-size string of bytes. The output, known as a hash code, is typically an integer that represents the original input in a compact form. Hashing has several key characteristics:
+
+- **Efficiency**: Hashing allows for fast data retrieval. Instead of searching through a collection, a hash function can directly compute the index where the data should be stored or retrieved.
+  
+- **Collision Handling**: Since multiple keys can generate the same hash code (a collision), data structures like `Hashtable` and `ConcurrentHashMap` implement methods to handle these collisions, such as chaining (linked lists) or open addressing.
+  
+- **Deterministic**: The same input will always produce the same hash code.
+
+### Mermaid Diagram
+
+Here's a diagram that illustrates the internal structure of `Hashtable` and `ConcurrentHashMap` with respect to hashing.
+
+```mermaid
+graph TD
+    A[Hashtable] --> B[Array of Buckets]
+    
+    B -->|Index| C[Bucket 0]
+    C -->|Hash| D[Node1]
+    C -->|Hash| E[Node2]
+
+    B -->|Index| F[Bucket 1]
+    F -->|Hash| G[Node3]
+
+    B -->|Index| H[Bucket 2]
+    H -->|Hash| I[Node4]
+    I -->|Next| J[Node5 - Node4 points to Node5 in the linked list]
+    J -->|Next| K[Node6 - Node5 points to Node6]
+
+    K[ConcurrentHashMap] -->|Hash Function| L[Hash Code]
+    L -->|Segmented Buckets| M[Segmented Array]
+    M -->|Bucket Structure| N[Bucket Array]
+    N -->|Collision Resolution| O[Linked List / Tree]
+    N -->|Key-Value Pairs| P[Key1: Value1]
+    N --> P
+    N --> Q[Key2: Value2]
+
+    subgraph Bucket Structure
+        direction TB
+        D[Node1] -->|Key| R[Key1]
+        D -->|Value| S[Value1]
+        E[Node2] -->|Key| T[Key2]
+        E -->|Value| U[Value2]
+        G[Node3] -->|Key| V[Key3]
+        G -->|Value| W[Value3]
+        I[Node4] -->|Key| X[Key4]
+        I -->|Value| Y[Value4]
+        J[Node5] -->|Key| Z[Key5]
+        J -->|Value| AA[Value5]
+        K[Node6] -->|Key| AB[Key6]
+        K -->|Value| AC[Value6]
+    end
+
+    style A fill:#bbf,stroke:#333,stroke-width:2px
+    style K fill:#f9f,stroke:#333,stroke-width:2px
+```
+
+### Explanation of the Diagram
+
+1. **Hashtable**:
+   - Similar to `HashMap`, `Hashtable` uses an array of buckets to store entries.
+   - Each entry is linked in case of collisions, and synchronization ensures thread safety.
+
+2. **ConcurrentHashMap**:
+   - The `ConcurrentHashMap` uses segmented buckets, allowing multiple threads to access different segments simultaneously without interference.
+   - It also uses a structure similar to `Hashtable` for handling collisions.
+
+### Summary
+
+- **Hashing** is a critical mechanism that enables fast data retrieval by converting keys into hash codes, which dictate their storage locations.
+- Both `Hashtable` and `ConcurrentHashMap` leverage this concept but differ in their synchronization and collision resolution methods, with `ConcurrentHashMap` designed for better concurrency in multi-threaded environments.
+
+### Revised Mermaid Diagram
+
+```mermaid
+graph TD
+    A[Hashtable] --> B[Array of Buckets]
+    
+    B -->|Index| C[Bucket 0]
+    C -->|Hash| D[Node1]
+    C -->|Hash| E[Node2]
+
+    B -->|Index| F[Bucket 1]
+    F -->|Hash| G[Node3]
+
+    B -->|Index| H[Bucket 2]
+    H -->|Hash| I[Node4]
+    I -->|Next| J[Node5]
+    J -->|Next| K[Node6]
+
+    L[ConcurrentHashMap] -->|Hash Function| M[Hash Code]
+    M -->|Segmented Buckets| N[Segmented Array]
+    N -->|Bucket Structure| O[Bucket Array]
+    O -->|Collision Resolution| P[Linked List / Tree]
+    O -->|Key-Value Pairs| Q[Key1: Value1]
+    O --> R[Key2: Value2]
+
+    subgraph Bucket Structure
+        direction TB
+        D[Node1] -->|Key| S[Key1]
+        D -->|Value| T[Value1]
+        E[Node2] -->|Key| U[Key2]
+        E -->|Value| V[Value2]
+        G[Node3] -->|Key| W[Key3]
+        G -->|Value| X[Value3]
+        I[Node4] -->|Key| Y[Key4]
+        I -->|Value| Z[Value4]
+        J[Node5] -->|Key| AA[Key5]
+        J -->|Value| AB[Value5]
+        K[Node6] -->|Key| AC[Key6]
+        K -->|Value| AD[Value6]
+    end
+
+    style A fill:#bbf,stroke:#333,stroke-width:2px
+    style L fill:#f9f,stroke:#333,stroke-width:2px
+```
+
+### Explanation of the Diagram
+
+1. **Hashtable**:
+   - **Array of Buckets**: The `Hashtable` contains an array where each bucket can store entries.
+   - **Collision Handling**: In buckets, if multiple keys hash to the same index, they are stored as nodes in a linked list (Node4 points to Node5, which points to Node6).
+
+2. **ConcurrentHashMap**:
+   - **Segmented Buckets**: The `ConcurrentHashMap` divides its structure into segments for better concurrency.
+   - **Bucket Array**: Similar to `Hashtable`, it manages key-value pairs, and handles collisions using a linked list or tree structure.
+
+### Summary
+
+This diagram illustrates how both `Hashtable` and `ConcurrentHashMap` use hashing and handle collisions, without unsupported comments. If you have any further questions or need more modifications, feel free to ask!
+
+---
+
+## Hashing in `Hashtable &  `ConcurrentHashMap`
+
+Hashing in a `Hashtable` and the concept of buckets in a `ConcurrentHashMap` are fundamental to how these data structures manage their data. Here’s an overview of each:
+
+### Hashing in `Hashtable`
+
+1. **Hash Function**: When you add a key-value pair to a `Hashtable`, the key is processed by a hash function, which generates an integer hash code. This hash code is typically derived from the key's `hashCode()` method.
+
+2. **Index Calculation**: The hash code is then converted into an index for the internal array (buckets) by applying a modulus operation with the array length. This determines where the key-value pair will be stored.
+
+3. **Collision Resolution**: If two keys hash to the same index (collision), `Hashtable` uses a simple approach:
+   - It creates a linked list at that index (bucket) to store all key-value pairs that hash to the same index.
+   - When searching, it traverses the linked list at that index to find the key.
+
+4. **Synchronization**: `Hashtable` is synchronized, meaning that all operations are thread-safe, which can lead to performance overhead in multi-threaded environments.
+
+### Buckets in `ConcurrentHashMap`
+
+1. **Segmented Locking**: A `ConcurrentHashMap` divides its internal structure into segments (or buckets), allowing concurrent access. This means that multiple threads can read and write to different segments simultaneously without locking the entire map.
+
+2. **Hashing Process**: Similar to `Hashtable`, keys are hashed to determine their bucket index. However, instead of a single array, the map is divided into segments (often using a fixed number of buckets).
+
+3. **Buckets**: Each segment contains its own array of buckets (which can be linked lists or trees, depending on the implementation):
+   - When a collision occurs, `ConcurrentHashMap` uses a linked list or a balanced tree (for large bucket sizes) to manage entries efficiently.
+   - This allows for faster retrieval and modification, especially under high contention.
+
+4. **Locking Mechanism**: 
+   - In a `ConcurrentHashMap`, only a segment is locked when a write operation occurs, allowing other segments to remain accessible for reads or writes. This fine-grained locking improves performance compared to `Hashtable`.
+   - Read operations do not require locks and can proceed concurrently, which enhances throughput.
+
+### Summary
+
+- **`Hashtable`**: Uses a simple array with linked lists for collision resolution and is synchronized, making it less efficient under high contention.
+- **`ConcurrentHashMap`**: Employs segmented locking with buckets, allowing concurrent reads and writes across segments, which significantly improves performance in multi-threaded environments.
+
+Both structures use hashing to manage keys efficiently, but `ConcurrentHashMap` is designed for higher concurrency and better performance in multi-threaded applications.
+
+## Concepts of hashing in a `Hashtable` and the bucket structure in a `ConcurrentHashMap`.
+
+### Mermaid Diagram
+
+```mermaid
+graph TD
+    A[Hashtable] -->|Hash Function| B[Hash Code]
+    B -->|Index Calculation| C[Bucket Array]
+    C -->|Collision Resolution| D[Linked List]
+    C -->|Key-Value Pairs| E[Key1: Value1]
+    C --> E
+    C --> F[Key2: Value2]
+    D --> F
+
+    A2[ConcurrentHashMap] -->|Hash Function| B2[Hash Code]
+    B2 -->|Segmented Buckets| C2[Segmented Array]
+    C2 -->|Bucket Structure| D2[Bucket Array]
+    D2 -->|Collision Resolution| E2[Linked List / Tree]
+    D2 -->|Key-Value Pairs| F2[Key1: Value1]
+    D2 --> F2
+    D2 --> G2[Key2: Value2]
+
+    style A fill:#f9f,stroke:#333,stroke-width:2px
+    style A2 fill:#bbf,stroke:#333,stroke-width:2px
+```
+
+### Explanation
+
+1. **Hashtable**:
+   - **Hash Function**: When a key-value pair is added, the key is processed by a hash function to generate a hash code.
+   - **Index Calculation**: The hash code is then converted into an index for the bucket array.
+   - **Bucket Array**: This is the array that holds the entries.
+   - **Collision Resolution**: If two keys hash to the same index, a linked list is used at that index to store multiple entries.
+   - **Key-Value Pairs**: Each bucket may contain multiple key-value pairs if collisions occur.
+
+2. **ConcurrentHashMap**:
+   - **Hash Function**: Similar to `Hashtable`, the key is hashed to produce a hash code.
+   - **Segmented Buckets**: Instead of a single array, the `ConcurrentHashMap` uses a segmented structure to allow concurrent access.
+   - **Bucket Structure**: Each segment contains its own bucket array for managing entries.
+   - **Collision Resolution**: Within each bucket, collisions are resolved using either linked lists or trees (for large sizes), providing efficient retrieval.
+   - **Key-Value Pairs**: Just like in `Hashtable`, buckets store key-value pairs.
+
+### Summary
+
+- The diagram visually represents how both data structures handle hashing and storage of key-value pairs, with emphasis on the differences in their collision resolution and concurrent access mechanisms. 
+- `Hashtable` uses a straightforward approach with linked lists for collisions, while `ConcurrentHashMap` optimizes for concurrency and performance with segmented locking and improved collision handling using trees or linked lists.
+
+## Concepts of `HashMap` and `HashSet`, highlighting how they manage data using hashing.
+
+###  `HashMap` and `HashSet` Diagram
+
+```mermaid
+graph TD
+    A[HashMap] -->|Hash Function| B[Hash Code]
+    B -->|Index Calculation| C[Bucket Array]
+    C -->|Collision Resolution| D[Linked List / Tree]
+    C -->|Key-Value Pairs| E[Key1: Value1]
+    C --> E
+    C --> F[Key2: Value2]
+
+    G[HashSet] -->|Hash Function| H[Hash Code]
+    H -->|Index Calculation| I[Bucket Array]
+    I -->|Collision Resolution| J[Linked List / Tree]
+    I -->|Unique Values| K[Value1]
+    I --> K
+    I --> L[Value2]
+
+    style A fill:#bbf,stroke:#333,stroke-width:2px
+    style G fill:#f9f,stroke:#333,stroke-width:2px
+```
+
+### Explanation
+
+1. **HashMap**:
+   - **Hash Function**: When a key-value pair is added, the key is processed by a hash function to generate a hash code.
+   - **Index Calculation**: The hash code is converted into an index for the internal bucket array.
+   - **Bucket Array**: This array holds the entries in the `HashMap`.
+   - **Collision Resolution**: If two keys hash to the same index, a linked list or tree is used to manage multiple entries at that index.
+   - **Key-Value Pairs**: Each entry in the `HashMap` consists of a key and its corresponding value.
+
+2. **HashSet**:
+   - **Hash Function**: Similar to `HashMap`, the object is processed by a hash function to generate a hash code.
+   - **Index Calculation**: The hash code determines the index in the bucket array.
+   - **Bucket Array**: This array stores unique values.
+   - **Collision Resolution**: Like `HashMap`, if collisions occur, a linked list or tree is used to manage values.
+   - **Unique Values**: The `HashSet` only stores unique elements, so it contains no duplicates.
+
+### Summary
+
+- **`HashMap`**: A collection that stores key-value pairs, where each key is unique, and each key maps to a value. It uses hashing to optimize retrieval and manages collisions using linked lists or trees.
+  
+- **`HashSet`**: A collection that stores unique values (no duplicates) and does not associate values with keys. It also uses hashing and manages collisions similarly to `HashMap`.
+
+This diagram helps illustrate the structural similarities and differences between `HashMap` and `HashSet`, particularly in how they use hashing and handle collisions.
+
+---
+
+## Comparison of HashMap and ConcurrentHashMap
+
+Java, both **`HashMap`** and **`ConcurrentHashMap`** are used to store key-value pairs, but they are designed for different purposes and have distinct characteristics, especially when it comes to **thread safety** and **concurrency**.
+
+Here's a detailed comparison of **`HashMap`** and **`ConcurrentHashMap`**:
+
+### **1. Thread Safety**
+
+- **`HashMap`**:
+  - **Not thread-safe**: `HashMap` is **not thread-safe**. If multiple threads attempt to read and write to the map concurrently, you may encounter **data inconsistency** or **exceptions** (e.g., `ConcurrentModificationException`).
+  - If you need to access a `HashMap` from multiple threads, you must manually synchronize access using synchronized blocks or other synchronization mechanisms (e.g., `Collections.synchronizedMap()`).
+  
+- **`ConcurrentHashMap`**:
+  - **Thread-safe**: `ConcurrentHashMap` is **designed for concurrent access**. It allows multiple threads to read and write to the map concurrently without causing data corruption or inconsistency.
+  - It achieves thread safety by **locking individual segments** (buckets) of the map, rather than locking the entire map. This allows for **fine-grained concurrency**, making it more efficient than a fully synchronized `HashMap` or `Hashtable`.
+
+---
+
+### **2. Locking Mechanism**
+
+- **`HashMap`**:
+  - Since `HashMap` is not thread-safe, **manual synchronization** (such as synchronized blocks or methods) must be implemented when it is accessed by multiple threads.
+  - **No internal locking**: `HashMap` does not have any internal locking mechanism.
+
+- **`ConcurrentHashMap`**:
+  - **Segmented locking**: `ConcurrentHashMap` uses a technique called **segment locking**, where the map is divided into several segments (internally a `Segment[]` array), and only one segment is locked at a time for write operations.
+  - **Read operations** are generally not blocked by locks, meaning multiple threads can read from the map concurrently without waiting for other threads.
+  - **Fine-grained concurrency**: This allows multiple threads to access different parts of the map simultaneously, increasing throughput.
+
+---
+
+### **3. Performance**
+
+- **`HashMap`**:
+  - **Faster for single-threaded access**: Since `HashMap` is not thread-safe, it is generally **faster** than `ConcurrentHashMap` in single-threaded applications because it does not need to manage locks.
+  - In multi-threaded scenarios, you would need to wrap the `HashMap` in a synchronized block, which can degrade performance due to thread contention.
+
+- **`ConcurrentHashMap`**:
+  - **Optimized for concurrency**: In multi-threaded scenarios, `ConcurrentHashMap` provides better performance compared to a `synchronizedMap` or manually synchronized `HashMap` because it allows **concurrent reads** and **fine-grained locks** on different parts of the map.
+  - **Higher throughput**: In high-concurrency environments, `ConcurrentHashMap` allows better scalability as different threads can update or query different parts of the map simultaneously without locking the entire structure.
+
+---
+
+### **4. Null Keys and Values**
+
+- **`HashMap`**:
+  - **Allows null keys and values**: `HashMap` allows **one null key** and **multiple null values**. This means you can insert a `null` key or value into a `HashMap`.
+
+- **`ConcurrentHashMap`**:
+  - **No null keys or values**: `ConcurrentHashMap` does not allow **null keys** or **null values**. If you try to insert a `null` key or value, it will throw a `NullPointerException`. This is done to avoid ambiguity and errors when dealing with concurrent operations (e.g., distinguishing between a key that doesn't exist and a key whose value is `null`).
+
+---
+
+### **5. Operations (Put, Remove, Replace, etc.)**
+
+- **`HashMap`**:
+  - Standard operations like `put()`, `get()`, `remove()`, and `containsKey()` are atomic but **not thread-safe** in a multi-threaded environment.
+  - In multi-threaded scenarios, you need to explicitly synchronize these operations or use `Collections.synchronizedMap()` to make it thread-safe.
+
+- **`ConcurrentHashMap`**:
+  - **Atomic operations**: Operations like `put()`, `get()`, `remove()`, `replace()`, and `containsKey()` are thread-safe in `ConcurrentHashMap`. Moreover, `ConcurrentHashMap` provides additional atomic operations like:
+    - `putIfAbsent(key, value)`: Adds the key-value pair if the key is not already present.
+    - `remove(key, value)`: Removes the key-value pair if the key is associated with the specified value.
+    - `replace(key, oldValue, newValue)`: Replaces the value only if the key is currently mapped to the old value.
+
+- **`HashMap`** requires manual synchronization for atomicity in concurrent access scenarios.
+
+---
+
+### **6. Iteration**
+
+- **`HashMap`**:
+  - **Weakly consistent iterator**: The iterator returned by a `HashMap` is not guaranteed to be **thread-safe**. If the map is modified during iteration (from another thread), it will throw a `ConcurrentModificationException`.
+  
+- **`ConcurrentHashMap`**:
+  - **Strongly consistent iterator**: The iterator of `ConcurrentHashMap` is **weakly consistent**. This means it reflects changes made to the map during iteration (e.g., elements may be added or removed), but it will not throw `ConcurrentModificationException`. However, the iterator will not necessarily reflect every update made to the map during iteration (e.g., updates from other threads that are being synchronized with locks).
+
+---
+
+### **7. Use Cases**
+
+- **`HashMap`**:
+  - Best suited for **single-threaded** applications or when you have external synchronization mechanisms in place.
+  - Common in cases where the map is only accessed by a single thread or when synchronization is manually handled by the developer.
+
+- **`ConcurrentHashMap`**:
+  - Best suited for **multi-threaded** applications where concurrent access to the map is required, and performance must be optimized.
+  - Common in scenarios where you need high concurrency, such as **caching** (e.g., `Cache`), **thread-safe counters**, **message queues**, and **thread pool management**.
+
+---
+
+### **8. Example Code**
+
+#### **Using HashMap:**
+```java
+import java.util.HashMap;
+import java.util.Map;
+
+public class HashMapExample {
+    public static void main(String[] args) {
+        Map<String, String> map = new HashMap<>();
+        map.put("a", "apple");
+        map.put("b", "banana");
+        
+        // Accessing values
+        System.out.println(map.get("a")); // Output: apple
+    }
+}
+```
+
+#### **Using ConcurrentHashMap:**
+```java
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.Map;
+
+public class ConcurrentHashMapExample {
+    public static void main(String[] args) {
+        Map<String, String> map = new ConcurrentHashMap<>();
+        map.put("a", "apple");
+        map.put("b", "banana");
+        
+        // Atomic putIfAbsent
+        map.putIfAbsent("a", "orange");  // Does not replace "a" because it's already present
+        
+        // Accessing values
+        System.out.println(map.get("a")); // Output: apple
+    }
+}
+```
+
+---
+
+### **Summary of Key Differences**
+
+| Feature                          | `HashMap`                          | `ConcurrentHashMap`                 |
+|-----------------------------------|------------------------------------|-------------------------------------|
+| **Thread-Safety**                 | Not thread-safe                    | Thread-safe                         |
+| **Null Keys/Values**              | Allows null key and values         | Does not allow null keys/values    |
+| **Locking Mechanism**             | No internal locking, manual sync needed | Segment-based locking, fine-grained concurrency |
+| **Performance in Concurrency**    | Slower in multi-threaded access due to external synchronization | Faster in multi-threaded environments |
+| **Atomic Operations**             | Not atomic in multi-threaded access | Provides atomic operations (e.g., `putIfAbsent()`, `remove()`) |
+| **Iteration Behavior**            | Throws `ConcurrentModificationException` if modified during iteration | Weakly consistent iterator, no `ConcurrentModificationException` |
+| **Best Use Case**                 | Single-threaded access or external synchronization | High concurrency in multi-threaded environments |
+
+---
+
+### **When to Use Which?**
+
+- Use **`HashMap`** when:
+  - You are working in a **single-threaded** environment or you can manage synchronization externally.
+  - You do not need thread-safety and you are not concerned about concurrent modifications.
+  
+- Use **`ConcurrentHashMap`** when:
+  - You are working in a **multi-threaded** environment where multiple threads will access and modify the map concurrently.
+  - You need thread-safe operations without locking the entire map (e.g., for performance reasons).
+
+---
+
+## Fail-Fast and Fail-Safe
+
+In Java's **Collections Framework**, the terms **Fail-Fast** and **Fail-Safe** describe how iterators behave when the underlying collection is modified during iteration. Both concepts are particularly relevant in concurrent programming scenarios where multiple threads might be modifying a collection while it is being iterated.
+
+### **1. Fail-Fast Iterators**
+
+A **Fail-Fast** iterator is designed to throw an exception as soon as it detects that the collection has been modified during iteration (except through the iterator's own `remove()` method).
+
+#### Characteristics of Fail-Fast:
+- **Immediate detection of modification**: If the collection is modified (structurally) while iterating, a `ConcurrentModificationException` is thrown.
+- **Detects modifications made by other threads**: It is mostly used with collections that are not thread-safe (e.g., `ArrayList`, `HashMap`), and it will throw an exception if the collection is modified while an iterator is traversing it.
+- **Prevents data inconsistency**: By throwing an exception early, it prevents the iterator from returning inconsistent or incorrect results.
+  
+#### How It Works:
+- The **modCount** field of the collection is used to track structural changes. If the collection is modified (for example, elements are added or removed), the **modCount** is updated. The iterator compares the current **modCount** with the value it had when the iteration began. If they don't match, the iterator throws a `ConcurrentModificationException`.
+
+#### Example of Fail-Fast (with `ArrayList`):
+```java
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+public class FailFastExample {
+    public static void main(String[] args) {
+        List<String> list = new ArrayList<>();
+        list.add("A");
+        list.add("B");
+        list.add("C");
+
+        Iterator<String> iterator = list.iterator();
+
+        // Modify the list during iteration
+        while (iterator.hasNext()) {
+            String element = iterator.next();
+            System.out.println(element);
+
+            // Adding/removing elements will cause a ConcurrentModificationException
+            if (element.equals("B")) {
+                list.remove("B");
+            }
+        }
+    }
+}
+```
+
+**Output**:
+```
+A
+B
+C
+Exception in thread "main" java.util.ConcurrentModificationException
+```
+
+In the example above, attempting to modify the `ArrayList` (removing "B") while iterating over it causes a `ConcurrentModificationException` because the `ArrayList` is fail-fast.
+
+#### Fail-Fast Collections:
+- **`ArrayList`**
+- **`HashMap`**
+- **`HashSet`**
+- **`LinkedHashMap`**
+- **`LinkedList`**
+- **`TreeMap`**
+- **`TreeSet`**
+
+These are examples of collections that generally use fail-fast iterators.
+
+### **2. Fail-Safe Iterators**
+
+A **Fail-Safe** iterator, on the other hand, allows modifications to be made to the collection while it is being iterated, without throwing exceptions. In other words, if the collection is modified during iteration (even by other threads), the iteration continues without errors, but it may not reflect the changes immediately.
+
+#### Characteristics of Fail-Safe:
+- **No `ConcurrentModificationException`**: Fail-safe iterators do not throw exceptions if the collection is modified during iteration.
+- **Copy of collection**: Fail-safe iterators usually work on a **copy** of the collection or on a snapshot of the collection at the time the iteration started.
+- **Safe in concurrent environments**: Fail-safe iterators are generally used with thread-safe collections where multiple threads can safely modify the collection while others are iterating over it (without any issues).
+
+#### How It Works:
+- Fail-safe collections create a copy (or snapshot) of the underlying data structure and iterate over this snapshot. Any changes made to the original collection (while iterating) will not be reflected in the iterator.
+- Fail-safe iterators work in concurrent environments where collections may be modified by multiple threads.
+
+#### Example of Fail-Safe (with `CopyOnWriteArrayList`):
+```java
+import java.util.Iterator;
+import java.util.concurrent.CopyOnWriteArrayList;
+
+public class FailSafeExample {
+    public static void main(String[] args) {
+        CopyOnWriteArrayList<String> list = new CopyOnWriteArrayList<>();
+        list.add("A");
+        list.add("B");
+        list.add("C");
+
+        Iterator<String> iterator = list.iterator();
+
+        // Modify the list during iteration
+        while (iterator.hasNext()) {
+            String element = iterator.next();
+            System.out.println(element);
+
+            // Modifying the list during iteration does not throw an exception
+            if (element.equals("B")) {
+                list.remove("B"); // This will not affect the current iteration
+            }
+        }
+    }
+}
+```
+
+**Output**:
+```
+A
+B
+C
+```
+
+In this example, even though we remove "B" from the list while iterating, the iteration continues without throwing a `ConcurrentModificationException` because `CopyOnWriteArrayList` is a fail-safe collection.
+
+#### Fail-Safe Collections:
+- **`CopyOnWriteArrayList`**
+- **`CopyOnWriteArraySet`**
+- **`ConcurrentHashMap`** (while iterating over the `keySet()`, `entrySet()`, or `values()`)
+  
+These collections implement fail-safe iterators.
+
+---
+
+### **Comparison Between Fail-Fast and Fail-Safe**
+
+| Feature                         | **Fail-Fast**                               | **Fail-Safe**                                |
+|----------------------------------|---------------------------------------------|---------------------------------------------|
+| **Behavior on Modification**    | Throws `ConcurrentModificationException` if the collection is modified during iteration. | Allows modification during iteration without throwing exceptions. |
+| **Used in**                      | Non-thread-safe collections (e.g., `ArrayList`, `HashMap`) | Thread-safe collections (e.g., `CopyOnWriteArrayList`, `ConcurrentHashMap`) |
+| **Modification Detection**       | Detects structural changes and throws an exception. | Works on a snapshot/copy of the collection, so modifications don't affect iteration. |
+| **Performance**                  | Can be more efficient because it doesn’t create copies or snapshots. | May have overhead because of creating a copy/snapshot for iteration. |
+| **Typical Use Case**            | Single-threaded or where manual synchronization is needed. | Multi-threaded applications where the collection is modified concurrently by multiple threads. |
+
+---
+
+### **Summary**
+
+- **Fail-Fast**: Ensures data consistency by throwing a `ConcurrentModificationException` if a collection is modified during iteration. This is typically used in **non-thread-safe** collections (like `ArrayList`, `HashMap`).
+- **Fail-Safe**: Allows modifications while iterating without throwing exceptions, but may not reflect the changes immediately in the iteration. This is generally used with **thread-safe** collections (like `CopyOnWriteArrayList`, `ConcurrentHashMap`).
+
+In summary, **Fail-Fast** is useful for catching bugs early in single-threaded or synchronized environments, while **Fail-Safe** is used in multi-threaded environments where modifications to the collection are expected during iteration.
+
+---
 ## Java Thread & Concurrency
 
 In Java, **threads** and **concurrency** are critical concepts that enable parallel execution and efficient resource utilization, particularly in multi-core processors. Understanding how threads work, how to manage concurrency, and how to avoid common pitfalls like race conditions is key to writing efficient, thread-safe applications.
@@ -7051,605 +8123,7 @@ Microservice design patterns provide essential strategies for managing complexit
 
 ---
 
-## Overview of `Hashtable` & `ConcurrentHashMap`
 
-Here’s a detailed overview of `Hashtable`, `ConcurrentHashMap`, and hashing itself, along with a Mermaid diagram to visualize their structures.
-
-### Internal Representation
-
-#### 1. Hashtable
-
-- **Array of Buckets**: Similar to `HashMap`, a `Hashtable` consists of an array of buckets.
-- **Entry Class**: Each bucket contains entries, typically stored in a linked list. Each entry consists of:
-  - The hash code of the key.
-  - The key itself.
-  - The value associated with the key.
-  - A reference to the next entry (for collision resolution).
-  
-- **Synchronized**: All operations are synchronized, making it thread-safe but potentially slower in high contention scenarios.
-
-#### 2. ConcurrentHashMap
-
-- **Segmented Structure**: A `ConcurrentHashMap` divides its internal structure into segments (or buckets), allowing concurrent access.
-- **Entry Class**: Each segment contains its own array of buckets. Each bucket can store:
-  - The hash of the key.
-  - The key itself.
-  - The value associated with the key.
-  - A reference to the next node (for collisions).
-  
-- **Locking Mechanism**: It uses a fine-grained locking mechanism, where only a specific segment is locked during write operations, allowing other segments to remain accessible for reads or writes.
-
-### What is Hashing?
-
-**Hashing** is the process of converting input (like a key) into a fixed-size string of bytes. The output, known as a hash code, is typically an integer that represents the original input in a compact form. Hashing has several key characteristics:
-
-- **Efficiency**: Hashing allows for fast data retrieval. Instead of searching through a collection, a hash function can directly compute the index where the data should be stored or retrieved.
-  
-- **Collision Handling**: Since multiple keys can generate the same hash code (a collision), data structures like `Hashtable` and `ConcurrentHashMap` implement methods to handle these collisions, such as chaining (linked lists) or open addressing.
-  
-- **Deterministic**: The same input will always produce the same hash code.
-
-### Mermaid Diagram
-
-Here's a diagram that illustrates the internal structure of `Hashtable` and `ConcurrentHashMap` with respect to hashing.
-
-```mermaid
-graph TD
-    A[Hashtable] --> B[Array of Buckets]
-    
-    B -->|Index| C[Bucket 0]
-    C -->|Hash| D[Node1]
-    C -->|Hash| E[Node2]
-
-    B -->|Index| F[Bucket 1]
-    F -->|Hash| G[Node3]
-
-    B -->|Index| H[Bucket 2]
-    H -->|Hash| I[Node4]
-    I -->|Next| J[Node5 - Node4 points to Node5 in the linked list]
-    J -->|Next| K[Node6 - Node5 points to Node6]
-
-    K[ConcurrentHashMap] -->|Hash Function| L[Hash Code]
-    L -->|Segmented Buckets| M[Segmented Array]
-    M -->|Bucket Structure| N[Bucket Array]
-    N -->|Collision Resolution| O[Linked List / Tree]
-    N -->|Key-Value Pairs| P[Key1: Value1]
-    N --> P
-    N --> Q[Key2: Value2]
-
-    subgraph Bucket Structure
-        direction TB
-        D[Node1] -->|Key| R[Key1]
-        D -->|Value| S[Value1]
-        E[Node2] -->|Key| T[Key2]
-        E -->|Value| U[Value2]
-        G[Node3] -->|Key| V[Key3]
-        G -->|Value| W[Value3]
-        I[Node4] -->|Key| X[Key4]
-        I -->|Value| Y[Value4]
-        J[Node5] -->|Key| Z[Key5]
-        J -->|Value| AA[Value5]
-        K[Node6] -->|Key| AB[Key6]
-        K -->|Value| AC[Value6]
-    end
-
-    style A fill:#bbf,stroke:#333,stroke-width:2px
-    style K fill:#f9f,stroke:#333,stroke-width:2px
-```
-
-### Explanation of the Diagram
-
-1. **Hashtable**:
-   - Similar to `HashMap`, `Hashtable` uses an array of buckets to store entries.
-   - Each entry is linked in case of collisions, and synchronization ensures thread safety.
-
-2. **ConcurrentHashMap**:
-   - The `ConcurrentHashMap` uses segmented buckets, allowing multiple threads to access different segments simultaneously without interference.
-   - It also uses a structure similar to `Hashtable` for handling collisions.
-
-### Summary
-
-- **Hashing** is a critical mechanism that enables fast data retrieval by converting keys into hash codes, which dictate their storage locations.
-- Both `Hashtable` and `ConcurrentHashMap` leverage this concept but differ in their synchronization and collision resolution methods, with `ConcurrentHashMap` designed for better concurrency in multi-threaded environments.
-
-### Revised Mermaid Diagram
-
-```mermaid
-graph TD
-    A[Hashtable] --> B[Array of Buckets]
-    
-    B -->|Index| C[Bucket 0]
-    C -->|Hash| D[Node1]
-    C -->|Hash| E[Node2]
-
-    B -->|Index| F[Bucket 1]
-    F -->|Hash| G[Node3]
-
-    B -->|Index| H[Bucket 2]
-    H -->|Hash| I[Node4]
-    I -->|Next| J[Node5]
-    J -->|Next| K[Node6]
-
-    L[ConcurrentHashMap] -->|Hash Function| M[Hash Code]
-    M -->|Segmented Buckets| N[Segmented Array]
-    N -->|Bucket Structure| O[Bucket Array]
-    O -->|Collision Resolution| P[Linked List / Tree]
-    O -->|Key-Value Pairs| Q[Key1: Value1]
-    O --> R[Key2: Value2]
-
-    subgraph Bucket Structure
-        direction TB
-        D[Node1] -->|Key| S[Key1]
-        D -->|Value| T[Value1]
-        E[Node2] -->|Key| U[Key2]
-        E -->|Value| V[Value2]
-        G[Node3] -->|Key| W[Key3]
-        G -->|Value| X[Value3]
-        I[Node4] -->|Key| Y[Key4]
-        I -->|Value| Z[Value4]
-        J[Node5] -->|Key| AA[Key5]
-        J -->|Value| AB[Value5]
-        K[Node6] -->|Key| AC[Key6]
-        K -->|Value| AD[Value6]
-    end
-
-    style A fill:#bbf,stroke:#333,stroke-width:2px
-    style L fill:#f9f,stroke:#333,stroke-width:2px
-```
-
-### Explanation of the Diagram
-
-1. **Hashtable**:
-   - **Array of Buckets**: The `Hashtable` contains an array where each bucket can store entries.
-   - **Collision Handling**: In buckets, if multiple keys hash to the same index, they are stored as nodes in a linked list (Node4 points to Node5, which points to Node6).
-
-2. **ConcurrentHashMap**:
-   - **Segmented Buckets**: The `ConcurrentHashMap` divides its structure into segments for better concurrency.
-   - **Bucket Array**: Similar to `Hashtable`, it manages key-value pairs, and handles collisions using a linked list or tree structure.
-
-### Summary
-
-This diagram illustrates how both `Hashtable` and `ConcurrentHashMap` use hashing and handle collisions, without unsupported comments. If you have any further questions or need more modifications, feel free to ask!
-
----
-
-## Hashing in `Hashtable &  `ConcurrentHashMap`
-
-Hashing in a `Hashtable` and the concept of buckets in a `ConcurrentHashMap` are fundamental to how these data structures manage their data. Here’s an overview of each:
-
-### Hashing in `Hashtable`
-
-1. **Hash Function**: When you add a key-value pair to a `Hashtable`, the key is processed by a hash function, which generates an integer hash code. This hash code is typically derived from the key's `hashCode()` method.
-
-2. **Index Calculation**: The hash code is then converted into an index for the internal array (buckets) by applying a modulus operation with the array length. This determines where the key-value pair will be stored.
-
-3. **Collision Resolution**: If two keys hash to the same index (collision), `Hashtable` uses a simple approach:
-   - It creates a linked list at that index (bucket) to store all key-value pairs that hash to the same index.
-   - When searching, it traverses the linked list at that index to find the key.
-
-4. **Synchronization**: `Hashtable` is synchronized, meaning that all operations are thread-safe, which can lead to performance overhead in multi-threaded environments.
-
-### Buckets in `ConcurrentHashMap`
-
-1. **Segmented Locking**: A `ConcurrentHashMap` divides its internal structure into segments (or buckets), allowing concurrent access. This means that multiple threads can read and write to different segments simultaneously without locking the entire map.
-
-2. **Hashing Process**: Similar to `Hashtable`, keys are hashed to determine their bucket index. However, instead of a single array, the map is divided into segments (often using a fixed number of buckets).
-
-3. **Buckets**: Each segment contains its own array of buckets (which can be linked lists or trees, depending on the implementation):
-   - When a collision occurs, `ConcurrentHashMap` uses a linked list or a balanced tree (for large bucket sizes) to manage entries efficiently.
-   - This allows for faster retrieval and modification, especially under high contention.
-
-4. **Locking Mechanism**: 
-   - In a `ConcurrentHashMap`, only a segment is locked when a write operation occurs, allowing other segments to remain accessible for reads or writes. This fine-grained locking improves performance compared to `Hashtable`.
-   - Read operations do not require locks and can proceed concurrently, which enhances throughput.
-
-### Summary
-
-- **`Hashtable`**: Uses a simple array with linked lists for collision resolution and is synchronized, making it less efficient under high contention.
-- **`ConcurrentHashMap`**: Employs segmented locking with buckets, allowing concurrent reads and writes across segments, which significantly improves performance in multi-threaded environments.
-
-Both structures use hashing to manage keys efficiently, but `ConcurrentHashMap` is designed for higher concurrency and better performance in multi-threaded applications.
-
-## Concepts of hashing in a `Hashtable` and the bucket structure in a `ConcurrentHashMap`.
-
-### Mermaid Diagram
-
-```mermaid
-graph TD
-    A[Hashtable] -->|Hash Function| B[Hash Code]
-    B -->|Index Calculation| C[Bucket Array]
-    C -->|Collision Resolution| D[Linked List]
-    C -->|Key-Value Pairs| E[Key1: Value1]
-    C --> E
-    C --> F[Key2: Value2]
-    D --> F
-
-    A2[ConcurrentHashMap] -->|Hash Function| B2[Hash Code]
-    B2 -->|Segmented Buckets| C2[Segmented Array]
-    C2 -->|Bucket Structure| D2[Bucket Array]
-    D2 -->|Collision Resolution| E2[Linked List / Tree]
-    D2 -->|Key-Value Pairs| F2[Key1: Value1]
-    D2 --> F2
-    D2 --> G2[Key2: Value2]
-
-    style A fill:#f9f,stroke:#333,stroke-width:2px
-    style A2 fill:#bbf,stroke:#333,stroke-width:2px
-```
-
-### Explanation
-
-1. **Hashtable**:
-   - **Hash Function**: When a key-value pair is added, the key is processed by a hash function to generate a hash code.
-   - **Index Calculation**: The hash code is then converted into an index for the bucket array.
-   - **Bucket Array**: This is the array that holds the entries.
-   - **Collision Resolution**: If two keys hash to the same index, a linked list is used at that index to store multiple entries.
-   - **Key-Value Pairs**: Each bucket may contain multiple key-value pairs if collisions occur.
-
-2. **ConcurrentHashMap**:
-   - **Hash Function**: Similar to `Hashtable`, the key is hashed to produce a hash code.
-   - **Segmented Buckets**: Instead of a single array, the `ConcurrentHashMap` uses a segmented structure to allow concurrent access.
-   - **Bucket Structure**: Each segment contains its own bucket array for managing entries.
-   - **Collision Resolution**: Within each bucket, collisions are resolved using either linked lists or trees (for large sizes), providing efficient retrieval.
-   - **Key-Value Pairs**: Just like in `Hashtable`, buckets store key-value pairs.
-
-### Summary
-
-- The diagram visually represents how both data structures handle hashing and storage of key-value pairs, with emphasis on the differences in their collision resolution and concurrent access mechanisms. 
-- `Hashtable` uses a straightforward approach with linked lists for collisions, while `ConcurrentHashMap` optimizes for concurrency and performance with segmented locking and improved collision handling using trees or linked lists.
-
-## Concepts of `HashMap` and `HashSet`, highlighting how they manage data using hashing.
-
-###  `HashMap` and `HashSet` Diagram
-
-```mermaid
-graph TD
-    A[HashMap] -->|Hash Function| B[Hash Code]
-    B -->|Index Calculation| C[Bucket Array]
-    C -->|Collision Resolution| D[Linked List / Tree]
-    C -->|Key-Value Pairs| E[Key1: Value1]
-    C --> E
-    C --> F[Key2: Value2]
-
-    G[HashSet] -->|Hash Function| H[Hash Code]
-    H -->|Index Calculation| I[Bucket Array]
-    I -->|Collision Resolution| J[Linked List / Tree]
-    I -->|Unique Values| K[Value1]
-    I --> K
-    I --> L[Value2]
-
-    style A fill:#bbf,stroke:#333,stroke-width:2px
-    style G fill:#f9f,stroke:#333,stroke-width:2px
-```
-
-### Explanation
-
-1. **HashMap**:
-   - **Hash Function**: When a key-value pair is added, the key is processed by a hash function to generate a hash code.
-   - **Index Calculation**: The hash code is converted into an index for the internal bucket array.
-   - **Bucket Array**: This array holds the entries in the `HashMap`.
-   - **Collision Resolution**: If two keys hash to the same index, a linked list or tree is used to manage multiple entries at that index.
-   - **Key-Value Pairs**: Each entry in the `HashMap` consists of a key and its corresponding value.
-
-2. **HashSet**:
-   - **Hash Function**: Similar to `HashMap`, the object is processed by a hash function to generate a hash code.
-   - **Index Calculation**: The hash code determines the index in the bucket array.
-   - **Bucket Array**: This array stores unique values.
-   - **Collision Resolution**: Like `HashMap`, if collisions occur, a linked list or tree is used to manage values.
-   - **Unique Values**: The `HashSet` only stores unique elements, so it contains no duplicates.
-
-### Summary
-
-- **`HashMap`**: A collection that stores key-value pairs, where each key is unique, and each key maps to a value. It uses hashing to optimize retrieval and manages collisions using linked lists or trees.
-  
-- **`HashSet`**: A collection that stores unique values (no duplicates) and does not associate values with keys. It also uses hashing and manages collisions similarly to `HashMap`.
-
-This diagram helps illustrate the structural similarities and differences between `HashMap` and `HashSet`, particularly in how they use hashing and handle collisions.
-
----
-
-## Comparison of HashMap and ConcurrentHashMap
-
-Java, both **`HashMap`** and **`ConcurrentHashMap`** are used to store key-value pairs, but they are designed for different purposes and have distinct characteristics, especially when it comes to **thread safety** and **concurrency**.
-
-Here's a detailed comparison of **`HashMap`** and **`ConcurrentHashMap`**:
-
-### **1. Thread Safety**
-
-- **`HashMap`**:
-  - **Not thread-safe**: `HashMap` is **not thread-safe**. If multiple threads attempt to read and write to the map concurrently, you may encounter **data inconsistency** or **exceptions** (e.g., `ConcurrentModificationException`).
-  - If you need to access a `HashMap` from multiple threads, you must manually synchronize access using synchronized blocks or other synchronization mechanisms (e.g., `Collections.synchronizedMap()`).
-  
-- **`ConcurrentHashMap`**:
-  - **Thread-safe**: `ConcurrentHashMap` is **designed for concurrent access**. It allows multiple threads to read and write to the map concurrently without causing data corruption or inconsistency.
-  - It achieves thread safety by **locking individual segments** (buckets) of the map, rather than locking the entire map. This allows for **fine-grained concurrency**, making it more efficient than a fully synchronized `HashMap` or `Hashtable`.
-
----
-
-### **2. Locking Mechanism**
-
-- **`HashMap`**:
-  - Since `HashMap` is not thread-safe, **manual synchronization** (such as synchronized blocks or methods) must be implemented when it is accessed by multiple threads.
-  - **No internal locking**: `HashMap` does not have any internal locking mechanism.
-
-- **`ConcurrentHashMap`**:
-  - **Segmented locking**: `ConcurrentHashMap` uses a technique called **segment locking**, where the map is divided into several segments (internally a `Segment[]` array), and only one segment is locked at a time for write operations.
-  - **Read operations** are generally not blocked by locks, meaning multiple threads can read from the map concurrently without waiting for other threads.
-  - **Fine-grained concurrency**: This allows multiple threads to access different parts of the map simultaneously, increasing throughput.
-
----
-
-### **3. Performance**
-
-- **`HashMap`**:
-  - **Faster for single-threaded access**: Since `HashMap` is not thread-safe, it is generally **faster** than `ConcurrentHashMap` in single-threaded applications because it does not need to manage locks.
-  - In multi-threaded scenarios, you would need to wrap the `HashMap` in a synchronized block, which can degrade performance due to thread contention.
-
-- **`ConcurrentHashMap`**:
-  - **Optimized for concurrency**: In multi-threaded scenarios, `ConcurrentHashMap` provides better performance compared to a `synchronizedMap` or manually synchronized `HashMap` because it allows **concurrent reads** and **fine-grained locks** on different parts of the map.
-  - **Higher throughput**: In high-concurrency environments, `ConcurrentHashMap` allows better scalability as different threads can update or query different parts of the map simultaneously without locking the entire structure.
-
----
-
-### **4. Null Keys and Values**
-
-- **`HashMap`**:
-  - **Allows null keys and values**: `HashMap` allows **one null key** and **multiple null values**. This means you can insert a `null` key or value into a `HashMap`.
-
-- **`ConcurrentHashMap`**:
-  - **No null keys or values**: `ConcurrentHashMap` does not allow **null keys** or **null values**. If you try to insert a `null` key or value, it will throw a `NullPointerException`. This is done to avoid ambiguity and errors when dealing with concurrent operations (e.g., distinguishing between a key that doesn't exist and a key whose value is `null`).
-
----
-
-### **5. Operations (Put, Remove, Replace, etc.)**
-
-- **`HashMap`**:
-  - Standard operations like `put()`, `get()`, `remove()`, and `containsKey()` are atomic but **not thread-safe** in a multi-threaded environment.
-  - In multi-threaded scenarios, you need to explicitly synchronize these operations or use `Collections.synchronizedMap()` to make it thread-safe.
-
-- **`ConcurrentHashMap`**:
-  - **Atomic operations**: Operations like `put()`, `get()`, `remove()`, `replace()`, and `containsKey()` are thread-safe in `ConcurrentHashMap`. Moreover, `ConcurrentHashMap` provides additional atomic operations like:
-    - `putIfAbsent(key, value)`: Adds the key-value pair if the key is not already present.
-    - `remove(key, value)`: Removes the key-value pair if the key is associated with the specified value.
-    - `replace(key, oldValue, newValue)`: Replaces the value only if the key is currently mapped to the old value.
-
-- **`HashMap`** requires manual synchronization for atomicity in concurrent access scenarios.
-
----
-
-### **6. Iteration**
-
-- **`HashMap`**:
-  - **Weakly consistent iterator**: The iterator returned by a `HashMap` is not guaranteed to be **thread-safe**. If the map is modified during iteration (from another thread), it will throw a `ConcurrentModificationException`.
-  
-- **`ConcurrentHashMap`**:
-  - **Strongly consistent iterator**: The iterator of `ConcurrentHashMap` is **weakly consistent**. This means it reflects changes made to the map during iteration (e.g., elements may be added or removed), but it will not throw `ConcurrentModificationException`. However, the iterator will not necessarily reflect every update made to the map during iteration (e.g., updates from other threads that are being synchronized with locks).
-
----
-
-### **7. Use Cases**
-
-- **`HashMap`**:
-  - Best suited for **single-threaded** applications or when you have external synchronization mechanisms in place.
-  - Common in cases where the map is only accessed by a single thread or when synchronization is manually handled by the developer.
-
-- **`ConcurrentHashMap`**:
-  - Best suited for **multi-threaded** applications where concurrent access to the map is required, and performance must be optimized.
-  - Common in scenarios where you need high concurrency, such as **caching** (e.g., `Cache`), **thread-safe counters**, **message queues**, and **thread pool management**.
-
----
-
-### **8. Example Code**
-
-#### **Using HashMap:**
-```java
-import java.util.HashMap;
-import java.util.Map;
-
-public class HashMapExample {
-    public static void main(String[] args) {
-        Map<String, String> map = new HashMap<>();
-        map.put("a", "apple");
-        map.put("b", "banana");
-        
-        // Accessing values
-        System.out.println(map.get("a")); // Output: apple
-    }
-}
-```
-
-#### **Using ConcurrentHashMap:**
-```java
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.Map;
-
-public class ConcurrentHashMapExample {
-    public static void main(String[] args) {
-        Map<String, String> map = new ConcurrentHashMap<>();
-        map.put("a", "apple");
-        map.put("b", "banana");
-        
-        // Atomic putIfAbsent
-        map.putIfAbsent("a", "orange");  // Does not replace "a" because it's already present
-        
-        // Accessing values
-        System.out.println(map.get("a")); // Output: apple
-    }
-}
-```
-
----
-
-### **Summary of Key Differences**
-
-| Feature                          | `HashMap`                          | `ConcurrentHashMap`                 |
-|-----------------------------------|------------------------------------|-------------------------------------|
-| **Thread-Safety**                 | Not thread-safe                    | Thread-safe                         |
-| **Null Keys/Values**              | Allows null key and values         | Does not allow null keys/values    |
-| **Locking Mechanism**             | No internal locking, manual sync needed | Segment-based locking, fine-grained concurrency |
-| **Performance in Concurrency**    | Slower in multi-threaded access due to external synchronization | Faster in multi-threaded environments |
-| **Atomic Operations**             | Not atomic in multi-threaded access | Provides atomic operations (e.g., `putIfAbsent()`, `remove()`) |
-| **Iteration Behavior**            | Throws `ConcurrentModificationException` if modified during iteration | Weakly consistent iterator, no `ConcurrentModificationException` |
-| **Best Use Case**                 | Single-threaded access or external synchronization | High concurrency in multi-threaded environments |
-
----
-
-### **When to Use Which?**
-
-- Use **`HashMap`** when:
-  - You are working in a **single-threaded** environment or you can manage synchronization externally.
-  - You do not need thread-safety and you are not concerned about concurrent modifications.
-  
-- Use **`ConcurrentHashMap`** when:
-  - You are working in a **multi-threaded** environment where multiple threads will access and modify the map concurrently.
-  - You need thread-safe operations without locking the entire map (e.g., for performance reasons).
-
----
-
-## Fail-Fast and Fail-Safe
-
-In Java's **Collections Framework**, the terms **Fail-Fast** and **Fail-Safe** describe how iterators behave when the underlying collection is modified during iteration. Both concepts are particularly relevant in concurrent programming scenarios where multiple threads might be modifying a collection while it is being iterated.
-
-### **1. Fail-Fast Iterators**
-
-A **Fail-Fast** iterator is designed to throw an exception as soon as it detects that the collection has been modified during iteration (except through the iterator's own `remove()` method).
-
-#### Characteristics of Fail-Fast:
-- **Immediate detection of modification**: If the collection is modified (structurally) while iterating, a `ConcurrentModificationException` is thrown.
-- **Detects modifications made by other threads**: It is mostly used with collections that are not thread-safe (e.g., `ArrayList`, `HashMap`), and it will throw an exception if the collection is modified while an iterator is traversing it.
-- **Prevents data inconsistency**: By throwing an exception early, it prevents the iterator from returning inconsistent or incorrect results.
-  
-#### How It Works:
-- The **modCount** field of the collection is used to track structural changes. If the collection is modified (for example, elements are added or removed), the **modCount** is updated. The iterator compares the current **modCount** with the value it had when the iteration began. If they don't match, the iterator throws a `ConcurrentModificationException`.
-
-#### Example of Fail-Fast (with `ArrayList`):
-```java
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
-public class FailFastExample {
-    public static void main(String[] args) {
-        List<String> list = new ArrayList<>();
-        list.add("A");
-        list.add("B");
-        list.add("C");
-
-        Iterator<String> iterator = list.iterator();
-
-        // Modify the list during iteration
-        while (iterator.hasNext()) {
-            String element = iterator.next();
-            System.out.println(element);
-
-            // Adding/removing elements will cause a ConcurrentModificationException
-            if (element.equals("B")) {
-                list.remove("B");
-            }
-        }
-    }
-}
-```
-
-**Output**:
-```
-A
-B
-C
-Exception in thread "main" java.util.ConcurrentModificationException
-```
-
-In the example above, attempting to modify the `ArrayList` (removing "B") while iterating over it causes a `ConcurrentModificationException` because the `ArrayList` is fail-fast.
-
-#### Fail-Fast Collections:
-- **`ArrayList`**
-- **`HashMap`**
-- **`HashSet`**
-- **`LinkedHashMap`**
-- **`LinkedList`**
-- **`TreeMap`**
-- **`TreeSet`**
-
-These are examples of collections that generally use fail-fast iterators.
-
-### **2. Fail-Safe Iterators**
-
-A **Fail-Safe** iterator, on the other hand, allows modifications to be made to the collection while it is being iterated, without throwing exceptions. In other words, if the collection is modified during iteration (even by other threads), the iteration continues without errors, but it may not reflect the changes immediately.
-
-#### Characteristics of Fail-Safe:
-- **No `ConcurrentModificationException`**: Fail-safe iterators do not throw exceptions if the collection is modified during iteration.
-- **Copy of collection**: Fail-safe iterators usually work on a **copy** of the collection or on a snapshot of the collection at the time the iteration started.
-- **Safe in concurrent environments**: Fail-safe iterators are generally used with thread-safe collections where multiple threads can safely modify the collection while others are iterating over it (without any issues).
-
-#### How It Works:
-- Fail-safe collections create a copy (or snapshot) of the underlying data structure and iterate over this snapshot. Any changes made to the original collection (while iterating) will not be reflected in the iterator.
-- Fail-safe iterators work in concurrent environments where collections may be modified by multiple threads.
-
-#### Example of Fail-Safe (with `CopyOnWriteArrayList`):
-```java
-import java.util.Iterator;
-import java.util.concurrent.CopyOnWriteArrayList;
-
-public class FailSafeExample {
-    public static void main(String[] args) {
-        CopyOnWriteArrayList<String> list = new CopyOnWriteArrayList<>();
-        list.add("A");
-        list.add("B");
-        list.add("C");
-
-        Iterator<String> iterator = list.iterator();
-
-        // Modify the list during iteration
-        while (iterator.hasNext()) {
-            String element = iterator.next();
-            System.out.println(element);
-
-            // Modifying the list during iteration does not throw an exception
-            if (element.equals("B")) {
-                list.remove("B"); // This will not affect the current iteration
-            }
-        }
-    }
-}
-```
-
-**Output**:
-```
-A
-B
-C
-```
-
-In this example, even though we remove "B" from the list while iterating, the iteration continues without throwing a `ConcurrentModificationException` because `CopyOnWriteArrayList` is a fail-safe collection.
-
-#### Fail-Safe Collections:
-- **`CopyOnWriteArrayList`**
-- **`CopyOnWriteArraySet`**
-- **`ConcurrentHashMap`** (while iterating over the `keySet()`, `entrySet()`, or `values()`)
-  
-These collections implement fail-safe iterators.
-
----
-
-### **Comparison Between Fail-Fast and Fail-Safe**
-
-| Feature                         | **Fail-Fast**                               | **Fail-Safe**                                |
-|----------------------------------|---------------------------------------------|---------------------------------------------|
-| **Behavior on Modification**    | Throws `ConcurrentModificationException` if the collection is modified during iteration. | Allows modification during iteration without throwing exceptions. |
-| **Used in**                      | Non-thread-safe collections (e.g., `ArrayList`, `HashMap`) | Thread-safe collections (e.g., `CopyOnWriteArrayList`, `ConcurrentHashMap`) |
-| **Modification Detection**       | Detects structural changes and throws an exception. | Works on a snapshot/copy of the collection, so modifications don't affect iteration. |
-| **Performance**                  | Can be more efficient because it doesn’t create copies or snapshots. | May have overhead because of creating a copy/snapshot for iteration. |
-| **Typical Use Case**            | Single-threaded or where manual synchronization is needed. | Multi-threaded applications where the collection is modified concurrently by multiple threads. |
-
----
-
-### **Summary**
-
-- **Fail-Fast**: Ensures data consistency by throwing a `ConcurrentModificationException` if a collection is modified during iteration. This is typically used in **non-thread-safe** collections (like `ArrayList`, `HashMap`).
-- **Fail-Safe**: Allows modifications while iterating without throwing exceptions, but may not reflect the changes immediately in the iteration. This is generally used with **thread-safe** collections (like `CopyOnWriteArrayList`, `ConcurrentHashMap`).
-
-In summary, **Fail-Fast** is useful for catching bugs early in single-threaded or synchronized environments, while **Fail-Safe** is used in multi-threaded environments where modifications to the collection are expected during iteration.
-
----
 
 
 
@@ -8311,479 +8785,7 @@ Thread.yield(); // Suggests that the current thread yield
 - **`join()`**: Makes the calling thread wait for another thread to finish.
 - **`yield()`**: Suggests to the scheduler that the current thread can be paused to allow other threads to run.
 
-## Immutable Classes in Java
 
-In Java, an immutable object is one whose state can not be changed once created. Immutable objects are persistent views of their data without a direct option to change it. To change the state, we must create a new copy of such an object with the intended changes. 
-
-In this post, we will learn immutability in detail, creating an immutable object and its advantages.
-
-### 1. What is Immutability?
-Immutability is a characteristic of Java objects that makes them immutable to future changes once they have been initialized. Its internal state cannot be changed in any way.
-
-Take the example of java.lang.String class which is an immutable class. Once a String is created, there is no way we can change the content of that String. Every public API in String class returns a new String with the modified content. The original String always remains the same.
-```java
-String string = "test";
-String newString = string.toLowerCase();  //Creates a new String
-```
-### 2. Immutability in Collections
-Similarly, for Collections, Java provides a certain degree of immutability with three options:
-```java
-Unmodifiable collections
-Immutable collection factory methods (Java 9+)
-Immutable copies (Java 10+)
-Collections.unmodifiableList(recordList);  //Unmodifiable list
-
-List.of(new Record(1, "test"));  //Factory methods in Java 9
-
-List.copyOf(recordList);  //Java 10
-```
-Note that such collections are only shallowly immutable, meaning that we can not add or remove any elements, but the collection elements themselves aren’t guaranteed to be immutable. If we hold the reference of a collection element, then we can change the element’s state without affecting the collection.
-
-In the following example, we cannot add or remove the list items, but we can change the state of an existing item in the list.
-```java
-List<Record> list = List.of(new Record(1, "value"));
-System.out.println(list);   //[Record(id=1, name=value)]
-
-//list.add(new Record()); //UnsupportedOperationException
-
-list.get(0).setName("modified-value");
-System.out.println(list); //[Record(id=1, name=modified-value)]
-
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-class Record {
-  long id;
-  String name;
-}
-```
-To ensure complete immutability, we must make sure that we only add immutable instances in the collections. This way, even if somebody gets a reference to an item in the collection, it cannot change anything.
-
-### 3. How to Create an Immutable Class?
-Java documentation itself has some guidelines identified to write immutable classes in this link. We will understand what these guidelines actually mean.
-
-Do not provide setter methods. Setter methods are meant to change an object’s state, which we want to prevent here.
-Make all fields final and private. Fields declared private will not be accessible outside the class, and making them final will ensure that we can not change them even accidentally.
-Do not allow subclasses to override methods. The easiest way is to declare the class as final. Final classes in Java can not be extended.
-Special attention to “immutable classes with mutable fields“. Always remember that member fields will be either mutable or immutable. Values of immutable members (primitives, wrapper classes, String etc) can be returned safely from the getter methods. For mutable members (POJO, collections etc), we must copy the content into a new Object before returning from the getter method.
-Let us apply all the above rules to create an immutable custom class. Notice that we are returning a new copy of ArrayList from the getTokens() method. By doing so, we are hiding the original tokens list so no one can even get a reference of it and change it.
-```java
-final class Record {
-
-  private final long id;
-  private final String name;
-  private final List<String> tokens;
-
-  public Record(long id, String name, List<String> tokens) {
-    this.id = id;
-    this.name = name;
-    this.tokens = tokens;
-  }
-
-  public long getId() {
-    return id;
-  }
-
-  public String getName() {
-    return name;
-  }
-
-  public List<String> getTokens() {
-    return new ArrayList<>(tokens);
-  }
-
-  @Override
-  public String toString() {
-    return "Record{" +
-        "id=" + id +
-        ", name='" + name + '\'' +
-        ", tokens=" + tokens +
-        '}';
-  }
-}
-```
-Now it’s time to test our class. We tried to add a new item to the tokens list, but the original record and its list remain unchanged.
-```java
-ArrayList<String> tokens = new ArrayList<>();
-tokens.add("active");
-
-Record record = new Record(1, "value", tokens);
-System.out.println(record);   //Record{id=1, name='value', tokens=[active]}
-
-record.getTokens().add("new token"); 
-System.out.println(record);   //Record{id=1, name='value', tokens=[active]}
-```
-### 4. Immutability with Java Records
-Java records help reduce the boilerplate code by generating the constructors and getters at compile time. They can also help create immutable classes with very few lines of code.
-
-For example, we can rewrite the above Record class as follows. Note that records generate the standard getters, so if we want to return a new copy of a mutable reference, we must override the corresponding method.
-```java
-record Record(long id, String name, List<String> tokens){
-
-  public List<String> tokens() {
-    return new ArrayList<>(tokens);
-  }
-}
-```
-Now let us test the immutability again.
-```java
-ArrayList<String> tokens = new ArrayList<>();
-tokens.add("active");
-
-Record record = new Record(1, "value", tokens);
-System.out.println(record);   //Record{id=1, name='value', tokens=[active]}
-
-record.tokens().add("new token");
-System.out.println(record);   ////Record{id=1, name='value', tokens=[active]}
-```
-### 5. Immutable Classes in JDK
-Apart from your written classes, JDK itself has lots of immutable classes. Given is such a list of immutable classes in Java.
-
-- java.lang.String
-- Wrapper classes such as Integer, Long, Double etc
-- java.math.BigInteger and java.math.BigDecimal
-- Unmodifiable collections such as Collections.singletonMap()
-- java.lang.StackTraceElement
-- Java enums
-- java.util.Locale
-- java.util.UUID
-- Java 8 Date Time API – LocalDate, LocalTime etc.
-- record types
-## 6. Advantages
-Immutable objects provide a lot of advantages over mutable objects. Let us discuss them.
-
-- **Predictability**: guarantees that objects won’t change due to coding mistakes or by 3rd party libraries. As long as we reference a data structure, we know it is the same as at the time of its creation.
-- **Validity**: is not needed to be tested again and again. Once we create the immutable object and test its validity once, we know that it will be valid indefinitely.
-- **Thread-safety**: is achieved in the program as no thread can change immutable objects. It helps in writing code in a simple manner without accidentally corrupting the shared data objects.
-- **Cacheability**: can be applied to immutable objects without worrying about state changes in the future. Optimization techniques, like memoization, are only possible with immutable data structures.
-### 7. Conclusion
-This tutorial taught us to create an immutable java class with mutable objects and immutable fields.
-
-In Java, immutable classes are:
-
-are simple to construct, test, and use
-are automatically thread-safe and have no synchronization issues
-do not need a copy constructor
-do not need an implementation of clone()
-allow hashCode() to use lazy initialization, and to cache its return value
-do not need to be copied defensively when used as a field
-make good Map keys and Set elements (these objects must not change state while in the collection)
-have their class invariant established once upon construction, and it never needs to be checked again
-always have “failure atomicity” (a term used by Joshua Bloch) : if an immutable object throws an exception, it’s never left in an undesirable or indeterminate state
-We also saw the benefits which immutable classes bring in an application. As a design best practice, always aim to make your application Java classes to be immutable. In this way, you can always worry less about concurrency related defects in your program.
-
----
-
-## **Concurrency Issues: Deadlock, Starvation, Race Condition, Fairness Policy**
-
-#### 1. **Deadlock**
-A **deadlock** is a situation in concurrent programming where two or more threads are blocked forever, waiting for each other to release resources that they need to continue execution. This can occur when:
-- **Thread A** holds resource 1 and is waiting for resource 2, while
-- **Thread B** holds resource 2 and is waiting for resource 1.
-
-**Example of Deadlock:**
-```java
-class A {
-    synchronized void methodA(B b) {
-        System.out.println("Thread 1 holding lock on A...");
-        try { Thread.sleep(100); } catch (Exception e) {}
-        b.last();
-    }
-
-    synchronized void last() { System.out.println("Inside A's last()"); }
-}
-
-class B {
-    synchronized void methodB(A a) {
-        System.out.println("Thread 2 holding lock on B...");
-        try { Thread.sleep(100); } catch (Exception e) {}
-        a.last();
-    }
-
-    synchronized void last() { System.out.println("Inside B's last()"); }
-}
-
-public class DeadlockExample {
-    public static void main(String[] args) {
-        final A a = new A();
-        final B b = new B();
-
-        Thread t1 = new Thread() {
-            public void run() {
-                a.methodA(b);
-            }
-        };
-        
-        Thread t2 = new Thread() {
-            public void run() {
-                b.methodB(a);
-            }
-        };
-
-        t1.start();
-        t2.start();
-    }
-}
-```
-
-**Prevention**:
-- **Lock ordering**: Always acquire locks in a predefined order to avoid circular dependencies.
-- **Timeouts**: Set a timeout for threads when acquiring locks, so they don’t wait indefinitely.
-- **Deadlock detection**: Some systems can detect deadlocks and handle them.
-
----
-
-#### 2. **Starvation**
-**Starvation** occurs when a thread is indefinitely denied access to resources because other threads are constantly being given preference. This usually happens in systems where resources are not allocated in a fair manner, causing some threads to be ignored while others are continuously executed.
-
-**Example**:
-- If threads with higher priority are always executing, low-priority threads may not get a chance to run.
-
-**Prevention**:
-- Use a **fairness policy** like **fair locks** to ensure that every thread gets a chance to execute, and no thread is indefinitely starved.
-- **Thread prioritization** strategies can help avoid starvation.
-
----
-
-#### 3. **Race Condition**
-A **race condition** happens when the outcome of a program depends on the non-deterministic ordering of events or thread execution. When two or more threads access shared data concurrently, and at least one thread modifies the data, the outcome can vary based on the order of execution.
-
-**Example of Race Condition**:
-```java
-class Counter {
-    private int count = 0;
-
-    public void increment() {
-        count++;
-    }
-
-    public int getCount() {
-        return count;
-    }
-}
-
-public class RaceConditionExample {
-    public static void main(String[] args) throws InterruptedException {
-        Counter counter = new Counter();
-        
-        // Two threads incrementing the counter
-        Thread t1 = new Thread(() -> {
-            for (int i = 0; i < 1000; i++) {
-                counter.increment();
-            }
-        });
-        Thread t2 = new Thread(() -> {
-            for (int i = 0; i < 1000; i++) {
-                counter.increment();
-            }
-        });
-
-        t1.start();
-        t2.start();
-        
-        t1.join();
-        t2.join();
-        
-        System.out.println("Final count: " + counter.getCount());  // Expected: 2000, actual: often less
-    }
-}
-```
-
-**Prevention**:
-- **Synchronization**: Use `synchronized` blocks or methods to ensure only one thread can access shared data at a time.
-- **Locks**: Use explicit locks (e.g., `ReentrantLock`) to coordinate access.
-
----
-
-#### 4. **Fairness Policy**
-**Fairness** in concurrency ensures that threads get a fair chance to execute and resources are allocated in a balanced manner. A fairness policy is important to prevent **starvation**.
-
-- **Fair locks** ensure that threads acquire locks in the order in which they requested them, preventing **starvation**.
-- **Fair thread scheduling** is another concept, where threads are scheduled based on **first-come, first-served** or other **fair algorithms**.
-
-**Example**: Using **`ReentrantLock`** with fairness:
-```java
-Lock lock = new ReentrantLock(true);  // true means fair lock, false is default
-```
-
----
-
-### **The Diamond Problem (in OOP)**
-The **Diamond Problem** occurs in languages that support multiple inheritance, like C++. It arises when a class inherits from two classes that both inherit from a common base class. This creates a **diamond shape** in the inheritance hierarchy.
-
-For example:
-```cpp
-class A { public: void display() { cout << "A" << endl; } };
-class B : public A { public: void display() { cout << "B" << endl; } };
-class C : public A { public: void display() { cout << "C" << endl; } };
-class D : public B, public C { public: void display() { cout << "D" << endl; } };
-
-int main() {
-    D d;
-    d.display();  // Which display() should be called?
-}
-```
-
-This causes ambiguity, as class **D** would inherit conflicting `display()` methods from both **B** and **C**. In Java, **multiple inheritance** of classes is not allowed, and interfaces are used instead, which avoids this problem.
-
----
-
-## **Breaking Singleton Pattern**
-
-The **Singleton Pattern** ensures that a class has only one instance and provides a global point of access to that instance. However, in some cases, you may want to **break** the Singleton pattern (for example, in testing or to allow more flexibility).
-
-You can break the Singleton in the following ways:
-1. **Reflection**: Use reflection to access the private constructor and create another instance.
-2. **Serialization**: By serializing and deserializing an object, you can create another instance.
-3. **Cloning**: You can break the singleton by calling `clone()` on the Singleton instance.
-
-**Example using Reflection**:
-```java
-public class Singleton {
-    private static Singleton instance;
-
-    private Singleton() {}  // private constructor
-
-    public static Singleton getInstance() {
-        if (instance == null) {
-            instance = new Singleton();
-        }
-        return instance;
-    }
-}
-
-public class SingletonTest {
-    public static void main(String[] args) throws Exception {
-        Singleton s1 = Singleton.getInstance();
-        Singleton s2 = null;
-
-        // Use reflection to break the Singleton
-        Constructor<Singleton> constructor = Singleton.class.getDeclaredConstructor();
-        constructor.setAccessible(true);  // Disable access control checks
-        s2 = constructor.newInstance();  // Create a new instance
-
-        System.out.println(s1 == s2);  // false, we've created a second instance
-    }
-}
-```
-
----
-
-## **Immutable Objects in Java**
-
-An **immutable object** is an object whose state cannot be changed once it is created. Immutable objects are inherently **thread-safe** because their state cannot be modified by multiple threads after they are created.
-
-- Common examples of immutable objects in Java: `String`, `Integer`, `LocalDate`, etc.
-
-#### **How to Create an Immutable Class**
-
-To write an immutable class in Java, follow these steps:
-1. Make the class `final` to prevent subclassing.
-2. Make all fields `private` and `final` to ensure they cannot be changed after initialization.
-3. Do not provide any setters for the fields.
-4. If the class has mutable fields (e.g., arrays or collections), ensure that these fields are deeply copied when returned or assigned to prevent external modification.
-
-**Example of an Immutable Class**:
-```java
-import java.util.Date;
-
-public final class Person {
-    private final String name;
-    private final int age;
-    private final Date birthDate;  // A mutable type
-
-    // Constructor that initializes all fields
-    public Person(String name, int age, Date birthDate) {
-        this.name = name;
-        this.age = age;
-        // Create a defensive copy of mutable objects
-        this.birthDate = new Date(birthDate.getTime());
-    }
-
-    // Getters for fields
-    public String getName() {
-        return name;
-    }
-
-    public int getAge() {
-        return age;
-    }
-
-    // Return a defensive copy of the mutable field
-    public Date getBirthDate() {
-        return new Date(birthDate.getTime());
-    }
-
-    @Override
-    public String toString() {
-        return "Person{name='" + name + "', age=" + age + ", birthDate=" + birthDate + "}";
-    }
-}
-```
-
-In this example:
-- **The `Person` class is `final`**, preventing subclassing.
-- **Fields are `private` and `final`**, ensuring they cannot be changed after object creation.
-- **Defensive copies** are made of mutable objects like `Date` to ensure the immutability of the class.
-
-### **Summary**
-- **Deadlock**: When two or more threads are stuck waiting for each other to release resources.
-- **Starvation**: When a thread is unable to gain regular access to resources due to other threads continuously being given priority.
-- **Race Condition**: Occurs when the outcome depends on the unpredictable ordering of thread execution.
-- **Fairness Policy**:
-
- Ensures that threads are treated fairly and are not starved or given excessive priority.
-- **Diamond Problem**: Occurs in multiple inheritance scenarios where the same method is inherited from different ancestors.
-- **Singleton Pattern**: Ensures only one instance of a class exists.
-- **Immutable Class**: A class that cannot be changed after creation, providing thread safety and consistency. 
-
----
-
-##  `void` and `Void`
-
-In Java, `void` and `Void` are used in different contexts and have distinct meanings. Here’s a breakdown of the differences between them:
-
-### `void`
-
-- **Definition**: `void` is a primitive type used as a return type in methods to indicate that the method does not return a value.
-- **Usage**: When a method is declared with a return type of `void`, it cannot return any value.
-
-#### Example:
-```java
-public void doSomething() {
-    // Method logic here
-    // No return statement
-}
-```
-
-### `Void`
-
-- **Definition**: `Void` is a reference type (a class) in Java that is the wrapper for the `void` type. It is part of the `java.lang` package.
-- **Usage**: `Void` can be used as a type parameter in generic classes or methods, particularly in scenarios where a method needs to represent the absence of a return value but still participate in generics.
-
-#### Example:
-```java
-public Callable<Void> createTask() {
-    return () -> {
-        // Task logic here
-        return null; // Must return null for Void
-    };
-}
-```
-
-### Return Type
-
-- **`void`**: Indicates that a method does not return a value.
-- **`Void`**: Can be used as a return type in contexts where you want to use generics but have no actual value to return.
-
-### Summary
-
-- **`void`**: Primitive type; used in method signatures to indicate no return value.
-- **`Void`**: Reference type; used in generics or when a method needs to comply with an API that requires a return type but does not return a value.
-
-In essence, use `void` when defining methods that don’t return a value, and use `Void` when you need to work with generics or APIs that require a return type in a context where there is no actual return value.
-
----
 
 In Java, prior to Java 8, interfaces could only declare abstract methods. However, with the introduction of Java 8, two significant features were added to interfaces: default methods and static methods. Here’s why they were introduced and their importance:
 
