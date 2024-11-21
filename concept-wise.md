@@ -2454,6 +2454,240 @@ Garbage collection algorithms in Java vary in terms of their performance charact
 
 ---
 
+## Garbage collection (GC) algorithms
+
+Java provides several garbage collection (GC) algorithms to manage memory automatically. Each of these algorithms has its own strengths and use cases. Here’s an overview of **Serial GC**, **Parallel GC**, **G1 GC**, and **ZGC**:
+
+### 1. Serial GC
+
+- **Description**: The Serial Garbage Collector is a simple and straightforward collector that uses a single thread for garbage collection. It is designed for single-threaded applications and is suitable for small applications with low memory requirements.
+  
+- **Characteristics**:
+  - **Single-threaded**: Only one thread performs garbage collection, which can lead to pauses in application execution during collection.
+  - **Stop-the-World**: All application threads are paused during the collection process.
+  - **Best for Small Applications**: Suitable for small applications with limited memory and where pause times are not critical.
+
+- **Usage**: Enabled with `-XX:+UseSerialGC`.
+
+### 2. Parallel GC (Parallel Scavenge)
+
+- **Description**: The Parallel Garbage Collector is designed for throughput. It uses multiple threads to perform garbage collection and is optimized for high throughput in multi-threaded applications.
+
+- **Characteristics**:
+  - **Multi-threaded**: Uses multiple threads to perform both minor and major collections.
+  - **Stop-the-World**: Similar to Serial GC, it pauses all application threads during garbage collection.
+  - **Throughput-Oriented**: Focuses on maximizing the overall throughput of the application.
+
+- **Usage**: Enabled with `-XX:+UseParallelGC`.
+
+### 3. G1 GC (Garbage-First Garbage Collector)
+
+- **Description**: The G1 Garbage Collector is designed for applications that require predictable pause times while still providing high throughput. It divides the heap into regions and prioritizes the collection of regions with the most garbage.
+
+- **Characteristics**:
+  - **Region-Based**: The heap is divided into multiple regions, allowing G1 to collect garbage incrementally.
+  - **Concurrent Marking**: G1 performs concurrent marking of live objects, which helps to reduce pause times.
+  - **Pause Time Goals**: Allows setting a target for maximum pause times using the `-XX:MaxGCPauseMillis` option.
+
+- **Usage**: Enabled with `-XX:+UseG1GC`.
+
+### 4. ZGC (Z Garbage Collector)
+
+- **Description**: ZGC is a low-latency garbage collector that aims to provide near-zero pause times, making it suitable for large heaps (multi-terabyte) and applications that cannot tolerate long garbage collection pauses.
+
+- **Characteristics**:
+  - **Concurrent and Low-Latency**: Most of the garbage collection work is done concurrently with the application threads, resulting in very short pause times (typically in the range of milliseconds).
+  - **Region-Based**: Similar to G1, ZGC also uses a region-based approach for memory management.
+  - **Handles Large Heaps**: Designed to efficiently manage large heaps without long stop-the-world pauses.
+
+- **Usage**: Enabled with `-XX:+UseZGC`.
+
+### Summary
+
+- **Serial GC**: Single-threaded, simple, best for small applications.
+- **Parallel GC**: Multi-threaded, throughput-oriented, suitable for multi-threaded applications.
+- **G1 GC**: Balances pause times and throughput, suitable for larger applications needing predictable performance.
+- **ZGC**: Low-latency, concurrent collector designed for applications that require minimal pause times and can handle large heaps.
+
+Choosing the right garbage collector depends on the specific requirements of your application, such as throughput, latency, and memory usage patterns.
+
+---
+
+## Causes of Memory Leaks in Java
+
+A memory leak in Java occurs when the Java Virtual Machine (JVM) retains references to objects that are no longer needed, preventing the garbage collector from reclaiming their memory. This can lead to increased memory usage and ultimately cause an application to run out of memory.
+
+1. **Static Fields**: Objects held in static fields are not eligible for garbage collection until the class is unloaded, which typically happens only when the application is terminated.
+
+2. **Listener/Callback References**: If an object registers itself as a listener to another object but does not unregister when it is no longer needed, it can lead to memory retention.
+
+3. **Collection Classes**: Holding references in collection classes (e.g., `List`, `Map`) without clearing them can cause leaks, especially in long-lived applications.
+
+4. **ThreadLocal Variables**: Misuse of `ThreadLocal` can lead to memory leaks, particularly in environments with thread pools, as the references can persist beyond the lifecycle of a thread.
+
+5. **Inner Classes**: Non-static inner classes hold an implicit reference to their enclosing class. If the inner class instance outlives the enclosing class, it can prevent garbage collection.
+
+### Prevention Strategies
+
+1. **Nullify References**: Set references to `null` when they are no longer needed, especially in long-lived objects.
+
+2. **Weak References**: Use `WeakReference` or `SoftReference` for caches or listeners that should be cleared when memory is needed.
+
+3. **Unregister Listeners**: Always unregister listeners or callbacks when the objects are no longer needed.
+
+4. **Avoid Static References**: Limit the use of static fields to those that need to persist for the application's lifetime.
+
+5. **Use Profiling Tools**: Utilize memory profiling tools (like VisualVM, YourKit, or Eclipse MAT) to identify and diagnose memory leaks.
+
+6. **Review Data Structures**: Regularly review and clear collections to ensure they do not hold onto unnecessary references.
+
+7. **Limit Inner Class Use**: Consider using static inner classes or standalone classes to avoid unintended references to the enclosing class.
+
+8. **Be Cautious with ThreadLocal**: Use `ThreadLocal` judiciously and ensure values are removed when no longer needed.
+
+### Conclusion
+
+By being mindful of object references, employing the right patterns, and regularly profiling your application, you can effectively prevent memory leaks and maintain optimal memory management in your Java applications.
+
+---
+
+## Memory Management and Resource Allocation
+
+In Java, memory management and resource allocation involve several concepts, including the heap, stack, string pool, object pool, instance pool, and connection pool. Here’s a detailed explanation of each:
+
+### 1. Heap
+- **Definition**: The heap is a region of memory used for dynamic memory allocation. Objects created with the `new` keyword are stored here.
+- **Characteristics**:
+  - **Size**: The heap size can be adjusted with JVM parameters (e.g., `-Xms` for initial size, `-Xmx` for maximum size).
+  - **Garbage Collection**: Memory in the heap is managed by the garbage collector, which automatically frees up memory occupied by objects that are no longer referenced.
+  - **Accessibility**: Objects in the heap can be accessed from anywhere in the application, making it suitable for storing global variables and long-lived objects.
+
+### 2. Stack
+- **Definition**: The stack is a region of memory that stores method call frames, local variables, and method parameters.
+- **Characteristics**:
+  - **LIFO Structure**: The stack follows a Last In, First Out (LIFO) structure. Each method call creates a new frame on top of the stack.
+  - **Automatic Memory Management**: Memory is automatically allocated and deallocated when methods are called and return, respectively.
+  - **Limited Size**: The stack size is typically smaller than the heap and can lead to a `StackOverflowError` if too many method calls are made (e.g., deep recursion).
+
+### 3. String Pool
+- **Definition**: The string pool (or string intern pool) is a special area in the heap where Java stores string literals.
+- **Characteristics**:
+  - **Memory Efficiency**: When you create a string literal, Java checks the pool first. If an identical string already exists, it reuses that reference instead of creating a new object.
+  - **String Interning**: You can manually add strings to the pool using the `String.intern()` method, which allows for more efficient memory use.
+  - **Immutability**: Strings in Java are immutable, meaning once created, their values cannot be changed.
+
+### 4. Object Pool
+- **Definition**: An object pool is a design pattern that maintains a collection of reusable objects to improve performance by reducing the overhead of creating and destroying objects frequently.
+- **Characteristics**:
+  - **Reuse**: Objects are checked out and returned to the pool instead of being created and destroyed repeatedly.
+  - **Performance**: This pattern is useful for expensive-to-create objects, such as database connections or thread pools.
+  - **Implementation**: You typically implement an object pool by creating a class that manages the lifecycle of the pooled objects.
+
+### 5. Instance Pool
+- **Definition**: An instance pool is a specific type of object pool that maintains instances of a particular class, allowing for reuse of these instances.
+- **Characteristics**:
+  - **Specificity**: Unlike a general object pool, an instance pool typically focuses on a particular type of object.
+  - **Management**: The pool manages the creation, reuse, and destruction of instances to optimize resource use.
+  - **Use Cases**: Commonly used in applications where the creation of instances is resource-intensive.
+
+### 6. Connection Pool
+- **Definition**: A connection pool is a caching mechanism that maintains a pool of database connections to optimize the connection process in applications that frequently access a database.
+- **Characteristics**:
+  - **Performance**: It reduces the overhead of establishing a new database connection each time one is needed, improving performance.
+  - **Resource Management**: Connections are reused, which helps manage database resources efficiently and can prevent connection limits from being reached.
+  - **Configuration**: Connection pools can be configured to specify the maximum number of connections, idle time, and other parameters.
+
+### Summary
+- **Heap**: Dynamic memory allocation area for objects.
+- **Stack**: Memory for method calls and local variables.
+- **String Pool**: Special area for storing string literals to optimize memory usage.
+- **Object Pool**: Design pattern for reusing objects to improve performance.
+- **Instance Pool**: A specialized object pool for specific object instances.
+- **Connection Pool**: Caches database connections for efficient access.
+
+These concepts are fundamental in understanding how Java manages memory and resources, contributing to the efficiency and performance of Java applications.
+
+A **resource pool** is a design pattern that manages a collection of resources, allowing them to be reused rather than created and destroyed repeatedly. This approach helps improve performance, reduces resource consumption, and optimizes resource management.
+
+### Key Characteristics of Resource Pools
+
+1. **Reusability**:
+   - Resources (e.g., database connections, threads, sockets) are created once and reused multiple times.
+   - This reduces the overhead associated with the creation and destruction of resources.
+
+2. **Efficiency**:
+   - By managing a limited number of resources, a pool can help ensure that the application does not exceed resource limits (e.g., database connections).
+   - This can lead to improved performance, especially in high-load scenarios.
+
+3. **Configuration**:
+   - Resource pools can often be configured with parameters like maximum size, minimum size, idle time, and timeout values.
+   - This allows fine-tuning based on application requirements and expected load.
+
+4. **Lifecycle Management**:
+   - Resource pools manage the lifecycle of the resources, including creation, validation, and destruction.
+   - This can include checking if a resource is still valid before it is returned to the application.
+
+### Common Types of Resource Pools
+
+1. **Connection Pool**:
+   - Manages database connections, allowing applications to reuse existing connections instead of creating new ones for each request.
+   - Libraries like HikariCP and Apache DBCP are popular connection pool implementations in Java.
+
+2. **Thread Pool**:
+   - Manages a pool of worker threads to execute tasks concurrently.
+   - This avoids the overhead of creating and destroying threads and helps manage system resources effectively.
+   - The `ExecutorService` in Java provides built-in support for thread pooling.
+
+3. **Object Pool**:
+   - Maintains a pool of reusable objects, typically for objects that are expensive to create.
+   - Can be used for various objects, such as network connections, file handles, or complex data structures.
+
+4. **Socket Pool**:
+   - Manages a pool of reusable socket connections, which can be useful for applications that communicate over a network.
+   - Helps improve performance by reducing the overhead of establishing new socket connections.
+
+### Example of a Resource Pool Implementation
+
+Here’s a simplified example of an object pool in Java:
+
+```java
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
+
+class ObjectPool {
+    private final BlockingQueue<MyObject> pool;
+
+    public ObjectPool(int size) {
+        pool = new LinkedBlockingQueue<>(size);
+        for (int i = 0; i < size; i++) {
+            pool.offer(new MyObject()); // Pre-populate the pool
+        }
+    }
+
+    public MyObject acquire() throws InterruptedException {
+        return pool.take(); // Waits if necessary until an object becomes available
+    }
+
+    public void release(MyObject obj) {
+        pool.offer(obj); // Returns the object to the pool
+    }
+}
+
+class MyObject {
+    // Object details and methods
+}
+```
+
+### Benefits of Using Resource Pools
+
+- **Performance**: Reduces the overhead of creating and destroying resources frequently.
+- **Scalability**: Helps manage resource limits effectively, allowing applications to scale.
+- **Resource Management**: Facilitates better utilization of resources by tracking their usage and lifecycle.
+
+### Summary
+A resource pool is a powerful design pattern for managing collections of reusable resources, improving performance, and optimizing resource management in applications. Common implementations include connection pools, thread pools, and object pools, each tailored for specific types of resources.
+
+---
 ### Algorithms and Data Structures
 7. **Question**: Can you explain how a HashMap works in Java?
    **Answer**: A `HashMap` stores key-value pairs and uses a hash function to compute an index into an array of buckets or slots, from which the desired value can be found. If two keys hash to the same index, a collision occurs, and the `HashMap` uses linked lists or balanced trees (Java 8+) to resolve this.
@@ -2491,11 +2725,6 @@ Garbage collection algorithms in Java vary in terms of their performance charact
 
 ### Conclusion
 These questions and answers cover a broad range of topics relevant to the skills listed in your request. Tailor your responses and examples based on your own experiences to make them more personal and impactful. Good luck with your interview preparation!
-
-
-
-
-
 
 
 Certainly! Here’s a detailed explanation of the various Java concepts and terms you’ve mentioned, including coding examples where applicable:
@@ -2768,144 +2997,94 @@ public final class ImmutableClass {
 
 ---
 
-## Memory Management and Resource Allocation
+## Java Collection Framework
 
-In Java, memory management and resource allocation involve several concepts, including the heap, stack, string pool, object pool, instance pool, and connection pool. Here’s a detailed explanation of each:
+The Java Collection Framework provides a set of classes and interfaces to manage groups of objects. It includes various collections that are used to store, retrieve, manipulate, and communicate aggregate data. The framework is divided into several parts: interfaces, implementations, and algorithms.
 
-### 1. Heap
-- **Definition**: The heap is a region of memory used for dynamic memory allocation. Objects created with the `new` keyword are stored here.
-- **Characteristics**:
-  - **Size**: The heap size can be adjusted with JVM parameters (e.g., `-Xms` for initial size, `-Xmx` for maximum size).
-  - **Garbage Collection**: Memory in the heap is managed by the garbage collector, which automatically frees up memory occupied by objects that are no longer referenced.
-  - **Accessibility**: Objects in the heap can be accessed from anywhere in the application, making it suitable for storing global variables and long-lived objects.
+### **1. Collection Framework Overview**
 
-### 2. Stack
-- **Definition**: The stack is a region of memory that stores method call frames, local variables, and method parameters.
-- **Characteristics**:
-  - **LIFO Structure**: The stack follows a Last In, First Out (LIFO) structure. Each method call creates a new frame on top of the stack.
-  - **Automatic Memory Management**: Memory is automatically allocated and deallocated when methods are called and return, respectively.
-  - **Limited Size**: The stack size is typically smaller than the heap and can lead to a `StackOverflowError` if too many method calls are made (e.g., deep recursion).
+#### **1.1. Interfaces**
 
-### 3. String Pool
-- **Definition**: The string pool (or string intern pool) is a special area in the heap where Java stores string literals.
-- **Characteristics**:
-  - **Memory Efficiency**: When you create a string literal, Java checks the pool first. If an identical string already exists, it reuses that reference instead of creating a new object.
-  - **String Interning**: You can manually add strings to the pool using the `String.intern()` method, which allows for more efficient memory use.
-  - **Immutability**: Strings in Java are immutable, meaning once created, their values cannot be changed.
+1. **Collection Interface**: The root interface of the collection hierarchy. It represents a group of objects known as elements.
+   - **List**: An ordered collection (sequence) that allows duplicate elements. Examples include `ArrayList`, `LinkedList`, and `Vector`.
+   - **Set**: A collection that does not allow duplicate elements. Examples include `HashSet`, `LinkedHashSet`, and `TreeSet`.
+   - **Queue**: A collection designed for holding elements prior to processing. Examples include `LinkedList` (also implements Queue), `PriorityQueue`, and `Deque`.
+   - **Deque**: A double-ended queue that allows elements to be added or removed from both ends. Examples include `ArrayDeque` and `LinkedList`.
 
-### 4. Object Pool
-- **Definition**: An object pool is a design pattern that maintains a collection of reusable objects to improve performance by reducing the overhead of creating and destroying objects frequently.
-- **Characteristics**:
-  - **Reuse**: Objects are checked out and returned to the pool instead of being created and destroyed repeatedly.
-  - **Performance**: This pattern is useful for expensive-to-create objects, such as database connections or thread pools.
-  - **Implementation**: You typically implement an object pool by creating a class that manages the lifecycle of the pooled objects.
+2. **Map Interface**: A collection of key-value pairs where each key is associated with exactly one value. Examples include `HashMap`, `LinkedHashMap`, and `TreeMap`.
 
-### 5. Instance Pool
-- **Definition**: An instance pool is a specific type of object pool that maintains instances of a particular class, allowing for reuse of these instances.
-- **Characteristics**:
-  - **Specificity**: Unlike a general object pool, an instance pool typically focuses on a particular type of object.
-  - **Management**: The pool manages the creation, reuse, and destruction of instances to optimize resource use.
-  - **Use Cases**: Commonly used in applications where the creation of instances is resource-intensive.
+#### **1.2. Implementations**
 
-### 6. Connection Pool
-- **Definition**: A connection pool is a caching mechanism that maintains a pool of database connections to optimize the connection process in applications that frequently access a database.
-- **Characteristics**:
-  - **Performance**: It reduces the overhead of establishing a new database connection each time one is needed, improving performance.
-  - **Resource Management**: Connections are reused, which helps manage database resources efficiently and can prevent connection limits from being reached.
-  - **Configuration**: Connection pools can be configured to specify the maximum number of connections, idle time, and other parameters.
+- **ArrayList**: Implements the `List` interface using a dynamic array. Allows fast random access but slower insertion and deletion.
+- **LinkedList**: Implements both `List` and `Deque` interfaces using a doubly-linked list. Allows fast insertion and deletion but slower random access.
+- **HashSet**: Implements the `Set` interface using a hash table. Does not guarantee the order of elements.
+- **LinkedHashSet**: Extends `HashSet` and maintains a linked list of the entries in the set, providing predictable iteration order.
+- **TreeSet**: Implements the `Set` interface using a Red-Black tree. Guarantees that elements are in sorted order.
+- **HashMap**: Implements the `Map` interface using a hash table. Does not guarantee the order of keys.
+- **LinkedHashMap**: Extends `HashMap` and maintains insertion order.
+- **TreeMap**: Implements the `Map` interface using a Red-Black tree. Guarantees that keys are in sorted order.
+- **PriorityQueue**: Implements the `Queue` interface and orders elements based on their natural ordering or a comparator provided at queue construction.
+- **ArrayDeque**: Implements the `Deque` interface using a resizable array.
 
-### Summary
-- **Heap**: Dynamic memory allocation area for objects.
-- **Stack**: Memory for method calls and local variables.
-- **String Pool**: Special area for storing string literals to optimize memory usage.
-- **Object Pool**: Design pattern for reusing objects to improve performance.
-- **Instance Pool**: A specialized object pool for specific object instances.
-- **Connection Pool**: Caches database connections for efficient access.
+### **2. Examples**
 
-These concepts are fundamental in understanding how Java manages memory and resources, contributing to the efficiency and performance of Java applications.
-
-A **resource pool** is a design pattern that manages a collection of resources, allowing them to be reused rather than created and destroyed repeatedly. This approach helps improve performance, reduces resource consumption, and optimizes resource management.
-
-### Key Characteristics of Resource Pools
-
-1. **Reusability**:
-   - Resources (e.g., database connections, threads, sockets) are created once and reused multiple times.
-   - This reduces the overhead associated with the creation and destruction of resources.
-
-2. **Efficiency**:
-   - By managing a limited number of resources, a pool can help ensure that the application does not exceed resource limits (e.g., database connections).
-   - This can lead to improved performance, especially in high-load scenarios.
-
-3. **Configuration**:
-   - Resource pools can often be configured with parameters like maximum size, minimum size, idle time, and timeout values.
-   - This allows fine-tuning based on application requirements and expected load.
-
-4. **Lifecycle Management**:
-   - Resource pools manage the lifecycle of the resources, including creation, validation, and destruction.
-   - This can include checking if a resource is still valid before it is returned to the application.
-
-### Common Types of Resource Pools
-
-1. **Connection Pool**:
-   - Manages database connections, allowing applications to reuse existing connections instead of creating new ones for each request.
-   - Libraries like HikariCP and Apache DBCP are popular connection pool implementations in Java.
-
-2. **Thread Pool**:
-   - Manages a pool of worker threads to execute tasks concurrently.
-   - This avoids the overhead of creating and destroying threads and helps manage system resources effectively.
-   - The `ExecutorService` in Java provides built-in support for thread pooling.
-
-3. **Object Pool**:
-   - Maintains a pool of reusable objects, typically for objects that are expensive to create.
-   - Can be used for various objects, such as network connections, file handles, or complex data structures.
-
-4. **Socket Pool**:
-   - Manages a pool of reusable socket connections, which can be useful for applications that communicate over a network.
-   - Helps improve performance by reducing the overhead of establishing new socket connections.
-
-### Example of a Resource Pool Implementation
-
-Here’s a simplified example of an object pool in Java:
-
+#### **ArrayList Example**
 ```java
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
+import java.util.ArrayList;
+import java.util.List;
 
-class ObjectPool {
-    private final BlockingQueue<MyObject> pool;
+public class ArrayListExample {
+    public static void main(String[] args) {
+        List<String> list = new ArrayList<>();
+        list.add("Apple");
+        list.add("Banana");
+        list.add("Cherry");
 
-    public ObjectPool(int size) {
-        pool = new LinkedBlockingQueue<>(size);
-        for (int i = 0; i < size; i++) {
-            pool.offer(new MyObject()); // Pre-populate the pool
+        for (String fruit : list) {
+            System.out.println(fruit);
         }
     }
-
-    public MyObject acquire() throws InterruptedException {
-        return pool.take(); // Waits if necessary until an object becomes available
-    }
-
-    public void release(MyObject obj) {
-        pool.offer(obj); // Returns the object to the pool
-    }
-}
-
-class MyObject {
-    // Object details and methods
 }
 ```
 
-### Benefits of Using Resource Pools
+#### **HashSet Example**
+```java
+import java.util.HashSet;
+import java.util.Set;
 
-- **Performance**: Reduces the overhead of creating and destroying resources frequently.
-- **Scalability**: Helps manage resource limits effectively, allowing applications to scale.
-- **Resource Management**: Facilitates better utilization of resources by tracking their usage and lifecycle.
+public class HashSetExample {
+    public static void main(String[] args) {
+        Set<String> set = new HashSet<>();
+        set.add("Apple");
+        set.add("Banana");
+        set.add("Cherry");
+        set.add("Apple"); // Duplicate element, will not be added
 
-### Summary
-A resource pool is a powerful design pattern for managing collections of reusable resources, improving performance, and optimizing resource management in applications. Common implementations include connection pools, thread pools, and object pools, each tailored for specific types of resources.
+        for (String fruit : set) {
+            System.out.println(fruit);
+        }
+    }
+}
+```
 
----
+#### **HashMap Example**
+```java
+import java.util.HashMap;
+import java.util.Map;
 
+public class HashMapExample {
+    public static void main(String[] args) {
+        Map<String, Integer> map = new HashMap<>();
+        map.put("Apple", 1);
+        map.put("Banana", 2);
+        map.put("Cherry", 3);
+
+        for (Map.Entry<String, Integer> entry : map.entrySet()) {
+            System.out.println(entry.getKey() + ": " + entry.getValue());
+        }
+    }
+}
+```
 
 ## HashMap, Hashtable, and HashSet
 
@@ -3046,95 +3225,6 @@ Each of these collections is optimized for different use cases, and understandin
 
 ---
 
-## Java Collection Framework
-
-The Java Collection Framework provides a set of classes and interfaces to manage groups of objects. It includes various collections that are used to store, retrieve, manipulate, and communicate aggregate data. The framework is divided into several parts: interfaces, implementations, and algorithms.
-
-### **1. Collection Framework Overview**
-
-#### **1.1. Interfaces**
-
-1. **Collection Interface**: The root interface of the collection hierarchy. It represents a group of objects known as elements.
-   - **List**: An ordered collection (sequence) that allows duplicate elements. Examples include `ArrayList`, `LinkedList`, and `Vector`.
-   - **Set**: A collection that does not allow duplicate elements. Examples include `HashSet`, `LinkedHashSet`, and `TreeSet`.
-   - **Queue**: A collection designed for holding elements prior to processing. Examples include `LinkedList` (also implements Queue), `PriorityQueue`, and `Deque`.
-   - **Deque**: A double-ended queue that allows elements to be added or removed from both ends. Examples include `ArrayDeque` and `LinkedList`.
-
-2. **Map Interface**: A collection of key-value pairs where each key is associated with exactly one value. Examples include `HashMap`, `LinkedHashMap`, and `TreeMap`.
-
-#### **1.2. Implementations**
-
-- **ArrayList**: Implements the `List` interface using a dynamic array. Allows fast random access but slower insertion and deletion.
-- **LinkedList**: Implements both `List` and `Deque` interfaces using a doubly-linked list. Allows fast insertion and deletion but slower random access.
-- **HashSet**: Implements the `Set` interface using a hash table. Does not guarantee the order of elements.
-- **LinkedHashSet**: Extends `HashSet` and maintains a linked list of the entries in the set, providing predictable iteration order.
-- **TreeSet**: Implements the `Set` interface using a Red-Black tree. Guarantees that elements are in sorted order.
-- **HashMap**: Implements the `Map` interface using a hash table. Does not guarantee the order of keys.
-- **LinkedHashMap**: Extends `HashMap` and maintains insertion order.
-- **TreeMap**: Implements the `Map` interface using a Red-Black tree. Guarantees that keys are in sorted order.
-- **PriorityQueue**: Implements the `Queue` interface and orders elements based on their natural ordering or a comparator provided at queue construction.
-- **ArrayDeque**: Implements the `Deque` interface using a resizable array.
-
-### **2. Examples**
-
-#### **ArrayList Example**
-```java
-import java.util.ArrayList;
-import java.util.List;
-
-public class ArrayListExample {
-    public static void main(String[] args) {
-        List<String> list = new ArrayList<>();
-        list.add("Apple");
-        list.add("Banana");
-        list.add("Cherry");
-
-        for (String fruit : list) {
-            System.out.println(fruit);
-        }
-    }
-}
-```
-
-#### **HashSet Example**
-```java
-import java.util.HashSet;
-import java.util.Set;
-
-public class HashSetExample {
-    public static void main(String[] args) {
-        Set<String> set = new HashSet<>();
-        set.add("Apple");
-        set.add("Banana");
-        set.add("Cherry");
-        set.add("Apple"); // Duplicate element, will not be added
-
-        for (String fruit : set) {
-            System.out.println(fruit);
-        }
-    }
-}
-```
-
-#### **HashMap Example**
-```java
-import java.util.HashMap;
-import java.util.Map;
-
-public class HashMapExample {
-    public static void main(String[] args) {
-        Map<String, Integer> map = new HashMap<>();
-        map.put("Apple", 1);
-        map.put("Banana", 2);
-        map.put("Cherry", 3);
-
-        for (Map.Entry<String, Integer> entry : map.entrySet()) {
-            System.out.println(entry.getKey() + ": " + entry.getValue());
-        }
-    }
-}
-```
-
 ### **3. Interview Questions and Answers**
 
 #### **Q1: What is the difference between `ArrayList` and `LinkedList`?**
@@ -3264,6 +3354,192 @@ public class CustomClassLoader extends ClassLoader {
     }
 }
 ```
+
+---
+
+## Java 8 Updated Collections Framework
+
+### **1. Stream API (Java 8)**
+One of the most significant additions to the Collections Framework in Java 8 is the **Stream API**. The Stream API allows you to process sequences of elements (such as collections, arrays, or I/O channels) in a functional style, enabling efficient, declarative operations on data.
+
+#### Key Features of Streams:
+- **Declarative Operations**: Perform operations like filtering, mapping, reducing, sorting, and collecting in a clean, readable, and functional way.
+- **Parallel Processing**: Streams can be processed in parallel, making it easier to leverage multi-core processors.
+- **Laziness**: Streams are lazy, meaning computations are only performed when a terminal operation (like `collect()`, `forEach()`, or `reduce()`) is invoked.
+
+#### Example:
+```java
+List<String> words = Arrays.asList("apple", "banana", "cherry", "date");
+// Filter and print words starting with "b"
+words.stream()
+     .filter(word -> word.startsWith("b"))
+     .forEach(System.out::println);  // Output: banana
+```
+Streams can also be processed in parallel:
+```java
+words.parallelStream()
+     .filter(word -> word.startsWith("b"))
+     .forEach(System.out::println);
+```
+
+---
+
+### **2. Default and Static Methods in Interfaces (Java 8)**
+Java 8 introduced **default** and **static** methods in interfaces, allowing developers to add methods to interfaces without breaking the existing implementation.
+#### a) **Default Methods**
+A **default method** in an interface allows you to provide a default implementation for a method. This is especially useful for adding new methods to interfaces without breaking existing implementations.
+```java
+interface MyList {
+    default void printList() {
+        System.out.println("Printing list");
+    }
+}
+class MyListImpl implements MyList {
+    // No need to implement printList() since it has a default implementation
+}
+```
+
+#### b) **Static Methods**
+Static methods in interfaces allow you to define utility methods that can be invoked without creating an instance of the implementing class.
+```java
+interface MyList {
+    static void printListStatic() {
+        System.out.println("Printing static list");
+    }
+}
+```
+
+---
+
+### **3. New Collection Classes (Java 8)**
+Java 8 introduced new classes and methods to the **`java.util.concurrent`** package, which enhances concurrency support and adds more powerful utilities for managing collections in a multi-threaded environment.
+
+#### a) **ConcurrentMap** Enhancements
+`ConcurrentMap` is an interface that extends `Map` and adds atomic operations for thread-safe modifications. Java 8 added new methods such as:
+- `compute()`, `computeIfAbsent()`, `computeIfPresent()`
+- `merge()`
+Example using `computeIfAbsent()`:
+```java
+ConcurrentMap<String, Integer> map = new ConcurrentHashMap<>();
+map.computeIfAbsent("key", k -> 42);  // Only computes if absent, else returns the existing value.
+```
+
+#### b) **CopyOnWriteArrayList and CopyOnWriteArraySet**
+These thread-safe variants of `ArrayList` and `HashSet` are optimized for scenarios where read operations dominate and few modifications are made. The data structure creates a new copy of the list or set whenever it's modified, ensuring thread safety without synchronization overhead.
+
+---
+### **4. The `forEach` Method (Java 8)**
+Java 8 introduced the `forEach()` method to the `Collection` interface, enabling a more concise and readable way to iterate over collections using lambdas. It replaces the traditional `for` loop or `Iterator` pattern.
+```java
+List<String> words = Arrays.asList("apple", "banana", "cherry");
+words.forEach(word -> System.out.println(word));  // Output: apple, banana, cherry
+```
+Internally, `forEach()` uses the `Consumer` functional interface, which allows you to process each element in the collection.
+
+---
+### **5. `List`, `Set`, and `Map` Enhancements (Java 8)**
+Java 8 added several new methods to the `List`, `Set`, and `Map` interfaces to improve functionality and usability.
+#### a) **List Interface Enhancements**
+- **`replaceAll()`**: A method to replace each element of the list using the given operator.
+  
+```java
+List<Integer> numbers = Arrays.asList(1, 2, 3, 4, 5);
+numbers.replaceAll(n -> n * 2);  // Doubles each element in the list
+```
+- **`sort()`**: A method to sort the list in-place using the specified comparator.
+```java
+List<Integer> numbers = Arrays.asList(5, 3, 8, 1);
+numbers.sort(Integer::compareTo);  // Sort in ascending order
+```
+#### b) **Set Interface Enhancements**
+- **`removeIf()`**: A method that removes elements based on a predicate.
+  
+```java
+Set<Integer> numbers = new HashSet<>(Arrays.asList(1, 2, 3, 4, 5));
+numbers.removeIf(n -> n % 2 == 0);  // Removes even numbers
+```
+#### c) **Map Interface Enhancements**
+- **`forEach()`**: This method allows you to iterate over key-value pairs.
+  
+```java
+Map<String, Integer> map = new HashMap<>();
+map.put("a", 1);
+map.put("b", 2);
+map.forEach((key, value) -> System.out.println(key + " = " + value));
+```
+- **`compute()`, `computeIfAbsent()`, and `computeIfPresent()`**: These methods provide atomic operations for modifying values in a map.
+Example using `computeIfAbsent()`:
+```java
+Map<String, Integer> map = new HashMap<>();
+map.computeIfAbsent("key", k -> 42);  // Computes a value if the key is absent
+```
+---
+### **6. `Collectors` Utility Class (Java 8)**
+Java 8 introduced the **`Collectors`** utility class in the `java.util.stream` package, which provides various predefined collection strategies for reducing and collecting the results of a stream operation.
+#### Common Collectors:
+- **`toList()`**: Collects the stream into a `List`.
+- **`toSet()`**: Collects the stream into a `Set`.
+- **`joining()`**: Concatenates the elements of a stream into a single `String`.
+- **`groupingBy()`**: Groups the elements of a stream by a classifier function.
+Example:
+```java
+List<String> words = Arrays.asList("apple", "banana", "cherry");
+String result = words.stream().collect(Collectors.joining(", "));  // "apple, banana, cherry"
+```
+- **`groupingBy()`**: Groups the stream elements by a given key.
+```java
+Map<Integer, List<String>> grouped = words.stream()
+    .collect(Collectors.groupingBy(String::length));
+```
+---
+### **7. `Spliterator` (Java 8)**
+Java 8 introduced **`Spliterator`**, a new interface that helps in efficiently dividing and processing large datasets in parallel. The `Spliterator` can be used for parallel stream processing, making it more efficient for large collections.
+It provides methods such as:
+- `trySplit()`: Splits the data into smaller parts for parallel processing.
+- `forEachRemaining()`: Processes the remaining elements.
+Example:
+```java
+List<String> words = Arrays.asList("apple", "banana", "cherry");
+Spliterator<String> spliterator = words.spliterator();
+spliterator.forEachRemaining(System.out::println);
+```
+---
+### **8. Immutable Collections (Java 9)**
+Java 9 introduced **immutable collections** with a convenient factory API for creating immutable lists, sets, and maps.
+#### Example of Immutable Collections:
+```java
+List<String> list = List.of("apple", "banana", "cherry");
+Set<String> set = Set.of("apple", "banana", "cherry");
+Map<String, Integer> map = Map.of("a", 1, "b", 2);
+list.add("date");  // Throws UnsupportedOperationException
+```
+- These collections are unmodifiable, which means once they are created, their contents cannot be modified.
+
+---
+
+### **9. `ConcurrentSkipListMap` and `ConcurrentSkipListSet` (Java 6)**
+
+Although not a feature of Java 8, the **`ConcurrentSkipListMap`** and **`ConcurrentSkipListSet`** are thread-safe, sorted collections introduced earlier in Java 6. These are a part of the `java.util.concurrent` package and are often used when you need thread-safe access to sorted data.
+
+---
+### **10. `var` Keyword (Java 10)**
+Java 10 introduced **local variable type inference** via the `var` keyword. This allows you to omit the explicit type declaration for local variables when it can be inferred from the context.
+Example:
+```java
+var list = new ArrayList<String>();  // Type is inferred as ArrayList<String>
+```
+This makes working with collections more concise.
+---
+### **Summary of Key Collection Framework Updates:**
+- **Stream API**: Provides a functional approach to working with collections (filtering, mapping, reducing).
+- **Default and Static Methods in Interfaces**: Added default behavior and utility methods to interfaces.
+- **Enhanced Methods in `List
+`, `Set`, and `Map`**: New methods like `replaceAll()`, `removeIf()`, and `forEach()` for more functional-style operations.
+- **Immutable Collections**: Java 9 introduced factory methods to create unmodifiable collections.
+- **Concurrency Utilities**: Enhancements in `ConcurrentMap`, `CopyOnWriteArrayList`, etc., for more efficient multi-threaded access.
+- **Collectors**: A utility class for collecting stream results with predefined strategies like `groupingBy()`, `joining()`, etc.
+- **Spliterator**: Supports parallel processing of collections with a customizable splitting mechanism.
+These updates provide developers with more flexible, efficient, and functional tools for managing collections and parallelism in Java.
 
 ---
 
@@ -4914,102 +5190,6 @@ In Java, the `ExecutorService` interface, part of the `java.util.concurrent` pac
 The `ExecutorService` interface provides a robust framework for concurrent programming in Java, making it easier to manage threads and execute tasks asynchronously. By using these methods, you can effectively handle task submission, execution, and lifecycle management in a multi-threaded environment.
 
 ---
-## Garbage collection (GC) algorithms
-
-Java provides several garbage collection (GC) algorithms to manage memory automatically. Each of these algorithms has its own strengths and use cases. Here’s an overview of **Serial GC**, **Parallel GC**, **G1 GC**, and **ZGC**:
-
-### 1. Serial GC
-
-- **Description**: The Serial Garbage Collector is a simple and straightforward collector that uses a single thread for garbage collection. It is designed for single-threaded applications and is suitable for small applications with low memory requirements.
-  
-- **Characteristics**:
-  - **Single-threaded**: Only one thread performs garbage collection, which can lead to pauses in application execution during collection.
-  - **Stop-the-World**: All application threads are paused during the collection process.
-  - **Best for Small Applications**: Suitable for small applications with limited memory and where pause times are not critical.
-
-- **Usage**: Enabled with `-XX:+UseSerialGC`.
-
-### 2. Parallel GC (Parallel Scavenge)
-
-- **Description**: The Parallel Garbage Collector is designed for throughput. It uses multiple threads to perform garbage collection and is optimized for high throughput in multi-threaded applications.
-
-- **Characteristics**:
-  - **Multi-threaded**: Uses multiple threads to perform both minor and major collections.
-  - **Stop-the-World**: Similar to Serial GC, it pauses all application threads during garbage collection.
-  - **Throughput-Oriented**: Focuses on maximizing the overall throughput of the application.
-
-- **Usage**: Enabled with `-XX:+UseParallelGC`.
-
-### 3. G1 GC (Garbage-First Garbage Collector)
-
-- **Description**: The G1 Garbage Collector is designed for applications that require predictable pause times while still providing high throughput. It divides the heap into regions and prioritizes the collection of regions with the most garbage.
-
-- **Characteristics**:
-  - **Region-Based**: The heap is divided into multiple regions, allowing G1 to collect garbage incrementally.
-  - **Concurrent Marking**: G1 performs concurrent marking of live objects, which helps to reduce pause times.
-  - **Pause Time Goals**: Allows setting a target for maximum pause times using the `-XX:MaxGCPauseMillis` option.
-
-- **Usage**: Enabled with `-XX:+UseG1GC`.
-
-### 4. ZGC (Z Garbage Collector)
-
-- **Description**: ZGC is a low-latency garbage collector that aims to provide near-zero pause times, making it suitable for large heaps (multi-terabyte) and applications that cannot tolerate long garbage collection pauses.
-
-- **Characteristics**:
-  - **Concurrent and Low-Latency**: Most of the garbage collection work is done concurrently with the application threads, resulting in very short pause times (typically in the range of milliseconds).
-  - **Region-Based**: Similar to G1, ZGC also uses a region-based approach for memory management.
-  - **Handles Large Heaps**: Designed to efficiently manage large heaps without long stop-the-world pauses.
-
-- **Usage**: Enabled with `-XX:+UseZGC`.
-
-### Summary
-
-- **Serial GC**: Single-threaded, simple, best for small applications.
-- **Parallel GC**: Multi-threaded, throughput-oriented, suitable for multi-threaded applications.
-- **G1 GC**: Balances pause times and throughput, suitable for larger applications needing predictable performance.
-- **ZGC**: Low-latency, concurrent collector designed for applications that require minimal pause times and can handle large heaps.
-
-Choosing the right garbage collector depends on the specific requirements of your application, such as throughput, latency, and memory usage patterns.
-
----
-
-## Causes of Memory Leaks in Java
-
-A memory leak in Java occurs when the Java Virtual Machine (JVM) retains references to objects that are no longer needed, preventing the garbage collector from reclaiming their memory. This can lead to increased memory usage and ultimately cause an application to run out of memory.
-
-1. **Static Fields**: Objects held in static fields are not eligible for garbage collection until the class is unloaded, which typically happens only when the application is terminated.
-
-2. **Listener/Callback References**: If an object registers itself as a listener to another object but does not unregister when it is no longer needed, it can lead to memory retention.
-
-3. **Collection Classes**: Holding references in collection classes (e.g., `List`, `Map`) without clearing them can cause leaks, especially in long-lived applications.
-
-4. **ThreadLocal Variables**: Misuse of `ThreadLocal` can lead to memory leaks, particularly in environments with thread pools, as the references can persist beyond the lifecycle of a thread.
-
-5. **Inner Classes**: Non-static inner classes hold an implicit reference to their enclosing class. If the inner class instance outlives the enclosing class, it can prevent garbage collection.
-
-### Prevention Strategies
-
-1. **Nullify References**: Set references to `null` when they are no longer needed, especially in long-lived objects.
-
-2. **Weak References**: Use `WeakReference` or `SoftReference` for caches or listeners that should be cleared when memory is needed.
-
-3. **Unregister Listeners**: Always unregister listeners or callbacks when the objects are no longer needed.
-
-4. **Avoid Static References**: Limit the use of static fields to those that need to persist for the application's lifetime.
-
-5. **Use Profiling Tools**: Utilize memory profiling tools (like VisualVM, YourKit, or Eclipse MAT) to identify and diagnose memory leaks.
-
-6. **Review Data Structures**: Regularly review and clear collections to ensure they do not hold onto unnecessary references.
-
-7. **Limit Inner Class Use**: Consider using static inner classes or standalone classes to avoid unintended references to the enclosing class.
-
-8. **Be Cautious with ThreadLocal**: Use `ThreadLocal` judiciously and ensure values are removed when no longer needed.
-
-### Conclusion
-
-By being mindful of object references, employing the right patterns, and regularly profiling your application, you can effectively prevent memory leaks and maintain optimal memory management in your Java applications.
-
----
 
 Choosing the right garbage collector depends on the specific requirements of your application, such as throughput, latency, and memory usage patterns.
 
@@ -5085,191 +5265,7 @@ Choosing the right garbage collector depends on the specific requirements of you
 
 ---
 
-## Java 8 Updated Collections Framework
 
-### **1. Stream API (Java 8)**
-One of the most significant additions to the Collections Framework in Java 8 is the **Stream API**. The Stream API allows you to process sequences of elements (such as collections, arrays, or I/O channels) in a functional style, enabling efficient, declarative operations on data.
-
-#### Key Features of Streams:
-- **Declarative Operations**: Perform operations like filtering, mapping, reducing, sorting, and collecting in a clean, readable, and functional way.
-- **Parallel Processing**: Streams can be processed in parallel, making it easier to leverage multi-core processors.
-- **Laziness**: Streams are lazy, meaning computations are only performed when a terminal operation (like `collect()`, `forEach()`, or `reduce()`) is invoked.
-
-#### Example:
-```java
-List<String> words = Arrays.asList("apple", "banana", "cherry", "date");
-// Filter and print words starting with "b"
-words.stream()
-     .filter(word -> word.startsWith("b"))
-     .forEach(System.out::println);  // Output: banana
-```
-Streams can also be processed in parallel:
-```java
-words.parallelStream()
-     .filter(word -> word.startsWith("b"))
-     .forEach(System.out::println);
-```
-
----
-
-### **2. Default and Static Methods in Interfaces (Java 8)**
-Java 8 introduced **default** and **static** methods in interfaces, allowing developers to add methods to interfaces without breaking the existing implementation.
-#### a) **Default Methods**
-A **default method** in an interface allows you to provide a default implementation for a method. This is especially useful for adding new methods to interfaces without breaking existing implementations.
-```java
-interface MyList {
-    default void printList() {
-        System.out.println("Printing list");
-    }
-}
-class MyListImpl implements MyList {
-    // No need to implement printList() since it has a default implementation
-}
-```
-
-#### b) **Static Methods**
-Static methods in interfaces allow you to define utility methods that can be invoked without creating an instance of the implementing class.
-```java
-interface MyList {
-    static void printListStatic() {
-        System.out.println("Printing static list");
-    }
-}
-```
-
----
-
-### **3. New Collection Classes (Java 8)**
-Java 8 introduced new classes and methods to the **`java.util.concurrent`** package, which enhances concurrency support and adds more powerful utilities for managing collections in a multi-threaded environment.
-
-#### a) **ConcurrentMap** Enhancements
-`ConcurrentMap` is an interface that extends `Map` and adds atomic operations for thread-safe modifications. Java 8 added new methods such as:
-- `compute()`, `computeIfAbsent()`, `computeIfPresent()`
-- `merge()`
-Example using `computeIfAbsent()`:
-```java
-ConcurrentMap<String, Integer> map = new ConcurrentHashMap<>();
-map.computeIfAbsent("key", k -> 42);  // Only computes if absent, else returns the existing value.
-```
-
-#### b) **CopyOnWriteArrayList and CopyOnWriteArraySet**
-These thread-safe variants of `ArrayList` and `HashSet` are optimized for scenarios where read operations dominate and few modifications are made. The data structure creates a new copy of the list or set whenever it's modified, ensuring thread safety without synchronization overhead.
-
----
-### **4. The `forEach` Method (Java 8)**
-Java 8 introduced the `forEach()` method to the `Collection` interface, enabling a more concise and readable way to iterate over collections using lambdas. It replaces the traditional `for` loop or `Iterator` pattern.
-```java
-List<String> words = Arrays.asList("apple", "banana", "cherry");
-words.forEach(word -> System.out.println(word));  // Output: apple, banana, cherry
-```
-Internally, `forEach()` uses the `Consumer` functional interface, which allows you to process each element in the collection.
-
----
-### **5. `List`, `Set`, and `Map` Enhancements (Java 8)**
-Java 8 added several new methods to the `List`, `Set`, and `Map` interfaces to improve functionality and usability.
-#### a) **List Interface Enhancements**
-- **`replaceAll()`**: A method to replace each element of the list using the given operator.
-  
-```java
-List<Integer> numbers = Arrays.asList(1, 2, 3, 4, 5);
-numbers.replaceAll(n -> n * 2);  // Doubles each element in the list
-```
-- **`sort()`**: A method to sort the list in-place using the specified comparator.
-```java
-List<Integer> numbers = Arrays.asList(5, 3, 8, 1);
-numbers.sort(Integer::compareTo);  // Sort in ascending order
-```
-#### b) **Set Interface Enhancements**
-- **`removeIf()`**: A method that removes elements based on a predicate.
-  
-```java
-Set<Integer> numbers = new HashSet<>(Arrays.asList(1, 2, 3, 4, 5));
-numbers.removeIf(n -> n % 2 == 0);  // Removes even numbers
-```
-#### c) **Map Interface Enhancements**
-- **`forEach()`**: This method allows you to iterate over key-value pairs.
-  
-```java
-Map<String, Integer> map = new HashMap<>();
-map.put("a", 1);
-map.put("b", 2);
-map.forEach((key, value) -> System.out.println(key + " = " + value));
-```
-- **`compute()`, `computeIfAbsent()`, and `computeIfPresent()`**: These methods provide atomic operations for modifying values in a map.
-Example using `computeIfAbsent()`:
-```java
-Map<String, Integer> map = new HashMap<>();
-map.computeIfAbsent("key", k -> 42);  // Computes a value if the key is absent
-```
----
-### **6. `Collectors` Utility Class (Java 8)**
-Java 8 introduced the **`Collectors`** utility class in the `java.util.stream` package, which provides various predefined collection strategies for reducing and collecting the results of a stream operation.
-#### Common Collectors:
-- **`toList()`**: Collects the stream into a `List`.
-- **`toSet()`**: Collects the stream into a `Set`.
-- **`joining()`**: Concatenates the elements of a stream into a single `String`.
-- **`groupingBy()`**: Groups the elements of a stream by a classifier function.
-Example:
-```java
-List<String> words = Arrays.asList("apple", "banana", "cherry");
-String result = words.stream().collect(Collectors.joining(", "));  // "apple, banana, cherry"
-```
-- **`groupingBy()`**: Groups the stream elements by a given key.
-```java
-Map<Integer, List<String>> grouped = words.stream()
-    .collect(Collectors.groupingBy(String::length));
-```
----
-### **7. `Spliterator` (Java 8)**
-Java 8 introduced **`Spliterator`**, a new interface that helps in efficiently dividing and processing large datasets in parallel. The `Spliterator` can be used for parallel stream processing, making it more efficient for large collections.
-It provides methods such as:
-- `trySplit()`: Splits the data into smaller parts for parallel processing.
-- `forEachRemaining()`: Processes the remaining elements.
-Example:
-```java
-List<String> words = Arrays.asList("apple", "banana", "cherry");
-Spliterator<String> spliterator = words.spliterator();
-spliterator.forEachRemaining(System.out::println);
-```
----
-### **8. Immutable Collections (Java 9)**
-Java 9 introduced **immutable collections** with a convenient factory API for creating immutable lists, sets, and maps.
-#### Example of Immutable Collections:
-```java
-List<String> list = List.of("apple", "banana", "cherry");
-Set<String> set = Set.of("apple", "banana", "cherry");
-Map<String, Integer> map = Map.of("a", 1, "b", 2);
-list.add("date");  // Throws UnsupportedOperationException
-```
-- These collections are unmodifiable, which means once they are created, their contents cannot be modified.
-
----
-
-### **9. `ConcurrentSkipListMap` and `ConcurrentSkipListSet` (Java 6)**
-
-Although not a feature of Java 8, the **`ConcurrentSkipListMap`** and **`ConcurrentSkipListSet`** are thread-safe, sorted collections introduced earlier in Java 6. These are a part of the `java.util.concurrent` package and are often used when you need thread-safe access to sorted data.
-
----
-### **10. `var` Keyword (Java 10)**
-Java 10 introduced **local variable type inference** via the `var` keyword. This allows you to omit the explicit type declaration for local variables when it can be inferred from the context.
-Example:
-```java
-var list = new ArrayList<String>();  // Type is inferred as ArrayList<String>
-```
-This makes working with collections more concise.
----
-### **Summary of Key Collection Framework Updates:**
-- **Stream API**: Provides a functional approach to working with collections (filtering, mapping, reducing).
-- **Default and Static Methods in Interfaces**: Added default behavior and utility methods to interfaces.
-- **Enhanced Methods in `List
-`, `Set`, and `Map`**: New methods like `replaceAll()`, `removeIf()`, and `forEach()` for more functional-style operations.
-- **Immutable Collections**: Java 9 introduced factory methods to create unmodifiable collections.
-- **Concurrency Utilities**: Enhancements in `ConcurrentMap`, `CopyOnWriteArrayList`, etc., for more efficient multi-threaded access.
-- **Collectors**: A utility class for collecting stream results with predefined strategies like `groupingBy()`, `joining()`, etc.
-- **Spliterator**: Supports parallel processing of collections with a customizable splitting mechanism.
-These updates provide developers with more flexible, efficient, and functional tools for managing collections and parallelism in Java.
-
----
 
 ## New features introduced in Java 8
 
