@@ -1,13 +1,4 @@
 
-- [void and Void are used in different](#differences-between-void-and-void-in-java)
-- [Functional Interface](#functional-interface)
-- [Key Concepts Diamond Problem Race Conditions Deadlocks and Fail-fast vs. Fail-safe in Java](#key-concepts-diamond-problem-race-conditions-deadlocks-and-fail-fast-vs-fail-safe-in-java)
-- [Race Condition in Java](#race-condition-in-java)
-================================================
-
-
-
-
 ### **Table of Contents**
 
 1. [Class and Object](#class-and-object)  
@@ -19805,11 +19796,12 @@ public class Main {
 
 
 
-==========================================
-
-
-
 ---
+
+- [void and Void are used in different](#differences-between-void-and-void-in-java)
+- [Functional Interface](#functional-interface)
+- [Key Concepts Diamond Problem Race Conditions Deadlocks and Fail-fast vs. Fail-safe in Java](#key-concepts-diamond-problem-race-conditions-deadlocks-and-fail-fast-vs-fail-safe-in-java)
+- [Race Condition in Java](#race-condition-in-java)
 
 
 
