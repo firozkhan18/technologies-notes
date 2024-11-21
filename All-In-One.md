@@ -9609,13 +9609,13 @@ Apart from your written classes, JDK itself has lots of immutable classes. Given
 - java.util.UUID
 - Java 8 Date Time API – LocalDate, LocalTime etc.
 - record types
-### 6. Advantages
+## 6. Advantages
 Immutable objects provide a lot of advantages over mutable objects. Let us discuss them.
 
-- Predictability: guarantees that objects won’t change due to coding mistakes or by 3rd party libraries. As long as we reference a data structure, we know it is the same as at the time of its creation.
-- Validity: is not needed to be tested again and again. Once we create the immutable object and test its validity once, we know that it will be valid indefinitely.
-- Thread-safety: is achieved in the program as no thread can change immutable objects. It helps in writing code in a simple manner without accidentally corrupting the shared data objects.
-- Cacheability: can be applied to immutable objects without worrying about state changes in the future. Optimization techniques, like memoization, are only possible with immutable data structures.
+- **Predictability**: guarantees that objects won’t change due to coding mistakes or by 3rd party libraries. As long as we reference a data structure, we know it is the same as at the time of its creation.
+- **Validity**: is not needed to be tested again and again. Once we create the immutable object and test its validity once, we know that it will be valid indefinitely.
+- **Thread-safety**: is achieved in the program as no thread can change immutable objects. It helps in writing code in a simple manner without accidentally corrupting the shared data objects.
+- **Cacheability**: can be applied to immutable objects without worrying about state changes in the future. Optimization techniques, like memoization, are only possible with immutable data structures.
 ### 7. Conclusion
 This tutorial taught us to create an immutable java class with mutable objects and immutable fields.
 
