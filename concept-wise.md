@@ -91,8 +91,7 @@
 ---
 
 ### **Void, Data Types, and Collections**
-
-68. [Void vs. void](#void-vs-void)  
+ 
 69. [void and Void](#void-and-void)  
 
 ---
@@ -107,7 +106,6 @@
 75. [Hashing in Hashtable & ConcurrentHashMap](#hashing-in-hashtable-concurrenthashmap)  
 76. [Hashtable vs. ConcurrentHashMap](#hashtable-vs-concurrenthashmap)  
 77. [Comparison of HashMap and ConcurrentHashMap](#comparison-of-hashmap-and-concurrenthashmap)  
-78. [Fail-Fast vs. Fail-Safe](#fail-fast-vs-fail-safe)  
 79. [Fail-Fast and Fail-Safe](#fail-fast-and-fail-safe)  
 
 ---
@@ -138,7 +136,7 @@
 
 ### **On-Premises & Java Profiling**
 
-94. [On-Premises Concepts](#on-premises-concepts)  
+94. [What is On-Premises?](#what-is-on-premises)  
 95. [Java Profiling Tools](#java-profiling-tools)  
 96. [SSL/TLS Configuration in Java](#ssl-tls-configuration-in-java)  
 97. [CI/CD Pipelines in Java](#ci-cd-pipelines-in-java)  
