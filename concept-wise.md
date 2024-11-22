@@ -25221,3 +25221,269 @@ This example covers the entire process of:
 5. **Scaling the microservice** in Kubernetes.
 
 With this setup, you can easily deploy, scale, and maintain your microservices with automated pipelines. You can adjust the setup based on your cloud provider and specific use case.
+
+---
+Here's the **combined diagram** of the entire architecture for the microservices setup with Docker, Kubernetes, CI/CD pipeline, cloud providers, observability, and the **Saga Pattern** for an eCommerce platform.
+
+```mermaid
+graph LR
+    %% Microservices
+    subgraph Microservices
+        CarService["Car Service"]
+        CustomerService["Customer Service"]
+        OrderService["Order Service"]
+        PaymentService["Payment Service"]
+        InventoryService["Inventory Service"]
+        NotificationService["Notification Service"]
+        AuthService["Authentication Service"]
+    end
+
+    %% Cloud Infrastructure
+    A[Microservices] -->|Containerized| B[Docker]
+    B --> C[Kubernetes]
+    C --> D[Cloud Providers - AWS, Azure, GCP]
+    D --> E[Load Balancer]
+    D --> F[Auto Scaling]
+    C --> G[Jenkins/GitLab CI/CD Pipeline]
+    G -->|Build & Deploy| B
+    G -->|Trigger Deployment| C
+
+    E -->|Traffic Distribution| C
+    F -->|Scale Pods/Instances| C
+
+    subgraph AWS
+        D1[EKS - Elastic Kubernetes Service]
+        D1 --> F
+        D1 --> E
+    end
+
+    subgraph Azure
+        D2[AKS - Azure Kubernetes Service]
+        D2 --> F
+        D2 --> E
+    end
+
+    subgraph GCP
+        D3[GKE - Google Kubernetes Engine]
+        D3 --> F
+        D3 --> E
+    end
+
+    %% EventBus (Kafka)
+    subgraph EventBus [Kafka Event Bus]
+        Kafka["Kafka"]
+    end
+
+    %% API Gateway
+    subgraph APIGateway["API Gateway"]
+        Gateway["API Gateway"]
+    end
+
+    %% Security
+    subgraph Security["Security"]
+        AuthServer["OAuth2 / JWT"]
+    end
+
+    %% CI/CD Pipeline
+    subgraph CI_CD["CI/CD Pipeline"]
+        Jenkins["Jenkins"]
+        Docker["Docker"]
+        Kubernetes["Kubernetes"]
+    end
+
+    %% Database
+    subgraph Database
+        CarDB["Car DB - PostgreSQL/MySQL"]
+        CustomerDB["Customer DB - MongoDB"]
+        OrderDB["Order DB - PostgreSQL"]
+        PaymentDB["Payment DB - SQL"]
+        InventoryDB["Inventory DB - PostgreSQL"]
+    end
+
+    %% Redis Cache
+    subgraph Redis["Redis Cache"]
+        RedisCache["Redis"]
+    end
+
+    %% Observability
+    subgraph Observability
+        Prometheus["Prometheus"]
+        Grafana["Grafana"]
+        ELKStack["ELK Stack"]
+        Jaeger["Jaeger"]
+    end
+
+    %% Saga Orchestration Flow
+    subgraph "Saga Orchestration Flow"
+        S[Start Order]
+        T[Reserve Vehicle in Inventory]
+        U[Verify Loan Eligibility]
+        V[Process Payment]
+        W[Initiate Shipping]
+        X[Notify Customer]
+        Y[Compensating Transaction]
+    end
+
+    %% Microservices Communication with Kafka
+    CarService -->|"Create Car Event"| Kafka
+    CustomerService -->|"Customer Registered"| Kafka
+    OrderService -->|"Order Placed"| Kafka
+    PaymentService -->|"Payment Processed"| Kafka
+    InventoryService -->|"Inventory Updated"| Kafka
+    NotificationService -->|"Send Notification"| Kafka
+    AuthService -->|"Authorize User"| Kafka
+
+    %% Kafka Communication (Saga)
+    Kafka --> CarService
+    Kafka --> CustomerService
+    Kafka --> OrderService
+    Kafka --> PaymentService
+    Kafka --> InventoryService
+    Kafka --> NotificationService
+
+    %% API Gateway routing
+    Gateway -->|"Route to Service"| CarService
+    Gateway -->|"Route to Service"| CustomerService
+    Gateway -->|"Route to Service"| OrderService
+    Gateway -->|"Route to Service"| PaymentService
+    Gateway -->|"Route to Service"| InventoryService
+    Gateway -->|"Route to Service"| NotificationService
+    Gateway -->|"Route to Service"| AuthService
+
+    %% Security
+    AuthServer -->|"OAuth2/JWT Tokens"| Gateway
+    AuthServer -->|"JWT Validation"| Microservices
+
+    %% CI/CD Pipeline
+    Jenkins --> Docker
+    Docker --> Kubernetes
+    Kubernetes --> Microservices
+
+    %% Databases
+    CarService --> CarDB
+    CustomerService --> CustomerDB
+    OrderService --> OrderDB
+    PaymentService --> PaymentDB
+    InventoryService --> InventoryDB
+
+    %% Redis Cache Integration
+    CarService --> RedisCache
+    InventoryService --> RedisCache
+    OrderService --> RedisCache
+
+    %% Observability
+    Prometheus -->|"Monitor Services"| Microservices
+    Grafana -->|"Visualize Metrics"| Prometheus
+    ELKStack -->|"Log Aggregation"| Microservices
+    Jaeger -->|"Distributed Tracing"| Microservices
+
+    %% Redis Cache for Performance
+    RedisCache -->|"Cache frequently accessed data"| CarDB
+    RedisCache -->|"Cache frequently accessed data"| InventoryDB
+    RedisCache -->|"Cache frequently accessed data"| OrderDB
+
+    %% Service Discovery
+    subgraph "Service Discovery"
+        C[Service Discovery]
+    end
+
+    %% API Gateway Routing to Service Discovery
+    Gateway -->|Routes Requests| C
+    C -->|Finds Services| CarService
+    C -->|Finds Services| CustomerService
+    C -->|Finds Services| OrderService
+    C -->|Finds Services| PaymentService
+    C -->|Finds Services| InventoryService
+    C -->|Finds Services| NotificationService
+
+    %% Service Communication
+    InventoryService -->|Inventory Data| OrderService
+    OrderService -->|Order Details| PaymentService
+    PaymentService -->|Payment Status| OrderService
+    PaymentService -->|Payment Status| InventoryService
+    OrderService -->|Order Status| NotificationService
+    NotificationService -->|Send Notifications| CustomerService
+    NotificationService -->|Order Info| CustomerService
+    CustomerService -->|Customer Data| InventoryService
+    CustomerService -->|Customer Data| OrderService
+
+    %% Configuration Flow
+    ConfigurationServer[Configuration Server]
+    ConfigurationRepository[Git Configuration Repository]
+
+    ConfigurationServer -->|Fetch Configurations| CarService
+    ConfigurationServer -->|Fetch Configurations| CustomerService
+    ConfigurationServer -->|Fetch Configurations| OrderService
+    ConfigurationServer -->|Fetch Configurations| PaymentService
+    ConfigurationServer -->|Fetch Configurations| InventoryService
+    ConfigurationServer -->|Fetch Configurations| NotificationService
+
+    %% Authentication Flow
+    Gateway --> AuthService
+    AuthService -->|Issue JWT| Microservices
+    AuthService -->|Validate JWT| CarService
+    AuthService -->|Validate JWT| OrderService
+    AuthService -->|Validate JWT| PaymentService
+    AuthService -->|Validate JWT| InventoryService
+    AuthService -->|Validate JWT| NotificationService
+    AuthService -->|Validate JWT| CustomerService
+
+    %% Saga Orchestration Flow (Expanded)
+    S --> T[Reserve Vehicle in Inventory]
+    T --> U[Verify Loan Eligibility]
+    U --> V[Process Payment]
+    V --> W[Initiate Shipping]
+    W --> X[Notify Customer]
+    Y --> T
+    Y --> U
+    Y --> V
+    Y --> W
+    Y --> X
+
+    %% Compensating Transactions (Saga)
+    Y -->|Compensates Inventory| T
+    Y -->|Compensates Loan| U
+    Y -->|Compensates Payment| V
+    Y -->|Compensates Shipping| W
+    Y -->|Compensates Notification| X
+
+    %% Optional communication with external systems - payment gateway
+    PaymentService --> O[External Payment Gateway]
+    InventoryService --> P[External Shipping System]
+    O --> Q[Payment Provider API]
+    P --> R[Shipping Provider API]
+```
+
+### **Explanation of the Combined Architecture:**
+
+1. **Microservices**:
+   - The architecture contains multiple microservices (`Car Service`, `Order Service`, `Payment Service`, etc.) that manage individual parts of the eCommerce platform.
+   - They communicate with each other through events published to **Kafka**.
+
+2. **Cloud Providers**:
+   - The services are deployed on cloud platforms like **AWS (EKS)**, **Azure (AKS)**, and **GCP (GKE)**, leveraging Kubernetes for orchestration.
+   - **Auto-scaling** and **Load Balancing** ensure scalability and availability.
+
+3. **CI/CD Pipeline**:
+   - Jenkins/GitLab is used for continuous integration and deployment, enabling automated builds, testing, and deployment to Kubernetes.
+
+4. **API Gateway & Security**:
+   - The **API Gateway** routes requests to the appropriate services, and **OAuth2/JWT** are used for secure authentication and authorization.
+
+5. **Kafka (Event Bus)**:
+   - Kafka serves as an event-driven communication backbone, handling events like `Order Placed`, `Payment Processed`, etc.
+   - The Saga pattern is implemented through events to ensure that each service performs a step in the transaction and compensates if necessary.
+
+6. **Databases & Redis Cache**:
+   - Each service has its own database (e.g., PostgreSQL, MongoDB), and **Redis** is used for caching frequently accessed data to improve performance.
+
+7. **Observability**:
+   - **Prometheus**, **Grafana**, **ELK Stack**, and **Jaeger** are used for monitoring, logging, and distributed tracing, providing insights into system health and performance.
+
+8. **Saga Orchestration**:
+   - The **Saga Pattern** ensures that the services involved in the order processing (e.g., `Reserve Vehicle`, `Process Payment`, `Ship Order`) are managed in a way that compensates for failures.
+   - Compensating transactions are used to roll back any changes if a step in the process fails
+
+ (e.g., refunding payment, releasing the inventory).
+
+This architecture illustrates a well-integrated microservices platform that leverages cloud-native technologies, event-driven communication, CI/CD, and fault-tolerant patterns like Saga for managing distributed transactions.
