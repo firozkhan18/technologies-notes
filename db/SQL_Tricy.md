@@ -2122,3 +2122,231 @@ In this case, the **`projects`** collection will be fetched along with the `Empl
 - **Lazy and Eager Loading**: Hibernate offers strategies for controlling when related data is loaded, optimizing performance.
 
 Using these features effectively, you can greatly enhance your application's performance, scalability, and maintainability.
+
+In MongoDB, **lazy loading** and **eager loading** are not concepts that are directly tied to the database itself, like in traditional relational databases. However, these loading strategies can be achieved using MongoDB drivers or ORM frameworks that sit on top of MongoDB, such as **Spring Data MongoDB** in a **Spring Boot** application, or **MongoDB's native Java driver**.
+
+### **Lazy Loading vs Eager Loading in MongoDB**
+
+- **Eager Loading**: In **eager loading**, you fetch all related data upfront, even if it's not immediately required. This might be suitable when you know you will need related data right after the main object is loaded.
+  
+- **Lazy Loading**: In **lazy loading**, you delay the loading of related data until it is explicitly accessed. This can help optimize performance by loading only the necessary data when needed.
+
+MongoDB, being a NoSQL database, doesn't have the concept of "relations" like relational databases. However, when you store documents with references to other documents (like a "one-to-many" or "many-to-many" relationship), you can implement **eager** or **lazy loading** manually.
+
+Let's look at how you can implement these strategies in MongoDB.
+
+---
+
+### **1. Eager Loading in MongoDB**
+
+Eager loading in MongoDB involves **embedding** related documents inside the parent document, or using MongoDB's aggregation framework to fetch all required data in one go.
+
+#### **Example of Eager Loading Using Embedding**
+
+Eager loading can be achieved by embedding related documents within the parent document. For example, if you have an `Order` document that contains an embedded `Customer` document, both will be fetched together when you query for an `Order`.
+
+```json
+// Order document with embedded Customer
+{
+  "_id": 1,
+  "orderNumber": "ORD123",
+  "customer": {
+    "_id": 101,
+    "name": "John Doe",
+    "email": "john.doe@example.com"
+  },
+  "items": [
+    { "product": "Laptop", "quantity": 1 },
+    { "product": "Mouse", "quantity": 2 }
+  ]
+}
+```
+
+When you query for an `Order`, the related `Customer` is fetched eagerly because it's embedded in the `Order` document.
+
+```java
+// MongoRepository example (Spring Data MongoDB)
+@Repository
+public interface OrderRepository extends MongoRepository<Order, String> {
+    List<Order> findByCustomerName(String customerName);
+}
+```
+
+In this case, **eager loading** is achieved because the `customer` data is embedded directly in the `Order` document. When you fetch an `Order`, the customer details are automatically included in the result.
+
+#### **Example of Eager Loading Using Aggregation**
+
+If you store references (instead of embedding) and want to **join** data from different collections (similar to SQL `JOIN`), you can use MongoDB's **aggregation framework** to perform eager loading.
+
+For example, if you have an `Order` collection and a `Customer` collection, you can use the `$lookup` operator to perform an "eager load" of the customer data for each order.
+
+```json
+// Order collection
+{
+  "_id": 1,
+  "orderNumber": "ORD123",
+  "customerId": 101,
+  "items": [
+    { "product": "Laptop", "quantity": 1 },
+    { "product": "Mouse", "quantity": 2 }
+  ]
+}
+```
+
+```json
+// Customer collection
+{
+  "_id": 101,
+  "name": "John Doe",
+  "email": "john.doe@example.com"
+}
+```
+
+Using MongoDB’s aggregation framework to perform **eager loading**:
+
+```javascript
+db.orders.aggregate([
+  {
+    $lookup: {
+      from: "customers",  // The collection to join
+      localField: "customerId",  // The field from the orders collection
+      foreignField: "_id",  // The field from the customers collection
+      as: "customer"  // Name of the field that will hold the joined data
+    }
+  }
+])
+```
+
+This query will return an `Order` document that includes a `customer` field with the related `Customer` data.
+
+---
+
+### **2. Lazy Loading in MongoDB**
+
+In MongoDB, **lazy loading** is typically achieved by **storing references** to related documents (i.e., using foreign keys instead of embedding the full document). When you fetch the parent document, related data (such as the customer's details) is not fetched immediately, but only when explicitly requested.
+
+#### **Example of Lazy Loading Using References**
+
+You can store references to other documents using MongoDB's `ObjectId`. For example, in an `Order` document, instead of embedding the `Customer` details, you store just the `customerId`.
+
+```json
+// Order document with a reference to Customer
+{
+  "_id": 1,
+  "orderNumber": "ORD123",
+  "customerId": ObjectId("605c72ef1532071f4f1b5a2c"),
+  "items": [
+    { "product": "Laptop", "quantity": 1 },
+    { "product": "Mouse", "quantity": 2 }
+  ]
+}
+```
+
+When you fetch an `Order` document, you only get the `customerId` (which is an ObjectId reference), not the full customer data.
+
+#### **Lazy Loading Example: Fetching Customer Data on Demand**
+
+When you fetch an `Order` document in this scenario, the customer data is not loaded immediately. You would need to explicitly query the `Customer` collection to fetch the customer data when it is needed.
+
+```java
+// MongoRepository for Order (Spring Data MongoDB)
+@Repository
+public interface OrderRepository extends MongoRepository<Order, String> {
+    List<Order> findByOrderNumber(String orderNumber);
+}
+
+// Separate Repository for Customer
+@Repository
+public interface CustomerRepository extends MongoRepository<Customer, String> {
+    Optional<Customer> findById(String id);
+}
+```
+
+Then, when you need to load the `Customer` data lazily:
+
+```java
+// Service layer to load Customer data lazily
+@Service
+public class OrderService {
+
+    @Autowired
+    private OrderRepository orderRepository;
+
+    @Autowired
+    private CustomerRepository customerRepository;
+
+    public Order getOrderWithCustomer(String orderNumber) {
+        // Fetch the Order
+        Order order = orderRepository.findByOrderNumber(orderNumber).get(0);
+
+        // Lazy load the customer details
+        Customer customer = customerRepository.findById(order.getCustomerId()).orElse(null);
+        order.setCustomer(customer);
+
+        return order;
+    }
+}
+```
+
+In this case, the `Customer` details are only fetched when explicitly accessed, achieving **lazy loading**.
+
+---
+
+### **Lazy and Eager Loading in MongoDB with Spring Data MongoDB**
+
+In **Spring Data MongoDB**, you can implement **lazy loading** and **eager loading** using the appropriate fetching strategies and repository methods.
+
+- **Eager Loading**: You can use **embedding** or **aggregation with `$lookup`**.
+- **Lazy Loading**: You can use **references** and then fetch the related data explicitly when needed.
+
+Here's an example of how you can achieve **lazy loading** with Spring Data MongoDB using references:
+
+```java
+@Entity
+public class Order {
+    @Id
+    private String id;
+    private String orderNumber;
+
+    @DBRef(lazy = true) // This tells Spring Data MongoDB to load the customer lazily
+    private Customer customer;
+
+    // Getters and setters
+}
+
+@Entity
+public class Customer {
+    @Id
+    private String id;
+    private String name;
+    private String email;
+
+    // Getters and setters
+}
+```
+
+In this example, the `@DBRef(lazy = true)` annotation ensures that the `Customer` is **lazily loaded**. It will not be fetched unless explicitly accessed.
+
+For **eager loading**, you can use `@DBRef` without the `lazy` attribute, or you can use MongoDB’s **aggregation framework** for more complex loading scenarios (like multiple referenced documents).
+
+---
+
+### **When to Use Eager or Lazy Loading in MongoDB**
+
+- **Eager Loading**:
+  - Use when you need to access all related data upfront (e.g., displaying an order and customer data together).
+  - Suitable for **embedded documents** (when the related data is small and often accessed together).
+  - Can be achieved using **aggregation or embedding**.
+
+- **Lazy Loading**:
+  - Use when you want to minimize the initial load and only fetch related data when needed (e.g., accessing an order and only fetching the customer when needed).
+  - Suitable for **referencing** (when data is large or not always needed).
+  - Achieved by **storing references** and fetching them only when explicitly required.
+
+---
+
+### **Conclusion**
+
+- **Eager Loading** in MongoDB can be achieved using **embedded documents** (for simple cases) or using the **aggregation framework** (for more complex queries, like joins).
+- **Lazy Loading** can be implemented by **storing references** to other documents and fetching them only when required. MongoDB supports lazy loading via `DBRef` and explicit querying.
+- Both strategies depend on how data is modeled in MongoDB, and the choice between them depends on your application's data access patterns and performance considerations.
