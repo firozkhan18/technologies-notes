@@ -1218,3 +1218,692 @@ public void saveEmployee(Employee employee) {
 ---
 
 These questions cover the basics of Hibernate and its key concepts, including ORM, transaction management, and configuration. Depending on the interview, you may also be asked more advanced questions related to Hibernate performance tuning, advanced mappings (like composite keys), and integration with Spring or JPA.
+
+### **Role of `EntityManager` in Spring Boot**
+
+In a **Spring Boot** application, particularly when using **JPA (Java Persistence API)**, the `EntityManager` plays a crucial role in interacting with the underlying database. It is the primary API used for performing CRUD (Create, Read, Update, Delete) operations on entities in a database.
+
+#### **Key Roles of `EntityManager`:**
+1. **Managing Entity Lifecycle:**
+   - `EntityManager` is responsible for managing the lifecycle of entities in a persistence context (i.e., the objects that are being tracked by JPA).
+   - It handles various operations like persisting an entity, updating it, and deleting it.
+
+2. **Query Execution:**
+   - `EntityManager` provides methods to create and execute JPQL (Java Persistence Query Language) queries, SQL queries, and criteria queries.
+
+3. **Transaction Handling:**
+   - `EntityManager` works within the context of a transaction. When a `EntityManager` is used to perform operations on the database, it automatically participates in a transaction. 
+   - It ensures that changes to the entities are persisted to the database and can be rolled back in case of failure.
+
+4. **Context Management:**
+   - It maintains a persistence context for a unit of work (i.e., a transaction). This context keeps track of all the entities associated with the current session, helping to track changes, cache objects, and ensure consistency.
+
+---
+
+#### **How to Use `EntityManager` in Spring Boot:**
+
+In **Spring Boot**, `EntityManager` can be used in two primary ways:
+1. **Directly via `@PersistenceContext`**
+2. **Via `JpaRepository` (preferred for Spring Data JPA)**
+
+### **1. Using `@PersistenceContext` with `EntityManager`**
+
+Spring provides `@PersistenceContext` annotation to inject an `EntityManager` into your Spring beans, typically in a service class. The `EntityManager` is automatically managed by Spring's container.
+
+#### Example:
+```java
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import org.springframework.stereotype.Service;
+
+@Service
+public class EmployeeService {
+
+    @PersistenceContext
+    private EntityManager entityManager;
+
+    public Employee save(Employee employee) {
+        entityManager.persist(employee);  // Persisting an entity
+        return employee;
+    }
+
+    public Employee findById(Long id) {
+        return entityManager.find(Employee.class, id);  // Finding an entity
+    }
+
+    public void delete(Employee employee) {
+        entityManager.remove(employee);  // Removing an entity
+    }
+}
+```
+
+In the above example:
+- `@PersistenceContext` is used to inject the `EntityManager` into the `EmployeeService`.
+- You can use the `EntityManager` to manage entities by performing operations like `persist()`, `find()`, and `remove()`.
+
+---
+
+### **2. Using `JpaRepository` (Preferred Approach in Spring Boot)**
+
+For most common use cases, Spring Data JPA provides the `JpaRepository` interface, which abstracts away the low-level details of `EntityManager`. You do not need to interact directly with `EntityManager` when using `JpaRepository`.
+
+#### Example:
+```java
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface EmployeeRepository extends JpaRepository<Employee, Long> {
+    // Custom query methods can be defined here
+}
+```
+
+In the example above:
+- `JpaRepository` provides CRUD operations without needing to manually use `EntityManager`.
+- Spring Boot automatically provides the implementation of the repository, so you can use it directly in your services.
+
+---
+
+### **Handling Transactions in Spring Boot**
+
+In Spring Boot, transactions can be handled either programmatically using `EntityManager` or declaratively using the `@Transactional` annotation. **`@Transactional`** is the most common and preferred approach because it allows Spring to manage the transaction lifecycle automatically.
+
+#### **1. Declarative Transaction Management with `@Transactional`**
+
+The `@Transactional` annotation is used to define the scope of a transaction on a method or class. It automatically begins, commits, or rolls back a transaction based on method execution.
+
+Spring will automatically manage transactions by using `EntityManager` under the hood, ensuring the changes are either committed or rolled back if any exception occurs.
+
+#### Example:
+```java
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+@Service
+public class EmployeeService {
+
+    @Autowired
+    private EmployeeRepository employeeRepository;
+
+    @Transactional  // Marks the method as transactional
+    public Employee createEmployee(Employee employee) {
+        // Business logic here
+        Employee savedEmployee = employeeRepository.save(employee);
+        // Any exception during the execution of this method will cause a rollback.
+        return savedEmployee;
+    }
+
+    @Transactional
+    public void updateEmployee(Long id, String newName) {
+        Employee employee = employeeRepository.findById(id).orElseThrow(() -> new RuntimeException("Employee not found"));
+        employee.setName(newName);
+        employeeRepository.save(employee);  // Automatically committed at the end of the method
+    }
+}
+```
+
+In the above example:
+- **`@Transactional`** ensures that all operations inside the method are part of a single transaction.
+- If the method executes without exceptions, the transaction is committed. If an exception occurs, the transaction is rolled back.
+- **Propagation and Isolation**: You can configure transaction behavior using `propagation` and `isolation` levels within the `@Transactional` annotation (e.g., `@Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED)`).
+
+---
+
+#### **2. Programmatic Transaction Management**
+
+While **declarative transaction management** is preferred, Spring also allows for **programmatic transaction management** if you need more control over the transaction lifecycle.
+
+#### Example:
+```java
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.DefaultTransactionDefinition;
+
+@Service
+public class EmployeeService {
+
+    @Autowired
+    private EmployeeRepository employeeRepository;
+
+    @Autowired
+    private PlatformTransactionManager transactionManager;
+
+    public Employee createEmployeeWithTransaction(Employee employee) {
+        // Define transaction properties
+        DefaultTransactionDefinition def = new DefaultTransactionDefinition();
+        def.setIsolationLevel(DefaultTransactionDefinition.ISOLATION_READ_COMMITTED);
+        def.setPropagationBehavior(DefaultTransactionDefinition.PROPAGATION_REQUIRED);
+
+        // Start the transaction
+        TransactionStatus status = transactionManager.getTransaction(def);
+
+        try {
+            // Perform business logic
+            Employee savedEmployee = employeeRepository.save(employee);
+            transactionManager.commit(status);  // Commit the transaction
+            return savedEmployee;
+        } catch (Exception e) {
+            transactionManager.rollback(status);  // Rollback in case of error
+            throw new RuntimeException("Transaction failed", e);
+        }
+    }
+}
+```
+
+In the above example:
+- We manually begin a transaction using `PlatformTransactionManager`.
+- If the operation is successful, we commit the transaction using `transactionManager.commit()`.
+- In case of an exception, the transaction is rolled back using `transactionManager.rollback()`.
+
+### **Transaction Propagation Levels:**
+Spring provides different propagation behaviors for managing nested transactions. Common ones include:
+- **`REQUIRED`**: Supports a current transaction, creates a new one if none exists.
+- **`REQUIRES_NEW`**: Suspends the current transaction and creates a new one.
+- **`MANDATORY`**: Supports the current transaction, throws an exception if no current transaction exists.
+- **`NESTED`**: Creates a nested transaction within the current transaction.
+
+### **Transaction Isolation Levels:**
+- **`READ_COMMITTED`**: Guarantees that no dirty reads occur.
+- **`READ_UNCOMMITTED`**: Allows dirty reads (not recommended for most cases).
+- **`REPEATABLE_READ`**: Prevents non-repeatable reads.
+- **`SERIALIZABLE`**: Provides the highest level of isolation and prevents phantom reads.
+
+---
+
+### **Conclusion:**
+
+- **`EntityManager`** in Spring Boot is used for managing the persistence context and performing database operations.
+- The **`@Transactional`** annotation provides declarative transaction management, making it easy to manage transactions without having to manually control them.
+- **Programmatic transactions** offer more control but are rarely used in practice as the declarative approach is preferred for most use cases.
+
+### **Role of `EntityManager` in Spring Boot**
+
+In a **Spring Boot** application, particularly when using **JPA (Java Persistence API)**, the `EntityManager` plays a crucial role in interacting with the underlying database. It is the primary API used for performing CRUD (Create, Read, Update, Delete) operations on entities in a database.
+
+#### **Key Roles of `EntityManager`:**
+1. **Managing Entity Lifecycle:**
+   - `EntityManager` is responsible for managing the lifecycle of entities in a persistence context (i.e., the objects that are being tracked by JPA).
+   - It handles various operations like persisting an entity, updating it, and deleting it.
+
+2. **Query Execution:**
+   - `EntityManager` provides methods to create and execute JPQL (Java Persistence Query Language) queries, SQL queries, and criteria queries.
+
+3. **Transaction Handling:**
+   - `EntityManager` works within the context of a transaction. When a `EntityManager` is used to perform operations on the database, it automatically participates in a transaction. 
+   - It ensures that changes to the entities are persisted to the database and can be rolled back in case of failure.
+
+4. **Context Management:**
+   - It maintains a persistence context for a unit of work (i.e., a transaction). This context keeps track of all the entities associated with the current session, helping to track changes, cache objects, and ensure consistency.
+
+---
+
+#### **How to Use `EntityManager` in Spring Boot:**
+
+In **Spring Boot**, `EntityManager` can be used in two primary ways:
+1. **Directly via `@PersistenceContext`**
+2. **Via `JpaRepository` (preferred for Spring Data JPA)**
+
+### **1. Using `@PersistenceContext` with `EntityManager`**
+
+Spring provides `@PersistenceContext` annotation to inject an `EntityManager` into your Spring beans, typically in a service class. The `EntityManager` is automatically managed by Spring's container.
+
+#### Example:
+```java
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import org.springframework.stereotype.Service;
+
+@Service
+public class EmployeeService {
+
+    @PersistenceContext
+    private EntityManager entityManager;
+
+    public Employee save(Employee employee) {
+        entityManager.persist(employee);  // Persisting an entity
+        return employee;
+    }
+
+    public Employee findById(Long id) {
+        return entityManager.find(Employee.class, id);  // Finding an entity
+    }
+
+    public void delete(Employee employee) {
+        entityManager.remove(employee);  // Removing an entity
+    }
+}
+```
+
+In the above example:
+- `@PersistenceContext` is used to inject the `EntityManager` into the `EmployeeService`.
+- You can use the `EntityManager` to manage entities by performing operations like `persist()`, `find()`, and `remove()`.
+
+---
+
+### **2. Using `JpaRepository` (Preferred Approach in Spring Boot)**
+
+For most common use cases, Spring Data JPA provides the `JpaRepository` interface, which abstracts away the low-level details of `EntityManager`. You do not need to interact directly with `EntityManager` when using `JpaRepository`.
+
+#### Example:
+```java
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface EmployeeRepository extends JpaRepository<Employee, Long> {
+    // Custom query methods can be defined here
+}
+```
+
+In the example above:
+- `JpaRepository` provides CRUD operations without needing to manually use `EntityManager`.
+- Spring Boot automatically provides the implementation of the repository, so you can use it directly in your services.
+
+---
+
+### **Handling Transactions in Spring Boot**
+
+In Spring Boot, transactions can be handled either programmatically using `EntityManager` or declaratively using the `@Transactional` annotation. **`@Transactional`** is the most common and preferred approach because it allows Spring to manage the transaction lifecycle automatically.
+
+#### **1. Declarative Transaction Management with `@Transactional`**
+
+The `@Transactional` annotation is used to define the scope of a transaction on a method or class. It automatically begins, commits, or rolls back a transaction based on method execution.
+
+Spring will automatically manage transactions by using `EntityManager` under the hood, ensuring the changes are either committed or rolled back if any exception occurs.
+
+#### Example:
+```java
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+@Service
+public class EmployeeService {
+
+    @Autowired
+    private EmployeeRepository employeeRepository;
+
+    @Transactional  // Marks the method as transactional
+    public Employee createEmployee(Employee employee) {
+        // Business logic here
+        Employee savedEmployee = employeeRepository.save(employee);
+        // Any exception during the execution of this method will cause a rollback.
+        return savedEmployee;
+    }
+
+    @Transactional
+    public void updateEmployee(Long id, String newName) {
+        Employee employee = employeeRepository.findById(id).orElseThrow(() -> new RuntimeException("Employee not found"));
+        employee.setName(newName);
+        employeeRepository.save(employee);  // Automatically committed at the end of the method
+    }
+}
+```
+
+In the above example:
+- **`@Transactional`** ensures that all operations inside the method are part of a single transaction.
+- If the method executes without exceptions, the transaction is committed. If an exception occurs, the transaction is rolled back.
+- **Propagation and Isolation**: You can configure transaction behavior using `propagation` and `isolation` levels within the `@Transactional` annotation (e.g., `@Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED)`).
+
+---
+
+#### **2. Programmatic Transaction Management**
+
+While **declarative transaction management** is preferred, Spring also allows for **programmatic transaction management** if you need more control over the transaction lifecycle.
+
+#### Example:
+```java
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.DefaultTransactionDefinition;
+
+@Service
+public class EmployeeService {
+
+    @Autowired
+    private EmployeeRepository employeeRepository;
+
+    @Autowired
+    private PlatformTransactionManager transactionManager;
+
+    public Employee createEmployeeWithTransaction(Employee employee) {
+        // Define transaction properties
+        DefaultTransactionDefinition def = new DefaultTransactionDefinition();
+        def.setIsolationLevel(DefaultTransactionDefinition.ISOLATION_READ_COMMITTED);
+        def.setPropagationBehavior(DefaultTransactionDefinition.PROPAGATION_REQUIRED);
+
+        // Start the transaction
+        TransactionStatus status = transactionManager.getTransaction(def);
+
+        try {
+            // Perform business logic
+            Employee savedEmployee = employeeRepository.save(employee);
+            transactionManager.commit(status);  // Commit the transaction
+            return savedEmployee;
+        } catch (Exception e) {
+            transactionManager.rollback(status);  // Rollback in case of error
+            throw new RuntimeException("Transaction failed", e);
+        }
+    }
+}
+```
+
+In the above example:
+- We manually begin a transaction using `PlatformTransactionManager`.
+- If the operation is successful, we commit the transaction using `transactionManager.commit()`.
+- In case of an exception, the transaction is rolled back using `transactionManager.rollback()`.
+
+### **Transaction Propagation Levels:**
+Spring provides different propagation behaviors for managing nested transactions. Common ones include:
+- **`REQUIRED`**: Supports a current transaction, creates a new one if none exists.
+- **`REQUIRES_NEW`**: Suspends the current transaction and creates a new one.
+- **`MANDATORY`**: Supports the current transaction, throws an exception if no current transaction exists.
+- **`NESTED`**: Creates a nested transaction within the current transaction.
+
+### **Transaction Isolation Levels:**
+- **`READ_COMMITTED`**: Guarantees that no dirty reads occur.
+- **`READ_UNCOMMITTED`**: Allows dirty reads (not recommended for most cases).
+- **`REPEATABLE_READ`**: Prevents non-repeatable reads.
+- **`SERIALIZABLE`**: Provides the highest level of isolation and prevents phantom reads.
+
+---
+
+### **Conclusion:**
+
+- **`EntityManager`** in Spring Boot is used for managing the persistence context and performing database operations.
+- The **`@Transactional`** annotation provides declarative transaction management, making it easy to manage transactions without having to manually control them.
+- **Programmatic transactions** offer more control but are rarely used in practice as the declarative approach is preferred for most use cases.
+
+Transaction isolation levels define the degree to which the operations in one transaction are isolated from operations in other concurrent transactions. They are crucial for maintaining the consistency and integrity of the database. Here's an explanation of the different **transaction isolation levels** and how you can use them in SQL queries for different databases like **MySQL**, **Oracle**, **PostgreSQL**, **DB2**, **HSQLDB**, and **MongoDB**.
+
+### **Transaction Isolation Levels**
+
+The **ANSI SQL Standard** defines the following four isolation levels, which control how transactions are isolated from one another:
+
+1. **Read Uncommitted**: Allows dirty reads (i.e., transactions can read uncommitted changes made by other transactions).
+2. **Read Committed**: Prevents dirty reads but allows non-repeatable reads (i.e., data can change between reads within the same transaction).
+3. **Repeatable Read**: Prevents dirty reads and non-repeatable reads but allows phantom reads (i.e., new rows might appear between different queries in the same transaction).
+4. **Serializable**: Provides the highest isolation level, ensuring no dirty reads, non-repeatable reads, or phantom reads. All transactions appear to run serially.
+
+### **1. MySQL**
+
+In MySQL, you can set the transaction isolation level using the `SET TRANSACTION ISOLATION LEVEL` command.
+
+#### Example (MySQL):
+```sql
+-- Set isolation level to Read Committed
+SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
+
+-- Start a transaction
+START TRANSACTION;
+
+-- Perform some queries
+SELECT * FROM employees WHERE employee_id = 1;
+
+-- Commit the transaction
+COMMIT;
+```
+
+#### MySQL Isolation Levels:
+- **Read Uncommitted**: MySQL supports dirty reads.
+- **Read Committed**: Ensures no dirty reads but may allow non-repeatable reads.
+- **Repeatable Read**: Default isolation level in MySQL; prevents dirty and non-repeatable reads but may allow phantom reads.
+- **Serializable**: Provides the highest isolation by locking the data.
+
+### **2. Oracle**
+
+In Oracle, the isolation level is controlled by the `SET TRANSACTION` statement. By default, Oracle uses **Read Committed** isolation, but you can change it for specific transactions.
+
+#### Example (Oracle):
+```sql
+-- Set the transaction isolation level to SERIALIZABLE
+SET TRANSACTION ISOLATION LEVEL SERIALIZABLE;
+
+-- Start a transaction
+BEGIN;
+
+-- Perform some queries
+SELECT * FROM employees WHERE employee_id = 1;
+
+-- Commit the transaction
+COMMIT;
+```
+
+#### Oracle Isolation Levels:
+- **Read Uncommitted**: Oracle does not allow dirty reads by default.
+- **Read Committed**: Default isolation level, prevents dirty reads but allows non-repeatable reads.
+- **Serializable**: Highest isolation level in Oracle; prevents dirty reads, non-repeatable reads, and phantom reads.
+- **Repeatable Read**: Not explicitly supported in Oracle, but **Serializable** provides the same guarantees.
+
+### **3. PostgreSQL**
+
+In PostgreSQL, isolation levels are set using the `SET TRANSACTION ISOLATION LEVEL` statement, similar to MySQL and Oracle.
+
+#### Example (PostgreSQL):
+```sql
+-- Set the isolation level to Repeatable Read
+SET TRANSACTION ISOLATION LEVEL REPEATABLE READ;
+
+-- Start a transaction
+BEGIN;
+
+-- Perform some queries
+SELECT * FROM employees WHERE employee_id = 1;
+
+-- Commit the transaction
+COMMIT;
+```
+
+#### PostgreSQL Isolation Levels:
+- **Read Uncommitted**: PostgreSQL treats it as **Read Committed** (i.e., it does not allow dirty reads).
+- **Read Committed**: Default isolation level, prevents dirty reads but may allow non-repeatable reads.
+- **Repeatable Read**: Prevents dirty and non-repeatable reads, but phantom reads may occur.
+- **Serializable**: The highest isolation level; prevents all concurrency anomalies, including phantom reads.
+
+### **4. DB2**
+
+In DB2, transaction isolation levels can be set via the `SET ISOLATION` command, similar to other databases.
+
+#### Example (DB2):
+```sql
+-- Set the transaction isolation level to SERIALIZABLE
+SET ISOLATION TO SERIALIZABLE;
+
+-- Start a transaction
+BEGIN;
+
+-- Perform some queries
+SELECT * FROM employees WHERE employee_id = 1;
+
+-- Commit the transaction
+COMMIT;
+```
+
+#### DB2 Isolation Levels:
+- **Read Uncommitted**: Allows dirty reads.
+- **Read Committed**: Ensures no dirty reads, but non-repeatable reads can occur.
+- **Repeatable Read**: Prevents dirty and non-repeatable reads but may allow phantom reads.
+- **Serializable**: Highest isolation level; guarantees no dirty reads, non-repeatable reads, or phantom reads.
+
+### **5. HSQLDB**
+
+HSQLDB (HyperSQL Database) supports setting isolation levels in the same way as the other relational databases. You can use `SET TRANSACTION ISOLATION LEVEL` for this purpose.
+
+#### Example (HSQLDB):
+```sql
+-- Set the isolation level to Repeatable Read
+SET TRANSACTION ISOLATION LEVEL REPEATABLE READ;
+
+-- Start a transaction
+BEGIN TRANSACTION;
+
+-- Perform some queries
+SELECT * FROM employees WHERE employee_id = 1;
+
+-- Commit the transaction
+COMMIT;
+```
+
+#### HSQLDB Isolation Levels:
+- **Read Uncommitted**: Allows dirty reads.
+- **Read Committed**: Default isolation level in HSQLDB.
+- **Repeatable Read**: Prevents dirty and non-repeatable reads, but phantom reads may still occur.
+- **Serializable**: Highest isolation level; prevents all concurrency anomalies.
+
+### **6. MongoDB**
+
+MongoDB is a NoSQL database and does not use the traditional SQL-based isolation levels. However, it supports **multi-document transactions** (starting from version 4.0) and provides **read and write concerns** to control the consistency and isolation behavior.
+
+In MongoDB, you can use `readConcern` and `writeConcern` to manage isolation-like behavior in transactions.
+
+#### Example (MongoDB):
+```javascript
+const session = await client.startSession();
+session.startTransaction({
+    readConcern: { level: 'snapshot' },  // Ensures consistent reads
+    writeConcern: { w: 'majority' },     // Ensures writes are committed to majority of replicas
+});
+
+// Perform some operations within the transaction
+await db.collection('employees').updateOne(
+    { employee_id: 1 },
+    { $set: { name: 'John Doe' } },
+    { session }
+);
+
+// Commit the transaction
+await session.commitTransaction();
+session.endSession();
+```
+
+#### MongoDB Read and Write Concerns:
+- **Read Concern Levels**:
+  - **local**: Reads data from the replica set primary node, may return stale data.
+  - **majority**: Ensures that the read is from a majority of nodes, providing a higher level of consistency.
+  - **snapshot**: Ensures that reads are consistent with a specific point in time, like **Serializable** isolation in traditional databases.
+
+- **Write Concern Levels**:
+  - **w: 1**: Write to the primary node.
+  - **w: majority**: Write to a majority of replica set members.
+  - **w: all**: Write to all nodes in the replica set (only in certain configurations).
+
+---
+
+### **Summary of Isolation Levels in SQL Databases**
+
+| **Isolation Level**   | **MySQL**               | **Oracle**            | **PostgreSQL**        | **DB2**               | **HSQLDB**            | **MongoDB**           |
+|-----------------------|-------------------------|-----------------------|-----------------------|-----------------------|-----------------------|-----------------------|
+| **Read Uncommitted**   | Supported               | Not Supported         | Treated as Read Committed | Supported             | Supported             | Not applicable        |
+| **Read Committed**     | Supported               | Default               | Default               | Supported             | Default               | Not applicable        |
+| **Repeatable Read**    | Default (in MySQL)      | Not explicitly supported, **Serializable** is used | Supported             | Supported             | Supported             | Not applicable        |
+| **Serializable**       | Supported               | Supported             | Supported             | Supported             | Supported             | Snapshot read concern for consistency |
+
+### **Conclusion**
+Each database has its own way of handling transaction isolation, but most relational databases support the same standard isolation levels. MongoDB, being a NoSQL database, handles transaction isolation through the use of read and write concerns rather than the traditional isolation levels. For traditional databases, you can set the isolation level at the start of a transaction and choose the appropriate level based on your consistency and concurrency needs.
+
+### **Using Spring Boot with JPA to Achieve Transaction Isolation Levels**
+
+In a **Spring Boot** application, you can easily manage transaction isolation levels by leveraging **JPA** (Java Persistence API) along with **Spring's `@Transactional`** annotation. Spring's transaction management abstracts the underlying persistence provider (like **Hibernate**) and provides a simple way to define transaction properties, including isolation levels.
+
+Here's how you can configure **transaction isolation** in a **Spring Boot** application using **JPA**.
+
+### **1. Setting Transaction Isolation in Spring Boot with JPA**
+
+Spring Boot uses **Spring Data JPA** by default, which relies on a persistence provider like **Hibernate** for ORM functionality. You can configure the **transaction isolation level** at the method level using the `@Transactional` annotation. You can also define it at the class level if you want it to apply to all methods in the class.
+
+#### **Example: Setting Transaction Isolation in Spring Boot with `@Transactional`**
+
+```java
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
+@Service
+public class EmployeeService {
+
+    @PersistenceContext
+    private EntityManager entityManager;
+
+    // Setting transaction isolation level to READ_COMMITTED for this method
+    @Transactional(isolation = org.springframework.transaction.annotation.Isolation.READ_COMMITTED)
+    public void updateEmployeeSalary(Long employeeId, Double newSalary) {
+        // Assuming Employee is a JPA entity
+        Employee employee = entityManager.find(Employee.class, employeeId);
+        if (employee != null) {
+            employee.setSalary(newSalary);
+            entityManager.merge(employee);  // Persist the changes
+        }
+    }
+
+    // Setting transaction isolation level to SERIALIZABLE
+    @Transactional(isolation = org.springframework.transaction.annotation.Isolation.SERIALIZABLE)
+    public void createNewEmployee(Employee employee) {
+        entityManager.persist(employee);  // Save a new employee
+    }
+}
+```
+
+### **Key Points about the `@Transactional` Annotation:**
+- **`isolation`**: The `@Transactional` annotation allows you to specify the isolation level for a given method. The options are:
+  - **`Isolation.READ_UNCOMMITTED`**: Allows dirty reads.
+  - **`Isolation.READ_COMMITTED`**: Prevents dirty reads but allows non-repeatable reads.
+  - **`Isolation.REPEATABLE_READ`**: Prevents dirty and non-repeatable reads, but phantom reads may occur.
+  - **`Isolation.SERIALIZABLE`**: Prevents all concurrency anomalies but can be performance-heavy.
+
+- **`@Transactional`** also supports other attributes like **propagation** (for handling nested transactions), **timeout**, **rollbackFor**, etc.
+
+### **2. Configuration in `application.properties`**
+
+You can also configure the transaction manager in `application.properties` for additional transaction-related configurations:
+
+```properties
+spring.jpa.properties.hibernate.transaction.coordinator_class=jdbc
+spring.jpa.properties.hibernate.transaction.isolation=2  # READ_COMMITTED (for example)
+spring.jpa.database-platform=org.hibernate.dialect.MySQL5InnoDBDialect  # For MySQL, configure based on your DB
+```
+
+### **JPA vs Hibernate: Key Differences**
+
+**JPA** (Java Persistence API) and **Hibernate** are often discussed together because Hibernate is the most popular **JPA implementation**, but they are not the same. Here’s a breakdown of the differences:
+
+| **Feature**                     | **JPA**                                      | **Hibernate**                               |
+|----------------------------------|----------------------------------------------|---------------------------------------------|
+| **Definition**                   | JPA is a specification (API) for ORM in Java. It defines a set of rules and guidelines for persisting Java objects to databases. | Hibernate is a framework that implements JPA (and also provides additional functionality). |
+| **Standards**                    | JPA is a standard API, part of the Java EE (now Jakarta EE) specification. | Hibernate is an implementation of the JPA specification but also has its own features. |
+| **Persistence Context**          | JPA defines the concept of **EntityManager** for managing persistence context. | Hibernate provides a similar concept called **Session**, which is also mapped to the EntityManager. |
+| **Cache**                         | JPA does not define caching behavior, but it supports it through the persistence provider (e.g., Hibernate). | Hibernate comes with its own powerful **first-level cache** (session cache) and **second-level cache** (across sessions). |
+| **Query Language**               | JPA defines **JPQL** (Java Persistence Query Language) for querying the database, which is similar to SQL but operates on entities. | Hibernate supports **HQL** (Hibernate Query Language), which is similar to JPQL but offers more advanced features. |
+| **Database Independence**        | JPA is database-agnostic, meaning it is intended to work with any relational database as long as the JPA provider supports it. | Hibernate also supports various databases but may have additional database-specific optimizations and dialects. |
+| **Annotations**                  | JPA has standard annotations for entity management, such as `@Entity`, `@Table`, `@Id`, etc. | Hibernate extends JPA annotations with some custom ones (e.g., `@GeneratedValue(strategy = GenerationType.AUTO)` for ID generation). |
+| **Custom Features**              | JPA is a minimalistic specification, so many advanced features, such as caching and batching, are handled by the provider (like Hibernate). | Hibernate comes with additional features such as **lazy loading**, **automatic dirty checking**, **batch processing**, etc. |
+
+### **Which One is Best: JPA vs Hibernate?**
+
+- **JPA** is a standard API, which provides a **clean, standard interface** for persistence. It is the **recommended choice** if you want portability and flexibility across different ORM providers. It allows you to switch between different providers (e.g., Hibernate, EclipseLink, OpenJPA) without changing much of your code.
+
+- **Hibernate**, on the other hand, is a specific **implementation** of JPA and also offers additional features not defined by JPA, such as **better caching** mechanisms, **query optimizations**, **multi-tenancy support**, and **native SQL support**. If you need advanced ORM features that are not part of JPA, then **Hibernate** is a great choice.
+
+#### **When to Use JPA:**
+- If you're building an enterprise application and need standardization across different vendors (databases and ORM providers).
+- When you want to avoid being tied to a single implementation (like Hibernate).
+- If you are already working with Java EE (Jakarta EE) or Spring, JPA integrates very well and provides a high-level, abstraction-driven approach.
+
+#### **When to Use Hibernate:**
+- If you need to take full advantage of advanced ORM features (like caching, batch processing, etc.).
+- When you are confident that you will not need to switch ORM providers.
+- If you need Hibernate-specific features, such as **native queries**, **session-level operations**, and **lazy loading**.
+
+### **Conclusion:**
+
+- **JPA** provides a standardized, portable approach for working with databases and is the way to go if you want to stick to the standards and be agnostic to the underlying ORM provider.
+- **Hibernate** is a more powerful, feature-rich ORM framework that extends JPA and adds additional capabilities, making it an excellent choice for complex use cases, but it ties you to Hibernate as the persistence provider.
+
+In **Spring Boot** applications, **Spring Data JPA** is the most common choice because it provides a repository layer that integrates easily with JPA providers like Hibernate. However, if you need more advanced features, Hibernate-specific functionalities can be directly used.
