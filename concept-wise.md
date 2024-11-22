@@ -25512,7 +25512,7 @@ graph LR
             G[Jenkins/GitLab CI/CD Pipeline]
         end
 
-        B --> C[Kubernetes]  %% Kubernetes is used for deployment, but managed separately
+        B --> C[Kubernetes]  
         G -->|Build & Deploy| B
         G -->|Trigger Deployment| C
     end
