@@ -24787,15 +24787,15 @@ Sure! Below is an explanation of how microservices, Docker, Kubernetes, Jenkins/
 
 ---
 
-### **Mermaid Diagram**: Visualizing the Workflow
+### Diagram: Visualizing the Workflow
 
 Below is a Mermaid diagram that shows the interactions between microservices, Docker, Kubernetes, Jenkins/GitLab, and cloud platforms (AWS, Azure, and GCP):
 
 ```mermaid
 graph TD
-    A[Microservices] -->|Containerized| B(Docker)
+    A[Microservices] -->|Containerized| B[Docker]
     B --> C[Kubernetes]
-    C --> D[Cloud Providers (AWS, Azure, GCP)]
+    C --> D[Cloud Providers - AWS, Azure, GCP]
     D --> E[Load Balancer]
     D --> F[Auto Scaling]
     C --> G[Jenkins/GitLab CI/CD Pipeline]
@@ -24806,19 +24806,19 @@ graph TD
     F -->|Scale Pods/Instances| C
 
     subgraph AWS
-        D1[EKS (Elastic Kubernetes Service)]
+        D1[EKS - Elastic Kubernetes Service]
         D1 --> F
         D1 --> E
     end
 
     subgraph Azure
-        D2[AKS (Azure Kubernetes Service)]
+        D2[AKS - Azure Kubernetes Service]
         D2 --> F
         D2 --> E
     end
 
     subgraph GCP
-        D3[GKE (Google Kubernetes Engine)]
+        D3[GKE - Google Kubernetes Engine]
         D3 --> F
         D3 --> E
     end
