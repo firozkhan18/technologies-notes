@@ -25487,3 +25487,230 @@ graph LR
  (e.g., refunding payment, releasing the inventory).
 
 This architecture illustrates a well-integrated microservices platform that leverages cloud-native technologies, event-driven communication, CI/CD, and fault-tolerant patterns like Saga for managing distributed transactions.
+
+```mermaid
+graph LR
+    %% Microservices
+    subgraph Microservices
+        CarService["Car Service"]
+        CustomerService["Customer Service"]
+        OrderService["Order Service"]
+        PaymentService["Payment Service"]
+        InventoryService["Inventory Service"]
+        NotificationService["Notification Service"]
+        AuthService["Authentication Service"]
+    end
+
+    %% CI/CD Pipeline
+    subgraph CI_CD["CI/CD Pipeline"]
+        %% Docker and Jenkins/GitLab
+        subgraph Docker["Docker"]
+            B[Docker]
+        end
+
+        subgraph Jenkins["Jenkins"]
+            G[Jenkins/GitLab CI/CD Pipeline]
+        end
+
+        B --> C[Kubernetes]  %% Kubernetes is used for deployment, but managed separately
+        G -->|Build & Deploy| B
+        G -->|Trigger Deployment| C
+    end
+
+    %% Cloud Infrastructure
+    subgraph CloudInfra["Cloud Infrastructure"]
+        subgraph AWS ["AWS Cloud"]
+            D1[EKS - Elastic Kubernetes Service]
+            D1 --> F
+            D1 --> E
+        end
+
+        subgraph Azure ["Azure Cloud"]
+            D2[AKS - Azure Kubernetes Service]
+            D2 --> F
+            D2 --> E
+        end
+
+        subgraph GCP ["GCP Cloud"]
+            D3[GKE - Google Kubernetes Engine]
+            D3 --> F
+            D3 --> E
+        end
+
+        D[Cloud Providers - AWS, Azure, GCP] --> E[Load Balancer]
+        D --> F[Auto Scaling]
+        E -->|Traffic Distribution| C[Kubernetes]
+        F -->|Scale Pods/Instances| C
+    end
+
+    %% EventBus (Kafka)
+    subgraph EventBus ["Kafka Event Bus"]
+        Kafka["Kafka"]
+    end
+
+    %% API Gateway
+    subgraph APIGateway["API Gateway"]
+        Gateway["API Gateway"]
+    end
+
+    %% Security
+    subgraph Security["Security"]
+        AuthServer["OAuth2 / JWT"]
+    end
+
+    %% Database
+    subgraph Database["Databases"]
+        CarDB["Car DB - PostgreSQL/MySQL"]
+        CustomerDB["Customer DB - MongoDB"]
+        OrderDB["Order DB - PostgreSQL"]
+        PaymentDB["Payment DB - SQL"]
+        InventoryDB["Inventory DB - PostgreSQL"]
+    end
+
+    %% Redis Cache (Fixed)
+    RedisCacheNode["Redis"]
+    
+    %% Observability
+    subgraph Observability["Observability"]
+        Prometheus["Prometheus"]
+        Grafana["Grafana"]
+        ELKStack["ELK Stack"]
+        Jaeger["Jaeger"]
+    end
+
+    %% Saga Orchestration Flow
+    subgraph SagaFlow["Saga Orchestration Flow"]
+        S[Start Order]
+        T[Reserve Vehicle in Inventory]
+        U[Verify Loan Eligibility]
+        V[Process Payment]
+        W[Initiate Shipping]
+        X[Notify Customer]
+        Y[Compensating Transaction]
+    end
+
+    %% Microservices Communication with Kafka
+    CarService -->|"Create Car Event"| Kafka
+    CustomerService -->|"Customer Registered"| Kafka
+    OrderService -->|"Order Placed"| Kafka
+    PaymentService -->|"Payment Processed"| Kafka
+    InventoryService -->|"Inventory Updated"| Kafka
+    NotificationService -->|"Send Notification"| Kafka
+    AuthService -->|"Authorize User"| Kafka
+
+    %% Kafka Communication (Saga)
+    Kafka --> CarService
+    Kafka --> CustomerService
+    Kafka --> OrderService
+    Kafka --> PaymentService
+    Kafka --> InventoryService
+    Kafka --> NotificationService
+
+    %% API Gateway routing
+    Gateway -->|"Route to Service"| CarService
+    Gateway -->|"Route to Service"| CustomerService
+    Gateway -->|"Route to Service"| OrderService
+    Gateway -->|"Route to Service"| PaymentService
+    Gateway -->|"Route to Service"| InventoryService
+    Gateway -->|"Route to Service"| NotificationService
+    Gateway -->|"Route to Service"| AuthService
+
+    %% Security
+    AuthServer -->|"OAuth2/JWT Tokens"| Gateway
+    AuthServer -->|"JWT Validation"| Microservices
+
+    %% Databases
+    CarService --> CarDB
+    CustomerService --> CustomerDB
+    OrderService --> OrderDB
+    PaymentService --> PaymentDB
+    InventoryService --> InventoryDB
+
+    %% Redis Cache Integration
+    CarService --> RedisCacheNode
+    InventoryService --> RedisCacheNode
+    OrderService --> RedisCacheNode
+
+    %% Observability
+    Prometheus -->|"Monitor Services"| Microservices
+    Grafana -->|"Visualize Metrics"| Prometheus
+    ELKStack -->|"Log Aggregation"| Microservices
+    Jaeger -->|"Distributed Tracing"| Microservices
+
+    %% Redis Cache for Performance
+    RedisCacheNode -->|"Cache frequently accessed data"| CarDB
+    RedisCacheNode -->|"Cache frequently accessed data"| InventoryDB
+    RedisCacheNode -->|"Cache frequently accessed data"| OrderDB
+
+    %% Service Discovery
+    subgraph ServiceDiscovery ["Service Discovery"]
+        ServiceDiscoveryNode["Service Discovery"]
+    end
+
+    %% API Gateway Routing to Service Discovery
+    Gateway -->|Routes Requests| ServiceDiscoveryNode
+    ServiceDiscoveryNode -->|Finds Services| CarService
+    ServiceDiscoveryNode -->|Finds Services| CustomerService
+    ServiceDiscoveryNode -->|Finds Services| OrderService
+    ServiceDiscoveryNode -->|Finds Services| PaymentService
+    ServiceDiscoveryNode -->|Finds Services| InventoryService
+    ServiceDiscoveryNode -->|Finds Services| NotificationService
+
+    %% Service Communication
+    InventoryService -->|Inventory Data| OrderService
+    OrderService -->|Order Details| PaymentService
+    PaymentService -->|Payment Status| OrderService
+    PaymentService -->|Payment Status| InventoryService
+    OrderService -->|Order Status| NotificationService
+    NotificationService -->|Send Notifications| CustomerService
+    NotificationService -->|Order Info| CustomerService
+    CustomerService -->|Customer Data| InventoryService
+    CustomerService -->|Customer Data| OrderService
+
+    %% Configuration Flow
+    ConfigurationServer[Configuration Server]
+    ConfigurationRepository[Git Configuration Repository]
+
+    ConfigurationServer -->|Fetch Configurations| ConfigurationRepository
+    ConfigurationServer -->|Provide Configurations| CarService
+    ConfigurationServer -->|Provide Configurations| CustomerService
+    ConfigurationServer -->|Provide Configurations| OrderService
+    ConfigurationServer -->|Provide Configurations| PaymentService
+    ConfigurationServer -->|Provide Configurations| InventoryService
+    ConfigurationServer -->|Provide Configurations| NotificationService
+
+    %% Authentication Flow
+    Gateway --> AuthService
+    AuthService -->|Issue JWT| Microservices
+    AuthService -->|Validate JWT| CarService
+    AuthService -->|Validate JWT| OrderService
+    AuthService -->|Validate JWT| PaymentService
+    AuthService -->|Validate JWT| InventoryService
+    AuthService -->|Validate JWT| NotificationService
+    AuthService -->|Validate JWT| CustomerService
+
+    %% Saga Orchestration Flow (Expanded)
+    S --> T[Reserve Vehicle in Inventory]
+    T --> U[Verify Loan Eligibility]
+    U --> V[Process Payment]
+    V --> W[Initiate Shipping]
+    W --> X[Notify Customer]
+    Y --> T
+    Y --> U
+    Y --> V
+    Y --> W
+    Y --> X
+
+    %% Compensating Transactions (Saga)
+    Y -->|Compensates Inventory| T
+    Y -->|Compensates Loan| U
+    Y -->|Compensates Payment| V
+    Y -->|Compensates Shipping| W
+    Y -->|Compensates Notification| X
+
+    %% Optional communication with external systems - payment gateway
+    PaymentService --> O[External Payment Gateway]
+    InventoryService --> P[External Shipping System]
+    O --> Q[Payment Provider API]
+    P --> R[Shipping Provider API]
+```
