@@ -251,6 +251,741 @@ graph LR
   
 You can visualize this diagram using any Mermaid-compatible renderer to get a visual understanding of how these components interact in a microservices-based architecture.
 
+Here's an updated version of the Mermaid diagram, incorporating the requested components like **UI**, **Kafka**, **Redis**, **Grafana**, **Prometheus**, **Loki**, **Logstash**, **Kibana**, **Cloud**, **Git**, **Jenkins**, and **Kubernetes**.
+
+```mermaid
+graph LR
+  A[API Gateway] -->|Route Requests| B[Product Service]
+  A[API Gateway] -->|Route Requests| C[Order Service]
+  A[API Gateway] -->|Route Requests| D[Inventory Service]
+  A[API Gateway] -->|Route Requests| E[Notification Service]
+
+  %% Product Service with MongoDB
+  B --> F[(MongoDB)]
+  %% Order Service with MySQL
+  C --> G[(MySQL)]
+  %% Inventory Service Database
+  D --> H[(Database)]
+  %% Notification Service Database
+  E --> I[(Database)]  
+
+  subgraph "Service Discovery & Configuration"
+    J[Eureka Server] --> B
+    J[Eureka Server] --> C
+    J[Eureka Server] --> D
+    J[Eureka Server] --> E
+    K[Config Server] --> B
+    K[Config Server] --> C
+    K[Config Server] --> D
+    K[Config Server] --> E
+  end
+  
+  subgraph "Distributed Tracing"
+    L[Zipkin] --> B
+    L[Zipkin] --> C
+    L[Zipkin] --> D
+    L[Zipkin] --> E
+    M[Spring Cloud Sleuth] --> L
+  end
+  
+  subgraph "Authentication & Security"
+    N[Keycloak] --> B
+    N[Keycloak] --> C
+    N[Keycloak] --> D
+    N[Keycloak] --> E
+  end
+  
+  subgraph "Containerization & Deployment"
+    O[Docker Compose] -->|Manage Containers| B
+    O[Docker Compose] -->|Manage Containers| C
+    O[Docker Compose] -->|Manage Containers| D
+    O[Docker Compose] -->|Manage Containers| E
+  end
+  
+  subgraph "Message Broker & Caching"
+    P[Kafka] --> B
+    P[Kafka] --> C
+    Q[Redis] --> B
+    Q[Redis] --> C
+  end
+
+  subgraph "Monitoring & Logging"
+    R[Prometheus] --> B
+    R[Prometheus] --> C
+    S[Grafana] --> R
+    T[Loki] --> B
+    T[Loki] --> C
+    U[Logstash] --> T
+    V[Kibana] --> U
+  end
+
+  subgraph "CI/CD & Cloud"
+    W[Git] --> X[Jenkins]
+    X[Jenkins] --> Y[Kubernetes]
+    Y[Kubernetes] -->|Deploys| O
+  end
+  
+  %% UI Frontend Service
+  Z[UI] --> A
+  
+  %% Data Exchange Links
+  F -.->|Data Exchange| G
+  G -.->|Data Exchange| H
+  H -.->|Data Exchange| I
+
+  classDef service fill:#f9f,stroke:#333,stroke-width:2px;
+  class A,B,C,D,E service;
+  class F,G,H,I service;
+```
+
+### New Components:
+- **UI**: Represents the user interface which communicates with the **API Gateway** to route requests to the microservices.
+- **Kafka**: Acts as a message broker to enable asynchronous communication between services (Product and Order).
+- **Redis**: A caching layer for quick data retrieval in services like Product and Order.
+- **Prometheus**: Collects and scrapes metrics from Spring Boot services for monitoring.
+- **Grafana**: Visualizes metrics collected by Prometheus, providing dashboards for monitoring service health.
+- **Loki**: For log aggregation, collecting logs from services like Product and Order.
+- **Logstash**: Processes and forwards logs from Loki to Kibana for visualization.
+- **Kibana**: Provides a web interface for searching, viewing, and analyzing log data stored in Loki.
+- **CI/CD with Git, Jenkins, and Kubernetes**:
+  - **Git**: Code repository.
+  - **Jenkins**: Continuous integration tool.
+  - **Kubernetes**: Orchestrates containers, ensuring the deployment and scaling of services.
+- **Cloud**: Represents cloud-based infrastructure (e.g., AWS, GCP, Azure) where services are deployed.
+
+### Interactions:
+- **UI** sends requests to the **API Gateway**.
+- **Kafka** handles asynchronous communication between **Product Service** and **Order Service**.
+- **Redis** is used for caching, improving response times for the Product and Order services.
+- **Prometheus** collects metrics from services like **Product Service** and **Order Service**, and **Grafana** visualizes them.
+- Logs are aggregated by **Loki**, processed by **Logstash**, and visualized in **Kibana** for monitoring and troubleshooting.
+- **Jenkins** integrates with **Git** for CI/CD, deploying microservices to **Kubernetes**, which manages the containers.
+
+This comprehensive diagram covers the full stack, from service communication to monitoring, logging, and CI/CD, ensuring a robust, scalable, and observable microservices architecture.
+
+Here's the updated **Mermaid diagram** with the added **Saga Pattern** and **Event-Driven Architecture**, along with the separation of components like **Message Broker & Caching**, **Distributed Tracing**, **Monitoring & Logging**, **CI/CD & Cloud**, and **Containerization & Deployment**.
+
+```mermaid
+graph LR
+  A[API Gateway] -->|Route Requests| B[Product Service]
+  A[API Gateway] -->|Route Requests| C[Order Service]
+  A[API Gateway] -->|Route Requests| D[Inventory Service]
+  A[API Gateway] -->|Route Requests| E[Notification Service]
+
+  %% Product Service with MongoDB
+  B --> F[(MongoDB)]
+  %% Order Service with MySQL
+  C --> G[(MySQL)]
+  %% Inventory Service Database
+  D --> H[(Database)]
+  %% Notification Service Database
+  E --> I[(Database)]  
+  
+  subgraph "Service Discovery & Configuration"
+    J[Eureka Server] --> B
+    J[Eureka Server] --> C
+    J[Eureka Server] --> D
+    J[Eureka Server] --> E
+    K[Config Server] --> B
+    K[Config Server] --> C
+    K[Config Server] --> D
+    K[Config Server] --> E
+  end
+
+  subgraph "Distributed Tracing"
+    L[Zipkin] --> B
+    L[Zipkin] --> C
+    L[Zipkin] --> D
+    L[Zipkin] --> E
+    M[Spring Cloud Sleuth] --> L
+  end
+
+  subgraph "Authentication & Security"
+    N[Keycloak] --> B
+    N[Keycloak] --> C
+    N[Keycloak] --> D
+    N[Keycloak] --> E
+  end
+  
+  subgraph "Message Broker & Caching"
+    P[Kafka] --> B
+    P[Kafka] --> C
+    Q[Redis] --> B
+    Q[Redis] --> C
+  end
+  
+  subgraph "Event-Driven Architecture"
+    R[Event Bus] --> B
+    R[Event Bus] --> C
+    R[Event Bus] --> D
+    R[Event Bus] --> E
+  end
+
+  subgraph "Saga Pattern"
+    U[Order Service] -->|Start Saga| V[Inventory Service]
+    V[Inventory Service] -->|Check Stock| W[Product Service]
+    W[Product Service] -->|Reserve Product| X[Notification Service]
+    X[Notification Service] -->|Notify Customer| Y[Order Service]
+  end
+
+  subgraph "Containerization & Deployment"
+    O[Docker Compose] -->|Manage Containers| B
+    O[Docker Compose] -->|Manage Containers| C
+    O[Docker Compose] -->|Manage Containers| D
+    O[Docker Compose] -->|Manage Containers| E
+  end
+
+  subgraph "Monitoring & Logging"
+    S[Prometheus] --> B
+    S[Prometheus] --> C
+    T[Grafana] --> S
+    U[Loki] --> B
+    U[Loki] --> C
+    V[Logstash] --> U
+    W[Kibana] --> V
+  end
+  
+  subgraph "CI/CD & Cloud"
+    X[Git] --> Y[Jenkins]
+    Y[Jenkins] --> Z[Kubernetes]
+    Z[Kubernetes] -->|Deploys| O
+  end
+
+  %% UI Frontend Service
+  AA[UI] --> A
+
+  %% Data Exchange Links
+  F -.->|Data Exchange| G
+  G -.->|Data Exchange| H
+  H -.->|Data Exchange| I
+
+  classDef service fill:#f9f,stroke:#333,stroke-width:2px;
+  class A,B,C,D,E service;
+  class F,G,H,I service;
+```
+
+### Key Additions:
+
+1. **Event-Driven Architecture**:
+   - **Event Bus**: A central hub through which services communicate asynchronously via events. The services (Product, Order, Inventory, Notification) all publish and consume events via this bus.
+   
+2. **Saga Pattern**:
+   - A **Saga** is a sequence of local transactions where each service involved performs a part of the transaction and publishes events to trigger the next step. The example includes the following services:
+     - **Order Service** starts the saga.
+     - **Inventory Service** checks stock.
+     - **Product Service** reserves the product.
+     - **Notification Service** sends notifications.
+     - **Order Service** finalizes the order.
+
+3. **Message Broker & Caching**:
+   - **Kafka**: Used for **asynchronous messaging** between services, enabling decoupled communication (Product, Order services).
+   - **Redis**: Caching layer for improving performance and response times for frequently accessed data.
+
+4. **Distributed Tracing**:
+   - **Zipkin**: Collects and visualizes traces for tracking requests across multiple services.
+   - **Spring Cloud Sleuth**: Generates trace and span IDs for requests.
+
+5. **Monitoring & Logging**:
+   - **Prometheus**: Scrapes metrics for monitoring the health and performance of microservices.
+   - **Grafana**: Visualizes metrics collected by Prometheus.
+   - **Loki**: Aggregates logs from microservices.
+   - **Logstash**: Processes logs before they are sent to **Kibana** for visualization.
+
+6. **CI/CD & Cloud**:
+   - **Git**: Source code repository.
+   - **Jenkins**: Continuous integration and deployment (CI/CD) pipeline.
+   - **Kubernetes**: Orchestrates deployment and scaling of containers.
+   - **Docker Compose**: Manages the containers for all microservices.
+
+### Flow Explanation:
+
+- **Event-Driven**: Services (Product, Order, Inventory, Notification) publish and subscribe to events on the **Event Bus**. This creates a decoupled, asynchronous communication flow.
+- **Saga Pattern**: Manages distributed transactions by coordinating services (Order → Inventory → Product → Notification) through event-based interactions.
+- **Kafka**: Enables services to communicate asynchronously and decouple them. It's used for event-driven architecture and messaging between **Order Service** and **Product Service**.
+- **Redis**: Caches frequently requested data to speed up the **Product Service** and **Order Service**.
+- **CI/CD**: Changes pushed to **Git** trigger the **Jenkins** pipeline, which deploys the application to **Kubernetes** using **Docker Compose**.
+- **Monitoring & Logging**: **Prometheus** collects metrics, which are visualized using **Grafana**. Logs from **Product** and **Order Services** are collected by **Loki**, processed by **Logstash**, and visualized in **Kibana**.
+
+This comprehensive diagram now includes all the requested components and shows how they interact in the system.
+
+Here’s a revised version of your **Mermaid flow diagram**, ensuring the correct interactions and logical flow for the microservices architecture:
+
+### Correct Flow Explanation
+
+- **API Gateway**: The entry point for all client requests, routing them to the appropriate service.
+- **Service Discovery & Configuration**: The **Eureka Server** helps services discover each other, and the **Config Server** manages external configurations.
+- **Authentication & Security**: **Keycloak** ensures that each service is secured and that all communications are authenticated.
+- **Distributed Tracing**: **Spring Cloud Sleuth** and **Zipkin** track and visualize the flow of requests across services.
+- **Message Broker & Caching**: **Kafka** and **Redis** are used for asynchronous communication and caching, respectively, to improve performance and decouple services.
+- **Event-Driven Architecture**: An **Event Bus** allows for communication via events, enabling loose coupling and asynchronous processing.
+- **Saga Pattern**: **Saga** ensures that distributed transactions are properly coordinated across services, with failure management.
+- **Monitoring & Logging**: **Prometheus** collects metrics, **Grafana** visualizes the metrics, and **Loki**, **Logstash**, and **Kibana** are used for logging.
+- **CI/CD & Cloud**: **Git** (for version control), **Jenkins** (for continuous integration), and **Kubernetes** (for orchestration) handle the deployment and scaling of services.
+- **Containerization & Deployment**: **Docker Compose** manages and orchestrates the microservices containers.
+
+### Updated Mermaid Diagram:
+
+```mermaid
+graph LR
+  A[API Gateway] -->|Route Requests| B[Product Service]
+  A[API Gateway] -->|Route Requests| C[Order Service]
+  A[API Gateway] -->|Route Requests| D[Inventory Service]
+  A[API Gateway] -->|Route Requests| E[Notification Service]
+
+  %% Product Service with MongoDB
+  B --> F[(MongoDB)]
+  %% Order Service with MySQL
+  C --> G[(MySQL)]
+  %% Inventory Service Database
+  D --> H[(Database)]
+  %% Notification Service Database
+  E --> I[(Database)]  
+  
+  subgraph "Service Discovery & Configuration"
+    J[Eureka Server] --> B
+    J[Eureka Server] --> C
+    J[Eureka Server] --> D
+    J[Eureka Server] --> E
+    K[Config Server] --> B
+    K[Config Server] --> C
+    K[Config Server] --> D
+    K[Config Server] --> E
+  end
+
+  subgraph "Distributed Tracing"
+    L[Zipkin] --> B
+    L[Zipkin] --> C
+    L[Zipkin] --> D
+    L[Zipkin] --> E
+    M[Spring Cloud Sleuth] --> L
+  end
+
+  subgraph "Authentication & Security"
+    N[Keycloak] --> B
+    N[Keycloak] --> C
+    N[Keycloak] --> D
+    N[Keycloak] --> E
+  end
+  
+  subgraph "Message Broker & Caching"
+    P[Kafka] --> B
+    P[Kafka] --> C
+    Q[Redis] --> B
+    Q[Redis] --> C
+  end
+  
+  subgraph "Event-Driven Architecture"
+    R[Event Bus] --> B
+    R[Event Bus] --> C
+    R[Event Bus] --> D
+    R[Event Bus] --> E
+  end
+
+  subgraph "Saga Pattern"
+    U[Order Service] -->|Start Saga| V[Inventory Service]
+    V[Inventory Service] -->|Check Stock| W[Product Service]
+    W[Product Service] -->|Reserve Product| X[Notification Service]
+    X[Notification Service] -->|Notify Customer| Y[Order Service]
+  end
+
+  subgraph "Containerization & Deployment"
+    O[Docker Compose] -->|Manage Containers| B
+    O[Docker Compose] -->|Manage Containers| C
+    O[Docker Compose] -->|Manage Containers| D
+    O[Docker Compose] -->|Manage Containers| E
+  end
+
+  subgraph "Monitoring & Logging"
+    S[Prometheus] --> B
+    S[Prometheus] --> C
+    T[Grafana] --> S
+    U[Loki] --> B
+    U[Loki] --> C
+    V[Logstash] --> U
+    W[Kibana] --> V
+  end
+  
+  subgraph "CI/CD & Cloud"
+    X[Git] --> Y[Jenkins]
+    Y[Jenkins] --> Z[Kubernetes]
+    Z[Kubernetes] -->|Deploys| O
+  end
+
+  %% UI Frontend Service
+  AA[UI] --> A
+
+  %% Data Exchange Links
+  F -.->|Data Exchange| G
+  G -.->|Data Exchange| H
+  H -.->|Data Exchange| I
+
+  classDef service fill:#f9f,stroke:#333,stroke-width:2px;
+  class A,B,C,D,E service;
+  class F,G,H,I service;
+```
+
+### Key Corrections and Flow Improvements:
+
+1. **Separation of Concerns**:
+   - **Service Discovery & Configuration**: **Eureka Server** and **Config Server** are only responsible for service registration, discovery, and configuration.
+   - **Distributed Tracing**: **Zipkin** and **Spring Cloud Sleuth** are dedicated to tracing service requests and visualizing the trace data.
+   - **Message Broker & Caching**: **Kafka** and **Redis** handle messaging and caching asynchronously.
+   - **Event-Driven Architecture**: An **Event Bus** drives communication between services, enabling them to react to events without tight coupling.
+
+2. **Saga Pattern**:
+   - Ensures that distributed transactions (e.g., order processing) are handled in a coordinated way. Services like **Order Service**, **Inventory Service**, **Product Service**, and **Notification Service** interact with each other to complete the saga.
+
+3. **Containerization & Deployment**:
+   - **Docker Compose** is used to manage the deployment of all services. The connection between **Kubernetes** and **Docker Compose** ensures that the services are orchestrated and deployed properly.
+
+4. **CI/CD & Cloud**:
+   - **Git**, **Jenkins**, and **Kubernetes** form the CI/CD pipeline and orchestrate the deployment of services.
+
+5. **Monitoring & Logging**:
+   - **Prometheus** collects and exposes metrics from microservices for monitoring.
+   - **Grafana** visualizes the metrics, while **Loki**, **Logstash**, and **Kibana** are used for log aggregation and visualization.
+
+6. **UI**: The **UI** communicates with the **API Gateway** to access the services, acting as the frontend for users.
+
+---
+
+### Final Notes:
+- **Data exchange** links are represented by dashed lines, showing asynchronous data flow between services (e.g., MongoDB to MySQL, or Order to Inventory).
+- **Interaction Flow**: The diagram illustrates how services communicate and are deployed, starting from the **UI** to the **API Gateway**, then to the services and their underlying infrastructure.
+
+This flow provides a clearer picture of the microservices architecture and the relationships between components. Let me know if you'd like further refinements!
+
+Thank you for your patience! I understand you're asking for clarifications on why certain components are placed in the same subgraphs or separated in your **Mermaid flow diagram**, as well as the issue with Docker and the CI/CD pipeline placement.
+
+Let's break this down:
+
+---
+
+### **1. Message Broker & Caching Subgraph** (Kafka & Redis together):
+```mermaid
+subgraph "Message Broker & Caching"
+  P[Kafka] --> B
+  P[Kafka] --> C
+  Q[Redis] --> B
+  Q[Redis] --> C
+end
+```
+
+**Reason for placement**:  
+- **Kafka** and **Redis** are closely related in the sense that they both facilitate **asynchronous communication**, though they serve different purposes:
+  - **Kafka**: Primarily a message broker for event-driven architecture, managing streams of data (often used for decoupling services).
+  - **Redis**: Primarily used as an in-memory cache, often for storing temporary data to improve performance.
+  
+By grouping them together under **Message Broker & Caching**, you're showing that both are middleware solutions for handling communication between microservices but addressing different needs:
+- Kafka for messaging (typically event-driven communication).
+- Redis for caching and sometimes pub/sub messaging.
+
+### **2. Event-Driven Architecture Subgraph (Event Bus Separate from Kafka)**:
+```mermaid
+subgraph "Event-Driven Architecture"
+  R[Event Bus] --> B
+  R[Event Bus] --> C
+  R[Event Bus] --> D
+  R[Event Bus] --> E
+end
+```
+
+**Reason for separation from Kafka**:  
+- The **Event Bus** in this subgraph is used to represent **Event-Driven Architecture**, where microservices publish and listen to events, and this could be implemented by various technologies, such as **Kafka**, **RabbitMQ**, or **ActiveMQ**.
+- **Kafka** can be considered as a specific tool used to implement this pattern, but the **Event Bus** is a higher-level abstraction. So, if you're planning to support different types of event-driven messaging, it's better to keep the **Event Bus** abstraction separate from the specific implementation of Kafka.
+
+If you’re using Kafka as your event bus, then Kafka could be part of this, but for clarity, it might be better to abstract the **Event Bus** separately to show that the system may evolve to use different messaging systems or protocols.
+
+---
+
+### **3. CI/CD & Cloud without Docker**:
+```mermaid
+subgraph "CI/CD & Cloud"
+  X[Git] --> Y[Jenkins]
+  Y[Jenkins] --> Z[Kubernetes]
+  Z[Kubernetes] -->|Deploys| O
+end
+```
+
+**Why it doesn’t include Docker**:  
+- **CI/CD** (Continuous Integration and Continuous Deployment) is focused on the process of automating the build, test, and deployment pipelines.
+- **Git** (Version Control), **Jenkins** (CI Server), and **Kubernetes** (Orchestration) are key components of the CI/CD pipeline, while **Docker** is related to containerization.
+  
+In this case, the **Docker Compose** subgraph, which is about **containerization and deployment**, is logically separate because Docker handles how services are packaged into containers, while **CI/CD** manages how those containers (and code) get built, tested, and deployed. Docker would be integrated into the **Kubernetes** (cloud) deployment stage indirectly, but it's not part of the direct flow of CI/CD.
+
+---
+
+### **4. Docker Subgraph (Containerization & Deployment)**:
+```mermaid
+subgraph "Containerization & Deployment"
+  O[Docker Compose] -->|Manage Containers| B
+  O[Docker Compose] -->|Manage Containers| C
+  O[Docker Compose] -->|Manage Containers| D
+  O[Docker Compose] -->|Manage Containers| E
+end
+```
+
+**Docker Compose placement**:  
+- **Docker Compose** is responsible for managing the containers that hold the microservices.
+- The subgraph focuses on orchestrating how all the services (Product, Order, Inventory, Notification) run in containers during development or testing.
+
+However, in a **production environment**, services might be orchestrated using **Kubernetes** rather than **Docker Compose**. But in a local development environment or testing environment, **Docker Compose** is often sufficient.
+
+This is why Docker Compose is separate from the CI/CD pipeline. The **CI/CD pipeline** automates code delivery (build, test, deploy), while **Docker Compose** focuses more on local deployment and container orchestration.
+
+---
+
+### **Updated Explanation of the Complete Flow:**
+
+- **Message Broker & Caching**: You group **Kafka** and **Redis** together because they both handle asynchronous communication, though with different functions. Kafka handles messaging (pub/sub, event-driven), while Redis acts as an in-memory cache for faster access to data.
+  
+- **Event-Driven Architecture**: The **Event Bus** is a logical abstraction for event-driven communication between services, potentially implemented using Kafka, RabbitMQ, or similar technologies. It’s not strictly tied to Kafka but represents the broader concept of decoupling services through events.
+
+- **CI/CD & Cloud**: The **CI/CD pipeline** (Git, Jenkins, Kubernetes) handles the flow of code from development to production. **Docker** is part of the deployment process but not directly part of the CI/CD flow in this diagram.
+
+- **Containerization & Deployment**: **Docker Compose** is specifically for orchestrating services locally (development/test environments), while **Kubernetes** would be used in production to scale and manage services. 
+
+---
+
+### **Refined Diagram**:
+
+Here's the refined flow considering all points:
+
+```mermaid
+graph LR
+  A[API Gateway] -->|Route Requests| B[Product Service]
+  A[API Gateway] -->|Route Requests| C[Order Service]
+  A[API Gateway] -->|Route Requests| D[Inventory Service]
+  A[API Gateway] -->|Route Requests| E[Notification Service]
+
+  %% Product Service with MongoDB
+  B --> F[(MongoDB)]
+  %% Order Service with MySQL
+  C --> G[(MySQL)]
+  %% Inventory Service Database
+  D --> H[(Database)]
+  %% Notification Service Database
+  E --> I[(Database)]  
+  
+  subgraph "Service Discovery & Configuration"
+    J[Eureka Server] --> B
+    J[Eureka Server] --> C
+    J[Eureka Server] --> D
+    J[Eureka Server] --> E
+    K[Config Server] --> B
+    K[Config Server] --> C
+    K[Config Server] --> D
+    K[Config Server] --> E
+  end
+
+  subgraph "Distributed Tracing"
+    L[Zipkin] --> B
+    L[Zipkin] --> C
+    L[Zipkin] --> D
+    L[Zipkin] --> E
+    M[Spring Cloud Sleuth] --> L
+  end
+
+  subgraph "Authentication & Security"
+    N[Keycloak] --> B
+    N[Keycloak] --> C
+    N[Keycloak] --> D
+    N[Keycloak] --> E
+  end
+  
+  subgraph "Message Broker & Caching"
+    P[Kafka] --> B
+    P[Kafka] --> C
+    Q[Redis] --> B
+    Q[Redis] --> C
+  end
+  
+  subgraph "Event-Driven Architecture"
+    R[Event Bus] --> B
+    R[Event Bus] --> C
+    R[Event Bus] --> D
+    R[Event Bus] --> E
+  end
+
+  subgraph "Saga Pattern"
+    U[Order Service] -->|Start Saga| V[Inventory Service]
+    V[Inventory Service] -->|Check Stock| W[Product Service]
+    W[Product Service] -->|Reserve Product| X[Notification Service]
+    X[Notification Service] -->|Notify Customer| Y[Order Service]
+  end
+
+  subgraph "Containerization & Deployment"
+    O[Docker Compose] -->|Manage Containers| B
+    O[Docker Compose] -->|Manage Containers| C
+    O[Docker Compose] -->|Manage Containers| D
+    O[Docker Compose] -->|Manage Containers| E
+  end
+
+  subgraph "Monitoring & Logging"
+    S[Prometheus] --> B
+    S[Prometheus] --> C
+    T[Grafana] --> S
+    U[Loki] --> B
+    U[Loki] --> C
+    V[Logstash] --> U
+    W[Kibana] --> V
+  end
+  
+  subgraph "CI/CD & Cloud"
+    X[Git] --> Y[Jenkins]
+    Y[Jenkins] --> Z[Kubernetes]
+    Z[Kubernetes] -->|Deploys| O
+  end
+
+  %% UI Frontend Service
+  AA[UI] --> A
+
+  %% Data Exchange Links
+  F -.->|Data Exchange| G
+  G -.->|Data Exchange| H
+  H -.->|Data Exchange| I
+
+  classDef service fill:#f9f,stroke:#333,stroke-width:2px;
+  class A,B,C,D,E service;
+  class F,G,H,I service;
+```
+
+### Summary:
+
+- **Message Broker & Caching**: Keeps Kafka (messaging) and Redis (caching) together for efficiency.
+- **Event-Driven Architecture**: Keeps **Event Bus** abstraction separate from Kafka (allows flexibility in messaging technology choice).
+- **CI/CD & Cloud**: Separates **Docker Compose** from CI/CD flow to focus on orchestration tools for deployment.
+- **Containerization**: Uses **Docker Compose** for local container management but also shows **Kubernetes** for cloud-based orchestration.
+
+Certainly! To clarify, **Event-Driven Architecture** is a pattern that decouples services by allowing them to communicate through events, where services publish and consume events asynchronously. In your case, components like Kafka, Redis, and possibly an **Event Bus** are used to facilitate this communication.
+
+### Separate **Event-Driven Architecture**:
+
+Here's how you can represent **Event-Driven Architecture** separately from the rest of the system in your **Mermaid diagram**.
+
+### Updated Mermaid Diagram
+
+```mermaid
+graph LR
+  A[API Gateway] -->|Route Requests| B[Product Service]
+  A[API Gateway] -->|Route Requests| C[Order Service]
+  A[API Gateway] -->|Route Requests| D[Inventory Service]
+  A[API Gateway] -->|Route Requests| E[Notification Service]
+
+  %% Product Service with MongoDB
+  B --> F[(MongoDB)]
+  %% Order Service with MySQL
+  C --> G[(MySQL)]
+  %% Inventory Service Database
+  D --> H[(Database)]
+  %% Notification Service Database
+  E --> I[(Database)]  
+  
+  subgraph "Service Discovery & Configuration"
+    J[Eureka Server] --> B
+    J[Eureka Server] --> C
+    J[Eureka Server] --> D
+    J[Eureka Server] --> E
+    K[Config Server] --> B
+    K[Config Server] --> C
+    K[Config Server] --> D
+    K[Config Server] --> E
+  end
+
+  subgraph "Distributed Tracing"
+    L[Zipkin] --> B
+    L[Zipkin] --> C
+    L[Zipkin] --> D
+    L[Zipkin] --> E
+    M[Spring Cloud Sleuth] --> L
+  end
+
+  subgraph "Authentication & Security"
+    N[Keycloak] --> B
+    N[Keycloak] --> C
+    N[Keycloak] --> D
+    N[Keycloak] --> E
+  end
+  
+  subgraph "Containerization & Deployment"
+    O[Docker Compose] -->|Manage Containers| B
+    O[Docker Compose] -->|Manage Containers| C
+    O[Docker Compose] -->|Manage Containers| D
+    O[Docker Compose] -->|Manage Containers| E
+  end
+
+  subgraph "Monitoring & Logging"
+    S[Prometheus] --> B
+    S[Prometheus] --> C
+    T[Grafana] --> S
+    U[Loki] --> B
+    U[Loki] --> C
+    V[Logstash] --> U
+    W[Kibana] --> V
+  end
+  
+  subgraph "CI/CD & Cloud"
+    X[Git] --> Y[Jenkins]
+    Y[Jenkins] --> Z[Kubernetes]
+    Z[Kubernetes] -->|Deploys| O
+  end
+
+  %% UI Frontend Service
+  AA[UI] --> A
+
+  %% Data Exchange Links
+  F -.->|Data Exchange| G
+  G -.->|Data Exchange| H
+  H -.->|Data Exchange| I
+
+  %% Event-Driven Architecture (Separate Section)
+  subgraph "Event-Driven Architecture"
+    R[Event Bus] --> B
+    R[Event Bus] --> C
+    R[Event Bus] --> D
+    R[Event Bus] --> E
+
+    subgraph "Message Broker"
+      P[Kafka] --> R
+    end
+    
+    subgraph "Caching"
+      Q[Redis] --> B
+      Q[Redis] --> C
+    end
+  end
+
+  classDef service fill:#f9f,stroke:#333,stroke-width:2px;
+  class A,B,C,D,E service;
+  class F,G,H,I service;
+```
+
+### Breakdown:
+
+#### **Event-Driven Architecture** (now placed separately):
+- **Event Bus** is shown as the central component that allows services to communicate asynchronously.
+- **Kafka** is used as the **Message Broker** within the Event Bus, connecting all services for messaging.
+- **Redis** is shown as part of the **Caching** mechanism, handling temporary data storage and also serving as a pub/sub message broker for certain events.
+  
+This **separation** highlights that the **Event-Driven Architecture** is more than just Kafka or Redis; it's a pattern that involves using an event bus (like Kafka, RabbitMQ, etc.) to communicate between services in a decoupled way.
+
+### **Key Points in This Setup:**
+1. **API Gateway** routes all requests to the respective services.
+2. **Service Discovery & Configuration** (Eureka & Config Server) helps the services to discover each other and maintain proper configurations.
+3. **Distributed Tracing** with **Zipkin** and **Spring Cloud Sleuth** helps monitor request lifecycles across services.
+4. **Security** is managed with **Keycloak**, providing authentication.
+5. **Containerization** is handled by **Docker Compose**, with potential deployment to **Kubernetes**.
+6. **Event-Driven Architecture** with **Kafka** (Message Broker) and **Redis** (Caching) facilitates communication between services via events asynchronously.
+
+### **Why Separate Event-Driven Architecture?**
+- **Kafka** and **Redis** have very different roles compared to the synchronous communication handled by the **API Gateway**. Grouping them under **Event-Driven Architecture** gives you a clear separation of concerns: 
+  - Kafka is a message broker for decoupling microservices via event streams.
+  - Redis is used for caching and event-driven messaging (e.g., pub/sub).
+  
+This way, **Event-Driven Architecture** is focused on handling asynchronous communication and decoupling the microservices, while the rest of the system handles synchronous, RESTful communication (via the API Gateway) and service management.
+
+This structure helps clarify the relationship between synchronous (API Gateway) and asynchronous (Event Bus/Kafka/Redis) communication in a microservice ecosystem.
+
 ### What is Flyway?
 
 **Flyway** is an open-source database migration tool that allows developers to manage schema changes in relational databases. It is especially useful in microservices architectures where multiple services may require different database schemas. Flyway helps ensure that all database changes are versioned, repeatable, and easily manageable.
