@@ -1055,6 +1055,247 @@ graph LR
 
 This diagram provides a high-level overview of the communication between the microservices and their components in a typical Spring Boot microservices architecture.
 
+
+You're right! The **API Gateway**, **Eureka Server**, and **Config Server** should indeed be connected to show how they interact with the rest of the services. Here's an updated **Mermaid diagram** that includes the correct communication flow between **API Gateway**, **Eureka Server**, and **Config Server**, alongside the rest of the services.
+
+### Updated Mermaid Diagram:
+```mermaid
+graph LR
+    %% API Gateway Routing Requests
+    A[API Gateway] -->|Route Requests| B[Product Service]
+    A[API Gateway] -->|Route Requests| C[Order Service]
+    A[API Gateway] -->|Route Requests| D[Inventory Service]
+    A[API Gateway] -->|Route Requests| E[Notification Service]
+
+    %% Product Service with MongoDB
+    B --> F[(MongoDB)]
+    %% Order Service with MySQL
+    C --> G[(MySQL)]
+    %% Inventory Service Database
+    D --> H[(Database)]
+    %% Notification Service Database
+    E --> I[(Database)]  
+
+    %% Eureka Server (Service Discovery)
+    J[Eureka Server] --> B
+    J[Eureka Server] --> C
+    J[Eureka Server] --> D
+    J[Eureka Server] --> E
+
+    %% Config Server (Centralized Configuration)
+    K[Config Server] --> B
+    K[Config Server] --> C
+    K[Config Server] --> D
+    K[Config Server] --> E
+
+    %% API Gateway connects to Eureka and Config Server
+    A --> J[Service Discovery: Eureka Server]
+    A --> K[Configuration: Config Server]
+
+    %% Service Communication Flow
+    F -.->|Data Exchange| G
+    G -.->|Data Exchange| H
+    H -.->|Data Exchange| I
+
+    %% Class Definition for Styling
+    classDef service fill:#f9f,stroke:#333,stroke-width:2px;
+    class A,B,C,D,E service;
+    class F,G,H,I service;
+    class J,K service;
+```
+
+### Explanation of Communication Flow:
+1. **API Gateway**:
+    - The **API Gateway** routes incoming requests to the appropriate services (Product, Order, Inventory, and Notification).
+    - The **API Gateway** also communicates with the **Eureka Server** for service discovery and the **Config Server** for configuration management.
+
+2. **Eureka Server**:
+    - The **Eureka Server** acts as a **service discovery** server where all services (Product, Order, Inventory, Notification) register themselves. This enables dynamic communication between microservices by allowing them to discover and communicate with each other.
+
+3. **Config Server**:
+    - The **Config Server** provides **centralized configuration management** to the services, ensuring that all microservices are using the same configuration. It can dynamically update the configuration across all services as needed.
+
+4. **Service Communication**:
+    - The services (Product, Order, Inventory, Notification) communicate with their respective databases (MongoDB, MySQL, etc.) for persistent storage. Additionally, the communication flow between these services is depicted using dashed arrows (for data exchange).
+
+### How to Visualize:
+1. **Mermaid Live Editor**: Copy and paste the code into [Mermaid Live Editor](https://mermaid-js.github.io/mermaid-live-editor/) to view the diagram.
+2. **Draw.io**: Alternatively, you can manually draw this out on [Draw.io](https://app.diagrams.net/) using the components described.
+
+This diagram now correctly represents the interaction between the **API Gateway**, **Eureka Server**, and **Config Server**, along with the rest of the services!
+
+### Communication Between Components in a Microservices Architecture
+
+In a typical **Spring Boot** microservices setup, **API Gateway**, **Eureka Server**, and **Config Server** communicate in specific ways to ensure a smooth and efficient workflow. Below is a breakdown of how each of these components interacts:
+
+---
+
+### **1. API Gateway Communication**
+
+**API Gateway** serves as the entry point for all incoming requests from clients (users or systems). It handles routing requests to appropriate microservices. In a Spring Cloud ecosystem, the **API Gateway** (often implemented with **Spring Cloud Gateway** or **Zuul**) typically interacts with the following components:
+
+#### **Flow of Communication**:
+- **Incoming Requests**: 
+  - Clients (such as a web or mobile application) send HTTP requests to the **API Gateway**.
+  - The **API Gateway** is the only public-facing entity, so all external traffic comes through it.
+  
+- **Routing Requests**: 
+  - The **API Gateway** inspects the request (based on URL, HTTP method, headers, etc.) and routes it to the appropriate service. For example, a request to `/products` would be routed to the **Product Service**, and `/orders` would be sent to the **Order Service**.
+  - **Routing Decision**: The **API Gateway** can use static rules or more advanced routing mechanisms (such as using service names from Eureka) to decide how to route the request.
+
+- **Integration with Eureka**:
+  - The **API Gateway** uses **Eureka** for dynamic service discovery. Instead of hardcoding the service endpoints (e.g., `localhost:8080/products`), the **API Gateway** queries **Eureka Server** to get the location (host and port) of the target microservice (e.g., **Product Service**).
+  - Eureka provides **client-side load balancing**, meaning if multiple instances of the same service are running, the **API Gateway** can route the request to any available instance.
+
+#### **Key Tasks**:
+- **Routing**: Directs requests to the correct microservice.
+- **Load Balancing**: Ensures load is distributed among available service instances.
+- **Security**: Can enforce authentication/authorization policies for incoming requests.
+
+---
+
+### **2. Eureka Server Communication**
+
+**Eureka Server** is a **Service Discovery** server, helping microservices register themselves and discover other services dynamically. **Eureka** uses a **client-server** model where each microservice registers itself as a client with the **Eureka Server**.
+
+#### **Flow of Communication**:
+- **Service Registration**: 
+  - When a microservice (e.g., **Product Service**) starts, it registers itself with the **Eureka Server**, providing its service name (e.g., `product-service`) and the URI (host + port).
+  - Eureka keeps track of the available service instances and their health status.
+  
+- **Service Discovery**:
+  - When a service (e.g., **API Gateway**) wants to make a request to another service (e.g., **Product Service**), it queries the **Eureka Server** to get the list of instances of the **Product Service**.
+  - The **API Gateway** can then use this information to route requests to a specific service instance.
+
+- **Health Checks**:
+  - Eureka periodically performs health checks to ensure the registered services are available. If a service becomes unhealthy or stops responding, Eureka removes it from the registry.
+  
+- **Client-Side Load Balancing**:
+  - With **Eureka** in place, client applications (like the **API Gateway**) can choose any healthy instance of the service. In case of multiple instances, the **API Gateway** can distribute traffic across instances to balance the load.
+
+#### **Key Tasks**:
+- **Service Registration**: Services register themselves with Eureka.
+- **Service Discovery**: Other services query Eureka to find available instances.
+- **Health Monitoring**: Eureka performs health checks on registered services.
+
+---
+
+### **3. Config Server Communication**
+
+**Config Server** is used to centralize configuration management for microservices. It provides externalized configuration properties, allowing microservices to fetch configuration values at runtime. This is essential for dynamic configuration updates across the microservices without requiring restarts.
+
+#### **Flow of Communication**:
+- **Service Configuration**:
+  - Each microservice retrieves configuration properties from the **Config Server** during startup or when needed. For example, the **Product Service** can fetch database connection properties, API keys, or other environment-specific values from the **Config Server**.
+  
+- **Dynamic Configuration Updates**:
+  - **Spring Cloud Config** supports **dynamic updates**. If the configuration is changed in the **Config Server** (e.g., in a `Git` repository or a local file), the **Config Server** notifies the microservices about the changes.
+  - The microservices can listen for configuration changes and automatically reload the updated configuration.
+
+- **Integration with Spring Cloud**:
+  - Microservices are configured to automatically fetch configuration from the **Config Server** using a URL like `http://config-server:8888/{application-name}/{profile}`.
+  - The **Config Server** can pull configurations from various sources like Git, local file system, or even a database.
+  
+- **Security & Access**:
+  - Access to the **Config Server** can be secured, ensuring that sensitive properties (like database credentials, API keys) are properly protected.
+  
+- **Use with Profiles**:
+  - Microservices can specify which configuration profile they need (e.g., `dev`, `prod`) and get environment-specific configurations.
+
+#### **Key Tasks**:
+- **Centralized Configuration**: Provides a centralized configuration management system.
+- **Dynamic Configuration**: Allows microservices to dynamically reload configuration properties.
+- **Externalized Properties**: Stores configuration properties outside of code, ensuring flexibility and scalability.
+
+---
+
+### **Summary of Interactions:**
+
+1. **API Gateway**:
+   - Routes requests to microservices based on the request URL or headers.
+   - Queries **Eureka** to discover the service instance and routes traffic accordingly.
+   - Can fetch configuration from the **Config Server** for routing or other purposes.
+
+2. **Eureka Server**:
+   - Maintains a registry of available microservices.
+   - Provides service discovery for the **API Gateway** and other services.
+   - Monitors health and availability of services to ensure routing to live instances.
+
+3. **Config Server**:
+   - Centralizes and externalizes configuration management.
+   - Supplies configuration data to microservices at runtime, allowing dynamic changes.
+   - Ensures that services can fetch and reload their configuration automatically.
+
+---
+
+### **Flow Example**: API Gateway to Product Service
+
+1. **Client Request**:
+   - A client (user) makes a request to `https://api.example.com/products`.
+
+2. **API Gateway**:
+   - The **API Gateway** intercepts the request.
+   - It queries **Eureka Server** to find the available instance of **Product Service**.
+   
+3. **Eureka Server**:
+   - The **API Gateway** gets the URL of a running instance of **Product Service**.
+   
+4. **Config Server** (if needed):
+   - The **API Gateway** or the **Product Service** might query the **Config Server** for any relevant configurations (e.g., rate limits, API keys).
+
+5. **Product Service**:
+   - The **API Gateway** forwards the request to the **Product Service**, which processes the request and sends a response back.
+
+6. **Response**:
+   - The **API Gateway** returns the response to the client.
+
+This communication flow ensures **centralized configuration management**, **service discovery**, and **request routing** in a scalable and dynamic microservices environment.
+
+It seems like there was an issue generating the image directly. However, I can guide you on how to manually create this diagram using tools like **Mermaid** or **Draw.io** based on the description provided. Here's the **Mermaid diagram** structure for you to try:
+
+```mermaid
+graph LR
+    A[API Gateway] -->|Route Requests| B[Product Service]
+    A[API Gateway] -->|Route Requests| C[Order Service]
+    A[API Gateway] -->|Route Requests| D[Inventory Service]
+    A[API Gateway] -->|Route Requests| E[Notification Service]
+
+    %% Product Service with MongoDB
+    B --> F[(MongoDB)]
+    %% Order Service with MySQL
+    C --> G[(MySQL)]
+    %% Inventory Service Database
+    D --> H[(Database)]
+    %% Notification Service Database
+    E --> I[(Database)]  
+
+    subgraph "Service Discovery & Configuration"
+        J[Eureka Server] --> B
+        J[Eureka Server] --> C
+        J[Eureka Server] --> D
+        J[Eureka Server] --> E
+        K[Config Server] --> B
+        K[Config Server] --> C
+        K[Config Server] --> D
+        K[Config Server] --> E
+    end
+
+    %% Service Communication
+    F -.->|Data Exchange| G
+    G -.->|Data Exchange| H
+    H -.->|Data Exchange| I
+
+    classDef service fill:#f9f,stroke:#333,stroke-width:2px;
+    class A,B,C,D,E service;
+    class F,G,H,I service;
+```
+
+### Steps to Render the Diagram:
+1. **Use Mermaid Live Editor**: Paste this code into the [Mermaid Live Editor](https://mermaid-js.github.io/mermaid-live-editor/) to visualize and adjust the diagram.
+2. **Draw.io**: Alternatively, you can use tools like [Draw.io](https://app.diagrams.net/) where you can manually drag and drop components like "API Gateway", "Eureka Server", "Config Server", and link them based on the communication flow.
+
+This will give you a comprehensive and clear visual representation of the communication flow between your services!
+
 ### What is Flyway?
 
 **Flyway** is an open-source database migration tool that allows developers to manage schema changes in relational databases. It is especially useful in microservices architectures where multiple services may require different database schemas. Flyway helps ensure that all database changes are versioned, repeatable, and easily manageable.
