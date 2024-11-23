@@ -1007,3 +1007,77 @@ graph TD;
 To view this diagram, you can use a **Mermaid live editor** or use it within a Markdown file that supports Mermaid rendering.
 
 ---
+Profile Summary
+
+DevOps professional offering a distinguished and insightful exposure of around 9 years of experience across high-growth environments in cloud & production support, implementation, configuring, monitoring, and troubleshooting in Azure cloud. Enthusiastic while working as part of a team or alone and believes in hard-work discipline and perseverance.
+
+Skills Summary:
+
+Professional experience with around 5 years of experience in implementation, migration, project, and support for Confidential Core Infrastructure Solutions On-Premises, Azure Cloud and DevOps.
+Working on best industry concepts Azure, DevOps, CI/CD, GIT, Jenkins, YAML, PowerShell, Docker, and Terraform. 
+Development, administration, and maintenance of the Continuous Integration (CI) and Continuous Delivery (CD) pipelines to build, package, test, validate, verify infrastructure, and deploy into all necessary environments.
+Develop DevOps pipelines using YAML in Azure DevOps and Terraform to Deploy applications in various Cloud and On-Premises environments
+
+
+Experience in automation and provisioning approaches using tools such as Terraform, PowerShell, GIT and GIT HUB.
+Collecting and projecting data in dashboards by using Power BI for Azure Security Center, Azure Cost Management and Azure DevOps Analytics view.   
+Experience in Agile Project Management/Scrum Methodologies approaches and tools such as Azure DevOps and Service Now. 
+Experience/Good Understanding in Azure Networking services like Azure VNET, Routing, Network security groups, Peering, Application Gateway etc. 
+Work as Cloud Administrator on Microsoft Azure such as Configuring VMs, subscriptions, blueprints for subscription, Resources needed for all web applications etc...
+Good understanding in Azure networking, Storage, VM provisioning, RBAC, Automation, AZ Copy, Storage Explorer, Application Insights, ARM Templates automation etc.
+Monitor Cost management and resources by checking log analytics for any errors. Making sure Cost-effective environment setup is configured and following the standards as well. 
+Responsible for Incident Management i.e., troubleshooting, and leading critical or urgent issues on email and mobility infrastructure and driving them to resolution as per the agreed SLAs with customer
+Worked on PowerShell to get fixes on Azure/SharePoint server and good working experience on YAML to write custom pipelines in Azure DevOps.
+
+
+Employment History
+
+Employer  
+Designation  
+Duration  
+abc
+DevOps Engineer
+
+
+
+
+Technical Skills
+Microsoft Azure: -
+Infrastructure as a Service (IaaS): Azure Cloud service, Azure Virtual Machine, Azure Virtual Networks / Storage, Azure Backup, Azure copy, Application Gateway, Frontdoor, Azure Container Registry, Terraform etc.
+Software as a Service (SaaS)	:	Office 365, SharePoint Online.
+Platform as a Service (PaaS)	:	App Services & Function Apps.
+Scripting			:	PowerShell, YAML.
+
+DevOps				:	Azure DevOps, Docker, Jenkins, GitHub
+Microsoft Operating System	:	Windows
+Application /web Servers	:	IIS
+
+Professional Experience
+
+Company		:					March 2019 – Till date
+Role			:	Senior DevOps
+Major Technologies	:	Azure, DevOps, O365, SharePoint Server
+
+Responsibilities: 
+Providing Administration cum Support involves Architecture Planning, Server Build, Environment Maintenance, Server Administration, and Application Development in Cloud.
+Build of new environments for Dev/Test in Azure. Policies for subscription (Dev/Test/Prod) at granular level as well.
+Migration, Gateway/Front door, Backups, App Services/Registrations, Key Vaults, Storage Accounts, Security Centre IaaS and PaaS.
+Imagine, architect, develop, deploy, and evolve CI and CD systems for the platform in the cloud and On-Premise Servers using Git, GitHub Actions, Jenkins, and Azure DevOps and Docker.
+Design and deploy Azure backup for webapps and other confidential backup confidential solutions in Azure.
+Administering Web Apps servers which are configured on On-premise servers for internal and external applications.
+Worked on Azure Load Balancer and Application Gateway for routing/rewriting HTTP requests and taken care of backend pools to connect to Gateway. 
+Responsible for systems and applications performance monitoring. 
+Monitoring critical production systems; performing health check from time to time and checking the disk space usage.
+Administering Coveo tool to unify disparate content and data, to automate the delivery of relevant, personalized information.
+Worked as Office 365 admin and did worked on Migrating SharePoint On-Premise apps to SharePoint On-Line. 
+Working as DevOps admin to architect, develop, deploy, and evolve for the platform in the cloud and On-Premise Servers.
+Working closely with QA teams, Business teams and DBA team and Product operations teams to identify QA and UAT cycles release schedule to non-prod and prod environments.
+Created Build definition and Release definition for continuous Integration and continuous Deployment. 
+Created dashboards in VSTS for CI/CD pipelines, work items and bugs.
+
+
+
+Education
+
+Certifications
+Personal Details
