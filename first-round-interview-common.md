@@ -101,6 +101,92 @@
 - **Configuration Management**: Ensure properties can be overridden as needed in different environments.
 
 
+Below diagram visually represents the architecture of the Spring Boot microservices application you described, including services like:-
+
+- Product
+- Order
+- Inventory
+- Notification
+
+Along with key components like:-
+- Eureka, 
+- Config Server, 
+- API Gateway and Docker.
+
+```mermaid
+graph TD
+  A[API Gateway] -->|Route Requests| B[Product Service]
+  A[API Gateway] -->|Route Requests| C[Order Service]
+  A[API Gateway] -->|Route Requests| D[Inventory Service]
+  A[API Gateway] -->|Route Requests| E[Notification Service]
+  
+  B --> F[(MongoDB)]  %% Product Service with MongoDB
+  C --> G[(MySQL)]  %% Order Service with MySQL
+  D --> H[(Database)]  %% Inventory Service Database
+  E --> I[(Database)]  %% Notification Service Database
+  
+  subgraph "Service Discovery & Configuration"
+    J[Eureka Server] --> B
+    J[Eureka Server] --> C
+    J[Eureka Server] --> D
+    J[Eureka Server] --> E
+    K[Config Server] --> B
+    K[Config Server] --> C
+    K[Config Server] --> D
+    K[Config Server] --> E
+  end
+  
+  subgraph "Distributed Tracing"
+    L[Zipkin] --> B
+    L[Zipkin] --> C
+    L[Zipkin] --> D
+    L[Zipkin] --> E
+    M[Spring Cloud Sleuth] --> L
+  end
+  
+  subgraph "Authentication & Security"
+    N[Keycloak] --> B
+    N[Keycloak] --> C
+    N[Keycloak] --> D
+    N[Keycloak] --> E
+  end
+  
+  subgraph "Containerization & Deployment"
+    O[Docker Compose] -->|Manage Containers| B
+    O[Docker Compose] -->|Manage Containers| C
+    O[Docker Compose] -->|Manage Containers| D
+    O[Docker Compose] -->|Manage Containers| E
+  end
+  
+  F -.->|Data Exchange| G
+  G -.->|Data Exchange| H
+  H -.->|Data Exchange| I
+  
+  classDef service fill:#f9f,stroke:#333,stroke-width:2px;
+  class A,B,C,D,E service;
+  class F,G,H,I service;
+```
+
+### Diagram Explanation:
+
+- **API Gateway**: Routes requests to different services (Product, Order, Inventory, Notification).
+- **Product, Order, Inventory, and Notification Services**: Microservices handling their respective domain logic, connected to databases.
+  - Product Service uses **MongoDB**.
+  - Order Service uses **MySQL**.
+  - Inventory and Notification services connect to their respective databases (could be SQL or NoSQL).
+- **Eureka Server**: Provides service discovery, allowing services to register and discover each other.
+- **Config Server**: Centralized configuration management, ensuring that all services use consistent configuration values.
+- **Zipkin**: Distributed tracing visualization platform, with Spring Cloud Sleuth generating trace data for each service.
+- **Keycloak**: Authentication and authorization service, ensuring secure access to the microservices.
+- **Docker Compose**: Orchestrates container deployment, ensuring services are packaged, deployed, and managed in Docker containers.
+
+### Interactions:
+- Services communicate through HTTP (API Gateway to services), and databases exchange data (e.g., MongoDB to MySQL).
+- Each service is registered with **Eureka Server** for discovery and queries configuration from **Config Server**.
+- **Spring Cloud Sleuth** and **Zipkin** are used for monitoring and tracing the lifecycle of requests across services.
+  
+You can visualize this diagram using any Mermaid-compatible renderer to get a visual understanding of how these components interact in a microservices-based architecture.
+
 ### What is Flyway?
 
 **Flyway** is an open-source database migration tool that allows developers to manage schema changes in relational databases. It is especially useful in microservices architectures where multiple services may require different database schemas. Flyway helps ensure that all database changes are versioned, repeatable, and easily manageable.
