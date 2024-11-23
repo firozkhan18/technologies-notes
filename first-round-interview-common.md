@@ -399,6 +399,63 @@ In a **microservices architecture**, the order in which services are started can
 3. **Fault Tolerance**: Consider adding retry mechanisms in case services take time to start, especially **Eureka Server** or **Config Server**.
 ---
 
+Below is the **Mermaid diagram** that reflects the order of execution and communication between the services, following the sequence we discussed:
+
+```mermaid
+graph LR
+    %% Config Server
+    A[Config Server] -->|Provide Configurations| B[Product Service]
+    A[Config Server] -->|Provide Configurations| C[Order Service]
+    A[Config Server] -->|Provide Configurations| D[Inventory Service]
+    A[Config Server] -->|Provide Configurations| E[Notification Service]
+
+    %% Eureka Server (Service Discovery)
+    F[Eureka Server] -->|Service Discovery| B
+    F[Eureka Server] -->|Service Discovery| C
+    F[Eureka Server] -->|Service Discovery| D
+    F[Eureka Server] -->|Service Discovery| E
+
+    %% API Gateway
+    G[API Gateway] -->|Route Requests| B
+    G[API Gateway] -->|Route Requests| C
+    G[API Gateway] -->|Route Requests| D
+    G[API Gateway] -->|Route Requests| E
+
+    %% Communication Between Services
+    %% Product Service with MongoDB
+    B --> H[(MongoDB)]
+    %% Order Service with MySQL
+    C --> I[(MySQL)]
+    %% Inventory Service Database
+    D --> J[(Database)]
+    %% Notification Service Database
+    E --> K[(Database)]
+
+    %% API Gateway communication with Eureka Server and Config Server
+    G --> F[Service Discovery: Eureka Server]
+    G --> A[Configuration: Config Server]
+
+    %% Class Definitions for Styling
+    classDef service fill:#f9f,stroke:#333,stroke-width:2px;
+    class A,B,C,D,E,F,G service;
+    class H,I,J,K service;
+```
+
+### Explanation of the Diagram:
+1. **Config Server** starts first and provides configuration details to all the microservices (Product Service, Order Service, Inventory Service, Notification Service).
+2. **Eureka Server** starts second, allowing each microservice to register and discover each other. The services (Product, Order, Inventory, Notification) register themselves with **Eureka Server** for service discovery.
+3. **API Gateway** is the entry point and routes incoming requests to the respective services (Product, Order, Inventory, Notification). It relies on **Eureka Server** for service discovery and **Config Server** for configuration properties.
+4. **Product Service** communicates with **MongoDB**, **Order Service** communicates with **MySQL**, **Inventory Service** communicates with its respective database, and **Notification Service** communicates with its own database.
+
+### Order of Execution:
+1. **Config Server** starts first, providing configuration.
+2. **Eureka Server** starts second, enabling service discovery.
+3. **API Gateway** starts third, routing requests.
+4. **Product Service**, **Order Service**, **Inventory Service**, and **Notification Service** follow, with each registering with **Eureka Server** and obtaining configurations from **Config Server**.
+
+This order ensures that all dependencies are correctly satisfied, allowing smooth communication between services.
+
+---
 
 Here's an updated version of the Mermaid diagram, incorporating the requested components like **UI**, **Kafka**, **Redis**, **Grafana**, **Prometheus**, **Loki**, **Logstash**, **Kibana**, **Cloud**, **Git**, **Jenkins**, and **Kubernetes**.
 
