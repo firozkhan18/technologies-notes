@@ -38,7 +38,9 @@ Hide/Show table of contents
 |3 | [**Q&A-React**](conceptsI/FAQ-React.md)|
 |5 | [**Q&A-React-Advanced**](conceptsI/FAQ-React-Advanced.md)|
 |6 | [**Q&A-React**](conceptsI/Q&A-React.md)|
+|7 | [**Lead**](first-round-interview3-lead.md)|
 </details>
+
 
 ## Interview Questions & Answers - Java & J2EE Technologies
 
