@@ -251,6 +251,69 @@ graph LR
   
 You can visualize this diagram using any Mermaid-compatible renderer to get a visual understanding of how these components interact in a microservices-based architecture.
 
+
+The **API Gateway**, **Eureka Server**, and **Config Server** should indeed be connected to show how they interact with the rest of the services. Here's an updated **Mermaid diagram** that includes the correct communication flow between **API Gateway**, **Eureka Server**, and **Config Server**, alongside the rest of the services.
+
+### Updated Mermaid Diagram:
+```mermaid
+graph LR
+    %% API Gateway Routing Requests
+    A[API Gateway] -->|Route Requests| B[Product Service]
+    A[API Gateway] -->|Route Requests| C[Order Service]
+    A[API Gateway] -->|Route Requests| D[Inventory Service]
+    A[API Gateway] -->|Route Requests| E[Notification Service]
+
+    %% Product Service with MongoDB
+    B --> F[(MongoDB)]
+    %% Order Service with MySQL
+    C --> G[(MySQL)]
+    %% Inventory Service Database
+    D --> H[(Database)]
+    %% Notification Service Database
+    E --> I[(Database)]  
+
+    %% Eureka Server (Service Discovery)
+    J[Eureka Server] --> B
+    J[Eureka Server] --> C
+    J[Eureka Server] --> D
+    J[Eureka Server] --> E
+
+    %% Config Server (Centralized Configuration)
+    K[Config Server] --> B
+    K[Config Server] --> C
+    K[Config Server] --> D
+    K[Config Server] --> E
+
+    %% API Gateway connects to Eureka and Config Server
+    A --> J[Service Discovery: Eureka Server]
+    A --> K[Configuration: Config Server]
+
+    %% Service Communication Flow
+    F -.->|Data Exchange| G
+    G -.->|Data Exchange| H
+    H -.->|Data Exchange| I
+
+    %% Class Definition for Styling
+    classDef service fill:#f9f,stroke:#333,stroke-width:2px;
+    class A,B,C,D,E service;
+    class F,G,H,I service;
+    class J,K service;
+```
+
+### Explanation of Communication Flow:
+1. **API Gateway**:
+    - The **API Gateway** routes incoming requests to the appropriate services (Product, Order, Inventory, and Notification).
+    - The **API Gateway** also communicates with the **Eureka Server** for service discovery and the **Config Server** for configuration management.
+
+2. **Eureka Server**:
+    - The **Eureka Server** acts as a **service discovery** server where all services (Product, Order, Inventory, Notification) register themselves. This enables dynamic communication between microservices by allowing them to discover and communicate with each other.
+
+3. **Config Server**:
+    - The **Config Server** provides **centralized configuration management** to the services, ensuring that all microservices are using the same configuration. It can dynamically update the configuration across all services as needed.
+
+4. **Service Communication**:
+    - The services (Product, Order, Inventory, Notification) communicate with their respective databases (MongoDB, MySQL, etc.) for persistent storage. Additionally, the communication flow between these services is depicted using dashed arrows (for data exchange).
+  
 Here's an updated version of the Mermaid diagram, incorporating the requested components like **UI**, **Kafka**, **Redis**, **Grafana**, **Prometheus**, **Loki**, **Logstash**, **Kibana**, **Cloud**, **Git**, **Jenkins**, and **Kubernetes**.
 
 ```mermaid
