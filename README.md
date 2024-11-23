@@ -788,3 +788,222 @@ This approach reduces the time complexity to O(n), which is much more efficient 
 - **Performance**: Refers to the efficiency of resource usage. Optimize performance by profiling, reducing bottlenecks, and using more efficient algorithms.
 
 By applying these principles, Java developers can design highly scalable, responsive, and performant applications that can handle increasing workloads with minimal delays.
+
+---
+
+Setting up a **CI/CD pipeline** using **Jenkins**, **GitHub**, **SonarQube**, and **Docker** on an **AWS EC2** instance is an essential skill for modern DevOps workflows. In this guide, we'll walk through each step in setting up an efficient, automated pipeline for building, testing, and deploying applications. We'll also integrate **SonarQube** for code quality analysis and use **Docker** for containerized deployment.
+
+### Prerequisites:
+1. **AWS EC2 Instance** (with Ubuntu 20.04 or similar Linux distribution)
+2. **Jenkins Account** and **GitHub Account**
+3. **SonarQube Server** (either self-hosted or using SonarCloud)
+
+---
+
+### **Step 1: Set Up AWS EC2 Instance**
+
+1. **Launch EC2 Instance**:
+   - Sign into the **AWS Management Console** and navigate to **EC2**.
+   - Launch an EC2 instance (choose Ubuntu 20.04 or Amazon Linux 2 as your OS).
+   - Select an **instance type** (e.g., `t2.micro` for testing purposes).
+   - Open ports for **HTTP (80)**, **HTTPS (443)**, and **SSH (22)** in the security group.
+
+2. **SSH into EC2 Instance**:
+   - Open a terminal and connect to your instance using SSH:
+     ```bash
+     ssh -i your-key.pem ubuntu@your-ec2-public-ip
+     ```
+
+---
+
+### **Step 2: Install Jenkins on EC2 Instance**
+
+1. **Install Java** (required for Jenkins):
+   ```bash
+   sudo apt update
+   sudo apt install openjdk-11-jdk -y
+   ```
+
+2. **Install Jenkins**:
+   - Add Jenkins repository:
+     ```bash
+     wget -q -O - https://pkg.jenkins.io/jenkins.io.key | sudo apt-key add -
+     sudo sh -c 'echo deb http://pkg.jenkins.io/debian/ / > /etc/apt/sources.list.d/jenkins.list'
+     sudo apt update
+     sudo apt install jenkins -y
+     ```
+
+3. **Start Jenkins**:
+   ```bash
+   sudo systemctl start jenkins
+   sudo systemctl enable jenkins
+   ```
+
+4. **Access Jenkins Web Interface**:
+   - Open your browser and visit `http://your-ec2-public-ip:8080`.
+   - Retrieve the Jenkins unlock key:
+     ```bash
+     sudo cat /var/lib/jenkins/secrets/initialAdminPassword
+     ```
+   - Enter the unlock key and complete the Jenkins setup by installing the recommended plugins.
+
+---
+
+### **Step 3: Set Up GitHub Integration with Jenkins**
+
+1. **Install GitHub Plugin on Jenkins**:
+   - Navigate to Jenkins dashboard, click on **Manage Jenkins** → **Manage Plugins**.
+   - In the **Available** tab, search for the **GitHub plugin**, install it, and restart Jenkins.
+
+2. **Generate GitHub Personal Access Token**:
+   - Go to your GitHub account settings, navigate to **Developer settings** → **Personal access tokens**, and generate a new token with `repo` and `admin:repo_hook` permissions.
+
+3. **Configure GitHub in Jenkins**:
+   - Go to **Manage Jenkins** → **Configure System**.
+   - In the **GitHub** section, add your GitHub credentials using the personal access token generated earlier.
+   - Test the connection to ensure it’s working.
+
+4. **Create a New Jenkins Job**:
+   - Create a **Freestyle Project** or **Pipeline Project** depending on your preference.
+   - Under **Source Code Management**, select **Git** and add the GitHub repository URL (e.g., `https://github.com/username/repository`).
+   - In the **Credentials** dropdown, select the GitHub credentials you configured.
+
+---
+
+### **Step 4: Set Up SonarQube for Code Quality Analysis**
+
+1. **Install SonarQube on EC2 or Use SonarCloud**:
+   - You can either host your own **SonarQube server** on EC2 or use **SonarCloud** (the cloud version of SonarQube).
+   - To install SonarQube on EC2:
+     ```bash
+     sudo apt install unzip openjdk-11-jdk -y
+     wget https://binaries.sonarsource.com/Commercial/sonarqube-9.5.zip
+     unzip sonarqube-9.5.zip
+     cd sonarqube-9.5/bin/linux-x86-64
+     ./sonar.sh start
+     ```
+
+2. **Configure SonarQube in Jenkins**:
+   - In Jenkins, go to **Manage Jenkins** → **Configure System** → **SonarQube Servers**.
+   - Add SonarQube server details, including the server URL (`http://your-sonarqube-server:9000`).
+   - For **authentication**, use the token generated in SonarQube under **My Account** → **Security**.
+
+3. **Add SonarQube Scanner**:
+   - Go to **Manage Jenkins** → **Global Tool Configuration** and add **SonarQube Scanner**.
+   - Download and configure the SonarQube Scanner for Jenkins.
+
+4. **Configure Jenkins Job to Run SonarQube Analysis**:
+   - In your Jenkins job, under **Build** → **Add build step**, select **Execute SonarQube Scanner**.
+   - Specify the project’s `sonar-project.properties` file or configure the necessary parameters (e.g., `sonar.projectKey`, `sonar.sources`).
+
+---
+
+### **Step 5: Set Up Docker and Build a Docker Image**
+
+1. **Install Docker on EC2**:
+   ```bash
+   sudo apt update
+   sudo apt install docker.io -y
+   sudo systemctl start docker
+   sudo systemctl enable docker
+   ```
+
+2. **Create a Dockerfile**:
+   In your GitHub repository, add a `Dockerfile` to define how your application will be built inside a Docker container. Here's an example for a simple Java application:
+
+   ```dockerfile
+   FROM openjdk:11-jre-slim
+   COPY target/my-app.jar /usr/app/
+   WORKDIR /usr/app
+   CMD ["java", "-jar", "my-app.jar"]
+   ```
+
+3. **Build Docker Image in Jenkins**:
+   - Add a build step to your Jenkins job to build the Docker image:
+     ```bash
+     docker build -t my-app .
+     ```
+   - Optionally, you can push the Docker image to a container registry (like Docker Hub or Amazon ECR) by adding:
+     ```bash
+     docker tag my-app:latest myusername/my-app:latest
+     docker push myusername/my-app:latest
+     ```
+
+---
+
+### **Step 6: Automate Deployment**
+
+1. **Deploy Docker Container on EC2**:
+   - Once the Docker image is built and pushed, you can deploy it using Jenkins:
+     ```bash
+     docker run -d -p 8080:8080 my-app
+     ```
+
+2. **Configure Jenkins Job to Trigger Deployment**:
+   - After the build and test steps, add a **Post-build Action** to deploy your Docker container to your EC2 instance.
+   - You can use Jenkins SSH plugin to remotely trigger Docker commands on the EC2 instance.
+
+---
+
+### **Step 7: Trigger CI/CD Pipeline Automatically with GitHub Webhooks**
+
+1. **Create GitHub Webhook**:
+   - In your GitHub repository, go to **Settings** → **Webhooks**.
+   - Add a new webhook with the Jenkins server URL (`http://your-jenkins-server:8080/github-webhook/`).
+   - This webhook will trigger Jenkins to start the build whenever there is a commit or push to your repository.
+
+---
+
+### **Conclusion**
+
+By following these steps, you have set up a complete **CI/CD pipeline** using **Jenkins**, **GitHub**, **SonarQube**, and **Docker** on an **AWS EC2** instance. Here's a summary of what you've done:
+
+1. **AWS EC2 Instance**: Provisioned an EC2 instance to host Jenkins and other tools.
+2. **Jenkins Installation**: Installed and configured Jenkins to automate builds.
+3. **GitHub Integration**: Set up GitHub repositories and integrated them with Jenkins.
+4. **SonarQube Configuration**: Integrated SonarQube to ensure code quality and conduct static code analysis.
+5. **Docker**: Automated Docker image builds and deployment to the EC2 instance.
+
+This setup ensures that your software development process is automated, with code quality checks and containerized deployments, enabling continuous integration and continuous delivery.
+
+---
+
+To represent the CI/CD pipeline with **Jenkins**, **GitHub**, **SonarQube**, and **Docker** on an **AWS EC2** instance using a **Mermaid** diagram, we can use the following code:
+
+```mermaid
+graph TD;
+    A[GitHub Repository] -->|Push Code| B[Jenkins Server];
+    B -->|Checkout Code| C[Build Project];
+    C -->|Run Unit Tests| D[SonarQube Analysis];
+    D -->|Code Quality Analysis| E[Docker Image Build];
+    E -->|Create Docker Image| F[Push Docker Image to Registry];
+    F -->|Push Image| G[AWS EC2 Instance];
+    G -->|Deploy Docker Container| H[Running Application on EC2];
+
+    A -.->|Webhooks| B;
+    B -->|Notify Build Status| I[GitHub Notifications];
+
+    classDef cloud fill:#f9f,stroke:#333,stroke-width:4px;
+    class A,B,G,H cloud;
+```
+
+### Explanation:
+1. **GitHub Repository** (`A`): The source code repository where changes (commits/pushes) are made.
+2. **Jenkins Server** (`B`): This listens for changes from GitHub (via Webhook), checks out the code, and triggers the pipeline.
+3. **Build Project** (`C`): Jenkins pulls the code and starts the build process (compile, package, etc.).
+4. **SonarQube Analysis** (`D`): Runs static code analysis to check for code quality issues (using SonarQube).
+5. **Docker Image Build** (`E`): Once the code passes quality checks, Jenkins builds a Docker image using the Dockerfile from the repository.
+6. **Push Docker Image to Registry** (`F`): After building the Docker image, it is pushed to a Docker registry (like Docker Hub or Amazon ECR).
+7. **AWS EC2 Instance** (`G`): The registry-hosted Docker image is pulled into an EC2 instance.
+8. **Deploy Docker Container** (`H`): The application is deployed and run in a Docker container on the EC2 instance.
+9. **GitHub Notifications** (`I`): GitHub is notified about the build status (success or failure).
+
+### How to Use:
+- This diagram helps visualize how the tools work together in a CI/CD pipeline.
+- The pipeline starts when code is pushed to the GitHub repository, which triggers Jenkins to run a build, tests, and quality analysis.
+- The final result is the deployment of a Docker container on AWS EC2.
+
+### How to Render:
+To view this diagram, you can use a **Mermaid live editor** or use it within a Markdown file that supports Mermaid rendering.
+
+---
