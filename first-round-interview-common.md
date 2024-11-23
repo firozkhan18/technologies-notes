@@ -1267,6 +1267,53 @@ This structure helps clarify the relationship between synchronous (API Gateway) 
 
 ---
 
+This video transcript provides a comprehensive overview of API Gateways, focusing on their function, capabilities, and how they compare to load balancers. Here's a breakdown of the key concepts covered:
+
+### What is an API Gateway?
+- **API Gateway** serves as a **single entry point** for client requests and routes them to the appropriate backend microservices based on the API endpoint.
+- It decides which microservice (e.g., invoice, order, or sales) should handle the request, unlike a **load balancer**, which only distributes traffic across multiple instances of a service.
+
+### Difference Between API Gateway and Load Balancer:
+- **API Gateway**: Routes requests to the appropriate microservice based on the URL structure and handles much more logic.
+- **Load Balancer**: Distributes requests evenly to multiple instances of a single microservice, but doesn't understand the specifics of the API call.
+
+### Capabilities of an API Gateway:
+1. **API Composition**:
+   - Combines multiple API calls into a single response. For example, an e-commerce platform might show different details depending on the client (mobile or desktop).
+   - The API Gateway can handle device-specific queries, reducing the client's complexity.
+   
+2. **Authentication**:
+   - API Gateway can authenticate requests by verifying tokens (e.g., OAuth 2.0) before routing the request to the backend.
+
+3. **Rate Limiting**:
+   - **Burst Limiting**: Defines the maximum number of concurrent requests the API Gateway can handle during peak times.
+   - **Throttling**: Limits the number of requests an individual user or application can make to a particular API within a set time frame.
+   - **API Queuing**: Holds requests that cannot be immediately processed, helping to handle traffic surges.
+
+4. **Service Discovery**:
+   - API Gateway interacts with a **service discovery** mechanism to get the latest location (IP and port) of backend microservices.
+   - It helps in managing dynamic scaling of microservices in distributed environments.
+
+5. **Request/Response Transformation and Caching**:
+   - API Gateway can modify the incoming request or outgoing response to match the required format.
+   - It can also cache responses to improve performance by avoiding unnecessary calls to microservices.
+
+### Handling Millions of Requests per Second:
+- The video explains how API Gateways can handle millions of requests per second by leveraging **multiple regions and availability zones**.
+- **Regions and Availability Zones**: In a cloud infrastructure, regions consist of multiple availability zones (data centers), and requests can be distributed across these zones for fault tolerance and high availability.
+- **Load Balancing and Traffic Distribution**: Within each region, load balancers distribute traffic to multiple instances of a microservice. The API Gateway coordinates which region and availability zone should handle the request.
+  
+### Key Points on Handling High Traffic:
+- **Regions** (e.g., Mumbai, Chennai) can have multiple **Availability Zones** (AZ), each with its own data center.
+- **API Gateway** and **Load Balancers** are distributed across multiple regions to avoid a single point of failure. If a region or availability zone fails, traffic is rerouted to another healthy zone or region.
+
+### Conclusion:
+The **API Gateway** acts as a smart intermediary that handles complex routing, authentication, rate limiting, and service discovery. While it is often described as a "single entry point," in reality, it is distributed across regions and availability zones to ensure high availability and scalability. 
+
+If you're designing an API Gateway system to handle millions of requests per second, this setup ensures there is no single point of failure and that the system can dynamically scale to meet traffic demands.
+
+---
+
 ### What is Flyway?
 
 **Flyway** is an open-source database migration tool that allows developers to manage schema changes in relational databases. It is especially useful in microservices architectures where multiple services may require different database schemas. Flyway helps ensure that all database changes are versioned, repeatable, and easily manageable.
