@@ -251,75 +251,61 @@ graph LR
   
 You can visualize this diagram using any Mermaid-compatible renderer to get a visual understanding of how these components interact in a microservices-based architecture.
 
+Below is the **Mermaid diagram** that reflects the order of execution and communication between the services, following the sequence we discussed:
 
-The **API Gateway**, **Eureka Server**, and **Config Server** should indeed be connected to show how they interact with the rest of the services. Here's an updated **Mermaid diagram** that includes the correct communication flow between **API Gateway**, **Eureka Server**, and **Config Server**, alongside the rest of the services.
-
-### Updated Mermaid Diagram:
 ```mermaid
 graph LR
-    %% API Gateway Routing Requests
-    A[API Gateway] -->|Route Requests| B[Product Service]
-    A[API Gateway] -->|Route Requests| C[Order Service]
-    A[API Gateway] -->|Route Requests| D[Inventory Service]
-    A[API Gateway] -->|Route Requests| E[Notification Service]
-
-    %% Product Service with MongoDB
-    B --> F[(MongoDB)]
-    %% Order Service with MySQL
-    C --> G[(MySQL)]
-    %% Inventory Service Database
-    D --> H[(Database)]
-    %% Notification Service Database
-    E --> I[(Database)]  
+    %% Config Server
+    A[Config Server] -->|Provide Configurations| B[Product Service]
+    A[Config Server] -->|Provide Configurations| C[Order Service]
+    A[Config Server] -->|Provide Configurations| D[Inventory Service]
+    A[Config Server] -->|Provide Configurations| E[Notification Service]
 
     %% Eureka Server (Service Discovery)
-    J[Eureka Server] --> B
-    J[Eureka Server] --> C
-    J[Eureka Server] --> D
-    J[Eureka Server] --> E
+    F[Eureka Server] -->|Service Discovery| B
+    F[Eureka Server] -->|Service Discovery| C
+    F[Eureka Server] -->|Service Discovery| D
+    F[Eureka Server] -->|Service Discovery| E
 
-    %% Config Server (Centralized Configuration)
-    K[Config Server] --> B
-    K[Config Server] --> C
-    K[Config Server] --> D
-    K[Config Server] --> E
+    %% API Gateway
+    G[API Gateway] -->|Route Requests| B
+    G[API Gateway] -->|Route Requests| C
+    G[API Gateway] -->|Route Requests| D
+    G[API Gateway] -->|Route Requests| E
 
-    %% API Gateway connects to Eureka and Config Server
-    A --> J[Service Discovery: Eureka Server]
-    A --> K[Configuration: Config Server]
+    %% Communication Between Services
+    %% Product Service with MongoDB
+    B --> H[(MongoDB)]
+    %% Order Service with MySQL
+    C --> I[(MySQL)]
+    %% Inventory Service Database
+    D --> J[(Database)]
+    %% Notification Service Database
+    E --> K[(Database)]
 
-    %% Service Communication Flow
-    F -.->|Data Exchange| G
-    G -.->|Data Exchange| H
-    H -.->|Data Exchange| I
+    %% API Gateway communication with Eureka Server and Config Server
+    G --> F[Service Discovery: Eureka Server]
+    G --> A[Configuration: Config Server]
 
-    %% Class Definition for Styling
+    %% Class Definitions for Styling
     classDef service fill:#f9f,stroke:#333,stroke-width:2px;
-    class A,B,C,D,E service;
-    class F,G,H,I service;
-    class J,K service;
+    class A,B,C,D,E,F,G service;
+    class H,I,J,K service;
 ```
 
-### Explanation of Communication Flow:
-1. **API Gateway**:
-    - The **API Gateway** routes incoming requests to the appropriate services (Product, Order, Inventory, and Notification).
-    - The **API Gateway** also communicates with the **Eureka Server** for service discovery and the **Config Server** for configuration management.
-
-2. **Eureka Server**:
-    - The **Eureka Server** acts as a **service discovery** server where all services (Product, Order, Inventory, Notification) register themselves. This enables dynamic communication between microservices by allowing them to discover and communicate with each other.
-
-3. **Config Server**:
-    - The **Config Server** provides **centralized configuration management** to the services, ensuring that all microservices are using the same configuration. It can dynamically update the configuration across all services as needed.
-
-4. **Service Communication**:
-    - The services (Product, Order, Inventory, Notification) communicate with their respective databases (MongoDB, MySQL, etc.) for persistent storage. Additionally, the communication flow between these services is depicted using dashed arrows (for data exchange).
-
----
+### Explanation of the Diagram:
+1. **Config Server** 
+2. **Eureka Server** starts second, 
+3. **API Gateway** 
+4. **Product Service** 
 
 In a **microservices architecture**, the order in which services are started can be crucial, especially when there are dependencies between services (such as service discovery, configuration management, and database connections). Based on the components and communication flow outlined in the diagram, here is the suggested startup sequence:
 
 ### 1. **Config Server** (Centralized Configuration Management)
    - **Reason**: The **Config Server** provides centralized configuration for all services. Other services (Product, Order, Inventory, and Notification) will depend on the configuration provided by the **Config Server**. It should be the first service to start up, so that it can provide configuration properties as soon as the other services need them.
+
+- Provides configuration details to all the microservices (Product Service, Order Service, Inventory Service, Notification Service).
+
    - **Dependencies**: None (it's a foundational service).
    
    **Start first**: **Config Server**
@@ -328,6 +314,7 @@ In a **microservices architecture**, the order in which services are started can
 
 ### 2. **Eureka Server** (Service Discovery)
    - **Reason**: The **Eureka Server** enables **service discovery**, which allows the microservices (Product, Order, Inventory, Notification) to register themselves and discover each other. This ensures that each service can find and communicate with others in the system.
+ - Allowing each microservice to register and discover each other. The services (Product, Order, Inventory, Notification) register themselves with **Eureka Server** for service discovery.
    - **Dependencies**: None (it functions independently, but other services will depend on it for discovery).
    
    **Start second**: **Eureka Server**
@@ -336,6 +323,7 @@ In a **microservices architecture**, the order in which services are started can
 
 ### 3. **API Gateway**
    - **Reason**: The **API Gateway** is the entry point for external requests. It routes incoming requests to the appropriate services (Product, Order, Inventory, Notification). For the API Gateway to function properly, it needs to be able to discover and route requests to the services. It depends on **Eureka Server** for service discovery and **Config Server** for configuration properties.
+ - The entry point and routes incoming requests to the respective services (Product, Order, Inventory, Notification). It relies on **Eureka Server** for service discovery and **Config Server** for configuration properties.
    - **Dependencies**: **Eureka Server**, **Config Server**
    
    **Start third**: **API Gateway**
@@ -389,6 +377,7 @@ In a **microservices architecture**, the order in which services are started can
 - The **API Gateway** must be started after **Eureka Server** to route requests to services discovered by Eureka.
 - The other services (**Product**, **Order**, **Inventory**, **Notification**) should be started in sequence, as they depend on the **Config Server** and **Eureka Server** for configuration and service discovery.
 
+**Product Service** communicates with **MongoDB**, **Order Service** communicates with **MySQL**, **Inventory Service** communicates with its respective database, and **Notification Service** communicates with its own database and follow, with each registering with **Eureka Server** and obtaining configurations from **Config Server**.
 ---
 
 ### Additional Considerations:
@@ -397,61 +386,6 @@ In a **microservices architecture**, the order in which services are started can
 2. **Docker Containers**: If using Docker Compose for containerization, the containers should be defined with dependency order in the **docker-compose.yml** file to ensure the services start in the right order.
 
 3. **Fault Tolerance**: Consider adding retry mechanisms in case services take time to start, especially **Eureka Server** or **Config Server**.
----
-
-Below is the **Mermaid diagram** that reflects the order of execution and communication between the services, following the sequence we discussed:
-
-```mermaid
-graph LR
-    %% Config Server
-    A[Config Server] -->|Provide Configurations| B[Product Service]
-    A[Config Server] -->|Provide Configurations| C[Order Service]
-    A[Config Server] -->|Provide Configurations| D[Inventory Service]
-    A[Config Server] -->|Provide Configurations| E[Notification Service]
-
-    %% Eureka Server (Service Discovery)
-    F[Eureka Server] -->|Service Discovery| B
-    F[Eureka Server] -->|Service Discovery| C
-    F[Eureka Server] -->|Service Discovery| D
-    F[Eureka Server] -->|Service Discovery| E
-
-    %% API Gateway
-    G[API Gateway] -->|Route Requests| B
-    G[API Gateway] -->|Route Requests| C
-    G[API Gateway] -->|Route Requests| D
-    G[API Gateway] -->|Route Requests| E
-
-    %% Communication Between Services
-    %% Product Service with MongoDB
-    B --> H[(MongoDB)]
-    %% Order Service with MySQL
-    C --> I[(MySQL)]
-    %% Inventory Service Database
-    D --> J[(Database)]
-    %% Notification Service Database
-    E --> K[(Database)]
-
-    %% API Gateway communication with Eureka Server and Config Server
-    G --> F[Service Discovery: Eureka Server]
-    G --> A[Configuration: Config Server]
-
-    %% Class Definitions for Styling
-    classDef service fill:#f9f,stroke:#333,stroke-width:2px;
-    class A,B,C,D,E,F,G service;
-    class H,I,J,K service;
-```
-
-### Explanation of the Diagram:
-1. **Config Server** starts first and provides configuration details to all the microservices (Product Service, Order Service, Inventory Service, Notification Service).
-2. **Eureka Server** starts second, allowing each microservice to register and discover each other. The services (Product, Order, Inventory, Notification) register themselves with **Eureka Server** for service discovery.
-3. **API Gateway** is the entry point and routes incoming requests to the respective services (Product, Order, Inventory, Notification). It relies on **Eureka Server** for service discovery and **Config Server** for configuration properties.
-4. **Product Service** communicates with **MongoDB**, **Order Service** communicates with **MySQL**, **Inventory Service** communicates with its respective database, and **Notification Service** communicates with its own database.
-
-### Order of Execution:
-1. **Config Server** starts first, providing configuration.
-2. **Eureka Server** starts second, enabling service discovery.
-3. **API Gateway** starts third, routing requests.
-4. **Product Service**, **Order Service**, **Inventory Service**, and **Notification Service** follow, with each registering with **Eureka Server** and obtaining configurations from **Config Server**.
 
 This order ensures that all dependencies are correctly satisfied, allowing smooth communication between services.
 
