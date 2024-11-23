@@ -986,6 +986,75 @@ This way, **Event-Driven Architecture** is focused on handling asynchronous comm
 
 This structure helps clarify the relationship between synchronous (API Gateway) and asynchronous (Event Bus/Kafka/Redis) communication in a microservice ecosystem.
 
+Here is a simple Mermaid diagram based on your request, depicting the microservices architecture with the components you specified, including the **API Gateway**, **Eureka Server**, **Config Server**, and the services for **Product**, **Order**, **Inventory**, and **Notification**, along with their respective databases.
+
+### Mermaid Diagram:
+
+```mermaid
+graph LR
+  %% API Gateway
+  A[API Gateway] -->|Route Requests| B[Product Service]
+  A[API Gateway] -->|Route Requests| C[Order Service]
+  A[API Gateway] -->|Route Requests| D[Inventory Service]
+  A[API Gateway] -->|Route Requests| E[Notification Service]
+
+  %% Product Service with MongoDB
+  B --> F[(MongoDB)]
+  
+  %% Order Service with MySQL
+  C --> G[(MySQL)]
+  
+  %% Inventory Service Database
+  D --> H[(Database)]
+  
+  %% Notification Service Database
+  E --> I[(Database)]  
+  
+  %% Service Discovery (Eureka)
+  J[Eureka Server] --> B
+  J[Eureka Server] --> C
+  J[Eureka Server] --> D
+  J[Eureka Server] --> E
+
+  %% Configuration Server (Config Server)
+  K[Config Server] --> B
+  K[Config Server] --> C
+  K[Config Server] --> D
+  K[Config Server] --> E
+  
+  classDef service fill:#f9f,stroke:#333,stroke-width:2px;
+  class A,B,C,D,E,F,G,H,I,J,K service;
+```
+
+### **Diagram Explanation**:
+
+1. **API Gateway**:
+   - The API Gateway is the entry point for external requests. It routes incoming requests to the appropriate service (Product, Order, Inventory, and Notification).
+   
+2. **Eureka Server**:
+   - Eureka Server is a **Service Discovery** server. All microservices register themselves here, allowing them to discover and communicate with each other.
+
+3. **Config Server**:
+   - The Config Server is used to centralize external configuration properties for the microservices, enabling dynamic updates and scaling.
+   
+4. **Product Service**:
+   - The **Product Service** handles product-related operations and communicates with **MongoDB** for data storage.
+
+5. **Order Service**:
+   - The **Order Service** is responsible for managing orders, and it connects to **MySQL** for data persistence.
+
+6. **Inventory Service**:
+   - The **Inventory Service** is responsible for managing inventory data, storing information in a database.
+
+7. **Notification Service**:
+   - The **Notification Service** handles communication and notifications, with its own database for storing notification-related data.
+
+### **Additional Notes**:
+- **Eureka Server** and **Config Server** are shared among all the microservices, ensuring they can dynamically adjust to configuration changes and find each other at runtime.
+- Each service connects to its respective database (**MongoDB**, **MySQL**, etc.) for persistence.
+
+This diagram provides a high-level overview of the communication between the microservices and their components in a typical Spring Boot microservices architecture.
+
 ### What is Flyway?
 
 **Flyway** is an open-source database migration tool that allows developers to manage schema changes in relational databases. It is especially useful in microservices architectures where multiple services may require different database schemas. Flyway helps ensure that all database changes are versioned, repeatable, and easily manageable.
