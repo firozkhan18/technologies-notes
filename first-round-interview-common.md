@@ -1585,7 +1585,7 @@ graph LR
     A[Client Request] --> B[DNS-Based Load Balancer]
     B --> C[API Gateway in Region 1]
     B --> D[API Gateway in Region 2]
-    C --> E[Service Registry (e.g., Eureka, Consul)]
+    C --> E[Service Registry - ex Eureka, Consul]
     D --> E
     E --> F[Load Balancer in AZ 1]
     E --> G[Load Balancer in AZ 2]
