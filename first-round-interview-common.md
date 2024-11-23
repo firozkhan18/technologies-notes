@@ -113,8 +113,68 @@ Along with key components like:-
 - Config Server, 
 - API Gateway and Docker.
 
+## TOP to DOWN
 ```mermaid
 graph TD
+  A[API Gateway] -->|Route Requests| B[Product Service]
+  A[API Gateway] -->|Route Requests| C[Order Service]
+  A[API Gateway] -->|Route Requests| D[Inventory Service]
+  A[API Gateway] -->|Route Requests| E[Notification Service]
+
+  %% Product Service with MongoDB
+  B --> F[(MongoDB)]
+  %% Order Service with MySQL
+  C --> G[(MySQL)]
+  %% Inventory Service Database
+  D --> H[(Database)]
+  %% Notification Service Database
+  E --> I[(Database)]  
+  
+  subgraph "Service Discovery & Configuration"
+    J[Eureka Server] --> B
+    J[Eureka Server] --> C
+    J[Eureka Server] --> D
+    J[Eureka Server] --> E
+    K[Config Server] --> B
+    K[Config Server] --> C
+    K[Config Server] --> D
+    K[Config Server] --> E
+  end
+  
+  subgraph "Distributed Tracing"
+    L[Zipkin] --> B
+    L[Zipkin] --> C
+    L[Zipkin] --> D
+    L[Zipkin] --> E
+    M[Spring Cloud Sleuth] --> L
+  end
+  
+  subgraph "Authentication & Security"
+    N[Keycloak] --> B
+    N[Keycloak] --> C
+    N[Keycloak] --> D
+    N[Keycloak] --> E
+  end
+  
+  subgraph "Containerization & Deployment"
+    O[Docker Compose] -->|Manage Containers| B
+    O[Docker Compose] -->|Manage Containers| C
+    O[Docker Compose] -->|Manage Containers| D
+    O[Docker Compose] -->|Manage Containers| E
+  end
+  
+  F -.->|Data Exchange| G
+  G -.->|Data Exchange| H
+  H -.->|Data Exchange| I
+  
+  classDef service fill:#f9f,stroke:#333,stroke-width:2px;
+  class A,B,C,D,E service;
+  class F,G,H,I service;
+```
+
+## LEFT to RIGHT
+```mermaid
+graph LR
   A[API Gateway] -->|Route Requests| B[Product Service]
   A[API Gateway] -->|Route Requests| C[Order Service]
   A[API Gateway] -->|Route Requests| D[Inventory Service]
