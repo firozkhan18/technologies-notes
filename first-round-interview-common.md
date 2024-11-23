@@ -514,45 +514,6 @@ In a typical **Spring Boot** microservices setup, **API Gateway**, **Eureka Serv
 
 This communication flow ensures **centralized configuration management**, **service discovery**, and **request routing** in a scalable and dynamic microservices environment.
 
-It seems like there was an issue generating the image directly. However, I can guide you on how to manually create this diagram using tools like **Mermaid** or **Draw.io** based on the description provided. Here's the **Mermaid diagram** structure for you to try:
-
-```mermaid
-graph LR
-    A[API Gateway] -->|Route Requests| B[Product Service]
-    A[API Gateway] -->|Route Requests| C[Order Service]
-    A[API Gateway] -->|Route Requests| D[Inventory Service]
-    A[API Gateway] -->|Route Requests| E[Notification Service]
-
-    %% Product Service with MongoDB
-    B --> F[(MongoDB)]
-    %% Order Service with MySQL
-    C --> G[(MySQL)]
-    %% Inventory Service Database
-    D --> H[(Database)]
-    %% Notification Service Database
-    E --> I[(Database)]  
-
-    subgraph "Service Discovery & Configuration"
-        J[Eureka Server] --> B
-        J[Eureka Server] --> C
-        J[Eureka Server] --> D
-        J[Eureka Server] --> E
-        K[Config Server] --> B
-        K[Config Server] --> C
-        K[Config Server] --> D
-        K[Config Server] --> E
-    end
-
-    %% Service Communication
-    F -.->|Data Exchange| G
-    G -.->|Data Exchange| H
-    H -.->|Data Exchange| I
-
-    classDef service fill:#f9f,stroke:#333,stroke-width:2px;
-    class A,B,C,D,E service;
-    class F,G,H,I service;
-```
-
 ### Additional Considerations:
 1. **Databases** (MongoDB, MySQL, etc.) should be up and running before their respective services (Product, Order, etc.) start, but since databases are generally not part of the microservices themselves, they should be provisioned and available before starting the services.
    
