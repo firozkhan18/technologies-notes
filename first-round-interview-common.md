@@ -1551,7 +1551,79 @@ To handle millions of requests per second, especially in cloud environments, we 
 - The system uses **horizontal scaling**, where more instances of microservices are deployed as traffic increases.
 
 ---
+To illustrate how scaling handles millions of requests per second across multiple regions and availability zones with the help of an API Gateway and DNS-based load balancing, here’s a breakdown of the components and flow, followed by the **Mermaid diagram**:
 
+### Key Components
+1. **Regions**: Geographic locations containing multiple availability zones.
+2. **Availability Zones (AZ)**: Isolated data centers within a region to ensure high availability.
+3. **API Gateway**: A globally distributed service that routes API requests to the correct microservice in the correct availability zone or region.
+4. **DNS-Based Load Balancer**: Directs requests to the closest region based on latency or geographic rules (e.g., AWS Route 53, Azure Traffic Manager).
+5. **Service Registry**: Keeps track of the available microservices across regions and AZs (e.g., Eureka, Consul).
+6. **Load Balancers**: Distribute requests to the available instances within an AZ, ensuring proper traffic distribution.
+
+### Flow of Traffic
+
+1. **Client Request**: A client (e.g., a user in a specific region) makes a request to the API.
+   
+2. **DNS-Based Load Balancer**: The DNS resolver checks the request and routes it to the nearest region (based on latency, geographic rules, or load balancing policies).
+   
+3. **API Gateway**: The API Gateway in the selected region receives the request.
+   
+4. **Service Discovery**: The API Gateway checks the service registry (e.g., Eureka, Consul) to find out which availability zone contains the required microservice.
+   
+5. **Load Balancer**: The load balancer within the availability zone (AZ) routes the request to the appropriate instance of the microservice.
+
+6. **Fault Tolerance & Scaling**:
+   - **If an AZ goes down**: The API Gateway can reroute traffic to another healthy AZ within the same region.
+   - **If a region goes down**: The DNS-based load balancer will reroute traffic to another region with available resources.
+   - **Horizontal Scaling**: As traffic increases, more instances of microservices are deployed in each region and AZ to handle the load.
+
+### Mermaid Diagram
+
+```mermaid
+graph LR
+    A[Client Request] --> B[DNS-Based Load Balancer]
+    B --> C[API Gateway in Region 1]
+    B --> D[API Gateway in Region 2]
+    C --> E[Service Registry (e.g., Eureka, Consul)]
+    D --> E
+    E --> F[Load Balancer in AZ 1]
+    E --> G[Load Balancer in AZ 2]
+    F --> H[Microservice Instance 1]
+    G --> H
+    F --> I[Microservice Instance 2]
+    G --> I
+    H --> J[Response to Client]
+    I --> J
+    style A fill:#f9f,stroke:#333,stroke-width:2px
+    style B fill:#bbf,stroke:#333,stroke-width:2px
+    style C fill:#bbf,stroke:#333,stroke-width:2px
+    style D fill:#bbf,stroke:#333,stroke-width:2px
+    style E fill:#bfb,stroke:#333,stroke-width:2px
+    style F fill:#fbf,stroke:#333,stroke-width:2px
+    style G fill:#fbf,stroke:#333,stroke-width:2px
+    style H fill:#ffa,stroke:#333,stroke-width:2px
+    style I fill:#ffa,stroke:#333,stroke-width:2px
+    style J fill:#f9f,stroke:#333,stroke-width:2px
+```
+
+### Explanation of the Diagram:
+1. **Client Request** (`A`): The client initiates a request.
+2. **DNS-Based Load Balancer** (`B`): The DNS resolver routes the request to the closest region's API Gateway (Region 1 or Region 2).
+3. **API Gateway** (`C` or `D`): The API Gateway in the region checks the service registry for microservice locations.
+4. **Service Registry** (`E`): The registry contains information about all microservices and their available instances across availability zones.
+5. **Load Balancers** (`F`, `G`): These route traffic within the selected AZ, distributing requests to the available instances.
+6. **Microservices Instances** (`H`, `I`): Instances of the microservice handle the request.
+7. **Response to Client** (`J`): The processed response is sent back to the client.
+
+### Fault Tolerance and High Availability:
+- **Cross-AZ Failover**: If an AZ fails, the API Gateway will route traffic to another AZ in the same region.
+- **Cross-Region Failover**: If an entire region fails, the DNS-based load balancer will route traffic to another region (e.g., from Region 1 to Region 2).
+- **Horizontal Scaling**: More instances of microservices are deployed as traffic increases, ensuring the system can handle millions of requests per second.
+
+This architecture ensures high availability, fault tolerance, and scalability, making it suitable for handling millions of requests efficiently in a cloud environment.
+
+---
 ### 4. **High-Performance Configuration Example in Spring Boot**
 
 Below is an example configuration for handling millions of requests using Spring Boot and an API Gateway architecture.
