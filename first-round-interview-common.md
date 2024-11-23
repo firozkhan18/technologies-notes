@@ -373,56 +373,6 @@ In a **microservices architecture**, the order in which services are started can
 
 **Product Service** communicates with **MongoDB**, **Order Service** communicates with **MySQL**, **Inventory Service** communicates with its respective database, and **Notification Service** communicates with its own database and follow, with each registering with **Eureka Server** and obtaining configurations from **Config Server**.
 
-
-
-You're right! The **API Gateway**, **Eureka Server**, and **Config Server** should indeed be connected to show how they interact with the rest of the services. Here's an updated **Mermaid diagram** that includes the correct communication flow between **API Gateway**, **Eureka Server**, and **Config Server**, alongside the rest of the services.
-
-### Updated Mermaid Diagram:
-```mermaid
-graph LR
-    %% API Gateway Routing Requests
-    A[API Gateway] -->|Route Requests| B[Product Service]
-    A[API Gateway] -->|Route Requests| C[Order Service]
-    A[API Gateway] -->|Route Requests| D[Inventory Service]
-    A[API Gateway] -->|Route Requests| E[Notification Service]
-
-    %% Product Service with MongoDB
-    B --> F[(MongoDB)]
-    %% Order Service with MySQL
-    C --> G[(MySQL)]
-    %% Inventory Service Database
-    D --> H[(Database)]
-    %% Notification Service Database
-    E --> I[(Database)]  
-
-    %% Eureka Server (Service Discovery)
-    J[Eureka Server] --> B
-    J[Eureka Server] --> C
-    J[Eureka Server] --> D
-    J[Eureka Server] --> E
-
-    %% Config Server (Centralized Configuration)
-    K[Config Server] --> B
-    K[Config Server] --> C
-    K[Config Server] --> D
-    K[Config Server] --> E
-
-    %% API Gateway connects to Eureka and Config Server
-    A --> J[Service Discovery: Eureka Server]
-    A --> K[Configuration: Config Server]
-
-    %% Service Communication Flow
-    F -.->|Data Exchange| G
-    G -.->|Data Exchange| H
-    H -.->|Data Exchange| I
-
-    %% Class Definition for Styling
-    classDef service fill:#f9f,stroke:#333,stroke-width:2px;
-    class A,B,C,D,E service;
-    class F,G,H,I service;
-    class J,K service;
-```
-
 ### Explanation of Communication Flow:
 1. **API Gateway**:
     - The **API Gateway** routes incoming requests to the appropriate services (Product, Order, Inventory, and Notification).
@@ -436,12 +386,6 @@ graph LR
 
 4. **Service Communication**:
     - The services (Product, Order, Inventory, Notification) communicate with their respective databases (MongoDB, MySQL, etc.) for persistent storage. Additionally, the communication flow between these services is depicted using dashed arrows (for data exchange).
-
-### How to Visualize:
-1. **Mermaid Live Editor**: Copy and paste the code into [Mermaid Live Editor](https://mermaid-js.github.io/mermaid-live-editor/) to view the diagram.
-2. **Draw.io**: Alternatively, you can manually draw this out on [Draw.io](https://app.diagrams.net/) using the components described.
-
-This diagram now correctly represents the interaction between the **API Gateway**, **Eureka Server**, and **Config Server**, along with the rest of the services!
 
 ### Communication Between Components in a Microservices Architecture
 
