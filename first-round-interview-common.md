@@ -119,11 +119,15 @@ graph TD
   A[API Gateway] -->|Route Requests| C[Order Service]
   A[API Gateway] -->|Route Requests| D[Inventory Service]
   A[API Gateway] -->|Route Requests| E[Notification Service]
-  
-  B --> F[(MongoDB)]  %% Product Service with MongoDB
-  C --> G[(MySQL)]  %% Order Service with MySQL
-  D --> H[(Database)]  %% Inventory Service Database
-  E --> I[(Database)]  %% Notification Service Database
+
+  %% Product Service with MongoDB
+  B --> F[(MongoDB)]
+  %% Order Service with MySQL
+  C --> G[(MySQL)]
+  %% Inventory Service Database
+  D --> H[(Database)]
+  %% Notification Service Database
+  E --> I[(Database)]  
   
   subgraph "Service Discovery & Configuration"
     J[Eureka Server] --> B
