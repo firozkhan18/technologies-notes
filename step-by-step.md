@@ -1060,81 +1060,64 @@ Add Spring Boot Actuator to each service for monitoring and configure Prometheus
 
 You now have a fully functional microservices architecture using Spring Boot with essential services, API gateway, service discovery, and Docker setup. This setup provides a solid foundation for building scalable and maintainable applications. Further enhancements can include adding security with Keycloak, distributed tracing with Zipkin, and implementing database migrations using Liquibase or Flyway.
 
-Spring Boot Microservices Tutorial - Part 1
-March 28, 2024
-Introduction
+## Spring Boot Microservices Tutorial - Part 1
+
+### Introduction
 In this Spring Boot Microservices Tutorial series, you will learn how to develop applications with Microservices Architecture using Spring Boot and Spring Cloud and deploy them using Docker and Kubernetes.
 
 We will cover several concepts and Microservices Architectural Patterns as part of this tutorial series, here are the topics we are going to cover in each part:
 
-Part -1 covers building REST-based applications using Spring Boot 3 and following several best practices.
+- Part -1 covers building REST-based applications using Spring Boot 3 and following several best practices.
+- Part -2 of this tutorial series covers, the Synchronous Inter-Service Communication Pattern using Spring Cloud Open Feign
+- Part - 3 covers the Service Discovery Pattern using Spring Cloud Netflix Eureka
+- Part - 4 covers the API Gateway Pattern using Spring Cloud Gateway
+- Part - 5 covers the Microservices Security using Keycloak
+- Part - 6 covers the Circuit Breaker Pattern using Spring Cloud CircuitBreaker with Resilience4J
+- Part - 7 covers the Event Driven Architecture Pattern using Kafka
+- Part - 8 covers the Observability Pattern, and we will be implementing Distributed Tracing using Open Telemetry and Grafana Tempo, we will be implementing the Log Aggregation Pattern to view the logs of our services using Grafana Loki, and we will be using Prometheus to collect the Metrics and Grafana to visualize the metrics in a dashboard.
+- In Part - 9, we will be containerizing all our applications using Docker. We will see how to run our applications using Docker Compose
+- In Part - 10, we will migrate our Docker Compose Workloads to Kubernetes
 
-Part -2 of this tutorial series covers, the Synchronous Inter-Service Communication Pattern using Spring Cloud Open Feign
-
-Part - 3 covers the Service Discovery Pattern using Spring Cloud Netflix Eureka
-
-Part - 4 covers the API Gateway Pattern using Spring Cloud Gateway
-
-Part - 5 covers the Microservices Security using Keycloak
-
-Part - 6 covers the Circuit Breaker Pattern using Spring Cloud CircuitBreaker with Resilience4J
-
-Part - 7 covers the Event Driven Architecture Pattern using Kafka
-
-Part - 8 covers the Observability Pattern, and we will be implementing Distributed Tracing using Open Telemetry and Grafana Tempo, we will be implementing the Log Aggregation Pattern to view the logs of our services using Grafana Loki, and we will be using Prometheus to collect the Metrics and Grafana to visualize the metrics in a dashboard.
-
-In Part - 9, we will be containerizing all our applications using Docker. We will see how to run our applications using Docker Compose
-
-In Part - 10, we will migrate our Docker Compose Workloads to Kubernetes
-
-Application Overview
+### Application Overview
 We will be building a simple e-commerce application where customers can order products. Our application contains the following services:
 
-Product Service
-
-Order Service
-
-Inventory Service
-
-Notification Service
+- Product Service
+- Order Service
+- Inventory Service
+- Notification Service
 
 To focus on the principles of Spring Cloud and Microservices, we will develop services with essential functionality rather than creating fully-featured e-commerce services.
 
 Download Source Code
 You can download the source code of this project through Github – https://github.com/SaiUpadhyayula/spring-boot-microservices/tree/initial-setup
 
-Architecture Diagram of the Project
+### Architecture Diagram of the Project
 Here is the architecture diagram of the project we are going to cover in this tutorial series
 
-Architecture Diagram for Spring Boot Microservices Project
+### Architecture Diagram for Spring Boot Microservices Project
 
-Creating our First Microservice: Product Service
+#### Creating our First Microservice: Product Service
 Let's start creating our first microservice (Product Service). As discussed before, we will keep this service simple and only include the most important features.
 
 We are going to expose a REST API endpoint that will CREATE and READ products.
 
-Service Operation	HTTP METHOD	Service End point
-CREATE PRODUCT	POST	/api/product/
-READ ALL PRODUCTS	GET	/api/product/
-Product Service REST Operations
+- Service Operation	HTTP METHOD	Service End point
+- CREATE PRODUCT	POST	/api/product/
+- READ ALL PRODUCTS	GET	/api/product/
+- Product Service REST Operations
 
 To create the project, let’s go to start.spring.io and create our project based on the following configuration:
 
-Start.Spring.IO Configuration for Product Service
+#### Start.Spring.IO Configuration for Product Service
 
 Here are the dependencies you need to add:
 
-Lombok
-
-Spring Web
-
-Test Containers
-
-Spring Data MongoDB
-
-Java 21
-
-Maven as the build tool
+- Lombok
+- Spring Web
+- Test Containers
+- Spring Data MongoDB
+- Java 21
+- Maven as the build tool
 
 We are going to use MongoDB as the database backing our Product Service
 
@@ -1144,16 +1127,17 @@ Unzip the source code and open it in your favorite IDE.
 
 After opening the project, run the below command to build the project:
 
-mvn clean verify
+> mvn clean verify
 The application should be built successfully without any errors.
 
-Download MongoDB using Docker and Docker Compose
+### Download MongoDB using Docker and Docker Compose
 We will be using Docker to install the necessary software like Databases, Message Queues, and other required software for this project.
 
 If you don't have Docker installed on your machine, you can download it at this link: https://docs.docker.com/get-docker/
 
 Once Docker is installed, create a file called docker-compose.yml in the root folder:
 
+```yaml
 version: '4'
 services:
   mongo:
@@ -1167,16 +1151,19 @@ services:
       MONGO_INITDB_DATABASE: product-service
     volumes:
       - ./docker/mongodb/data:/data/db
+```
 We have to configure the MongoDB URI Details inside the application.properties file:
 
+```
 spring.data.mongodb.uri=mongodb://root:password@localhost:27017/product-service?authSource=admin
+```
 If you are not aware of how to work with MongoDB and Spring Boot, have a look at the Spring Boot MongoDB REST API Tutorial
 
-Creating the Create and Read Endpoints
+### Creating the Create and Read Endpoints
 Let's create the below model class which acts as the domain for the Products.
 
-Product.java
-
+- Product.java
+```java
 package com.programmingtechie.productservice.model;
 
 import lombok.AllArgsConstructor;
@@ -1201,11 +1188,11 @@ public class Product {
     private String description;
     private BigDecimal price;
 }
-
+```
 Next, let's create the Spring Data MongoDB interface for the Product class - ProductRepository.java
 
-ProductRepository.java
-
+- ProductRepository.java
+```java
 package com.programming.techie.productservice.repository;
 
 
@@ -1214,10 +1201,11 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 
 public interface ProductRepository extends MongoRepository<Product, String> {
 }
+```
 Now let's create the service class - ProductService.java, which contains the actual business logic of our product-service, that is responsible for creating and reading the products from the database.
 
-ProductService.java
-
+- ProductService.java
+```java
 package com.programmingtechie.productservice.service;
 
 import com.programmingtechie.productservice.dto.ProductRequest;
@@ -1259,10 +1247,11 @@ public class ProductService {
                 product.getDescription(), product.getPrice());
     }
 }
+```
 Next, we need the Controller class that exposes the POST and GET endpoint to create and read the products.
 
-ProductRestController.java
-
+- ProductRestController.java
+```java
 package com.programmingtechie.productservice.controller;
 
 import com.programmingtechie.productservice.dto.ProductRequest;
@@ -1294,10 +1283,11 @@ public class ProductController {
     }
 
 }
+```
 The ProductController class uses ProductRequest and ProductResponse as the DTOs, let's also create those records
 
-ProductRequest.java
-
+- ProductRequest.java
+```java
 package com.programmingtechie.productservice.dto;
 
 import java.math.BigDecimal;
@@ -1312,6 +1302,7 @@ import java.math.BigDecimal;
 
 public record ProductResponse(String id, String name, String description, BigDecimal price) {
 }
+```
 Testing the Product Service APIs
 Let’s start the application and test our two Endpoints
 
@@ -1329,18 +1320,19 @@ Let's write a couple of Integration Tests to test our Create Product and Get Pro
 If you are unaware of Testcontainers, you can read more about it here: https://testcontainers.com/
 
 Before writing our tests, we need to add one dependency to our pom.xml file:
-
+```pom
         <dependency>
             <groupId>io.rest-assured</groupId>
             <artifactId>rest-assured</artifactId>
             <version>5.3.2</version>
         </dependency>
+```
 We added the rest-assured dependency as we need a real HTTP Client to call the endpoints while running the Integration Tests.
 
 Let's create the integration test with the below code:
 
-ProductServiceApplicationTests.java
-
+- ProductServiceApplicationTests.java
+```java
 package com.programmingtechie.productservice;
 
 import com.programmingtechie.productservice.dto.ProductRequest;
@@ -1396,32 +1388,28 @@ class ProductServiceApplicationTests {
     }
 
 }
-Create Second Microservice - Order Service
+```
+#### Create Second Microservice - Order Service
 Now let's create our 2nd Microservice, the order service, this service contains only one endpoint, to submit an order.
 
-Service Operation	Endpoint Method	Service Endpoint
-PLACE ORDER	POST	/api/order
-Operations for Order Service
+- Service Operation	Endpoint Method	Service Endpoint
+- PLACE ORDER	POST	/api/order
+- Operations for Order Service
 
 Let's create the project, by visiting the site start.spring.io
 
-Create the project with below dependencies:
+#### Create the project with below dependencies:
 
-Spring Web
-
-Lombok
-
-Spring Data JPA
-
-MySQL Driver
-
-Flyway Migration
-
-Testcontainers
+- Spring Web
+- Lombok
+- Spring Data JPA
+- MySQL Driver
+- Flyway Migration
+- Testcontainers
 
 We will be using Java 21 also for this service and Maven as the build tool.
 
-Order Service Starter Configuratione
+### Order Service Starter Configuratione
 
 In Order Service, we are going to use MySQL Database, so let’s go ahead and download MySQL using docker-compose.
 
@@ -1457,7 +1445,7 @@ We are using the spring.jpa.hibernate.ddl-auto property as none because we don't
 
 Notice that we are running the order-service application on port 8081, as product-service is already running on port 8080
 
-Database Migrations with Flyway
+### Database Migrations with Flyway
 As mentioned before, we will be using Flyway to execute database migrations, the necessary dependencies for it are already added in the generated project. Here are the dependencies for Flyway:
 ```pom
 <dependency>
@@ -1473,15 +1461,15 @@ By using Flyway, we can provide the necessary SQL scripts that will be executed 
 
 Flyway will look for the scripts under this particular folder, and Flyway will also follow a particular naming convention to identify the SQL scripts, we need to name the files like below:
 
-V<Number>__file-name.sql
+- V<Number>__file-name.sql
 
-Example: V1__init.sql, V2__add_products.sql, etc.
+> Example: V1__init.sql, V2__add_products.sql, etc.
 
 Note that the number, inside the name of the SQL file, needs to be incremented for each database migration you want to run.
 
 Let's create the below file to create the Order table
 
-V1__init.sql
+- V1__init.sql
 ```sql
 CREATE TABLE `t_orders`
 (
@@ -1610,7 +1598,7 @@ Now Let's test our endpoints using Postman, before that let's start our applicat
 
 Let's make a POST request to the URL http://localhost:8081/api/order as seen in the below screenshot:
 
-Testing Order Service through Postman
+### Testing Order Service through Postman
 
 The request should be successful with HTTP Status 201 Created and the response body should have the text "Order Placed Successfully".
 
@@ -1679,23 +1667,23 @@ class OrderServiceApplicationTests {
 ## Creating Third Microservice - Inventory Service
 Now let's create our 3rd microservice the Inventory Service. Go to start.spring.io and select the below dependencies:
 
-Spring Web
-Spring Data JPA
-Lombok
-Flyway
-MySQL JDBC Driver
-Test Containers
-Java 21 and Maven as Build tool
+- Spring Web
+- Spring Data JPA
+- Lombok
+- Flyway
+- MySQL JDBC Driver
+- Test Containers
+- Java 21 and Maven as Build tool
 
 The Inventory Service exposes only 1 endpoint, similar to the Order Service, here is a brief overview of the endpoint:
 
-Service Operation	Endpoint Method	Service Endpoint
-GET Inventory	GET	/api/inventory
-REST Operations for Inventory Service
+- Service Operation	Endpoint Method	Service Endpoint
+- GET Inventory	GET	/api/inventory
+- REST Operations for Inventory Service
 
 As we are using MySQL Database also for the inventory service, we need to first update the mysql/init.sql file with the SQL commands to create the inventory database.
 
-mysql/init.sql
+- mysql/init.sql
 ```sql
 CREATE DATABASE IF NOT EXISTS order_service;
 CREATE DATABASE IF NOT EXISTS inventory_service;
@@ -1825,9 +1813,9 @@ Successfully applied 2 migrations to schema `inventory_service`, now at version 
 Testing using Postman
 Now let's open Postman and call the http://localhost:8082/api/inventory?skuCode=iphone_15&quantity=100 endpoint, notice that we are passing multiple SKUCodes in the Request Params.
 
-Testing Inventory Service through Postman
+#### Testing Inventory Service through Postman
 
-Writing Integration Tests
+##### Writing Integration Tests
 Let's write integration tests for the Inventory Service.
 ```java
 InventoryServiceApplicationTests.java
@@ -1890,32 +1878,33 @@ class InventoryServiceApplicationTests {
 
 }
 ```
-Conclusion
+### Conclusion
 That's it for the first part of the Spring Boot Microservices Tutorial Series, we create 3 services for our application, and from the next part, we will be concentrating on applying the Microservice Design Patterns to our application.
 
 In the next part, we will learn about Synchronous Inter-Service Communication Pattern using Spring Cloud OpenFeign. Until then, Happy Coding Techies!
 
-Spring Boot Microservices Tutorial - Part 2
+### Spring Boot Microservices Tutorial - Part 2
 
 In Part 2 of this Spring Boot Microservices Tutorial series, we will implement Synchronous Communication between our Order Service and Inventory Service using Spring Cloud OpenFeign Library.
 
 Spring Cloud OpenFeign library uses that provides OpenFeign integrations with Spring Boot and Spring Cloud. It provides a declarative REST Client that makes consuming REST Endpoints in our code easy.
 
-Inter Process Communication
+#### Inter Process Communication
 
 We will implement Synchronous Communication between Order Service and Inventory Service using the Spring Cloud OpenFeign library.
 
 Add Spring Cloud OpenFeign to Order Service
 To get started, let's add the Spring Cloud OpenFeign Starter to the pom.xml file of the Order Service.
 
-pom.xml
+```pom.xml
 
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-openfeign</artifactId>
         </dependency>
+```
 We also need to add the spring-cloud-dependencies bom dependency to the <dependencyManagement> section in the pom.xml file.
-
+```pom
 <dependencyManagement>
         <dependencies>
             <dependency>
@@ -1927,9 +1916,10 @@ We also need to add the spring-cloud-dependencies bom dependency to the <depende
             </dependency>
         </dependencies>
     </dependencyManagement>
+```
 This is how your pom.xml should look like at the end:
 
-pom.xml
+```pom.xml
 
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
@@ -2013,12 +2003,12 @@ pom.xml
         </dependencies>
     </dependencyManagement>
 </project>
-
-Create FeignClient for Inventory Service
+```
+#### Create FeignClient for Inventory Service
 As we will be calling Inventory Service from Order Service, we need to create a class called InventoryClient.java inside the client package inside the order-service.
 
-client/InventoryClient.java
-
+- client/InventoryClient.java
+```java
 package com.programmingtechie.orderservice.client;
 
 import org.springframework.cloud.openfeign.FeignClient;
@@ -2031,7 +2021,7 @@ public interface InventoryClient {
     @RequestMapping(method = RequestMethod.GET, value = "/api/inventory")
     boolean isInStock(@RequestParam String skuCode, @RequestParam Integer quantity);
 }
-
+```
 Notice that the @FeignClient annotation has an attribute called URL that is pointing to the inventory.url property in the application.properties file
 
 inventory.url=http://localhost:8082
@@ -2045,8 +2035,8 @@ If the client returns true, then we will place the order and save it to the data
 
 Here's how the OrderService class looks like with the final logic.
 
-OrderService.java
-
+- OrderService.java
+```java
 package com.programmingtechie.orderservice.service;
 
 import com.programmingtechie.orderservice.client.InventoryClient;
@@ -2086,11 +2076,11 @@ public class OrderService {
         return order;
     }
 }
-
+```
 Before we go ahead and test our implementation, we have to add the @EnableFeignClients annotation to enable Feign Client Capabilities
 
-OrderServiceApplication.java
-
+- OrderServiceApplication.java
+```java
 package com.programmingtechie.orderservice;
 
 import org.springframework.boot.SpringApplication;
@@ -2106,22 +2096,22 @@ public class OrderServiceApplication {
     }
 
 }
-
-Manual Testing using Postman
+```
+### Manual Testing using Postman
 Now it's time to test our implementation using Postman, make sure you start both the Order Service as well as the Inventory Service and call the Place Order Endpoint of Order Service.
 
 Let's order the skuCode iphone_15, with a quantity of 100, as in Part -1 we initialized all skuCodes with quantity 100, this product should be in stock, and our Order should go through.
 
-Submit Order with OpenFeign
+#### Submit Order with OpenFeign
 
 Now let's change the quantity to 101, and this time our Order call should fail with a 500 error.
 
-Order Service negative case
+- Order Service negative case
 
 If you observe logs, then you should see the below exception message:
 
-java.lang.RuntimeException: Product with Skucode iphone_15is not in stock
-Updating the Integration Tests
+- java.lang.RuntimeException: Product with Skucode iphone_15is not in stock
+#### Updating the Integration Tests
 Now if you run our Integration Tests in the order service, you will notice that they no longer run successfully as we are calling the Inventory Service.
 
 To make these test successful, we have to use a library called Wiremock that provides a mock server environment to test our Order Service by making some mock HTTP calls.
@@ -2130,17 +2120,18 @@ By using Wiremock, we can verify if our Order Service is calling the inventory s
 
 To enable wiremock, we need to add the following dependency to our pom.xml file of Order Service
 
-pom.xml
+```pom.xml
 
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-contract-stub-runner</artifactId>
             <scope>test</scope>
         </dependency>
+```
 Here's how the update Integration Test looks like:
 
-OrderServiceApplicationTests.java
-
+- OrderServiceApplicationTests.java
+```java
 package com.programmingtechie.orderservice;
 
 import com.programmingtechie.orderservice.stub.InventoryStubs;
@@ -2200,12 +2191,13 @@ class OrderServiceApplicationTests {
         assertThat(responseBodyString, Matchers.is("Order Placed Successfully"));
     }
 }
-
-application.properties
-
+```
+- application.properties
+```
 inventory.url=http://localhost:${wiremock.server.port}
-InventoryStubs.java
-
+```
+- InventoryStubs.java
+```java
 package com.programmingtechie.orderservice.stub;
 
 import lombok.experimental.UtilityClass;
@@ -2223,31 +2215,32 @@ public class InventoryStubs {
                         .withBody("true")));
     }
 }
-
-Conclusion
+```
+### Conclusion
 That's it for Part -2 of this tutorial, in the next part we will learn how to implement Service Discovery using Netflix Eureka.
 
-Spring Boot Microservices Tutorial - Part 3
-April 14, 2024
+### Spring Boot Microservices Tutorial - Part 3
+
 In Part 2 of this Spring Boot Microservices Tutorial series, we will implement Synchronous Communication between our Order Service and Inventory Service using Spring Cloud OpenFeign Library.
 
 Spring Cloud OpenFeign library uses that provides OpenFeign integrations with Spring Boot and Spring Cloud. It provides a declarative REST Client that makes consuming REST Endpoints in our code easy.
 
-Inter Process Communication
+### Inter Process Communication
 
 We will implement Synchronous Communication between Order Service and Inventory Service using the Spring Cloud OpenFeign library.
 
 Add Spring Cloud OpenFeign to Order Service
 To get started, let's add the Spring Cloud OpenFeign Starter to the pom.xml file of the Order Service.
 
-pom.xml
+```pom.xml
 
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-openfeign</artifactId>
         </dependency>
+```
 We also need to add the spring-cloud-dependencies bom dependency to the <dependencyManagement> section in the pom.xml file.
-
+```pom
 <dependencyManagement>
         <dependencies>
             <dependency>
@@ -2259,9 +2252,10 @@ We also need to add the spring-cloud-dependencies bom dependency to the <depende
             </dependency>
         </dependencies>
     </dependencyManagement>
+```
 This is how your pom.xml should look like at the end:
 
-pom.xml
+```pom.xml
 
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
@@ -2345,12 +2339,12 @@ pom.xml
         </dependencies>
     </dependencyManagement>
 </project>
-
-Create FeignClient for Inventory Service
+```
+### Create FeignClient for Inventory Service
 As we will be calling Inventory Service from Order Service, we need to create a class called InventoryClient.java inside the client package inside the order-service.
 
-client/InventoryClient.java
-
+- client/InventoryClient.java
+```java
 package com.programmingtechie.orderservice.client;
 
 import org.springframework.cloud.openfeign.FeignClient;
@@ -2363,10 +2357,11 @@ public interface InventoryClient {
     @RequestMapping(method = RequestMethod.GET, value = "/api/inventory")
     boolean isInStock(@RequestParam String skuCode, @RequestParam Integer quantity);
 }
-
+```
 Notice that the @FeignClient annotation has an attribute called URL that is pointing to the inventory.url property in the application.properties file
-
+```
 inventory.url=http://localhost:8082
+```
 By externalizing this property we can replace it dynamically in tests or during startup time.
 
 Coming to the method, we have the @RequestMapping annotation that is calling the path - /api/inventory.
@@ -2377,8 +2372,8 @@ If the client returns true, then we will place the order and save it to the data
 
 Here's how the OrderService class looks like with the final logic.
 
-OrderService.java
-
+- OrderService.java
+```java
 package com.programmingtechie.orderservice.service;
 
 import com.programmingtechie.orderservice.client.InventoryClient;
@@ -2418,11 +2413,11 @@ public class OrderService {
         return order;
     }
 }
-
+```
 Before we go ahead and test our implementation, we have to add the @EnableFeignClients annotation to enable Feign Client Capabilities
 
-OrderServiceApplication.java
-
+- OrderServiceApplication.java
+```java
 package com.programmingtechie.orderservice;
 
 import org.springframework.boot.SpringApplication;
@@ -2438,22 +2433,22 @@ public class OrderServiceApplication {
     }
 
 }
-
-Manual Testing using Postman
+```
+### Manual Testing using Postman
 Now it's time to test our implementation using Postman, make sure you start both the Order Service as well as the Inventory Service and call the Place Order Endpoint of Order Service.
 
 Let's order the skuCode iphone_15, with a quantity of 100, as in Part -1 we initialized all skuCodes with quantity 100, this product should be in stock, and our Order should go through.
 
-Submit Order with OpenFeign
+### Submit Order with OpenFeign
 
 Now let's change the quantity to 101, and this time our Order call should fail with a 500 error.
 
-Order Service negative case
+- Order Service negative case
 
 If you observe logs, then you should see the below exception message:
 
 java.lang.RuntimeException: Product with Skucode iphone_15is not in stock
-Updating the Integration Tests
+### Updating the Integration Tests
 Now if you run our Integration Tests in the order service, you will notice that they no longer run successfully as we are calling the Inventory Service.
 
 To make these test successful, we have to use a library called Wiremock that provides a mock server environment to test our Order Service by making some mock HTTP calls.
@@ -2462,17 +2457,18 @@ By using Wiremock, we can verify if our Order Service is calling the inventory s
 
 To enable wiremock, we need to add the following dependency to our pom.xml file of Order Service
 
-pom.xml
+```pom.xml
 
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-contract-stub-runner</artifactId>
             <scope>test</scope>
         </dependency>
+```
 Here's how the update Integration Test looks like:
 
-OrderServiceApplicationTests.java
-
+- OrderServiceApplicationTests.java
+```java
 package com.programmingtechie.orderservice;
 
 import com.programmingtechie.orderservice.stub.InventoryStubs;
@@ -2532,6 +2528,7 @@ class OrderServiceApplicationTests {
         assertThat(responseBodyString, Matchers.is("Order Placed Successfully"));
     }
 }
+```
 In Part 3 of this **Spring Boot Microservices Tutorial** series, we will implement the API Gateway pattern using the Spring Cloud Gateway MVC library.
 
 ## What is an API Gateway?
@@ -2543,9 +2540,7 @@ An API Gateway also called an Edge Server, acts as an entry point for our micros
 In our microservice project landscape, we have 3 services accessible to the user:
 
 - Product Service
-
 - Order Service
-
 - Inventory service
 
 For example, imagine that external clients like Web and Mobile applications consume these three independent services through the exposed endpoints. If the internal implementation of these services changes, then also the clients need to update the Endpoints on their side.
@@ -2565,9 +2560,7 @@ As we learned before, an API Gateway acts as an abstraction over the microservic
 To implement this feature, Spring Cloud Gateway uses the below building blocks:
 
 - Routes
-
 - Predicates
-
 - Filters
 
 ### Routes
@@ -2586,13 +2579,10 @@ Let's see how we can implement the API Gateway in our project using Spring Cloud
 
 Note that we will be using Spring Cloud Gateway MVC, but not Spring Cloud Gateway which is based on reactive stack backed by Spring Webflux.
 
-
 Here are the routing rules we will implement:
 
 - If a request matches the path - /api/product, then forward it to Product Service
-
 - If a request matches the path - /api/order, then forward it to Order Service
-
 - If a request matches the path - /api/inventory, then forward it to Inventory Service
 
 ## Coding
@@ -2601,7 +2591,7 @@ Let's start developing our API Gateway, once you open the project downloaded fro
 
 **pom.xml**
 
-```xml
+```pom
 <?xml version="1.0" encoding="UTF-8"?>
 
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -2663,10 +2653,10 @@ Let's start developing our API Gateway, once you open the project downloaded fro
     </build>
 
 </project>
-
+```
 And the main Spring Boot application class, ApiGatewayApplication.java
 
-
+```java
 package com.programming.techie;
 
 import org.springframework.boot.SpringApplication;
@@ -2680,18 +2670,18 @@ public class ApiGatewayApplication {
     }
 
 }
-
+```
 Now it's time to create the routing rules defined above, for that we can follow 2 approaches
 
-Using Java API
+### Using Java API
 
 Using Property files
 
 We will go with the approach of using Java API in this tutorial, for that let's create a class called Routes.java
 
-Routes.java
+- Routes.java
 
-
+```java
 package com.programming.techie.routes;
 
 import org.springframework.context.annotation.Bean;
@@ -2715,14 +2705,14 @@ return route("product_service")
 .build();
 }
 }
-
+```
 The above code defines a route to the product service, the route() method takes in two arguments one for the path which is the predicate we want to match in this case (/api/product), and the second argument is http("<target-destination-url>") which points to the target destination ie. product service that is running at http://localhost:8080.
 
 We will see how to use Filters in the upcoming section when we implement Circuit Breakers for resiliency.
 
 Let's add also the remaining routes for the order service and inventory service
 
-
+```java
 package com.programming.techie.routes;
 
 import org.springframework.context.annotation.Bean;
@@ -2762,16 +2752,16 @@ return route("product_service")
     }
 
 }
-
+```
 You can observe that the other routes have very similar code, but the only differences are obvious, with the path being /api/order, routed to the Order Service, and the path /api/inventory to the Inventory Service.
 
 Finally, let's add a property in the application.properties file to make sure that the api-gateway service runs on port 9000 as 8080 is already taken by the product service.
 
-
+```
 server.port=9000
-
+```
 Now if you make an HTTP GET request to the URL:
-
+```json
 http://localhost:9000/api/product then you should see the below response
 
 [
@@ -2782,21 +2772,22 @@ http://localhost:9000/api/product then you should see the below response
     "price": 1000
   }
 ]
+```
 That's it for this part, in the next part we will discuss how to implement security in our project by integrating OAuth2 using Keycloak.
 
-Spring Boot Microservices Tutorial - Part 4
-April 18, 2024
+### Spring Boot Microservices Tutorial - Part 4
+
 In Part 4 of this Spring Boot Microservices Tutorial series, we will secure our API Gateway using Keycloak
 
-What is Keycloak?
+#### What is Keycloak?
 Keycloak is an open-source Authorization Server that can be used to outsource the authentication and authorization from our application. Keycloak supports various authentication and authorization protocols like OAuth2, OpenID Connect, SAML, etc. It also offers features like Single Sign On (SSO), and Multi-Factor Authentication (MFA) out of the box.
 
 If you want to learn more about OAuth2 and OIDC you can refer to the below documentation
 https://oauth.net/2/ and https://openid.net/developers/how-connect-works/
 
-Download Keycloak
+- Download Keycloak
 To download Keycloak, we must create the docker-compose.yml file inside our API gateway project.
-
+```yaml
 docker-compose.yml
 
 version: '3.8'
@@ -2829,46 +2820,36 @@ services:
       - ./docker/keycloak/realms/:/opt/keycloak/data/import/
     depends_on:
       - keycloak-mysql
-
+```
 The above file sets up Keycloak along with a MySQL database to store the keycloak configuration. For now, we are starting Keycloak in the dev environment using the 'start-dev' argument provided through the command field of the docker-compose configuration.
 
 Now you can run the below command to start the Keycloak docker container:
 
-docker compose up -d
-Keycloak Configuration
+> docker compose up -d
+#### Keycloak Configuration
 After starting the Keycloak docker container, it's time to set up Keycloak, open the URL http://localhost:8181 this should open the home page of keycloak, provide admin/admin as the credentials as we have configured it in the docker-compose file.
 
 In Keycloak, all the clients, users, and roles related to a particular application (or) a group of applications reside inside something known as a realm. Realms are independent of each other, so if you create one client/user in one realm, you cannot use it from another realm.
 
 In our project, we will be using the Client Credentials grant, to communicate with the API Gateway and fetch an Access Token, and this access token will be verified by the API Gateway against Keycloak.
 
-To get started, log in to the Keycloak Admin page using the above-mentioned credentials and the first thing we are going to do is to create the realm.
+- To get started, log in to the Keycloak Admin page using the above-mentioned credentials and the first thing we are going to do is to create the realm.
+- After logging in, click on the dropdown with the text "Keycloak" in the top left-side corner and click on the Create Realm button
+- Provide the name of the realm(eg: spring-microservices-realm) and click on the Create button
+- Now the realm should be created successfully
+- Next, click on the Clients link to the left sidebar, and click on Create Client
+- Provide any Client ID you like eg: test-client-id and click on Next
+- Check Client Authentication as ON
+- In the Authentication Flow, select Service accounts roles and unselect all other options, this makes sure that our client supports Client Credentials grant
+- Click on Next and then Save
+- Finally, click on the Credentials tab, here you can view the client secret that is generated automatically and you can also regenerate a new client secret. Make sure to copy the client secret, we will use this in the later parts to request a token to access the API Gateway
 
-After logging in, click on the dropdown with the text "Keycloak" in the top left-side corner and click on the Create Realm button
-
-
-Provide the name of the realm(eg: spring-microservices-realm) and click on the Create button
-
-Now the realm should be created successfully
-
-Next, click on the Clients link to the left sidebar, and click on Create Client
-
-Provide any Client ID you like eg: test-client-id and click on Next
-
-Check Client Authentication as ON
-
-In the Authentication Flow, select Service accounts roles and unselect all other options, this makes sure that our client supports Client Credentials grant
-
-Click on Next and then Save
-
-Finally, click on the Credentials tab, here you can view the client secret that is generated automatically and you can also regenerate a new client secret. Make sure to copy the client secret, we will use this in the later parts to request a token to access the API Gateway
-
-Configure Keycloak in API Gateway
+#### Configure Keycloak in API Gateway
 Now let's configure keycloak in our api-gateway application, for that we need to add the spring-security-oauth2-resource-server dependency to our pom.xml file
 
 Here is how our pom.xml file now looks like after adding the dependency.
 
-pom.xml
+```pom.xml
 
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -2927,9 +2908,9 @@ pom.xml
 	</build>
 
 </project>
-
+```
 Now let's configure the application.properties with the Authorization Server details. For that first, we need to retrieve the Issuer URI of our authorization server. For keycloak, it's usually in the format:
-http://<key-cloak-url>/realm/<realm-name>
+> http://<key-cloak-url>/realm/<realm-name>
 
 For the realm we created in the previous step, the issuer uri will be: http://localhost:8181/realms/spring-microservices-realm
 
@@ -2937,7 +2918,7 @@ Now let's go ahead and configure this inside our Spring Boot API Gateway applica
 
 spring.security.oauth2.resourceserver.jwt.issuer-uri=http://localhost:8181/realms/spring-microservices-realm
 The next step is to create the Security Configuration class, let's create a package called config and create a class inside the package - SecurityConfig.class
-
+```java
 package com.programming.techie.gateway.config;
 
 import org.springframework.context.annotation.Bean;
@@ -2956,60 +2937,53 @@ public class SecurityConfig {
                 .build();
     }
 }
-
+```
 This is the basic Security Configuration, Spring Security already creates for us out of the box, you can also choose to ignore adding this file if you don't need to add any additional configuration.
 
-Now let's run the ApiGatewayApplication.java class and test out our endpoints using postman.
-
-Open the Postman client and inside the request window, click on the Authorization tab and then select OAuth2.
-
-Select the Grant Type as Client Credentials
-
-Enter the Client ID and Client Secret of the client we created in the previous steps
-
-Leave the rest of the fields as it is, and click on the Get New Access Token button.
-
-This will make a call to the Token Endpoint and fetches us a new Access Token.
-
-Click on the Use Token method, to add the token to our Request Context Window.
-
-Select any request you want to make for example: call the Product Service Endpoint - GET HTTP://localhost:9000/api/product and click on Send
+- Now let's run the ApiGatewayApplication.java class and test out our endpoints using postman.
+- Open the Postman client and inside the request window, click on the Authorization tab and then select OAuth2.
+- Select the Grant Type as Client Credentials
+- Enter the Client ID and Client Secret of the client we created in the previous steps
+- Leave the rest of the fields as it is, and click on the Get New Access Token button.
+- This will make a call to the Token Endpoint and fetches us a new Access Token.
+- Click on the Use Token method, to add the token to our Request Context Window.
+- Select any request you want to make for example: call the Product Service Endpoint - GET HTTP://localhost:9000/api/product and click on Send
 
 You should receive a successful response from the API Gateway.
 
-Postman
+#### Postman
 
 In the next part, we will learn how to implement Circuit Breaker Pattern using Resilience4J and Spring Cloud Circuit Breaker Project.
 
-Spring Boot Microservices Tutorial - Part 5
-May 5, 2024
+### Spring Boot Microservices Tutorial - Part 5
+
 In Part 5 of this Spring Boot Microservices Tutorial series, we will document our REST APIs using Springdoc Open API and Swagger.
 
-What is Open API?
+#### What is Open API?
 Open API (don't mistake it with Open AI :D )is a specification that defines a standard way to document the APIs. No matter which programming language or framework you use, Open AI provides a standard way of defining and documenting your API so that it's easy to read and use the API.
 
 In the Java world, it's similar to the Java Persistence API (JPA) that defines a specification on how to persist data in our applications. Hibernate is a library that implements JPA, similarly, we have a tool called Swagger, which helps us implement the OpenAPI specification.
 
-Springdoc OpenAPI
+#### Springdoc OpenAPI
 Swagger does not provide out-of-the-box support with Spring Boot, that's where the library Springdoc OpenAPI comes in, it provides good support with Spring Boot and helps us generate the API documentation automatically in JSON/YML and HTML formats.
 
 If you want to view the documentation in HTML format, we should add the below dependency in all our services:
-
+```pom
    <dependency>
       <groupId>org.springdoc</groupId>
       <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
       <version>2.5.0</version>
    </dependency>
-
+```
 Make sure to check the documentation, to get the latest version of the dependency -https://springdoc.org/#getting-started
 
-Next, let's customize the URL we want to serve the REST API documentation, by default, spring doc open API exposes the documentation at URL path - /swagger-ui/index.html, if we want to customize the URL path, add the below property to the application.properties file.
+- Next, let's customize the URL we want to serve the REST API documentation, by default, spring doc open API exposes the documentation at URL path - /swagger-ui/index.html, if we want to customize the URL path, add the below property to the application.properties file.
 
-springdoc.swagger-ui.path=/swagger-ui.html
-Next, we have to create a configuration class, to define some metadata about our API, to create a class called OpenAPIConfig in a package called config.
+> springdoc.swagger-ui.path=/swagger-ui.html
+- Next, we have to create a configuration class, to define some metadata about our API, to create a class called OpenAPIConfig in a package called config.
 
-OpenAPIConfig.java
-
+- OpenAPIConfig.java
+```java
 package com.techie.microservices.product.config;
 
 import io.swagger.v3.oas.models.ExternalDocumentation;
@@ -3034,37 +3008,31 @@ public class OpenAPIConfig {
                         .url("https://product-service-dummy-url.com/docs"));
     }
 }
-
+```
 You can see the above configuration is for the ProductService application, we can create a similar configuration for the Order Service and the inventory service.
 
 Now, let's start all the applications and go to the path /swagger-ui.html for all our 3 services, you will see the API documentation like below screenshots.
 
-API Documentation for Product Service
-
-API Documentation for Product Service
-
-API Documentation for Order Service
-
-API Documentation for Order Service
-
-API Documentation for Product Service
-
-API Documentation for Product Service
-
-Documentation in JSON/YML Format
+- API Documentation for Product Service
+- API Documentation for Product Service
+- API Documentation for Order Service
+- API Documentation for Order Service
+- API Documentation for Product Service
+- API Documentation for Product Service
+- Documentation in JSON/YML Format
 To generate the documentation in JSON/YML format, we have to add the following dependency:
-
+```pom
    <dependency>
       <groupId>org.springdoc</groupId>
       <artifactId>springdoc-openapi-starter-webmvc-api</artifactId>
       <version>2.5.0</version>
    </dependency>
-
+```
 Let's customize the path of the API documentation by adding the below property in the application.properties file
 
 springdoc.api-docs.path=/api-docs
 Now, after restarting the application, go to the URL: http://localhost:8080/api-docs and you should see the documentation below:
-
+```json
   "openapi": "3.0.1",
   "info": {
     "title": "Product Service API",
@@ -3176,11 +3144,12 @@ Now, after restarting the application, go to the URL: http://localhost:8080/api-
     }
   }
 }
-Aggregating the documentation in API Gateway
+```
+#### Aggregating the documentation in API Gateway
 You may have observed that to access the documentation we have to manually visit the URL of each service, we can aggregate all the documentation and expose it in a single place in the API Gateway.
 
 To do that add the below dependencies to the pom.xml of the API Gateway service.
-
+```pom
 		<dependency>
 			<groupId>org.springdoc</groupId>
 			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
@@ -3191,8 +3160,9 @@ To do that add the below dependencies to the pom.xml of the API Gateway service.
 			<artifactId>springdoc-openapi-starter-webmvc-api</artifactId>
 			<version>2.5.0</version>
 		</dependency>
+```
 Next, let's add the below properties to aggregate the URLs of all the 3 services.
-
+```
 springdoc.swagger-ui.path=/swagger-ui.html
 springdoc.swagger-ui.enabled=true
 springdoc.api-docs.enabled=true
@@ -3202,10 +3172,11 @@ springdoc.swagger-ui.urls[1].name=Order Service
 springdoc.swagger-ui.urls[1].url=/aggregate/order-service/v3/api-docs
 springdoc.swagger-ui.urls[2].name=Inventory Service
 springdoc.swagger-ui.urls[2].url=/aggregate/inventory-service/v3/api-docs
+```
 We defined each service with a separate URL, whenever the user visits this URL, we have to route this request to the appropriate service, and for that, we need to add the corresponding routes in the Routes.java class.
 
-Routes.java
-
+- Routes.java
+```java
 @Bean
     public RouterFunction<ServerResponse> productServiceSwaggerRoute() {
         return GatewayRouterFunctions.route("product_service_swagger")
@@ -3229,10 +3200,11 @@ Routes.java
                 .filter(setPath("/api-docs"))
                 .build();
     }
+```
 The above configuration will route all the incoming requests to the /api-docs path of the corresponding service. Note that, we previously exposed the path /api-docs to serve the documentation in the JSON format.
 
 Next, we have to add the security configuration to make sure that API Gateway allows the requests without authentication.
-
+```java
 package com.programming.techie.gateway.config;
 
 import org.springframework.context.annotation.Bean;
@@ -3273,19 +3245,17 @@ public class SecurityConfig {
         return source;
     }
 }
-
+```
 In the above configuration, we have defined a variable called freeResourceUrls, where we should permit all the requests to these paths. To allow the calls to the downstream microservices, we added the path /aggregate/ that covers the path for all the 3 services:
 
-/aggregate/product-service/v3/api-docs
-
-/aggregate/inventory-service/v3/api-docs
-
-/aggregate/order-service/v3/api-docs
+- /aggregate/product-service/v3/api-docs
+- /aggregate/inventory-service/v3/api-docs
+- /aggregate/order-service/v3/api-docs
 
 Lastly, we have also defined CORS configuration, as we will be accessing different services through the browser from API Gateway.
 
 We also need to update the microservices to define CORS, or else we will get a CORS ERROR while accessing the API Documentation. So, let's add the below CORS Configuration in all the services by creating a class CorsConfig.java
-
+```java
 package com.techie.microservices.product.config;
 
 import org.springframework.context.annotation.Configuration;
@@ -3304,13 +3274,14 @@ class CorsConfig implements WebMvcConfigurer {
                 .allowCredentials(false);
     }
 }
+```
 Lastly, now let's run all the services, and go to the URL- http://localhost:9000/swagger-ui.html, and on the top right corner you should see a dropdown where you can switch between different API documentation of the services.
 
-Spring Boot Microservices Tutorial - Part 6
-May 26, 2024
+### Spring Boot Microservices Tutorial - Part 6
+
 In Part 6 of this Spring Boot Microservices Tutorial, we will learn how to implement Resiliency in our project by implementing the Circuit Breaker pattern. We will use the library Resilience4J together with Spring Cloud Circuit Breaker Resilience4J to implement the circuit breaker pattern in our project
 
-What is Circuit Breaker Pattern ?
+### What is Circuit Breaker Pattern ?
 Circuit Breaker is one of the widely used best practice in the real world distributed systems
 
 Consider a scenario where your application A makes synchronous calls to a remote service R. If service R becomes unavailable or responds very slowly due to performance issues, this situation will negatively impact application A as well.
@@ -3321,20 +3292,18 @@ In our Microservices Project, we can introduce this Circuit Breaker mechanism in
 
 API Gateway is the main service that is calling 3 other services, so this will be the best place to use Circuit Breaker, similarly we can also implement this feature in the Order Service as the service is calling Inventory Service to fetch the inventory information.
 
-Different States in the Circuit Breaker Pattern
+### Different States in the Circuit Breaker Pattern
 At any given point of time, a circuit breaker will be in different states like:
 
-Open: This states indicates that the Circuit Breaker is open, and all the traffic going through the Circuit Breaker will be blocked.
+- Open: This states indicates that the Circuit Breaker is open, and all the traffic going through the Circuit Breaker will be blocked.
+- Half-Open: In this state, the Circuit Breaker will start allowing gradually the traffic to the remote service R
+- Closed: In this state, the Circuit Breaker will allow all the requests to the service, which means that the service R is working well without any problems.
 
-Half-Open: In this state, the Circuit Breaker will start allowing gradually the traffic to the remote service R
+### Different States in the Circuit Breaker Pattern
 
-Closed: In this state, the Circuit Breaker will allow all the requests to the service, which means that the service R is working well without any problems.
-
-Different States in the Circuit Breaker Pattern
-
-Implement Circuit Breaker in the API Gateway
+### Implement Circuit Breaker in the API Gateway
 Now let's implement this pattern in our API Gateway project, for that I am going to add the following dependencies to the pom.xml of the API Gateway project
-
+```pom
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-circuitbreaker-resilience4j</artifactId>
@@ -3343,10 +3312,11 @@ Now let's implement this pattern in our API Gateway project, for that I am going
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
+```
 The first dependency adds the Resilience4J library in our project and the second dependency adds the Spring Boot Actuator that provides us with useful endpoints to get useful information about our application like Metrics, we can make use of these endpoints to check the state of the Resilience4J Circuit Breaker.
 
 After adding the above dependency, we need to add the circuitBreaker() method to our Route Configuration for all the routes.
-
+```java
 @Bean
     public RouterFunction<ServerResponse> productServiceRoute() {
         return GatewayRouterFunctions.route("product_service")
@@ -3404,12 +3374,13 @@ After adding the above dependency, we need to add the circuitBreaker() method to
                 .GET("/fallbackRoute", request -> ServerResponse.status(HttpStatus.SERVICE_UNAVAILABLE).body("Service Unavailable, please try again later"))
                 .build();
     }
+```
 You can see that the circuitBreaker() method is taking an ID which is a string and then a URL parameter which points to a fallback endpoint that will be displayed when the requests are blocked when the CircuitBreaker is OPEN
 
 We have the fallbackRoute() bean that is defined as a fallback route at the path - /fallbackRoute that sends a HTTP 503 Service Unavailable response back to the client.
 
 After adding this configuration for our routes, we have to now configure Resilience4J in our project, for that open application.properties file:
-
+```
 #Resilinece4j Properties
 resilience4j.circuitbreaker.configs.default.registerHealthIndicator=true
 resilience4j.circuitbreaker.configs.default.slidingWindowType=COUNT_BASED
@@ -3419,27 +3390,30 @@ resilience4j.circuitbreaker.configs.default.waitDurationInOpenState=5s
 resilience4j.circuitbreaker.configs.default.permittedNumberOfCallsInHalfOpenState=3
 resilience4j.circuitbreaker.configs.default.automaticTransitionFromOpenToHalfOpenEnabled=true
 resilience4j.circuitbreaker.configs.default.minimum-number-of-calls=5
+```
 The above properties make sure that Resilience4J is configured in our project.
 
-Enable Circuit Breaker for Timeouts
+### Enable Circuit Breaker for Timeouts
 We can enable Circuit Breaker to implement a timeout, when the remote service is taking a very long time to respond, for that all we have to do is add the following property:
-
+```
 resilience4j.timelimiter.configs.default.timeout-duration=3s
+```
 With this configuration, the circuit breaker will be OPEN, when the remote service is taking more than 3 seconds to send back the response.
 
-Implement Retries
+### Implement Retries
 Sometimes, the service can be unavailable due to a small network issue (or) any other minor issue, in those cases, it's better to retry the call instead of directly activating the Circuit Breaker. For this reason, the Resilience4J library allows us to implement retries by adding the following configuration:
-
+```
 #Resilience4J Retry Properties
 resilience4j.retry.configs.default.max-attempts=3
 resilience4j.retry.configs.default.wait-duration=2s
+```
 The above configuration will retry for a maximum of 3 times, with a wait of 5 seconds in between the retries.
 
-Implement Circuit Breaker in the Order Service
+### Implement Circuit Breaker in the Order Service
 Now let's implement the Circuit Breaker also in the Order Service, as we are making a synchronous call to the inventory service in this service.
 
 For that, I am going to add the below dependencies, in the pom.xml of the project:
-
+```pom
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-circuitbreaker-resilience4j</artifactId>
@@ -3448,8 +3422,9 @@ For that, I am going to add the below dependencies, in the pom.xml of the projec
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
+```
 After that, let's add the configuration for Resilience4J in the application.properties file, like below:
-
+```
 #Resilinece4j Properties
 resilience4j.circuitbreaker.instances.inventory.registerHealthIndicator=true
 resilience4j.circuitbreaker.instances.inventory.event-consumer-buffer-size=10
@@ -3467,10 +3442,12 @@ resilience4j.timelimiter.instances.inventory.timeout-duration=3s
 #Resilience4J Retry Properties
 resilience4j.retry.instances.inventory.max-attempts=3
 resilience4j.retry.instances.inventory.wait-duration=5s
+
+```
 After that to enable Circuit Breaker on the specific endpoints we can add the @CircuitBreaker annotation, similarly to enable retries, we can add the @Retry annotation respectively.
 
 We can add these above annotations in the Inventory Client class, this is how the class looks like after adding the necessary annotations:
-
+```java
 package com.techie.microservices.order.client;
 
 import groovy.util.logging.Slf4j;
@@ -3496,11 +3473,11 @@ public interface InventoryClient {
         return false;
     }
 }
-
+```
 In the above class, you can notice that we defined a method called fallbackMethod that will be executed whenever the Circuit Breaker is OPEN.
 
 To implement Timeout, we can configure the RestClient to have a connection and read time out through the requestFactory() method. This is how the RestClientConfig.java class looks like:
-
+```java
 package com.techie.microservices.order.config;
 
 import com.techie.microservices.order.client.InventoryClient;
@@ -3541,8 +3518,8 @@ public class RestClientConfig {
         return ClientHttpRequestFactories.get(clientHttpRequestFactorySettings);
     }
 }
-
-Testing the Circuit Breaker Pattern
+```
+### Testing the Circuit Breaker Pattern
 To test the Circuit Breaker in the API Gateway, make sure that one of the services like Product, Order or Inventory Service is unavailable, and then call the corresponding service.
 
 You should see an error - Service Unavailable, please try again later with the status HTTP_503
@@ -3551,52 +3528,46 @@ You can try the same thing also for the Order Service project, by stopping the I
 
 To test the Timeout and Retry, we can introduce a slight delay by adding something like Thread.sleep() to simulate latency for our requests and you can observe that Circuit Breaker will be activated also in these cases.
 
-Conclusion
+### Conclusion
 In this blogpost, you learned about Circuit Breaker pattern, why and when to use it. We also learned how to enable the pattern using libraries like Resilience4J and Spring Cloud Circuit Breaker.
 
 In the next part of the Spring Boot Microservice Tutorial series, we will learn how to implement asynchronous communication using Kafka.
 
-Spring Boot Microservices Tutorial - Part 7
-June 9, 2024
+### Spring Boot Microservices Tutorial - Part 7
+
 In Part 7 of this Spring Boot Microservices Tutorial series, we will set up a UI for our project, we will be using Angular as our frontend framework. This tutorial contains logical steps to build the UI.
 
 We will use the latest Angular version - v18- to build this project. Ensure you have Node and Npm installed on your machine before following the instructions below.
 
-Link to download Node - https://nodejs.org/en/download/package-manager
+- Link to download Node - https://nodejs.org/en/download/package-manager
+- Link to download NPM - https://docs.npmjs.com/downloading-and-installing-node-js-and-npm
+- Link to download Angular CLI - https://angular.dev/tools/cli/setup-local#install-the-angular-cli
 
-Link to download NPM - https://docs.npmjs.com/downloading-and-installing-node-js-and-npm
-
-Link to download Angular CLI - https://angular.dev/tools/cli/setup-local#install-the-angular-cli
-
-Create Angular Scaffolding Project
+### Create Angular Scaffolding Project
 To get started, let's create a new angular project with the below command:
 
-ng new microservices-shop-frontend
+> ng new microservices-shop-frontend
 Angular CLI will ask you a set of questions, I will provide the answers to the relevant settings for the project, for the rest of the settings, feel free to pick as per your preferences.
 
-Which stylesheet format would you like to use? - CSS
+- Which stylesheet format would you like to use? - CSS
+- Do you want to enable Server-Side Rendering (SSR) and Static Site Generation (SSG/Prerendering)? N
+- After answering the above questions, press Enter, and the project should now be created successfully.
+- Once the project is created, you can start the scaffolding application by typing the below command:
 
-Do you want to enable Server-Side Rendering (SSR) and Static Site Generation (SSG/Prerendering)? N
-
-After answering the above questions, press Enter, and the project should now be created successfully.
-
-Once the project is created, you can start the scaffolding application by typing the below command:
-
-ng serve
+> ng serve
 Angular CLI will now compile the project and start a webserver to serve the application and it will also watch for the changes in the project files so that whenever a change occurs in the code, the webserver will automatically reload and apply the new changes.
 
-After the application is started successfully open the URL - http://localhost:4200
+- After the application is started successfully open the URL - http://localhost:4200
+- Now you have created the Angular app, now it's time to configure Tailwind CSS as our CSS framework.
 
-Now you have created the Angular app, now it's time to configure Tailwind CSS as our CSS framework.
-
-Install Tailwind CSS
+#### Install Tailwind CSS
 We will be using TailwindCSS as our CSS framework, to install it in our angular project, type the below commands:
 
-npm install -D tailwindcss postcss autoprefixer
+> npm install -D tailwindcss postcss autoprefixer
 
-npx tailwindcss init
+> npx tailwindcss init
 After executing both commands there will be a tailwind.config.js file, update its content below:
-
+```json
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
@@ -3607,21 +3578,23 @@ module.exports = {
   },
   plugins: [],
 }
+```
 The above configuration will apply tailwind CSS to all the HTML templates in our project.
 
 To enable CSS, we also have to update the src/styles.css file with the following code:
-
+```jsx
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+```
 Once this is done, restart the application by running the ng serve command again.
 
-Add Angular Auth OIDC Client dependency
+### Add Angular Auth OIDC Client dependency
 The next thing we are going to do is to enable OAuth2 capabilities in our project, by adding the angular-auth-oidc-client dependency, by executing the below command:
 
- npm install angular-auth-oidc-client
+ > npm install angular-auth-oidc-client
 After installing the library, we need to configure it by creating a file called src/app/config/auth-config.ts
-
+```jsx
 import { PassedInitialConfig } from 'angular-auth-oidc-client';
 
 export const authConfig: PassedInitialConfig = {
@@ -3637,21 +3610,21 @@ export const authConfig: PassedInitialConfig = {
     renewTimeBeforeTokenExpiresInSeconds: 30,
   }
 }
-
+```
 The above configuration will set up our angular application to talk with the Keycloak server, if you want to revise how to set up the Keycloak server, refer to my previous post here - https://programmingtechie.com/2024/04/18/spring-boot-microservices-tutorial-part-4/
 
 The authority field is pointing to the URL of the Realm we created in the previous parts, and then the client ID is going to be angular-client, which is the name of the client ID we will create soon in Keycloak.
 
 We are going to use the Refresh Token mechanism to get a new token whenever our existing token is expired.
 
-Create Header Component
+- Create Header Component
 So in the next step, we are going to add the header component, to generate a new component, type the following command:
 
-ng g c shared/header
+> ng g c shared/header
 The above command generates a component at the location src/app/shared/header, if you just provide header instead of shared/header, then the component will be created at location - src/app/header
 
-header.component.html
-
+- header.component.html
+```html
 <nav class="bg-white border border-gray-200 dark:border-gray-700 px-2 sm:px-4 py-2.5 rounded dark:bg-gray-800 shadow">
     <div class="container flex flex-wrap justify-between items-center mx-auto">
         <a href="/" class="flex items-center">
@@ -3705,9 +3678,9 @@ header.component.html
 
     </div>
 </nav>
-
-header.component.ts
-
+```
+- header.component.ts
+```jsx
 import {Component, inject, OnInit} from '@angular/core';
 import {OidcSecurityService} from "angular-auth-oidc-client";
 
@@ -3747,14 +3720,14 @@ export class HeaderComponent implements OnInit {
       .subscribe((result) => console.log(result));
   }
 }
-
+```
 The header component is mainly responsible for displaying the information about the currently logged-in user (like the username) and then providing the links to Login/Logout of the application. Here we are using the OidcSecurityService from the angular-auth-oidc-client dependency to implement login and logout functionalities.
 
 Create Home Page Component
 The next step is going to be to create the Home Page component
 
-home-page.component.html
-
+- home-page.component.html
+```html
 <main>
   <div class="p-4">
     <div class="flex justify-between items-center mb-4">
@@ -3805,9 +3778,9 @@ home-page.component.html
     }
   </div>
 </main>
-
-home-page.component.ts
-
+```
+- home-page.component.ts
+```jsx
 import {Component, inject, OnInit} from '@angular/core';
 import {OidcSecurityService} from "angular-auth-oidc-client";
 import {Product} from "../../model/product";
@@ -3887,13 +3860,14 @@ export class HomePageComponent implements OnInit {
     })
   }
 }
+```
 The home page will interact with the Order Service, that is responsible to make HTTP calls to our microservice backend, to create the order service, type the below command:
 
-ng g s services/order
+> ng g s services/order
 And then add the below code:
 
-order.service.ts
-
+- order.service.ts
+```jsx
 import {Component, inject, OnInit} from '@angular/core';
 import {OidcSecurityService} from "angular-auth-oidc-client";
 import {Product} from "../../model/product";
@@ -3967,9 +3941,9 @@ export class HomePageComponent implements OnInit {
     })
   }
 }
-
+```
 We also need to create the model classes to transfer the payload, for that create a package called model and a file inside called order.ts
-
+```jsx
 export interface Order {
   id?: number;
   orderNumber?: string;
@@ -3984,11 +3958,11 @@ export interface UserDetails {
   firstName: string;
   lastName: string;
 }
-
+```
 When we are making calls from the frontend to the backend we have to make sure that our frontend is sending the access token for each HTTP request to the backend, for that we need to create an interceptor to intercept all outgoing requests and add the token.
 
-interceptor/auth.interceptor.ts
-
+- interceptor/auth.interceptor.ts
+```jsx
 import {HttpInterceptorFn} from "@angular/common/http";
 import {inject} from "@angular/core";
 import {OidcSecurityService} from "angular-auth-oidc-client";
@@ -4014,12 +3988,12 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   return next(req);
 
 }
-
+```
 We are also reading the products from the backend and displaying them in the frontend, for that we also have to create a product service similar to the order service by executing the below command:
 
-ng g s services/product
-product.service.ts
-
+> ng g s services/product
+- product.service.ts
+```jsx
 import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
@@ -4128,9 +4102,9 @@ add-product.component.html
     </button>
   </form>
 </div>
-
-add-product.component.ts
-
+```
+- add-product.component.ts
+```jsx
 import {Component, inject} from '@angular/core';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {Product} from "../../model/product";
@@ -4191,10 +4165,10 @@ export class AddProductComponent {
     return this.addProductForm.get('price');
   }
 }
-
-Configure Routes
+```
+#### Configure Routes
 Now we have a couple of components, we have to configure routing between these components, for open the app.routes.ts file and add the below content:
-
+```jsx
 import {Routes} from '@angular/router';
 import {HomePageComponent} from "./pages/home-page/home-page.component";
 import {AddProductComponent} from "./pages/add-product/add-product.component";
@@ -4203,9 +4177,9 @@ export const routes: Routes = [
   {path: '', component: HomePageComponent},
   {path: 'add-product', component: AddProductComponent}
 ];
-
+```
 Now let's add some final configuration changes to enable the functionalities like HTTP Client, OAuth2, and interceptor in our angular application, by updating the app.config.ts file:
-
+```jsx
 import {ApplicationConfig, provideZoneChangeDetection} from '@angular/core';
 import {provideRouter} from '@angular/router';
 
@@ -4222,44 +4196,36 @@ export const appConfig: ApplicationConfig = {
     provideAuth(authConfig),
   ]
 };
-
+```
 And finally, this is how the app.component.html file looks like:
-
+```jsx
 <app-header></app-header>
 <router-outlet />
-Setting up Angular Client in Keycloak
+```
+#### Setting up Angular Client in Keycloak
 Before we go ahead and test our application, we have to create the Angular Client in the Keycloak server. For that open localhost:8181 and login to Keycloak with your admin credentials.
 
-Select the realm - spring-microservices-security-realm
-
-Click on Clients on the left side menu bar
-
-Click on the Create client button
-
-Enter Client ID as angular-client
-
-Click Next
-
-Only Select the option - Standard Flow and nothing else, de-select the option Direct access grants that is enabled by default, we don't need it for our use case
-
-Click Next
-
-Under the input Valid redirect URIs - provide the value - http://localhost:4200
-
-Under the input Web origins - provide the value - * to allow requests from all origins.
-
-Click on Save
+- Select the realm - spring-microservices-security-realm
+- Click on Clients on the left side menu bar
+- Click on the Create client button
+- Enter Client ID as angular-client
+- Click Next
+- Only Select the option - Standard Flow and nothing else, de-select the option Direct access grants that is enabled by default, we don't need it for our use case
+- Click Next
+- Under the input Valid redirect URIs - provide the value - http://localhost:4200
+- Under the input Web origins - provide the value - * to allow requests from all origins.
+- Click on Save
 
 That's all you need to configure the Angular client in Keycloak, we already configured our Angular app to use the client we just created.
 
-Enable User Registration for Keycloak
+#### Enable User Registration for Keycloak
 The next thing we want to do is to enable the users to self-register on Keycloak, for that open the Realm Settings, click on Login, and select the User Registration option to enable it.
 
-Enable CORS on API Gateway
+#### Enable CORS on API Gateway
 Before we go ahead and test our implementation, we have to enable CORS on the API Gateway because our Frontend application is running at http://localhost:4200, whereas our API Gateway is running at http://localhost:9000, as they are two different origins, the browser will not allow the requests to the API Gateway, it will only allow if we explicitly allow the origin in our API Gateway.
 
 To add this configuration, use the following configuration in the SecurityConfig.java class of the API Gateway project.
-
+```java
 package com.programming.techie.gateway.config;
 
 import org.springframework.context.annotation.Bean;
@@ -4300,13 +4266,13 @@ public class SecurityConfig {
         return source;
     }
 }
-
+```
 We created a bean called corsConfigurationSource and inside the bean, we are allowing any HTTP method, in a production-grade application you should not do this, but instead should check which HTTP method is allowed, as well as which URL is allowed to access your service.
 
 Testing the application
 To test the application, open the URL: http://localhost:4200 you will be greeted with the page that looks like below:
 
-Home Page
+- Home Page
 
 Click on Login and you will be redirected to the Keycloak login page.
 
@@ -4316,29 +4282,29 @@ You will be automatically logged in to the application.
 
 If you don't have any products in the product service, you can create one by clicking on the Add Products Page providing the necessary information, and submit it.
 
-Add Products
+- Add Products
 
 After adding the product, you can view it on the home page like below:
 
-Home Page with products
+- Home Page with products
 
 You can order the products by clicking on the Order Now button, make sure to add the quantity before you click on the Order Now button.
 
-Conclusion
+### Conclusion
 I hope you learned something from this tutorial, in the next tutorial we will continue with our microservices series and we will see how to implement event driven architecture using Kafka in our microservices project.
 
-Spring Boot Microservices Tutorial - Part 8
-July 7, 2024
+### Spring Boot Microservices Tutorial - Part 8
+
 In Part 8 of this Spring Boot Microservices Tutorial series, we will integrate Kafka into our project and learn how to build Event-Driven Microservices with Spring Boot and Kafka.
 
-What are Event Driven Microservices?
+### What are Event Driven Microservices?
 Event-driven microservices architecture is a way of building applications, where the systems communicate by publishing and consuming events, these events are available whenever other consumers need to read them at any time.
 
 Apache Kafka is a distributed messaging and streaming platform used frequently in the industry to implement Event-Driven Architecture.
 
-Installing Apache Kafka through Docker
+### Installing Apache Kafka through Docker
 We will use Docker to install Apache Kafka together with Zookeeper. We will also use a Kafka UI to see the topics and messages in our Kafka Cluster using the Kafka UI project. Here is how the Docker compose file looks like in the order-service docker-compose.yaml file:
-
+```yaml
 version: '4'
 services:
   mysql:
@@ -4401,24 +4367,26 @@ services:
       KAFKA_CLUSTERS_BOOTSTRAPSERVERS: broker:29092
       KAFKA_CLUSTERS_SCHEMAREGISTRY: http://schema-registry:8081
       DYNAMIC_CONFIG_ENABLED: 'true'
+```
 The main services we use are
 
-cp-zookeeper which is a Zookeeper cluster that is used to orchestrate multiple Kafka clusters.
+- cp-zookeeper which is a Zookeeper cluster that is used to orchestrate multiple Kafka clusters.
 
-cp-kafka which is the Kafka server itself
+- cp-kafka which is the Kafka server itself
 
-cp-schema-registry is the service we used to define the schema of the messages that are sent between producers and consumers
+- cp-schema-registry is the service we used to define the schema of the messages that are sent between producers and consumers
 
-Lastly, we have kafka-ui which provides a nice UI to allow us to view the Kafka topics that are created and also helps us to view the messages from and send messages to the Kafka topic.
+- Lastly, we have kafka-ui which provides a nice UI to allow us to view the Kafka topics that are created and also helps us to view the messages from and send messages to the Kafka topic.
 
-After updating the docker-compose file, just run docker compose up -d to start all the services.
+- After updating the docker-compose file, just run docker compose up -d to start all the services.
 
-Spring Kafka
+### Spring Kafka
 We will be using the Spring Kafka project to implement Kafka functionality in our Spring Boot projects, for that add the below dependencies in the order-service project.
-
+```pom
         <dependency>
             <groupId>org.springframework.kafka</groupId>
-            <artifactId>spring-kafka</artifactId>
+
+     <artifactId>spring-kafka</artifactId>
         </dependency>
         <dependency>
             <groupId>io.confluent</groupId>
@@ -4440,12 +4408,13 @@ We will be using the Spring Kafka project to implement Kafka functionality in ou
             <artifactId>spring-kafka-test</artifactId>
             <scope>test</scope>
         </dependency>
+```
 The above dependencies not only add the spring-kafka functionality but also bring in dependencies to work with schema-registry. We will define our schema in avro format, for that reason we need to also add the avro and kafka-avro-serializer dependencies.
 
 After adding the above dependencies, now it's time to implement the logic to send an event to the kafka topic whenever there is an order placed in the order-service. We will first start by defining the avro-schema of the event we want to send. And we will define the schema in a .avsc file, avsc is the format to define the Avro schema, let's add the below file under src/main/resources/avro folder.
 
-order-placed.avsc
-
+- order-placed.avsc
+```json
 {
   "type": "record",
   "name": "OrderPlacedEvent",
@@ -4457,12 +4426,13 @@ order-placed.avsc
     { "name": "lastName", "type": "string" }
   ]
 }
+```
 Here we have a few fields orderNumber, email, firstName, and lastName that are used to send notifications to the user whenever an order is placed successfully.
 
 The idea is to generate the Java classes automatically using this schema, so if there is a change in the schema file, then those changes will be automatically applied during the build time.
 
 To be able to generate the Java classes automatically, we are going to use the avro-maven-plugin:
-
+```pom
             <plugin>
                 <groupId>org.apache.avro</groupId>
                 <artifactId>avro-maven-plugin</artifactId>
@@ -4480,27 +4450,29 @@ To be able to generate the Java classes automatically, we are going to use the a
                     </execution>
                 </executions>
             </plugin>
+```
 Add the above plugin under the <plugins> section and run mvn clean compile command.
 
 Now you should see a file called OrderPlacedEvent.java under the com.techie.microservices.order.event package.
 
 Producing Messages from Order Service
 Now it's time to configure Kafka in our Spring Boot application, for that we are going to add the following properties in the application.properties file.
-
+```
 #Kafka Properties
 spring.kafka.bootstrap-servers=localhost:9092
 spring.kafka.template.default-topic=order-placed
 spring.kafka.producer.key-serializer=org.apache.kafka.common.serialization.StringSerializer
 spring.kafka.producer.value-serializer=io.confluent.kafka.serializers.KafkaAvroSerializer
 spring.kafka.producer.properties.schema.registry.url=http://localhost:8085
+```
 The above properties provide the necessary configuration to run Kafka Producer and to use the Kafka Schema registry in our Order service application.
 
 Inside the OrderService.java class, let's add the logic to send the messages to the Kafka topic using the KafkaTemplate class.
 
 Here is how the OrderService.java class looks like:
 
-OrderService.java
-
+- OrderService.java
+```java
 package com.techie.microservices.order.service;
 
 import com.techie.microservices.order.client.InventoryClient;
@@ -4553,19 +4525,16 @@ public class OrderService {
         }
     }
 }
-
+```
 This is all the logic we need to produce the events to order-placed kafka topic. Now let's see how to consume the messages in our consumer, that would be the notification-service.
 
-Consuming Messages from Notification Service
+#### Consuming Messages from Notification Service
 Let's create a new Spring Boot application called Notification Service with the following dependencies.
 
-Spring Kafka
-
-Java Mail Sender
-
-Lombok
-
-Test Containers
+- Spring Kafka
+- Java Mail Sender
+- Lombok
+- Test Containers
 
 After adding these dependencies, generate the project and open it in your IDE.
 
@@ -4573,7 +4542,7 @@ Now we need to add some more dependencies like Kafka Schema Registry, Avro Seria
 
 The complete pom.xml for notification-service looks like below:
 
-pom.xml
+```pom.xml
 
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -4692,11 +4661,11 @@ pom.xml
         </repository>
     </repositories>
 </project>
-
+```
 Place the order-placed.avsc file under the src/main/resources/avro folder
 
-order-placed.avsc
-
+- order-placed.avsc
+```json
 {
   "type": "record",
   "name": "OrderPlacedEvent",
@@ -4708,8 +4677,9 @@ order-placed.avsc
     { "name": "lastName", "type": "string" }
   ]
 }
+```
 Now let's configure the properties for Kafka Consumer in our Spring Boot Application's application.properties file:
-
+```
 spring.application.name=notification-service
 # Mail Properties
 spring.mail.host=sandbox.smtp.mailtrap.io
@@ -4726,10 +4696,11 @@ spring.kafka.consumer.properties.spring.deserializer.key.delegate.class=org.apac
 spring.kafka.consumer.properties.spring.deserializer.value.delegate.class=io.confluent.kafka.serializers.KafkaAvroDeserializer
 spring.kafka.consumer.properties.schema.registry.url=http://localhost:8085
 spring.kafka.consumer.properties.specific.avro.reader=true
+```
 Create a class called NotificationService.java that listens for the messages on the topic - "order-placed" and sends email
 
-NotificationService.java
-
+- NotificationService.java
+```java
 package com.techie.microservices.notification.service;
 
 import com.techie.microservices.order.event.OrderPlacedEvent;
@@ -4778,19 +4749,20 @@ public class NotificationService {
         }
     }
 }
-Spring Boot 3 Observability with Grafana Stack
-September 9, 2023
+```
+### Spring Boot 3 Observability with Grafana Stack
+
 In this blog post - Spring Boot 3 Observability with Grafana Stack, we will learn how to implement Observability in our Spring Boot applications using Grafana Stack which comprises Grafana, Loki, and Tempo.
 
-Spring Boot 3 Observability with Grafana Stack
-What is Observability?
+### Spring Boot 3 Observability with Grafana Stack
+#### What is Observability?
 In a nutshell, Observability is the process of understanding the internal state of the application with the help of different indicators such as Logs, Metrics, and Tracing information.
 
 For a more detailed explanation, have a look at this article.
 
 We will see how to implement Observability for a sample loan processing system built with Spring Boot 3 using the Grafana Stack.
 
-Grafana Stack
+#### Grafana Stack
 Grafana Stack comprises about 3 softwares:
 
 Grafana: This is the most widely used tool that helps to monitor and visualize the metrics of our application. Users can visualize the metrics by building different dashboards and can use different kinds of charts to visualize the metrics. We can also configure alerts to be notified whenever a metric reaches a certain required threshold.
@@ -4801,10 +4773,10 @@ Loki: is a Log Aggregation tool that receives the logs from our application and 
 
 Tempo: is used as a distributed tracing tool, which can track requests that span across different systems.
 
-Implementing Observability
+#### Implementing Observability
 The below picture shows you a high-level overview of our project and how tools like Grafana, Loki, and Tempo fit into our overall architecture.
 
-Observability
+#### Observability
 We have a loan-service that is responsible for accepting requests for loans and this request is validated against a fraud-service that verifies if the applicant is on the fraud list.
 
 You can find the source code of this application at - https://github.com/SaiUpadhyayula/springboot3-observablity
@@ -4815,16 +4787,17 @@ The application is built as a maven multi-module project, where loan-service and
 
 Logging
 Let's start with implementing logging in our application. To send our application logs to Loki, we have to add the below dependency to the pom.xml of both loan-service and fraud-service.
-
+```pom
     <dependency>
         <groupId>com.github.loki4j</groupId>
         <artifactId>loki-logback-appender</artifactId>
         <version>1.3.2</version>
     </dependency>
+```
 The loki-logback-appender adds the necessary integration with Loki with the help of the Logback logging library.
 
 Next, we have to define a logback-spring.xml file inside the src/main/resources which contains necessary information about how to structure our logs and where to send the logs (in other words it contains the information about Loki URL).
-
+```pom
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
     <include resource="org/springframework/boot/logging/logback/base.xml"/>
@@ -4849,48 +4822,53 @@ Next, we have to define a logback-spring.xml file inside the src/main/resources 
         <appender-ref ref="LOKI"/>
     </root>
 </configuration>
-
+```
 The <appender> defines the Loki4JAppender, which contains the reference to the Loki url under the <url> tag. It also defines the log pattern using the <pattern> tag which is defined as application=${app.name}, host=${HOSTNAME}, level=%level, where we display the application name which is defined in the <springProperty> tag, host, and the log level, which is defined as INFO under the <root> tag.
 
 That's all we need to do to implement logging using Loki. You can download and run Loki on your machine using Docker. In the sample project, I am using docker-compose, add the below Loki configuration in the docker-compose.yml file:
+
+```yaml
 
 loki:
   image: grafana/loki:main
   command: ['-config.file=/etc/loki/local-config.yaml']
   ports:
     - '3100:3100'
+```
 Now let's see how to implement Metrics using Prometheus and Grafana.
 
-Metrics
+#### Metrics
 Metrics can be any kind of measurable information about our application like JVM statistics, Thread Count, Heap Memory information, etc. To collect metrics of our application, we need to first enable Spring Boot Actuator in our project by adding the below dependency:
-
+```pom
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-actuator</artifactId>
 		</dependency>
+```
 Next, we have to add another dependency to expose the metrics of our application, Spring Boot uses Micrometer to collect metrics, and by adding the below dependency we can configure Micrometer to expose an endpoint that can be scraped by Prometheus.
-
+```pom
 		<dependency>
 			<groupId>io.micrometer</groupId>
 			<artifactId>micrometer-registry-prometheus</artifactId>
 			<scope>runtime</scope>
 		</dependency>
-
+```
 To see different metrics exposed by Spring Boot you can refer to this link from Spring Boot documentation - https://docs.spring.io/spring-boot/docs/current/reference/html/actuator.html#actuator.metrics.supported
 
 The next step is to add some properties to our application.yml file.
-
+```
 management.endpoints.web.exposure.include=health, info, metrics, prometheus
 management.metrics.distribution.percentiles-histogram.http.server.requests=true
 management.observations.key-values.application=loan-service
-The property - management.endpoints.web.exposure.include=health, info, metrics, prometheus exposes the endpoints health, info, metrics, and prometheus through the actuator.
+```
+- The property - management.endpoints.web.exposure.include=health, info, metrics, prometheus exposes the endpoints health, info, metrics, and prometheus through the actuator.
 
 Next, we are defining a property called management.metrics.distribution.percentiles-histogram.http.server.requests=true which is used by the micrometer to gather the metrics in the form of a histogram and send it to Prometheus. You can read more about this concept here - https://micrometer.io/docs/concepts#_histograms_and_percentiles.
 
 After adding the above properties run both applications and open the URL - http://localhost:8080/actuator/prometheus to see different metrics that are exposed by the micrometer.
 
 You can run Prometheus by adding the below entry in the docker-compose.yml file
-
+```yaml
 prometheus:
   image: prom/prometheus:v2.46.0
   command:
@@ -4900,8 +4878,9 @@ prometheus:
     - ./docker/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
   ports:
     - '9090:9090'
+```
 We need a configuration file, to tell Prometheus where it can find the necessary metrics to scrape. For that, we need to create a file called prometheus.yml with the following content.
-
+```yaml
 global:
   scrape_interval: 2s
   evaluation_interval: 2s
@@ -4918,13 +4897,14 @@ scrape_configs:
     metrics_path: '/actuator/prometheus'
     static_configs:
       - targets: ['host.docker.internal:8081'] ## only for demo purposes don't use host.docker.internal in production
+```
 Under the global field, we defined the scrape and evaluation interval as 2s. In the scrape_configs section, we have 3 jobs, one for prometheus, loan-service, and fraud-detection service. Notice that to scrape the loan-service and fraud-detection services we defined the URL of both the services and the metrics path as - /actuator/prometheus
 
-Tracing
+#### Tracing
 Now let's go ahead and implement Distributed Tracing using Tempo. For that, we need to add some more dependencies.
 
 Prior to Spring Boot 3, we used to add the Spring Cloud Sleuth dependency to add distributed tracing capabilities to our application, but from Spring Boot 3, Spring Cloud Sleuth is no longer needed and this is replaced by the Micrometer Tracing Project. To add the support, add the below dependencies:
-
+```pom
 		<dependency>
 			<groupId>io.micrometer</groupId>
 			<artifactId>micrometer-tracing-bridge-brave</artifactId>
@@ -4933,22 +4913,24 @@ Prior to Spring Boot 3, we used to add the Spring Cloud Sleuth dependency to add
 			<groupId>io.zipkin.reporter2</groupId>
 			<artifactId>zipkin-reporter-brave</artifactId>
 		</dependency>
+```
 micrometer-tracing-bridge-brave is the dependency that does all the magic and adds distributed tracing for our application. Whereas zipkin-reporter-brave will exportthe tracing information to Tempo.
 
 NOTE: You can also use other tracing implementation like OpenTelemetry - micrometer-tracing-bridge-otel dependency instead of Brave - micrometer-tracing-bridge-brave
 If you want to trace the calls to the database, as we are using Spring Data JDBC, we can add the dependency datasource-micrometer-spring-boot dependency.
-
+```pom
 		<dependency>
 			<groupId>net.ttddyy.observation</groupId>
 			<artifactId>datasource-micrometer-spring-boot</artifactId>
 			<version>1.0.1</version>
 		</dependency>
+```
 As we are using a RestTemplate to call fraud-detection service from loan-service , the traceId and spanId are generated and propagated automatically.
 
 But if you want to create manual tracing for specific calls you can use the Observation API and the @Observed annotation.
 
 For example, as we wanted to trace the calls to the database, we can do that by adding the @Observed annotation on the LoanRepository interface.
-
+```java
 @Repository
 @RequiredArgsConstructor
 @Observed
@@ -4960,8 +4942,9 @@ public class LoanRepository {
     .....
     .....
 }
+```
 Next, we need to define a bean of type `ObservedAspect` we can do that by creating a class called ObservationConfig.java
-
+```java
 package com.programming.techie.loans.config;
 
 import io.micrometer.observation.ObservationRegistry;
@@ -4976,17 +4959,19 @@ public class ObservationConfig {
         return new ObservedAspect(registry);
     }
 }
+```
 Finally, to enable the Aspect Oriented Programming, we need to add the spring-boot-starter-aop dependency.
-
+```pom
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-aop</artifactId>
 		</dependency>
+```
 Micrometer Tracing will only send 10% of the traces it generates to Tempo, just to avoid overwhelming it with a lot of requests. We can set it to 100% by adding the below property to our application.yml file
 
 management.tracing.sampling.probability=1.0
 Finally, you can run Tempo using docker, by adding the below piece of code inside the docker-compose.yml file:
-
+```yaml
 tempo:
   image: grafana/tempo:2.2.2
   command: ['-config.file=/etc/tempo.yaml']
@@ -4996,8 +4981,9 @@ tempo:
   ports:
     - '3110:3100' # Tempo
     - '9411:9411' # zipkin
+```
 Finally, we need to configure a file called tempo.yml file to store the necessary settings to be used in Tempo. I created this file under the docker folder
-
+```yaml
 server:
   http_listen_port: 3200
 
@@ -5010,11 +4996,12 @@ storage:
     backend: local
     local:
       path: /tmp/tempo/blocks
+```
 You can observe that we are referring to this file inside the docker-compose service, and we are mounting this file into the /etc/ location of the container.
 
-Running Grafana
+#### Running Grafana
 Before testing our implementation, let's also see how to run Grafana using Docker. After all, this is what brings all the services like Tempo, Loki, and Prometheus together and visualizes the information produced by our services.
-
+```yaml
 grafana:
   image: grafana/grafana:10.1.0
   volumes:
@@ -5025,10 +5012,11 @@ grafana:
     - GF_AUTH_DISABLE_LOGIN_FORM=true
   ports:
     - '3000:3000'
+```
 The above configuration will run Grafana by disabling the login and authentication, do not use this configuration in Production.
 
 Also for Grafana, we need to define the data sources from which it needs to gather the information to visualize, for that let's create a file called datasources.yml
-
+```yaml
 apiVersion: 1
 
 datasources:
@@ -5076,39 +5064,39 @@ datasources:
             matcherRegex: \[.+,(.+?),
             name: TraceID
             url: $${__value.raw}
-
+```
 This file defines all the data sources like Prometheus, Loki, and Tempo and references to the respective URLs.
 
-Testing
+#### Testing
 Okay, now it's Testing Time.
 
 Start all the services by running the command:
 
-docker compose up -d
+> docker compose up -d
 Also, run both the loan-service and fraud-detection services.
 
 After you make some calls to GET/loan and POST/loan, let's first open Loki and check for logs.
 
-Open the URL - http://localhost:3000
+- Open the URL - http://localhost:3000
 
-Click on the toggle menu and click on 'Explore'
+- Click on the toggle menu and click on 'Explore'
 
-Under the dropdown select - 'Loki' and run the query with your desired parameters, e.g.: select the application label as - loan-service.
+- Under the dropdown select - 'Loki' and run the query with your desired parameters, e.g.: select the application label as - loan-service.
 
-TraceID
+#### TraceID
 Now let's open Prometheus, and apply the same filter, you should see the results below:
 
-Prometheus Dashboard
+#### Prometheus Dashboard
 Note down the traceId from the logs that are generated by the GET/loan (or) POST/loan calls.
 
-TraceID
+#### TraceID
 Now open Tempo, go to the Query Type - TraceQL, paste the traceId, and press Shift-Enter.
 You should see the tracing information of that particular request.
 
 You can observe from the below image that the fraud-detection service also displays the calls made to the database, thanks to the datasource-micrometer-spring-boot dependency we added before.
 
-Tempo Dashboard
-Conclusion
+#### Tempo Dashboard
+### Conclusion
 Observability plays a vital role in ensuring that our applications are running as expected and provides us insights into the inner state of the application.
 
 ```
