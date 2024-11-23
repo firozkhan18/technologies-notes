@@ -1728,7 +1728,7 @@ In summary:
 - For handling millions of requests per second, use multiple regions and availability zones, with DNS-based load balancing to route traffic to the nearest healthy API Gateway.
 - Implementing features like service discovery, auto-scaling, and fault tolerance ensures your microservice architecture can scale efficiently to handle massive loads with high availability.
 
---
+---
 ### Service Mesh and Its Architecture: How Microservices Communicate
 
 A **Service Mesh** is a dedicated infrastructure layer that facilitates service-to-service communications within microservices architectures. It helps manage, secure, and observe the communication between microservices. It decouples the communication logic from the application code, providing benefits such as service discovery, traffic management, load balancing, security (e.g., mutual TLS), and observability.
@@ -1899,6 +1899,75 @@ spec:
 
 ### Summary:
 A **Service Mesh** simplifies managing microservice communication by centralizing features such as traffic management, service discovery, load balancing, security (via mutual TLS), and observability. The architecture relies on sidecar proxies, where each microservice interacts with the service mesh, ensuring a consistent and secure communication layer across the entire microservice ecosystem.
+
+--
+Based on your description of how microservices communicate with each other using Service Mesh, here's a detailed diagram illustrating the architecture of how microservices can interact in a typical service mesh setup, using Kubernetes and a sidecar proxy approach. The architecture involves key components like Service Discovery, Load Balancing, Authentication, Authorization, Circuit Breaker, Retry, Telemetry, and more.
+
+### Mermaid Diagram Representation of Service Mesh Architecture:
+
+```mermaid
+graph LR
+    A[API Gateway] --> B[Load Balancer]
+    B --> C[Service Discovery]
+    C --> D[Microservice A Instances]
+    C --> E[Microservice B Instances]
+
+    subgraph "Microservice A"
+        D1[Instance 1] --> F[Sidecar Proxy A]
+        D2[Instance 2] --> F
+        D3[Instance 3] --> F
+    end
+
+    subgraph "Microservice B"
+        E1[Instance 1] --> G[Sidecar Proxy B]
+        E2[Instance 2] --> G
+        E3[Instance 3] --> G
+    end
+
+    F -->|Service Discovery| G
+    F -->|Load Balancing| G
+    F -->|Authorization & Authentication| G
+    F -->|Circuit Breaker| G
+    F -->|Telemetry| G
+
+    subgraph Control Plane
+        H[Configuration Manager] --> I[Traffic Controller]
+        I --> J[Security Manager]
+        I --> K[Telemetry Manager]
+    end
+
+    H -->|Load Balancer Config| I
+    I --> F[Sidecar Proxy A]
+    I --> G[Sidecar Proxy B]
+
+    %% Connections for Circuit Breaker, Retry, and Telemetry Configs
+    H -->|Circuit Breaker Config| F
+    H -->|Retry Config| G
+    H -->|Telemetry Config| F
+    H -->|Telemetry Config| G
+```
+
+### Breakdown of Components:
+- **API Gateway**: Acts as the entry point for all incoming traffic.
+- **Load Balancer**: Distributes incoming traffic to appropriate instances of the microservices.
+- **Service Discovery**: Resolves the network locations (IP and port) of microservice instances (A and B) dynamically.
+- **Microservice A** & **Microservice B**: Each has multiple instances (pods in Kubernetes) and sidecar proxies.
+- **Sidecar Proxy**: Each microservice instance has its own sidecar proxy, which intercepts incoming and outgoing traffic, managing features like service discovery, load balancing, authorization, and telemetry.
+- **Control Plane**: Manages configurations for proxies and services, such as load balancing, security (authentication/authorization), circuit breakers, retries, and telemetry.
+    - **Configuration Manager**: Manages user-provided configurations (e.g., via YAML files or UI).
+    - **Traffic Controller**: Routes traffic according to the configuration.
+    - **Security Manager**: Handles security-related tasks like generating keys and managing encryption and authentication.
+    - **Telemetry Manager**: Collects metrics and logs from sidecar proxies for observability and monitoring.
+  
+### Features Handled by Sidecar Proxy:
+1. **Service Discovery**: The sidecar handles service discovery and routes requests to available instances.
+2. **Load Balancing**: It distributes the requests evenly among instances (can be client-side or using the proxy).
+3. **Authorization & Authentication**: Ensures that only authorized services can communicate.
+4. **Circuit Breaker**: Prevents cascading failures by temporarily halting requests if a service fails repeatedly.
+5. **Retry Logic**: Handles retries in case of transient failures, typically for 5xx errors.
+6. **Telemetry**: Collects and forwards metrics for analysis, such as request counts, latencies, error rates, etc.
+
+This architecture allows microservices to communicate securely and efficiently, with automatic failure handling and observability. The sidecar proxies and control plane components make managing complex microservices environments easier and more reliable.
 
 ---
 ### What is Flyway?
