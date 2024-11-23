@@ -1969,124 +1969,7 @@ graph LR
 
 This architecture allows microservices to communicate securely and efficiently, with automatic failure handling and observability. The sidecar proxies and control plane components make managing complex microservices environments easier and more reliable.
 
----
-### How DNS Works: An In-depth Explanation of the Domain Name System
 
-The **Domain Name System (DNS)** is a fundamental part of the internet infrastructure that translates human-readable domain names (like `www.example.com`) into machine-readable IP addresses (like `192.0.2.1`). This allows users to access websites by using names instead of remembering complex numerical IP addresses. DNS is often described as the "phonebook" of the internet because it translates domain names into IP addresses, much like a phonebook maps names to phone numbers.
-
-### 1. **DNS Overview**
-
-The Domain Name System is a distributed hierarchical system that consists of several components:
-
-- **Domain Names**: Human-readable names (e.g., `example.com`).
-- **DNS Records**: Information stored in DNS servers that map domain names to IP addresses and other data.
-- **DNS Servers**: Systems responsible for storing and providing DNS records.
-  
-DNS enables users to access services via domain names by resolving those names to IP addresses. The system is highly scalable and decentralized, meaning no single entity controls the entire DNS system.
-
-### 2. **DNS Hierarchy**
-
-DNS uses a **hierarchical** model that organizes domain names into multiple levels. The domain name hierarchy is divided into:
-
-- **Root Domain**: The very top of the DNS hierarchy. It is represented by a dot (`.`). The root is managed by root DNS servers.
-  
-- **Top-Level Domains (TLDs)**: Directly below the root, this includes common extensions like `.com`, `.org`, `.net`, as well as country-specific TLDs like `.uk`, `.de`.
-  
-- **Second-Level Domains (SLDs)**: The part directly beneath a TLD. For example, in `example.com`, `example` is the second-level domain.
-  
-- **Subdomains**: Below second-level domains, these are the parts you see in domains like `www.example.com`. These can be further sub-divided (e.g., `blog.example.com`).
-  
-### 3. **DNS Resolution Process**
-
-The DNS resolution process involves a series of queries and lookups across multiple DNS servers to resolve a domain name into an IP address. The key steps in the resolution process are:
-
-1. **DNS Query Initiation**:
-   - When a user enters a domain name (e.g., `www.example.com`) in a browser, the browser first checks if the IP address is available in its local cache.
-   - If it’s not cached, the DNS resolver (usually provided by the user's ISP) starts the resolution process.
-
-2. **Query to Recursive Resolver**:
-   - The DNS resolver, typically a recursive resolver (which is a DNS server configured to handle queries from end-users), takes the domain name and starts the lookup process.
-   - If the resolver doesn't have the answer in its cache, it begins querying other DNS servers.
-
-3. **Root DNS Servers**:
-   - The recursive resolver sends a query to one of the **root DNS servers**. The root DNS servers don’t have the exact IP address for `www.example.com`, but they can direct the resolver to the correct **TLD name servers** (in this case, for `.com`).
-
-4. **TLD Name Servers**:
-   - The recursive resolver sends a query to one of the **TLD DNS servers** for `.com`. These servers contain information about where the authoritative DNS servers for the specific domain `example.com` are located.
-   - The TLD servers respond with the IP address or hostname of the **authoritative name servers** for the domain `example.com`.
-
-5. **Authoritative DNS Servers**:
-   - The recursive resolver then queries the **authoritative DNS server** for `example.com`. These servers store the actual DNS records (such as A records, CNAME records, MX records, etc.) for the domain.
-   - The authoritative server responds with the appropriate DNS record for `www.example.com`. This typically includes the **A record** (which maps the domain to an IPv4 address), but it can also include other types of records like MX (for mail servers), CNAME (for aliases), etc.
-
-6. **Final Resolution**:
-   - The recursive resolver caches the response and sends the resolved IP address (e.g., `192.0.2.1`) back to the client.
-   - The browser can now use the IP address to establish a connection with the web server, usually over HTTP or HTTPS.
-
-### 4. **Types of DNS Records**
-
-DNS records store various types of information about a domain. The most common DNS records include:
-
-- **A Record (Address Record)**: Maps a domain name to an IPv4 address (e.g., `www.example.com` → `192.0.2.1`).
-- **AAAA Record**: Maps a domain name to an IPv6 address.
-- **CNAME Record (Canonical Name)**: Maps a domain name to another domain name (i.e., aliasing). For example, `www.example.com` → `example.com`.
-- **MX Record (Mail Exchange)**: Specifies the mail server responsible for receiving emails for a domain.
-- **NS Record (Name Server)**: Indicates the DNS servers that are authoritative for a particular domain.
-- **PTR Record (Pointer Record)**: Used for reverse DNS lookups (maps IP addresses back to domain names).
-- **SOA Record (Start of Authority)**: Contains administrative information about the domain, such as the primary DNS server and the email of the domain administrator.
-
-### 5. **DNS Caching**
-
-To improve performance, DNS resolvers and browsers cache DNS records. When a record is cached, the resolver or browser does not need to repeat the full resolution process. Caching also reduces load on DNS servers and speeds up website access.
-
-- **TTL (Time to Live)**: Each DNS record comes with a TTL, which specifies how long the record should be cached. After this time, the resolver will need to query the authoritative server again.
-  
-### 6. **Types of DNS Servers**
-
-DNS resolution typically involves different types of servers:
-
-- **Recursive Resolver**: Handles requests from client devices. If it doesn’t have the answer in its cache, it queries other DNS servers.
-  
-- **Root Name Servers**: The starting point of the DNS hierarchy. These servers don’t store domain records but direct the resolver to the appropriate TLD servers.
-
-- **TLD Name Servers**: Store information for each top-level domain and direct the resolver to the authoritative name servers for the domain in question.
-
-- **Authoritative Name Servers**: The final source of truth for domain name records. They provide the actual DNS records for the queried domain.
-
-### 7. **DNS Security (DNSSEC)**
-
-DNS is vulnerable to several attacks, such as **DNS spoofing** or **cache poisoning**, where attackers can inject malicious records into DNS resolvers. To mitigate such risks, **DNSSEC (DNS Security Extensions)** was introduced to add an additional layer of security.
-
-DNSSEC uses digital signatures to ensure that the DNS responses received by a resolver are authentic and have not been tampered with. This is achieved by signing DNS records with cryptographic keys.
-
-### 8. **DNS Load Balancing**
-
-DNS can also be used to distribute traffic across multiple servers. This technique is called **DNS load balancing**. There are a few common methods:
-
-- **Round-robin DNS**: Multiple A records are returned for the same domain name, each pointing to different IP addresses. This helps distribute traffic evenly.
-- **GeoDNS**: Returns different IP addresses based on the user's geographic location, helping with regional load balancing.
-- **Weighted DNS**: Assigns different weights to each IP address to control the proportion of traffic directed to different servers.
-
-### 9. **DNS Performance Optimizations**
-
-Several techniques are used to optimize DNS performance:
-
-- **Anycast**: Multiple DNS servers are placed in various geographic locations. The closest server to the user handles the query, reducing latency and improving response time.
-  
-- **DNS Prefetching**: Browsers can pre-resolve domain names in the background before a user clicks on a link, reducing delay when accessing websites.
-
-- **DNS Caching at multiple levels**: DNS resolvers, authoritative servers, and browsers cache responses to reduce the need for repeated queries.
-
-### 10. **DNS in a Nutshell**
-
-In essence, the DNS is a critical system for converting human-readable domain names into machine-readable IP addresses. It is a distributed, hierarchical system that uses a series of steps involving multiple types of servers (recursive resolvers, TLD servers, authoritative servers) to resolve domain names.
-
-- **The client** sends a DNS query.
-- **The recursive resolver** initiates the query process by asking root, TLD, and authoritative servers.
-- **The authoritative server** responds with the requested DNS records.
-- The DNS response is cached and used by the client, allowing access to the requested resource.
-
-Understanding DNS is crucial for system architects, network administrators, and anyone involved in internet infrastructure. DNS enables users to interact with the internet seamlessly, without needing to deal with IP addresses directly.
 ---
 ### What is Flyway?
 
@@ -2459,4 +2342,162 @@ In **iterative resolution**, the client is responsible for making all the querie
 - **Recursive queries** are typically used by clients (like web browsers), as they only need to make one request to the DNS resolver.
 - **Iterative queries** are more often used in specific configurations, like DNS clients querying directly when a resolver is not in place.
 
+---
+---
+### How DNS Works: An In-depth Explanation of the Domain Name System
 
+The **Domain Name System (DNS)** is a fundamental part of the internet infrastructure that translates human-readable domain names (like `www.example.com`) into machine-readable IP addresses (like `192.0.2.1`). This allows users to access websites by using names instead of remembering complex numerical IP addresses. DNS is often described as the "phonebook" of the internet because it translates domain names into IP addresses, much like a phonebook maps names to phone numbers.
+
+### 1. **DNS Overview**
+
+The Domain Name System is a distributed hierarchical system that consists of several components:
+
+- **Domain Names**: Human-readable names (e.g., `example.com`).
+- **DNS Records**: Information stored in DNS servers that map domain names to IP addresses and other data.
+- **DNS Servers**: Systems responsible for storing and providing DNS records.
+  
+DNS enables users to access services via domain names by resolving those names to IP addresses. The system is highly scalable and decentralized, meaning no single entity controls the entire DNS system.
+
+### 2. **DNS Hierarchy**
+
+DNS uses a **hierarchical** model that organizes domain names into multiple levels. The domain name hierarchy is divided into:
+
+- **Root Domain**: The very top of the DNS hierarchy. It is represented by a dot (`.`). The root is managed by root DNS servers.
+  
+- **Top-Level Domains (TLDs)**: Directly below the root, this includes common extensions like `.com`, `.org`, `.net`, as well as country-specific TLDs like `.uk`, `.de`.
+  
+- **Second-Level Domains (SLDs)**: The part directly beneath a TLD. For example, in `example.com`, `example` is the second-level domain.
+  
+- **Subdomains**: Below second-level domains, these are the parts you see in domains like `www.example.com`. These can be further sub-divided (e.g., `blog.example.com`).
+  
+### 3. **DNS Resolution Process**
+
+The DNS resolution process involves a series of queries and lookups across multiple DNS servers to resolve a domain name into an IP address. The key steps in the resolution process are:
+
+1. **DNS Query Initiation**:
+   - When a user enters a domain name (e.g., `www.example.com`) in a browser, the browser first checks if the IP address is available in its local cache.
+   - If it’s not cached, the DNS resolver (usually provided by the user's ISP) starts the resolution process.
+
+2. **Query to Recursive Resolver**:
+   - The DNS resolver, typically a recursive resolver (which is a DNS server configured to handle queries from end-users), takes the domain name and starts the lookup process.
+   - If the resolver doesn't have the answer in its cache, it begins querying other DNS servers.
+
+3. **Root DNS Servers**:
+   - The recursive resolver sends a query to one of the **root DNS servers**. The root DNS servers don’t have the exact IP address for `www.example.com`, but they can direct the resolver to the correct **TLD name servers** (in this case, for `.com`).
+
+4. **TLD Name Servers**:
+   - The recursive resolver sends a query to one of the **TLD DNS servers** for `.com`. These servers contain information about where the authoritative DNS servers for the specific domain `example.com` are located.
+   - The TLD servers respond with the IP address or hostname of the **authoritative name servers** for the domain `example.com`.
+
+5. **Authoritative DNS Servers**:
+   - The recursive resolver then queries the **authoritative DNS server** for `example.com`. These servers store the actual DNS records (such as A records, CNAME records, MX records, etc.) for the domain.
+   - The authoritative server responds with the appropriate DNS record for `www.example.com`. This typically includes the **A record** (which maps the domain to an IPv4 address), but it can also include other types of records like MX (for mail servers), CNAME (for aliases), etc.
+
+6. **Final Resolution**:
+   - The recursive resolver caches the response and sends the resolved IP address (e.g., `192.0.2.1`) back to the client.
+   - The browser can now use the IP address to establish a connection with the web server, usually over HTTP or HTTPS.
+
+### 4. **Types of DNS Records**
+
+DNS records store various types of information about a domain. The most common DNS records include:
+
+- **A Record (Address Record)**: Maps a domain name to an IPv4 address (e.g., `www.example.com` → `192.0.2.1`).
+- **AAAA Record**: Maps a domain name to an IPv6 address.
+- **CNAME Record (Canonical Name)**: Maps a domain name to another domain name (i.e., aliasing). For example, `www.example.com` → `example.com`.
+- **MX Record (Mail Exchange)**: Specifies the mail server responsible for receiving emails for a domain.
+- **NS Record (Name Server)**: Indicates the DNS servers that are authoritative for a particular domain.
+- **PTR Record (Pointer Record)**: Used for reverse DNS lookups (maps IP addresses back to domain names).
+- **SOA Record (Start of Authority)**: Contains administrative information about the domain, such as the primary DNS server and the email of the domain administrator.
+
+### 5. **DNS Caching**
+
+To improve performance, DNS resolvers and browsers cache DNS records. When a record is cached, the resolver or browser does not need to repeat the full resolution process. Caching also reduces load on DNS servers and speeds up website access.
+
+- **TTL (Time to Live)**: Each DNS record comes with a TTL, which specifies how long the record should be cached. After this time, the resolver will need to query the authoritative server again.
+  
+### 6. **Types of DNS Servers**
+
+DNS resolution typically involves different types of servers:
+
+- **Recursive Resolver**: Handles requests from client devices. If it doesn’t have the answer in its cache, it queries other DNS servers.
+  
+- **Root Name Servers**: The starting point of the DNS hierarchy. These servers don’t store domain records but direct the resolver to the appropriate TLD servers.
+
+- **TLD Name Servers**: Store information for each top-level domain and direct the resolver to the authoritative name servers for the domain in question.
+
+- **Authoritative Name Servers**: The final source of truth for domain name records. They provide the actual DNS records for the queried domain.
+
+### 7. **DNS Security (DNSSEC)**
+
+DNS is vulnerable to several attacks, such as **DNS spoofing** or **cache poisoning**, where attackers can inject malicious records into DNS resolvers. To mitigate such risks, **DNSSEC (DNS Security Extensions)** was introduced to add an additional layer of security.
+
+DNSSEC uses digital signatures to ensure that the DNS responses received by a resolver are authentic and have not been tampered with. This is achieved by signing DNS records with cryptographic keys.
+
+### 8. **DNS Load Balancing**
+
+DNS can also be used to distribute traffic across multiple servers. This technique is called **DNS load balancing**. There are a few common methods:
+
+- **Round-robin DNS**: Multiple A records are returned for the same domain name, each pointing to different IP addresses. This helps distribute traffic evenly.
+- **GeoDNS**: Returns different IP addresses based on the user's geographic location, helping with regional load balancing.
+- **Weighted DNS**: Assigns different weights to each IP address to control the proportion of traffic directed to different servers.
+
+### 9. **DNS Performance Optimizations**
+
+Several techniques are used to optimize DNS performance:
+
+- **Anycast**: Multiple DNS servers are placed in various geographic locations. The closest server to the user handles the query, reducing latency and improving response time.
+  
+- **DNS Prefetching**: Browsers can pre-resolve domain names in the background before a user clicks on a link, reducing delay when accessing websites.
+
+- **DNS Caching at multiple levels**: DNS resolvers, authoritative servers, and browsers cache responses to reduce the need for repeated queries.
+
+### 10. **DNS in a Nutshell**
+
+In essence, the DNS is a critical system for converting human-readable domain names into machine-readable IP addresses. It is a distributed, hierarchical system that uses a series of steps involving multiple types of servers (recursive resolvers, TLD servers, authoritative servers) to resolve domain names.
+
+- **The client** sends a DNS query.
+- **The recursive resolver** initiates the query process by asking root, TLD, and authoritative servers.
+- **The authoritative server** responds with the requested DNS records.
+- The DNS response is cached and used by the client, allowing access to the requested resource.
+
+Understanding DNS is crucial for system architects, network administrators, and anyone involved in internet infrastructure. DNS enables users to interact with the internet seamlessly, without needing to deal with IP addresses directly.
+
+---
+**Latency** refers to the delay or time it takes for data to travel from one point to another in a network or system. In the context of computing and networking, latency typically measures the time between a **request** being sent (e.g., a user clicking on a link or sending a message) and the **response** being received (e.g., the web page loading or the message being delivered).
+
+### Key Points About Latency:
+
+1. **Measurement**:  
+   Latency is usually measured in **milliseconds (ms)**, which represents one-thousandth of a second. Lower latency means faster response times.
+
+2. **Types of Latency**:
+   - **Network Latency**: The delay in data transmission over a network (like the time it takes for data to travel from your computer to a web server and back).
+   - **Round-Trip Time (RTT)**: A specific type of network latency that measures the time it takes for a packet of data to travel from the sender to the receiver and back again.
+   - **Disk Latency**: The delay in reading or writing data to storage devices (like hard drives or SSDs).
+   - **Processing Latency**: The time it takes for a system to process a request or task (e.g., how long it takes a server to handle a database query).
+
+3. **Causes of Latency**:
+   - **Physical Distance**: Data travels through physical cables (fiber optics, copper, etc.) and has to cover distances, sometimes across countries or continents.
+   - **Network Congestion**: Traffic on a network can cause delays if too many devices are competing for bandwidth.
+   - **Routing**: Data might pass through multiple routers and servers, each adding a small delay.
+   - **Hardware Limitations**: Slow devices (e.g., older routers, servers, or storage devices) can introduce delays.
+   - **Protocol Overheads**: Some communication protocols (e.g., TCP) add extra steps that can slow down the transfer process.
+   - **Queueing**: Data might need to wait in a queue before being processed, which can add delay.
+
+4. **Impact of Latency**:
+   - **Web Browsing**: High latency can make websites feel slow or unresponsive because it increases the time it takes for a page to load.
+   - **Gaming**: In online multiplayer games, high latency (often called "ping") can cause lag, resulting in delayed actions or movements.
+   - **VoIP and Video Calls**: High latency in voice or video calls can lead to noticeable delays in conversation, echoing, or freezing.
+
+5. **Latency vs. Bandwidth**:
+   - **Latency** is about how fast data is transmitted, while **bandwidth** is about how much data can be transmitted at once. Both are important for network performance, but low latency is often more critical for real-time applications like gaming, video conferencing, and VoIP calls.
+
+### Example:
+- If you send a request to load a website, **network latency** is the time it takes for your browser to contact the web server, request the page, and wait for the server to send the page back to your computer.
+  
+   If a website takes **200 ms** to load, it means there is a **200-millisecond delay** before the page starts appearing. For more interactive applications, such as online gaming, even a delay of 50 ms can significantly impact the user experience.
+
+---
+
+### In Summary:
+**Latency** is the delay or time lag in data transfer or communication between two points. It's an important measure of how quickly or slowly systems respond to requests and is crucial for determining the performance of real-time applications, like web browsing, gaming, or video conferencing. Lower latency is always desirable for a more responsive experience.
