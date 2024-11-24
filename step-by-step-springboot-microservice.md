@@ -6080,3 +6080,193 @@ If you still face issues, log into your MySQL container and check the authentica
 ### Conclusion
 
 Flyway provides a robust and efficient way to manage database migrations in microservices architectures. By offering features such as version control, repeatable migrations, and easy integration into deployment processes, it helps teams maintain consistency across their database schemas while allowing for the flexibility required in a microservices environment. This leads to better collaboration, reduced deployment risks, and a smoother development workflow.
+
+---
+
+Here are concise answers to the technical questions you asked:
+
+---
+
+### 1. **Difference between JWT, OAuth, and SAML**
+
+- **JWT (JSON Web Token):**
+  - A compact, URL-safe token format used to securely transmit information between two parties. JWT can be signed and optionally encrypted. It consists of three parts: Header, Payload, and Signature.
+  - Typically used for **authentication** (e.g., for session management in RESTful APIs).
+  - Self-contained (contains all user data), no need for a database lookup.
+
+- **OAuth (Open Authorization):**
+  - An authorization framework that allows third-party applications to access user data without exposing user credentials. OAuth 2.0 is commonly used for granting access tokens to applications.
+  - Focuses on **delegating access** between systems (e.g., logging in to a site using your Google or Facebook account).
+  - OAuth doesn't define the format of the token (JWT is a common choice).
+
+- **SAML (Security Assertion Markup Language):**
+  - An XML-based protocol used for **Single Sign-On (SSO)**. It allows the exchange of authentication and authorization data between parties, typically between an identity provider (IdP) and a service provider (SP).
+  - Commonly used in enterprise environments for web-based SSO (e.g., logging into multiple systems using a single set of credentials).
+
+### 2. **Reverse Proxy vs Forward Proxy**
+
+- **Forward Proxy:**
+  - Acts on behalf of the client. When a client makes a request to a server, the forward proxy forwards that request on behalf of the client. It hides the client’s identity and can be used to filter traffic (e.g., for content filtering, security).
+  - **Example use case**: Internet censorship, content filtering in corporate networks.
+
+- **Reverse Proxy:**
+  - Acts on behalf of the server. It forwards client requests to one or more backend servers and hides the identity of the server from the client. It is used to load-balance, secure, and optimize server requests.
+  - **Example use case**: Load balancing, SSL termination, security (hiding backend servers), caching.
+
+### 3. **Horizontal Scaling vs Vertical Scaling**
+
+- **Horizontal Scaling (Scaling Out):**
+  - Involves adding more instances (or nodes) to the system, such as adding more servers or containers. It is often preferred in cloud environments and microservices architectures.
+  - **Pros:** Can handle more traffic by distributing load. It's cost-effective and scalable.
+  - **Cons:** Requires more management, like balancing load across multiple instances.
+
+- **Vertical Scaling (Scaling Up):**
+  - Involves increasing the resources (CPU, RAM, storage) of a single server or instance. 
+  - **Pros:** Simple and quick to implement.
+  - **Cons:** There's a limit to how much you can scale a single server before hitting hardware limits.
+
+### 4. **Microservices vs Monolithic Architecture**
+
+- **Monolithic Architecture:**
+  - A traditional architecture where the entire application is built as a single unit. All components (UI, business logic, data access) are tightly coupled and share a single codebase.
+  - **Pros:** Simple to develop and deploy in early stages.
+  - **Cons:** Difficult to scale, maintain, and test. A change in one component requires redeploying the entire application.
+
+- **Microservices Architecture:**
+  - The application is broken down into smaller, independently deployable services that can be developed, deployed, and scaled independently.
+  - **Pros:** Scalability, maintainability, flexibility, and resilience. Each service can use different technologies.
+  - **Cons:** Complexity in managing services, network latency, distributed data management.
+
+### 5. **What is a Rate Limiter? How does it work?**
+
+- **Rate Limiter:**  
+  A rate limiter is a mechanism that controls the rate at which an application or service can process requests. It prevents abuse by limiting how many requests a user or client can make within a specific time window.
+  
+- **How it works:**  
+  Rate limiting typically works by keeping track of the number of requests made by each user or IP address and comparing it with predefined thresholds. If the rate of requests exceeds the limit, further requests are denied or delayed.
+  - **Common algorithms:** Token bucket, leaky bucket, fixed window counter.
+
+### 6. **API Gateway vs Load Balancer**
+
+- **API Gateway:**
+  - An API Gateway acts as a reverse proxy that routes client requests to the appropriate microservice. It handles authentication, rate limiting, logging, and sometimes request/response transformations.
+  - **Use case:** Used in microservices architectures to manage and route API calls.
+
+- **Load Balancer:**
+  - A Load Balancer distributes incoming network traffic across multiple servers or instances, ensuring high availability and reliability. It balances the load between servers to prevent any single server from becoming overwhelmed.
+  - **Use case:** Ensures traffic is distributed across multiple back-end servers in web and cloud applications.
+
+### 7. **How does Single Sign-On (SSO) work?**
+
+- **Single Sign-On (SSO):**
+  SSO allows users to authenticate once and gain access to multiple applications without having to log in separately to each one. This is achieved by establishing a trust relationship between the SSO identity provider and the applications.
+  
+- **How it works:**  
+  - The user logs into the SSO system (identity provider).  
+  - The identity provider generates a token or assertion (e.g., JWT, SAML).
+  - The user is then redirected to the desired application (service provider) along with the token.
+  - The service provider validates the token and grants access if the user is authenticated.
+
+### 8. **How does Apache Kafka work? Why is it so fast?**
+
+- **How Kafka works:**
+  Apache Kafka is a distributed event streaming platform used to build real-time data pipelines and streaming applications. It works by storing streams of records (events/messages) in **topics**. Producers publish messages to Kafka topics, and consumers subscribe to these topics to process the messages.
+  
+- **Why is Kafka fast?**
+  - Kafka is optimized for high-throughput, low-latency messaging. It achieves this by:
+    - **Log-based storage:** Kafka stores messages in an append-only log, which is efficient for both writing and reading.
+    - **Partitioning:** Kafka topics can be partitioned, allowing parallel reads and writes.
+    - **Distributed architecture:** Kafka runs in a distributed manner, spreading data across multiple brokers and ensuring fault tolerance and scalability.
+
+### 9. **Difference between Kafka, ActiveMQ, and RabbitMQ**
+
+- **Kafka:**
+  - **Use case:** Event streaming and real-time data pipelines.
+  - **Key Features:** Distributed, fault-tolerant, high-throughput, high scalability, durable, stores messages for a configurable retention period.
+  - **Protocol:** Pub/sub and message queues.
+
+- **ActiveMQ:**
+  - **Use case:** Message queuing with support for JMS (Java Message Service).
+  - **Key Features:** Message broker, supports **synchronous** and **asynchronous** messaging.
+  - **Protocol:** Supports multiple protocols like AMQP, MQTT, OpenWire, etc.
+
+- **RabbitMQ:**
+  - **Use case:** Message broker for real-time messaging in distributed systems.
+  - **Key Features:** Supports reliable messaging, queues, and routing via **exchanges**.
+  - **Protocol:** AMQP (Advanced Message Queuing Protocol), supports message routing and delivery guarantees.
+
+---
+
+It seems I wasn't able to generate the diagram. However, I can describe how to visualize the difference between JWT, OAuth, and SAML for your understanding.
+
+### Diagram Overview (Conceptual)
+Imagine a flowchart that illustrates each technology's components and how they interact:
+
+---
+
+**1. JWT (JSON Web Token)**  
+- **Entities:** User, Web Server, API
+- **Flow:**
+  1. **User** logs in and gets a JWT token from the **Web Server**.
+  2. The token is sent with each request to the **API** for authentication.
+  3. The **API** validates the JWT (checks signature and expiration) and grants access.
+
+---
+
+**2. OAuth (Open Authorization)**  
+- **Entities:** User, Client App, Authorization Server, Resource Server
+- **Flow:**
+  1. **User** logs in and authorizes the **Client App** to access their data.
+  2. The **Authorization Server** issues an **Access Token** to the **Client App**.
+  3. The **Client App** uses this token to access resources from the **Resource Server** (the user's data).
+
+---
+
+**3. SAML (Security Assertion Markup Language)**  
+- **Entities:** User, Identity Provider (IdP), Service Provider (SP)
+- **Flow:**
+  1. **User** accesses a service hosted by the **Service Provider (SP)**.
+  2. The **SP** redirects the user to the **Identity Provider (IdP)** for authentication.
+  3. The **IdP** sends a signed **SAML assertion** back to the **SP**.
+  4. **SP** validates the assertion and grants access to the user.
+
+---
+
+### Diagram Elements:
+- **JWT:** Show a **User** obtaining a **token** directly from the **Web Server**, then using it to authenticate to the **API**.
+- **OAuth:** Display a **Client App** requesting access to resources from the **Resource Server** via an **Access Token** issued by the **Authorization Server**.
+- **SAML:** Illustrate **User Authentication** with an **Identity Provider (IdP)**, leading to a **SAML Token** being sent to the **Service Provider (SP)**.
+
+---
+
+Sure! Below is a **Mermaid diagram** that you can use to visually compare the flows of JWT, OAuth, and SAML. Mermaid is a simple syntax for generating diagrams and flowcharts directly from text.
+
+```mermaid
+graph TD;
+    A[User] -->|Login| B[Web Server (JWT)]
+    B -->|Generate JWT| A
+    A -->|Send JWT in Request| C[API Server]
+    C -->|Validate JWT| D[API]
+    
+    A1[User] -->|Login and Authorize| B1[Client App (OAuth)]
+    B1 -->|Redirect to| C1[Authorization Server]
+    C1 -->|Generate Access Token| B1
+    B1 -->|Access Resources with Token| D1[Resource Server]
+    
+    E[User] -->|Access Service| F[Service Provider (SAML)]
+    F -->|Redirect to IdP for Authentication| G[Identity Provider (IdP)]
+    G -->|Send SAML Assertion| F
+    F -->|Validate SAML Assertion| E
+```
+
+### Explanation:
+- **JWT:**
+  - **User** logs in via the **Web Server**, which generates a **JWT** token. The **User** sends this token in subsequent API requests, and the **API Server** validates the token.
+  
+- **OAuth:**
+  - **User** logs in and authorizes the **Client App**, which redirects the **User** to the **Authorization Server**. After authorization, an **Access Token** is generated and sent to the **Client App**. The **Client App** uses this token to access resources from the **Resource Server**.
+
+- **SAML:**
+  - **User** accesses a service (**Service Provider**). The **Service Provider** redirects to the **Identity Provider** for authentication. After successful authentication, the **Identity Provider** sends a **SAML Assertion** to the **Service Provider**, which validates the assertion and grants access.
+
+---
