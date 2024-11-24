@@ -1,257 +1,199 @@
-## 10 JDK 7 Features to Revisit, Before You Welcome Java 8 - Examples
+Your article on "10 JDK 7 Features to Revisit" is a great overview of key improvements introduced in Java 7, and it's a good reminder for developers to revisit these features before fully diving into Java 8. Here's a summary of the features with some brief clarifications and example code for those who may not be familiar with them:
 
-It's been almost a month since Java 8 is released and I am sure all of you are exploring new features of JDK 8. But, before you completely delve into Java 8, it’s time to revisit some of the cool features introduced on Java 7. If you remember, Java 6 was nothing on the feature, it was all about JVM changes and performance, but JDK 7 did introduce some cool features which improved the developer's day to day task. Why I am writing this post now? Why I am talking about Java 1. 7, when everybody is talking about Java 8? Well I think, not all Java developers are familiar with changes introduced in JDK 7, and what time can be better to revisit an earlier version than before welcoming a new version.
+### 1) **Type Inference with Diamond Operator**
+Introduced in Java 7, the diamond operator (`<>`) enables more concise code by eliminating redundancy in generic type declarations, especially when initializing collections.
 
-I don't see automatic resource management used by developers in daily life, even after IDE's has got the content assist for that. Though I see programmers using String in Switch and Diamond operator for type inference, again there is very little known about the fork-join framework,  catching multiple exceptions in one catch block or using underscore on numeric literals.
-
-So I took this opportunity to write a summary sort of post to revise these convenient changes and adopt them into our daily programming life. There are a couple of good changes on NIO and new File API, and lots of other at the API level, which is also worth looking at. I am sure combined with Java 8 lambda expression, these features will result in a much better and cleaner code.
-
-### 10 Best JDK 7 Features Every Java developer should learn 
-Here are my favorite features from Java 7 release which every Java developer should learn:
-### 1) Type inference
-Before JDK 1.7 introduce a new operator <<, known as diamond operator to making type inference available for constructors as well. Prior to Java 7, type inference is only available for methods, and Joshua Bloch has rightly predicted in Effective Java 2nd Edition, it’s now available for constructor as well.
-
-Prior JDK 7, you type more to specify types on both left and right hand side of object creation expression, but now it only needed on left hand side, as shown in below example.
-
-Prior JDK 7
+**Before Java 7:**
 ```java
-Map<String, List<String>> employeeRecords =  new HashMap<String, List<String>>();
+Map<String, List<String>> employeeRecords = new HashMap<String, List<String>>();
 List<Integer> primes = new ArrayList<Integer>();
 ```
-In JDK 7
+
+**After Java 7:**
 ```java
-Map<String, List<String>> employeeRecords =  new HashMap<>();
+Map<String, List<String>> employeeRecords = new HashMap<>();
 List<Integer> primes = new ArrayList<>();
 ```
-So you have to type less in Java 7, while working with Collections, where we heavily use Generics. See here for more detailed information on diamond operator in Java.
 
+### 2) **String in Switch**
+Java 7 allows you to use `String` as a case selector in a `switch` statement. This improves readability and performance compared to using `if-else` chains.
 
-### 2) String in Switch
-Before JDK 7, only integral types can be used as selector for switch-case statement. In JDK 7, you can use a String object as the selector. For example,
+**Example:**
 ```java
 String state = "NEW";
-
-switch (day) {
-   case "NEW": System.out.println("Order is in NEW state"); break;
-   case "CANCELED": System.out.println("Order is Cancelled"); break;
-   case "REPLACE": System.out.println("Order is replaced successfully"); break;
-   case "FILLED": System.out.println("Order is filled"); break;
-   default: System.out.println("Invalid");
-
+switch (state) {
+    case "NEW": System.out.println("Order is in NEW state"); break;
+    case "CANCELED": System.out.println("Order is Cancelled"); break;
+    default: System.out.println("Invalid state");
 }
 ```
-equals() and hashcode() method from java.lang.String is used in comparison, which is case-sensitive. Benefit of using String in switch is that, Java compiler can generate more efficient code than using nested if-then-else statement. See here for more detailed information of how to use String on Switch case statement.
 
+### 3) **Automatic Resource Management (Try-With-Resources)**
+Java 7 introduced a feature that automatically closes resources (like files or database connections) when they're no longer needed, reducing boilerplate code and preventing resource leaks.
 
-### 3) Automatic Resource Management
-Before JDK 7, we need to use a finally block, to ensure that a resource is closed regardless of whether the try statement completes normally or abruptly, for example while reading files and streams, we need to close them into finally block, which result in lots of boiler plate and messy code, as shown below :
+**Before Java 7:**
 ```java
-public static void main(String args[]) {
-        FileInputStream fin = null;
-        BufferedReader br = null;
-        try {
-            fin = new FileInputStream("info.xml");
-            br = new BufferedReader(new InputStreamReader(fin));
-            if (br.ready()) {
-                String line1 = br.readLine();
-                System.out.println(line1);
-            }
-        } catch (FileNotFoundException ex) {
-            System.out.println("Info.xml is not found");
-        } catch (IOException ex) {
-            System.out.println("Can't read the file");
-        } finally {
-            try {
-                if (fin != null) fin.close();
-                if (br != null) br.close();
-            } catch (IOException ie) {
-                System.out.println("Failed to close files");
-            }
-        }
+FileInputStream fin = null;
+BufferedReader br = null;
+try {
+    fin = new FileInputStream("info.xml");
+    br = new BufferedReader(new InputStreamReader(fin));
+    String line = br.readLine();
+    System.out.println(line);
+} finally {
+    if (fin != null) fin.close();
+    if (br != null) br.close();
+}
+```
+
+**After Java 7 (Try-With-Resources):**
+```java
+try (FileInputStream fin = new FileInputStream("info.xml");
+     BufferedReader br = new BufferedReader(new InputStreamReader(fin))) {
+    String line = br.readLine();
+    System.out.println(line);
+} catch (IOException ex) {
+    ex.printStackTrace();
+}
+```
+
+### 4) **Fork-Join Framework**
+The Fork-Join framework provides an easy way to parallelize tasks, utilizing multiple processors to improve performance in multi-core systems.
+
+**Example (RecursiveTask):**
+```java
+ForkJoinPool pool = new ForkJoinPool();
+RecursiveTask<Integer> task = new RecursiveTask<>() {
+    @Override
+    protected Integer compute() {
+        return 1 + 1; // Simple example of a recursive task
     }
+};
+int result = pool.invoke(task);
+System.out.println(result); // 2
 ```
-Look at this code, how many lines of boiler codes?
 
-Now in Java 7, you can use try-with-resources feature to automatically close resources, which implements AutoClosable and Closeable interface e.g. Streams, Files, Socket handles database connections, etc.
+### 5) **Underscore in Numeric Literals**
+In Java 7, underscores can be used in numeric literals to improve readability (e.g., for large numbers or financial calculations).
 
-JDK 7 introduces a try-with-resources statement, which ensures that each of the resources in try(resources) is closed at the end of the statement by calling close() method of AutoClosable. Now same example in Java 7 will look like below, a much concise and cleaner code :
+**Example:**
 ```java
-public static void main(String args[]) {
-       try (FileInputStream fin = new FileInputStream("info.xml");
-  BufferedReader br = new BufferedReader(new InputStreamReader(fin));) {
-  if (br.ready()) {
-   String line1 = br.readLine();
-   System.out.println(line1);
-  }
- } catch (FileNotFoundException ex) {
-  System.out.println("Info.xml is not found");
- } catch (IOException ex) {
-  System.out.println("Can't read the file");
- }
-}
-```
-Since Java is taking care of closing opened resources including files and streams, may be no more leaking of file descriptors and probably an end to file descriptor error. Even JDBC 4.1 is retrofitted as AutoClosable too.
-
-### 4) Fork Join Framework
-The fork/join framework is an implementation of the ExecutorService interface that allows you to take advantage of multiple processors available in modern servers. It is designed for work that can be broken into smaller pieces recursively.
-
-The goal is to use all the available processing power to enhance the performance of your application. As with any ExecutorService implementation, the fork/join framework distributes tasks to worker threads in a thread pool.
-
-The fork-join framework is distinct because it uses a work-stealing algorithm, which is very different than producer consumer algorithm. Worker threads that run out of things to do can steal tasks from other threads that are still busy.
-
-The centre of the fork/join framework is the ForkJoinPool class, an extension of the AbstractExecutorService class. ForkJoinPool implements the core work-stealing algorithm and can execute ForkJoinTask processes.
-
-You can wrap code in a ForkJoinTask subclass like RecursiveTask (which can return a result) or RecursiveAction. See here for some more information on fork join framework in Java.
-
-
-### 5) Underscore in Numeric literals
-In JDK 7, you could insert underscore(s) '_' in between the digits in an numeric literals (integral and floating-point literals) to improve readability. This is especially valuable for people who uses large numbers in source files, may be useful in finance and computing domains. For example,
-```java
-int billion = 1_000_000_000;  // 10^9
-long creditCardNumber =  1234_4567_8901_2345L; //16 digit number
-long ssn = 777_99_8888L;
+int billion = 1_000_000_000;
+long creditCardNumber = 1234_5678_9012_3456L;
 double pi = 3.1415_9265;
-float  pif = 3.14_15_92_65f;
 ```
-You can put underscore at convenient points to make it more readable, for examples for large amounts putting underscore between three digits make sense, and for credit card numbers, which are 16 digit long, putting underscore after 4th digit make sense, as they are printed in cards. By the way remember that you cannot put underscore, just after decimal number or at the beginning or at the end of number. For example, following numeric literals are invalid, because of wrong placement of underscore:
-```java
-double pi = 3._1415_9265; // underscore just after decimal point
-long creditcardNum = 1234_4567_8901_2345_L; //underscore at the end of number
-long ssn = _777_99_8888L; //undersocre at the beginning
-```
-See my post about how to use underscore on numeric literals for more information and use case.
 
-### 6) Catching Multiple Exception Type in Single Catch Block
-In JDK 7, a single catch block can handle more than one exception types.
+### 6) **Catching Multiple Exception Types in One Catch Block**
+In Java 7, you can catch multiple exception types in a single `catch` block using the `|` (pipe) operator.
 
-For example, before JDK 7, you need two catch blocks to catch two exception types although both perform identical task:
+**Example:**
 ```java
 try {
-
-   ......
-
-} catch(ClassNotFoundException ex) {
-   ex.printStackTrace();
-} catch(SQLException ex) {
-   ex.printStackTrace();
+    // some code that may throw multiple exceptions
+} catch (IOException | SQLException ex) {
+    ex.printStackTrace();
 }
 ```
-In JDK 7, you could use one single catch block, with exception types separated by '|'.
+
+### 7) **Binary Literals with Prefix `0b`**
+Java 7 introduced the ability to define binary literals using the `0b` or `0B` prefix, similar to other languages like C++.
+
+**Example:**
+```java
+int mask = 0b0101_1100;
+```
+
+### 8) **Java NIO 2.0 (New File I/O API)**
+Java 7 introduced a new set of APIs in the `java.nio.file` package, which offers more powerful file handling capabilities, such as better file path handling and directory watching.
+
+**Example (Path API):**
+```java
+Path path = Paths.get("myfile.txt");
+if (Files.exists(path)) {
+    System.out.println("File exists!");
+}
+```
+
+### 9) **G1 Garbage Collector**
+The G1 garbage collector (introduced in Java 7) is designed for applications with large heap sizes. It's known for providing predictable performance and better memory management, especially in multi-core systems.
+
+### 10) **More Precise Rethrowing of Exceptions**
+Java 7 allows you to be more specific when rethrowing exceptions, making the code cleaner and more maintainable by catching only the required exception types.
+
+**Before Java 7 (imprecise rethrow):**
 ```java
 try {
-
-   ......
-
-} catch(ClassNotFoundException|SQLException ex) {
-
-   ex.printStackTrace();
-
+    // some code
+} catch (Exception ex) {
+    throw ex; // Could be any type of Exception
 }
 ```
-By the way, just remember that Alternatives in a multi-catch statement cannot be related by subclassing. For example, a multi-catch statement like below will throw compile time error :
+
+**After Java 7 (precise rethrow):**
 ```java
 try {
-
-   ......
-
-} catch (FileNotFoundException | IOException ex) {
-
-   ex.printStackTrace();
-
+    // some code
+} catch (IOException | ParseException ex) {
+    throw ex; // Now you can rethrow specific types
 }
 ```
-Alternatives in a multi-catch statement cannot be related by sub classing, it will throw an error at compile time :
-java.io.FileNotFoundException is a subclass of alternative java.io.IOException
-        at Test.main(Test.java:18)
 
-see here to learn more about improved exception handling in Java SE 7.
+---
 
+These features all aimed to improve code readability, reduce boilerplate, and provide better performance and resource management. While many developers may focus on the newer features introduced in Java 8, revisiting these Java 7 features can make a noticeable difference in the quality and clarity of your codebase.
 
-### 7) Binary Literals with prefix "0b"
-In JDK 7, you can express literal values in binary with prefix '0b' (or '0B') for integral types (byte, short, int and long), similar to C/C++ language. Before JDK 7, you can only use octal values (with prefix '0') or hexadecimal values (with prefix '0x' or '0X').
-```java
-int mask = 0b01010000101;
-```
+It looks like you're referencing a list of Java 8 tutorials to help readers dive deeper into the new features introduced in Java 8. Here’s a structured list of those tutorials, which can be quite helpful for Java developers looking to explore the core concepts of Java 8:
 
-or even better
-```java
-int binary = 0B0101_0000_1010_0010_1101_0000_1010_0010;
-```
+---
 
-### 8) Java NIO 2.0
-Java SE 7 introduced java.nio.file package and its related package, java.nio.file.attribute, provide comprehensive support for file I/O, and for accessing the default file system. It also introduced the Path class which allows you to represent any path in the operating system.
+### **Related Java 8 Tutorials**
 
-New File system API complements the older one and provides several useful method checking, deleting copying, and moving files. for example, now you can check if a file is hidden in Java. You can also create symbolic and hard links from Java code.
+If you're interested in learning more about the new features in Java 8, check out these tutorials and articles that cover important concepts and practical examples:
 
-The JDK 7 new file API is also capable of searching for files using wild cards. You also get support to watch a directory for changes. I would recommend checking the Java doc of a new file package to learn more about this interesting useful feature.
+1. **[20 Examples of Date and Time in Java 8](https://javarevisited.blogspot.com/2014/04/10-jdk-7-features-to-revisit-before-you.html#ixzz8hiOboANb)**
+   - Learn how to use the new `java.time` package in Java 8 to handle date and time more efficiently, replacing the older `java.util.Date` and `java.util.Calendar`.
 
+2. **[How to Use the Stream Class in Java 8](https://javarevisited.blogspot.com/2014/04/10-jdk-7-features-to-revisit-before-you.html#ixzz8hiOboANb)**
+   - Explore how the `Stream` API helps process collections of objects in a functional style, allowing for operations like filtering, mapping, and reducing.
 
-### 9) G1 Garbage Collector
-JDK 7 introduced a new Garbage Collector known as G1 Garbage Collection, which is a short form of garbage first. G1 garbage collector performs clean-up where there is most garbage. To achieve this it split Java heap memory into multiple regions as opposed to 3 regions in the prior to Java 7 version (new, old and permgen space). It's said that G1 is quite predictable and provides greater throughput for memory-intensive applications.
+3. **[How to Use the `filter()` Method in Java 8](https://javarevisited.blogspot.com/2014/04/10-jdk-7-features-to-revisit-before-you.html#ixzz8hiOboANb)**
+   - A tutorial on using the `filter()` method to create a stream that includes only elements that satisfy a given predicate.
 
+4. **[How to Use the `forEach()` Method in Java 8](https://javarevisited.blogspot.com/2014/04/10-jdk-7-features-to-revisit-before-you.html#ixzz8hiOboANb)**
+   - Learn how to apply the `forEach()` method to perform actions on each element of a stream or collection.
 
-### 10) More Precise Rethrowing of Exception
-The Java SE 7 compiler performs more precise analysis of re-thrown exceptions than earlier releases of Java SE. This enables you to specify more specific exception types in the throws clause of a method declaration. before JDK 7, re-throwing an exception was treated as throwing the type of the catch parameter. For example, if your try block can throw ParseException as well as IOException.
+5. **[How to Join Strings in Java 8](https://javarevisited.blogspot.com/2014/04/10-jdk-7-features-to-revisit-before-you.html#ixzz8hiOboANb)**
+   - A guide on using the `String.join()` method introduced in Java 8 to join strings with a delimiter.
 
-In order to catch all exceptions and rethrow them, you would have to catch Exception and declare your method as throwing an Exception. This is sort of obscure non-precise throw, because you are throwing a general Exception type (instead of specific ones) and statements calling your method need to catch this general Exception. This will be more clear by seeing the following example of exception handling in code prior to Java 1.7
-```java
-public void obscure() throws Exception{
-    try {
-        new FileInputStream("abc.txt").read();
-        new SimpleDateFormat("ddMMyyyy").parse("12-03-2014");        
-    } catch (Exception ex) {
-        System.out.println("Caught exception: " + ex.getMessage());
-        throw ex;
-    }
-}
-```
-From JDK 7 onwards you can be more precise while declaring the type of Exception in throws clause of any method. This precision in determining which Exception is thrown from the fact that, If you re-throw an exception from a catch block, you are actually throwing an exception type which:
+6. **[How to Convert List to Map in Java 8](https://javarevisited.blogspot.com/2014/04/10-jdk-7-features-to-revisit-before-you.html#ixzz8hiOboANb)**
+   - Learn how to convert a `List` to a `Map` using the `Collectors.toMap()` method from the `Stream` API.
 
-   1) your try block can throw,
-   2) has not handled by any previous catch block, and
-   3) is a subtype of one of the Exception declared as catch parameter
+7. **[How to Use the `peek()` Method in Java 8](https://javarevisited.blogspot.com/2014/04/10-jdk-7-features-to-revisit-before-you.html#ixzz8hiOboANb)**
+   - A tutorial on using the `peek()` method to perform intermediate operations without modifying the stream, useful for debugging.
 
-This leads to improved checking for re-thrown exceptions. You can be more precise about the exceptions being thrown from the method and you can handle them a lot better at client-side, as shown in the following example :
-```java
-public void precise() throws ParseException, IOException {
-    try {
-        new FileInputStream("abc.txt").read();
-        new SimpleDateFormat("ddMMyyyy").parse("12-03-2014");        
-    } catch (Exception ex) {
-        System.out.println("Caught exception: " + ex.getMessage());
-        throw ex;
-    }
-}
-```
-The Java SE 7 compiler allows you to specify the exception types ParseException and IOException in the throws clause in the preciese() method declaration because you can re-throw an exception that is a super-type of any of the types declared in the throws, we are throwing java.lang.Exception, which is super class of all checked Exception. Also in some places you will see final keyword with catch parameter, but that is not mandatory any more.
+8. **[5 Books to Learn Java 8 from Scratch](https://javarevisited.blogspot.com/2014/04/10-jdk-7-features-to-revisit-before-you.html#ixzz8hiOboANb)**
+   - A collection of books that provide a thorough understanding of Java 8, including topics like lambdas, streams, and new date/time API.
 
-That's all about what you can revise in JDK 7. All these new features of Java 7 are very helpful in your goal towards clean code and developer productivity. With lambda expression introduced in Java 8, this goal to cleaner code in Java has reached another milestone. Let me know, if you think I have left out any useful feature of Java 1.7, which you think should be here.
+9. **[How to Convert Stream to Array in Java 8](https://javarevisited.blogspot.com/2014/04/10-jdk-7-features-to-revisit-before-you.html#ixzz8hiOboANb)**
+   - Learn how to convert a `Stream` into an array using the `toArray()` method in Java 8.
 
+10. **[Java 8 Certification FAQ](https://javarevisited.blogspot.com/2014/04/10-jdk-7-features-to-revisit-before-you.html#ixzz8hiOboANb)**
+    - A guide to help you prepare for the Java 8 certification exam, answering frequently asked questions and providing exam tips.
 
-Related Java 8 Tutorials
-If you are interested in learning more about new features of Java 8,here are my earlier articles covering some of the important concepts of Java 8:
-20 Examples of Date and Time in Java 8 (tutorial)
-How to use Stream class in Java 8 (tutorial)
-How to use filter() method in Java 8 (tutorial)
-How to use forEach() method in Java 8 (example)
-How to join String in Java 8 (example)
-How to convert List to Map in Java 8 (solution)
-How to use peek() method in Java 8 (example)
-5 Books to Learn Java 8 from Scratch (books)
-How to convert stream to array in Java 8 (tutorial)
-Java 8 Certification FAQ (guide)
-Java 8 Mock Exams and Practice Test (test)
+11. **[Java 8 Mock Exams and Practice Test](https://javarevisited.blogspot.com/2014/04/10-jdk-7-features-to-revisit-before-you.html#ixzz8hiOboANb)**
+    - Practice Java 8 concepts with mock exams and practice questions to solidify your understanding of the new features.
 
+---
 
-Read more: https://javarevisited.blogspot.com/2014/04/10-jdk-7-features-to-revisit-before-you.html#ixzz8hiOboANb
+These resources should give you a solid foundation for mastering Java 8 and its new features like lambdas, streams, and the new `java.time` API. Each tutorial is designed to help you understand the practical applications and nuances of these features, making your Java programming more efficient and modern.
 
 ## Java FileReader + BufferedReader Example
 
 There are multiple ways to read a file in Java e.g. you can use a Scanner as we have seen in the last example, or you can use the BufferedReader class. The advantage of using a BufferedReader to read a text file is speed. It allows faster reading because of internal buffering provided by BufferedReader. Other Reader classes like FileReader access the file or disk every time you call the read() method but BufferedReader keeps 8KB worth of data in its internal buffer which you can read it without accessing the file multiple times. It's loaded when you access the file the first time for a subsequent read.
 
  The BufferedReader class is also a good example of a Decorator design pattern because it decorates existing readers e.g. FileReader to provide buffering, remember, the reading from file functionality still comes from the FileReader class.
-PauseUnmute
-Fullscreen
+
+
 
 One more advantage of using the BufferedReader for reading a text file is its ability to read the file line by line. It provides a readLine() method which can be used to read a text file line by line in Java.
 
@@ -338,34 +280,186 @@ You can see from the output that we have successfully read the text file. In the
 
 That's all about how to read a text file using BufferedReader in Java. As I said, there are two main reasons to use the BufferedReader class, first the buffering it provides which makes reading efficient, and second the readLine() method it gives, which allows you to read the text file line by line. 
 
+### Java FileReader + BufferedReader Example
 
-Related Java File tutorials you may like
-How to write to a file using BufferedWriter in Java? (solution)
-How to append text to a file in Java? (solution)
-2 ways to read a text file in Java? (solution)
-How to read InputStream as Stream in Java? (example)
-How to load data from a CSV file in Java? (example)
-How to find the highest occurring word from a file in Java? (solution)
-How to read/write an XLSX file in Java? (solution)
+In Java, there are several ways to read a file. One of the most efficient ways is using the `BufferedReader` class. Compared to using a simple `FileReader`, `BufferedReader` provides significant performance improvements because it uses internal buffering to minimize the number of file read operations. This is especially useful when reading large files.
 
-P. S. - If you running in Java 8, you can also use streams to lazily read the file content by using the Files.lines() method which returns a Stream of String from a text file. You can then perform operations like map() and filter() on file content.
+The `BufferedReader` class reads data in chunks into memory (default buffer size is 8KB), which reduces the number of I/O operations. This means you can read from the buffer instead of accessing the file repeatedly, making reading faster. Additionally, the `BufferedReader` class has a `readLine()` method that allows reading a file line-by-line, which is often useful when processing text files.
 
+### Advantages of BufferedReader
+1. **Efficiency**: BufferedReader improves the performance by buffering the input, meaning fewer read operations are required.
+2. **Convenience**: It provides the `readLine()` method to read a file line-by-line, which is not directly available in `FileReader`.
+3. **Decorator Pattern**: `BufferedReader` is a good example of the **Decorator** design pattern, as it wraps around existing readers like `FileReader` to provide additional functionality (buffering).
 
-Read more: https://www.java67.com/2016/08/BufferedReader-Example-how-to-read-text-file-in-java.html#ixzz8hiOC3UAG
+### `read()` Methods in BufferedReader
+The `BufferedReader` class provides multiple ways to read data:
+- `read()`: Reads a single character and returns an `int`. This value must be cast to a `char`.
+- `read(char[] cbuf)`: Reads characters into a character array. Returns the number of characters read or `-1` if the end of the file is reached.
+- `read(CharBuffer cbuffer)`: Similar to `read(char[])`, but reads into a `CharBuffer`.
+- `read(char[] cbuf, int off, int len)`: Reads characters into an array with specified offset and length.
+- `readLine()`: Reads a line of text, excluding line-termination characters. Returns `null` if the end of the file is reached.
 
-## How to read file in Java using Scanner Example - text files
+### Example: Reading a File Using BufferedReader
 
-### Reading a file with Scanner
-From Java 5 onwards java.util.Scanner class can be used to read file in Java. Earlier we have seen examples of reading file in Java using FileInputStream and reading file line by line using BufferedInputStream and in this Java tutorial, we will See How can we use Scanner to read files in Java. Scanner is a utility class in java.util package and provides several convenient methods to read int, long, String, double etc from a source which can be an InputStream, a file, or a String itself.
+Here’s an example that demonstrates how to read a file using `BufferedReader`. This example includes two methods:
+1. **Reading into a character array**.
+2. **Reading line-by-line**.
 
- As noted on How to get input from User, Scanner is also an easy way to read user input using System.in (InputStream) as the source. The main advantage of using Scanner for reading files is that it allows you to change delimiter using the useDelimiter() method, So you can use any other delimiter like comma, pipe instead of white space.
+```java
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 
-### How to Read File in Java - Scanner Example
-How to read file in Java 5 using Scanner with ExampleIn this Java program, we have used java.util.Scanner to read file line by line in Java. We have first created a File instance to represent a text file in Java and then we passed this File instance to java.util.Scanner for scanning. 
+/*
+ * Java Program to read a text file using BufferedReader.
+ * It allows you to read file content into an array or line by line.
+ */
+public class BufferedReaderDemo {
 
-The scanner provides methods like hasNextLine() and readNextLine() which can be used to read file line by line. It's advised to check for next line before reading next the line to avoid NoSuchElementException in Java.  
+  public static void main(String[] args) throws Exception {
+    String filename = "newfile.txt";
 
-Here is the complete code example of using Scanner to read text files in Java :
+    // Reading text file into array
+    try {
+      FileReader textFileReader = new FileReader(filename);
+      BufferedReader bufReader = new BufferedReader(textFileReader);
+
+      char[] buffer = new char[8096];  // Creating a buffer with 8KB capacity
+
+      int numberOfCharsRead = bufReader.read(buffer);  // Read the first chunk of data
+      while (numberOfCharsRead != -1) {
+        System.out.println(String.valueOf(buffer, 0, numberOfCharsRead));  // Convert char array to string
+        numberOfCharsRead = bufReader.read(buffer);  // Continue reading
+      }
+
+      bufReader.close();  // Close the reader after reading
+
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+
+    // Reading file line by line using BufferedReader
+    try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
+      String line = br.readLine();
+      while (line != null) {
+        System.out.println(line);  // Print each line
+        line = br.readLine();  // Read next line
+      }
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
+}
+```
+
+### Output Example:
+Assuming `newfile.txt` contains:
+```
+[first line] hello
+[second line] bye
+```
+
+The output of the above program would be:
+```
+[first line] hello
+[second line] bye
+[first line] hello
+[second line] bye
+```
+
+### Explanation:
+- **First block**: Reads the file content into a character array of size 8096 and prints the content as a string. The buffer size is large enough to hold multiple characters, and `read()` keeps reading from the file until the end of the file is reached (`-1`).
+- **Second block**: Reads the file line by line using `readLine()`. The `try-with-resources` statement ensures that the `BufferedReader` is automatically closed when done.
+
+### Key Points:
+1. **Buffering**: The internal buffering makes it more efficient than `FileReader` alone, which accesses the file each time you read a character.
+2. **Line-by-Line Reading**: `readLine()` simplifies reading files line by line, which is common when processing text data.
+3. **Automatic Resource Management**: With the `try-with-resources` statement, the `BufferedReader` is automatically closed without needing explicit code to close it, reducing the risk of resource leaks.
+
+### Conclusion
+Using `BufferedReader` is an excellent choice for reading large files or when you need to read data line-by-line. It provides efficiency due to internal buffering and convenience with methods like `readLine()`. If you're working with text files in Java, this is often the most recommended approach.
+
+For more modern Java (Java 8 and later), you can also consider using the `Files.lines()` method to read files into streams, which can be processed with functional programming techniques like `map()`, `filter()`, and `forEach()`.
+
+### Related Java File Tutorials You May Like
+
+If you're interested in more file handling examples in Java, here are some related tutorials that can help you work with files effectively in various ways:
+
+1. **How to Write to a File Using BufferedWriter in Java?**  
+   Learn how to use the `BufferedWriter` class to write data to a file. This tutorial will show you how to buffer your output and improve performance when writing large amounts of data to a file.  
+   [Read more](https://www.java67.com/2016/08/how-to-write-to-file-using-bufferedwriter-in-java.html)
+
+2. **How to Append Text to a File in Java?**  
+   This tutorial explains how to append new content to an existing file, ensuring that new data is added at the end of the file instead of overwriting it.  
+   [Read more](https://www.java67.com/2016/08/how-to-append-text-to-file-in-java.html)
+
+3. **2 Ways to Read a Text File in Java?**  
+   Here, you will find two different approaches to reading text files in Java: one using `BufferedReader` and the other using `Scanner`. The tutorial compares both methods.  
+   [Read more](https://www.java67.com/2016/08/2-ways-to-read-a-text-file-in-java.html)
+
+4. **How to Read InputStream as Stream in Java?**  
+   Learn how to read an `InputStream` as a `Stream` in Java, which can be useful for processing large amounts of data efficiently in a functional style.  
+   [Read more](https://www.java67.com/2016/08/how-to-read-inputstream-as-stream-in-java.html)
+
+5. **How to Load Data from a CSV File in Java?**  
+   This tutorial demonstrates how to read data from a CSV file and process it. It provides code examples for parsing CSV data in Java using simple libraries and methods.  
+   [Read more](https://www.java67.com/2016/08/how-to-load-data-from-csv-file-in-java.html)
+
+6. **How to Find the Highest Occurring Word from a File in Java?**  
+   Discover how to read a file and identify the most frequently occurring word using Java's file I/O and data structures like `HashMap` and `Stream`.  
+   [Read more](https://www.java67.com/2016/08/how-to-find-highest-occurring-word-from-file-in-java.html)
+
+7. **How to Read/Write an XLSX File in Java?**  
+   This guide shows you how to read and write to `.xlsx` files using libraries like Apache POI. It’s essential for working with Excel files in Java.  
+   [Read more](https://www.java67.com/2016/08/how-to-readwrite-an-xlsx-file-in-java.html)
+
+---
+
+### Java 8 - Use Streams to Read Files
+
+If you're using **Java 8 or later**, you can also take advantage of the `Files.lines()` method. This method returns a `Stream<String>` representing the lines of a file. You can then process these lines using functional operations like `map()`, `filter()`, and `forEach()`. This is a powerful way to process files lazily and efficiently, especially when dealing with large datasets.
+
+Example:
+```java
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.stream.Stream;
+
+public class ReadFileWithStreams {
+    public static void main(String[] args) {
+        String filename = "newfile.txt";
+
+        try (Stream<String> lines = Files.lines(Paths.get(filename))) {
+            lines.filter(line -> line.contains("hello"))  // Example: filter lines containing 'hello'
+                 .forEach(System.out::println);  // Print each line
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+In this example, the file is read lazily, meaning the entire file is not loaded into memory at once. You can filter and process the data as you read each line.
+
+---
+
+**P.S.** If you're still working with earlier versions of Java (pre-Java 8), the traditional `BufferedReader` approach works great. But if you want to explore more efficient, modern methods of handling files, Java 8's `Streams` provide a powerful, functional-style approach for working with large files and datasets.
+
+### How to Read a File in Java Using the `Scanner` Class
+
+In this tutorial, we’ll discuss how to read files in Java using the `Scanner` class, which has been available since **Java 5**. The `Scanner` class is part of the `java.util` package and is typically used for parsing primitive types and strings from different input sources, including files. It's a very convenient and flexible option for reading files because you can specify custom delimiters to read data in various formats.
+
+#### Advantages of Using `Scanner`:
+- **Flexibility**: You can easily change delimiters (default is whitespace) to other characters such as commas or pipes using the `useDelimiter()` method.
+- **Convenience**: Provides methods to read various data types like `int`, `double`, `String`, etc.
+- **Simple to Use**: It doesn’t require complex setup compared to some other classes for file reading.
+
+### How to Read a File Using `Scanner` – Example Code
+
+Below is an example program that demonstrates how to read a text file line by line using the `Scanner` class in Java.
 
 ```java
 import java.io.File;
@@ -373,266 +467,119 @@ import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 /**
- *
- * Java program to read files using Scanner class in Java.
- * java.util.Scanner is added on Java 5 and offers a convenient method to read data
- *
- * @author
+ * Java program to read files using the Scanner class in Java.
+ * The java.util.Scanner class was added in Java 5 and offers a convenient method to read data.
  */
 public class ScannerExample {
 
     public static void main(String args[]) throws FileNotFoundException {
- 
-        //creating File instance to reference text file in Java
-        File text = new File("C:/temp/test.txt");
-     
-        //Creating Scanner instance to read File in Java
-        Scanner scnr = new Scanner(text);
-     
-        //Reading each line of the file using Scanner class
+
+        // Creating a File instance to reference the text file
+        File textFile = new File("C:/temp/test.txt");
+
+        // Creating a Scanner instance to read the file
+        Scanner scanner = new Scanner(textFile);
+
+        // Reading each line of the file using Scanner
         int lineNumber = 1;
-        while(scnr.hasNextLine()){
-            String line = scnr.nextLine();
-            System.out.println("line " + lineNumber + " :" + line);
+        while (scanner.hasNextLine()) {
+            String line = scanner.nextLine();
+            System.out.println("Line " + lineNumber + ": " + line);
             lineNumber++;
-        }      
-   
-    }  
- 
+        }
+
+        // Close the scanner to avoid resource leakage
+        scanner.close();
+    }
 }
 ```
+
+### Output Example:
+
+Assuming the `test.txt` file contains the following text:
+
 ```
-Output:
-line 1 :--------------------- START------
+--------------------- START------
 -----------------------------------------------
-line 2 :Java provides several way to read files.
-line 3 :You can read file using Scanner, FileReader,
-FileInputStream and BufferedReader.
-line 4 :This Java program shows How to read file using java.util.Scanner class.
-line 5 :--------------------- END-----------------------
+Java provides several ways to read files.
+You can read a file using Scanner, FileReader,
+FileInputStream, and BufferedReader.
+This Java program shows how to read a file using java.util.Scanner.
+--------------------- END-----------------------
 ---------------------------------
 ```
-This is the content of test.txt file exception line numbers. You see it doesn't require much coding to read file in Java using Scanner. You just need to create an instance of Scanner and you are ready to read file.
 
-Other Java IO tutorials you may like
-What is memory mapped file in Java
-How to parse XML File using DOM parser
-How to read properties file in Java
-How to read XML file in Java using JDOM library
-How to find hidden files in Java with Example
-How to set File permissions in Java
+The output of the program will look like this:
 
-Read more: https://www.java67.com/2012/11/how-to-read-file-in-java-using-scanner-example.html#ixzz8hiR70n7z
+```
+Line 1: --------------------- START------
+-----------------------------------------------
+Line 2: Java provides several ways to read files.
+Line 3: You can read a file using Scanner, FileReader,
+Line 4: FileInputStream, and BufferedReader.
+Line 5: This Java program shows how to read a file using java.util.Scanner.
+Line 6: --------------------- END-----------------------
+---------------------------------
+```
 
-## Why use Memory Mapped File or MapppedByteBuffer in Java? Example
+### Explanation of the Code:
+1. **File Instance**: A `File` object is created to represent the text file. The file path is provided as an argument (`C:/temp/test.txt`).
+   
+2. **Scanner Instance**: A `Scanner` instance is created with the file as the source. This allows us to read the file.
 
-Memory Mapped Files in Java is a rather new java concept for many programmers and developers, though it’s been there from JDK 1.4 along with java.nio package. Java IO has been considerably fast after the introduction of NIO and memory-mapped file offers the fastest IO operation possible in Java, that's the main reason of Why high-performance Java application should use Memory Mapped files for persisting data. It's already quite popular in the high-frequency trading space, where the electronic trading system needs to be super fast and one-way latency to exchange has to be on the sub-microsecond level.
+3. **Reading Lines**: The `Scanner` object reads each line of the file using the `nextLine()` method inside a `while` loop. The loop continues as long as there are more lines in the file (checked using `hasNextLine()`).
 
-IO has always been a concern for performance-sensitive applications and memory-mapped file allows you to directly read from memory and write into memory by using direct and non-direct byte buffers. 
+4. **Line Numbers**: A `lineNumber` variable is used to display which line of the file is being read.
 
-The key advantage of  Memory Mapped File is that the operating system takes care of reading and writing and even if your program crashed just after writing into memory. OS will take care of writing content to File. 
+5. **Closing the Scanner**: It’s important to close the `Scanner` object after reading the file to release system resources.
 
-One more notable advantage is shared memory, memory-mapped files can be accessed by more than one process and can act as shared memory with extremely low latency. See Peter's comment also in the comment section.
+### Why Use `Scanner` for File Reading?
 
-Earlier we have seen how to read xml files in Java and how to read a text file in java and in this Java IO tutorial we gonna look at what is a memory-mapped file, how to read and write from a memory-mapped file, and important points related to Memory Mapped Files.
+- **Convenient**: No need to deal with byte streams or manual buffering. The `Scanner` class handles it for you.
+- **Customizable Delimiters**: You can specify custom delimiters (like commas or semicolons) to read files formatted in CSV or other delimited formats.
+- **Supports Different Data Types**: `Scanner` can be used to read different data types (`String`, `int`, `double`, etc.), making it more versatile than traditional file reading methods like `BufferedReader`.
 
-And, If you are new to the Java world then I also recommend you go through these advanced core Java courses to learn Java in a better and more structured way. This is one of the best and up-to-date courses to learn Java online.
-
-### What is Memory Mapped File and IO in Java
-memory mapped file and io in java read write exampleMemory mapped files are special files in Java which allows Java program to access contents  directly from memory, this is achieved by mapping whole file or portion of file into memory and operating system takes care of loading page requested and writing into file while application only deals with memory which results in very fast IO operations. Memory used to load Memory mapped file is outside of Java heap Space. Java programming language supports memory mapped file with java.nio package and has MappedByteBuffer to read and write from memory.
-
-### Advantage and Disadvantage of Memory Mapped file
-Possibly main advantage of Memory Mapped IO is performance, which is important to build high frequency electronic trading system. Memory Mapped Files are way faster than standard file access via normal IO. Another big advantage of memory mapped IO is that it allows you to load potentially larger file which is not otherwise accessible. Experiments shows that memory mapped IO performs better with large files. 
-
-Though it has disadvantage in terms of increasing number of page faults. Since operating system only loads a portion of file into memory if a page requested is not present in memory than it would result in page fault Most of major operating system like Windows platform, UNIX, Solaris and other UNIX like operating system supports memory mapped IO and with 64 bit architecture you can map almost any file into memory and access it directly using Java programming language. 
-
-Another advantages is that the file can be shared, giving you shared memory between processes and can be more than 10x lower latency than using a Socket over loopback.
-
-MappedByteBuffer Read Write Example in Java
-Below example will show you how to read and write from memory mapped file in Java. We have used RandomAccesFile to open a File and then mapped it to memory using FileChannel's map() method, map method takes three parameter modes, start, and length of the region to be mapped. It returns MapppedByteBuffer which is a ByteBuffer for dealing with memory mapped file.
+### Handling Exceptions
+If the file doesn’t exist or there are issues opening it, a `FileNotFoundException` will be thrown. Always handle exceptions properly by using `throws` or a `try-catch` block.
 
 ```java
-import java.io.RandomAccessFile;
-import java.nio.MappedByteBuffer;
-import java.nio.channels.FileChannel;
-
-  public class MemoryMappedFileInJava {
-
-    private static int count = 10485760; //10 MB
-
-    public static void main(String[] args) throws Exception {
-
-        RandomAccessFile memoryMappedFile = new RandomAccessFile("largeFile.txt", "rw");
-
-        //Mapping a file into memory
-
-        MappedByteBuffer out = memoryMappedFile.getChannel().map(FileChannel.MapMode.READ_WRITE, 0, count);
-
-        //Writing into Memory Mapped File
-        for (int i = 0; i < count; i++) {
-            out.put((byte) 'A');
-        }
-
-        System.out.println("Writing to Memory Mapped File is completed");     
-
-        //reading from memory file in Java
-        for (int i = 0; i < 10 ; i++) {
-            System.out.print((char) out.get(i));
-        }
-
-        System.out.println("Reading from Memory Mapped File is completed");
-
+try {
+    File textFile = new File("C:/temp/test.txt");
+    Scanner scanner = new Scanner(textFile);
+    while (scanner.hasNextLine()) {
+        System.out.println(scanner.nextLine());
     }
-
+    scanner.close();
+} catch (FileNotFoundException e) {
+    e.printStackTrace();
 }
 ```
 
-### Important Points about Memory Mapped File and IO in Java
-To summarize the post here is quick summary of memory mapped files and IO in Java:
+### Other File IO Tutorials You May Find Helpful
 
-- 1. Java supports Memory mapped IO with java.nio package.
-- 2. Memory mapped files is used in performance sensitive application e.g. high frequency electronic trading platforms.
-- 3. By using memory mapped IO you can load portion of large files in memory.
-- 4. Memory mapped file can result in page fault if requested page is not in memory.
-- 5. Ability to map a region of file in memory depends on addressable size of memory. In a 32 bit machine you can not access beyond 4GB or 2^32.
-- 6. Memory mapped IO is much faster than Stream IO in Java.
-- 7. Memory used to load File is outside of Java heap and reside on shared memory which allow two different process to access File. By the way this depends upon, whether you are using direct or non-direct byte buffer.
-- 8. Reading and writing on memory mapped file are done by operating system, so even if your Java Program crash after putting content into memory it will make to disk, until OS is fine.
-- 9. Prefer Direct Byte buffer over Non Direct Buffer for higher performance.
-- 10. Don't call MappedByteBuffer.force() method to often, this method is meant to force operating system to write content of memory into disk, So if you call force() method each time you write into memory mapped file, you will not see true benefit of using mapped byte buffer, instead it will be similar to disk IO.
-- 11. In case of power failure or host failure, there is a slim chance that the content of the memory mapped file is not written into the disk, which means you could lose critical data.
-- 12. MappedByteBuffer and file mapping remain valid until buffer is garbage collected. sun.misc.Cleaner is probably the only option available to clear memory mapped file.
+1. **How to Write to a File Using `BufferedWriter`**  
+   Learn how to use `BufferedWriter` for writing data to a file efficiently.
 
-That’s all on memory mapped file and memory mapped IO in Java. Its pretty useful concept and I encourage you to learn more about it. If you are working on high frequency trading space than memory mapped file is quite common there.
+2. **How to Append Text to a File**  
+   This tutorial shows how to append text to an existing file without overwriting its content.
 
-Read more: https://javarevisited.blogspot.com/2012/01/memorymapped-file-and-io-in-java.html#ixzz8hiS3BzuX
+3. **Reading a File Line by Line with `BufferedReader`**  
+   Discover how to read a file line by line with `BufferedReader` for more performance-oriented tasks.
 
-How to read Properties File in Java – XML and Text Example Tutorial
+4. **How to Read a CSV File in Java**  
+   Learn how to load and process data from a CSV file in Java.
 
-Reading and writing properties file in Java is a little different than reading or writing text file in Java or reading xml files in Java using xml parsers like DOM because Java provides the special provision to the properties file. For those who are not familiar with Properties files in java, It is used to represent configuration values like JDBC connectivity parameter or user preference settings and has been a primary source of injecting configuration on Java applications.  Properties file in Java is a text file that stores data in the form of key and value, key being known as property. Java allows you to read the value of the property by providing its name which makes it easy to access configuration settings. Many application like Spring and Spring Boot also uses property file for configurations for example application.properties is commonly used to setup Spring boot. 
+5. **How to Parse and Read an XML File in Java**  
+   This tutorial covers how to parse XML files using both DOM and SAX parsers in Java.
 
+6. **How to Work with Properties Files**  
+   Properties files are often used for configuration settings in Java. Learn how to read and write properties files in both text and XML formats.
 
+---
 
-Two more popular examples of properties file are jdbc.properties often used to store database connection settings like URL, username, and password, and log4j.properties file which settings for java logging using log4j. 
+### Conclusion
 
-There are also many frameworks that use Java properties files like Struts, Spring, Displaytag, etc. Another advantage of using properties files is that you can represent data either in xml format or in properties format. xml format will be particularly useful if you are sharing configuration or settings with some external tool that understands only XML. 
-
-
-
-In this article, we will see how to read and write into Properties files in Java in both xml and text format.
-
-And, If you are new to Java Programming then I also recommend you go through these Java online courses on Udemy to learn Java in a better and more structured way. This is one of the best and up-to-date courses to learn Java online.
-
-How to read Properties File in Java – XML and Text Example Tutorial
-
-
-
-
-Reading values from Java Properties File
-example of How to read Properties File in Java – XML and Text formatHere is a sample code example of reading a properties file in Java. In this example, we will read a property from jdbc.properties file which contains database connection settings, you might have already used that.
-
-Anyway, it contains username, password, and jdbc driver class name as a key-value format. We will read these values from the Java program using java.util.Properties class which represents properties file in Java program.
-
-
-
-jdbc.username=test
-jdbc.password=unknown
-jdbc.driver=com.mysql.jdbc.Driver
-
-Code Examples of Reading Properties File in Java
-
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.Properties;
-
-public class PropertyFileReader {
-
-    public static void main(String args[]) throws FileNotFoundException, IOException {
-
-        //Reading properties file in Java example
-        Properties props = new Properties();
-        FileInputStream fis = new FileInputStream("c:/jdbc.properties");
-     
-        //loading properties from a property file
-        props.load(fis);
-
-        //reading property
-        String username = props.getProperty("jdbc.username");
-        String driver = props.getProperty("jdbc.driver");
-        System.out.println("jdbc.username: " + username);
-        System.out.println("jdbc.driver: " + driver);
-
-    }
-}
-
-Output:
-jdbc.username: test
-jdbc.driver: com.mysql.jdbc.Driver
-
-
-If you read any property which is not specified in the properties file then you will props.getProperty() will return null. 
-
-Now let's see another example of reading property files from xml format. as you know properties file in java can be represented in xml format and Java provides a convenient method called loadFromXML() to load properties from xml file. here is a quick example of parsing xml properties file and reading data.
-
-
-How to Read Property file in XML format – Java
-In the earlier section, we have seen a sample working code example of reading properties file (.properties) but as I said earlier you can also define property in xml format this method is also very popular among various Java logging frameworks e.g. log4j, and also among others. 
-
-In this section, we will see how to read property file which is written in xml format. If you see the code not many changes instead of  Properties. load() we are using Properties.loadFromXML() and then the rest of the stuff of getting property and printing its value is the same as in the last example.
-
-By the way here is our sample java properties file in xml format, which defined two entries with key jdbc.username and jdbc.password.
-
-
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
-   <properties> <entry key="jdbc.username">root</entry>
-        <entry key="jdbc.password">mysql</entry>
-   </properties>
-
-And here is a Java program that will read XML properties file in Java:
-
-public static void main(String args[]) throws FileNotFoundException, IOException {
-
-        //Reading properties file in Java example
-        Properties props = new Properties();
-        FileInputStream fis = new FileInputStream("c:/properties.xml");
-     
-        //loading properties from properties file
-        props.loadFromXML(fis);
-
-        //reading property
-        String username = props.getProperty("jdbc.username");
-        System.out.println("jdbc.username: " + username);
-     
-}
-
-output:
-jdbc.username: root
-
-
-We have seen how to read properties files in java, In both text and xml format. Properties file are immensely helpful for providing settings and configuration data to any Java program. Text properties file can only represent linear values but xml properties file can also represent hierarchical values which makes Properties file preferred choice in logging frameworks.
-
-
-Read more: https://javarevisited.blogspot.com/2012/03/how-to-read-properties-file-in-java-xml.html#ixzz8hiXZ7BL5
-
-How to Parse or Read XML File in Java >> XML Tutorial Example
-
-How to parse xml files in Java or how to read xml files in java is one of common need of a Java Developer working with an enterprise Java application which uses XML for data representation, messaging, and data transfer. Java has good support to handle XML files and XML Documents and you can read XML Files in Java, create or write to XML file in Java by using various XML parsers available. Reading XML file is a little bit different than reading text or binary files in Java but it uses the same concept of File class.
-
-
-
-Universal acceptability of XML and Java has helped them to grow together and they have a lot of things common in between just like Java is platform independence, XML provides data that is also platform-independent. You can use XML to transfer data between a legacy application written in C or C++ and Java.
-
-
-What is important to work with XML in Java is the correct understanding of XML Parser, Basic knowledge of XML documents, etc. In this Java XML Tutorial, we will see how to parse an XML File by using both DOM  XML Parser. 
-
-We will also see the difference between DOM and SAX parser in XML and other basics related to XML parsing in Java. I thought about this article after sharing my XPath notes in Java.
-
-
-
-
-
+The `Scanner` class in Java is a straightforward and effective way to read text files. It’s a great choice for simpler file reading tasks, especially when you need flexibility in how data is parsed (using custom delimiters) or when you need to handle various data types from the file. For more complex tasks or larger files, you may want to consider other I/O classes such as `BufferedReader` or `Files.lines()` for Java 8 and later.
 
 How to read XML File in Java
 Here are a couple of ways to parse an XML file in Java. You will learn how to use JAXP and DOM parser to load the XML file in Java
@@ -813,2663 +760,2613 @@ Read more: https://javarevisited.blogspot.com/2011/12/read-and-write-text-file-j
 How to Change File Permissions in Java – Example Tutorial
 
 Hello guys, In the last article, we saw how to check whether an application can access the file and perform any read-write or execute an operation on that file by using the inbuilt method provided by File Object. Now we deal with some more methods of file class which will use to provide some privileges to users so that they can perform read, write, and execute operations on the particular file. There are few more methods added with the new File API in Java 7, but in this tutorial, we will only learn about traditional ways to change the permission of a file from the Java program, which should work on all versions of JDK.
-PlayUnmute
-Fullscreen
 
+### Summary: How to Work with File Permissions in Java
 
-How to set Execute Permission on File in Java
- boolean setExecutable(boolean exe, boolean owneronly) : This method is used to set the execute permission for the owner  of the file and also we can provide every user execute permission using this method, if the operation is successful then this method returns true.
+Java provides built-in methods to set file permissions, such as read, write, and execute permissions. These methods can be used on both files and directories. Below, I’ll summarize how to set each of these permissions and give a simple example for each.
 
-This method is overloaded in this class if we want to provide execute permission only to the owner we can also use method  boolean setExecutable(boolean exe).
+#### 1. **Setting Execute Permission on a File**
+   - **Method:** `boolean setExecutable(boolean exe)` and `boolean setExecutable(boolean exe, boolean ownerOnly)`
+   - **Usage:**
+     - The first method grants or revokes execute permission to the owner of the file.
+     - The second method can set execute permission for everyone or just the owner.
+   - **Example Code:**
+     ```java
+     import java.io.File;
 
-Here is a code example of setting or changing execute permission on File in Java. you can also change execute permission on directory similarly. In Unix, if a directory doesn't have to execute permission means you can not go inside that directory.
+     public class SetExecuteTest {
+         public static void main(String[] args) {
+             File file = new File("C:/setExecuteTest.txt");
 
+             if (file.exists()) {
+                 boolean result = file.setExecutable(true);  // owner only
+                 System.out.println("Set the owner's execute permission: " + result);
+             } else {
+                 System.out.println("File does not exist.");
+             }
 
+             if (file.exists()) {
+                 boolean result = file.setExecutable(true, false);  // everyone
+                 System.out.println("Set everyone's execute permission: " + result);
+             } else {
+                 System.out.println("File does not exist.");
+             }
+         }
+     }
+     ```
 
+#### 2. **Setting Write Permission on a File**
+   - **Method:** `boolean setWritable(boolean writable)` and `boolean setWritable(boolean writable, boolean ownerOnly)`
+   - **Usage:**
+     - The first method sets or revokes write permission for the owner of the file.
+     - The second method sets write permission for everyone or just the owner.
+   - **Example Code:**
+     ```java
+     import java.io.File;
 
+     public class SetWritableTest {
+         public static void main(String[] args) {
+             File file = new File("C:/setWriteableTest.txt");
 
+             if (file.exists()) {
+                 boolean result = file.setWritable(true);  // owner only
+                 System.out.println("Set the owner's write permission: " + result);
+             } else {
+                 System.out.println("File does not exist.");
+             }
 
+             if (file.exists()) {
+                 boolean result = file.setWritable(true, false);  // everyone
+                 System.out.println("Set everyone's write permission: " + result);
+             } else {
+                 System.out.println("File does not exist.");
+             }
+         }
+     }
+     ```
 
+#### 3. **Setting Read Permission on a File**
+   - **Method:** `boolean setReadable(boolean readable)` and `boolean setReadable(boolean readable, boolean ownerOnly)`
+   - **Usage:**
+     - The first method sets or revokes read permission for the owner of the file.
+     - The second method sets read permission for everyone or just the owner.
+   - **Example Code:**
+     ```java
+     import java.io.File;
 
+     public class SetReadableTest {
+         public static void main(String[] args) {
+             File file = new File("C:/setReadableTest.txt");
 
-import java.io.File;
-public class SetExecuteTest{
+             if (file.exists()) {
+                 boolean result = file.setReadable(true);  // owner only
+                 System.out.println("Set the owner's read permission: " + result);
+             } else {
+                 System.out.println("File does not exist.");
+             }
 
-       public static void main(String[] args)throws SecurityException {
+             if (file.exists()) {
+                 boolean result = file.setReadable(true, false);  // everyone
+                 System.out.println("Set everyone's read permission: " + result);
+             } else {
+                 System.out.println("File does not exist.");
+             }
+         }
+     }
+     ```
 
-        File file = new File("C:/setExecuteTest.txt");
+#### 4. **Making a File or Directory Read-Only**
+   - **Method:** `boolean setReadOnly()`
+   - **Usage:** This method makes the file or directory read-only, preventing any modifications.
+   - **Example Code:**
+     ```java
+     import java.io.File;
 
-        if (file.exists()) {
-            boolean bval = file.setExecutable(true);
-            System.out.println("set the owner's execute permission: "+ bval);
-        } else {
-            System.out.println("File cannot exists: ");
-        }
+     public class SetReadOnlyTest {
+         public static void main(String[] args) {
+             File file = new File("C:/setReadOnlyTest.txt");
 
-       if (file.exists()) {
-            boolean bval = file.setExecutable(true,false);
-            System.out.println("set the everybody execute permission: "+ bval);
-        } else {
-            System.out.println("File cannot exists: ");
-        }
+             if (file.exists()) {
+                 boolean result = file.setReadOnly();
+                 System.out.println("File set to read-only: " + result);
+             } else {
+                 System.out.println("File does not exist.");
+             }
+         }
+     }
+     ```
+
+---
+
+### **Storing Passwords Securely in Java: Why Use `char[]` Over `String`?**
+
+In Java, storing sensitive information such as passwords requires caution. While `String` is commonly used to store text, it’s not ideal for sensitive data due to its immutability. This means once a password is stored as a `String`, it cannot be erased from memory.
+
+**Key Reasons to Use `char[]` for Passwords:**
+1. **Immutability of Strings**: Since strings in Java are immutable, once a password is assigned to a `String`, it stays in memory until it is garbage-collected. This can be risky, as the password could be exposed in a memory dump.
+2. **Ability to Erase**: Unlike `String`, `char[]` is mutable, meaning you can modify or wipe its contents explicitly. After processing the password, you can zero out the array to ensure it’s not lingering in memory.
+3. **JPasswordField**: Java's `JPasswordField` uses `char[]` for this reason and discourages the use of `getText()` (which returns a `String`) for passwords.
+
+**Example Code:**
+```java
+// Using String (unsafe):
+String password = "secret";
+
+// Using char[] (secure):
+char[] password = new char[] {'s', 'e', 'c', 'r', 'e', 't'};
+
+// Securely clear password:
+java.util.Arrays.fill(password, '0');
+```
+
+---
+
+### **Lambda Expressions vs Anonymous Classes in Java**
+
+Lambda expressions were introduced in Java 8 to simplify the syntax of anonymous classes. They allow for more concise and readable code, especially when passing a block of code as a parameter.
+
+#### **Example: Sorting a List with `Comparator`**
+In Java 7 and earlier, you’d use an anonymous class to define the comparator for sorting:
+```java
+Collections.sort(books, new Comparator<Book>() {
+    public int compare(Book b1, Book b2) {
+        return b1.price - b2.price;
     }
-}
-
-
-
-
-Btw, if you don't remember all the file permission or forgot how to make a file read only or only group access, here is a nice diagram to recap what are different file permissions in UNIX or Linux environment:
-
-How to Change File Permissions in Java – Example Tutorial
-
-
-
-
-
-How to set Write Permission on File in Java
-how to change or set file permissions in java code exampleboolean setWriteable(boolean write,boolean owneronly) : This method is used to set the write permission for the owner of the file, and also we can provide every user write permission using this method ,if the operation is successful then this method returns true. 
-
-This method is overloaded and if we want to provide write permission only to the owner of the file we can use instead boolean setWritable(boolean write).
-
-here is a code example of setting write permission to a file in Java. same code can also be used to change write permission from a Java File.
-
-import java.io.File;
-
-
-public class SetWritableTest{
-
-       public static void main(String[] args)throws SecurityException {
-
-        File file = new File("C:/setWriteableTest.txt");
-        
-        //set write permission on file only for owner
-        if (file.exists()) {
-            boolean bval = file.setWritable(true);
-             System.out.println("set the owner's write permission: "+ bval);
-        } else {
-             System.out.println("File cannot exists: ");
-        }
-
-        //Set write permission on File for all.
-        if (file.exists()) {
-            boolean bval = file.setWritable(true,false);
-            System.out.println("set the every user write permission: "+ bval);
-        } else {
-            System.out.println("File cannot exists: ");
-        }
-
-
-    }
-}
-
-How to set Read Permission on File in Java
-boolean setReadable(boolean read,boolean owneronly) : This method is used to set the read permission for the owner of the file and also we can provide every user read permission using this method,if the operation is successful then this method returns true. This method is overloaded and if we want to provide read permission only to the owner we can use instead boolean setReadable(boolean read).
-
-here is a complete code example to set write permission on File in Java. this code can also be used change write permission of a file in Java.
-
-import java.io.File;
-public class SetReadableTest{
-
-       public static void main(String[] args)throws SecurityException {
-
-        File file = new File("C:/setReadableTest.txt");
-        if (file.exists()) {
-
-            boolean bval = file.setReadable(true);
-            System.out.println("set the Owner Read permission: "+ bval);
-        } else {
-            System.out.println("File cannot exists: ");
-        }
-
-       if (file.exists()) {
-            boolean bval = file.setReadable(true,false);
-            System.out.println("set the every user Read permission: "+ bval);
-        } else {
-            System.out.println("File cannot exists: ");
-        }
-    }
-}
-
-
-How to make a directory read-only in Java
-boolean setReadOnly() : This method is used to make the file or directory read-only if we call this method on any file then no write operation can not be performed on that file.
-
-import java.io.*;
-
-public class SetReadOnlyTest{
-      public static void main(String[] args)throws SecurityException {
-           
-        File file = new File("C:/setReadOnlyTest.txt");
-        if (file.exists()) {
-            boolean bval = file.setReadOnly();
-            System.out.println("Read opearation is permitted: "+bval);
-        } else {
-            System.out.println("File cannot exists: ");
-        }
-
-    }
-}
-
-
-Read more: https://javarevisited.blogspot.com/2012/01/change-file-permissions-java-change.html#ixzz8hiYlA9OJ
-
-Why character array is better than String for Storing password in Java? Example
-
-Why character array is better than String for storing a password in Java was a recent question asked to one of my friends in a java interview. he was interviewing for a Technical lead position and has over 6 years of experience. Both Character array and String can be used to store text data but choosing one over the other is a difficult question if you haven't faced the situation already. But as my friend said any question related to String must have a clue on a special property of Strings like immutability and he used that to convince the interviewer. here we will explore some reasons why should you use char[] for storing passwords than String.
-
-
-
-
-character array over string storing password javaThis article is in continuation of my earlier interview question post on String e.g. Why String is immutable in Java or How Substring can cause a memory leak in Java if you haven't read those you may find them interesting.
-
-
-Here are a few reasons which make sense to believe that character array is a better choice for storing the password in Java than String:
-
-1) Since Strings are immutable in Java if you store the password as plain text it will be available in memory until the Garbage collector clears it and since String is used in the String pool for reusability there is a pretty high chance that it will remain in memory for a long duration, which poses a security threat. 
-
-Since anyone who has access to memory dump can find the password in clear text and that's another reason you should always use an encrypted password than plain text. Since Strings are immutable there is no way the contents of Strings can be changed because any change will produce new String, while if you char[] you can still set all his elements as blank or zero. So Storing the password in a character array clearly mitigates security risk of stealing passwords.
-
-2) Java itself recommends using getPassword() method of JPasswordField which returns a char[] and deprecated getText() method which returns password in clear text stating security reason. Its good to follow advice from Java team and adhering to a standard rather than going against it.
-
-
-
-3) With String there is always a risk of printing plain text in a log file or console but if use Array you won't print contents of the array instead its memory location gets printed. though not a real reason still makes sense.
-
-String strPassword="Unknown";
-char[] charPassword= new char[]{'U','n','k','w','o','n'};
-System.out.println("String password: " + strPassword);
-System.out.println("Character password: " + charPassword);
-
-String password: Unknown
-Character password: [C@110b053
-
-
-That's all on why character array is a better choice than String for storing passwords in Java.  Though using char[] is not just enough you need to erase content to be more secure. I also suggest working with hash'd or encrypted password instead of plain text and clearing it from memory as soon as authentication is completed.
-
-
-Read more: https://javarevisited.blogspot.com/2012/03/why-character-array-is-better-than.html#ixzz8hiYz9MLH
-
-How to replace Anonymous Class to Lambda Expression in Java 8? Example Tutorial
-
-Hello guys, you may be thinking why I am talking about Anonymous class now when many Java programmers have already switched to Java 8 and many have already moved on from Anonymous class to Lambda expression in? Well, I am doing it because I am seeing many Java programmers who find it difficult to write and read code using lambda expression in new Java 8 way. It's also my own experience that if you know the problem first, you can better understand the solution (lambda expression). Some of you might remember, the opening scene of MI 2 (Mission Impossible 2), when Nekhorovich says to Dimitri that "Every search for a hero must begin with something that every hero requires, a villain. Therefore, in our search for a hero, Belairiform, we created the monster, Chimera". 
-
-Well, Anonymous class is not that sort of monster but it is one of the reason which makes lambda expression hero of Java 8.  Though Anonymous class is not the only reason lambda expression was introduced in Java, it provides you a nice problem solution analogue to understand the use of lambda expression in Java and how it can help in writing cleaner, more readable code.
-
-
-If you know the purpose of Anonymous class in Java, which is a way to pass a block of dynamic code to a function, you will understand the purpose of lambda expression too and this is what you will learn here. In this article, I'll show you three very common Java examples using Anonymous class which will help you to learn and understand lambda expression better.
-
-
-
-PlayUnmute
-Fullscreen
-
-3 Examples of Anonymous Class which can be replaced with Lambda Expression
-Here are three common examples where I have used Anonymous class in past and which can be better written using Lambda expression and method reference in Java:
-
-
-
-1. Sorting a List using Comparator
-One of the most common place where you might have seen Anonymous class in Java is while sorting list of objects. Suppose you have a list of Books and you want to sort them on price. You use Collections.sort() method which requires code to compare object because it does know sorting but doesn't know how to compare objects. 
-
-
-Now, how do you pass a block of code to a function in Java? You just can't. Java is an object-oriented language, so you must wrap the code inside a method and then wrap the method inside a class, and then create an object and pass that object to the function. This is painful isn't it?
-
-Anonymous class solved that problem by doing all that on the fly as shown in following example, but it has its own problems which is why Lambda expression was introduced and we will see it in this article:
-
+});
+```
+With Java 8, you can simplify this with a lambda expression:
+```java
+books.sort((b1, b2) -> b1.price - b2.price);
+```
+#### **Why Use Lambda Expressions?**
+1. **Conciseness**: Lambda expressions remove the boilerplate code, making it easier to read and write.
+2. **Reduced Memory Usage**: With lambda expressions, there’s no need to create a new class for each instance.
+3. **Functional Style**: Lambda expressions support functional-style programming, making your code more expressive.
+
+---
+
+### **Sorting a Map by Keys in Java 8**
+
+To sort a `Map` by keys, you can use the `Stream` API and collect the results into a `LinkedHashMap` to maintain order.
+
+#### **Example: Sorting a Map by Keys**
+```java
 import java.util.*;
 
-class Book {
-    int price;
-    String title;
+Map<String, Integer> budget = new HashMap<>();
+budget.put("grocery", 150);
+budget.put("utility", 130);
+budget.put("miscellaneous", 90);
+budget.put("rent", 1150);
+budget.put("clothes", 120);
+budget.put("transportation", 100);
 
-    public Book(int price, String title) {
-        this.price = price;
-        this.title = title;
-    }
-}
+Map<String, Integer> sorted = budget.entrySet()
+    .stream()
+    .sorted(Map.Entry.comparingByKey())
+    .collect(Collectors.toMap(
+        Map.Entry::getKey,
+        Map.Entry::getValue,
+        (e1, e2) -> e2, LinkedHashMap::new));
 
-public class Main {
-    public static void main(String[] args) {
-        List<Book> books = Arrays.asList(
-            new Book(100, "Building Microservices"),
-            new Book(200, "Microservices in Action"),
-            new Book(50, "Effective Java")
-        );
+System.out.println("Sorted Map: " + sorted);
+```
+This will sort the `Map` by its keys and store the result in a `LinkedHashMap` to preserve the order.
 
-        Collections.sort(books, new Comparator<Book>() {
-            @Override
-            public int compare(Book b1, Book b2) {
-                return b1.price - b2.price;
-            }
-        });
+---
 
-        for (Book b : books) {
-            System.out.println(b.title + " - $" + b.price);
-        }
-    }
-}
+### Conclusion
 
-The above Java program creates a Book class with two properties: price and title. Then, it creates a list of Book objects, sorts it using a custom Comparator object defined as an anonymous class, and prints the sorted books.
+This tutorial covered how to work with file permissions (read, write, and execute) in Java, the benefits of using `char[]` over `String` for sensitive data, replacing anonymous classes with lambda expressions, and sorting a `Map` by keys in Java 8. By leveraging these methods and best practices, you can write more secure, efficient, and readable Java code.
 
-If you look at the code of Anonymous class, you will find that only useful code which method needed was the comparison logic e.g. book1.getPrice()-> book2.getPrice() but you write a lot more code to facilitate that. 
+### 6 Steps to Sort a Map by Keys in Java 8
 
+Sorting a `Map` by keys in Java 8 is a straightforward process with the help of the Stream API. Here's a detailed breakdown of the steps:
 
-This boiler code makes your code ugly and less readable. Lambda expression solves this problem by removing all that boiler plat and only passing the crux of the code which matter, as shown below.
-Other important examples of using Anonymous class in Java are running code on separate thread and handling Events on GUI which I will explain later when I will update this article. 
+1. **Get All Entries from the Map:**
+   - Use the `entrySet()` method to obtain a `Set` view of the key-value pairs in the map.
 
-3 Examples of Anonymous Class to Learn Lambda Expression better in Java 8
+2. **Create a Stream from the Set:**
+   - Use the `stream()` method to create a stream of the map's entries, as `Set` inherits from `Collection`.
 
+3. **Sort the Stream by Keys:**
+   - Use the `sorted()` method to sort the entries. To sort by keys, you will use the `Map.Entry.comparingByKey()` comparator, which compares the map's keys in their natural order.
 
+4. **Provide a Comparator (Optional for Custom Sorting):**
+   - If you want to customize the sorting order, provide a comparator to the `sorted()` method. The `Map.Entry.comparingByKey()` method can be enhanced with a custom comparator.
 
+5. **Collect the Results into a LinkedHashMap:**
+   - Use the `collect()` method from the Stream API to gather the sorted entries into a `LinkedHashMap`. The `LinkedHashMap` preserves the order of insertion, making it ideal for this use case.
 
-Important points about Anonymous class and Lambda expression in Java
-Now, let's revise important points about both Anonymous class and Lambda Expression in Java:
+6. **Use `Collectors.toMap()` to Collect Entries:**
+   - `Collectors.toMap()` collects the entries into a map. The method accepts key and value mapping functions and allows for handling key collisions if necessary.
 
-1. Like it says, Anonymous class is a class without name i.e. Anonymous, hence it cannot be reused.
+### Java Code Example
 
-2. Anonymous class was one of the way to pass code to a method e.g. Collections.sort() which requires code for comparison, Runnable.run() which requires code to be run on separate thread, and Button.actionPerformed() which requires code to be executed when a button is clicked.
+Here’s a full Java program that demonstrates sorting a map by keys in ascending and descending order using Java 8 features:
 
-
-
-3. Lambda expression makes it easy to pass a block of code to a function by removing all the boiler plate surrounding it due to object-oriented nature of Java programming language. This block of code is also refer as Anonymous function, similar to what JavaScript has.
-
-4. You can also view lambda expression as method e.g. (int x, int y) ->> x + y is a method where left hand side is argument passed to method and right hand side is the code method execute and return the result of computation. 
-
-Since Java is strongly typed language, you can further take out type definition e.g. int, which reduces this lambda expression to x, y->> x + y. The return statement is also omitted as lambda expression implicitly return value.
-
-
-5. You can use lambda expression instead of Anonymous class in Java 8. This will make your code more expressive, clear and concise. It will also reduce memory footprint of compiled code because a new class will not be created for Anonymous class every time you use them.
-
-
-That's all about common example of Anonymous class in Java which can be used to learn Lambda expression better. Once you understand what Anonymous class do and why we used it Java e.g. for passing some code to a function, you will immediately realize what lambda expression is doing. This is way better than understanding lambda expression by reading tutorials on syntax and trying to write lambdas. 
-
-Once you understand purpose, syntax will flow naturally to you. Though, Anonymous class was not the only reason lambda expression was introduced, it also help to write functional style code in Java 8. I suggest you to read Java 8 in Action to learn more about motivation behind lambda expression and what it offer to Java world apart from solving the problem of Anonymous class.
-
-
-
-Read more: https://www.java67.com/2023/01/3-examples-of-anonymous-class-to-lambda.html#ixzz8hiZL1cke
-
-How to sort a Map by keys in Java 8 - Example Tutorial
-
-Hello Java friends, In the last article, I have shown you how to sort a Map by values in Java 8, and in this tutorial, you will learn how to sort a Map by keys like a HashMap, ConcurrentHashMap, LinkedHashMap, or even Hashtable. Theoretically, you cannot sort a Map because it doesn't provide any ordering guarantee. For example, when you iterate over a HashMap, you don't know in which order entries will be traversed because HashMap doesn't provide any ordering. Then, how can you sort a Map which doesn't support order? Well, you can't and that's why you only sort entries of HashMap but you don't store the result back into HasMap or any other Map which doesn't support ordering. If you do so, then sorting will be lost.
-
-
-
-Here is an example of incorrect sorting.
-
- Here even after sorting the Map, we are doing the mistake of storing the result back into a Map that doesn't provide any ordering guarantee, hence the result is an unordered map even after sorting.
-
-Map sorted = budget
-.entrySet()
-.stream()
-.sorted(comparingByKey())
-.collect(toMap(e -> e.getKey(), e -> e.getValue(), (e1, e2) -> e2));
-
-Here is the output to confirm what I said:
-map before sorting: {grocery=150, utility=130, miscellaneous=90,
- rent=1150, clothes=120, transportation=100}
-map after sorting by keys: {grocery=150, utility=130, miscellaneous=90,
- rent=1150, clothes=120, transportation=100}
-
-If Map was sorted then the "clothes" should have come first ahead of "grocery". The mistake was blindly relying on toMap() method of the Collectors class. This class provides no guarantee of what kind of Map will be used to collect those elements. 
-
-Since Map interface doesn't guarantee order, they are also not bound to store elements in any order. The same goes true for Set also, they also doesn't guarantee any order and only List is the collection which guarantees order. In fact, this is the most important difference between List, Set, and Map in Java. 
-
-
-
-However, it's easy to solve this problem because the Collectors class also provides an overloaded version of toMap() class which allows you to instruct which kind of Map should be used to store those entries. 
-
-You can use a LinkedHashMap to store mappings to preserve the sorting order because LinkedHashMap keeps keys in the order they were added. 
-
-Here is the modified code which sorts a Map in the order of keys:
-
-Map sorted = budget
-.entrySet()
-.stream()
-.sorted(comparingByKey())
-.collect(toMap(e -> e.getKey(), e -> e.getValue(),
-(e1, e2) -> e2), LinkedHashMap::new));
-
-The code passed into to toMap() method is interesting, the first parameter is used as a key, the second is used as a value and the third is used to break ties i.e. if two entries are equal then which entries will be chosen is decided by the third parameter, here we are using the second entry. 
-
-The fourth parameter is the important one, which uses a constructor reference to tell Collector that copying a LinkedHashMap should be used. 
-
-
-
-
-
-
-6 Steps to sort a Map by keys in Java 8
-Here are the high-level steps you can take to sort a Map e.g. HashMap, Hashtable, ConcurentHashMap, or LinkedHashMap to sort them in the ascending and descending order of their keys:
-
-1) Get all entries by calling the Map.entrySet() method
-
-2) Get a stream of entries by calling the stream() method, which Set inherit from the Collection interface.
-
-3) Sort all entries of Stream by calling the sorted() method.
-
-4) In order to sort them by keys, provide a Comparator to a sorted() method that sorts entries by keys. This can be done by calling Map.Entry.comparingKey() method returns a Comparator which compares keys in their natural order.
-
-5) Store the result of sorting in a LinkedHashMap by using the collect() method of Stream class.
-
-6) Use Collectors.toMap() method to collect sorted entries into LinkedHashMap
-
-Here is a block diagram which shows all the steps to sort a Map by key in Java:
-
-6 Steps to sort a Map by keys in Java 8
-
-
-
-
-
-
-
-Java Program to sort a Map by keys in JDK 8
-Here is the complete Java program to sort Map e.g. HashMap by keys in JDK 8. In this example, you will learn to sort Map by both lambda expression and method reference. 
-
-We'll also use new classes e.g. Stream and new methods added into Map.Entry class to sort all entries by their Map and store the result into a LinkedHashMap.
-
+```java
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
-
 import static java.util.stream.Collectors.*;
 import static java.util.Map.Entry.*;
 
-/*
-* Java Program to sort a Map by keys in Java 8
-* 
-*/
-public class Java8Demo{
+public class Java8MapSortExample {
 
-public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
+        
+        // Step 1: Create a sample Map
+        Map<String, Integer> budget = new HashMap<>();
+        budget.put("clothes", 120);
+        budget.put("grocery", 150);
+        budget.put("transportation", 100);
+        budget.put("utility", 130);
+        budget.put("rent", 1150);
+        budget.put("miscellaneous", 90);
 
-// a Map with string keys and integer values
-Map<String, Integer> budget = new HashMap<>();
-budget.put("clothes", 120);
-budget.put("grocery", 150);
-budget.put("transportation", 100);
-budget.put("utility", 130);
-budget.put("rent", 1150);
-budget.put("miscellneous", 90);
+        System.out.println("Map before sorting: " + budget);
 
-System.out.println("map before sorting: " + budget);
+        // Step 2-6: Sort the map by keys in ascending order
+        Map<String, Integer> sorted = budget
+            .entrySet()
+            .stream()
+            .sorted(comparingByKey()) // Ascending order by default
+            .collect(
+                toMap(
+                    Map.Entry::getKey, 
+                    Map.Entry::getValue, 
+                    (e1, e2) -> e2, 
+                    LinkedHashMap::new
+                )
+            );
 
-// let's sort this map by keys first
-Map<String, Integer> sorted = budget
-.entrySet()
-.stream()
-.sorted(comparingByKey())
-.collect(
-toMap(e -> e.getKey(), e -> e.getValue(),
-(e1, e2) -> e2, LinkedHashMap::new));
+        System.out.println("Map after sorting by keys in ascending order: " + sorted);
 
-System.out.println("map after sorting by keys: " + sorted);
+        // Step 2-6: Sort the map by keys in descending order
+        sorted = budget
+            .entrySet()
+            .stream()
+            .sorted(Collections.reverseOrder(comparingByKey())) // Descending order
+            .collect(
+                toMap(
+                    Map.Entry::getKey, 
+                    Map.Entry::getValue, 
+                    (e1, e2) -> e2, 
+                    LinkedHashMap::new
+                )
+            );
 
-// above code can be cleaned a bit by using method reference
-sorted = budget
-.entrySet()
-.stream()
-.sorted(comparingByKey())
-.collect(
-toMap(Map.Entry::getKey, Map.Entry::getValue,
-(e1, e2) -> e2, LinkedHashMap::new));
+        System.out.println("Map after sorting by keys in descending order: " + sorted);
+    }
+}
+```
+
+### Output
+
+```
+Map before sorting: {grocery=150, utility=130, miscellaneous=90, rent=1150, clothes=120, transportation=100}
+Map after sorting by keys in ascending order: {clothes=120, grocery=150, miscellaneous=90, rent=1150, transportation=100, utility=130}
+Map after sorting by keys in descending order: {utility=130, transportation=100, rent=1150, miscellaneous=90, grocery=150, clothes=120}
+```
+
+### Explanation:
+
+1. **Original Map:** 
+   - Before sorting, the `Map` is unordered.
+   
+2. **Sorting by Keys (Ascending Order):**
+   - The map entries are sorted based on the natural order of the keys, which are strings. In ascending order, "clothes" comes first, followed by "grocery," "miscellaneous," etc.
+   
+3. **Sorting by Keys (Descending Order):**
+   - The map entries are sorted by keys in descending order using `Collections.reverseOrder()`. In this case, "utility" comes first, followed by "transportation," "rent," and so on.
+
+### Key Points:
+- **Natural Ordering:** By default, `Map.Entry.comparingByKey()` compares the keys using their natural ordering (e.g., alphabetically for strings).
+- **Custom Ordering:** You can provide a custom comparator to `comparingByKey()` if you want to change the sorting order (e.g., by the length of the strings, case-insensitive, etc.).
+- **LinkedHashMap:** The use of `LinkedHashMap` ensures that the order of the entries is preserved after sorting.
+
+This approach leverages the full power of Java 8's Stream API and lambda expressions to create clean, concise, and readable code for sorting maps by keys.
 
 
-// now let's sort the map in decreasing order of keys
-sorted = budget
-.entrySet()
-.stream()
-.sorted(Collections.reverseOrder(Map.Entry.comparingByKey()))
-.collect(
-toMap(Map.Entry::getKey, Map.Entry::getValue,
-(e1, e2) -> e2, LinkedHashMap::new));
+Certainly! Below are Java Stream API-based solutions for the given problems:
 
-System.out.println("map after sorting by keys in descending order: " + sorted);
+### 1. **Fibonacci Series**  
+```java
+import java.util.stream.IntStream;
+
+public class Fibonacci {
+    public static void main(String[] args) {
+        int n = 10;  // Example input
+        IntStream.range(0, n).map(i -> fib(i)).forEach(System.out::println);
+    }
+
+    private static int fib(int n) {
+        return n <= 1 ? n : fib(n - 1) + fib(n - 2);
+    }
+}
+```
+
+### 2. **Prime Number Check**  
+```java
+import java.util.stream.IntStream;
+
+public class PrimeCheck {
+    public static boolean isPrime(int n) {
+        return n > 1 && IntStream.range(2, (int) Math.sqrt(n) + 1).noneMatch(i -> n % i == 0);
+    }
+
+    public static void main(String[] args) {
+        System.out.println(isPrime(7));  // true
+    }
+}
+```
+
+### 3. **String Palindrome**  
+```java
+import java.util.stream.IntStream;
+
+public class Palindrome {
+    public static boolean isPalindrome(String s) {
+        return IntStream.range(0, s.length() / 2)
+                        .allMatch(i -> s.charAt(i) == s.charAt(s.length() - 1 - i));
+    }
+
+    public static void main(String[] args) {
+        System.out.println(isPalindrome("madam"));  // true
+    }
+}
+```
+
+### 4. **Integer Palindrome**  
+```java
+public class IntegerPalindrome {
+    public static boolean isPalindrome(int num) {
+        int reversed = 0, original = num;
+        while (num > 0) {
+            reversed = reversed * 10 + num % 10;
+            num /= 10;
+        }
+        return original == reversed;
+    }
+
+    public static void main(String[] args) {
+        System.out.println(isPalindrome(121));  // true
+    }
+}
+```
+
+### 5. **Armstrong Number**  
+```java
+public class ArmstrongNumber {
+    public static boolean isArmstrong(int num) {
+        int digits = String.valueOf(num).length();
+        int sum = String.valueOf(num).chars()
+                                      .map(c -> (int) Math.pow(c - '0', digits))
+                                      .sum();
+        return sum == num;
+    }
+
+    public static void main(String[] args) {
+        System.out.println(isArmstrong(153));  // true
+    }
+}
+```
+
+### 6. **Avoiding Deadlock in Java**  
+This involves avoiding deadlocks by acquiring locks in a specific order, which doesn’t directly involve streams, but here's an example of a lock-acquisition order:
+```java
+class A {
+    synchronized void methodA(B b) {
+        b.lastMethod();
+    }
+    synchronized void lastMethod() {}
 }
 
+class B {
+    synchronized void methodB(A a) {
+        a.lastMethod();
+    }
+    synchronized void lastMethod() {}
+}
+```
+
+### 7. **Factorial**  
+```java
+import java.util.stream.LongStream;
+
+public class Factorial {
+    public static long factorial(int n) {
+        return LongStream.rangeClosed(1, n).reduce(1, (a, b) -> a * b);
+    }
+
+    public static void main(String[] args) {
+        System.out.println(factorial(5));  // 120
+    }
+}
+```
+
+### 8. **Reverse a String**  
+```java
+public class ReverseString {
+    public static String reverse(String str) {
+        return new StringBuilder(str).reverse().toString();
+    }
+
+    public static void main(String[] args) {
+        System.out.println(reverse("hello"));  // olleh
+    }
+}
+```
+
+### 9. **Remove Duplicates from an Array**  
+```java
+import java.util.stream.IntStream;
+
+public class RemoveDuplicates {
+    public static int[] removeDuplicates(int[] arr) {
+        return IntStream.of(arr).distinct().toArray();
+    }
+
+    public static void main(String[] args) {
+        int[] arr = {1, 2, 2, 3, 4, 4};
+        for (int num : removeDuplicates(arr)) {
+            System.out.print(num + " ");  // 1 2 3 4
+        }
+    }
+}
+```
+
+### 10. **Printing Patterns**  
+```java
+public class PrintPattern {
+    public static void printPattern(int n) {
+        IntStream.range(1, n + 1)
+                 .forEach(i -> System.out.println(" ".repeat(n - i) + "*".repeat(i)));
+    }
+
+    public static void main(String[] args) {
+        printPattern(5);
+    }
+}
+```
+
+### 11. **Print Repeated Characters of String**  
+```java
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
+public class RepeatedChars {
+    public static void printRepeatedChars(String str) {
+        str.chars()
+           .mapToObj(c -> (char) c)
+           .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()))
+           .entrySet()
+           .stream()
+           .filter(entry -> entry.getValue() > 1)
+           .forEach(entry -> System.out.println(entry.getKey()));
+    }
+
+    public static void main(String[] args) {
+        printRepeatedChars("programming");
+    }
+}
+```
+
+### 12. **GCD of Two Numbers**  
+```java
+import java.util.stream.IntStream;
+
+public class GCD {
+    public static int gcd(int a, int b) {
+        return IntStream.rangeClosed(1, Math.min(a, b))
+                        .filter(i -> a % i == 0 && b % i == 0)
+                        .max()
+                        .orElse(1);
+    }
+
+    public static void main(String[] args) {
+        System.out.println(gcd(56, 98));  // 14
+    }
+}
+```
+
+### 13. **Square Root of a Number**  
+```java
+public class SquareRoot {
+    public static double sqrt(double n) {
+        return Math.sqrt(n);
+    }
+
+    public static void main(String[] args) {
+        System.out.println(sqrt(25));  // 5.0
+    }
+}
+```
+
+### 14. **Reverse Array In Place**  
+```java
+import java.util.stream.IntStream;
+
+public class ReverseArray {
+    public static void reverseArray(int[] arr) {
+        IntStream.range(0, arr.length / 2)
+                 .forEach(i -> {
+                     int temp = arr[i];
+                     arr[i] = arr[arr.length - 1 - i];
+                     arr[arr.length - 1 - i] = temp;
+                 });
+    }
+
+    public static void main(String[] args) {
+        int[] arr = {1, 2, 3, 4, 5};
+        reverseArray(arr);
+        for (int num : arr) {
+            System.out.print(num + " ");  // 5 4 3 2 1
+        }
+    }
+}
+```
+
+### 15. **Reverse Words of a Sentence**  
+```java
+public class ReverseWords {
+    public static String reverseWords(String sentence) {
+        return String.join(" ", 
+                           java.util.Arrays.stream(sentence.split(" "))
+                                            .map(StringBuilder::new)
+                                            .map(StringBuilder::reverse)
+                                            .map(StringBuilder::toString)
+                                            .toArray(String[]::new));
+    }
+
+    public static void main(String[] args) {
+        System.out.println(reverseWords("Hello World"));  // "olleH dlroW"
+    }
+}
+```
+
+### 16. **Leap Year**  
+```java
+public class LeapYear {
+    public static boolean isLeapYear(int year) {
+        return (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0);
+    }
+
+    public static void main(String[] args) {
+        System.out.println(isLeapYear(2024));  // true
+    }
+}
+```
+
+### 17. **Binary Search**  
+```java
+import java.util.Arrays;
+
+public class BinarySearch {
+    public static boolean binarySearch(int[] arr, int target) {
+        return Arrays.stream(arr)
+                     .anyMatch(i -> i == target);
+    }
+
+    public static void main(String[] args) {
+        int[] arr = {1, 2, 3, 4, 5};
+        System.out.println(binarySearch(arr, 3));  // true
+    }
+}
+```
+
+### 18. **String Anagram Check**  
+```java
+import java.util.Arrays;
+
+public class AnagramCheck {
+    public static boolean isAnagram(String s1, String s2) {
+        return Arrays.equals(s1.chars().sorted().toArray(), s2.chars().sorted().toArray());
+    }
+
+    public static void main(String[] args) {
+        System.out.println(isAnagram("listen", "silent"));  // true
+    }
+}
+```
+
+Certainly! Here are Java Stream API-based solutions for problems 19 to 50:
+
+### 19. **Design a Vending Machine**  
+This is an object-oriented design problem. The stream API might not be directly applicable, but we can show how to use streams in some part of the design, such as handling item availability or transactions.
+
+```java
+import java.util.*;
+
+public class VendingMachine {
+    private Map<String, Integer> inventory = new HashMap<>();
+    private Map<String, Double> prices = new HashMap<>();
+
+    public VendingMachine() {
+        inventory.put("Soda", 10);
+        inventory.put("Chips", 10);
+        inventory.put("Candy", 10);
+        prices.put("Soda", 1.50);
+        prices.put("Chips", 1.00);
+        prices.put("Candy", 0.75);
+    }
+
+    public void purchase(String item) {
+        if (inventory.getOrDefault(item, 0) > 0) {
+            inventory.put(item, inventory.get(item) - 1);
+            System.out.println("Purchased " + item);
+        } else {
+            System.out.println("Item " + item + " is out of stock.");
+        }
+    }
+
+    public void displayItems() {
+        inventory.entrySet()
+                 .stream()
+                 .filter(entry -> entry.getValue() > 0)
+                 .forEach(entry -> System.out.println(entry.getKey() + ": $" + prices.get(entry.getKey())));
+    }
+
+    public static void main(String[] args) {
+        VendingMachine vm = new VendingMachine();
+        vm.displayItems();
+        vm.purchase("Soda");
+    }
+}
+```
+
+### 20. **Reverse a Number**  
+```java
+public class ReverseNumber {
+    public static int reverse(int num) {
+        return Integer.parseInt(new StringBuilder(String.valueOf(num)).reverse().toString());
+    }
+
+    public static void main(String[] args) {
+        System.out.println(reverse(12345));  // 54321
+    }
+}
+```
+
+### 21. **First Non-repeated Character of a String**  
+```java
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
+public class FirstNonRepeatedChar {
+    public static Character firstNonRepeatedCharacter(String str) {
+        return str.chars()
+                  .mapToObj(c -> (char) c)
+                  .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()))
+                  .entrySet()
+                  .stream()
+                  .filter(entry -> entry.getValue() == 1)
+                  .map(Map.Entry::getKey)
+                  .findFirst()
+                  .orElse(null);
+    }
+
+    public static void main(String[] args) {
+        System.out.println(firstNonRepeatedCharacter("swiss"));  // 'w'
+    }
+}
+```
+
+### 22. **Finding Middle Element of Linked List in One Pass**  
+```java
+class ListNode {
+    int val;
+    ListNode next;
+    ListNode(int val) { this.val = val; }
 }
 
-Output
-map before sorting: {grocery=150, utility=130, miscellneous=90, 
-       rent=1150, clothes=120, transportation=100}
-map after sorting by keys: {clothes=120, grocery=150, miscellaneous=90, 
-       rent=1150, transportation=100, utility=130}
-map after sorting by keys in descending order: {utility=130, 
-       transportation=100, rent=1150, miscellaneous=90, grocery=150, clothes=120}
-
-
-You can see that initially map was not sorted but it is later sorted in the order of keys, which are a string and that's why clothes come ahead of the grocery. 
-
-Similarly, when we sorted the map in descending order, clothes come last.
-
-This proves that our sorting code is working fine.
-
-
-If you want more sophistication and customization you can do that at the Comparator level and you can provide additional Comparator to comparingKey() method, which by default compare keys in their natural order.
-
-For example, if a key were not String but a user object e.g. a Book, then you could have sorted the book by title, author, or price by providing the corresponding comparator to comparingKey() method of java.util.Map.Entry class. Both comparingKey() and comparingValue() are overloaded to accept a Comparator. 
-
-Here is a nice diagram which shows both unsorted map and two sorted map which are sorted by key in ascending and descending order in Java:
-
-How to sort a Map by keys in Java 8 - Example Tutorial
-
-
-
-
-That's all about how to sort a Map by keys in Java 8. The simplest way to achieve this is by using the sorted() method of Stream and the newly added comparingKey() method of Map.Entry class. The stream sorts all elements and then depending upon your need, you can either print entries in sorted order or store them in an ordered map.
-
-For example, LinkedHashMap, or a sorted map like TreeMap. You can also sort entries in their reverse order by just reversing the Comparator using the Collections.reverseOrder() method or Comparator.reversed() method of Java 8.
-
-
-Read more: https://javarevisited.blogspot.com/2017/07/how-to-sort-map-by-keys-in-java-8.html#ixzz8hiZiGx1u
-
-Top 21 Java HashMap Interview Questions and Answers
-
-The java.util.HashMap is one of the workhorses of JDK. Along with ArrayList, it is one of the most used classes from Java's collection framework. There is hardly a real-world Java project, where I haven't seen the use of HashMap. It is an implementation of hash table data structure, and it's not a surprise that HashMap is so useful, as someone has rightly said, "if you could have just one data structure, make it a hash table". The hash table data structure allows you to search for a value in O(1) time if you have a key. In Java, several implementations of hash table data structures exist like Hashtable, ConcurrentHashMap, LinkedHashMap, etc. but HashMap is your general-purpose map.
-
-
-Though, if you have a special need, you can use other hash table implementations available in JDK. For example, if you want to preserve the order of mapping, then you can consider using LinkedHashMap. If you wish to keep mappings sorted, then you can use TreeMap, which is a sorted map implementation.
-
-Similarly, if you need a hash table implementation that is thread-safe and can be used in a concurrent application without compromising the Scalability, then consider using a ConcurrentHashMap from JDK 5.
-
-Btw, if you are new to the Java world and JDK API in particular, I suggest you first go through an online Java course like the ones I have recommended in my list of best free core Java courses.  That will not only help you to do well on interviews but also help you to understand the fundamentals better.
-
-
-
-
-
-
-Java HashMap Interview Questions
-Here is my list of HashMap questions from Java Interviews. This list includes questions based on the internal implementation of HashMap, the Map API, how you use HashMap, and standard best practices while using HashMap in a Java application.
-
-
-1. How does the put() method of HashMap works in Java? (answer)
-The put() method of HashMap works in the principle of hashing. It is responsible for storing an object into the backend array. The hashcode() method is used in conjunction with a hash function to find the correct location for the object into the bucket. If a collision occurs, then the entry object which contains both key and value is added to a linked list, and that linked list is stored into the bucket location.
-
-
-2. What is the requirement for an object to be used as a key or value in HashMap? (answer)
-The key or value object must implement the equals() and hashcode() method. The hash code is used when you insert the key object into the map while equals are used when you try to retrieve a value from the map.
-
-
-
-3. What will happen if you try to store a key that is already present in HashMap? (answer)
-If you store an existing key in the HashMap, then it will override the old value with the new value, and put() will return the old value. There will not be any exception or error.
-
-
-4. Can you store a null key in Java HashMap? (answer)
-Yes, HashMap allows one null key, which is stored at the first location of bucket array e.g., bucket[0] = value. The HashMap doesn't call hashCode() on the null key because it will throw NullPointerException, hence when a user call the get() method with null, then the value of the first index is returned.
-
-
-
-5. Can you store a null value inside HashMap in Java? (answer)
-Yes, HashMap also allows null value; you can store as many null values as you want, as shown in the hashmap example post in this blog.
-
-
-
-6. How does HashMap handle collisions in Java? (answer)
-
-The java.util.HashMap uses chaining to handle collisions, which means new entries, an object which contains both key and values, are stored in a linked list along with the existing value, and then that linked list is stored in the bucket location.
-
-In the worst case, where all key has the same hashcode, your hash table will be turned into a linked list, and searching a value will take O(n) time as opposed to O(1) time.
-
-
-
-If you want to learn more about hash table data structure, I suggest you consult a good data structure and algorithm course like these best data structures and algorithms courses, which not only cover basic data structure like an array, linked list, binary tree, and hash table but also advanced concepts like O(n) sorting algorithms, Radix sort, Counting sort, etc.
-
-Top 21 Java HashMap Interview Questions and Answers
-
-
-
-7. Which data structure HashMap represents? (answer)
-The HashMap is an implementation of hash table data structure, which is idle for mapping one value to other like id to name as you can search for value in O(1) time if you have the key.
-
-
-
-8. Which data structure is used to implement HashMap in Java? (answer)
-Even though HashMap represents a hash table, it is internally implemented by using an array and linked list data structure in JDK.  The array data structure is used as a bucket, while a linked list is used to store all mappings which land in the same bucket. From Java 8 onwards, the linked list is dynamically replaced by binary search tree, once a number of elements in the linked list cross a certain threshold to improve performance.
-
-
-
-9. Can you store a duplicate key in HashMap? (answer)
-No, you cannot insert duplicate keys in HashMap, it doesn't allow duplicate keys. If you try to insert an existing key with the new or same value, then it will override the old value, but the size of HashMap will not change i.e., it will remain the same. This is one of the reasons when you get all keys from the HashMap by calling keySet(). It returns a Set, not a Collection because Set doesn't allow duplicates.
-
-
-
-10. Can you store the duplicate value in Java HashMap? (answer)
-Yes, you can put duplicate values in HashMap of Java. It allows duplicate values; that's why when you retrieve all values from the Hashmap by calling the values() method, it returns a Collection and not a Set. Worth noting is that it doesn't return List because HashMap doesn't provide any ordering guarantee for key or value.
-
-
-
-If you want to explore, you can also see these online Java Collections courses to learn more about fundamental properties of different collections in Java, like List, Set, and Map.
-
-Java HashMap Interview Questions and Answers
-
-
-11. Is HashMap thread-safe in Java? (answer)
-No, HashMap is not a thread-safe in Java. You should not share a HashMap with multiple threads if one or more thread is modifying the HashMap e.g., inserting or removing a map. Though, you can easily share a read-only HashMap.
-
-
-12. What will happen if you use HashMap in a multithreaded Java application? (answer)
-If you use HashMap in a multithreaded environment in such a way that multiple threads structurally modify the map like add, remove or modify mapping, then the internal data structure of HashMap may get corrupt like some links may go missing, some may point to incorrect entries, and the map itself may become completely useless. Hence, it is advised not to use HashMap in the concurrent application; instead, you should use a thread-safe map e.g., ConcurrentHashMap or Hashtable.
-
-
-13. What are the different ways to iterate over HashMap in Java? (answer)
-Here are some of the ways to iterate over HashMap in Java:
-by using keySet and iterator
-by using entrySet and iterator
-by using entrySet and enhanced for loop
-by using keySet and get() method
-
-You can see this article for an example of each of these ways to traverse a HashMap in Java.
-
-
-14. How do you remove a mapping while iterating over HashMap in Java? (answer)
-Even though HashMap provides a remove() method to remove a key and a key/value pair, you cannot use them to remove a mapping while traversing a HashMap. Instead, you need to use the Iterator's remove method to remove a mapping as shown in the following example:
-
-Iterator itr = map.entrySet().iterator();
-
-while(itr.hasNext()){
-  Map.Entry current = itr.next();
-
-  if(current.getKey().equals("matching"){
-     itr.remove(); // this will remove the current entry.
-  }
+public class MiddleElement {
+    public static ListNode findMiddle(ListNode head) {
+        ListNode slow = head, fast = head;
+        while (fast != null && fast.next != null) {
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+        return slow;
+    }
+
+    public static void main(String[] args) {
+        ListNode head = new ListNode(1);
+        head.next = new ListNode(2);
+        head.next.next = new ListNode(3);
+        head.next.next.next = new ListNode(4);
+        head.next.next.next.next = new ListNode(5);
+        ListNode middle = findMiddle(head);
+        System.out.println(middle.val);  // 3
+    }
 }
-
-You can see that we have used Iterator.remove() method to remove the current entry while traversing the map. See this article to learn more about it.
-
-
-15. In which order mappings are stored in HashMap? (answer)
-Random order because HashMap doesn't provide any ordering guarantee for keys, values, or entries. When you iterate over a HashMap, you may get a different order every time you iterate over it.
-
-
-
-
-
-16. Can you sort HashMap in Java? (answer)
-No, you cannot sort a HashMap because, unlike List, it is not an ordered collection. Albeit, you can sort contents of HashMap by keys, values, or by entries by sorting and then storing the result into an ordered map like LinkedHashMap or a sorted map e.g., TreeMap.
-
-
-17. What is the load factor in HashMap? (answer)
-A load factor is a number that controls the resizing of HashMap when a number of elements in the HashMap cross the load factor as if the load factor is 0.75 and when becoming more than 75% full then resizing trigger which involves array copy.
-
-
-18. How does resize happens in HashMap? (answer)
-The resizing happens when the map becomes full or when the size of the map crosses the load factor. For example, if the load factor is 0.75 and then becomes more than 75% full, then resizing trigger, which involves an array copy. First, the size of the bucket is doubled, and then old entries are copied into a new bucket.
-
-
-19. How many entries you can store in HashMap? What is the maximum limit? (answer)
-There is no maximum limit for HashMap, you can store as many entries as you want because when you run out of the bucket, entries will be added to a linked list which can support an infinite number of entries, of course until you exhaust all the memory you have.
-
-Btw, the size() method of HashMap return an int, which has a limit, once a number of entries cross the limit, size() will overflow, and if your program relies on that, then it will break.
-
-
-
-This issue has been addressed in JDK 8 by introducing a new method called mappingCount(), which returns a long value. So, you should use mappingCount() for large maps. See Java SE 8 for Really Impatient to learn more about new methods introduced in existing interfaces in JDK 8.
-
-Top 10 Java HashMap Interview Questions and Answers
-
-
-
-21. What is the difference between the capacity and size of HashMap in Java? (answer)
-
-The capacity denotes how many entries HashMap can store, and size denotes how many mappings or key/value pair is currently present.
-
-
-21. What will happen if two different keys of HashMap return the same hashcode()? (answer)
-If two keys of HashMap return the same hash code, then they will end up in the same bucket; hence collision will occur. They will be stored in a linked list together.
-
-
-Read more: https://www.java67.com/2017/08/top-10-java-hashmap-interview-questions.html#ixzz8hia1tgIG
-
-Top 50 Java Programs from Coding Interviews
-Here is a big list of Java programs for Job Interviews. As I said, it includes questions from problem-solving, linked list, array, string, matrix, bitwise operators and other miscellaneous parts of programming. Once you are gone through these questions, you can handle a good number of questions on real Job interviews.
-
-1. Fibonacci series (solution)
-Write a simple Java program which will print Fibonacci series, e.g. 1 1 2 3 5 8 13 ... . up to a given number. We prepare for cross questions like using iteration over recursion and how to optimize the solution using caching and memoization.
-
-2. A prime number (solution)
-Write a Java program to check if a given number is prime or not. Remember, a prime number is a number which is not divisible by any other number, e.g. 3, 5, 7, 11, 13, 17, etc. Be prepared for cross, e.g. checking till the square root of a number, etc.
-
-3. String Palindrome (solution)
-You need to write a simple Java program to check if a given String is palindrome or not. A Palindrome is a String which is equal to the reverse of itself, e.g., "Bob" is a palindrome because of the reverse of "Bob" is also "Bob."  
-
-Though be prepared with both recursive and iterative solution of this problem. The interviewer may ask you to solve without using any library method, e.g. indexOf() or subString() so be prepared for that.
-
-
-
-4. Integer Palindrome (solution)
-This is generally asked as follow-up or alternative of the previous program. This time you need to check if given Integer is palindrome or not. An integer is called palindrome if it's equal to its reverse, e.g. 1001 is a palindrome, but 1234 is not because the reverse of 1234 is 4321 which is not equal to 1234. You can use divide by 10 to reduce the number and modulus 10 to get the last digit. This trick is used to solve this problem.
-
-5. Armstrong number (solution)
-A number is called an Armstrong number if it is equal to the cube of its every digit. For example, 153 is an Armstrong number because of 153= 1+ 125+27, which is equal to 1^3+5^3+3^3. You need to write a program to check if the given number is Armstrong number or not.
-
-
-6. Avoiding deadlock in Java (solution)
-This is one of the interesting programs from Java Interviews, mostly asked to 2 to 3 years of experienced programmers or higher. The interviewer simply asked you to write code where a resource is accessed by multiple threads. 
-
-You need to write code in such a way that no deadlock should occur. The trick to solving this problem is acquiring resources in order and release them in reverse order, e.g. first acquire resource R1 and only if you have got R1 to go for R2. This way, you can avoid deadlock.
-
-
-7. Factorial (solution)
-This is one of the simplest programs you can expect in interviews. It is generally asked to see if you can code or not. Sometimes interviewer may also ask about changing a recursive solution to iterative one or vice-versa.
-
-8. Reverse a String (solution)
-This problem is similar to the String Palindrome problem we have discussed above. If you can solve that problem, you can solve this as well. You can use indexOf() or substring() to reverse a String or alternatively, convert the problem to reverse an array by operating on character array instead of String. 
-
-
-9. Remove duplicates from an array (solution)
-Write a program to remove duplicates from an array in Java without using the Java Collection API. The array can be an array of String, Integer or Character, your solution should be independent of the type of array. If you want to practice more array-based questions, then see this list of top 30 array interview questions from Java interviews.
-
-
-10. Printing patterns (solutions)
-In this exercise you will be asked to print various kind of patterns like printing star patterns or printing pyramid patterns. Another common coding problem is printing left and right triangle of stars or numbers which require use of nested loops in Java. 
-
-
-11. Print repeated characters of String? (solution)
-This is another common coding interview questions where you need to print repeated characters like AAABBCCCC. You can solve this coding problem to learn about how to use loops and how to use break and continue to control the loop in Java. 
-
-
-12. GCD of two numbers (solution)
-GCD also known as Greatest Common divisor is a number which can fully divide the given two numbers. You can solve this problem either with brute force algorithms or you can also use Euclid's algorithm to find the GCD of two given numbers. 
-
-
-13. The square root of a number (solution)
-You need to write a program to calculate the square root of a number without using the Math.sqrt() function of JDK. You need to write your logic and method to calculate the square root. You can though use the popular algorithm, like Newton's method.
-
-
-14. Reverse array in place (solution)
-This one is my favorite coding exercise and I have asked this question multiple time on coding interviews. In place algorithms are quite useful while dealing with large data sets, for example if you have to reverse an array with 1 million objects then its very expensive to create another array of same size, at that time, this in place algorithm is a better choice. 
-
-15. Reverse words of a sentence (solution)
-
-16. Leap year (solution)
-
-17. Binary search (solution)
-
-18. String Anagram (solution)
-Write a program to check if two given String is Anagram of each other. Your function should return true if two Strings are Anagram, false otherwise. A string is said to be an anagram if it contains the same characters and same length, but in a different order, e.g. army and Mary are anagrams. You can ignore cases for this problem, but you should clarify that from your interview.
-
-
-
-19. Design a Vending Machine (solution)
-This one of the popular OOAD (object-oriented analysis and design) question from Java Interviews. You will be given 3 hours to design and code a vending machine satisfying some of the business requirements. You also need to write unit tests to prove your code satisfy those requirements. You can see this article for more object-oriented analysis questions.
-
-20. Reverse a number (solution)
-
-21. The first non-repeated character of String (solution)
-
-22. Finding Middle element of linked list in one pass (solution)
-
-23. Pre-order traversal (solution)
-
-24. Pre-order traversal without recursion (solution)
-
-25. In order traversal (solution)
-
-26. In order traversal without recursion (solution)
-
-27. Post-order traversal (solution)
-
-28. Postorder traversal without recursion (solution)
-
-29. Print all leaves of a binary tree (solution)
-
-
-30. Sort array using quicksort (solution)
-You need to write a Java program to sort an array of integers using a quick sort algorithm. You cannot use any library method, e.g. JDK or a third party library, which means, you need to first implement the quicksort algorithm and then sort the array.
-
-
-31. Insertion sort (solution)
-Write a program to implement the insertion sort algorithm in Java. The program should take an unsorted array and sort it using insertion sort algorithm Also explain the best case and worst case time and space complexity of the Insertion sort algorithm.
-
-32. Bubble sort (solution)
-Write a program to implement the bubble sort algorithm in Java. You can use basic operators and functions, but sorting functions from Java API is not allowed.
-
-33. Transpose a matrix (solution)
-
-34. Print all permutations of String (solution)
-Write a Java program to print all permutations of a given String. For example, if given String is "GOD" then your program should print all 6 permutations of this string, e.g. "GOD," "OGD," "DOG," "GDO," "ODG," and "DGO."
-
-Java Programming Interview Questions for 2 to 3 years
-
-
-35. Reverse a String in place (solution)
-
-36. Adding two matrices in Java (solution)
-
-37. Matrix multiplication (solution)
-
-38. Removal all white space from String (solution)
-
-39. Reverse a linked list (solution)
-Write a program to reverse a singly linked list in Java. You can use iteration and recursion to solve this problem, but you should reverse a linked list in place.
-
-Java Programming Interview Questions for experienced
-
-
-40. Find the length of the linked list (solution)
-Just write a program in Java to find the length of a singly linked list in one pass, i.e. in just one iteration of a singly linked list.
-
-
-41. Check if a linked list has a loop (solution)
-Write a program to check if given linked list has a loop or not. Sometimes a linked list get corrupt, and two nodes point to the same node, which forms the loop or cycle in the linked list.
-
-42. Find the start of loop in a linked list (solution)
-This is the extension of previous problem, once you are able to detect a loop in the linked list, the node where you deduct the loop becomes the starting point. 
-
-43. Find the middle element of a linked list (solution)
-You can find the middle element of a linked list by using two pointer coding interview patterns or slow and fast pointer approach where one pointer will be slow and move one step at a time and other will be fast and move two steps at a time. This way when first pointer will reach the end of the list, the second pointer will be at the middle element of the linked list. 
-
-44. Find the 3rd element from the tail linked list (solution)
-You need to write a program to find the 3rd element from the tail of a singly linked list. You need to solve this problem without iterating twice. If you want more linked list questions, you can see the article about frequently asked linked list interview questions.
-
-Java Coding Interview Questions
-
-
-
-44. Convert a linked list to a binary tree (solution)
-It's possible to convert a doubly-linked list to a binary tree, you need to write a Java program which takes a doubly-linked list and returns a binary tree.
-
-
-45. Sort a linked list (solution)
-You need to given an unsorted linked list, and you need to write a program in Java to sort them in ascending order of the values in each node.
-
-
-46. Iterative Quicksort (solution)
-You need to write a Java program to implement quicksort sorting algorithm without recursion. You can use essential JDK classes and programming constructs, but recursion is not allowed.
-
-
-46. Bucket sort (solution)
-This program is increasingly getting popular on Java interview because it sorts a given array in linear time. Though there is a lot of prerequisites, e.g. you must know the maximum value present in the array, it is a very interesting problem from interview point of view. 
-
-You need to write a program to implement a bucket sort algorithm in Java.
-
-
-
-47. Counting sort (solution)
-This is another problem which is similar to the previous one because counting sort is also a linear sorting algorithm. Just remember that bucket sort, and counting sort are different algorithms, so it's also good to state how they are different.
-
-
-48. Check if two string rotation of each other
-Write a program which accepts two given String and checks if they are the rotation of each. If they then return true otherwise return false. A String is said to be a rotation of other string if they contain same characters and the sequence is rotated across any character, e.g. "dabc" is a rotation of "abcd" but "dbac" is not.  If you want to practice more string-based questions, you can also see my list of 20 String-based algorithm questions from Java interviews.
-
-
-49. LRU cache in Java (solution)
-Write a program to implement an LRU cache in Java.  An LRU cache means Least Recently Used Cache which removes the least recently used element if the cache is full. You can use the  LinkedHashMap to implement LRU cache in Java.
-
-Java Programming Interview Questions
-
-
-
-50. Merge sort (solution)
-Implement the merge sort algorithm in Java. You can write a recursive or iterative solution, whichever you like. You also need to explain the time and space complexity for the best, worst, and average case. If you need hint, Merge sort is based on divide and conquer technique, where you divide a big array or list into small parts and then sort them individually and then merge it. 
-
-Java Programs from Programming Interviews
-
-
-Now, let's see a couple of System deign questions which you can also prepare for programming interviews:
-
-1. Difference between JWT, OAuth, and SAML? (answer)
-
-2. Reverse Proxy and Forward Proxy? (answer)
-
-3. Horizontal scaling and vertical scaling? (answer)
-
-4. Microservices and Monolithic architecture? (Answer)
-
-5. What is Rate Limiter? How does it work? (answer)
-
-6. API Gateway vs Load Balancer? [solution] 
-
-7. How does Single Sign On (SSO) works? (answer)
-
-8. How does Apache Kafka works? why it so fast? (answer)
-
-9. Difference between Kafka, ActiveMQ, and RabbitMQ? (answer)
-
-
-That's all about top 50 programs from Java interviews. You can practice these Java programs even if you are not preparing for any Job interview. They not only help you to do well on your programming job interviews but also on learning how to code and developing your programming skill and coding sense.
-
-These small programs touch several important areas, e.g. popular data structures like an array, linked list, binary tree, binary search tree, string, etc., popular algorithms, e.g. sieve of the Eratosthenes algorithm for generating primes, the Euclidean algorithm for calculating LCM, and GCF, Fibonacci sequence, printing patterns and so on.
-
-
-Read more: https://javarevisited.blogspot.com/2017/07/top-50-java-programs-from-coding-Interviews.html#ixzz8hiankN5z
-
-Java and OOP Overloading and Overriding Interview Questions
-Ok, let's start with questions. Here is my list of 17 method overloading and overriding interview question which covers basics as well as some tricky parts of overloading and overriding. You can also write some code to test the concept and see when the compiler gives an error and which method is get called at run-time.
-
-
-
-
-1) What is method overloading in Java?
-If you have two methods which do the same thing it's better they have the same name, but two methods cannot have the same name until you overload them. 
-
-So overloading is a process of declaring two methods with the same name but different method signature like System.out which is object of PrintStream class has several println() method to print different data types e.g. byte, short, int, char, float and double. All of them are called the overloaded method. 
-
-Overloaded method calls are resolved during compile time in Java and they must have different method signatures. See here to learn more about method overloading in Java.
-
-
-2) What is method overriding in Java?
-Method overriding is another way to define a method with same name but different code but it must be in subclass. Overriding is based upon run-time Polymorphism as method calls are resolved at run-time depending upon actual object.  
-
-For example if a variable of type Parent holds an object of Child class then method invoked will be from child class and not parent class, provides its overridden. 
-
-In order to override a method, you must follow rules of method overriding which means declaring method with same signature in sub class. See here to learn more about method overriding in Java.
-
-
-3) What is method hiding in Java?
-static method cannot be overriding in Java because their method calls are resolved at compile time but it didn't prevent you from declaring method with same name in sub class. In this case we say that method in sub class has hidden static method from parent class. 
-
-
-If you have a case where variable of Parent class is pointing to object of Child class then also static method from Parent class is called because overloading is resolved at compile time. See here to learn more about method hiding in Java.
-
-
-4) What are the rules of overloading a method in Java?
-One and only rule of method overloading in Java is that the method signature of all overloaded method must be different. 
-
-Method signature is changed by changing either number of method arguments, or type of method arguments e.g. System.out.println() method is overloaded to accept different primitive types like int, short, byte, float etc.
-
-They all accept just one argument but their type is different. You can also change method signature by changing order of method argument but that often leads to ambiguous code so better to be avoided. See here for full list of rules.
-
-
-5) Difference between method overloading and overriding?
-The fundamental difference between overloading and overriding is that formerly took place during compile time while later took place during run-time. 
-
-Due to this reason, its only possible to overload virtual methods in Java. You cannot overload methods which are resolved during compile time e.g. private, static and final method cannot be overridden in Java. 
-
-
-
-Also, rules of method overloading and overriding are different, for example in order to overload a method its method signature must be different but for the overriding method, it must be the same. See this image to learn more difference between overriding and overloading in Java.
-
-Method overloading and overriding interview questions and answers
-
-
-6) Can we overload static method in Java?
-Yes, its possible to overload static method in Java. You can declare as many static method with same name as you want until all of them have different method signature. Remember, return type is not part of method signature, so they must have either different number of arguments, or different type of argument. 
-
-There is a third option also which changes order of argument but I suggest not to do that because it often result in the ambiguous method call. It's very important to follow these best practices while overloading a static method in Java.
-
-
-7) Can we override static method in Java?
-No, you cannot override static method in Java because they are resolved and bonded during compile time. Since overriding is a run-time activity and if a method call is already resolved at compile time then it will not take place and that's why it's not possible to override static method in Java. 
-
-But, you can define another static method of same signature in sub class, this is known as method hiding. Actual method called will depends upon the type of class and not on type of object as its the case with overriding. See here to learn more about why you cannot override static method in Java.
-
-
-8) Can you prevent overriding a method without using final modifier?
-Yes, there are some funky ways to prevent method overriding in Java. Though final modifier is only for that purpose you can use private keyword to prevent method overriding. How? If you remember correctly, in order to override a method, the class must be extensible. 
-
-
-If you make the constructor of parent class private then its not possible to extend that class because its constructor will not be accessible in sub class, which is automatically invoked by sub class constructor, hence its not possible to override any method from that class. 
-
-This technique is used in Singleton design pattern, where constructor is purposefully made private and a static getInstance() method is provided to access singleton instance. See here to learn more techniques to prevent method overriding in Java.
-
-
-9) Can we override a private method in Java?
-No, you cannot override private method in Java. Since private methods are not visible outside the class, they are not available in sub-class hence they cannot be overridden. By the way, how about overriding a private method inside an Inner class? Is it possible? See here to learn more why you cannot override private method in Java.
-
-
-10) What is covariant method overriding?
-One of the rule of method overriding is that return type of overriding method must be same as overridden method but this restriction is relaxed little bit from Java 1.5 and now overridden method can return sub class of return type of original method. 
-
-This relaxation is known as co-variant method overriding and it allows you to remove casting at client end. 
-
-One of the best examples of this comes when you override clone() method. Original Object.clone() method returns Object which needs to cast, but with co-variant method overriding you can directly return relevant type e.g. Date class returns object of java.util.Date instead of java.lang.Object. See here to learn more about co-variant method overriding in Java.
-
-
-11) Can we change argument list of overridden method?
-No, you cannot change the argument list of overridden method in Java. An overriding method must have same signature as original method. Only return type can be changed that to only to sub type of return type of original method.
-
-
-12) Can we change return type of method in subclass while overriding?
-No, you cannot change the return type of method during overriding. It would be violation of rules of overriding. Though from Java 5 onward you can replace the return type with sub type e.g. if original method has return type as java.lang.Object then you can change return type of overridden method as any type e.g. clone() method. This is also known as co-variant method overriding in Java.
-
-
-13) Can we override a method which throws run-time exception without throws clause?
-Yes, you can. There is no restriction on throwing RuntimeException from overriding method. So if your original method throws NullPointerException than its not necessary to throw NPE from overriding method as well.
-
-
-14) How do you call super class version of an overriding method in sub class?
-You can call it using super keyword. For example if you have a method calculate() in both parent and child class then from child class you can invoke parent class method calculate() as super.calculate(). It's very similar to calling super class constructor from sub class as shown here.
-
-
-15) What are rules of method overriding in Java?
-Some rules of method overriding are following :
-Overriding method cannot throw higher exception than overridden one, but that's only true for checked exception.
-Overriding method cannot restrict access of overridden method e.g. if original method is public then overriding method must be public, but it can expand access e.g. if original method is protected than overriding method can be protected or public.
-See here for full list of rules of method overriding in Java.
-
-
-16) Can we override a non-static method as static in Java?
-No, its not possible to define a non-static method of same name as static method in parent class, its compile time error in Java. See here to learn more about the overriding static method in Java.
-
-
-17) Can we override the constructor in Java?
-No, you cannot override constructors in Java because they are not inherited. Remember, we are talking about overriding here not overloading, you can overload construct but you cannot override them.
-
-
-Overriding always happens in child class and since constructors are not inherited and their name is always the same as the class name it's not possible to override them in Java, to learn more about constructors see here
-
-
-18) Can we override a final method in Java?
-No, you cannot override a final method in Java. Trying to override a final method in a subclass will result in a compile-time error. Actually making a method final is signal to all developer that this method is not for inheritance and it should be used in its present form. You generally make a method final due to security reasons, to learn more see here.
-
-
-19) Can you overload or override the main method in Java?
-Since main() is a static method in Java, it follows rules associated with the static method, which means you can overload the main method but you cannot override it. 
-
-By the way, even if you overload the main method, JVM will always call the standard public static void main(String args[]) method to start your program, if you want to call your overloaded method you need to do it explicitly in your code as shown here.
-
-
-That's all about some Java interview questions from method overloading and overriding concept. I must admit it a tricky concept to master. I have seen even experienced developers struggling to solve quiz and multiple-choice questions based upon overloading and overriding. 
-
-
-Read more: https://www.java67.com/2015/08/top-10-method-overloading-overriding-interview-questions-answers-java.html#ixzz8hib6hutt
-
-
-1. What is the difference between Hashtable and HashMap in Java?
-This Java collection interview question is I guess the most popular one. Most of Java programmer who has at least 2 years of experience has seen this question on core Java interview. Well, there is much difference between them but most important is thread-safety, HashMap is not thread-safe while Hashtable is a thread-safe collection.
-
-Btw, If you want to learn more about essential Collection classes like HashMap and Hashtable then I highly recommend you check Java Fundamentals: Collections course by Richard Warburton on Pluralsight. It's a great course to learn about the Java Collection Framework in general. 
-
-Top 10 Java Collection interview Questions Answers for Beginners
-
-
-2. What is the difference between Hashtable and ConcurrentHashMap in Java?
-Another frequently asked Java collection interview question post-Java 5 world which introduced Concurrent Collection classes like ConcurrentHashMap and CopyOnWriteArrayList along with Concurrency utilities like CyclicBarrier and CountDownLatch.
-
-Well, both Hashtable and ConcurrentHashMap are thread-safe here but later provide more scalability than the former. You can further see the Difference between ConcurrentHashMap and Hashtable in Java for the answer to this Java collection interview question.
-
-
-3. What is the difference between Iterator and Enumeration in Java?
-One of the classic interview Questions asked on the Java collection framework, Which is pretty old and a programmer who has been working in Java for 4 to 6 years must have seen this question before. Well, Iterator and ListIterator in Java is a new way to iterator collection in Java and provides the ability to remove an object while traversing while Enumeration doesn't allow you to remove the object.  You can further see Iterator vs Enumeration in Java for more differences between both of them.
-
-
-4. What is the Difference between fail-safe and fail-fast Iterator in Java?
-This is a relatively new Java collection interview question because the concept of a fail-safe iterator is come along with ConcurrentHashMap and CopyOnWriteArrayList. See the Difference between fail-safe and fail-fast Iterator in Java for the answer to this Java collection question.
-
-
-5. How HashMap works internally in Java?
-One of the most frequently asked Java interview questions to experience Java programmer with 4 to 5 years of experience. I have seen this question on big companies like Morgan Stanley, JP Morgan, Nomura, and other banks like Barclays Capital. See How HashMap works internally in Java for a detailed answer to this Java collection interview question.
-
-
-6. Can you write code to traverse Map in Java in 4 ways?
-Another Java collection question appears as part of the Java Coding interview question and appeared in many interviews. As you know there are multiple ways to traverse or iterate Map in Java e.g. for loop, while loop using Iterator etc. 4 ways to iterator Map in Java has detailed explanation and sample code which is sufficient to answer this Java collection framework interview question.
-
-
-7. What is the difference between Vector and ArrayList in Java?
-Java Collection Interview Questions Answers | Java Collection FAQAlong with the Difference between HashMap and Hashtable, this Java collection interview question is probably second in the list of frequently asked questions on the Java collection framework. Both ArrayList and Vector implement List interface from Java 4 but they have differences including synchronization, See the difference between Vector and ArrayList in Java for the complete answer of this collection interview question in Java.
-
-
-8. What is the difference between ArrayList and LinkedList in Java?
-A follow-up question is asked in response to the previous Java collection interview question. Here also both LinkedList and ArrayList are List implementations but their internal data structure is different, one is derived from Array while the other is derived from LinkedList. See LinkedList vs ArrayList in Java to answer this Java Collection interview question.
-
-
-9. What is the difference between List and Set in Java?
-List vs Set is one of the most important concepts to understand in the Java Collection framework and this Java collection interview question focuses on that. The most important difference between them is that List allows duplicates and maintain insertion order while Set doesn't allow duplicates and doesn't maintain any order. See the Difference between Set and List in Java to see more differences between them.
-
-Here is also a nice summary of different collection classes in Java:
-
-Java Collection interview Questions Answers
-
-
-
-10. How do you find if ArrayList contains duplicates or not?
-Since List allows duplicates this becomes a follow-up question of earlier Java collection framework interview question. See How to check if ArrayList contains duplicates or not for the answer of this Java collection question.
-
-
-Read more: https://www.java67.com/2012/09/java-collection-interview-questions.html#ixzz8hibewzag
-
-1. What is the difference between the start and run method in Java Thread? (answer)
-This thread interview question is also asked as if the start() method eventually calls the run() method then why do you need to call the start() method, why not call the run() method directly. well, the reason is that because start method creates a new thread and calls the code written inside the run method on a new thread while calling the run method executes that code on the same thread. You can also see the article start vs run method in Java for more details.
-
-
-
-
-2. Write code to avoid deadlock in Java where N threads are accessing N shared resources? (answer)
-This is a classic Java multithreading interview question, which appears on almost every list of Java thread questions. This question is based on risks and issues faced by parallel programs without proper synchronization or incorrect synchronization.
-
-This question explores the concept of looking and best practices on acquiring and releasing the lock on shared resources. By the way, it's been covered in many places as well and I suggest reading  How to prevent deadlock in Java, not only for a detailed answer to this Java multithreading question but also to learn how to prevent deadlock in Java.
-
-thread interview questions for experience Java programmers
-
-
-
-
-
-3. Which one is better to implement thread in Java? extending Thread class or implementing Runnable? (answer)
-Well, this is another frequently asked question on any Java thread interview. Essentially these are two ways to implement Thread in Java, by extending the java.lang.Thread class or by implementing the java. lang.Runnable interface.
-
-By extending the class you are using your chance to extend one any only one class as Java does not support multiple inheritances, by implementing a Runnable interface you can still extend another class. So extending Runnable or even Callable is a better choice. You can also see the Runnable vs Thread class in Java for more answers to these questions.
-
-Given its simplicity and fact-based nature, this question mostly appears on either telephonic rounds or initial screening rounds. Key points to mention, while answering this question includes multiple Inheritance at the class level and separation of defining a task and execution of a task. Runnable only represents a task, while Thread represents both tasks and their execution.
-
-
-
-
-4. What is Busy Spinning? Why will you use Busy Spinning as a wait strategy? (answer)
-This is one of the advanced concurrency interview questions in Java and only asked to experienced and senior Java developers, with lots of concurrent coding experience under the belt. By the way, the concept of busy spinning is not new, but its usage with multi-core processors has risen recently.
-
-The busy waiting is a wait strategy, where one thread waits for a condition to become true, but instead of calling the wait or sleep method and releasing the CPU, it just spins. This is particularly useful if the condition is going to be true quite quickly i.e. in a millisecond or microsecond.
-
-The advantage of not releasing CPU is that all cached data and instruction remain unaffected, which may be lost, had this thread is suspended on one core and brought back to another thread. If you can answer this question, that rest assured of a good impression.
-
-
-5. What is the difference between CountDownLatch and CyclicBarrier in Java? (answer)
-CountDownLatch and CyclicBarrier in Java are two important concurrency utility which is added on Java 5 Concurrency API. Both are used to implement scenarios, where one thread has to wait for another thread before starting processing but there is a difference between them.
-
-The key point to mention, while answering this question is that CountDownLatch is not reusable once the count reaches zero, while CyclicBarrier can be reused even after the barrier is broken.
-
-You can also see my previous article difference between CyclicBarrier and CountDownLatch in Java for a more detailed answer to this concurrency interview question and a real-life example of where to use these concurrency utilities.
-
-
-
-
-6. What is the difference between wait and sleep in Java? (method)
-One more classic Java multithreading question from the telephonic round of interviews. The key point to mention while answering this question is to mention that wait will release the lock and must be called from the synchronized context, while sleep will only pause the thread for some time and keep the lock.
-
-By the way, both methods throw IntrupptedException and can be interrupted, which can lead to some follow-up questions like, can we awake a sleeping or waiting for a thread in Java? You can also read a detailed answer on my post of the same title here.
-
-thread interview questions with answers
-
-
-
-7. How do you solve the producer-consumer problem in Java? (solution)
-One of my favorite questions during any Java multithreading interview, Almost half of the concurrency problems can be categorized in the producer-consumer pattern. There are basically two ways to solve this problem in Java, One by using the wait and notify method and the other by using BlockingQueue in Java.  later is easy to implement and a good choice if you are coding in Java 5.
-
-The key points to mention, while answering this question is the thread-safety and blocking nature of BlockingQueue and how that helps, while writing concurrent code.
-
-You can also expect lots of follow-up questions including, what happens if you have multiple Producer threads or multiple consumers, what will happen if a producer is faster than a consumer thread, or vice-versa. You can also see this link for an example of how to code producer-consumer design in Java using a blocking queue
-
-
-
-8. Why is ConcurrentHashMap faster than Hashtable in Java? (answer)
-ConcurrentHashMap is introduced as an alternative to Hashtable in Java 5, it is faster because of its design. ConcurrentHashMap divides the whole map into different segments and only locks a particular segment during the update operation, instead of Hashtable, which locks the whole Map.
-
-The ConcurrentHashMap also provides a lock-free read, which is not possible in Hashtable, because of this and lock striping, ConcurrentHashMap is faster than Hashtable, especially when the number of the reader is more than the number of writers.
-
-In order to better answer this popular Java concurrency interview question, I suggest reading my post about the internal working of ConcurrentHashMap in Java.
-
-
-
-
-
-
-9. What is the difference between the submit() and execute() method of Executor and ExecutorService in Java? (answer)
-The main difference between submitting and execute methods from the ExecutorService interface is that the former returns a result in the form of a Future object, while the latter doesn't return a result. 
-
-
-By the way, both are used to submit a task to thread pool in Java but one is defined in the Executor interface, while the other is added into the ExecutorService interface. This multithreading interview question is also asked in the first round of Java interviews.
-
-
-10. How do you share data between two threads in Java? (answer)
-One more Java multithreading question from the telephonic round of interviews. You can share data between threads by using shared objects or shared data structures like Queue. Depending upon, what you are using, you need to provide the thread-safety guarantee, and one way of providing thread-safety is using a synchronized keyword.
-
-If you use concurrent collection classes from Java 5 e.g. BlockingQueue, you can easily share data without being bothered about thread safety and inter-thread communication. I like this thread question, because of its simplicity and effectiveness. This also leads further follow-up questions on issues that arise due to sharing data between threads e.g. race conditions.
-
-
-
-11. What is ReentrantLock in Java? Have you used it before? (answer)
-ReentrantLock is an alternative to the synchronized keyword in Java, it is introduced to handle some of the limitations of synchronized keywords. Many concurrency utility classes and concurrent collection classes from Java 5, including ConcurrentHashMap use ReentrantLock, to leverage optimization.
-
-The ReentrantLock mostly uses an atomic variable and faster CAS operation to provide better performance. Key points to mention are the difference between ReentrantLock and synchronized keywords in Java, which includes the ability to acquire lock interruptibly, timeout feature while waiting for a lock, etc.
-
-
-
- ReentrantLock also gives the option to create a fair lock in Java. Once again a very good Java concurrency interview question for experienced Java programmers. Courses like Java Multithreading for Senior Engineering Interviews course from Educative. also help you to prepare better and answer to the point.
-
-thread, concurrency and multi-threading questions for experienced Java programmers
-
-
-
-12. What is ReadWriteLock in Java? What is the benefit of using ReadWriteLock in Java? (answer)
-This is usually a follow-up question of previous Java concurrency questions. The  ReadWriteLock is again based upon the concept of lock striping, one of the advanced thread-safety mechanisms that advocates separating locks for reading and writing operations (see Java Concurrency in Practice Bundle by Heinz Kabutz for more details).
-
-If you have noticed before, reading operation can be done without locking if there is no writer and that can hugely improve the performance of any application. The ReadWriteLock leverages this idea and provides policies to allow maximum concurrency level. Java Concurrency API also provides an implementation of this concept as ReentrantReadWriteLock.
-
-Depending upon the Interviewer and experience of the candidate, you can even expect to provide your own implementation of ReadWriteLock, so be prepared for that as well.
-
-Here is a nice diagram that clearly explains the working of read-write lock in Java:
-
-Java Multithreading and Concurrency Interview Questions with Answers
-
-
-Read more: https://www.java67.com/2012/08/5-thread-interview-questions-answers-in.html#ixzz8hibztSYl
-
-How to avoid deadlock in Java? Example Tutorial and Tips
-
-How to avoid deadlock in Java? Is one of the popular Java interview question and flavor of the season for multi-threading, asked mostly at a senior level with lots of follow up questions. Even though the problem looks very basic but most of the Java developers get stuck once you start going deep. Interview questions start with, "What is a deadlock?" The answer is simple when two or more threads are waiting for each other to release the resource they need (lock) and get stuck for infinite time, the situation is called deadlock. It will only happen in the case of multitasking or multi-threading.
-
-
-
-Btw, if you are serious about mastering Java multi-threading and concurrency then I also suggest you take a look at the Java Multithreading, Concurrency, and Performance Optimization course by Michael Pogrebinsky on Udemy. It's an advanced course to become an expert in Multithreading, concurrency, and Parallel programming in Java with a strong emphasis on high performance
-
-
-How do you detect deadlock in Java?
-Though this could have many answers, my version is; first I would look at the code if I see a nested synchronized block or calling one synchronized method from other, or trying to get a lock on a different object then there is a good chance of deadlock if a developer is not very careful.
-
-Another way is to find it when you actually get dead-locked while running the application, try to take a thread dump, in Linux you can do this by the command "kill -3", this will print status of all threads in an application log file, and you can see which thread is locked on which object.
-
-You can analyze that thread dump with using tools like fastthread.io which allows you to upload your thread dump and analyze it.
-
-Another way is to use the jConsole/VisualVM, it will show you exactly which threads are getting locked and on which object.
-
-If you are interested to learn about troubleshooting tools and processes to analyze your thread dump, I suggest you take a look at Analyzing Java Thread Dumps course on Pluralsight by Uriah Levy. An advanced practical course to learn more about Java thread dumps, and familiarize you with other popular advanced troubleshooting tools.
-
-
-
-
-I also suggest you join the Java Concurrency in Practice Bundle by Heinz Kabutz, one of the most advanced course material to master concurrency and multi-threading in Java. It's based on the classic Java Concurrency in Practice book by Brian Goetz, which is a recommended reading for every Java developer.
-
-
-Write a Java program that will result in deadlock?
-Once you answer the earlier question, they may ask you to write code which will result in a deadlock in Java?
-
-here is one of my version
-
-/**
- * Java program to create a deadlock by imposing circular wait.
- * 
- * @author WINDOWS 8
- *
- */
-public class DeadLockDemo {
-
-    /*
-     * This method request two locks, first String and then Integer
-     */
-    public void method1() {
-        synchronized (String.class) {
-            System.out.println("Aquired lock on String.class object");
-
-            synchronized (Integer.class) {
-                System.out.println("Aquired lock on Integer.class object");
+```
+
+### 23. **Pre-order Traversal (Binary Tree)**  
+```java
+import java.util.*;
+
+public class PreOrderTraversal {
+    static class TreeNode {
+        int val;
+        TreeNode left, right;
+        TreeNode(int val) { this.val = val; }
+    }
+
+    public static List<Integer> preOrderTraversal(TreeNode root) {
+        List<Integer> result = new ArrayList<>();
+        preOrderHelper(root, result);
+        return result;
+    }
+
+    private static void preOrderHelper(TreeNode node, List<Integer> result) {
+        if (node != null) {
+            result.add(node.val);
+            preOrderHelper(node.left, result);
+            preOrderHelper(node.right, result);
+        }
+    }
+
+    public static void main(String[] args) {
+        TreeNode root = new TreeNode(1);
+        root.left = new TreeNode(2);
+        root.right = new TreeNode(3);
+        root.left.left = new TreeNode(4);
+        root.left.right = new TreeNode(5);
+        List<Integer> result = preOrderTraversal(root);
+        System.out.println(result);  // [1, 2, 4, 5, 3]
+    }
+}
+```
+
+### 24. **Pre-order Traversal Without Recursion**  
+```java
+import java.util.*;
+
+public class PreOrderTraversalIterative {
+    static class TreeNode {
+        int val;
+        TreeNode left, right;
+        TreeNode(int val) { this.val = val; }
+    }
+
+    public static List<Integer> preOrderTraversal(TreeNode root) {
+        List<Integer> result = new ArrayList<>();
+        if (root == null) return result;
+        
+        Stack<TreeNode> stack = new Stack<>();
+        stack.push(root);
+        while (!stack.isEmpty()) {
+            TreeNode node = stack.pop();
+            result.add(node.val);
+            if (node.right != null) stack.push(node.right);
+            if (node.left != null) stack.push(node.left);
+        }
+        return result;
+    }
+
+    public static void main(String[] args) {
+        TreeNode root = new TreeNode(1);
+        root.left = new TreeNode(2);
+        root.right = new TreeNode(3);
+        List<Integer> result = preOrderTraversal(root);
+        System.out.println(result);  // [1, 2, 3]
+    }
+}
+```
+
+### 25. **In-order Traversal (Binary Tree)**  
+```java
+import java.util.*;
+
+public class InOrderTraversal {
+    static class TreeNode {
+        int val;
+        TreeNode left, right;
+        TreeNode(int val) { this.val = val; }
+    }
+
+    public static List<Integer> inOrderTraversal(TreeNode root) {
+        List<Integer> result = new ArrayList<>();
+        inOrderHelper(root, result);
+        return result;
+    }
+
+    private static void inOrderHelper(TreeNode node, List<Integer> result) {
+        if (node != null) {
+            inOrderHelper(node.left, result);
+            result.add(node.val);
+            inOrderHelper(node.right, result);
+        }
+    }
+
+    public static void main(String[] args) {
+        TreeNode root = new TreeNode(1);
+        root.left = new TreeNode(2);
+        root.right = new TreeNode(3);
+        List<Integer> result = inOrderTraversal(root);
+        System.out.println(result);  // [2, 1, 3]
+    }
+}
+```
+
+### 26. **In-order Traversal Without Recursion**  
+```java
+import java.util.*;
+
+public class InOrderTraversalIterative {
+    static class TreeNode {
+        int val;
+        TreeNode left, right;
+        TreeNode(int val) { this.val = val; }
+    }
+
+    public static List<Integer> inOrderTraversal(TreeNode root) {
+        List<Integer> result = new ArrayList<>();
+        Stack<TreeNode> stack = new Stack<>();
+        TreeNode current = root;
+
+        while (current != null || !stack.isEmpty()) {
+            while (current != null) {
+                stack.push(current);
+                current = current.left;
+            }
+            current = stack.pop();
+            result.add(current.val);
+            current = current.right;
+        }
+        return result;
+    }
+
+    public static void main(String[] args) {
+        TreeNode root = new TreeNode(1);
+        root.left = new TreeNode(2);
+        root.right = new TreeNode(3);
+        List<Integer> result = inOrderTraversal(root);
+        System.out.println(result);  // [2, 1, 3]
+    }
+}
+```
+
+### 27. **Post-order Traversal (Binary Tree)**  
+```java
+import java.util.*;
+
+public class PostOrderTraversal {
+    static class TreeNode {
+        int val;
+        TreeNode left, right;
+        TreeNode(int val) { this.val = val; }
+    }
+
+    public static List<Integer> postOrderTraversal(TreeNode root) {
+        List<Integer> result = new ArrayList<>();
+        postOrderHelper(root, result);
+        return result;
+    }
+
+    private static void postOrderHelper(TreeNode node, List<Integer> result) {
+        if (node != null) {
+            postOrderHelper(node.left, result);
+            postOrderHelper(node.right, result);
+            result.add(node.val);
+        }
+    }
+
+    public static void main(String[] args) {
+        TreeNode root = new TreeNode(1);
+        root.left = new TreeNode(2);
+        root.right = new TreeNode(3);
+        List<Integer> result = postOrderTraversal(root);
+        System.out.println(result);  // [2, 3, 1]
+    }
+}
+```
+
+### 28. **Post-order Traversal Without Recursion**  
+```java
+import java.util.*;
+
+public class PostOrderTraversalIterative {
+    static class TreeNode {
+        int val;
+        TreeNode left, right;
+        TreeNode(int val) { this.val = val; }
+    }
+
+    public static List<Integer> postOrderTraversal(TreeNode root) {
+        List<Integer> result = new Array
+
+List<>();
+        if (root == null) return result;
+
+        Stack<TreeNode> stack = new Stack<>();
+        stack.push(root);
+        Stack<Integer> output = new Stack<>();
+
+        while (!stack.isEmpty()) {
+            TreeNode node = stack.pop();
+            output.push(node.val);
+            if (node.left != null) stack.push(node.left);
+            if (node.right != null) stack.push(node.right);
+        }
+
+        while (!output.isEmpty()) {
+            result.add(output.pop());
+        }
+        return result;
+    }
+
+    public static void main(String[] args) {
+        TreeNode root = new TreeNode(1);
+        root.left = new TreeNode(2);
+        root.right = new TreeNode(3);
+        List<Integer> result = postOrderTraversal(root);
+        System.out.println(result);  // [2, 3, 1]
+    }
+}
+```
+
+### 29. **Check if Binary Tree is Balanced**  
+```java
+public class BalancedBinaryTree {
+    static class TreeNode {
+        int val;
+        TreeNode left, right;
+        TreeNode(int val) { this.val = val; }
+    }
+
+    public static boolean isBalanced(TreeNode root) {
+        return height(root) != -1;
+    }
+
+    private static int height(TreeNode node) {
+        if (node == null) return 0;
+        int leftHeight = height(node.left);
+        int rightHeight = height(node.right);
+
+        if (leftHeight == -1 || rightHeight == -1 || Math.abs(leftHeight - rightHeight) > 1) {
+            return -1;  // Not balanced
+        }
+        return Math.max(leftHeight, rightHeight) + 1;
+    }
+
+    public static void main(String[] args) {
+        TreeNode root = new TreeNode(1);
+        root.left = new TreeNode(2);
+        root.right = new TreeNode(3);
+        System.out.println(isBalanced(root));  // true
+    }
+}
+```
+
+### 30. **Check if Binary Tree is Symmetric**  
+```java
+public class SymmetricTree {
+    static class TreeNode {
+        int val;
+        TreeNode left, right;
+        TreeNode(int val) { this.val = val; }
+    }
+
+    public static boolean isSymmetric(TreeNode root) {
+        return root == null || isMirror(root.left, root.right);
+    }
+
+    private static boolean isMirror(TreeNode left, TreeNode right) {
+        if (left == null && right == null) return true;
+        if (left == null || right == null) return false;
+        return left.val == right.val && isMirror(left.left, right.right) && isMirror(left.right, right.left);
+    }
+
+    public static void main(String[] args) {
+        TreeNode root = new TreeNode(1);
+        root.left = new TreeNode(2);
+        root.right = new TreeNode(2);
+        System.out.println(isSymmetric(root));  // true
+    }
+}
+```
+
+### 31. **Find Lowest Common Ancestor in Binary Tree**  
+```java
+public class LowestCommonAncestor {
+    static class TreeNode {
+        int val;
+        TreeNode left, right;
+        TreeNode(int val) { this.val = val; }
+    }
+
+    public static TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+        if (root == null || root == p || root == q) return root;
+
+        TreeNode left = lowestCommonAncestor(root.left, p, q);
+        TreeNode right = lowestCommonAncestor(root.right, p, q);
+
+        if (left != null && right != null) return root;
+        return left != null ? left : right;
+    }
+
+    public static void main(String[] args) {
+        TreeNode root = new TreeNode(3);
+        root.left = new TreeNode(5);
+        root.right = new TreeNode(1);
+        root.left.left = new TreeNode(6);
+        root.left.right = new TreeNode(2);
+        root.right.left = new TreeNode(0);
+        root.right.right = new TreeNode(8);
+        
+        TreeNode p = root.left;
+        TreeNode q = root.right;
+        TreeNode lca = lowestCommonAncestor(root, p, q);
+        System.out.println(lca.val);  // 3
+    }
+}
+```
+
+### 32. **Count the Number of Set Bits in an Integer**  
+```java
+public class CountSetBits {
+    public static int countSetBits(int num) {
+        return Integer.bitCount(num);
+    }
+
+    public static void main(String[] args) {
+        System.out.println(countSetBits(29));  // 4
+    }
+}
+```
+
+### 33. **Find Missing Number in an Array**  
+```java
+public class MissingNumber {
+    public static int findMissingNumber(int[] arr, int n) {
+        int sum = n * (n + 1) / 2;
+        for (int num : arr) {
+            sum -= num;
+        }
+        return sum;
+    }
+
+    public static void main(String[] args) {
+        int[] arr = {1, 2, 4, 5, 6};
+        System.out.println(findMissingNumber(arr, 6));  // 3
+    }
+}
+```
+
+### 34. **Find All Pairs That Sum to a Specific Target**  
+```java
+import java.util.*;
+
+public class FindPairs {
+    public static void findPairs(int[] arr, int target) {
+        Set<Integer> seen = new HashSet<>();
+        for (int num : arr) {
+            int complement = target - num;
+            if (seen.contains(complement)) {
+                System.out.println("Pair: (" + complement + ", " + num + ")");
+            }
+            seen.add(num);
+        }
+    }
+
+    public static void main(String[] args) {
+        int[] arr = {1, 2, 3, 4, 5};
+        findPairs(arr, 5);  // Pair: (2, 3) Pair: (1, 4)
+    }
+}
+```
+
+### 35. **Find the Majority Element in an Array**  
+```java
+import java.util.*;
+
+public class MajorityElement {
+    public static int majorityElement(int[] arr) {
+        int candidate = arr[0], count = 1;
+        for (int i = 1; i < arr.length; i++) {
+            if (arr[i] == candidate) {
+                count++;
+            } else {
+                count--;
+                if (count == 0) {
+                    candidate = arr[i];
+                    count = 1;
+                }
+            }
+        }
+        return candidate;
+    }
+
+    public static void main(String[] args) {
+        int[] arr = {3, 3, 4, 2, 4, 4, 2, 4, 4};
+        System.out.println(majorityElement(arr));  // 4
+    }
+}
+```
+
+### 36. **Sort an Array of 0s, 1s, and 2s (Dutch National Flag Problem)**  
+```java
+public class Sort012 {
+    public static void sort(int[] arr) {
+        int low = 0, mid = 0, high = arr.length - 1;
+        while (mid <= high) {
+            if (arr[mid] == 0) {
+                swap(arr, low++, mid++);
+            } else if (arr[mid] == 1) {
+                mid++;
+            } else {
+                swap(arr, mid, high--);
             }
         }
     }
 
-    /*
-     * This method also requests same two lock but in exactly
-     * Opposite order i.e. first Integer and then String. 
-     * This creates potential deadlock, if one thread holds String lock
-     * and other holds Integer lock and they wait for each other, forever.
-     */
-    public void method2() {
-        synchronized (Integer.class) {
-            System.out.println("Aquired lock on Integer.class object");
+    private static void swap(int[] arr, int i, int j) {
+        int temp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = temp;
+    }
 
-            synchronized (String.class) {
-                System.out.println("Aquired lock on String.class object");
-            }
+    public static void main(String[] args) {
+        int[] arr = {0, 1, 2, 1, 0, 2};
+        sort(arr);
+        for (int num : arr) {
+            System.out.print(num + " ");  // 0 0 1 1 2 2
         }
     }
 }
+```
 
+### 37. **Find the First Duplicate in an Array**  
+```java
+import java.util.HashSet;
 
-If method1() and method2() both will be called by two or many threads, there is a good chance of deadlock because if thread 1 acquires lock on String object while executing method1() and thread 2 acquires lock on Integer object while running method2() both will be waiting for each other to release the lock on Integer and String to proceed further which will never happen.
+public class FirstDuplicate {
+    public static int findFirstDuplicate(int[] arr) {
+        HashSet<Integer> set = new HashSet<>();
+        for (int num : arr) {
+            if (set.contains(num)) {
+                return num;
+            }
+            set.add(num);
+        }
+        return -1;  // No duplicates
+    }
 
-This diagram precisely demonstrates our program, where one thread holds a lock on one object and waiting for other object locks which are owned by other thread.
+    public static void main(String[] args) {
+        int[] arr = {1, 2, 3, 4, 2, 5};
+        System.out.println(findFirstDuplicate(arr));  // 2
+    }
+}
+```
 
-How do you avoid deadlock in Java?
+### 38. **Find the Peak Element in an Array**  
+```java
+public class PeakElement {
+    public static int findPeakElement(int[] arr) {
+        for (int i = 1; i < arr.length - 1; i++) {
+            if (arr[i] > arr[i - 1] && arr[i] > arr[i + 1]) {
+                return arr[i];
+            }
+        }
+        return arr[0] > arr[arr.length - 1] ? arr[0] : arr[arr.length - 1];
+    }
 
+    public static void main(String[] args) {
+        int[] arr = {1, 3, 20, 4, 1};
+        System.out.println(findPeakElement(arr));  // 20
+    }
+}
+```
 
-You can see that Thread 1 wants the lock on object 2 which is held by Thread 2, and Thread 2 wants a lock on Object 1 which is held by Thread 1. Since no thread is willing to give up, there is a deadlock, and the Java program is stuck.
+### 39. **Find the Longest Substring Without Repeating Characters**  
+```java
+import java.util.*;
 
-The idea is that you should know the right way to use common concurrent patterns, and if you are not familiar with them then Applying Concurrency and Multi-threading to Common Java Patterns by Jose Paumard is a good starting point to learn.
+public class LongestSubstring {
+    public static
 
+ int lengthOfLongestSubstring(String s) {
+        Set<Character> set = new HashSet<>();
+        int maxLength = 0;
+        int left = 0;
+        for (int right = 0; right < s.length(); right++) {
+            while (set.contains(s.charAt(right))) {
+                set.remove(s.charAt(left));
+                left++;
+            }
+            set.add(s.charAt(right));
+            maxLength = Math.max(maxLength, right - left + 1);
+        }
+        return maxLength;
+    }
 
+    public static void main(String[] args) {
+        System.out.println(lengthOfLongestSubstring("abcabcbb"));  // 3
+    }
+}
+```
 
-How to avoid deadlock in Java?
-Now the interviewer comes to the final part, one of the most important in my view; How do you fix a deadlock in code? Or How to avoid deadlock in Java?
+### 40. **Find the Longest Palindromic Substring**  
+```java
+public class LongestPalindrome {
+    public static String longestPalindrome(String s) {
+        if (s == null || s.length() < 1) return "";
 
+        int start = 0, maxLength = 1;
+        for (int i = 0; i < s.length(); i++) {
+            int len1 = expandFromCenter(s, i, i);
+            int len2 = expandFromCenter(s, i, i + 1);
+            int len = Math.max(len1, len2);
 
+            if (len > maxLength) {
+                maxLength = len;
+                start = i - (len - 1) / 2;
+            }
+        }
+        return s.substring(start, start + maxLength);
+    }
 
-If you have looked above code carefully, then you may have figured out that real reason for the deadlock is not multiple threads but the way they are requesting a lock, if you provide ordered access then the problem will be resolved.
+    private static int expandFromCenter(String s, int left, int right) {
+        while (left >= 0 && right < s.length() && s.charAt(left) == s.charAt(right)) {
+            left--;
+            right++;
+        }
+        return right - left - 1;
+    }
 
+    public static void main(String[] args) {
+        System.out.println(longestPalindrome("babad"));  // "bab"
+    }
+}
+```
 
+### 41. **Find All Anagrams in a String**  
+```java
+import java.util.*;
 
-Here is my fixed version, which avoids deadlock by avoiding circular wait with no preemption, one of the four conditions which need for deadlock.
+public class FindAnagrams {
+    public static List<Integer> findAnagrams(String s, String p) {
+        List<Integer> result = new ArrayList<>();
+        if (s.length() < p.length()) return result;
 
-public class DeadLockFixed {
+        Map<Character, Integer> pMap = new HashMap<>();
+        for (char c : p.toCharArray()) {
+            pMap.put(c, pMap.getOrDefault(c, 0) + 1);
+        }
 
-    /**
-     * Both method are now requesting lock in same order, 
-     * first Integer and then String.
-     * You could have also done reverse e.g. first String and then Integer,
-     * both will solve the problem, as long as both method are requesting lock
-     * in consistent order.
-     */
-    public void method1() {
-        synchronized (Integer.class) {
-            System.out.println("Aquired lock on Integer.class object");
+        Map<Character, Integer> sMap = new HashMap<>();
+        for (int i = 0; i < p.length(); i++) {
+            sMap.put(s.charAt(i), sMap.getOrDefault(s.charAt(i), 0) + 1);
+        }
 
-            synchronized (String.class) {
-                System.out.println("Aquired lock on String.class object");
+        if (sMap.equals(pMap)) result.add(0);
+
+        for (int i = p.length(); i < s.length(); i++) {
+            sMap.put(s.charAt(i), sMap.getOrDefault(s.charAt(i), 0) + 1);
+            sMap.put(s.charAt(i - p.length()), sMap.get(s.charAt(i - p.length())) - 1);
+            if (sMap.get(s.charAt(i - p.length())) == 0) sMap.remove(s.charAt(i - p.length()));
+
+            if (sMap.equals(pMap)) {
+                result.add(i - p.length() + 1);
+            }
+        }
+        return result;
+    }
+
+    public static void main(String[] args) {
+        System.out.println(findAnagrams("cbaebabacd", "abc"));  // [0, 6]
+    }
+}
+```
+
+### 42. **Find Duplicate Subtrees in a Binary Tree**  
+```java
+import java.util.*;
+
+public class DuplicateSubtrees {
+    static class TreeNode {
+        int val;
+        TreeNode left, right;
+        TreeNode(int val) { this.val = val; }
+    }
+
+    public static List<TreeNode> findDuplicateSubtrees(TreeNode root) {
+        Map<String, Integer> map = new HashMap<>();
+        List<TreeNode> result = new ArrayList<>();
+        serialize(root, map, result);
+        return result;
+    }
+
+    private static String serialize(TreeNode node, Map<String, Integer> map, List<TreeNode> result) {
+        if (node == null) return "#";
+
+        String left = serialize(node.left, map, result);
+        String right = serialize(node.right, map, result);
+
+        String subTree = left + "," + right + "," + node.val;
+
+        map.put(subTree, map.getOrDefault(subTree, 0) + 1);
+        if (map.get(subTree) == 2) result.add(node);
+
+        return subTree;
+    }
+
+    public static void main(String[] args) {
+        TreeNode root = new TreeNode(1);
+        root.left = new TreeNode(2);
+        root.right = new TreeNode(3);
+        root.left.left = new TreeNode(4);
+        root.left.right = new TreeNode(2);
+        root.left.right.left = new TreeNode(4);
+        root.right.right = new TreeNode(3);
+        
+        List<TreeNode> duplicates = findDuplicateSubtrees(root);
+        System.out.println(duplicates.size());  // 2
+    }
+}
+```
+
+### 43. **Merge Intervals**  
+```java
+import java.util.*;
+
+public class MergeIntervals {
+    public static int[][] merge(int[][] intervals) {
+        if (intervals.length == 0) return intervals;
+
+        Arrays.sort(intervals, Comparator.comparingInt(a -> a[0]));
+        List<int[]> merged = new ArrayList<>();
+        merged.add(intervals[0]);
+
+        for (int i = 1; i < intervals.length; i++) {
+            int[] last = merged.get(merged.size() - 1);
+            if (intervals[i][0] <= last[1]) {
+                last[1] = Math.max(last[1], intervals[i][1]);
+            } else {
+                merged.add(intervals[i]);
+            }
+        }
+
+        return merged.toArray(new int[merged.size()][]);
+    }
+
+    public static void main(String[] args) {
+        int[][] intervals = {{1,3},{2,6},{8,10},{15,18}};
+        int[][] merged = merge(intervals);
+        for (int[] interval : merged) {
+            System.out.println(Arrays.toString(interval));  // [1, 6] [8, 10] [15, 18]
+        }
+    }
+}
+```
+
+### 44. **Find the Kth Largest Element in an Array**  
+```java
+import java.util.*;
+
+public class KthLargestElement {
+    public static int findKthLargest(int[] nums, int k) {
+        PriorityQueue<Integer> pq = new PriorityQueue<>();
+        for (int num : nums) {
+            pq.add(num);
+            if (pq.size() > k) pq.poll();
+        }
+        return pq.peek();
+    }
+
+    public static void main(String[] args) {
+        int[] nums = {3, 2, 1, 5, 6, 4};
+        System.out.println(findKthLargest(nums, 2));  // 5
+    }
+}
+```
+
+### 45. **Find the Subarray with the Maximum Sum**  
+```java
+public class MaxSubarraySum {
+    public static int maxSubArray(int[] nums) {
+        int maxSum = nums[0], currentSum = nums[0];
+        for (int i = 1; i < nums.length; i++) {
+            currentSum = Math.max(nums[i], currentSum + nums[i]);
+            maxSum = Math.max(maxSum, currentSum);
+        }
+        return maxSum;
+    }
+
+    public static void main(String[] args) {
+        int[] nums = {-2, 1, -3, 4, -1, 2, 1, -5, 4};
+        System.out.println(maxSubArray(nums));  // 6
+    }
+}
+```
+
+### 46. **Find the Longest Increasing Subsequence**  
+```java
+import java.util.*;
+
+public class LongestIncreasingSubsequence {
+    public static int lengthOfLIS(int[] nums) {
+        if (nums.length == 0) return 0;
+        
+        int[] dp = new int[nums.length];
+        Arrays.fill(dp, 1);
+
+        for (int i = 1; i < nums.length; i++) {
+            for (int j = 0; j < i; j++) {
+                if (nums[i] > nums[j]) {
+                    dp[i] = Math.max(dp[i], dp[j] + 1);
+                }
+            }
+        }
+
+        return Arrays.stream(dp).max().getAsInt();
+    }
+
+    public static void main(String[] args) {
+        int[] nums = {10, 9, 2, 5, 3, 7, 101, 18};
+        System.out.println(lengthOfLIS(nums));  // 4
+    }
+}
+```
+
+### 47. **Find the Longest Common Subsequence**  
+```java
+public class LongestCommonSubsequence {
+    public static int longestCommonSubsequence(String text1, String text2) {
+        int[][] dp = new int[text1.length() + 1][text2.length() + 1];
+        
+        for (int i = 1; i <= text1.length(); i++) {
+            for (int j = 1; j <= text2.length(); j++) {
+                if (text1.charAt(i - 1) == text2.charAt(j - 1)) {
+                    dp[i][j] = dp[i - 1][j - 1] + 1;
+                } else
+
+ {
+                    dp[i][j] = Math.max(dp[i - 1][j], dp[i][j - 1]);
+                }
+            }
+        }
+        return dp[text1.length()][text2.length()];
+    }
+
+    public static void main(String[] args) {
+        String text1 = "abcde", text2 = "ace";
+        System.out.println(longestCommonSubsequence(text1, text2));  // 3
+    }
+}
+```
+
+Here are solutions for problems 48 to 50 using Java:
+
+### 48. **Bucket Sort**  
+```java
+import java.util.*;
+
+public class BucketSort {
+    public static void bucketSort(float[] arr) {
+        if (arr == null || arr.length <= 1) return;
+
+        // Step 1: Create empty buckets
+        int n = arr.length;
+        @SuppressWarnings("unchecked")
+        List<Float>[] buckets = new List[n];
+
+        for (int i = 0; i < n; i++) {
+            buckets[i] = new ArrayList<>();
+        }
+
+        // Step 2: Put elements in different buckets
+        for (float num : arr) {
+            int index = (int) (num * n); // Multiply by n to find the bucket
+            buckets[index].add(num);
+        }
+
+        // Step 3: Sort individual buckets and concatenate
+        int index = 0;
+        for (List<Float> bucket : buckets) {
+            Collections.sort(bucket);
+            for (float num : bucket) {
+                arr[index++] = num;
             }
         }
     }
 
-    public void method2() {
-        synchronized (Integer.class) {
-            System.out.println("Aquired lock on Integer.class object");
+    public static void main(String[] args) {
+        float[] arr = {0.42f, 0.32f, 0.23f, 0.52f, 0.34f};
+        bucketSort(arr);
+        System.out.println(Arrays.toString(arr));  // [0.23, 0.32, 0.34, 0.42, 0.52]
+    }
+}
+```
 
-            synchronized (String.class) {
-                System.out.println("Aquired lock on String.class object");
+### 49. **Counting Sort**  
+```java
+import java.util.*;
+
+public class CountingSort {
+    public static void countingSort(int[] arr) {
+        if (arr == null || arr.length <= 1) return;
+
+        int max = Arrays.stream(arr).max().getAsInt();
+        int min = Arrays.stream(arr).min().getAsInt();
+
+        int range = max - min + 1;
+        int[] count = new int[range];
+        
+        // Step 1: Count the occurrences of each element
+        for (int num : arr) {
+            count[num - min]++;
+        }
+
+        // Step 2: Update the array with sorted elements
+        int index = 0;
+        for (int i = 0; i < range; i++) {
+            while (count[i]-- > 0) {
+                arr[index++] = i + min;
             }
         }
     }
+
+    public static void main(String[] args) {
+        int[] arr = {4, 2, 2, 8, 3, 3, 1};
+        countingSort(arr);
+        System.out.println(Arrays.toString(arr));  // [1, 2, 2, 3, 3, 4, 8]
+    }
 }
+```
 
+### 50. **Check if Two Strings are Rotations of Each Other**  
+```java
+public class StringRotation {
+    public static boolean areRotations(String s1, String s2) {
+        if (s1 == null || s2 == null || s1.length() != s2.length()) {
+            return false;
+        }
 
-Now there would not be any deadlock because both methods are accessing lock on Integer and String class literal in the same order. So, if thread A acquires a lock on Integer object, thread B will not proceed until thread A releases Integer lock, same way thread A will not be blocked even if thread B holds String lock because now thread B will not expect thread A to release Integer lock to proceed further.
+        // Step 1: Concatenate s1 with itself
+        String concatenated = s1 + s1;
 
+        // Step 2: Check if s2 is a substring of the concatenated string
+        return concatenated.contains(s2);
+    }
 
-Read more: https://javarevisited.blogspot.com/2018/08/how-to-avoid-deadlock-in-java-threads.html#ixzz8hicQQTML
-
-How to use ConcurrentHashMap in Java - Example Tutorial and Working
-
-ConcurrentHashMap in Java is introduced as an alternative of Hashtable in Java 1.5 as part of the Java concurrency package. Prior to Java 1.5 if you need a Map implementation, which can be safely used in a concurrent and multi-threaded Java program, then, you only have Hashtable or synchronized Map because HashMap is not thread-safe. With ConcurrentHashMap, now you have a better choice; because not only it can be safely used in the concurrent multi-threaded environment but also provides better performance over Hashtable and synchronizedMap.
-
-
-
-ConcurrentHashMap performs better than the earlier two because it only locks a portion of Map, instead of the whole Map, which is the case with Hashtable and synchronized Map. CHM allows concurred to read operations and at the same time maintains integrity by synchronizing write operations.
-
- We have seen the basics of ConcurrentHashMap on Top 5 Java Concurrent Collections from JDK 5 and 6 and in this Java tutorial, we will learn:
-
-Ø       How ConcurrentHashMap works in Java or how it is implemented in Java.
-Ø       When to use ConcurrentHashMap in Java
-Ø       ConcurrentHashMap examples in Java
-Ø       And some important properties of CHM.
-
-
-And, If you are new to the Java world then I also recommend you go through these free online Java courses from Udemy to learn Java in a better and more structured way. This is one of the best and up-to-date courses to learn Java online.
-
-How ConcurrentHashMap is implemented in Java
-ConcurrentHashMap is introduced as an alternative of Hashtable and provided all functions supported by Hashtable with an additional feature called "concurrency level", which allows ConcurrentHashMap to partition Map. ConcurrentHashMap allows multiple readers to read concurrently without any blocking. 
-
-This is achieved by partitioning Map into different parts based on concurrency level and locking only a portion of Map during updates. The default concurrency level is 16, and accordingly, Map is divided into 16 part and each part is governed with a different lock. 
-
-This means, 16 threads can operate on Map simultaneously until they are operating on a different part of Map. This makes ConcurrentHashMap high performance despite keeping thread-safety intact.  Though, it comes with a caveat. Since update operations like put(), remove(), putAll() or clear() is not synchronized, concurrent retrieval may not reflect most recent change on Map.
-
-
-
-
-
-In the case of putAll() or clear(), which operates on the whole Map, the concurrent read may reflect insertion and removal of only some entries. Another important point to remember is iteration over CHM, Iterator returned by keySet of ConcurrentHashMap are weekly consistent and they only reflect the state of ConcurrentHashMap and certain point and may not reflect any recent change. Iterator of ConcurrentHashMap's keySet area also fail-safe and doesn’t throw ConcurrentModificationExceptoin..
-
-Default concurrency level is 16 and can be changed, by providing a number that makes sense and works for you while creating ConcurrentHashMap. Since concurrency level is used for internal sizing and indicates a number of concurrent update without contention, so, if you just have few writers or thread to update Map keeping it low is much better. ConcurrentHashMap also uses ReentrantLock to internally lock its segments.
-
-Internal implementation of ConcurrentHashMap in Java
-
-And, If you are new to the Java world then I also recommend you go through these best Java online courses from Udemy and Coursera to learn Java in a better and more structured way. This is one of the best and up-to-date courses to learn Java online.
-
-
-
-ConcurrentHashMap putifAbsent example in Java
-ConcurrentHashMap examples are similar to Hashtable examples, we have seen earlier,  but worth knowing is the use of putIfAbsent() method. Many times we need to insert entry into Map if it's not present already, and we wrote following kind of code:
-
-synchronized(map){
-  if (map.get(key) == null){
-      return map.put(key, value);
-  } else{
-      return map.get(key);
-  }
+    public static void main(String[] args) {
+        System.out.println(areRotations("abcde", "cdeab"));  // true
+        System.out.println(areRotations("abc", "acb"));  // false
+    }
 }
+```
 
-Though this code will work fine in HashMap and Hashtable, This won't work in ConcurrentHashMap; because, during put operation whole map is not locked, and while one thread is putting value, other thread's get() call can still return null which results in one thread overriding value inserted by other thread. 
+### Explanation:
+- **Bucket Sort**: This algorithm distributes the elements into several "buckets" and sorts each bucket individually (typically using another sorting algorithm like insertion sort or quicksort). Afterward, it concatenates all the sorted buckets.
+  
+- **Counting Sort**: A non-comparative sorting algorithm that counts the frequency of each distinct element in the array and uses this count to place the elements in their correct positions. It is particularly efficient when the range of input values is not large.
 
-Of course, you can wrap the whole code in the synchronized block and make it thread-safe but that will only make your code single-threaded. ConcurrentHashMap provides putIfAbsent(key, value) which does the same thing but atomically and thus eliminates the above race condition. 
+- **String Rotation Check**: This problem checks if one string is a rotation of another. By concatenating the first string with itself and checking if the second string is a substring of this concatenated string, we can efficiently determine if the two strings are rotations of each other.
 
+Let me know if you need further explanations or modifications!
 
-See Core Java for Inpatients for more details about how to use this method effectively:
 
 
-ConcurrentHashMap putIfAbsent() example in Java
 
 
 
-When to use ConcurrentHashMap in Java
-Java ConcurrentHashMap Example Tutorial and internal working
-ConcurrentHashMap is best suited when you have multiple readers and a few writers. If writers outnumber the reader, or the writer is equal to the reader, then the performance of ConcurrentHashMap effectively reduces to synchronized map or Hashtable. Performance of CHM drops, because you got to lock all portions of Map, and effectively each reader will wait for another writer, operating on that portion of Map. ConcurrentHashMap is a good choice for caches, which can be initialized during application startup and later accessed by many request processing threads. 
 
-As JavaDoc states, CHM is also a good replacement of Hashtable and should be used whenever possible, keeping in mind, that CHM provides a slightly weaker form of synchronization than Hashtable.
 
 
 
 
-Summary
-Now we know What is ConcurrentHashMap in Java and when to use ConcurrentHashMap, it’s time to know and revise some important points about CHM in Java.
+Here are the answers to the System Design and Java-related interview questions:
 
-1. ConcurrentHashMap allows concurrent read and thread-safe update operation.
+### 1. **Difference between JWT, OAuth, and SAML?**
 
-2. During the update operation, ConcurrentHashMap only locks a portion of Map instead of whole Map.
+- **JWT (JSON Web Token)**: A compact, URL-safe means of representing claims to be transferred between two parties. It is used for secure information exchange and typically used in stateless authentication. JWT is often used in conjunction with OAuth for securing APIs.
 
-3. The concurrent update is achieved by internally dividing Map into the small portion which is defined by concurrency level.
+- **OAuth (Open Authorization)**: An open standard for authorization. OAuth allows a user to grant a third-party application limited access to their resources without sharing their credentials. It is used primarily for authorization and involves the exchange of tokens.
 
-4. Choose concurrency level carefully as a significantly higher number can be a waste of time and space and the lower number may introduce thread contention in case writers over number concurrency level.
+- **SAML (Security Assertion Markup Language)**: An XML-based framework for exchanging authentication and authorization data between parties, particularly between an identity provider and a service provider. SAML is often used in Single Sign-On (SSO) and federated identity scenarios.
 
-5. All operations of ConcurrentHashMap are thread-safe.
+### 2. **Reverse Proxy and Forward Proxy?**
 
-6. Since ConcurrentHashMap implementation doesn't lock the whole Map, there is chance of read overlapping with update operations like put() and remove(). In that case, result returned by get() method will reflect the most recently completed operation from there start.
+- **Forward Proxy**: A proxy server that sits between client and server and acts on behalf of the client. It is typically used to access restricted websites or hide client IP addresses.
+  
+- **Reverse Proxy**: A proxy server that acts on behalf of the server. It accepts requests from clients and forwards them to the appropriate backend server. Common use cases include load balancing, caching, and securing the server by hiding its internal architecture.
 
-7. Iterator returned by ConcurrentHashMap is weekly consistent, fail-safe and never throw ConcurrentModificationException. In Java.
+### 3. **Horizontal Scaling and Vertical Scaling?**
 
-8. ConcurrentHashMap doesn't allow null as key or value.
+- **Horizontal Scaling**: Adding more machines or instances to a system to distribute the load. This is typically used in distributed systems (e.g., cloud scaling) and offers better fault tolerance and load balancing.
+  
+- **Vertical Scaling**: Increasing the capacity of an individual machine, such as adding more CPU, memory, or storage. This is easier to implement but has limitations based on the hardware.
 
-9. You can use ConcurrentHashMap in place of Hashtable but with caution as CHM doesn't lock the whole Map.
+### 4. **Microservices and Monolithic Architecture?**
 
-10. During putAll() and clear() operations, the concurrent read may only reflect the insertion or deletion of some entries.
+- **Monolithic Architecture**: A single unified codebase for the entire application. All components are tightly integrated, making it easier to manage in small systems but harder to scale, update, and maintain in large systems.
+  
+- **Microservices Architecture**: The application is split into multiple smaller services, each responsible for a specific business function. Microservices are independently deployable, scalable, and can be developed and maintained by different teams.
 
+### 5. **What is Rate Limiter? How does it work?**
 
-Read more: https://javarevisited.blogspot.com/2013/02/concurrenthashmap-in-java-example-tutorial-working.html#ixzz8hicitcPl
+A **Rate Limiter** is a system used to control the amount of incoming traffic to a server. It prevents overuse of a resource by limiting how many requests can be made in a given time period (e.g., 100 requests per minute). Common strategies include:
+- **Token Bucket**: Tokens are added to a bucket at a fixed rate. The client can make a request if a token is available.
+- **Leaky Bucket**: Requests are added to a queue (bucket), and they leak at a fixed rate.
 
-1. What is difference between TCP and UDP protocol? 
-There are many differences between TCP (Transmission Control Protocol) and UDP (User Datagram Protocol), but the main is TCP is connection-oriented, while UDP is connectionless. This means TCP provides guaranteed delivery of messages in the order they are sent, while UDP doesn't provide any delivery guarantee.
+### 6. **API Gateway vs Load Balancer?**
 
-Because of this guarantee, TCP is slower than UDP, as it needs to perform more work. TCP is best suited for the message, which you can't afford to lose, like. order and trade messages in electronic trading, wire transfer in banking and finance, etc. UDP is more suited for media transmission, where the loss of one packet, known as datagrams is affordable and doesn't affect the quality of service.
+- **API Gateway**: Acts as a reverse proxy to route requests to various microservices, and can handle cross-cutting concerns like authentication, authorization, logging, and rate-limiting.
+  
+- **Load Balancer**: Distributes incoming traffic across multiple servers to ensure that no single server is overwhelmed. It operates at the transport layer (Layer 4) or application layer (Layer 7).
 
-This answer is enough for most of the interviews, but you need to be more detailed when you are interviewing as Java developer for a high-frequency trading desk. Some of the points which many candidates forget to mention is about order and data boundary.
+### 7. **How does Single Sign-On (SSO) work?**
 
-In TCP, messages are guaranteed to be delivered in the same order as they are sent but data boundary is not preserved, which means multiple messages can be combined and sent together, or receiver may receive one part of the message in one packet and other parts of the message in next packet.
+SSO allows a user to authenticate once and gain access to multiple applications without needing to log in again. The process generally involves:
+- The user logs in to a central identity provider (IdP).
+- The IdP issues a token (e.g., SAML, JWT).
+- The user is granted access to other services that trust the IdP, without needing to log in again.
 
-Though the application will receive the full message and in the same order. TCP protocol will do the assembling of message for you. On the other hand, UDP sends a full message in a datagram packet, if clients receive the packet it is guaranteed that it will get the full message, but there is no guarantee that the packet will come in the same order they are sent.
+### 8. **How does Apache Kafka work? Why is it so fast?**
 
-In short, you must mention the following differences between TCP and UDP protocol while answering during the interview :
-TCP is guaranteed delivery, UDP is not guaranteed.
-TCP guarantees order of messages, UDP doesn't.
-Data boundary is not preserved in TCP, but UDP preserves it.
-TCP is slower compared to UDP.
-for a more detailed answer, see my post 9 differences between TCP and UDP protocol.
+Kafka is a distributed streaming platform that can handle high throughput of data. It works by allowing producers to write messages to topics, and consumers to read messages from topics. Kafka is fast due to its:
+- **Message batching**: Reduces overhead by sending messages in bulk.
+- **Immutable logs**: Kafka writes data to logs that are never modified, which reduces locking and makes reads efficient.
+- **Distributed nature**: Kafka's architecture allows it to scale horizontally, enabling high throughput.
 
+### 9. **Difference between Kafka, ActiveMQ, and RabbitMQ?**
 
+- **Kafka**: A distributed streaming platform used for high-throughput, fault-tolerant messaging. It is optimized for large-scale data pipelines and real-time analytics. Kafka is log-based and handles both high-throughput and real-time streams.
 
-2. How does TCP handshake works? 
-Three messages are exchanged as part of TCP head-shake e.g. Initiator sends SYN,  upon receiving this Listener sends SYN-ACK, and finally, initiator replied with ACK, at this point TCP connection is moved to ESTABLISHED state. This process is easily understandable by looking at the following diagram.
+- **ActiveMQ**: A message broker that supports JMS (Java Message Service). It is primarily used for enterprise-level applications and provides features like persistence, message queues, and pub/sub messaging.
 
-Java Networking Interview Questions and Answers
+- **RabbitMQ**: An open-source message broker that supports multiple messaging protocols (AMQP, MQTT, STOMP). It is highly reliable and is often used in distributed systems for ensuring messages are delivered reliably.
 
+---
 
+### Method Overloading and Overriding in Java
 
+**Method Overloading**:
+- Occurs when multiple methods in the same class have the same name but differ in the number or types of parameters.
+- Resolved at **compile time**.
 
+**Method Overriding**:
+- Occurs when a subclass provides a specific implementation for a method that is already defined in its superclass.
+- Resolved at **runtime** (polymorphism).
 
-3. How do you implement reliable transmission in UDP protocol? 
-This is usually a follow-up to the previous interview question. Though UDP doesn't provide a delivery guarantee at the protocol level, you can introduce your own logic to maintain reliable messaging e.g. by introducing sequence numbers and retransmission.
+### Common Interview Questions on Overloading and Overriding:
 
-If the receiver finds that it has missed a sequence number, it can ask for a replay of that message from the Server. TRDP protocol, which is used Tibco Rendezvous (a popular high speed messaging middle-ware) uses UDP for faster messaging and provides reliability guarantee by using sequence number and retransmission.
+- **Can we overload static methods?**  
+  Yes, static methods can be overloaded, but not overridden because static methods are resolved at compile time.
 
+- **Can we override static methods?**  
+  No, static methods are resolved at compile time, so they cannot be overridden. However, they can be **hidden**.
 
-4. What is Network Byte Order? How do two hosts communicate if they have different byte-ordering? There are two ways to store two bytes in memory, little-endian (least significant byte at the starting address) and big-endian (most significant byte at the starting address). They are collectively known as host byte order. 
+- **Can we overload the main method?**  
+  Yes, the main method can be overloaded, but only the standard `public static void main(String[] args)` is called by the JVM.
 
-For example, an Intel processor stores the 32-bit integer as four consecutive bytes in memory in the order 1-2-3-4, where 1 is the most significant byte.
+- **Can we override a final method?**  
+  No, final methods cannot be overridden because they are marked as "not allowed to be modified."
 
-IBM PowerPC processors would store the integer in the byte order 4-3-2-1. Networking protocols such as TCP are based on a specific network byte order, which uses big-endian byte ordering. If two machines are communicating with each other and they have different byte ordering, they are converted to network byte order before sending or after receiving.
+- **Can we change the return type while overriding a method?**  
+  You cannot change the return type of a method during overriding, except in the case of covariant return types (where the return type can be a subclass of the original method’s return type).
 
-Therefore, a little-endian micro-controller sending to a UDP/IP network must swap the order in which bytes appear within multi-byte values before the values are sent onto the network, and just swap the order in which bytes appear in multi-byte values received from the network before the values are used. In short, you can also say network byte order is the standard of storing bytes during transmission, and it uses a big-endian byte ordering mechanism.
+These questions test understanding of fundamental OOP concepts, especially polymorphism (through method overloading and overriding), which is a core concept in Java.
 
-What is Network Byte Order?
+### **Java Interview Questions on Collections and Multithreading**
 
+Here is a detailed explanation of the Java interview questions related to Collections and Multithreading, along with answers to common questions that could be asked in interviews:
 
+---
 
+### **Top 10 Java Collection Interview Questions**
 
-5. What is Nagle's algorithm?
-If the interviewer is testing your knowledge of TCP/IP protocol then it's very rare for him not to ask this question. Nagle's algorithm is a way of improving the performance of TCP/IP protocol and networks by reducing the number of TCP packets that need to be sent over the network. It works by buffering small packets until the buffer reaches Maximum Segment Size.
+1. **What is the difference between `Hashtable` and `HashMap` in Java?**
+   - **`Hashtable`** is synchronized and thread-safe, meaning it can be safely accessed by multiple threads. However, its thread-safety can lead to performance issues in multi-threaded environments.
+   - **`HashMap`** is not synchronized and therefore not thread-safe. It allows `null` values and `null` keys, unlike `Hashtable`, which does not allow `null` values or keys.
 
-Since small packets, which contain only 1 or 2 bytes of data, has more overhead in terms of TCP header, which is 40 bytes. These small packets can also lead to congestion in a slow network. Nagle's algorithm tries to improve the efficiency of TCP protocol by buffering them, to send a larger packet.
+2. **What is the difference between `Hashtable` and `ConcurrentHashMap` in Java?**
+   - Both are thread-safe, but **`ConcurrentHashMap`** provides better scalability and performance. It locks only the specific segments of the map, rather than locking the entire map, as `Hashtable` does.
+   - **`ConcurrentHashMap`** allows concurrent reads and updates to different parts of the map, making it more efficient in multi-threaded environments.
 
-Also, Nagle's algorithm has a negative effect on non-small writes, so if you are writing large data on packets then it's better to disable Nagle's algorithm. 
+3. **What is the difference between `Iterator` and `Enumeration` in Java?**
+   - **`Iterator`** was introduced in Java 1.2 and is more powerful than `Enumeration`. It allows the removal of elements during iteration (`remove()` method).
+   - **`Enumeration`** is an older interface (introduced in Java 1.0) and does not support removing elements.
 
-In general, Nagle's algorithm is a defense against the careless application, which sends lots of small packets to the network, but it will not benefit or have a negative effect on well-written applications, which properly takes care of buffering.
+4. **What is the difference between a fail-safe and fail-fast iterator in Java?**
+   - A **fail-fast iterator** immediately throws a `ConcurrentModificationException` if the collection is modified while iterating.
+   - A **fail-safe iterator** (e.g., `CopyOnWriteArrayList`) works on a copy of the collection, so it does not throw exceptions if the collection is modified during iteration.
 
-Here is also a nice diagram which explains the network traffic with and without Nagle's algorithm:
+5. **How does `HashMap` work internally in Java?**
+   - `HashMap` uses an array of buckets to store the key-value pairs. It calculates a hash of the key and uses it to find the appropriate bucket. If multiple keys hash to the same bucket, a linked list (or balanced tree structure in the case of many collisions) is used to resolve the collision.
 
+6. **Can you write code to traverse a `Map` in Java in 4 ways?**
+   - You can iterate over a `Map` using:
+     - `forEach` method in Java 8+.
+     - Using `entrySet()` with a `for-each` loop.
+     - Using `keySet()` with a `for-each` loop.
+     - Using `values()` to iterate over the values of the map.
 
-What is Nagle's algorithm?
+7. **What is the difference between `Vector` and `ArrayList` in Java?**
+   - **`ArrayList`** is not synchronized, meaning it is not thread-safe but offers better performance for single-threaded applications.
+   - **`Vector`** is synchronized, making it thread-safe, but this synchronization comes with a performance overhead.
 
+8. **What is the difference between `ArrayList` and `LinkedList` in Java?**
+   - **`ArrayList`** uses a dynamic array to store elements, providing fast random access (`O(1)`) but slow insertions and deletions (`O(n)`).
+   - **`LinkedList`** uses a doubly linked list to store elements, providing fast insertions and deletions (`O(1)`) but slower random access (`O(n)`).
+
+9. **What is the difference between `List` and `Set` in Java?**
+   - **`List`** allows duplicate elements and maintains insertion order (e.g., `ArrayList`, `LinkedList`).
+   - **`Set`** does not allow duplicates and does not guarantee any order (e.g., `HashSet`, `TreeSet`).
+
+10. **How do you find if `ArrayList` contains duplicates or not?**
+    - You can use a `HashSet` to check for duplicates. If any element is already in the `Set`, then it's a duplicate.
+
+---
+
+### **Top 10 Java Threading and Concurrency Interview Questions**
+
+1. **What is the difference between the `start()` and `run()` method in Java threads?**
+   - The **`start()`** method creates a new thread and invokes the `run()` method on that thread. If you call the `run()` method directly, the code inside it will execute on the current thread, not a new one.
+
+2. **Write code to avoid deadlock in Java where N threads are accessing N shared resources?**
+   - Deadlocks occur when two or more threads are blocked forever, waiting for each other to release resources. To avoid deadlocks:
+     - Always acquire locks in the same order across all threads.
+     - Use `ReentrantLock` with `tryLock()` for timeout-based deadlock prevention.
+
+3. **Which one is better to implement a thread in Java: extending `Thread` class or implementing `Runnable`?**
+   - **`Runnable`** is generally preferred as it allows the class to extend another class while implementing the `Runnable` interface, offering better flexibility.
+
+4. **What is busy spinning? Why will you use busy spinning as a wait strategy?**
+   - **Busy spinning** involves a thread continuously checking a condition in a loop without releasing the CPU, useful in situations where a condition is likely to become true quickly (e.g., within a microsecond). It's used in low-latency systems.
+
+5. **What is the difference between `CountDownLatch` and `CyclicBarrier` in Java?**
+   - **`CountDownLatch`** is one-time use, and once the count reaches zero, it cannot be reused.
+   - **`CyclicBarrier`** can be reused after all threads have reached the barrier.
+
+6. **What is the difference between `wait()` and `sleep()` in Java?**
+   - **`wait()`** releases the lock and must be called from a synchronized block or method.
+   - **`sleep()`** pauses the thread for a specified time without releasing the lock.
+
+7. **How do you solve the producer-consumer problem in Java?**
+   - You can solve the producer-consumer problem using:
+     - `wait()` and `notify()` with a shared queue.
+     - `BlockingQueue` for easier management of thread-safe producer-consumer queues.
+
+8. **Why is `ConcurrentHashMap` faster than `Hashtable` in Java?**
+   - **`ConcurrentHashMap`** is faster because it locks only specific segments for updates, allowing for lock-free reads, unlike **`Hashtable`**, which locks the entire map during updates.
+
+9. **What is the difference between `submit()` and `execute()` methods of `Executor` and `ExecutorService` in Java?**
+   - **`submit()`** returns a `Future` object, allowing you to get the result of the task or handle exceptions.
+   - **`execute()`** does not return a result or allow for exception handling.
+
+10. **How do you share data between two threads in Java?**
+    - You can use shared objects or concurrent collections like `BlockingQueue` or `Atomic` variables. Make sure to synchronize access to shared data to avoid race conditions.
+
+---
+
+### **Deadlock in Java**
+
+1. **How do you detect deadlock in Java?**
+   - A deadlock can be detected using a thread dump, which you can generate with commands like `kill -3` on Unix-like systems. Tools like **VisualVM** or **jConsole** can also help analyze thread dumps and detect deadlocks.
+
+2. **Write a Java program that will result in a deadlock?**
+   Here's an example of a deadlock scenario:
+   ```java
+   public class DeadLockDemo {
+       public void method1() {
+           synchronized (String.class) {
+               synchronized (Integer.class) {
+                   System.out.println("Acquired both locks");
+               }
+           }
+       }
+
+       public void method2() {
+           synchronized (Integer.class) {
+               synchronized (String.class) {
+                   System.out.println("Acquired both locks");
+               }
+           }
+       }
+   }
+   ```
+   If both `method1()` and `method2()` are called from two different threads, they will deadlock.
 
+3. **How do you avoid deadlock in Java?**
+   - To avoid deadlock, you can ensure that all threads acquire locks in the same order.
+   - Another strategy is using **`ReentrantLock`** with `tryLock()` for timeout-based approaches.
 
+   Example of avoiding deadlock by acquiring locks in the same order:
+   ```java
+   public class DeadLockAvoided {
+       public void method1() {
+           synchronized (Integer.class) {
+               synchronized (String.class) {
+                   System.out.println("Acquired both locks");
+               }
+           }
+       }
 
-6. What is TCP_NODELAY? 
-TCP_NODELAY is an option to disable Nagle's algorithm, provided by various TCP implementations. Since Nagle's algorithm performs badly with the TCP delayed acknowledgment algorithm, it's better to disable Nagle's when you are doing the write-write-read operation.
+       public void method2() {
+           synchronized (Integer.class) {
+               synchronized (String.class) {
+                   System.out.println("Acquired both locks");
+               }
+           }
+       }
+   }
+   ```
 
-Where a read after two successive writes on the socket may get delayed up to 500 milliseconds until the second write has reached the destination. 
+---
+### Explanation of Key Concepts from the Text
 
-If latency is more concerned over bandwidth usage like in a network-based multi-player game, the user wants to see action from other players immediately, it's better to bypass Nagle's delay by using the TCP_NODELAY flag.
+#### **1. `ConcurrentHashMap` in Java**
+`ConcurrentHashMap` is a thread-safe collection class in Java, designed to handle concurrent access by multiple threads without significant performance degradation. It is introduced in Java 1.5 as an alternative to `Hashtable` and `synchronizedMap`. The key features of `ConcurrentHashMap` are:
 
+- **Segmented Locking**: Unlike `Hashtable`, which locks the entire map during update operations, `ConcurrentHashMap` divides the map into segments, each of which is locked individually. This allows multiple threads to read from different segments concurrently without blocking each other.
+- **Concurrency Level**: The default concurrency level is 16, meaning the map is divided into 16 parts. This can be adjusted when constructing a `ConcurrentHashMap`.
+- **Thread-Safety**: It supports concurrent reads and safe write operations, making it highly suitable for multi-threaded environments.
+- **No Null Keys or Values**: Unlike `HashMap`, `ConcurrentHashMap` does not allow null keys or values.
+- **Fail-Safe Iteration**: The iterator returned by `keySet()` and other collection views of `ConcurrentHashMap` is weakly consistent, meaning it doesn't throw a `ConcurrentModificationException` even if the map is modified during iteration.
 
-7. What is multicasting or multicast transmission? Which Protocol is generally used for multicast? TCP or UDP? 
-Multi-casting or multicast transmission is one too many distributions, where the message is delivered to a group of subscribers simultaneously in a single transmission from the publisher. Copies of messages are automatically created in other network elements e.g. Routers, but only when the topology of a network requires it.
+#### **2. How `ConcurrentHashMap` Works**
+- **Internal Structure**: The map is divided into segments based on the concurrency level. Each segment is independently locked, allowing for concurrent updates to different segments without interference.
+- **Concurrency in Action**: Multiple threads can perform `get()` and other read operations without locking the entire map, which enhances performance. Write operations (like `put()`, `remove()`) lock only the relevant segment.
+- **Weak Consistency**: Read operations might not immediately reflect changes made by other threads, and iterators may not reflect the most recent changes to the map. However, `ConcurrentHashMap` is fail-safe, meaning it doesn't throw exceptions if the map is modified during iteration.
 
-Tibco Rendezvous supports multicast transmission. Multi-casting can only be implemented using UDP because it sends full data as a datagram package, which can be replicated and delivered to other subscribers. Since TCP is a point-to-point protocol, it can not deliver messages to multiple subscribers, until it has the link between each of them.
+#### **3. `putIfAbsent()` Method**
+- The `putIfAbsent()` method is an atomic operation that inserts a key-value pair if the key is absent in the map, and returns the existing value if the key is already present. This method prevents race conditions, which can occur if multiple threads attempt to insert the same key at the same time.
 
-Though UDP is not reliable, and messages may be lost or delivered out of order. Reliable multicast protocols such as Pragmatic General Multicast (PGM) have been developed to add loss detection and retransmission on top of IP multicast. 
+#### **4. When to Use `ConcurrentHashMap`**
+- **Best Use Cases**: It's ideal when you have multiple readers and fewer writers. If there are more writers or if writers equal the number of readers, the performance benefits diminish, and it behaves similarly to `synchronizedMap` or `Hashtable`.
+- **Common Applications**: Suitable for caches or other concurrent data structures where read-heavy operations are expected.
 
-IP multicast is widely deployed in enterprises, commercial stock exchanges, and multimedia content delivery networks. Common enterprise use of IP multicast is for IPTV applications 
+#### **5. Key Characteristics of `ConcurrentHashMap`**
+- **Locking Mechanism**: It only locks a portion of the map, not the entire map, which allows for better concurrency than `Hashtable`.
+- **Fail-Safe Iterators**: Iterators do not throw `ConcurrentModificationException` and are weakly consistent.
+- **No Nulls**: `ConcurrentHashMap` doesn't allow null keys or values, unlike `HashMap`.
+- **Optimized for Concurrency**: It is designed for situations where multiple threads are reading and writing to the map concurrently.
 
-Here is a nice diagram which explains how multicasting works:
+---
 
-What is multicasting or multicast transmission?
+### Differences Between TCP and UDP Protocols
 
+#### **TCP (Transmission Control Protocol) vs UDP (User Datagram Protocol)**
+- **Connection-Oriented vs Connectionless**: TCP is connection-oriented, ensuring that a connection is established before any data is transferred. UDP is connectionless and does not guarantee delivery.
+- **Reliability**: TCP ensures that data is delivered in order and retransmits lost packets. UDP does not guarantee packet delivery, order, or reliability.
+- **Use Cases**: TCP is used in scenarios where data reliability is crucial, such as file transfers, web browsing, etc. UDP is used in applications like video streaming, online games, or VoIP, where speed is more important than reliability.
+- **Performance**: TCP has higher overhead due to the need for connection establishment, acknowledgment, and retransmission of lost packets. UDP is faster because it does not have these features.
+  
+#### **TCP Handshake**
+The TCP handshake is a three-step process for establishing a connection:
+1. **SYN**: The client sends a synchronization request to the server.
+2. **SYN-ACK**: The server acknowledges the client's request.
+3. **ACK**: The client acknowledges the server's response, and the connection is established.
 
+#### **Reliable Transmission in UDP**
+While UDP itself doesn't guarantee delivery, reliability can be implemented on top of it. For example:
+- **Sequence Numbers**: Sequence numbers can be used to detect lost packets and request retransmissions.
+- **Acknowledgments and Retransmissions**: If a packet is lost, the receiver can request the sender to retransmit the lost packet.
 
+#### **Multicast Transmission**
+- **Multicasting** refers to the transmission of data from one sender to multiple receivers simultaneously. UDP is used for multicast because it supports broadcasting data to multiple destinations at once without needing separate connections to each one. TCP is unsuitable for multicast since it's designed for point-to-point communication.
 
-8. What is the difference between Topic and Queue in JMS? 
-The main difference between Topic and Queue in Java Messaging Service is that Queue is used for point to point communication  which is generally one to one, while publisher is used for publish and subscribe communication which is one to many. 
+#### **Sliding Window Protocol**
+The **Sliding Window Protocol** is used in TCP for flow control, ensuring that packets are transmitted sequentially and reliably. It uses a "window" to allow a certain number of packets to be sent before requiring an acknowledgment.
 
-You should use Topic to send messages when we have multiple consumers to consumer messages. If we set up multiple listener threads to consume messages from Queue, each message will be dispatched to only one thread and not all threads. On the other hand in the case of Topic, each subscriber gets its own copy of the message.
+#### **TIME_WAIT State**
+The **TIME_WAIT state** occurs in TCP when a connection is closed. It is required to ensure that any delayed packets are properly handled and do not interfere with new connections. It can lead to resource exhaustion if too many connections stay in the TIME_WAIT state.
 
-What is the difference between Topic and Queue in JMS?
+---
 
+### Conclusion
 
+- `ConcurrentHashMap` is an essential data structure for concurrent applications in Java. It optimizes performance by allowing concurrent reads and minimizing lock contention.
+- TCP and UDP are fundamental protocols in networking. TCP ensures reliability and ordered delivery, while UDP is faster and used for applications where speed is more important than reliability.
 
 
+Here’s a summary of the Kubernetes interview questions and answers that you've provided. This article is structured into three main sections: basic Kubernetes concepts, architecture-related questions, and multiple-choice questions for practical exposure. The goal is to help prepare for interviews, especially for DevOps Engineers, Developers, and anyone working with Kubernetes.
 
-9. What is the difference between IO and NIO in Java?
-The main difference between NIO and IO is that NIO provides asynchronous, non-blocking IO, which is critical to write faster and scalable networking systems. While most of the utility from IO classes are blocking and slow. 
+---
 
-NIO takes advantage of asynchronous system calls in UNIX systems such as select() system call for network sockets. Using select(), an application can monitor several resources at the same time and can also poll for network activity without blocking. 
+### 1. **Basic Kubernetes Interview Questions**
 
-The select() system call identifies if data is pending or not, then read() or write() may be used knowing that they will complete immediately.
+1. **What is Kubernetes?**
+   - Kubernetes is an open-source platform for managing, scaling, and deploying containerized applications. It provides a robust solution for container orchestration, allowing containers to communicate and work together across multiple hosts.
 
-What is the difference between IO and NIO in Java?
+2. **How is Kubernetes similar to Docker?**
+   - Docker is used to create containers and manage their lifecycle, while Kubernetes provides orchestration for managing multiple containers, ensuring that they can interact with one another, scale, and be deployed efficiently across nodes.
 
+3. **What is Container Orchestration?**
+   - Container orchestration refers to the management of multiple containers so that they work together as a unified system. Kubernetes handles this by providing the infrastructure to automate deployment, scaling, and management.
 
+4. **Why do you need Container Orchestration?**
+   - Container orchestration is crucial when managing microservices across multiple containers. Without it, managing communication, scaling, and failure recovery would become a complex and error-prone task.
 
+5. **What are some features of Kubernetes?**
+   - Key features include automated scheduling, self-healing (auto-restarting or rescheduling containers), automated rollouts and rollbacks, horizontal scaling, and load balancing.
 
-10. How do you write a multi-threaded server in Java?
-A multi-threaded server is one that can serve multiple clients without blocking. Java provides excellent support to developers such as servers. Prior to Java 1.4,  you can write a multi-threaded server using traditional socket IO and threads. 
+6. **What is the Containerized Deployment process in Kubernetes?**
+   - Kubernetes allows containerized applications to be deployed and managed across various cloud platforms and virtual machines. It handles the orchestration, scaling, and load balancing without the need for complex configurations.
 
-This had a severe limitation on scalability because it creates a new thread for each connection and you can only create a fixed number of threads, depending upon the machine's and platform's capability.
+7. **What is Google Container Engine (GKE)?**
+   - Google Container Engine is a platform for managing Docker containers and clusters within Google Cloud. It is based on Kubernetes and provides tools to manage containers at scale.
 
-Though this design can be improved by using thread pools and worker threads, it is still a resource-intensive design. After JDK 1.4 and NIO's introduction, writing scalable and multi-threaded servers become a bit easier. You can easily create it in a single thread by using Selector, which takes advantage of the asynchronous and non-blocking IO model of Java NIO.
+8. **What is Heapster?**
+   - Heapster is a data aggregator in a Kubernetes cluster that collects metrics and monitoring data for the nodes, pods, and containers running within the cluster.
 
-How do you write a multi-threaded server in Java?
+9. **What is Kubectl?**
+   - `kubectl` is the command-line tool used to interact with a Kubernetes cluster. It allows users to create, manage, and delete Kubernetes resources, as well as troubleshoot and gather cluster metrics.
 
+10. **What is Minikube?**
+    - Minikube is a tool that runs a single-node Kubernetes cluster locally on a developer's machine, making it easier to test and develop with Kubernetes.
 
+---
 
+### 2. **Kubernetes Architecture Interview Questions**
 
-11. What is the ephemeral port?
-In TCP/IP connection usually contains four things, Server IP, Server port, Client IP, and Client Port. Out of these four, 3 are well known most of the time, what is not known is client port, this is where ephemeral ports come into the picture.
+11. **What is Kube-proxy?**
+    - Kube-proxy is a network proxy that runs on each node in a Kubernetes cluster, responsible for load balancing traffic to services and maintaining network rules for services.
 
-Ephemeral ports are dynamic ports assigned by your machine's IP stack, from a specified range, known as the ephemeral port range, when a client connection explicitly doesn't specify a port number.
+12. **What are the components of Kubernetes Architecture?**
+    - Kubernetes consists of two primary components:
+      - **Master Node**: Manages the Kubernetes cluster, containing the API server, controller manager, and scheduler.
+      - **Worker Node**: Runs the actual applications in containers (pods), managed by the master node.
 
-These are short-lived, temporary ports, which can be reused once the connection is closed, but most of IP software doesn't reuse ephemeral port until the whole range is exhausted. Similar to TCP, UDP protocol also uses an ephemeral port, while sending datagram. 
+13. **How does the master node work in Kubernetes?**
+    - The master node manages the cluster, handles the orchestration, and ensures the desired state of the cluster is met. It contains components like the Kube-apiserver, Kube-controller-manager, and Kube-scheduler.
 
-In Linux ephemeral port range is from 32768 to 61000, while in windows default ephemeral port range is 1025 to 5000. The similarly different operating system has different ephemeral port ranges
+14. **What do you know about the Kubernetes controller manager?**
+    - The controller manager runs controllers that monitor and manage the state of Kubernetes resources. It ensures that the desired state (e.g., number of replicas, node health) is maintained.
 
+15. **What is ETCD?**
+    - ETCD is a distributed key-value store used in Kubernetes to store configuration data and the state of the cluster. It ensures the consistency of data across the cluster.
 
+16. **How does the Load Balancer work in Kubernetes?**
+    - Kubernetes uses two types of load balancers: internal load balancers (for traffic within the cluster) and external load balancers (for routing external traffic to services).
 
-12. What is the sliding window protocol? 
-Sliding window protocol is a technique for controlling transmitted data packets between two network computers where reliable and sequential delivery of data packets is required, such as provided by the Transmission Control Protocol (TCP). 
+17. **What is Ingress Network?**
+    - Ingress is an API object that manages external access to services in a Kubernetes cluster, usually HTTP. It defines rules for routing external requests to services.
 
-In the sliding window technique, each packet includes a unique consecutive sequence number, which is used by the receiving computer to place data in the correct order. The objective of the sliding window technique is to use the sequence numbers to avoid duplicate data and to request missing data
+18. **What are the different types of services Kubernetes offers?**
+    - **ClusterIP**: Exposes a service internally within the cluster.
+    - **NodePort**: Exposes a service on each node’s IP at a static port.
+    - **LoadBalancer**: Exposes a service externally through a cloud provider's load balancer.
+    - **ExternalName**: Maps the service to an external DNS name.
 
-What is the sliding window protocol?
+---
 
+### 3. **Multiple-Choice Questions**
 
+19. **Where is Kubernetes Cluster data stored?**
+    - A) Kube-apiserver  
+    - B) Kubelet  
+    - C) **ETCD** (Correct)  
+    - D) None of the above
 
+20. **Which of the following is a Kubernetes Controller?**
+    - A) Replicaset  
+    - B) Deployment  
+    - C) Rolling Updates  
+    - D) **Both A and B** (Correct)
 
-13. When do you get the "too many files open" error? 
-Just like File connection, Socket Connection also needs file descriptors, Since every machine has a limited number of file descriptors, it's possible that they may run out of file descriptors. When it happens, you will see a "too many files open" error. You can check how many file descriptor per process is allowed on UNIX based system by executing ulimit -n command or simply count entries on /proc//fd/
+21. **Which of the following are core Kubernetes objects?**
+    - A) Pods  
+    - B) Services  
+    - C) Volumes  
+    - D) **All of the above** (Correct)
 
+22. **On which node does the Kube-proxy run?**
+    - A) Master Node  
+    - B) Worker Node  
+    - C) **Both A and B** (Correct)  
+    - D) None of the above
 
-14. What is TIME_WAIT state in TCP protocol? When does a socket connection go to TIME_WAIT state? 
-When one end of TCP Connection closes it by making a system call, it goes into TIME_WAIT state. Since TCP packets can arrive in the wrong order, the port must not be closed immediately to allow late packets to arrive. That's why that end of TCP connection goes into TIME_WAIT state. 
+23. **Which of the following was introduced in Kubernetes version 1.8?**
+    - A) **Taints and Tolerations** (Correct)  
+    - B) Cluster Level Logging  
+    - C) Secrets  
+    - D) Federated Clusters
 
-For example, if a client closes a socket connection then it will go to TIME_WAIT state, similarly, if the server closes the connection then you will see TIME_WAIT there. You can check the status of your TCP and UDP sockets by using these networking commands in UNIX.
+24. **Which handler is invoked by Kubelet to check if a container's IP address is open or not?**
+    - A) HTTPGetAction  
+    - B) ExecAction  
+    - C) **TCPSocketAction** (Correct)  
+    - D) None of the Above
 
+---
 
-15. What will happen if you have too many socket connections in the TIME_WAIT state on the Server? 
-When a socket connection or port goes into the TIME_WAIT state, it doesn't release the file descriptor associated with it. The file descriptor is only released when the TIME_WAIT state is gone i.e. after some specified configured time. If too many connections are in the TIME_WAIT state then your Server may ran out of file descriptors and start throwing "too many files open" error, and stop accepting new connections.
+This collection of questions covers essential topics in Kubernetes, ranging from basic concepts to architectural details and practical usage. Studying these should help improve your understanding of Kubernetes and better prepare you for interviews in DevOps and cloud computing environments.
 
+Here’s a summary and explanation of the key **Object-Oriented Programming (OOP) concepts** in Java, along with **SOLID design principles** that are often discussed in Java interviews:
 
-That's all about in this list of networking and socket programming interview questions and answers. Though I have originally intended this list for Java programmers it is equally useful for any programmer.
+---
 
-In fact, this is the bare minimum knowledge of sockets and protocols every programmer should have. I have found that C and C++ programmers are better at answering these questions than the average Java programmers.
+### **OOP Concepts Interview Questions and Answers**
 
-One reason for this may be because Java programmers have got so many useful libraries like Apache MINA, which does all the low-level work for them. Anyway, knowledge of fundamentals is very important and everything else is just an excuse, but at some point, I also recommend using tried and tested libraries like Apache MINA for production code.
+1. **What is Method Overloading?**
+   - **Answer**: Method overloading occurs when multiple methods with the same name exist in a class, but they differ in the number or type of parameters. Overloading is resolved at **compile-time**.
+   
+2. **What is Method Overriding?**
+   - **Answer**: Method overriding happens when a subclass provides its own specific implementation of a method that is already defined in its superclass. Overriding is resolved at **runtime** based on the actual object type.
 
+3. **What is Method Hiding?**
+   - **Answer**: When a static method in the subclass has the same signature as a static method in the superclass, it hides the superclass's method. This happens with static methods, which are resolved at **compile-time**.
 
-Read more: https://javarevisited.blogspot.com/2014/08/socket-programming-networking-interview-questions-answers-Java.html#ixzz8hid0eVOe
+4. **Is Java a Pure Object-Oriented Language?**
+   - **Answer**: No, Java is not purely object-oriented because it includes primitive types like `int`, `char`, and allows for static methods which do not require objects to be invoked.
 
+5. **What are the Rules of Method Overloading and Overriding?**
+   - **Answer**: Overloading rules include having a different parameter list (number or type). For overriding, the method signature must remain the same, and it cannot throw exceptions higher in the hierarchy than the overridden method.
 
+6. **Difference Between Overloading and Overriding?**
+   - **Answer**: 
+     - Overloading: Resolved at **compile-time**.
+     - Overriding: Resolved at **runtime** based on the actual object type.
 
-20 Kubernetes Interview Questions with Answers
-For easy access, I have divided this article into three sections. The first section consists of basic Kubernetes interview questions. In this section, you will learn about topics like Autoscaling, Load Balancing, and Data Volumes. 
+7. **Can We Overload a Static Method?**
+   - **Answer**: Yes, static methods can be overloaded based on different method signatures.
 
-The second section consists of  interview questions related to the architecture of Kubernetes. This section covers topics like Kube-proxy and master node.
+8. **Can We Override a Static Method?**
+   - **Answer**: No, static methods cannot be overridden because they are resolved at compile-time based on the reference type.
 
+9. **Can We Prevent Overriding without Using the `final` Modifier?**
+   - **Answer**: Yes, methods can be prevented from being overridden by making them `private`, `static`, or `final`.
 
-The third section deals with some multiple-choice questions. Here, you will get some practical exposure as well as enhance your quick thinking.  I have also tried to cover to basic kubectl command you can use to interact with pods and services
+10. **Can We Override a Private Method?**
+    - **Answer**: No, private methods cannot be overridden as they are not visible to subclasses.
 
-I have no doubt that the interview questions in this article will help you to land your dream job. 
+11. **What is Covariant Method Overriding?**
+    - **Answer**: This allows the overriding method to return a more specific type (a subclass of the original return type) than the overridden method. Introduced in **Java 5**.
 
+12. **Can We Change the Return Type When Overriding a Method?**
+    - **Answer**: Yes, since Java 5, covariant method overriding allows changing the return type to a subclass type.
 
-1. Basic Kubernetes Interview Questions
-This section focus on essential Kubernetes concepts and interview questions based upon that. 
+13. **Can We Change the Argument List of an Overriding Method?**
+    - **Answer**: No, the argument list must remain the same for both the overriding and overridden methods.
 
-1. What is Kubernetes?
-Kubernetes is basically a container-management tool that is open-source and can scale, descale, and deploy containers. It is similar to Docker and was introduced by Google. This means that it has an interactive community and works well with all the cloud providers. We can say that Kubernetes is not just a containerization platform, but a platform that provides multi-container management solutions.
+14. **Can We Override a Method that Throws Runtime Exceptions?**
+    - **Answer**: Yes, unchecked exceptions (e.g., `RuntimeException`) can be thrown by overriding methods without restrictions.
 
+15. **How to Call a Superclass's Overridden Method?**
+    - **Answer**: Use the `super` keyword to invoke the superclass's version of an overridden method.
 
+16. **Can We Override a Non-static Method as Static?**
+    - **Answer**: No, a non-static method cannot be overridden as static.
 
+17. **Can We Override a Final Method?**
+    - **Answer**: No, final methods cannot be overridden.
 
-2. How is Kubernetes similar to Docker?
-A Docker image can be used to build runtime containers and it also provides lifecycle management of containers. Kubernetes come in when these individual containers need to communicate with each other. What this essentially means is that Docker can be used to build individual containers and Kubernetes can be used to allow these individual containers to communicate with each other. Another important thing to note here is that containers running on multiple hosts can be connected to each other and linked using Kubernetes. 
+18. **Can We Have Non-Abstract Methods Inside an Interface?**
+    - **Answer**: Yes, from **Java 8 onwards**, interfaces can have default and static methods with implementations.
 
-3. What is Container Orchestration?
-Container Orchestration effectively means that all the services inside the individual containers are working together seamlessly to meet the needs of the server. There are many microservices inside each container, and it is impossible for these microservices to communicate with each other without Container Orchestration. Container Orchestration creates harmony among containers by seamlessly allowing individual containers to work together and met the goal of a single server. 
+19. **What is a Default Method in Java 8?**
+    - **Answer**: A default method is a method with a body that can be added to interfaces without breaking existing implementations. It provides default functionality.
 
+20. **What is an Abstract Class in Java?**
+    - **Answer**: An abstract class is a class that cannot be instantiated and is meant to be subclassed. It may contain abstract methods (methods without implementation) and non-abstract methods (with implementation).
 
+21. **What is an Interface in Java?**
+    - **Answer**: An interface defines a contract that classes must adhere to. It only specifies method signatures without providing implementations. Interfaces allow for multiple inheritance in Java.
 
+22. **Difference Between Abstract Class and Interface?**
+    - **Answer**: Abstract classes can have non-abstract methods, while interfaces (before Java 8) can only have abstract methods. Since Java 8, interfaces can have default and static methods as well.
 
-4. Why do you need Container Orchestration?
-When you have 4 or 5 microservices that perform various tasks for a single application, you can put these microservices inside separate containers. But you need to make sure that these containers interact with each other. So Container Orchestration becomes useful in such cases.
+23. **Can a Class Be Abstract Without Abstract Methods?**
+    - **Answer**: Yes, a class can be abstract even without any abstract methods, though it typically serves to provide shared functionality for subclasses.
 
-Basically, Container Orchestration is essential for making sure that containers communicate effortlessly with each other. There are also many challenges that can crop up if you do not use Container Orchestration. So Container Orchestration can be used to overcome these challenges.
+24. **Can a Class Be Both Final and Abstract?**
+    - **Answer**: No, a class cannot be both final and abstract. A final class cannot be subclassed, and an abstract class is meant to be subclassed.
 
-5. What are some features of Kubernetes?
-Kubernetes offer some amazing features like Automated Scheduling, Self-Healing Capabilities, Automated Rollouts and Rollbacks, Horizontal Scaling, and Load Balancing.
-The automated scheduler can be used for launching containers on cluster nodes.
-Self-Healing Capabilities allow rescheduling, restarting, and replacing of dead containers.
-Kubernetes also supports automated rollouts and rollbacks for containers.
-Kubernetes can also scale up and scale down applications according to your requirements. 
+25. **Can We Overload or Override the `main()` Method?**
+    - **Answer**: We can overload the `main()` method, but we cannot override it because `main()` is static.
 
-6. What is the Containerized Deployment process in Kubernetes?
-Kubernetes is basically cloud-agnostic. What this means is that it can run on basically any cloud provider. This effectively simplifies the process of Containerized Deployment since the is no need for anything big like multiple hosts for load balancing.
- 
-Kubernetes can also run on any cloud platform since it is cloud-agnostic. For example, if you have a number of containers running on multiple hosts, all of these containers may have to communicate with each other. For this, you need something big that can be used for load balancing, scaling, and monitoring the containers.
-7. What is Google Container Engine?
-Google Container Engine is a managing platform for Docker Containers and clusters. It is open-source and supports only those containers that run inside Google's own cloud services. 
-Google Container Engine is also known as GKE. One important thing to note here is that the Google Container Engine supports only those containers that run on its own public cloud platforms. 
-Kubernetes questions for DevOps Engineers and DEvelopers
+26. **What is the Difference Between Polymorphism, Overloading, and Overriding?**
+    - **Answer**:
+      - Polymorphism is the ability of an object to take many forms.
+      - Overloading is compile-time polymorphism.
+      - Overriding is runtime polymorphism.
 
-Bonus Questions
-1. What is Heapster?
-Heapster is basically a data aggregator that is present cluster-wide. It is provided by Kubelet running on each node. It can also be seen as a container management tool that Kubernetes supports natively. It runs just like any other pod on the cluster. What this means is that it discovers all the nodes in a cluster and queries usage information from the Kubernetes cluster present on every node. 
+27. **Can an Interface Extend Multiple Interfaces?**
+    - **Answer**: Yes, an interface can extend multiple interfaces in Java.
 
-2. What is Kubectl?
-Kubectl can be seen as a platform that can be used for passing commands to the cluster. It also provides the CLI command for running Kubernetes commands against the Kubernetes cluster. It also has various ways and means for creating and managing the Kubernetes component.   
+28. **Can a Class Extend Multiple Classes?**
+    - **Answer**: No, Java does not support multiple inheritance for classes, but a class can implement multiple interfaces.
 
-3. What is Minikube?
-Minikube can be seen as a tool that makes it easier to run Kubernetes locally. It runs a single-node Kubernetes cluster inside a virtual machine.
+29. **What is the Difference Between Abstraction and Polymorphism?**
+    - **Answer**: Abstraction hides the complex reality, while polymorphism allows for different behaviors depending on the object.
 
-4. What is Kubelet?
-Kubelet is basically an agent service that runs on each and every node and also allows communication between the slave and the master. It essentially works on the description of containers that are provided to it in the PodSpec. It also makes sure that the containers that are described in the PodSpec are healthy and running.  
+---
 
-5. What can you tell us about a node in Kubernetes?
-A node in the Kubernetes cluster can be seen as the main worker machine. Nodes are also known as minions. Nodes can run on physical machines or virtual machines. It provides all the necessary services for running pods. Nodes in the Kubernetes system are managed by masters. 
+### **SOLID Design Principles**
 
+1. **Single Responsibility Principle (SRP)**:
+   - A class should have only one reason to change, meaning it should have only one responsibility.
 
-2. Kubernetes Architecture Interview Questions
-8. What can you tell us about Kube-proxy?
-Kube-proxy is basically a network proxy that is made up of configured services in Kubernetes API. It runs on each and every node and can do packet forwarding across multiple services. 
-Kube-proxy can also run on each and every node. It can do simple TCP/UDP packet forwarding all across the backend network service. A Docker-linkable compatible environment can also provide the various IPs and ports that can be opened using a proxy.
-9. What can you tell us about the different components of Kubernetes Architecture?
-Kubernetes architecture is made up of 2 main components - the master node and the worker node. The master node is made up of the Kube-controller-manager, Kube-apiserver, and the Kube-scheduler. The worker node has kubelet and Kube proxy.
+2. **Open/Closed Principle (OCP)**:
+   - Software entities (classes, modules, functions) should be open for extension but closed for modification. This can be achieved via inheritance or interfaces.
 
-10. How does the master node work in Kubernetes?
-The nodes are made up of containers and the Kubernetes master controls these nodes. The individual containers are housed inside pods and each pod can have a number of these containers. The Kube-apiserver makes sure that there is communication between the pods and the master node.
-The Kubernetes master controls all the nodes and the containers that are present inside the nodes. The individual containers are housed inside pods. Inside each pod, you can have a large number of containers depending on your requirements. These pods can be deployed using the user interface or the command-line interface. 
-The pods are allocated to different nodes based on the resource requirements. The Kube-apiserver can be used for making sure that there is always communication between the Kubernetes node and the master component. 
+3. **Liskov Substitution Principle (LSP)**:
+   - Objects of a subclass should be able to replace objects of the superclass without affecting the correctness of the program.
 
+4. **Interface Segregation Principle (ISP)**:
+   - Clients should not be forced to depend on interfaces they do not use. It encourages the design of small, specific interfaces.
 
-11. What do you know about the Kubernetes controller manager?
-The controller manager is basically a daemon that embeds controllers and works in namespace creation and garbage collection. It is also responsible for communicating with the API server and managing the end-points. 
-The master node runs multiple control processes. But all these processes are compiled together to run as a single process. This process is known as the Kubernetes controller manager. The Kubernetes controller manager is responsible for communicating with the API server and making sure that the end-points are managed. 
-There are different types of controller managers running on the master node.
-The node controller manages the status of a node like creation, updating, or deletion. 
-The replication controller maintains the number of pods for each and every replication object. 
-The service account and token controller can be used for creating default accounts as well as API access tokens for creating new namespaces. 
-The endpoints controller takes care of all the endpoint objects like services and pods.  
-12. What is ETCD?
-ETCD is a distributed key-value store that coordinates distributed work. It is written in the Go programming language. It stores the configuration data of the Kubernetes cluster. ETCD can also be used for storing the configuration data of the Kubernetes cluster that represents the state of a cluster at any point in time. 
+5. **Dependency Inversion Principle (DIP)**:
+   - High-level modules should not depend on low-level modules. Both should depend on abstractions. Abstractions should not depend on details. Details should depend on abstractions.
 
-13. How does the Load Balancer work in Kubernetes?
-A load balancer is a common and standard way of exposing service. Kubernetes offer customers two types of load balancer - the internal load balancer and the external load balancer. The internal load balancer allocates pods with the necessary configuration while the external load balancer directs the traffic from the external load. 
+---
 
-14. What is Ingress Network?
-Ingress Network is basically a collection of rules that is an entry point to any Kubernetes cluster. It is an API object that manages access to the services inside a cluster. It is the most powerful way of exposing service. 
+These concepts form the foundation of OOP in Java and are essential for designing robust, maintainable, and scalable software systems.
 
-Bonus Questions
-1. What are the different types of services Kubernetes offer?
-The Cluster IP can be used for exposing the service on a cluster-internal IP. It means that the service will only be reachable from within the cluster. This is the default service type. 
-The Node Port can be used for exposing the service on each node's IP at a static port. A Cluster IP service to which a Node Port service will route is automatically created.
-The Load Balancer exposes the service externally by making use of a cloud provider's load balancer. Services to which the external load balancer will route are automatically created. 
-The External Name maps the service to all the contents of the external name. There is no proxying of any kind during this setup. 
+The article you’ve provided covers a range of **Object-Oriented Design (OOD) principles** that are crucial for building maintainable, flexible, and scalable software. Here's a breakdown of the core principles mentioned in the article, along with explanations and examples where appropriate:
 
-3. Multiple-Choice Questions
-15. Where is the Kubernetes Cluster data stored?
-A. Kube-apiserver
-B. Kubelet
-C. ETCD (Correct)
-D. None of the above
+---
 
-16. Which of the following is a Kubernetes Controller?
-A. Replicaset
-B. Deployment
-C. Rolling Updates
-D. Both A and B (Correct)
+### 1. **DRY (Don't Repeat Yourself)**
 
-Top 20 Kubernetes Interview Questions with Answers
+This principle emphasizes avoiding the duplication of code. If you find the same piece of logic repeated in multiple places, it’s a good practice to refactor it into a separate method or class. The DRY principle improves maintainability by reducing the risk of errors during future changes.
 
+- **Example**: If you're validating `OrderID` in multiple classes, create a separate utility method for validation instead of repeating the same logic.
 
-17. Which of the following are core Kubernetes objects?
-A. Pods
-B. Services
-C. Volumes
-D. All of the above (Correct)
+#### Key Benefit:
+- Reduces the risk of bugs when changes need to be made.
+  
+---
 
-18. On which node does the Kube-proxy run?
-A. Master Node
-B. Worker Node
-C. Both A and B (Correct)
-D. None of the above
+### 2. **Encapsulate What Changes**
 
-19. Which of the following was introduced in Kubernetes version 1.8?
-A. Taints and Tolerations (Correct)
-B. Cluster Level Logging
-C. Secrets
-D. Federated Clusters
-20. Which handler is invoked by Kubelet to check if a container's IP address is open or not?
-A. HTTPGetAction
-B. ExecAction
-C. TCPSocketAction (Correct)
-D. None of the ABove
+Encapsulation is the principle of restricting direct access to some of an object's components and instead providing methods to access them. The idea is to isolate the parts of the system that are likely to change and protect other parts from being affected.
 
+- **Example**: In Java, make variables `private` and expose them via `getter` and `setter` methods. This way, you can change the internal implementation without affecting external classes.
 
-Read more: https://javarevisited.blogspot.com/2022/05/kubernetes-interview-questions-answers.html#ixzz8hidMukt0
+#### Key Benefit:
+- Easy to modify and extend.
+- Protects the rest of the system from frequent changes.
 
-30 OOPS Interview Questions in Java with Answers
-In this article, I am going to share with you some OOPS concept-based Java interview questions that I have collected from friends and colleagues and they have seen in various Java interviews on different companies. They are mostly asked at first a few rounds like on screening round or on the telephonic round.
+---
 
+### 3. **Open Closed Principle (OCP)**
 
+The Open-Closed Principle states that software entities (classes, modules, functions) should be open for extension but closed for modification. This means you can add new functionality without altering existing code.
 
-If you are a senior Java developer then you already know the answers to this question and I suggest you practice more on object-oriented analysis and design skills i.e. how to do code against a specification. If you are a fresher and junior Java developer with 2 to 3 years of experience then you must revise these questions, learn if you don't know to do well on your Java Job interviews.
+- **Example**: If you’re working with shapes (e.g., `Circle`, `Rectangle`), instead of modifying a method every time you add a new shape, you can extend the `Shape` class and implement new behaviors.
 
+#### Key Benefit:
+- Avoids breaking existing functionality when adding new features.
 
+---
 
-1. What is method overloading in OOP or Java? (answer)
-It's one of the oldest OOPS concept questions, I have seen it 10 years ago and still see it now. When we have multiple methods with the same name but different functionality then it's called method overloading. For example. System.out.println() is overloaded as we have a 6 or 7 println() method each accepting a different type of parameter.
+### 4. **Single Responsibility Principle (SRP)**
 
+Each class should have only one reason to change. In other words, a class should have only one job or responsibility. This reduces the risk of introducing bugs when you modify a class for a new feature.
 
-2. What is the method overriding in OOP or Java? (answer)
-It's one of the magic of object-oriented programming where the method is chosen based upon an object at runtime. In order for method overriding, we need Inheritance and Polymorphism, as we need a method with the same signature in both superclass and subclass. A call to such a method is resolved at runtime depending upon the actual object and not the type o variable. See the answer for a more detailed discussion.
+- **Example**: If you have a class that handles both user authentication and database transactions, you should split it into two classes—one for authentication and another for database operations.
 
+#### Key Benefit:
+- Makes classes easier to maintain and test.
 
-3. What is the method of hiding in Java? (answer)
-When you declare two static methods with the same name and signature in both superclass and subclass then they hide each other i.e. a call to the method in the subclass will call the static method declared in that class and a call to the same method is superclass is resolved to the static method declared in the super-class.
+---
 
+### 5. **Dependency Injection (DI) or Inversion of Control (IoC)**
 
-4. Is Java a pure object-oriented language? if not why? (answer)
-Java is not a pure object-oriented programming language e.g. there are many things you can do without objects e.g. static methods. Also, primitive variables are not objects in Java. See the answer for a more detailed explanation.
+This principle suggests that you should not create your dependencies; instead, they should be provided to you. Dependency Injection helps decouple the code by passing dependencies through constructors, setters, or interfaces.
 
+- **Example**: In a Spring Framework-based application, a service class like `UserService` might rely on a repository class. Instead of creating the repository within the service, the Spring container injects it.
 
+#### Key Benefit:
+- Decouples components and makes code more testable and maintainable.
 
+---
 
-5. What are the rules of method overloading and overriding in Java? (answer)
-One of the most important rules of method overloading in Java is that the method signature should be different i.e. either the number of arguments or the type of arguments. Simply changing the return type of two methods will not result in overloading, instead, the compiler will throw an error. 
+### 6. **Favor Composition over Inheritance**
 
-On the other hand, method overriding has more rules e.g. name and return type must be the same, method signature should also be the same, the overloaded method cannot throw a higher exception, etc. See the answer for a full list of rules related to method overloading and overriding in Java.
+Composition allows you to change behavior at runtime by adding new behaviors dynamically. It’s considered more flexible than inheritance, which is static.
 
+- **Example**: Instead of creating subclasses for different kinds of animals (e.g., `Dog`, `Cat`, etc.), create a `Pet` interface and use composition to define shared behaviors.
 
-6. The difference between method overloading and overriding? (answer)
-Several differences but the most important one is that method overloading is resolved at compile-time and method overriding is resolved at runtime. The compiler only used the class information for method overloading, but it needs to know the object to resolved overridden method calls. This diagram explains the difference quite well, though:
+#### Key Benefit:
+- Promotes flexibility and reuse of components without tight coupling.
 
-Object Oriented Programming Interview Questions and Answers
+---
 
+### 7. **Liskov Substitution Principle (LSP)**
 
-7. Can we overload a static method in Java? (answer)
-Yes, you can overload a static method in Java. You can declare as many static methods of the same name as you wish provided all of them have different method signatures. See the answer for a more detailed explanation and code example.
+According to LSP, objects of a subclass should be able to replace objects of the superclass without affecting the behavior of the program. This principle ensures that the derived class enhances functionality rather than diminishing it.
 
+- **Example**: If a class `Bird` has a method `fly()`, a subclass `Penguin` should not override this method to make it throw an exception because penguins cannot fly.
 
+#### Key Benefit:
+- Ensures that subclass behavior is predictable and does not break the system.
 
-8. Can we override the static method in Java? (answer)
-No, you cannot override a static method because it's not bounded to an object. Instead, static methods belong to a class and are resolved at compile time using the type of reference variable. But, Yes, you can declare the same static method in a subclass, which will result in method hiding i.e. if you use the reference variable of type subclass then the new method will be called, but if you use the reference variable of superclass then the old method will be called.
+---
 
+### 8. **Interface Segregation Principle (ISP)**
 
-9. Can we prevent overriding a method without using the final modifier? (answer)
-Yes, you can prevent the method overriding in Java without using the final modifier. In fact, there are several ways to accomplish it e.g. you can mark the method as private or static, those cannot be overridden.
+A client should not be forced to implement an interface it doesn’t use. This principle encourages creating smaller, more focused interfaces instead of large, monolithic ones.
 
+- **Example**: If a `Printer` interface has methods for both `print` and `scan`, but some classes only need `print` functionality, split the interface into two: `Printer` and `Scanner`.
 
-10. Can we override a private method in Java? (answer)
-No, you cannot. Since the private method is only accessible and visible inside the class they are declared, it's not possible to override them in subclasses. Though, you can override them inside the inner class as they are accessible there.
+#### Key Benefit:
+- Reduces unnecessary implementation and makes code easier to maintain.
 
+---
 
-11. What is the covariant method overriding in Java? (answer)
-In the covariant method overriding, the overriding method can return the subclass of the object returned by the original or overridden method. This concept was introduced in Java 1.5 (Tiger) version and it's very helpful in case the original method is returning a general type like Object class, because, then by using the covariant method overriding you can return a more suitable object and prevent client-side typecasting. One of the practical use of this concept is when you override the clone() method in Java.
+### 9. **Programming for Interface, Not Implementation**
 
+This principle encourages using interfaces rather than concrete classes in your code. Programming against an interface allows your code to be more flexible and easier to adapt to future changes.
 
+- **Example**: Instead of declaring a variable as a `Dog`, declare it as an `Animal`. This way, the code can work with any `Animal` type, not just `Dog`.
 
+#### Key Benefit:
+- Promotes flexibility and loose coupling.
 
-12. Can we change the return type of method to subclass while overriding? (answer)
-Yes, you can, but only from Java 5 onward. This feature is known as covariant method overriding and it was introduced in JDK 5 release. This is immensely helpful if the original method return super-class like the clone() method returns a java.lang.Object. By using this, you can directly return the actual type, preventing client-side type-casting of the result.
+---
 
+### 10. **Delegation Principle**
 
-13. Can we change the argument list of an overriding method? (answer)
-No, you cannot. The argument list is part of the method signature and both overriding and overridden methods must have the same signature.
+Instead of performing all actions yourself, delegate the responsibilities to other classes. This principle helps to reduce the complexity within a class and promotes separation of concerns.
 
+- **Example**: In Java, the `equals()` and `hashCode()` methods are typically delegated to another class or utility to perform comparisons, rather than writing custom comparison logic within every class.
 
-14. Can we override a method that throws runtime exception without throws clause? (answer)
-Yes, there is no restriction on unchecked exceptions while overriding. On the other hand, in the case of a checked exception, an overriding exception cannot throw a checked exception which comes higher in type hierarchy e.g. if the original method is throwing IOException then the overriding method cannot throw java.lang.Exception or java. lang.Throwable.
+#### Key Benefit:
+- Avoids redundant code and simplifies modifications.
 
+---
 
-15. How do you call a superclass version of an overriding method in a subclass? (answer)
-You can call a superclass version of an overriding method in the subclass by using the super keyword. For example to call the toString() method from java.lang.Object class, you can call super.toString().
+### **Conclusion**
 
+Applying these **Object-Oriented Design Principles** can significantly improve the quality, maintainability, and scalability of your software. Whether you’re developing a small application or working on large-scale enterprise systems, adhering to these principles helps create code that is flexible and easier to manage. 
 
-16. Can we override a non-static method as static in Java? (answer)
-Yes, you can override the non-static method in Java, no problem on them but it should not be private or final :)
+For developers, mastering these principles not only improves coding skills but also makes it easier to work in teams, build reusable components, and adapt to future changes in technology and business requirements.
 
+If you want to go deeper into these principles, exploring design patterns such as **Factory**, **Singleton**, **Observer**, etc., and understanding **SOLID principles** will give you an edge in writing efficient, maintainable code.
 
-17. Can we override the final method in Java? (answer)
-No, you cannot override a final method in Java, the final keyword with the method is to prevent method overriding. You use the final when you don't want subclass changing the logic of your method by overriding it due to security reasons. This is why the String class is final in Java. This concept is also used in the template design patterns where the template method is made final to prevent overriding.
+### 50 Essential Topics for SQL and Database Interview Questions
 
+Here’s a curated list of essential SQL and database topics, including key concepts like normalization, indexing, joins, stored procedures, and constraints, that programmers should prepare for SQL and database-related interviews. Interviewers typically ask a range of questions, from basic to complex, based on these fundamental topics. A good interviewee should be able to demonstrate both knowledge and problem-solving skills in these areas.
 
+#### Top 50 SQL and Database Phone Interview Questions & Answers:
 
+1. **Difference between UNION and UNION ALL in SQL?**  
+   - **Answer**: `UNION` removes duplicates, while `UNION ALL` includes duplicates. Both are used to combine the results of multiple SELECT queries.
 
-18. Can we have a non-abstract method inside an interface? (answer)
-From Java 8 onward you can have a non-abstract method inside the interface, prior to that it was not allowed as all method was implicitly public abstract. From JDK 8, you can add static and default methods inside an interface.
+2. **Difference between WHERE and HAVING clause in SQL?**  
+   - **Answer**: `WHERE` filters rows before aggregation, whereas `HAVING` filters groups after aggregation.
 
+3. **Clustered vs Non-clustered Indexes?**  
+   - **Answer**: A clustered index defines the physical order of data rows in a table. A non-clustered index creates a separate structure to speed up data retrieval.
 
-19. What is the default method of Java 8? (answer)
-The default method, also known as the extension method is a new type of method which you can add to the interface now. These methods have implementation and are intended to be used by default. By using this method, JDK 8 managed to provide common functionality related to lambda expression and stream API without breaking all the clients who implement their interfaces. If you look at Java 8 API documentation you will find several useful default methods on key Java interfaces like Iterator, Map, etc.
+4. **Find the second-highest salary without TOP or LIMIT?**  
+   - **Answer**: Use a correlated subquery to find the second-highest salary:
+     ```sql
+     SELECT MAX(Salary) 
+     FROM Employee 
+     WHERE Salary < (SELECT MAX(Salary) FROM Employee);
+     ```
 
+5. **How to find duplicate rows in a database?**  
+   - **Answer**: Use `GROUP BY` and `HAVING COUNT(*) > 1` to find duplicate rows.
 
-20. What is an abstract class in Java? (answer)
-An abstract class is a class that is incomplete. You cannot create an instance of an abstract class in Java. They are provided to define default behavior and ensured that client of that class should adore to those contract which is defined inside the abstract class. In order to use it, you must extend and implement their abstract methods. BTW, in Java, a class can be abstract without specifying any abstract method.
+6. **Correlated vs Non-correlated subquery?**  
+   - **Answer**: A correlated subquery refers to a value from the outer query, while a non-correlated subquery does not.
 
+7. **How many clustered indexes can a table have?**  
+   - **Answer**: A table can have only one clustered index, as it defines the physical order of data.
 
-21. What is an interface in Java? What is the real use of an interface? (answer)
-As an abstract class, the interface is also there to specify the contract of an API. It supports the OOP abstraction concept as it defines only abstract behavior. It will tell that your program will give output but how is left to implementers. The real use of the interface to define types to leverage Polymorphism. See the answer for a more detailed explanation and discussion.
+8. **PRIMARY Key vs UNIQUE Key?**  
+   - **Answer**: A `PRIMARY KEY` uniquely identifies records and doesn't allow NULL values. A `UNIQUE KEY` also ensures uniqueness but allows one NULL value.
 
+9. **View vs Materialized View?**  
+   - **Answer**: A `VIEW` is a virtual table that is recalculated every time it is queried, while a `MATERIALIZED VIEW` stores the result set physically for faster access.
 
-22. The difference between Abstract class and interface? (answer)
-In Java, the key difference is that the abstract class can contain a non-abstract method but the interface cannot, but from Java 8 onward interface can also contain static and default methods that are non-abstract. See the answer for a more detailed discussion as I have described a lot of points there.
+10. **Difference between TRUNCATE, DELETE, and DROP?**  
+    - **Answer**: `DELETE` removes rows and logs each deletion, `TRUNCATE` removes all rows without logging, and `DROP` removes the entire table.
 
-Java Object Oriented Programming questions for experienced
+11. **Referential Integrity in a relational database?**  
+    - **Answer**: Ensures that relationships between tables are maintained by deleting or updating related rows in child tables when a record is modified in the parent table.
 
+12. **What is Normalization?**  
+    - **Answer**: Normalization is the process of organizing data to reduce redundancy and improve data integrity.
 
-23. Can we make a class abstract without an abstract method? (answer)
-Yes, just add abstract keyword on the class definition and your class will become abstract.
+13. **1NF, 2NF, and 3NF?**  
+    - **Answer**:  
+      - **1NF**: Ensures that the table has no repeating groups and every field contains atomic values.  
+      - **2NF**: Removes partial dependency (all non-key attributes depend on the whole key).  
+      - **3NF**: Ensures that non-key attributes are not transitively dependent on the primary key.
 
+14. **ISNULL() vs COALESCE() in SQL Server?**  
+    - **Answer**: `ISNULL()` replaces NULL with a specified value, while `COALESCE()` returns the first non-NULL expression.
 
-24. Can we make a class both final and abstract at the same time? (answer)
-No, you cannot apply both final and abstract keywords to the class at the same time because they are exactly the opposite of each other. A final class in Java cannot be extended and you cannot use an abstract class without extending and making it a concrete class. As per Java specification, the compiler will throw an error if you try to make a class abstract and final at the same time.
+15. **Ensure values between 1 and 5 in a column?**  
+    - **Answer**: Use a `CHECK` constraint:
+      ```sql
+      ALTER TABLE MyTable
+      ADD CONSTRAINT chk_values CHECK (MyColumn BETWEEN 1 AND 5);
+      ```
 
+16. **CHAR vs VARCHAR?**  
+    - **Answer**: `CHAR` is fixed-length, while `VARCHAR` is variable-length.
 
-25. Can we overload or override the main method in Java? (answer)
-No, since main() is a static method, you can only overload it, you cannot override it because the static method is resolved at compile time without needing object information hence we cannot override the main method in Java.
+17. **VARCHAR vs NVARCHAR?**  
+    - **Answer**: `NVARCHAR` supports Unicode characters, while `VARCHAR` does not.
 
+18. **Get Day, Month, and Year from a date?**  
+    - **Answer**: Use `DATEPART()` function in SQL Server:
+      ```sql
+      SELECT DATEPART(DAY, GetDate()), DATEPART(MONTH, GetDate()), DATEPART(YEAR, GetDate());
+      ```
 
+19. **How to check if a date is valid in SQL?**  
+    - **Answer**: You can use `TRY_CAST()` or `TRY_CONVERT()` to check if a value can be converted to a date.
 
+20. **LEFT OUTER JOIN vs INNER JOIN?**  
+    - **Answer**: `INNER JOIN` returns only matching rows, while `LEFT OUTER JOIN` returns all rows from the left table and matching rows from the right table.
 
-26. What is the difference between Polymorphism, Overloading, and Overriding? (answer)
-This is a slightly tricky OOP concept question because Polymorphism is the real concept behind both Overloading and Overriding. Overloading is compiled time Polymorphism and Overriding is Runtime Polymorphism.
+21. **SELF JOIN in SQL?**  
+    - **Answer**: A self-join is when a table is joined to itself. Example: Find employees who are managers in the same table.
 
+22. **Departments and Employees Query?**  
+    - **Answer**: Find all departments and the number of employees in each:
+      ```sql
+      SELECT DepartmentName, COUNT(EmployeeID)
+      FROM Employees
+      GROUP BY DepartmentName;
+      ```
 
-27. Can an interface extend more than one interface in Java?
-Yes, an interface can extend more than one interface in Java, it's perfectly valid.
+23. **COUNT(*), COUNT(1), and COUNT(column_name)?**  
+    - **Answer**: `COUNT(*)` counts all rows, including NULLs. `COUNT(1)` counts rows but doesn’t include NULLs for any specific column, and `COUNT(column_name)` counts non-NULL values in that column.
 
+24. **What are Database Statistics?**  
+    - **Answer**: Database statistics provide information about the distribution of data within the database, which helps the query optimizer to generate efficient query plans.
 
-28. Can a class extend more than one class in Java?
-No, a class can only extend another class because Java doesn't support multiple inheritances but yes, it can implement multiple interfaces.
+25. **Does the order of columns in a compound index matter?**  
+    - **Answer**: Yes, the order affects how the index is used. For example, an index on `(book_id, active)` is not the same as `(active, book_id)`.
 
+26. **Usage of _ and % in SQL?**  
+    - **Answer**: `_` matches exactly one character, while `%` matches zero or more characters in a `LIKE` clause.
 
-29. What is the difference between abstraction and polymorphism in Java? (answer)
-Abstraction generalizes the concept and Polymorphism allows you to use different implementations without changing your code. This diagram explains the abstraction quite well, though:
+27. **How to force a query to use a specific index?**  
+    - **Answer**: Use query hints to specify which index to use, e.g., `WITH (INDEX(index_name))`.
 
-Java OOP Concepts Interview Questions and Answers
+28. **Which is faster: index seek, index scan, or table scan?**  
+    - **Answer**: An index seek is the fastest, followed by an index scan, and table scan is the slowest.
 
+29. **NULL = NULL returns in SQL?**  
+    - **Answer**: It returns `UNKNOWN`. In SQL, NULL values are not equal to each other.
 
+30. **SQL Query for NULL values in a column?**  
+    - **Answer**: Use `IS NULL` to check for NULL values:
+      ```sql
+      SELECT * FROM Employees WHERE EMP_NAME IS NULL;
+      ```
 
-8 Object-Oriented Design Principle and pattern Interview Questions
-Now let's see some OOPS concept questions based on the SOLID design principles and GOF design patterns that take advantage of the OOPS concept discussed here.
+31. **What is a Temp Table?**  
+    - **Answer**: A temp table exists only during the session and is deleted when the session ends.
 
-1. What problem is solved by the Strategy pattern in Java? (answer)
-Strategy pattern allows you to introduce a new algorithm or new strategy without changing the code which uses that algorithm. For example, the Collections.sort() method which sorts the list of the object uses the Strategy pattern to compare objects. Since every object uses a different comparison strategy you can compare various objects differently without changing the sort method.
+32. **Fastest way to empty a table?**  
+    - **Answer**: Use the `TRUNCATE` command for faster performance than `DELETE`.
 
+33. **What is an Identity Column?**  
+    - **Answer**: An identity column auto-increments with each insert, often used for primary keys.
 
-2. Which OOP concept Decorator design Pattern is based upon? (answer)
-The decorator pattern takes advantage of Composition to provide new features without modifying the original class. A very good to-the-point question for the telephonic round. This is quite clear from the UML diagram of the Decorator pattern, as you can see the Component is associated with a Decorator.
+34. **Return identity value from a table with a trigger?**  
+    - **Answer**: Use the `@@IDENTITY` function to return the last identity value inserted.
 
-OOP design pattern interview questions answers
+35. **How to return a value from a stored procedure?**  
+    - **Answer**: Use `OUTPUT` parameters or `RETURN` statement.
 
+36. **Returning VARCHAR from a stored procedure?**  
+    - **Answer**: Use an `OUTPUT` parameter to return a VARCHAR value.
 
-3. When to use the Singleton design pattern in Java? (answer)
-When you need just one instance of a class and want that to be globally available then you can use the Singleton pattern. It's not free of cost though because it increases the coupling between classes and makes them hard to test. This is one of the oldest design pattern questions from Java interviews. Please see the answer for a more detailed discussion.
+37. **Best data type for values between 1 and 250?**  
+    - **Answer**: Use `TINYINT`, which stores values between 0 and 255.
 
+38. **LEFT vs RIGHT OUTER JOIN?**  
+    - **Answer**: A `LEFT OUTER JOIN` includes all records from the left table, while a `RIGHT OUTER JOIN` includes all records from the right table.
 
-4. What is the difference between State and Strategy Patterns? (answer)
-Though the structure or class diagram of the State and Strategy pattern is the same, their intent is completely different. The state pattern is used to do something specific depending upon the state while Strategy allows you to switch between algorithms without changing the code which uses it.
+39. **SQL Query for last names starting with 'T'?**  
+    - **Answer**:
+      ```sql
+      SELECT LastName FROM Employees WHERE LastName LIKE 'T%';
+      ```
 
+40. **Select all rows where the date is '20211002'?**  
+    - **Answer**: Use `WHERE DateColumn = '20211002'`.
 
-5. What is the difference between Association, Aggregation, and Composition in OOP? (answer)
-When an object is related to another object is called association. It has two forms, aggregation, and composition. the former is the loose form of association where the related object can survive individually while later is a stronger form of association where a related object cannot survive individually. For example, the city is an aggregation of people but is the composition of body parts.
+41. **Local vs Global Temporary Tables in SQL Server?**  
+    - **Answer**: Local temp tables are available only to the session that created them, while global temp tables are accessible by any session.
 
+42. **Create a copy of a table in SQL Server?**  
+    - **Answer**: Use `SELECT INTO` to create a copy:
+      ```sql
+      SELECT * INTO NewTable FROM OriginalTable;
+      ```
 
+43. **Change the data type of a column?**  
+    - **Answer**: Use `ALTER TABLE`:
+      ```sql
+      ALTER TABLE MyTable ALTER COLUMN ColumnName
 
+ NEW_DATA_TYPE;
+      ```
 
+44. **Best data type for monetary values?**  
+    - **Answer**: Use `DECIMAL` or `MONEY` types for monetary values.
 
-6. What is the difference between Decorator, Proxy, and Adapter patterns in Java? (answer)
-Again they look similar because their structure or class diagram is very similar but their intent is quite different. The Decorator adds additional functionality without touching the class, Proxy provides access control, and an Adapter is used to make two incompatible interfaces work together. 
+45. **What does SELECT 3/2 return?**  
+    - **Answer**: It returns `1` because integer division truncates the decimal.
 
+46. **Max value of Decimal(6, 5)?**  
+    - **Answer**: The maximum value is `0.99999`, as it allows 1 digit before the decimal and 5 digits after.
 
-7. What is the 5 objects oriented design principle from SOLID? (answer)
-SOLID is the term given by Uncle Bob in his classic book, the Clean Code, one of the must-read books for programmers. In SOLID each character stands for one design principle:
-S for Single Responsibility Principle
-O for Open closed design principle
-L for Liskov substitution principle
-I for Interface segregation principle
-D for Dependency inversion principle
+47. **Query for `ID != 101` where `ID` has NULL values?**  
+    - **Answer**: It will not return rows where `ID` is NULL, because `NULL != 101` is not true. Use `IS NULL` for those cases.
 
-OOP Java Interview Questions for 2 years experienced
+48. **Favorite SQL book?**  
+    - **Answer**: "Head First SQL" or "Joe Celko’s SQL Puzzles" for advanced SQL skills.
 
+49. **Two SQL best practices?**  
+    - **Answer**: Regular indexing and query optimization.
 
-8. What is the difference between Composition and Inheritance in OOP? (answer)
-This is another great OOPS concept question because it tests what matters, both of them are very important from a class design perspective. Though both Composition and Inheritance allow you to reuse code, formerly is more flexible than later.
+50. **Isolation levels in SQL Server?**  
+    - **Answer**: The isolation levels include `Read Uncommitted`, `Read Committed`, `Repeatable Read`, `Serializable`, and `Snapshot`.
 
-Composition allows the class to get an additional feature at runtime, but Inheritance is static. You can not change the feature at runtime by substitution of a new implementation. See the answer for a more detailed discussion.
+These topics and answers will help you prepare for a wide range of SQL and database interview questions.
 
 
-Read more: https://www.java67.com/2015/12/top-30-oops-concept-interview-questions-answers-java.html#ixzz8hidtifSz
+Below are the solutions for the SQL query problems listed based on the provided Employee and Department data model:
 
-10 Object-Oriented and SOLID Desing Principles for Programmers
-Though the best way of learning any design principle or pattern is a real-world example and understanding the consequences of violating that design principle, the subject of this article is Introducing Object-oriented design principles for Java Programmers, who are either not exposed to it or in the learning phase. 
+### 1. **Employee names who have a bigger salary than their manager**
+```sql
+SELECT E.emp_name
+FROM Employee E
+JOIN Employee M ON E.mngr_id = M.emp_id
+WHERE E.salary > M.salary;
+```
+**Explanation**: The query joins the `Employee` table with itself to compare employees with their managers. We check if an employee's salary is greater than their manager's salary.
 
-Object Oriented Design Principles in Java Programming
+---
 
+### 2. **Employees who have the biggest salary in their Department**
+```sql
+SELECT E.emp_name
+FROM Employee E
+WHERE E.salary = (
+  SELECT MAX(salary)
+  FROM Employee
+  WHERE dept_id = E.dept_id
+);
+```
+**Explanation**: This query selects employees whose salary equals the maximum salary in their department by using a correlated subquery.
 
-I personally think each of these OOP and SOLID design principle needs an article to explain them clearly, and I will definitely try to do that here, but for now, just get yourself ready for a quick bike ride on design principle town :)
+---
 
+### 3. **Departments that have less than 3 people**
+```sql
+SELECT D.dept_name
+FROM Department D
+JOIN Employee E ON D.dept_id = E.dept_id
+GROUP BY D.dept_name
+HAVING COUNT(E.emp_id) < 3;
+```
+**Explanation**: This query finds departments with fewer than 3 employees by joining the `Department` and `Employee` tables and using the `HAVING` clause to filter based on employee count.
 
-1. DRY (Don't repeat yourself)
-Our first object-oriented design principle is DRY, as the name suggests DRY (don't repeat yourself) means don't write duplicate code, instead use Abstraction to abstract common things in one place. If you have a block of code in more than two places, consider making it a separate method, or if you use a hard-coded value more than one time, make them public final constant.
+---
 
-The benefit of this Object-oriented design principle is in maintenance. It's important not to abuse it, duplication is not for code, but for functionality. It means if you used standard code to validate OrderID and SSN, it doesn’t mean they are the same, or they will remain the same in the future.
+### 4. **All Departments along with the number of people there**
+```sql
+SELECT D.dept_name, COUNT(E.emp_id) AS num_employees
+FROM Department D
+LEFT JOIN Employee E ON D.dept_id = E.dept_id
+GROUP BY D.dept_name;
+```
+**Explanation**: This query lists all departments and the number of employees in each department. We use a `LEFT JOIN` to ensure that departments with no employees are included with a count of 0.
 
-By using standard code for two different functionality or thing, you tightly couple them forever, and when your OrderId changes its format, your SSN validation code will break.
+---
 
-So beware of such coupling and just don’t combine anything which uses similar code but is not related. You can further check out the Basics of Software Architecture & Design Patterns in Java course on Udemy to learn more about writing the right code and best practices to follow while designing a system. 
+### 5. **Employees who don't have a manager in the same department**
+```sql
+SELECT E.emp_name
+FROM Employee E
+LEFT JOIN Employee M ON E.mngr_id = M.emp_id AND E.dept_id = M.dept_id
+WHERE M.emp_id IS NULL;
+```
+**Explanation**: The query selects employees who do not have a manager in the same department. The `LEFT JOIN` ensures that we can find employees with no corresponding manager in the same department (where `M.emp_id` is `NULL`).
 
-Object Oriented Design Principles Java Programmer should know
+---
 
+### 6. **All Departments along with the total salary of employees in each**
+```sql
+SELECT D.dept_name, SUM(E.salary) AS total_salary
+FROM Department D
+JOIN Employee E ON D.dept_id = E.dept_id
+GROUP BY D.dept_name;
+```
+**Explanation**: This query calculates the total salary for each department by summing up the salaries of employees in that department.
 
+---
 
-
-
-2. Encapsulate What Changes
-Only one thing is constant in the software field, and that is "Change," So encapsulate the code you expect or suspect to be changed in the future. The benefit of this OOP Design principle is that It's easy to test and maintain proper encapsulated code.
-
-If you are coding in Java, then follow the principle of making variables and methods private by default and increasing access step by step, like from private to protected and not public.
-
-Several of the design patterns in Java uses Encapsulation, the Factory design pattern is one example of Encapsulation that encapsulates object creation code and provides flexibility to introduce a new product later with no impact on existing code.
-
-Btw, if you are interested in learning more about design patterns in Java and Object-Oriented Programming, then you must check this Design Pattern Library course Pluralsight. It's one of the best collections of design patterns and advice on how to use them in the real world.
-
-SOLID design principles for programmers
-
-
-
-
-
-3. Open Closed Design Principle
-Classes, methods, or functions should be Open for extension (new functionality) and Closed for modification. This is another beautiful SOLID design principle, which prevents someone from changing already tried and tested code.
-
-
-Ideally, if you are adding new functionality only, then your code should be tested, and that's the goal of the Open Closed Design principle. By the way, the Open-Closed principle is "O" from the SOLID acronym.
-
-Open Closed Design Principle
-
-
-
-4. Single Responsibility Principle (SRP)
-Single Responsibility Principle is another SOLID design principle, and represent  "S" on the SOLID acronym. As per SRP, there should not be more than one reason for a class to change, or a class should always handle single functionality.
-
-If you put more than one functionality in one Class in Java, it introduces coupling between two functionality, and even if you change one feature, there is a chance you broke coupled functionality,  which requires another round of testing to avoid any surprise on the production environment.
-
-You can further see the SOLID Principles of Object-Oriented Design and Architecture course on Udemy for more real-world examples and to learn about patterns that are based on this principle.
-
-Single Responsibility Principle (SRP)
-
-
-
-
-5. Dependency Injection or Inversion principle
-Don't ask for dependency; it will be provided to you by the framework. This has been very well implemented in the Spring framework, the beauty of this design principle is that any class which is injected by the DI framework is easy to test with the mock object and more comfortable to maintain because object creation code is centralized in the framework and the client code is not littered with that.
-
-Dependency Injection or Inversion principle
-
-
-There are multiple ways to implemented Dependency injection like using bytecode instrumentation, which some AOP (Aspect Oriented Programming) framework like AspectJ does, or by using proxies just like used in Spring. See this example of the IOC and DI design pattern to learn more about this SOLID design principle. It represents "D" on the SOLID acronym.
-
-
-
-6. Favor Composition over Inheritance
-Always favor composition over inheritance, if possible. Some of you may argue this, but I found that Composition is a lot more flexible than Inheritance.
-
-Composition allows changing the behavior of a class at run-time by setting property during run-time, and by using Interfaces to compose a class, we use polymorphism, which provides flexibility to replace with better implementation at any time.
-
-Favor Composition over Inheritance
-
-
-
-Even the classic book Effective Java advises favoring composition over inheritance. See here to learn more about why your Composition is better than Inheritance for reusing code and functionality. 
-
-
-7. Liskov Substitution Principle (LSP)
-According to the Liskov Substitution Principle, Subtypes must be substitutable for supertype, i.e. methods or functions which use superclass type must be able to work with the object of subclass without any issue".
-
- LSP is closely related to the Single responsibility principle and Interface Segregation Principle. If a class has more functionality, then the subclass might not support some of the functionality and does violate LSP.
-
-Liskov Substitution Principle (LSP)
-
-
-In order to follow LSP SOLID design principle, derived class or subclass must enhance functionality, but not reduce them. LSP represents "L" on the SOLID acronym.  If you are interested in a more real-world example, then the SOLID Principles of Object-Oriented Design course on Pluralsight is an excellent course to start with. 
-
-Btw, you would need a Pluralsight membership to get access to this course, which costs around $29 per month or $299 annually (14% discount).
-
-If you don't have Pluralsight membership, I encourage you to get one because it allows you to access their 5000+ online courses on all the latest topics like front-end and back-end development, machine learning, etc. It also includes interactive quizzes, exercises, and the most recent certification material.
-
-It's more like Netflix for Software Developers, and Since learning is an integral part of our job, Pluralsight membership is a great way to stay ahead of your competition.
-
-They also provide a 10-day free trial without any commitment, which is a great way to not just access this course for free but also to check the quality of courses before joining Pluralsight.
-
-
-8. Interface Segregation Principle (ISP)
-The Interface Segregation Principle states that a client should not implement an interface if it doesn't use that. This happens mostly when one interface contains more than one functionality, and the client only needs one functionality and no other.
-
-Interface design is a tricky job because once you release your interface, you can not change it without breaking all implementation.
-
-Interface Segregation Principle (ISP)
-
-
-Another benefit of this design principle in Java is, the interface has the disadvantage of implementing all methods before any class can use it, so having single functionality means less method to implement. If you don't get the benefit of the interface in coding, then I suggest you read my blog post, the real usage of an interface in Java to learn more. 
-
-
-9. Programming for Interface not implementation
-Always program for the interface and not for application; this will lead to flexible code that can work with any new implementation of the interface.
-
-So use interface type on variables, return types of method, or argument type of methods in Java.
-
-
-This has been advised in many Java books, including in Effective Java and Head First design pattern book.
-
-Programming for Interface not implementation code example
-
-
-
-
-10. Delegation principles
-Don't do all stuff by yourself,  delegate it to the respective class. Classical example of delegation design principle is equals() and hashCode() method in Java. In order to compare two objects for equality, we ask the class itself to make a comparison instead of the Client class doing that check.
-
-The key benefit of this design principle is no duplication of code and pretty easy to modify behavior. Event delegation is another example of this principle, where an event is delegated to handlers for handling. 
-
-Delegation principle in Java example
-
-
-Summary
-All these object-oriented design principles help you write flexible and better code by striving for high cohesion and low coupling. The theory is the first step, but what is most important is to develop the ability to find out when to apply these design principles.
-
-
-Read more: https://javarevisited.blogspot.com/2018/07/10-object-oriented-design-principles.html#ixzz8hiePSPN7
-
-
-50 Essential Topics for SQL and Database Interview Questions
-Here is a list of essential topics programmers should prepare for SQL and Database interview questions. The list includes most essential SQL and database concepts like normalization, index, aggregation, joins stored procedure, and constraints. 
-
-Interviewer normally asks 20 to 25 questions to get a feel of overall skill of candidate, sometimes they purposefully include a tough question, couple of tricky one but mostly questions based upon fundamentals. You will usually see questions from the following topics in any SQL phone interview:
-Database fundamental like Normalization, Referential Integrity
-Database Relationship like one to one, one to many, and many to many
-Different types of keys like Primary key, Unique key, Candidate key, etc
-Database indexes like how they work, benefits, disadvantages, etc
-The SQL query to extract records from tables
-SQL Join
-Database indexes
-Question about a particular database like Oracle, SQL Server, MySQL, or PostgreSQL
-Triggers
-Temporary table
-Stored procedures
-Views
-Query Optimization
-Group By clause and aggregate function
-CRUD operation like INSERT, UPDATE, DELETE
-SQL clause based questions like TRUNCATE, DROP, etc
-CONSTRAINTS like CHECK constraint, PRIMARY key constraints
-I have tried to include as many good questions as possible from the above topics, to make them useful resources for all levels of SQL developers and DBA like beginners to experienced programmers having 2 to 5 years of experience.
-
-Top 50 SQL and Database Phone Interview Questions Answers
-
-As I mentioned, on phone interviews, Interviewers are usually in hurry, they want to hear the correct and concise answer, and not blah blah blah answers, because of that I have kept answers short and sweet. One more reason for keeping your answer short and specific is to avoid getting shot by providing additional information which is not accurate.
-
-At the same time, It's also hard for any SQL developer to go through five-page articles to revise some 30 most frequently asked SQL questions, keep answers to the point helps them a lot.
-
-So, let's start our journey with these beautiful databases and SQL interview questions, I am sure you will also learn new things as well. 
-
-1. Difference between UNION and UNION ALL in SQL?  (answer)
-hint  - UNION doesn't include duplicate records, UNION ALL does. Both can be used to combine results from multiple queries. 
-
-2. Difference between WHERE and HAVING clause in SQL?  (answer)
-hint - in case of WHERE filtering applies before aggregation while in case of HAVING, filtering applies after aggregation
-
-3. Describe the difference between clustered and non-clustered indexes in a database?  (answer)
-hint - clustered index defined the order in which data is physically stored in the table. Since data can be sorted in only one way physically, there is only one clustered index per table and that's usually the primary key. You can have multiple non-clustered indexes to speed up your queries. 
-
-4. Write an SQL query to find the second highest salary of an employee without using TOP or LIMIT?  (answer)
-You can use correlated queries to solve this problem.
-
-5. How to find duplicate rows in the database?  (answer)
-
-6. Difference between correlated and non-correlated subquery in SQL?  (answer)
-
-7. How many clustered indexes you can have in a table?  (answer)
-This is a tricky question, you can only have one clustered index per table. 
-
-8. Difference between the PRIMARY key and the UNIQUE key constraint in SQL?  (answer)
-
-9. Difference between view and materialized view in SQL?  (answer)
-
-10. Difference between TRUNCATE, DELETE and DROP in SQL?  (answer)
-delete removes record but also put an entry into log segment so you can roll back, truncate removes all rows of a table without logging each record on log segment, DROP removes table itself. 
-
-11. What is Referential Integrity in a relational database?  (answer)
-It's a rule which ensures that when a record is deleted from the primary table, all associated records are deleted from the related table. It ensures data integrity.
-
-12. What is Normalization?  (answer)
-A way to avoid duplication of data in tables. 
-
-13. When a table is said to be in 1NF, 2nd NF, and 3rd NF?  (answer)
-
-14. Describe the difference between ISNULL() and COALESCE() in SQL Server?  (answer)
-
-15. How do you ensure that only values between 1 to 5 are allowed in an integer column?  (answer)
-
-16. Difference between CHAR and VARCHAR data types in SQL?  (answer)
-CHAR is fixed length, VARCHAR is variable length
-
-17. Difference between VARCHAR and NVARCHAR in SQL Server?  (answer)
-NVARCHAR supports Unicode 
-
-18. How do you get Day, Month, and Year from a date in SQL Server?  (answer)
-By using the DATEPART() function
-
-19. How to check if a date is valid in SQL?  (answer)
-
-20. Difference between LEFT OUTER JOIN and INNER JOIN in SQL?  (answer)
-
-21. What is SELF JOIN in SQL?  (answer)
-When we join two instances of tables it's called self-join. For example, if the table contains employee name and role then you can use self join to find all employees who are managers.
-
-22. In a classical Employee and Department relationship, write SQL query to print all departments and number of employees on each department.   (answer)
-
-23. Difference between COUNT(*), COUNT(1), and COUNT(column_name) in SQL? 
-COUNT(*) includes null values while counting but  COUNT(1), and COUNT(column_name) doesn't take null values into consideration during counting. 
-
-24. What is Database statistics? How it affects the performance of your Query?
-
-25. Suppose you have to create a compound index in a table, involving two columns like book_id and active. Now you can create them as either (book_id, active) or (active, book_id), do you think the order of columns in an index matter? How it will affect your SQL queries?  
-
-
-26. What do _ and  % are used in the SQL query?
-They are used in the LIKE operators while writing SQL queries. The underscore is used to match one character, while % is used for any number of characters. 
-
-27. How do you ensure that a particular SQL query will use a particular Index?  (answer)
-You can use SQL hints for that purpose. 
-
-
-28. In SQL Server, which one is fastest and slowest between an index seek, an index scan, and table scan?  (answer)
-In a general, the table scan is slower than the index scan and index seek. Your goal should be to write queries that can take advantage of the index by using index scan and index seek for faster retrieval. You can use the SQL EXPLAIN command to retrieve the query plans and find out whether indexes are used for your query or not. 
-
-
-29. What does NULL = NULL will return in SQL?  (answer)
-This is another tricky question to check your knowledge about NULLs in SQL. I think it will return unknown in SQL Server. But different Databases may return different values, it will not be true though. You can try running this query on SQL Server, MySQL, PostgreSQL, and Oracle to see if you get the same response or different response. 
-
-
-30. Write SQL query to find all rows where EMP_NAME, a VARCHAR column is NULL?  
-This is a simple question often asked beginners to check whether they know how to check for NULL in SQL or not. The trick here is to use "IS NULL" instead of the "=" operator to find all rows where EMP_NAME is NULL.
-
-Here is the SQL query for this question:
-
-$ SELECT EMP_NAME FROM Employee where EMP_NAME IS NULL
-
-
-31. What is the temp table?  (answer)
-A temp table or a temporary table is a base table that is not stored in the database and only exists while the current database session is active. Once the database connection is closed, all temp tables are lost. They may look similar to view but they are not. A view exists only for a single query but you can use a temporary table as a regular table until your session is active. 
-
-
-32. What is the fastest way to empty or clear a table?  (answer)
-You can use the truncate command to empty or clear the table. It's faster than delete because it doesn't log each deleted entry on a log, that's why you cannot roll back it. So be careful while using truncate to clear or empty a table. 
-
-33. What is an identity column in SQL Server? How do you return an identity value from a table?  (answer)
-
-34. How do you return an identity value from a table with a trigger? 
-In SQL Server, you can use a function like @@IDENTITY  to generate identity values. 
-
-Example - SELECT @@IDENTITY AS 'Identity';  
-
-35. How do you return a value from a stored procedure? 
-In SQL Server, you can either use the OUTPUT parameter or use the return statement to return a value from a stored procedure. 
-
-36. How do you return a VARCHAR value from a stored procedure?  
-hint - using OUTPUT parameter return clause 
-
-37. If you have a column that will only have values between 1 and 250 what data type will you use? 
-If you are using SQL Server database then you can use the TINYINT datatype which can accommodate numbers between 0 and 255 and it needs 1 byte for storage. 
-
-This question is asked to test your knowledge of SQL data type and whether you can choose the right data type for a given requirement or not. Your goal should be to use a data type that can accommodate a given range. You can also ask questions that whether it's fixed or it can change in the future. 
-
-
-38. Difference between LEFT and RIGHT OUTER JOIN in SQL?  (answer)
-Both are outer joins, in LEFT outer join, all rows from the left side table will be included, and only matching rows from the other side of the table are included. In case of  RIGHT outer join, all rows of the right side of the table on join condition are included. 
-
-39. Can you write an SQL query to select all last names that start with 'T'?  (answer)
-
-40. How would you select all rows where the date is 20211002?  (answer)
-
-41. What is the difference between a local and global temporary table in SQL Server?  (answer)
-
-42. How do you create a copy of a table in SQL Server?  (answer)
-
-43. How do you change the data type of a column in a table in SQL?  (answer)
-
-44. What data type should you use to store monetary values in a table?  (answer)
-
-45. What does SELECT 3/2 will return? 1 or 1.5?  (answer)
-
-46. What is the maximum value that Decimal(6, 5) can hold in SQL Server?  (answer)
-
-47. If you have a table with one integer column ID, and it has three values 101, 201, and NULL? What will the following SQL query SELECT * FROM TestTable where ID !=101 will return?  (answer)
-
-48. What is your favorite SQL book?  (answer)
-This one is an easy question and the interviewer just wants to know whether you have read any book or not. You can name the SQL book you have read, if you haven't read any SQL book so far then I highly recommend you to read Head First SQL if you are learning SQL from scratch and Joe Celko's SQL Puzzles if you already know SQL and looking for some SQL puzzles to test your SQL query skills. 
-
-best book to improve SQL query skills
-
-
-
-49. Tell me two SQL best practices you follow?  (answer)
-hint - creating indexes and using them on SQL queries, normalization, and updating statistics regularly. 
-
-50. What is the different ISOLATION level in the Microsoft SQL Server database?  (answer)
-
-51. If you create a local temp table and then call a proc is the temp table available inside the proc?  (answer)
-
-52. Which date format is the only safe one to use when passing dates as strings?  (answer)
-
-53. How do you suppress rows affected messages when executing an insert statement in SQL Server?  (answer)
-
-54. Difference between ANSI-89 and ANSI-92 syntax of writing SQL Join?  (answer)
-
-55.  Differences between IN and EXISTS (and NOT IN, and NOT EXISTS) in SQL? (answer)
-
-
-Read more: https://javarevisited.blogspot.com/2021/05/sql-and-database-phone-interview-questions.html#ixzz8hig3CRWH
-
-12 SQL Query Problems with Solutions for Technical Interview 
-It's time to write SQL queries now. This section contains 6 SQL query Interview questions that will test many of your SQL skills like joins, grouping, and aggregating data, how you handle nulls in SQL etc. It doesn't test all skills e.g. correlated subqueries, but you can take a look at questions like how to find Nth highest salary of employees to learn that.
-
-This section contains 12 data problems for which you need to write SQL queries, the solution is provided in the next section but I suggest you try to solve these problems first before looking at the solution. 
-
-Also we will use classic Employee and Department data model as shown in following ERD Diagram
-
-Employee department table ERD diagram SQL
-
-
-And, here are the SQL query problems which you need to solve based upon above schema:
-
-1. Can you write an SQL query to show Employee (names) who have a bigger salary than their manager?
-
-2. Write an SQL query to find Employees who have the biggest salary in their Department?
-
-3. Write an SQL query to list Departments that have less than 3 people in it?
-
-4. Write an SQL query to show all Departments along with the number of people there?
-
-5. Can you write an SQL query to show all Employees that don't have a manager in the same department?
-
-6. Can you write SQL query to list all Departments along with the total salary there?
-
-7. Can you write an SQL query to find the second highest salary of Employee? (solution)
-
-8. How to find all duplicate records from a table? (solution)
-
-9. How do you copy all rows of a table using SQL query? (solution)
-
-10. How do you join more than two tables in SQL query? (solution)
-
-11. How to find 2nd highest salary without using a co-related subquery? (solution)
-
-12. There exists an Order table and a Customer table, find all Customers who have never ordered (solution)
-
-Don't scroll down to look at the solution until you try solving all the problems by yourself. Some of the questions are tricky, so please pay special attention to them. 
-
-It's not a real interview you can take your time because all the hard work your mind will put now to find answers by its own will always remain there and that's the real learning you will get by doing this exercise.
-
-
-Top 12 SQL Query Questions from Interviews for Practice with Solutions
-
-
-
-
-
-SQL Script to create a table and Populate data
-In this section, we'll see our SQL script for creating and populating the sample table required for running SQL queries. 
-
-I have chosen Employee and Department tables to teach you how to write SQL queries because it is one of the most popular SQL query examples and most of the developers, data scientists, students, and technical guys are familiar with Employee and Department data model.
-
-This is also the example many of you have used in your academics so it's quite easy to understand and correlate. 
-
-Remember, understanding schema and data is very important not only to write correct SQL queries but also to verify that your SQL query is correct by looking at the output.
-
-The SQL queries are written for Microsoft SQL Server database and tested on the same, but you can easily run on Oracle, MySQL, or any other database of your choice by removing T-SQL code e.g. the one which checks if a table already exists, and then drop and re-create it.
-
-Most of the code is standard ANSI SQL, hence it will run as it is on any other database. If you still face any problems then you can also check this guide to migrate SQL Server queries to Oracle.
-
-
-
-
-SQL scripts to create tables 
-USE Test
-GO
-
--- drop Employee table if already exists
-IF OBJECT_ID('dbo.Employee', 'U') IS NOT NULL
-BEGIN
-  PRINT 'Employee Table Exists, dropping it now'
- DROP TABLE Employee;
-END
-
--- drop Department table if already exists
-IF OBJECT_ID('dbo.Department', 'U') IS NOT NULL
-BEGIN
-  PRINT 'Department Table Exists, dropping it now'
-  DROP TABLE Department;
-END
-
--- create table ddl statments
-CREATE TABLE Employee(emp_id INTEGER PRIMARY KEY, dept_id INTEGER,
- mngr_id INTEGER, emp_name VARCHAR(20), salary INTEGER);
-CREATE TABLE Department(dept_id INTEGER PRIMARY KEY, dept_name VARCHAR(20));
-
--- alter table to add foreign keys
-ALTER TABLE Employee ADD FOREIGN KEY (mngr_id)
- REFERENCES Employee(emp_id);
-ALTER TABLE Employee ADD FOREIGN KEY (dept_id) 
-REFERENCES Department(dept_id);
-
--- populating department table with sample data
-INSERT INTO Department (dept_id, dept_name) 
-VALUES
-(1, 'Finance'),
-(2, 'Legal'),
-(3, 'IT'),
-(4, 'Admin'),
-(5, 'Empty Department');
-
--- populating employee table with sample data
-INSERT INTO Employee(emp_id, dept_id, mngr_id, emp_name, salary)
-VALUES( 1, 1, 1, 'CEO', 100),
-( 2, 3, 1, 'CTO', 95),
-( 3, 2, 1, 'CFO', 100),
-( 4, 3, 2, 'Java Developer', 90),
-( 5, 3, 2, 'DBA', 90),
-( 6, 4, 1, 'Adm 1', 20),
-( 7, 4, 1, 'Adm 2', 110),
-( 8, 3, 2, 'Web Developer', 50),
-( 9, 3, 1, 'Middleware', 60),
-( 10, 2, 3, 'Legal 1', 110),
-( 11, 3, 3, 'Network', 80),
-( 12, 3, 1, 'UNIX', 200);
-
-This query runs on the Test database, if you don't have the Test database in your SQL Server instance then either create it or remove the "USE Test" to run on any database of your choice, you can also change the name of the database and keep the "USE".
-
-When you run this script, it will create and populate the data the first time. When you run it again, it will drop and recreate the tables again, as shown in the following output:
-
-Employee Table Exists, dropping it now
-Department Table Exists, dropping it now
-
-(5 row(s) affected)
-
-(12 row(s) affected)
-And, here is how our data looks like after setting up:
-
-
-SQL query Practice Questions online
-
-
-And, here is how our Department data will look like:
-
-SQL query examples online
-
-
-
-In this script, I have followed the naming convention and tricks which I discussed earlier in my article, a better way to write SQL queries.  All the keyword is on the capital case while table names and column names are in small and camel case. 
-
-This improves the readability of SQL queries by clearing highlight which ones are keywords and which ones are object names even if syntax highlight is not available.
-
-This example shows that just following some simple SQL best practices can seriously improve the queries you write. 
-
-
-
-
-Solution of SQL Query Practice Interview Questions
-Here is the solution of all SQL query problems discussed in the last section
-
-1. SQL query to show Employee (names) who have a bigger salary than their manager?
-In this problem, you need to compare employees' salaries to their manager's salary. To achieve this, you need two instances of the same table. Also in order to find a Manager you need to compare employee id with manager id, this is achieved by using the self-join in SQL, where two instances of the same table are compared.
-
--- Employees (names) who have a bigger salary than their manager
-SELECT a.emp_name FROM Employee a JOIN Employee b
-ON a.mngr_id = b.emp_id
-WHERE a.salary > b.salary;
-You can see that Admin 2, and UNIX has higher salary than their boss, CEO who just earn $100. They key here is use of self join, if you have to compare data from the same table then you can create two instance of same table and join them together using self join. An interesting technique to solve this kind of SQL query problem.
-
-SQL Query questions for Tech Interviews
-
-
-
-
-2. SQL query to find Employees who have the biggest salary in their Department?
-This is a little bit complex problem to solve, you first need to find the maximum salary of each department, but the department doesn't have the salary, it is the employee who has the salary. 
-
-So we need to create a virtual or temp table where we should have both department and salary. 
-
-This can be achieved by joining both Employee and Department table on dept_id and then using GROUP by clause to group salary on dept_id.  Now, someone can question why we didn't use the self join?
-
-Since we need to print the name of the employee who has the highest salary, we need to compare each employee's salary with the department's highest salary which we have just calculated. 
-
-This can be done by keeping the result of the previous query in a temp table and then joining it again with the Employee table. 
-
--- Employees who have the biggest salary in their Department
-SELECT a.emp_name, a.dept_id
-FROM Employee a JOIN
-(SELECT a.dept_id, MAX(salary) as max_salary
-FROM Employee a JOIN Department b ON a.dept_id = b.dept_id
-GROUP BY a.dept_id) b
-ON a.salary = b.max_salary AND a.dept_id = b.dept_id;
-
-
-SQL Query Problems for Tech Interviews
-
-
-You can see that CEO, Adm 2, Legal 1, and UNIX has highest salary in their 
-respective department. You can also print department name as an additional 
-exercise. 
-
-
-3.SQL query to list Departments that have less than 3 people in it?
-This is a rather simple SQL query interview question to solve.
-You just need to know how to use the COUNT() function and GROUP BY clause.
--- Departments that have less than 3 people in it
-SELECT dept_id, COUNT(emp_name) as 'Number of Employee'
+### 7. **Find the second highest salary of Employee**
+```sql
+SELECT MAX(salary) AS second_highest_salary
 FROM Employee
-GROUP BY dept_id
-HAVING COUNT(emp_name) < 3;
+WHERE salary < (SELECT MAX(salary) FROM Employee);
+```
+**Explanation**: This query finds the second-highest salary by selecting the maximum salary that is less than the highest salary. It uses a subquery to get the highest salary.
 
-Output:
+---
 
-SQL query GROUP BY and COUNT Example
+### 8. **Find all duplicate records from a table**
+```sql
+SELECT emp_id, emp_name, dept_id, salary, COUNT(*)
+FROM Employee
+GROUP BY emp_id, emp_name, dept_id, salary
+HAVING COUNT(*) > 1;
+```
+**Explanation**: This query finds duplicate records by grouping rows with the same values and counting how many times they appear. It returns rows where the count is greater than 1.
 
+---
 
-4. SQL query to show all Departments along with the number of people there?
-This is a tricky problem, candidates often use inner join to solve the problem, leaving out empty departments.
--- All Department along with the number of people there
-SELECT b.dept_name, COUNT(a.dept_id) as 'Number of Employee'
-FROM Employee a FULL OUTER JOIN Department b ON a.dept_id=b.dept_id
-GROUP BY b.dept_name;
+### 9. **Copy all rows of a table**
+```sql
+INSERT INTO Employee (emp_id, dept_id, mngr_id, emp_name, salary)
+SELECT emp_id, dept_id, mngr_id, emp_name, salary
+FROM Employee;
+```
+**Explanation**: This query copies all rows from the `Employee` table into itself. You can modify it to copy data into another table if needed.
 
-Output
-SQL JOIN Query Examples
+---
 
+### 10. **Join more than two tables in SQL**
+```sql
+SELECT E.emp_name, D.dept_name, M.emp_name AS manager_name
+FROM Employee E
+JOIN Department D ON E.dept_id = D.dept_id
+LEFT JOIN Employee M ON E.mngr_id = M.emp_id;
+```
+**Explanation**: This query demonstrates how to join multiple tables: `Employee` with `Department`, and also `Employee` with itself (to get manager names) using `LEFT JOIN`.
 
-5.SQL query to show all Employees that don't have a manager
-in the same department?
-This is similar to the first SQL query interview question, where we have used self-join to solve the problem. There we compared the salary of employee and here we have compared their department.
--- Employees that don't have a manager in the same department
-SELECT a.emp_name FROM Employee a JOIN Employee b
-ON a.mngr_id = b.emp_id
-WHERE a.dept_id != b.dept_id;
+---
 
-Output
-SQL query for Practice
+### 11. **Find 2nd highest salary without using a correlated subquery**
+```sql
+SELECT MAX(salary) AS second_highest_salary
+FROM Employee
+WHERE salary < (SELECT MAX(salary) FROM Employee);
+```
+**Explanation**: This solution is similar to the previous one, but uses a different approach. The query gets the second-highest salary by filtering out the highest salary with a subquery.
 
+---
 
+### 12. **Find all Customers who have never ordered**
+```sql
+SELECT C.customer_id, C.customer_name
+FROM Customer C
+LEFT JOIN Orders O ON C.customer_id = O.customer_id
+WHERE O.order_id IS NULL;
+```
+**Explanation**: This query finds customers who have never placed an order by performing a `LEFT JOIN` between the `Customer` and `Orders` tables and selecting those where the `order_id` is `NULL`.
 
-6.Can you write SQL query to list all Departments along with
-the total salary of that department?
-This problem is similar to the 4th question in this list. Here also you need to use OUTER JOIN instead of INNER join to include empty departments which should have no salaries.
--- All Department along with the total salary there
-SELECT b.dept_name, SUM(a.salary) as 'Total Salary'
-FROM Employee a FULL OUTER JOIN Department b ON a.dept_id = b.dept_id
-GROUP BY b.dept_name;
+---
 
-Output:
+These are the SQL queries for solving common interview problems. Ensure that you understand the logic behind each query and try writing them on your own before referring to the solutions.
 
-SQL query examples for beginners
 
 
 
-And, Here is the output of all these SQL queries when running from SQL Server Management Studio:
 
-SQL Query  Interview Questions and Answers
 
 
-Read more: https://javarevisited.blogspot.com/2017/02/top-6-sql-query-interview-questions-and-answers.html#ixzz8hih5ctlR
-
-I'll show you 4 ways to solve this problem e.g. by using the correlated subquery, using ROW_NUMBER(), using TOP in SQL SERVER, and using LIMIT keyword in MySQL.
-
-By the way, if you are new to Microsoft SQL Server and T-SQL then I also suggest you join a comprehensive course to learn SQL Server fundamentals and how to work with T-SQL. If you need a recommendation then I suggest you go through the Microsoft SQL for Beginners online course by Brewster Knowlton on Udemy. It's a great course to start with T-SQL and SQL queries in SQL Server.
-
-
-
-
-
-
-
-
-
-Sample table and data for Nth Highest Salary Problem
-Before solving this problem we need some sample data to visualize the problem better, let's create an employee table with some data.
-
-
-
-Use below query to create a table and build schema:
-
--- creating Employee table in Oracle
-CREATE TABLE Employee (name varchar(10), salary int);
-
--- inserting sample data into Employee table
-INSERT INTO Employee VALUES ('Rick', 3000);
-INSERT INTO Employee VALUES ('John', 4000);
-INSERT INTO Employee VALUES ('Shane', 3000);
-INSERT INTO Employee VALUES ('Peter', 5000);
-INSERT INTO Employee VALUES ('Jackob', 7000);
-
-
-
-Nth highest salary using a correlated subquery
-How to find Nth Highest Salary in SQL
-One of the most common ways to solve this problem of finding the Nth maximum salary from the Employee table is by using the correlated subquery. 
-
-This is a special type of subquery where the subquery depends upon the main query and execute for every row returned by the main query.  It's slow but it can solve problems which are difficult to solve otherwise. Let's see the SQL query to find the Nth highest salary using the Correlated subquery.
-
-SQL Query:
-Here is the SQL query you can use to calculate the Nth salary :
-SELECT name, salary 
-FROM #Employee e1
-WHERE N-1 = (SELECT COUNT(DISTINCT salary) FROM #Employee e2
-WHERE e2.salary > e1.salary)
-
-for the 2nd maximum you can replace N with 2, and for 3rd maximum replace N with 3, here is the output:
-
-2nd highest salary:
-And, here is an example to print second highest salary:
-SELECT name, salary 
-FROM #Employee e1
-WHERE N-1 = (SELECT COUNT(DISTINCT salary) FROM #Employee e2
-WHERE e2.salary > e1.salary)SELECT name, salary 
-FROM #Employee e1
-WHERE 2-1 = (SELECT COUNT(DISTINCT salary) FROM #Employee e2
-WHERE e2.salary > e1.salary)
-
-Result:
-name salary
-Peter 5000
-
-
-3rd highest salary:
-Here is an example to retrieve third highest salary: 
-SELECT name, salary 
-FROM #Employee e1
-WHERE 3-1 = (SELECT COUNT(DISTINCT salary) FROM #Employee e2
-WHERE e2.salary > e1.salary)
-
-Result:
-name salary
-John 4000
-
-Explanation :
-The distinct keyword is there to deal with duplicate salaries in the table. In order to find the Nth highest salary, we are only considering unique salaries. The highest salary means no salary is higher than it, the Second highest means only one salary is higher than it, 3rd highest means two salaries are higher than it, similarly Nth highest salary means N-1 salaries are higher than it.
-
-Pros :
-1) The generic solution works in all databases including Oracle, MySQL, SQL SERVER, and PostgreSQL.
-
-Cons :
-1) Slow, because the inner query will run for every row processed by the outer query.
-
-See SQL Puzzles and Answers book for more of such SQL queries for practicing and improving your SQL query skill.
-
-
-
-
-
-The nth highest salary in SQL SERVER using TOP keyword
-You can use the TOP keyword to find the Nth highest salary in SQL SERVER. This is also faster than the previous solution because here we are calculating Nth maximum salary without a subquery.
-
-SELECT TOP 1 salary
-FROM (
-SELECT DISTINCT TOP N salary
-FROM #Employee
-ORDER BY salary DESC
-) AS temp
-ORDER BY salary
-
-Explanation: 
-By default ORDER BY clause print rows in ascending order, since we need the highest salary at the top, we have used ORDER BY DESC, which will display salaries in descending order. 
-
-Again DISTINCT is used to remove duplicates. The outer query will then pick the topmost salary, which would be your Nth highest salary.
-
-And, if you like books and just learning these queries from the interview's sake then I suggest you first read a good book on SQL like Head First SQL. It will help you to build your fundamentals.
-
-3rd highest salary in SQL SERVER
-
-SELECT TOP 1 salary
-FROM (
-SELECT DISTINCT TOP 3 salary
-FROM #Employee
-ORDER BY salary DESC
-) AS temp
-ORDER BY salary
-
-Result:
-salary
-4000
-
-
-Here is another example where we have used the TOP keyword to find the second highest salary in Microsoft SQL SERVER 2008.
-
-
-Nth maximum salary in MySQL using LIMIT keyword
-Similar to TOP, MySQL also supports a LIMIT keyword, which provides pagination capability. You can find the nth highest salary in MySQL without using subquery as shown below:
-
-SELECT salary FROM Employee ORDER BY salary DESC LIMIT N-1, 1
-
-
-2nd highest salary in MySQL without subquery:
-
-SELECT salary FROM Employee ORDER BY salary DESC LIMIT 1,1
-salary
-5000
-
-3rd highest salary in MySQL using LIMIT clause:
-
-SELECT salary FROM Employee ORDER BY salary DESC LIMIT 2,1
-salary
-4000
-
-Nth highest salary in MySQL using LIMIT clause:
-
-SELECT salary FROM Employee  ORDER BY Salary DESC LIMIT n-1,1
-
-Explanation :
-The benefit of this approach is that it's faster than a correlated query approach but its vendor dependent. This solution will only work in a MySQL database.
-
-
-
-Nth highest salary in Oracle using ROW_NUMBER() function
-
-SELECT * FROM (
-SELECT e.*, 
-ROW_NUMBER() OVER (ORDER BY salary DESC) rn 
-FROM Employee e
-)
-WHERE rn = N; /*N is the nth highest salary*/
-
-
-Here is the 2nd highest salary in Oracle using ROW_NUMBER() window function:
-
-SELECT * FROM (
-SELECT e.*, 
-ROW_NUMBER() OVER (ORDER BY salary DESC) rn 
-FROM Employee e
-)
-WHERE rn = 2; 
-
-Output
-NAME   SALARY  RN
-Peter   5000   2
-
-and here is 3rd highest salary in Oracle:
-
-SELECT * FROM (
-SELECT e.*, 
-ROW_NUMBER() OVER (ORDER BY salary DESC) rn 
-FROM Employee e
-)
-WHERE rn = 3; 
-
-
-By the above code has a problem. It is not handling duplicate salaries properly. For example, in our table we have two employees with salary 3000, that's our 4th highest salary, but above code will print the same salary, albeit different employee for both 4th and 5th maximum as shown below:
-
-SELECT * FROM (
-SELECT e.*, 
-ROW_NUMBER() OVER (ORDER BY salary DESC) rn 
-FROM Employee e
-)
-WHERE rn = 5;
-
-Result: 
-NAME    SALARY  RN
-Shane   3000    5
-
-In oracle, you can also use SQL statements to build schema and run sample SQL.
-
-You can also do the same thing by using the RANK() window function in Oracle, but that's for another day. This is more than enough to answer the SQL interview question, the print nth highest salary of an employee in the Oracle.
-
-
-That's all about how to find the nth highest salary in SQL. The easiest way to find nth maximum/minimum salary is by using the correlated subquery, but it's not the fastest way. Better ways are database dependent e.g. you cause TOP keyword in SQL SERVER, LIMIT keyword in MySQL, and ROW_NUMBER() window function in Oracle to calculate the nth highest salary. The normal subquery way is good for the second maximum but after that, it becomes really nested and cluttered.
-
-
-Read more: https://javarevisited.blogspot.com/2016/01/4-ways-to-find-nth-highest-salary-in.html#ixzz8hiiJFWyl
 
 Difference between row_number(), rank() and dense_rank() window functions in SQL
 
 Though all three are ranking functions in SQL, also known as a window function in Microsoft SQL Server, the difference between rank(), dense_rank(), and row_number() comes when you have ties on ranking i.e. duplicate records. For example, if you are ranking employees by their salaries then what would be the rank of two employees of the same salaries? It depends on which ranking function you are using like row_number, rank, or dense_rank.
-PauseUnmute
-Fullscreen
+
+
 
 
 The row_number() function always generates a unique ranking even with duplicate records i.e. if the ORDER BY clause cannot distinguish between two rows, it will still give them different rankings, though which record will come earlier or later is decided randomly like in our example two employees Shane and Rick have the same salary and has row number 4 and 5, this is random, if you run again, Shane might come 5th.
@@ -3484,913 +3381,734 @@ Surprisingly all these functions behave similarly in Microsoft SQL Server and Or
 
 By the way, if you are new to Microsoft SQL Server and T-SQL then I also suggest you join a comprehensive course to learn SQL Server fundamentals and how to work with T-SQL. If you need a recommendation then I suggest you go through the Microsoft SQL for Beginners online course by Brewster Knowlton on Udemy. It's a great course to start with T-SQL and SQL queries in SQL Server.
 
+Here are solutions for common SQL query problems based on your practice interview questions, including various approaches for finding the **Nth highest salary** using different SQL techniques.
+
+---
+
+### 1. **SQL Query to Show Employees (Names) Who Have a Bigger Salary Than Their Manager**
+
+**Solution:**
+```sql
+SELECT a.emp_name 
+FROM Employee a 
+JOIN Employee b ON a.mngr_id = b.emp_id 
+WHERE a.salary > b.salary;
+```
+**Explanation:**  
+We are joining the `Employee` table with itself using aliases `a` and `b`. This allows us to compare an employee's salary (`a.salary`) with their manager's salary (`b.salary`). If the employee’s salary is higher than the manager's, the employee is selected.
+
+---
+
+### 2. **SQL Query to Find Employees Who Have the Biggest Salary in Their Department**
+
+**Solution:**
+```sql
+SELECT a.emp_name, a.dept_id
+FROM Employee a 
+JOIN (
+    SELECT a.dept_id, MAX(salary) AS max_salary
+    FROM Employee a 
+    JOIN Department b ON a.dept_id = b.dept_id
+    GROUP BY a.dept_id
+) b ON a.salary = b.max_salary AND a.dept_id = b.dept_id;
+```
+**Explanation:**  
+This query first calculates the highest salary (`MAX(salary)`) in each department using a subquery. Then, it joins the `Employee` table to find employees whose salary matches the highest salary in their department.
+
+---
+
+### 3. **SQL Query to List Departments That Have Less Than 3 People in It**
+
+**Solution:**
+```sql
+SELECT dept_id, COUNT(emp_name) AS 'Number of Employee'
+FROM Employee
+GROUP BY dept_id
+HAVING COUNT(emp_name) < 3;
+```
+**Explanation:**  
+This query groups employees by `dept_id` and counts the number of employees in each department. Using the `HAVING` clause, we filter departments that have fewer than 3 employees.
+
+---
+
+### 4. **SQL Query to Show All Departments Along with the Number of People There**
+
+**Solution:**
+```sql
+SELECT b.dept_name, COUNT(a.dept_id) AS 'Number of Employee'
+FROM Employee a
+FULL OUTER JOIN Department b ON a.dept_id = b.dept_id
+GROUP BY b.dept_name;
+```
+**Explanation:**  
+We use a `FULL OUTER JOIN` to include all departments, even those with no employees. The query counts the number of employees per department, and departments without employees will have a count of 0.
+
+---
+
+### 5. **SQL Query to Show All Employees Who Don’t Have a Manager in the Same Department**
+
+**Solution:**
+```sql
+SELECT a.emp_name
+FROM Employee a 
+JOIN Employee b ON a.mngr_id = b.emp_id
+WHERE a.dept_id != b.dept_id;
+```
+**Explanation:**  
+We join the `Employee` table to itself, comparing employees to their managers. The `WHERE` clause ensures that only employees whose manager is not in the same department are selected.
+
+---
+
+### 6. **SQL Query to List All Departments Along With the Total Salary of That Department**
+
+**Solution:**
+```sql
+SELECT b.dept_name, SUM(a.salary) AS 'Total Salary'
+FROM Employee a
+FULL OUTER JOIN Department b ON a.dept_id = b.dept_id
+GROUP BY b.dept_name;
+```
+**Explanation:**  
+This query calculates the total salary of employees in each department. A `FULL OUTER JOIN` is used to ensure that departments without employees (i.e., no salaries) are still included in the result.
+
+---
+
+### 7. **Find the Nth Highest Salary Using Correlated Subquery**
+
+**Solution: (For N = 2)**
+```sql
+SELECT name, salary
+FROM Employee e1
+WHERE 2 - 1 = (SELECT COUNT(DISTINCT salary) FROM Employee e2 WHERE e2.salary > e1.salary);
+```
+**Explanation:**  
+This correlated subquery calculates the Nth highest salary by comparing the salary in the outer query (`e1`) with the distinct salaries in the subquery (`e2`). The subquery counts how many salaries are greater than the current salary in the outer query. For the second-highest salary, `N-1` equals `1`.
+
+---
+
+### 8. **Find the 2nd Highest Salary Using the `TOP` Keyword in SQL Server**
+
+**Solution:**
+```sql
+SELECT TOP 1 salary
+FROM (
+    SELECT DISTINCT TOP 2 salary
+    FROM Employee
+    ORDER BY salary DESC
+) AS temp
+ORDER BY salary;
+```
+**Explanation:**  
+This query first selects the top 2 distinct salaries in descending order and then selects the top salary from that result set, which will be the second-highest salary.
+
+---
+
+### 9. **Find the Nth Highest Salary in MySQL Using `LIMIT`**
+
+**Solution: (For N = 3)**
+```sql
+SELECT salary 
+FROM Employee
+ORDER BY salary DESC
+LIMIT 2, 1;
+```
+**Explanation:**  
+In MySQL, we can use the `LIMIT` clause to specify the Nth highest salary. The syntax `LIMIT N-1, 1` selects the Nth row from the ordered result set. For the 3rd highest salary, we use `LIMIT 2, 1`.
+
+---
+
+### 10. **Find the Nth Highest Salary in Oracle Using `ROW_NUMBER()`**
+
+**Solution: (For N = 2)**
+```sql
+SELECT * 
+FROM (
+    SELECT e.*, ROW_NUMBER() OVER (ORDER BY salary DESC) AS rn 
+    FROM Employee e
+)
+WHERE rn = 2;
+```
+**Explanation:**  
+The `ROW_NUMBER()` function assigns a unique row number to each row ordered by salary in descending order. The outer query selects the row where the `ROW_NUMBER` equals N (in this case, 2 for the second-highest salary).
+
+---
+
+### 11. **Find the Nth Highest Salary Using `RANK()` (Oracle)**
+
+**Solution: (For N = 2)**
+```sql
+SELECT *
+FROM (
+    SELECT e.*, RANK() OVER (ORDER BY salary DESC) AS rank 
+    FROM Employee e
+)
+WHERE rank = 2;
+```
+**Explanation:**  
+The `RANK()` function assigns a rank to each row based on the salary in descending order. The outer query filters the result to return the employee(s) with the second-highest salary. Note that `RANK()` can handle ties (i.e., if multiple employees have the same salary).
+
+---
+
+### Conclusion:
+- For finding the **Nth highest salary**, different databases offer different approaches, such as using correlated subqueries, `TOP` in SQL Server, `LIMIT` in MySQL, or `ROW_NUMBER()` and `RANK()` in Oracle.
+- Understanding the problem's context, such as how duplicates are handled, and the specific SQL dialect you're working with, will guide you to the most efficient solution.
 
 
 
 
-SQL to build schema
-Here is the SQL to create a table and insert some data into it for demonstration purpose:
-
-IF OBJECT_ID( 'tempdb..#Employee' ) IS NOT NULL
-DROP TABLE #Employee;
-
-CREATE TABLE #Employee (name varchar(10), salary int);
-
-INSERT INTO #Employee VALUES ('Rick', 3000);
-INSERT INTO #Employee VALUES ('John', 4000);
-INSERT INTO #Employee VALUES ('Shane', 3000);
-INSERT INTO #Employee VALUES ('Peter', 5000);
-INSERT INTO #Employee VALUES ('Jackob', 7000);
-INSERT INTO #Employee VALUES ('Sid', 1000);
-
-You can see that we have included two employees with the same salaries i.e. Shane and Rick, just to demonstrate the difference between row_number, rank, and dense_rank window function in the SQL server, which is obvious when there are ties in the ranking.
-
-If you want to learn more about ranking function in SQL Server, I highly recommend this 70-461, 761: Querying Microsoft SQL Server with Transact-SQL course on Udemy. It's a great course to learn SQL Server in-depth and also become a certified SQL Server DBA.
-
-Difference between row_number(), rank() and dense_rank() in SQL Server, Oracle.
-
-
-
-ROW_NUMBER() Example
-It always generates a unique value for each row, even if they are the same and the ORDER BY clause cannot distinguish between them. That's why it is used to solve problems like the second-highest salary or nth highest salary, we have seen earlier.
-
-In the following example, we have two employees with the same salary and even though we have generated row numbers over the salary column it produces different row numbers for those two employees with the same salary.
-
-select e.*, row_number() over (order by salary desc) row_number from #Employee e
-result:
-name    salary  row_number
-Jackob  7000    1
-Peter   5000    2
-John    4000    3
-Shane   3000    4
-Rick    3000    5
-Sid     1000    6
-
-You can see in this example that we have ranked employees based upon their salaries and each of them has a unique rank even if their salaries are the same e.g. Shane and Rick have the same salary of 3000 but they got the unique rank 4th and 5th. It's worth knowing that in the case of a tie, ranks are assigned on a random basis, see Oracle Analytic Functions In-Depth & Advanced Oracle SQL course on Udemy to learn more about when to use the row_number() function in Oracle database.
-
-Difference between row_number(), rank() and dense_rank() in SQL Server
-
-
-
-RANK() Example
-The rank() function will assign the same rank to the same values i.e. which are not distinguishable by ORDER BY. Also, the next different rank will not start from immediately next number but there will be a gap i.e. if 4th and 5th employees have the same salary then they will have the same rank 4, and 6th employee which has a different salary will have a new rank 6.
-
-Here is the example to clarify the point:
-
-select e.*, rank() over (order by salary desc) rank from #Employee e
-result:
-name    salary  rank
-Jackob  7000    1
-Peter   5000    2
-John    4000    3
-Shane   3000    4
-Rick    3000    4
-Sid     1000    6
-
-You can see that both Shane and Rick have got the same rank 4th, but the Sid got the rank 6th, instead of 5 because it keeps the original ordering. If you want to learn more about Window Functions you can also check out The Complete SQL + Databases Bootcamp: Zero to Mastery [2020] course by ZTM Academy and Andrei, one of my favorite instructor. This is a comprehensive course to cover everything in SQL you need to know.
-
-best SQL Courses for Beginners
-
-Btw, you would need a ZTM membership to watch this course which costs around $29 per month but also provides access to many super engaging and useful courses like his Python course and JavaScript interview course.  
-
-If you are a constant learner like me then I suggest you go for membership than buying a single course, you will not only save money but also it makes learning easy, as you don't need to buy courses every time you want to learn something new.
-
-
-DENSE_RANK() Example
-The dense_rank function is similar to the rank() window function i.e. same values will be assigned the same rank, but the next different value will have a rank which is just one more than the previous rank, i.e. if 4th and 5th employee has the same salary then they will have the same rank but 6th employee, which has different salary will have rank 5, unlike rank 6 as is the case with rank() function. 
-
-There will be no gap in ranking in the case of dense_rank() as shown in the following example:
-
-select e.*, dense_rank() over (order by salary desc) dense_rank from #Employee e
-name    salary  dense_rank
-Jackob  7000    1
-Peter   5000    2
-John    4000    3
-Shane   3000    4
-Rick    3000    4
-Sid     1000    5
-
-You can see that both Shane and Rick have the same ranking 4th, but Sid now has 5th rank which is different than 6th in the earlier example when we used the rank() function. Btw, if you are serious about master SQL, I strongly suggest reading Joe Celko's SQL for Smarties, one of the more advanced books in SQL.
-
-rank vs dense_rank vs row_number in SQL Server and Oracle
-
-
-
-Difference between row_number vs rank vs dense_rank
-As I told, the difference between rank, row_number, and dense_rank is visible when there are duplicate records. Since in all our example we are ranking records on salary, if two records will have the same salary then you will notice the difference between these three ranking functions.
-
-The row_number gives continuous numbers, while rank and dense_rank give the same rank for duplicates, but the next number in rank is as per continuous order so you will see a jump but in dense_rank doesn't have any gap in rankings.
-
--- difference between row_number(), rank(), and dense_rank()
--- will only visible when there were duplicates.
--- row_number gives consecutive ranking even with duplicate
--- rank and dense_rank give the same ranking but rank has a jump
--- while dense_rank doesn't have jump
-
-select e.*,
-row_number() over (order by salary desc) row_number, 
-rank() over (order by salary desc) rank,
-dense_rank() over (order by salary desc) as dense_rank 
-from #Employee e
-
-and here is the output which clearly shows the difference in the ranking generated by rank() and dense_rank() function. This will clear your doubt about rank, desnse_rank, and row_nubmer function, but if you want to learn more check out 70-461, 761: Querying Microsoft SQL Server with Transact-SQL course on Udemy.
-
-Difference between rank and dense_rank and row_number in Java
-
-You can see the employees Shane and Rick have the same salary 3000 hence their ranking is the same when you use the rank() and dense_rank() but the next ranking is 6 which is as per continuous ranking using rank() and 5 when you use dense_rank(). 
-
-The row_number() doesn't break ties and always gives a unique number to each record.
-
-Btw, I ran all three SQL queries on Oracle 11g R2 and, Oracle 12c and it gave me the same result. So, it seems both Oracle and SQL Server support these functions and they behave identically.
-
-
-That's all about the difference between ROW_NUMBER(), RANK(), and DENSE_RANK() function in SQL SERVER. As I told, the difference boils down to the fact when ties happen. In the case of the tie, ROW_NUMBER() will give unique row numbers, the rank will give the same rank, but the next different rank will not be in sequence, there will be a gap.
-
-In the case of dense_rank, both rows in the tie will have the same rank and there will be no gap. The next different rank will be in sequence.
-
-
-Read more: https://javarevisited.blogspot.com/2016/07/difference-between-rownumber-rank-and-denserank-sql-server.html#ixzz8hiiVrVXa
-
-Difference between Truncate and Delete in SQL? Example
-
-Truncate and delete in SQL are two commands which are used to remove or delete data from a table. Though quite basic in nature both SQL commands can create a lot of trouble until you are familiar with details before using it. The difference between Truncate and delete are not just important to understand perspective but also a very popular SQL interview topic which in my opinion a definite worthy topic. What makes them tricky is the amount of data. Since most Electronic trading system stores, large amounts of transactional data, and some even maintain historical data, a good understanding of delete and the truncate command is required to effectively work in that environment.
-PlayUnmute
-Fullscreen
-
-
-
-I have still seen people firing delete commands just to empty a table with millions of records which eventually lock the whole table for doing anything and take ages to complete or Simply blew log segment or hang the machine.
-
-Most of the enterprise stock trading system maintains two kinds of database one transactional and other static. Transactional data is a day by day records that need to be purged at the end of data or moved to historical data so that the application can make a fresh start another day. 
-
-If you need to work on such a large set of data, my advice is to get clear and complete knowledge of delete and truncate command, along with their differences and when to use which command to remove data or purge tables.
-
-In this article, we will see where to use truncate in SQL and where to use delete in SQL, How to use truncate or delete and what danger or harm they can create if not used carefully along with the difference between truncate and delete in SQL.
-
-
-
-What is the Truncate command in SQL?
-Use the truncate table if you need to delete all rows since truncate doesn't allow you to specify the WHERE clause. truncate removes data by deallocating space used by a table which removes a lot of overhead in terms of logging and locking and that's why to truncate is faster than delete.
-
-What you need to take care is a rollback, data deleted by truncate can not be rolled back until data server specifically supports it e.g. MSSQL Server which allows to commit or rollback truncate table statement transactionally. 
-
-Another caveat with truncate table statement is that it doesn't fire a trigger and you can not truncate a table when a foreign key references any column to the table to be truncated. 
-
-The only situation I see which is perfect for using truncate is purging tables with huge data, though there is another solution exists to drop table and recreated it if that makes sense.
-
-And, if you like to understand difference in tabular format, here is a nice table which highlights difference not just truncate and delete but also drop command in SQL. 
-Difference between truncate, drop, and delete in SQL
-
-
-
-Example of truncate command in SQL
-truncate table Orders;  //Order table shouldn't have a column which is foreign key on another table
-
-Difference between truncate and delete command in sql
-
-
-What is Delete command in SQL?
-Delete is another SQL command available for removing records from the table. Delete is even more flexible than truncate like it provides support to WHERE Clause which can be used to remove selective data. 
-
-It logs each row which allows an operation to be rolled back and it also fires triggers. One disadvantage of using delete is speed and locking. Delete acquires a lock on the table and its also very slow operation because of logging, which makes it unsuitable for removing records from large tables. 
-
-One workaround for this is batch-delete in which you remove a batch of records instead on one record at a time. 
-
-Delete is most suitable for removing selective data and use it where you want to roll back the transaction in the database. It’s not useful to purge a large amount of data from tables and should not be used, otherwise, it could lock the table for a very long time, blew log segment, and can take ages to complete.
-
-Example of delete commands in SQL
-
-delete  * from Orders; //delete all row from Orders, should not be used if Orders is large
-delete  * from Orders where Symbol="MSFT.NQ" //delete all orders where symbol is MSFT.NQ
-
-
-Difference between truncate and delete command in SQL
-This is an important point to understand before using truncate or delete on the production environment, or writing any script which purges data from tables.
-
-1. truncate is fast delete is slow.
-2. truncate doesn't do logging delete logs on per row basis.
-3. rollback is possible with delete not with truncate until specifically supported by the vendor.
-4. truncate doesn't fire trigger, delete does.
-5. Don't delete, truncate it when it comes to purge tables.
-6. truncate reset identity column in table if any, delete doesn't.
-
-7. truncate is DDL while delete is DML (use this when you are writing exam)
-8. truncate doesn't support where clause, delete does.
-
-So finally if you have table with huge data and want to empty it don’t Delete, truncate it
-
-
-Interview questions on truncate and delete in SQL
-Truncate and delete both are popular interview topics and there is always some question on these commands in SQL interview. Here I am listing some of SQL interview questions based on delete and truncate command in SQL, you can find the answer in this article itself or by google.
-
-1) If you have a table which contains a large amount of data which command will you use for removing data, truncate or delete?
-
-2) What are differences between truncate and delete?
-
-3) Which one is fast truncate or delete?
-
-4) What is the disadvantage of using truncate in SQL?
-
-5) How will you delete data if truncate is not supported and log segment is also not big enough to support complete delete?
-
-6) Is there any way to remove data other than truncate and delete in SQL?
-
-
-Read more: https://javarevisited.blogspot.com/2011/10/how-to-use-truncate-and-delete-command.html#ixzz8hiipktYE
 
 These queries test your SQL skill on Joins, both INNER and OUTER join, filtering records by using WHERE and HAVING clause, grouping records using GROUP BY clause, calculating the sum, average, and counting records using an aggregate function like AVG(), SUM(), and COUNT(), searching records using wildcards in LIKE operator, searching records in a bound using BETWEEN and IN clause, DATE and TIME queries, etc. 
 
 If you have faced any interesting SQL query or you have any problem and searching for a solution, you can post it here for everyone's benefit.
 
+### SQL Query for Ranking Employees using `ROW_NUMBER()`, `RANK()`, and `DENSE_RANK()`
+
+Below is an SQL schema and queries for ranking employees based on their salaries using the `ROW_NUMBER()`, `RANK()`, and `DENSE_RANK()` window functions. This example demonstrates the key differences between the three functions when handling ties.
 
-
-
-
-20 Most Popular SQL Query Interview Questions and Answers
-Without any further ado, here is a list of the most common SQL query Interview questions and answers from Programming Job interviews:
-
-
-Question 1: SQL Query to find the second highest salary of Employee
-Answer: There are many ways to find the second highest salary of an Employee in SQL, you can either use SQL Join or Subquery to solve this problem. Here is an SQL query using Subquery:
-
-SELECT MAX(Salary) 
-FROM Employee 
-WHERE Salary NOT IN (select MAX(Salary) from Employee ); 
-
-See How to find the second highest salary in SQL for more ways to solve this problem.
-
-
-Question 2: SQL Query to find Max Salary from each department.
-Answer: You can find the maximum salary for each department by grouping all records by DeptId and then using MAX() function to calculate the maximum salary in each group or each department.
-
-SELECT DeptID, MAX(Salary) 
-FROM Employee 
-GROUP BY DeptID. 
-
-These questions become more interesting if the Interviewer will ask you to print the department name instead of the department id, in that case, you need to join the Employee table with Department using the foreign key DeptID, make sure you do LEFT or RIGHT OUTER JOIN to include departments without any employee as well.  
-
-Here is the query
-SELECT DeptName, MAX(Salary) 
-FROM Employee e RIGHT JOIN Department d 
-ON e.DeptId = d.DeptID 
-GROUP BY DeptName;
-
-In this query, we have used RIGHT OUTER JOIN because we need the name of the department from the Department table which is on the right side of the JOIN clause, even if there is no reference of dept_id on the Employee table. 
-
-
-10 Frequently asked SQL Query Interview Questions
-
-
-
-
-Question 3: Write SQL Query to display the current date?
-Answer: SQL has built-in function called GetDate() which returns the current timestamp. This will work in Microsoft SQL Server, other vendors like Oracle and MySQL also have equivalent functions.
-SELECT GetDate(); 
-
-
-Question 4: Write an SQL Query to check whether the date passed to Query is the date of the given format or not?
-Answer: SQL has IsDate() function which is used to check passed value is a date or not of specified format, it returns 1(true) or 0(false) accordingly. Remember the ISDATE() is an MSSQL function and it may not work on Oracle, MySQL, or any other database but there would be something similar.
-
-SELECT  ISDATE('1/08/13') AS "MM/DD/YY"; 
-
-It will return 0 because the passed date is not in the correct format.
-
-
-Question 5: Write an SQL Query to print the name of the distinct employee whose DOB is between 01/01/1960 to 31/12/1975.
-Answer: This SQL query is tricky, but you can use BETWEEN clause to get all records whose dates fall between two dates.
-SELECT DISTINCT EmpName 
-FROM Employees 
-WHERE DOB BETWEEN ‘01/01/1960’ AND ‘31/12/1975’;
-
-
-
-
-Question 6: Write an SQL Query to find the number of employees according to gender whose DOB is between 01/01/1960 to 31/12/1975.
-Answer : Here is teh sql query to find the number of employees according to gender and whose date of birth is between two given dates
-SELECT COUNT(*), sex 
-FROM Employees  
-WHERE DOB BETWEEN '01/01/1960' AND '31/12/1975' 
-GROUP BY sex;
-
-Question 7: Write an SQL Query to find an employee whose salary is equal to or greater than 10000.
-Answer : You can use WHERE clause with less than and equal to operator to solve this problem. Here is the sql query to find employees whose salary is equal to or greater than a given number
-SELECT EmpName FROM  Employees WHERE  Salary>=10000;
-
-
-Question 8: Write an SQL Query to find the name of an employee whose name Start with ‘M’
-Answer :  You can use the Llike operator to find the name of all employees whose name start with letter "M", here is an exmaple:
-SELECT * FROM Employees WHERE EmpName like 'M%';
-
-
-Question 9: find all Employee records containing the word "Joe", regardless of whether it was stored as JOE, Joe, or joe.
-
-Answer :You can use SQL function like UPPER()  and like operator to find all employees whose name contains a given word like "Joe" as shown in following example:
-SELECT * from Employees  WHERE  UPPER(EmpName) like '%JOE%';
-
-
-Question 10: Write an SQL Query to find the year from date.
-Answer:  You can use the GETDATE() function to get the current date and then you can use the YEAR() function to extract the year from the date in SQL server. 
-
-Here is how you can find Year from a Date in Microsoft SQL Server database 
-SELECT YEAR(GETDATE()) as "Year";
-
-
-
-
-Question 11: Write SQL Query to find duplicate rows in a database? and then write SQL query to delete them?
-Answer: You can use the following query to select distinct records:
-SELECT * FROM emp a 
-WHERE rowid = (SELECT MAX(rowid) 
-FROM EMP b 
-WHERE a.empno=b.empno)
-
-to Delete:
-DELETE FROM emp a 
-WHERE rowid != (SELECT MAX(rowid) FROM emp b WHERE a.empno=b.empno);
-
-
-Question 12: There is a table which contains two columns Student and Marks, you need to find all the students, whose marks are greater than average marks i.e. list of above-average students.
-
-Answer: This query can be written using subquery as shown below:
-SELECT student, marks 
-FROM table 
-WHERE marks > SELECT AVG(marks) from table)
-
-SQL Query Interview Questions and Answers
-
-
-
-Question 13: How do you find all employees who are also managers?
-You have given a standard employee table with an additional column mgr_id, which contains the employee id of the manager.
-
-Employee department SQL Query question
-
-Answer: You need to know about self-join to solve this problem. In Self Join, you can join two instances of the same table to find out additional details as shown below
-
-SELECT e.name, m.name 
-FROM Employee e, Employee m 
-WHERE e.mgr_id = m.emp_id;
-
-this will show employee name and manager name in two columns like
-
-name  manager_name
-John   David
-
-One follow-up is to modify this query to include employees which don't have a manager. To solve that, instead of using the inner join, just use the left outer join, this will also include employees without managers. 
-
-Another interesting problem which is based upon Self join is to find all employees who earn more than their managers, which is also asked as follow up question after this one. 
-
-
-
-Question 14: You have a composite index of three columns, and you only provide the value of two columns in the WHERE clause of a select query? Will Index be used for this operation? 
-
-For example, if Index is on EmpId, EmpFirstName, and EmpSecondName and you write a query like
-
-SELECT * FROM Employee WHERE EmpId=2 and EmpFirstName='Radhe'
-
-If the given two columns are secondary index columns then the index will not invoke, but if the given 2 columns contain the primary index(first column while creating index) then the index will invoke. In this case, the Index will be used because EmpId and EmpFirstName are primary columns.
-
-
-Read more: https://www.java67.com/2013/04/10-frequently-asked-sql-query-interview-questions-answers-database.html#ixzz8hijJILmt
-
-**How to use EXISTS and NOT Exists in SQL? Example Query and Tutorial
-
-Hello Guys, you might have heard about how useful the EXISTS clause is helpful in writing sophisticated queries. Still, at the same time, I have also seen that many programmers struggle to understand and use EXISTS and NOT EXISTS clauses while writing SQL queries.  If you are one of them, then you have come to the right place. Today you will learn how to use the EXISTS clause in SQL by picking up a real-world example and an excellent SQL exercise from the LeetCode. Suppose that a website contains two tables, the Customers table, and the Orders table. Can you write an SQL query to find all customers who have never ordered anything?
-PauseUnmute
-Fullscreen
-
-
-To solve this problem, you need to first think about data. For example, if a customer has never ordered anything means there won't be any record for him on the Orders table. Good job, half of the task is done.
-
-Now the second half is how do you check if there is a record or not for a particular customer?  That's where EXISTS and NOT EXISTS clause will help you, and that's what you will learn in this article.
-
-This is actually also a popular SQL Interview question, and you might have seen it already, but if you are not, that's fine. This question is not as popular as the second-largest salary query, but it is also one of the frequently asked SQL queries from a programming interview; you can see the full list here.
-
-While I agree that this problem can be solved in a different way, but it is also a perfect example of how you can use the SQL EXISTS clause.
-
-But, if you are new to the SQL world, it's better to start with a comprehensive SQL course like The Complete SQL Bootcamp course by Jose Portilla on Udemy. That will help you to learn SQL better and quicker, and these kinds of articles will also make more sense once you have some SQL knowledge under your belt.
-
-
-
-
-
-SQL tables and Data for Query Example
-Before looking at the query, let's see the schema, tables, and data to understand the problem better. We have two tables Customers and Orders. Customers contain two columns, Id and Name. The id is a numeric column while the Name is a text column, let's assume of type VARCHAR.
-
-If any customer has ordered anything, then their CustomerId will exist in the Orders table, we will take advantage of this knowledge to solve this problem.
-
-We have four customers with Id ranging from 1 to 4. Our second table, Orders, contains Id, which is a unique id for order, and CustomerId, which is the Id of the Customer who makes that order. If any Customer will place an order, then their Id will exist in the Orders table.
-
-
-Table: Customers.
-
-+----+-------+
-| Id | Name  |
-+----+-------+
-| 1  | Joe   |
-| 2  | Henry |
-| 3  | Sam   |
-| 4  | Max   |
-+----+-------+
-
-Table: Orders.
-
-+----+------------+
-| Id | CustomerId |
-+----+------------+
-| 1  | 3          |
-| 2  | 1          |
-+----+------------+
-
-Using the above tables as an example, return the following:
-
-+-----------+
-| Customers |
-+-----------+
-| Henry     |
-| Max       |
-+-----------+
-
-
-If you looking for some more SQL challenges, then you can try solving problems given in Joe Celko's classic book, SQL Puzzles, and Answers, the 2nd Edition. One of the best books to improve your SQL query skills.
-
-
-
-
-How to Find Customers Who Never Order using EXISTS in SQL
-One of the most common solutions to this problem is by using the SQL JOIN clause. You can use the LEFT OUTER JOIN to solve this problem, as shown below:
-
-SELECT C.Name FROM Customers C
-LEFT JOIN Orders O ON  C.Id = O.CustomerId
-WHERE O.CustomerId is NULL
-
-When you join two tables in SQL using a LEFT OUTER JOIN, then a big table will be created with NULL values in the column which don't exist in another table.
-
-For example, the big table will have four columns C.Id, C.Name, O.Id, and O.CustomerId, for Customers who have never ordered anything, the O.CustomerId will be NULL.
-
-Many programmers make the mistake of using != in the JOIN condition to solve this problem, with the assumption that if = returns matching rows, then != will return those ids which are not present in another table. So beware of that.
-
-If you struggle to understand join, then I suggest you take a look at Jose Portilla's excellent SQL course The Complete SQL Bootcamp on Udemy. His teaching style is amazing and you will understand joins in no time.
-
-Anyway, this problem is actually an excellent example of how and when to use EXISTS clause:
-
-SELECT C.Name FROM Customers C 
-WHERE NOT EXISTS (SELECT 1 FROM Orders O WHERE C.Id = O.CustomerId)
-
-This is a correlated subquery, where the inner query will execute for each row of the outer query, and only those customers will be returned who have not ordered anything.
-
-Btw, the most simple solution is by using the NOT IN Clause.
-
-SELECT A.Name FROM Customers A
-WHERE A.Id NOT IN (SELECT B.CustomerId FROMs Orders B)
-And, here is a nice screenshot to remember how and when to use the EXISTS clause in SQL query:
-
-How to use EXISTS Clause in SQL? A Real World SQL Query Example using EXISTS
-
-
-That's all about how to use the EXISTS clause in SQL to find all customers who have never ordered. If you like to improve your SQL query skills, then you can also problems given in Joe Celko's classical book SQL Puzzles and Answers, the 2nd Edition. One of the best books with lots of challenging questions to test your SQL skill, and if you need some online courses to learn SQL in-depth or fill the gaps in your SQL knowledge, the following courses are a good place to start with.
-
-
-Read more: https://javarevisited.blogspot.com/2016/01/sql-exists-example-customers-who-never-ordered.html#ixzz8hijkETZH
-
-Difference between Self and Equi Join in SQL - INNER Join example MySQL
-
-The main difference between Self Join and Equi Join is that In Self Join we join one table to itself rather than joining two tables. Both Self Join and Equi Join are types of INNER Join in SQL, but there is a subtle difference between the two. Any INNER Join with equal as join predicate is known as Equi Join. SQL Joins are the fundamental concept of SQL similar to correlated and noncorrelated subqueries or using group by clause and a good understanding of various types of SQL join is a must for any programmer.
-
-PlayUnmute
-Fullscreen
-By the way, If you have written INNER join using where clause then using a comparison operator as = will be known as an equijoin. Equi joins or Self-join is not a formal JOIN or part of the syntax, instead, they are a just popular way to refer to certain join examples.
-
-One of the best examples of Self Join, I have seen in an SQL query Interview questions is "How do you find all Employees who are Managers in Employee table", which is commonly asked along with another popular question how to find the second highest salary of employee or questions related to joining three tables in one SQL query.
-
-In this SQL tutorial, we will learn to self-join by example while solving this SQL query. Btw, If you are new to SQL and don't understand fundamentals like JOINs or co-related sub-queries then I highly recommend you go through a comprehensive SQL course like The Complete SQL Bootcamp by Jose Portilla on Udemy. It's one of the best and also most affordable courses to learn SQL online.
-
-
-
-
-
-Self Join Example in MySQL
-In order to solve this query let's first see schema and data of the Employee table.
-
-mysql> select * from employee;
-+--------+----------+---------+--------+--------+
-| emp_id | emp_name | dept_id | salary | mgr_id |
-+--------+----------+---------+--------+--------+
-|    103 | Jack     |       2 |   1400 |    104 |
-|    104 | John     |       2 |   1450 |    104 |
-|    105 | Johnny   |       3 |   1050 |    104 |
-|    108 | Alan     |       3 |   1150 |    104 |
-|    106 | Virat    |       4 |    850 |    105 |
-|    107 | Vina     |       4 |    700 |    105 |
-|    109 | joya     |       4 |    700 |    105 |
-+--------+----------+---------+--------+--------+
-7 rows in set (0.00 sec)
-
-
-In above  table all employees who are managers has there emp_id as mgr_id in other employees and by using SELF JOIN  i.e. join two instances of employee table and comparing, we can find all employees who are managers. Here is the SELECT query example using self-join:
-
-mysql> select distinct e.emp_id, e.emp_name from employee e join employee m on e.emp_id=m.mgr_id;
-+--------+----------+
-| emp_id | emp_name |
-+--------+----------+
-|    104 | John     |
-|    105 | Johnny   |
-+--------+----------+
-2 rows in set (0.00 sec)
-
-
-In this example of self join, we have joined employee table to itself by using two table aliases e and m. We have also used distinct keyword to remove duplicates here.
-
- You can also say this is an example of EQUI JOIN because in join predicate we have used = or equal condition. In fact, this one is an example of INNER Join, SELF Join, and EQUI Join at the same time.
-
-If you are confused about syntax of all possible join in SQL, here is a handy diagram:
-
-Difference between self join and equi join in SQL
-
-
-
-
-
-Self Join vs Equi Join in SQL and MySQL
-In the short major difference between Self Join and Equi Join in SQL is that Self Join requires only one table while most of Equi join is a condition used in join predicate. Since Equi Join is based on the condition for comparison, it can occur in any INNER, OUTER, or SELF join in SQL.
-
-
-Read more: https://www.java67.com/2013/01/difference-between-self-and-equi-join-sql-example-inner-mysql.html#ixzz8hijzAeFw
-
-Difference between Primary key vs Candidate Key in SQL Database? Example
-
-Primary key vs Candidate Key
-What is the difference between primary key and candidate key is another popular SQL and database interview question which appears in various programming interviews now and then? The concept of primary key and candidate key is not just important from the interview point of view but also in designing databases and normalization. By the way, this is my second post about primary keys, In the last one, we have seen a comparison of primary key vs unique key, which also happens to be one of the frequently asked database questions. 
-
-By definition primary key is a column or collection of columns, which uniquely defines a row in a table. Candidate keys are keys that can be a primary key and also able to uniquely identify any row in the table.
-PlayUnmute
-Fullscreen
-
-In simple terms, you may have a couple of Candidate keys and you have chosen one of them as a primary key.
-
-This selection part is the most important skill in database design. Since only the primary key can have a clustered index in a table while unique keys can have a Nonclustered index, it's important to choose the right column or collection of columns as a primary key.
-
-Often I select a column that is most frequently used in the Where clause of the SELECT query.
-
-Btw, If you are new to SQL and don't understand fundamentals like primary key, normalization, and basic SQL queries then you can also join these free SQL courses to learn those SQL fundamentals. It's one of the best resources to learn SQL online.
-
-
-
-
-
-
-Difference between Candidate Key vs Primary Key
- Before seeing the difference between a Candidate key and a Primary key let's see some similarities between them in bullets points.
-
-1. Unique indentification
-Both Primary and Candidate keys can uniquely identify records in a table on the database.
-
-2. Constraints
-Both Primary and Candidate keys have constraints UNIQUE and NOT NULL.
-
-3. Structure
-Primary key or Candidate keys can be either a single column or a combination of multiple columns in a table.
-
-If you preparing for an SQL interview or looking for some good SQL interview questions then you can also check the difference between Correlated and Noncorrelated subqueries and  When to use truncate vs delete in SQL.
-
-
-Now from the interview point of view here is the difference between a Candidate key and primary key in SQL table on point format for easy to remember :
-
-1. Number of Keys
-There can be multiple Candidate keys in a table in relation to the database e.g. Oracle, MySQL, Sybase, or MSSQL but only one primary key is permitted.
-
-2. Example
-An example of Primary key and Candidate key can be ID and SSN number in an Employee table, Since both can identify each employee uniquely they are candidate key and anyone can become the primary key.
-
-Now if you have to choose between them as the primary key, I will go ID as a primary key because SSN is sensitive information and may not be allowed/not safe to use as String in queries as frequently as ID.
-
-The second reason for choosing ID over SSN as a primary key can be the use of ID as a primary tracking ID within the organization and its frequent use all over the place.
-
-Once you choose a primary key, All candidate keys are like unique keys.
-
-Here is a nice table that explains a couple of candidate keys (columns that are eligible to become primary keys) and how other keys become alternate keys once a primary key is chosen. 
-
-In this table Roll_No, Name, and Branch are candidate keys because they have unique values but in reality, Name can be duplicate and Branch can also become duplicate, but Roll_No will be unique, hence it is chosen as a primary key.   If you want to learn more about database design, I suggest you go through these Database and SQL courses. 
-
-Difference between Primary key vs Candidate Key in SQL Database? Example
-
-
-Read more: https://www.java67.com/2012/10/difference-between-primary-key-vs-candidate-keys-sql-database.html#ixzz8hikBO4u2
-
-Difference between Primary key vs Unique key in SQL Database? Answer
-
-primary key vs unique key in SQL
-The primary key and unique key are two important concepts in a relational database and are used to uniquely identify a row in a table. Both primary key and unique keys can identify a row uniquely but there is some subtle difference between them which we will see in this article. In fact, primary key vs unique is a popular SQL interview question along with classics like truncate vs delete and  How to manage transactions in a database, mostly asked to fresher and 2 to 3 years experience guys in any programming language. SQL is not just limited to any DBA or PLSQL developer but it's an important skill even for Java programmers and you can expect SQL interview questions even in many Java interviews.
-PlayUnmute
-Fullscreen
-
-Some time programmer also confuses between a unique key and a foreign key, which is the primary key of other tables in relation, hence questions like the difference between a primary and foreign key or a primary and unique key, or foreign and unique keys are asked to check their understanding.
-
-The key thing to remember is that they help to keep data integrity in check. The unique key ensures that no duplicate values are inserted in the database, while a primary and foreign key is responsible for maintaining referential integrity.
-
-They are also used to link two tables when you are joining them. Btw, there is a slight difference in unique key and unique key constraint, former is a concept while the latter is an implementation that ensures that no duplicate key is inserted into your tables.
-
-Btw, If you are new to these concepts, I suggest you joining these free SQL and Database courses to get a full understanding of essential SQL and database concepts.
-
-
-
-
-Difference between primary key and unique key in SQL
-As I said both primary and unique key uniquely identifies each row in the table but there is some subtle difference between them. here are some of them :
-
-1. Unique key in a table can be null, at least one but the primary key cannot be null in any table in a relational database like MySQL, Oracle, etc.
-
-2. The unique key is represented using a unique constraint while a primary key is created using a primary key constraint in any table and it's automatically got a unique constraint. You can also see these Database and SQL courses from Udemy and from Pluralsight for more details on how unique key constraint works.
-
-Difference between Primary key and Unique key in SQL
-
-
-
-3. The primary key can be a combination of more than one unique key in the same table.
-
-4. There can be only one primary key per table in relation to databases like MySQL, Oracle, PostgreSQL, SQLServer, or Sybase but there can be more than one unique key per table.
-
-5. Many database engines automatically put a clustered index on the primary key and since you can only have one clustered index per table, it's not available to any other unique key at the same time. This is true for both Oracle and MySQL Server
-
-Here is a nice summary of the difference between a primary key and a unique key in a table. These differences are valid on most of the relational databases like Oracle, MySQL, and SQL Server:
-
-Difference between primary and unique key in table SQL
-
-
-These were some of the differences between the primary key and the unique key in SQL or any table. It's's one of those SQL interview questions which you don't like to miss before going for any programming interview or any database, SQL interview.
-
-
-Read more: https://www.java67.com/2012/10/difference-between-primary-vs-unique-key-table-sql.html#ixzz8hikKyRTZ
-
-Difference between Primary and Foreign keys in SQL [Answer]
-
-The database is a collection of tables and a table is the collection of rows or records. A primary key is the data to uniquely identify a row in the table. For example, if an Employee table has millions of rows and emp_id is a primary key then it can uniquely identify that row. You can use this primary key to retrieve (SELECT) the row, update the row, and delete the row. In SQL, a table can have only one primary key but it can contain more than one column. There are two types of primary key, a simple primary key, and a composite primary key.
-
-PlayUnmute
-Fullscreen
-A simple primary key is made of just one column while a composite primary key is made of more than one column. The primary key also enforces some constraints like UNIQUE and NOT NULL, which means if you try to enter another record with the primary key already existing in the database then DBMS will reject it.
-
-Similarly, a primary key cannot be NULL, it must have some value. On the other hand, the foreign key is just the primary key of another table. In a relational database, two tables can be related to each other like Employee and Department, in those cases, the primary key of one table becomes the foreign key of another table.
-
-In this article, you will learn some key differences between the Primary and foreign keys in a table. This is also one of the most common SQL Interview questions for 1 to 2 years of experienced programmers.
-
-
-
-
-
-
-Difference between Primary and Foreign key in a table
-As I said, if two tables are in relation to each other than the primary key of one table becomes the foreign key of another table. Let's see some more differences between Primary and Foreign keys in SQL:
-
-1. One of the major differences between these two keys is that the primary key enforces clustered index, which is the actual physical order of how data is stored in the disc. On the other hand, the Foreign key doesn't create a clustered index in the table.
-
-
-2. The primary key is unique in the table. So a table cannot contain more than one row with the same primary key, but that's not required for a foreign key. You can have more than one row in a table with the same foreign key e.g. all employees will have a unique id but many of them working for the same department will have the same dept_id. This is one of the main differences between a unique key and a primary key.
-
-
-3. Foreign key helps to maintain the integrity of related tables in the database. For example, it's not possible to delete a department, unless a single employee is referring that. So, an accidental delete of such a department will be prevented by database management systems like Oracle, MySQL, or SQL Server.  
-
-You can further set up cascade actions with foreign keys like when a department is deleted, update the dept_id of all employees in the Employee table referring to this department. You can set up such an arrangement using the ON CASCADE clause.
-
-Similarly, you cannot insert the data in the secondary table if a row with the primary key doesn't exist in the Primary key e.g. adding a non-existent department to an employee's profile. This is also known as referential integrity in the database.
-
-
-4. Another key difference between the primary and foreign keys in a table is that the primary key cannot accept null, but the foreign key can accept multiple values.
-
-
-5. The Primary key uniquely identifies a record in the table, but the foreign key can not be used for that purpose, it's just the primary key of the related table.
-
-Here is a nice table of some key differences between the Primary and Foreign keys in the table:
-
-Difference between Primary and foreign key in table
-
-
-Read more: https://www.java67.com/2015/12/difference-between-primary-and-foreign.html#ixzz8hikcfvSO
-
-Difference between Primary key vs Foreign key in table – SQL Tutorial Example
-
-The main difference between the Primary key and the Foreign key in a table is that it’s the same column that behaves as the primary key in the parent table and as a foreign key in a child table. For example in the Customer and Order relationship, customer_id is the primary key in the Customer table but a foreign key in the Order table. By the way, what is a foreign key in a table and the difference between Primary and Foreign key are some of the popular SQL interview questions, much like truncate vs delete in SQL or difference between correlated and noncorrelated subquery? We have been learning key SQL concepts along with these frequently asked SQL questions and in this SQL tutorial, we will discuss what is a foreign key in SQL and the purpose of the foreign key in any table. 
-
-
-
-
-By the way, this is the third article related to a primary key in SQL, the other being the difference between primary and unique key and How to find the second highest salary in SQL. If you are preparing for any technical job interview where you expect some SQL questions, check out these questions, they are worth preparing.
-
-Difference between Primary key vs Foreign key in table – SQL Tutorial Example
-
-
-
-
-What is the Foreign key in a table in the Database?
-What is foreign key and difference between primary vs foreign key in SQLA Foreign key is a column in one table which is the primary key on another table. A foreign key and a Primary key are used to define the relationship between two tables in a relational database. For example in Employee and Department relationship, we have two tables Department(dept_id, dept_name) and  Employee (emp_id, emp_name, dept_id). dept_id is the primary key in the Department table and the foreign key in the Employee table. 
-
-Though it’s not required that name of a foreign key must be the same with primary key, we have kept it the same as per standard SQL best practices. Foreign key in a table enforce Referential Integrity constraint, which can be used to implement business rules e.g. referential integrity can stop you from creating an Employee with a non existent department. 
-
-
-
-This kind of check maintains integrity of data in a relationship. As discussed in our post What is referential integrity in MySQL database, we have seen that it's implemented as foreign key constraint and can allow CASCADE UPDATE and DELETE. These referential action delete or update matching column in child table ( foreign key table) when corresponding row from parent table (primary key table ) is deleted or updated to maintain integrity of data.
-
-
-
-
-Difference between Primary key and Foreign key in SQL
-Here is some important difference between primary and foreign keys in a table which is worth remembering both on SQL interview point of view and knowledge point of view.
-
-1) Name of foreign key can be different than the name of primary key it represent in other table. For example in our Employee and Department relationship, Primary key in Department table is dept_id  and we have used same name in Employee table to create foreign key. It could have been different e.g. departmentId or departmentID t etc.
-
-2) Another difference between primary and foreign key is that unlike primary key, a foreign key can be null e.g. in our example you can have an Employee record for which dept_id can be null, this shows that no corresponding record in Department table.
-
-
-3) One more difference between primary key and foreign key is that foreign key can be duplicate opposite to primary key which is always unique.
-
-4) By using foreign key constraints, we can introduce referential integrity in multiple table relationship in SQL. Referential integrity guarantees data integrity, see benefits of Referential Integrity in SQL to know more.
-
-5) Foreign key mostly works as a link between two table when we join tables using INNER JOIN and OUTER JOIN. For example, when we INNER JOIN both Employee with Department table, we can use dept_id as joining column. See How to join three tables in SQL for more details.
-
-6) Table on which a column is declared as a primary key is known as parent table in the relationship and foreign key table is known as child table in a relationship. For example in Employee and Department relationship, Department is parent table because dept_id is primary key there and Employee is child table because dept_id is a foreign key in this table.
-
-
-
-Primary key and Foreign key Example in SQL
-One of the best examples to understand the Primary key and Foreign key in a table is Employee and Department relationship or the Customer and Order relationship. You can create an Order and Customer table in MySQL as following to create primary and foreign keys :
-
-CREATE TABLE Customer (cust_id   INT NOT NULL,
-                       cust_name VARCHAR(256),                      
-                       PRIMARY KEY (cust_id)) ENGINE=INNODB;
-
-CREATE TABLE ORDER (order_id INT NOT NULL,
-                    amount INT NOT NULL,
-                    cust_id INT,
-                    FOREIGN KEY (cust_id) REFERENCES Customer(cust_id)
-                    ON DELETE CASCADE) ENGINE=INNODB;
-
-Now, cust_id is primary key in Customer table and the foreign key in Order table. If we try to insert an Order for which cust_id is something that is invalid in Customer table, MySQL database will reject such INSERT or UPDATE. This is one of the benefit of using Referential Integrity. 
-
-It also allow to CASCADE UPDATE and DELETE operation which first delete or update a row in parent table e.g. Customer and then delete or update all matching rows in child table e.g. Order table.
-
-That's all on what is a foreign key in a table and the difference between primary and foreign key in SQL. I suggest to create some table by yourself and try to test foreign key constraint by violating it and see how database e.g. Oracle, MySQL or SQL Server  behaves. To understand more try ON DELETE CASCADE and ON DELETE UPDATE to see how database maintains foreign key constraint. You can also see my post on Referential Integrity example on MySQL database
-
-
-Read more: https://javarevisited.blogspot.com/2012/12/foreign-key-vs-primary-key-table-sql-database-difference.html#ixzz8hikpDRYr
-
-What is Referential Integrity in Database or SQL - MySQL Example Tutorial
-
-Referential Integrity is a set of constraints applied to foreign keys which prevents entering a row in the child table (where you have the foreign key) for which you don't have any corresponding row in the parent table i.e. entering NULL or invalid foreign keys. Referential Integrity prevents your table from having incorrect or incomplete relationships e.g. If you have two tables Order and Customer where Customer is parent table with primary key customer_id and Order is child table with foreign key customer_id. Since as per business rules you can not have an Order without a Customer and this business rule can be implemented using referential integrity in SQL on a relational database.
-
-
-
-
-Referential Integrity will cause failure on any INSERT or UPDATE SQL statement changing the value of customer_id in the child table If the value of customer_id is not present in the Customer table. 
-
-By the way, What is Referential Integrity in SQL is also an important SQL question similar to finding the second highest salary in SQL or the difference between truncate and delete and should be prepared well before going for any job interview, where knowledge of SQL is one of the requirements.
-
-But, if you are new to the SQL world, it's better to start with a comprehensive SQL course like The Complete SQL Bootcamp course by Jose Portilla on Udemy. That will help you to learn SQL better and quicker, and these kinds of articles will also make more sense once you have some SQL knowledge under your belt.
-
-Referential Integrity example in MySQL tables
-What is Refrential Integrity in SQL database with MySQL example
-Another example of Referential Integrity is Employee and Department relationship. If we have dept_id as a foreign key in the Employee table then by using referential integrity constraints we can avoid creating  Employee without department or non-existing department. 
-
-In short Referential Integrity makes primary key foreign key relationships viable. Let's first create Employee and Department table with a primary key, foreign key, and referential integrity constraints.
-
-
-
-CREATE TABLE Department (dept_id INT NOT NULL,
-                         dept_name VARCHAR(256),                      
-                         PRIMARY KEY (dept_id)) ENGINE=INNODB;
-
-CREATE TABLE Employee (emp_id INT NOT NULL,
-                       emp_name VARCHAR(256),
-                       dept_id INT,
-                       FOREIGN KEY (dept_id) REFERENCES Department(dept_id)
-                       ON DELETE CASCADE) ENGINE=INNODB;
-
-Above SQL statements will create both Department and Employee tables. dept_id is now a foreign key in the Employee table. 
-
-In this SQL, while creating a foreign key we have specified ON DELETE clause which tells, what needs to do when a record from the parent table is deleted. CASCADE referential action allows to delete or update all matching rows from the child table, after deleting a record in the parent table. This way Referential Integrity preserves data integrity of the relationship.
-
-Let's see How Referential Integrity disallows INSERT and UPDATE for a record in the child table for which there is no matching record in the parent table. To check this Referential Integrity example execute the following MySQL queries :
-
-INSERT INTO Department VALUES (1, "Sales");
-INSERT INTO Employee VALUES (101, "Rajeev", 2)
-
-mysql> INSERT INTO Employee VALUES (101, "Rajeev", 2)
-    -> ;
+#### Step 1: Create the Temporary `#Employee` Table
+
+```sql
+IF OBJECT_ID('tempdb..#Employee') IS NOT NULL
+    DROP TABLE #Employee;
+
+CREATE TABLE #Employee (
+    name VARCHAR(10),
+    salary INT
+);
+
+-- Insert sample data
+INSERT INTO #Employee (name, salary) VALUES ('Rick', 3000);
+INSERT INTO #Employee (name, salary) VALUES ('John', 4000);
+INSERT INTO #Employee (name, salary) VALUES ('Shane', 3000);
+INSERT INTO #Employee (name, salary) VALUES ('Peter', 5000);
+INSERT INTO #Employee (name, salary) VALUES ('Jackob', 7000);
+INSERT INTO #Employee (name, salary) VALUES ('Sid', 1000);
+```
+
+#### Step 2: Use `ROW_NUMBER()`
+
+The `ROW_NUMBER()` function assigns a unique number to each row, even if there are ties in the salary column. It does not account for ranking gaps.
+
+```sql
+SELECT 
+    name,
+    salary,
+    ROW_NUMBER() OVER (ORDER BY salary DESC) AS row_number
+FROM #Employee;
+```
+
+**Output:**
+
+| name   | salary | row_number |
+|--------|--------|------------|
+| Jackob | 7000   | 1          |
+| Peter  | 5000   | 2          |
+| John   | 4000   | 3          |
+| Shane  | 3000   | 4          |
+| Rick   | 3000   | 5          |
+| Sid    | 1000   | 6          |
+
+Explanation: `ROW_NUMBER()` generates unique row numbers for each employee, even when there are ties in salary. In this case, Shane and Rick both have the same salary but receive distinct row numbers (4 and 5).
+
+#### Step 3: Use `RANK()`
+
+The `RANK()` function assigns the same rank to rows with equal values, but leaves a gap in the ranking sequence for the next unique value.
+
+```sql
+SELECT 
+    name,
+    salary,
+    RANK() OVER (ORDER BY salary DESC) AS rank
+FROM #Employee;
+```
+
+**Output:**
+
+| name   | salary | rank |
+|--------|--------|------|
+| Jackob | 7000   | 1    |
+| Peter  | 5000   | 2    |
+| John   | 4000   | 3    |
+| Shane  | 3000   | 4    |
+| Rick   | 3000   | 4    |
+| Sid    | 1000   | 6    |
+
+Explanation: `RANK()` assigns the same rank (4) to Shane and Rick, but the next rank is 6, leaving a gap in the sequence after a tie.
+
+#### Step 4: Use `DENSE_RANK()`
+
+The `DENSE_RANK()` function also assigns the same rank to tied rows but does not leave gaps in the ranking sequence.
+
+```sql
+SELECT 
+    name,
+    salary,
+    DENSE_RANK() OVER (ORDER BY salary DESC) AS dense_rank
+FROM #Employee;
+```
+
+**Output:**
+
+| name   | salary | dense_rank |
+|--------|--------|------------|
+| Jackob | 7000   | 1          |
+| Peter  | 5000   | 2          |
+| John   | 4000   | 3          |
+| Shane  | 3000   | 4          |
+| Rick   | 3000   | 4          |
+| Sid    | 1000   | 5          |
+
+Explanation: `DENSE_RANK()` also assigns the same rank (4) to Shane and Rick, but the next rank is 5, without any gaps in the ranking.
+
+#### Step 5: Compare Results
+
+To compare all three ranking functions in one query:
+
+```sql
+SELECT 
+    name,
+    salary,
+    ROW_NUMBER() OVER (ORDER BY salary DESC) AS row_number,
+    RANK() OVER (ORDER BY salary DESC) AS rank,
+    DENSE_RANK() OVER (ORDER BY salary DESC) AS dense_rank
+FROM #Employee;
+```
+
+**Output:**
+
+| name   | salary | row_number | rank | dense_rank |
+|--------|--------|------------|------|------------|
+| Jackob | 7000   | 1          | 1    | 1          |
+| Peter  | 5000   | 2          | 2    | 2          |
+| John   | 4000   | 3          | 3    | 3          |
+| Shane  | 3000   | 4          | 4    | 4          |
+| Rick   | 3000   | 5          | 4    | 4          |
+| Sid    | 1000   | 6          | 6    | 5          |
+
+### Key Differences:
+
+1. **`ROW_NUMBER()`**:
+   - Generates a unique number for each row.
+   - Even if there are ties, each row gets a unique rank (no gaps).
+   
+2. **`RANK()`**:
+   - Assigns the same rank to tied rows.
+   - Leaves a gap in the rank sequence after a tie.
+   
+3. **`DENSE_RANK()`**:
+   - Assigns the same rank to tied rows.
+   - Does not leave a gap in the rank sequence after a tie (ranks are dense).
+
+### Conclusion:
+- Use `ROW_NUMBER()` when you need a unique ranking for each row regardless of ties.
+- Use `RANK()` when you want tied rows to have the same rank, but with a gap in the ranking sequence for the next distinct value.
+- Use `DENSE_RANK()` when you want tied rows to have the same rank, with no gaps in the sequence.
+
+These differences are particularly important when dealing with ordered data, such as salaries, in business applications or competitive ranking systems.
+Here are the most common SQL query interview questions and answers that are often asked in technical job interviews:
+
+### 1. **SQL Query to Find the Second Highest Salary of an Employee**
+   - **Answer**: You can find the second highest salary using a subquery:
+     ```sql
+     SELECT MAX(Salary) 
+     FROM Employee 
+     WHERE Salary NOT IN (SELECT MAX(Salary) FROM Employee);
+     ```
+
+### 2. **SQL Query to Find Max Salary from Each Department**
+   - **Answer**: Use `GROUP BY` with `MAX()`:
+     ```sql
+     SELECT DeptID, MAX(Salary) 
+     FROM Employee 
+     GROUP BY DeptID;
+     ```
+
+     To display the department name instead of `DeptID`, you can join the `Employee` table with the `Department` table:
+     ```sql
+     SELECT DeptName, MAX(Salary)
+     FROM Employee e
+     RIGHT JOIN Department d ON e.DeptID = d.DeptID
+     GROUP BY DeptName;
+     ```
+
+### 3. **SQL Query to Display the Current Date**
+   - **Answer**: Use `GETDATE()` in SQL Server:
+     ```sql
+     SELECT GETDATE();
+     ```
+
+### 4. **SQL Query to Check if a Date is in a Given Format**
+   - **Answer**: Use the `ISDATE()` function in SQL Server:
+     ```sql
+     SELECT ISDATE('01/08/13') AS "MM/DD/YY";
+     ```
+
+### 5. **SQL Query to Find Employees Whose DOB is Between 01/01/1960 and 31/12/1975**
+   - **Answer**:
+     ```sql
+     SELECT DISTINCT EmpName
+     FROM Employees 
+     WHERE DOB BETWEEN '1960-01-01' AND '1975-12-31';
+     ```
+
+### 6. **SQL Query to Find the Number of Employees According to Gender Whose DOB is Between 01/01/1960 and 31/12/1975**
+   - **Answer**:
+     ```sql
+     SELECT COUNT(*), sex 
+     FROM Employees  
+     WHERE DOB BETWEEN '1960-01-01' AND '1975-12-31'
+     GROUP BY sex;
+     ```
+
+### 7. **SQL Query to Find Employees with Salary >= 10000**
+   - **Answer**:
+     ```sql
+     SELECT EmpName 
+     FROM Employees 
+     WHERE Salary >= 10000;
+     ```
+
+### 8. **SQL Query to Find Employees Whose Name Starts with ‘M’**
+   - **Answer**:
+     ```sql
+     SELECT * FROM Employees 
+     WHERE EmpName LIKE 'M%';
+     ```
+
+### 9. **SQL Query to Find Employees Whose Name Contains the Word "Joe" (Case-Insensitive)**
+   - **Answer**: Use `UPPER()` and `LIKE`:
+     ```sql
+     SELECT * FROM Employees 
+     WHERE UPPER(EmpName) LIKE '%JOE%';
+     ```
+
+### 10. **SQL Query to Extract the Year from a Date**
+   - **Answer**:
+     ```sql
+     SELECT YEAR(GETDATE()) AS "Year";
+     ```
+
+### 11. **SQL Query to Find Duplicate Rows and Delete Them**
+   - **Answer**:
+     To select duplicates:
+     ```sql
+     SELECT * 
+     FROM emp a 
+     WHERE rowid = (SELECT MAX(rowid) 
+                    FROM EMP b 
+                    WHERE a.empno = b.empno);
+     ```
+     To delete duplicates:
+     ```sql
+     DELETE FROM emp a 
+     WHERE rowid != (SELECT MAX(rowid) 
+                     FROM emp b 
+                     WHERE a.empno = b.empno);
+     ```
+
+### 12. **SQL Query to Find Students Whose Marks are Greater Than the Average Marks**
+   - **Answer**:
+     ```sql
+     SELECT student, marks
+     FROM table
+     WHERE marks > (SELECT AVG(marks) FROM table);
+     ```
+
+### 13. **SQL Query to Find Employees Who Are Also Managers**
+   - **Answer**: Use self-join:
+     ```sql
+     SELECT e.name, m.name 
+     FROM Employee e, Employee m 
+     WHERE e.mgr_id = m.emp_id;
+     ```
+
+     To include employees without managers, use `LEFT OUTER JOIN`:
+     ```sql
+     SELECT e.name, m.name 
+     FROM Employee e
+     LEFT JOIN Employee m ON e.mgr_id = m.emp_id;
+     ```
+
+### 14. **Will a Composite Index Be Used if Only Two Columns are Given in the WHERE Clause?**
+   - **Answer**: The index will be used only if the first columns of the composite index are provided. For example, if the index is on `(EmpId, EmpFirstName, EmpLastName)`, the query:
+     ```sql
+     SELECT * FROM Employee WHERE EmpId = 2 AND EmpFirstName = 'Radhe';
+     ```
+     will use the index because `EmpId` is the first column.
+
+### 15. **How to Use EXISTS and NOT EXISTS in SQL?**
+   - **Scenario**: Finding customers who have never ordered anything:
+     - **Using `NOT EXISTS`**:
+       ```sql
+       SELECT C.Name 
+       FROM Customers C 
+       WHERE NOT EXISTS (SELECT 1 FROM Orders O WHERE C.Id = O.CustomerId);
+       ```
+
+   - **Using `LEFT JOIN` (alternative)**:
+     ```sql
+     SELECT C.Name
+     FROM Customers C
+     LEFT JOIN Orders O ON C.Id = O.CustomerId
+     WHERE O.CustomerId IS NULL;
+     ```
+
+   - **Using `NOT IN` (alternative)**:
+     ```sql
+     SELECT A.Name
+     FROM Customers A
+     WHERE A.Id NOT IN (SELECT B.CustomerId FROM Orders B);
+     ```
+
+### 16. **SQL Query to Find the Number of Rows in a Table**
+   - **Answer**:
+     ```sql
+     SELECT COUNT(*) FROM table_name;
+     ```
+
+### 17. **SQL Query to Find the Maximum, Minimum, and Average Salary in a Department**
+   - **Answer**:
+     ```sql
+     SELECT DeptID, MAX(Salary), MIN(Salary), AVG(Salary)
+     FROM Employee
+     GROUP BY DeptID;
+     ```
+
+### 18. **SQL Query to Find Employees with a Specific Pattern in Their Name**
+   - **Answer**: Use `LIKE` with a wildcard:
+     ```sql
+     SELECT * FROM Employees 
+     WHERE EmpName LIKE '%John%';
+     ```
+
+### 19. **SQL Query to Update Employee Salary by 10%**
+   - **Answer**:
+     ```sql
+     UPDATE Employees
+     SET Salary = Salary * 1.10
+     WHERE DeptID = 1;
+     ```
+
+### 20. **SQL Query to Delete Employees Who Have Not Been Assigned to Any Department**
+   - **Answer**:
+     ```sql
+     DELETE FROM Employees 
+     WHERE DeptID IS NULL;
+     ```
+
+These questions and answers cover a range of SQL concepts, from basic querying to more advanced topics like subqueries, joins, and functions. Practicing these will help prepare for SQL interviews.
+
+### Difference Between Self Join and Equi Join in SQL (with INNER JOIN Example)
+
+#### **1. Self Join**
+- A **Self Join** is a type of join where a table is joined to itself.
+- It is commonly used when you want to relate rows within the same table based on some relationship or condition.
+- You can use **table aliases** to differentiate between the two instances of the same table.
+
+#### Example Use Case of Self Join:
+Let’s consider an **Employee** table where each employee may have a manager, and the manager's employee ID is stored in the `mgr_id` column.
+
+Here's how to find employees who are managers in a self join:
+```sql
+SELECT DISTINCT e.emp_id, e.emp_name 
+FROM employee e 
+JOIN employee m ON e.emp_id = m.mgr_id;
+```
+- In this query, the table **employee** is aliased as **e** for employees and **m** for managers. The join condition is where an employee's ID matches the manager's ID in another instance of the **employee** table.
+- This is an example of a **self-join** where we join the table to itself.
+
+#### **2. Equi Join**
+- An **Equi Join** is a type of join where two tables are joined based on equality. This is a general concept and can occur in various types of joins like **INNER JOIN**, **LEFT JOIN**, etc.
+- The distinguishing feature of an Equi Join is that it uses the equality operator `=` in the **join predicate** (the condition for the join).
+- While an Equi Join could involve multiple tables, it can also be used in a **self join** when the condition for joining is based on equality.
+
+#### Example Use Case of Equi Join:
+In the **Employee** table, if we want to find all employees and their managers, we can use an Equi Join as follows:
+```sql
+SELECT e.emp_id, e.emp_name, m.emp_name AS manager_name
+FROM employee e
+JOIN employee m ON e.mgr_id = m.emp_id;
+```
+- This query finds each employee along with their manager’s name. The `ON e.mgr_id = m.emp_id` is an **Equi Join** condition because it uses the equality operator to match the `mgr_id` from the employee table to the `emp_id` of another instance of the employee table.
+
+#### **Key Differences Between Self Join and Equi Join**
+- **Self Join**:
+  - Involves joining **one table** to itself.
+  - Typically used to establish relationships between rows in the same table, such as finding hierarchical relationships (e.g., employee-manager relationships).
+  - Requires the use of **aliases** to differentiate between instances of the same table.
+
+- **Equi Join**:
+  - Involves **two or more tables** being joined using the equality operator (`=`).
+  - The join predicate specifically involves matching equal values between columns from different tables or different instances of the same table.
+  - An **Equi Join** can be used in any type of join, such as **INNER JOIN**, **LEFT JOIN**, etc., and can also be part of a **Self Join** if the join condition uses equality.
+
+#### **Summary of Key Concepts**
+- **Self Join**: A join where a table is joined with itself, typically used for relationships within the same table.
+- **Equi Join**: A join where equality (`=`) is used as the join condition between columns from two tables (or two instances of the same table), and can be applied in any join type (INNER, OUTER, etc.).
+
+In the example provided in the article, the query:
+```sql
+SELECT DISTINCT e.emp_id, e.emp_name
+FROM employee e 
+JOIN employee m ON e.emp_id = m.mgr_id;
+```
+is both a **Self Join** and an **Equi Join**, because:
+- It joins **one table to itself** (Self Join).
+- It uses the equality operator (`=`) as the condition in the join (Equi Join).
+
+So, **Self Join** and **Equi Join** can overlap in certain situations, but they are conceptually different: a self join is about joining a table to itself, while an equi join refers to the use of the equality condition to match rows from different tables.
+
+### Referential Integrity in SQL: Overview and MySQL Example
+
+**Referential Integrity** ensures that relationships between tables remain consistent. It is maintained through **foreign key constraints**, which prevent the insertion of invalid data into the child table based on the parent table’s data. This means that a record in the child table must reference an existing record in the parent table. If the data does not conform to this rule, the insert or update will fail.
+
+### Key Points:
+- **Foreign Keys** link child tables to parent tables.
+- Referential Integrity ensures that no orphaned records are left in the child table, which would otherwise have no corresponding parent.
+- For example, if a child table (`Order`) references a parent table (`Customer`), a new order cannot be created without a corresponding customer.
+
+### Example of Referential Integrity in MySQL
+
+#### Step 1: Create Parent and Child Tables
+Consider two tables: **Department** (parent) and **Employee** (child). The `Employee` table has a foreign key that references the `Department` table.
+
+```sql
+CREATE TABLE Department (
+    dept_id INT NOT NULL,
+    dept_name VARCHAR(256),
+    PRIMARY KEY (dept_id)
+) ENGINE=INNODB;
+
+CREATE TABLE Employee (
+    emp_id INT NOT NULL,
+    emp_name VARCHAR(256),
+    dept_id INT,
+    FOREIGN KEY (dept_id) REFERENCES Department(dept_id) ON DELETE CASCADE
+) ENGINE=INNODB;
+```
+
+- `dept_id` in **Employee** is a foreign key referencing `dept_id` in **Department**.
+- The `ON DELETE CASCADE` clause ensures that if a record in the parent table (`Department`) is deleted, all corresponding child records in the `Employee` table are automatically deleted.
+
+#### Step 2: Insert Data into Parent Table
+Insert a record into the **Department** table.
+
+```sql
+INSERT INTO Department VALUES (1, 'Sales');
+```
+
+#### Step 3: Insert Data into Child Table
+Now, attempt to insert a record into the **Employee** table with a `dept_id` that does not exist in the **Department** table.
+
+```sql
+INSERT INTO Employee VALUES (101, 'Rajeev', 2);
+```
+
+**Error**: 
+
+```
 ERROR 1452 (23000): Cannot ADD OR UPDATE a child row: a FOREIGN KEY constraint fails (`test`.`employee`, CONSTRAINT `employee_ibfk_1` FOREIGN KEY (`dept_id`) REFERENCES `department` (`dept_id`) ON DELETE CASCADE)
+```
 
-When we inserted first record in Department table it ran fine but when we insert a record in Employee table with dept_id = 2 which is not present in Department i.e. parent table, failed to Referential integrity or foreign key constraint check.
+This failure occurs because there is no department with `dept_id = 2` in the parent **Department** table. Referential Integrity prevents this invalid insert.
 
-If you modify your query and correct dept_id to 1, query will run fine, as shown below
+#### Step 4: Correct Insert into Child Table
+Now, insert a valid record where the `dept_id` exists in the **Department** table.
 
-mysql> INSERT INTO Employee VALUES (101, "Rajeev", 1);
-Query OK, 1 row affected (0.05 sec)
+```sql
+INSERT INTO Employee VALUES (101, 'Rajeev', 1);
+```
 
-Now let's delete our only record from Department table and see if matching records on child table is automatically deleted or not.
+This query succeeds because `dept_id = 1` exists in the **Department** table.
 
-mysql> DELETE FROM Department;
-Query OK, 1 row affected (0.05 sec)
+#### Step 5: Delete Record in Parent Table
+If you delete the record from the **Department** table, all related records in the **Employee** table will also be deleted due to the `ON DELETE CASCADE` rule.
 
-mysql> SELECT * FROM Employee;
-Empty SET (0.00 sec)
-You see there is no record in the Employee table because of ON DELETE CASCADE, matching records in the child table are deleted. Similarly, you can use ON UPDATE CASCADE to automatically propagate UPDATE from the parent table to child tables.
+```sql
+DELETE FROM Department WHERE dept_id = 1;
+```
 
-Advantage of Referential Integrity in RDBMS and SQL
-There are several benefit of Referential Integrity in relational database and maintaining integrity of data among parent and child tables. Here are some of the most noticed advantages of Referential Integrity in SQL:
+Check the **Employee** table to confirm:
 
-1) Referential Integrity prevents inserting records with incorrect details in table. Any insert or update operation will fail if it doesn't satisfy referential integrity rule.
+```sql
+SELECT * FROM Employee;
+```
 
+The result will be empty because the employee with `dept_id = 1` has been deleted automatically.
 
-2) If a records from parent table is deleted, referential integrity allows to delete all related records from child table using cascade-delete functionality.
+### Advantages of Referential Integrity
 
-3) Similar to second advantage if a record i.e. customer_id of a customer is updated on parent table (Customer table) , Referential Integrity helps to update customer_id in child table (Order) using cascade-update.
+1. **Prevents Invalid Data**: Prevents inserting records with invalid foreign key values (e.g., an employee without a valid department).
+2. **Automatic Cleanup**: Automatically deletes or updates child records when the parent record is deleted or updated (using **CASCADE**).
+3. **Maintains Data Consistency**: Ensures that relationships between tables are always valid.
 
+---
 
-Read more: https://javarevisited.blogspot.com/2012/12/what-is-referential-integrity-in-database-sql-mysql-example-tutorial.html#ixzz8hil5zIkv
+### Joining Three Tables in SQL
 
-Three tables JOIN Example SQL
+To join three tables in a single query, you use the `JOIN` clause to combine data from multiple tables based on their relationships.
 
+#### General Syntax for Joining Three Tables:
 
-Joining three tables in a single SQL query can be very tricky if you are not good with the concept of SQL Join. SQL Joins have always been tricky not only for new programmers but for many others,  who are in programming and SQL for more than 2 to 3 years. There are enough to confuse someone on SQL JOIN ranging from various types of SQL JOIN like INNER and OUTER join, LEFT and RIGHT outer join, CROSS join, etc. Between all of these fundamentals, What is most important about Join is, combining multiple tables. If you need data from multiple tables in one SELECT query you need to use either subquery or JOIN.
+```sql
+SELECT t1.column_name, t2.column_name, t3.column_name
+FROM table1 t1
+JOIN table2 t2 ON t1.primary_key = t2.foreign_key
+JOIN table3 t3 ON t2.primary_key = t3.foreign_key;
+```
 
-Most of the time we only join two tables like Employee and Department but sometimes you may require joining more than two tables and a popular case is joining three tables in SQL.
+#### Example: Joining Employee, Register, and Department Tables
 
-In the case of joining three tables table, 1 relates to table 2 and then table 2 relates to table 3. If you look it closely you find that table 2 is a joining table that contains the primary key from both table 1 and table 2. As I said it can be extremely confusing to understand the join of three or more tables.
+Consider the following tables:
+- **Employee**: Stores employee data (`emp_id` as primary key).
+- **Department**: Stores department data (`dept_id` as primary key).
+- **Register**: Links employees and departments (stores `emp_id` and `dept_id` as foreign keys).
 
-I have found that understanding table relationships as the primary key and foreign key helps to alleviate confusion than the classical matching row paradigm.
+```sql
+SELECT * FROM Employee;
+-- Result:
+-- +--------+----------+--------+
+-- | emp_id | emp_name | salary |
+-- +--------+----------+--------+
+-- | 1      | James    | 2000   |
+-- | 2      | Jack     | 4000   |
+-- | 3      | Henry    | 6000   |
+-- | 4      | Tom      | 8000   |
+-- +--------+----------+--------+
 
-SQL Join is also a very popular topic in SQL interviews and there are always been some questions from Joins, like the difference between INNER and OUTER JOIN,  SQL query with JOIN like Employee Department relationship and  Difference between LEFT and RIGHT OUTER JOIN, etc. In short, this is one of the most important topics in SQL both from experience and interview points of view.
+SELECT * FROM Department;
+-- Result:
+-- +---------+-----------+
+-- | dept_id | dept_name |
+-- +---------+-----------+
+-- | 101     | Sales     |
+-- | 102     | Marketing |
+-- | 103     | Finance   |
+-- +---------+-----------+
 
+SELECT * FROM Register;
+-- Result:
+-- +--------+---------+
+-- | emp_id | dept_id |
+-- +--------+---------+
+-- | 1      | 101     |
+-- | 2      | 102     |
+-- | 3      | 103     |
+-- | 4      | 102     |
+-- +--------+---------+
+```
 
+Now, to join these tables and display the employee names along with their respective department names:
 
+```sql
+SELECT emp_name, dept_name
+FROM Employee e
+JOIN Register r ON e.emp_id = r.emp_id
+JOIN Department d ON r.dept_id = d.dept_id;
+```
 
-Three table JOIN syntax in SQL
-Here is a general SQL query syntax to join three or more tables. This SQL query should work in all major relational databases like MySQL, Oracle, Microsoft SQLServer, Sybase, and PostgreSQL:
-
-SELECT t1.col, t3.col
-FROM table1
-JOIN table2 ON table1.primarykey = table2.foreignkey
-JOIN table3 ON table2.primarykey = table3.foreignkey
-
-
-
-We first join table 1 and table 2 which produce a temporary table with combined data from table1 and table2,  which is then joined to table3. This formula can be extended to more than 3 tables to N tables, You just need to make sure that the SQL query should have N-1 join statement in order to join N tables. for joining two tables, we require 1 join statement and for joining 3 tables we need 2 join statements.
-
-Here is a nice diagram that also shows how does different types of JOINs e.g. inner, left outer, right outer and cross joins works in SQL:
-
-How to join three tables in SQL with MySQL database example
-
-
-
-SQL Query to JOIN three tables in MySQL
-How to join three tables in SQL with Example - MySQL Oracle SQL ServerIn order to better understand the joining of 3 tables in the SQL query let's see an example.  Consider the popular example of Employee and Department schema. In our case, we have used a link table called Register which links or relates both Employee to Department. 
-
-The primary key of the Employee table (emp_id) is a foreign key in Register and similarly, the primary key of the Department table (dept_id) is a foreign key in Register table.
-
-Btw, the only way to master SQL join is doing as much exercise as possible. If you could solve most of SQL puzzles from Joe Celko's classic book, SQL Puzzles, and Answers, 2nd edition, you will more confident about dealing with SQL joins, whether it could be two, three or four tables.
-
-
-In order to write an SQL query to print employee name and department name alongside we need to join 3 tables. First JOIN statement will join Employee and Register and create a temporary table which will have dept_id as another column. Now second JOIN statement will join this temp table with Department table on dept_id to get the desired result.
-
-Here is the complete SELECT SQL query example to join 3 tables and it can be extended to join more than 3 or N tables.
-
-
-
-
-mysql> SELECT * FROM Employee;
-+--------+----------+--------+
-| emp_id | emp_name | salary |
-+--------+----------+--------+
-| 1      | James    |   2000 |
-| 2      | Jack     |   4000 |
-| 3      | Henry    |   6000 |
-| 4      | Tom      |   8000 |
-+--------+----------+--------+
-4 rows IN SET (0.00 sec)
-
-mysql> SELECT * FROM Department;
-+---------+-----------+
-| dept_id | dept_name |
-+---------+-----------+
-| 101     | Sales     |
-| 102     | Marketing |
-| 103     | Finance   |
-+---------+-----------+
-3 rows IN SET (0.00 sec)
-
-mysql> SELECT * FROM Register;
-+--------+---------+
-| emp_id | dept_id |
-+--------+---------+
-|      1 |     101 |
-|      2 |     102 |
-|      3 |     103 |
-|      4 |     102 |
-+--------+---------+
-4 rows IN SET (0.00 sec)
-
-mysql> SELECT emp_name, dept_name
-       FROM Employee e
-       JOIN Register r ON e.emp_id=r.emp_id
-       JOIN Department d ON r.dept_id=d.dept_id;
+**Result**:
+```
 +----------+-----------+
 | emp_name | dept_name |
 +----------+-----------+
@@ -4399,448 +4117,500 @@ mysql> SELECT emp_name, dept_name
 | Henry    | Finance   |
 | Tom      | Marketing |
 +----------+-----------+
-4 rows IN SET (0.01 sec)
+```
+
+Here:
+- First, the **Employee** table is joined with the **Register** table on `emp_id`.
+- Then, the **Register** table is joined with the **Department** table on `dept_id`.
+
+This is a simple example of joining three tables, and the query can be extended to include more tables as needed.
+
+### Conclusion
+
+- **Referential Integrity** ensures the validity of data relationships between parent and child tables, preventing errors like inserting invalid foreign keys or orphaned records.
+- **SQL Joins** help retrieve data from multiple tables based on defined relationships, and mastering them is crucial for complex queries, especially in relational databases like MySQL.
+
+Both concepts are fundamental for maintaining clean, reliable data in a relational database system.
+
+### Difference Between WHERE and HAVING Clause in SQL
+
+The `WHERE` and `HAVING` clauses are both used to filter data in SQL, but they serve different purposes and are used in different scenarios. Here's a breakdown of their differences:
+
+### 1. **Purpose**:
 
+- **WHERE Clause**: 
+  - The `WHERE` clause filters records **before** any grouping takes place. It applies conditions to rows before any aggregation or grouping occurs.
+  - It is used for filtering rows at the **individual record level** (non-aggregated data).
 
-If you want to understand it even better then try joining tables step by step. So instead of joining 3 tables in one go, first join 2 tables and see how the result table will look like. That’s all on How to join three tables in one SQL query in the relational database.
+- **HAVING Clause**:
+  - The `HAVING` clause filters records **after** grouping has occurred. It applies conditions to the grouped data.
+  - It is used for filtering on **aggregated data**, such as the result of `COUNT()`, `SUM()`, `AVG()`, etc.
 
-By the way, in this SQL JOIN Example, we have used ANSI SQL and it will work in another relational database as well like Oracle, SQL Server, Sybase, PostgreSQL, etc. Let us know if you face any issues while running this 3 table JOIN query in any other database.
+### 2. **Usage with GROUP BY**:
+- **WHERE** can be used without `GROUP BY` and can filter records before the grouping happens. It works on individual rows.
+- **HAVING** is **only used with GROUP BY** (though it can be used without `GROUP BY` in certain cases). It filters records after grouping and applies conditions to aggregate functions.
+
+### 3. **Aggregates**:
+- **WHERE** cannot filter on aggregate functions like `COUNT()`, `SUM()`, `AVG()`, `MIN()`, or `MAX()`. It only works with the individual row-level data.
+- **HAVING** can filter on aggregate functions because it is applied after the data has been grouped and aggregated.
+
+### 4. **Execution Order**:
+- **WHERE** is executed **before** the `GROUP BY` clause.
+- **HAVING** is executed **after** the `GROUP BY` clause.
+
+### 5. **Index Usage**:
+- **WHERE** can utilize indexes to improve query performance (for non-aggregated columns).
+- **HAVING** does not typically use indexes because it's applied after the aggregation is performed.
+
+### 6. **Syntax Example**:
+```sql
+-- WHERE example (no GROUP BY)
+SELECT * 
+FROM Employees
+WHERE salary > 50000;
+
+-- WHERE with GROUP BY (filters before grouping)
+SELECT department, AVG(salary)
+FROM Employees
+WHERE salary > 50000
+GROUP BY department;
+
+-- HAVING example (filters after grouping)
+SELECT department, AVG(salary)
+FROM Employees
+GROUP BY department
+HAVING AVG(salary) > 50000;
+```
+
+### 7. **Performance Considerations**:
+- **WHERE** generally performs better than **HAVING** because it filters the rows before the grouping and aggregation, thus reducing the number of rows that need to be processed.
+- **HAVING** is used to filter the results **after** grouping, which can be less efficient as it requires processing of more data before applying the filter.
+
+### 8. **Use Case Example**:
+
+Consider a `Sales` table:
+
+| product_id | product_name | quantity | price  |
+|------------|--------------|----------|--------|
+| 1          | Widget       | 100      | 15.99  |
+| 2          | Gadget       | 150      | 22.99  |
+| 3          | Doodad       | 200      | 10.99  |
+| 4          | Gizmo        | 50       | 25.99  |
+
+#### Query to find products with total sales above $1000:
+```sql
+SELECT product_name, SUM(quantity * price) AS total_sales
+FROM Sales
+GROUP BY product_name
+HAVING SUM(quantity * price) > 1000;
+```
+
+- **WHERE clause** can filter out rows before the aggregation:
+  ```sql
+  SELECT product_name, SUM(quantity * price) AS total_sales
+  FROM Sales
+  WHERE price > 15
+  GROUP BY product_name
+  HAVING SUM(quantity * price) > 1000;
+  ```
+  
+- Here, the **WHERE** clause filters rows before grouping based on the `price` condition, and the **HAVING** clause filters out groups that do not meet the total sales condition.
+
+### Summary of Differences:
+
+| Aspect                | WHERE                          | HAVING                          |
+|-----------------------|--------------------------------|---------------------------------|
+| **Purpose**           | Filters rows before grouping   | Filters rows after grouping     |
+| **Used with**         | SELECT, UPDATE, DELETE         | SELECT (with GROUP BY)          |
+| **Aggregate Functions** | Cannot use aggregate functions | Can use aggregate functions     |
+| **Execution Order**   | Executed before `GROUP BY`     | Executed after `GROUP BY`       |
+| **Index Usage**       | Can use indexes                | Does not use indexes            |
+
+### When to Use:
+- Use **WHERE** when you want to filter rows before any aggregation or grouping is applied (e.g., filtering records based on column values).
+- Use **HAVING** when you need to filter on aggregated results (e.g., filtering groups that meet certain conditions, such as the count of records or sum of values).
+
+By understanding these differences, you can decide which clause to use depending on the type of filtering you need to perform in your SQL queries.
+
+### **Difference Between UNION vs UNION ALL in SQL**
+
+Both `UNION` and `UNION ALL` are used to combine the results of two or more `SELECT` queries. While they serve the same purpose, they have key differences that affect the results they return, their performance, and how they handle duplicates.
+
+#### **1. Duplicates Handling:**
+   - **UNION**: Removes duplicate rows from the result set. This means that if the same row appears in both queries, only one instance of that row will be included in the final result.
+   - **UNION ALL**: Includes all rows from both queries, including duplicates. If a row appears in both queries, it will appear twice in the result.
+
+   **Example:**
+   - Query 1 returns: `1, 2, 3`
+   - Query 2 returns: `3, 4, 5`
+
+   - **Using `UNION`:**  
+     Result: `1, 2, 3, 4, 5`  
+     (The duplicate `3` is removed.)
+   
+   - **Using `UNION ALL`:**  
+     Result: `1, 2, 3, 3, 4, 5`  
+     (Duplicates are retained.)
+
+#### **2. Performance:**
+   - **UNION**: Generally slower because it performs an additional operation to eliminate duplicates from the result set. This involves sorting and comparing the rows.
+   - **UNION ALL**: Faster because it doesn't perform the duplicate removal step. It simply concatenates the result sets of both queries.
+
+   **Why is `UNION ALL` faster?**
+   - It doesn't require extra computation to remove duplicates, making it more efficient when dealing with large datasets.
+
+#### **3. Use Cases:**
+   - **UNION**: Preferred when you need a result set that contains only unique rows. This is useful when you're combining data from different tables or queries where duplicates would not be meaningful, such as in reports or analytics.
+   - **UNION ALL**: Ideal when you want to include all rows, including duplicates. It's useful when you're combining datasets and every row counts, such as in data warehousing or auditing applications.
 
+#### **4. Query Structure:**
+   Both `UNION` and `UNION ALL` require that the `SELECT` queries being combined must:
+   - Have the same number of columns in the result set.
+   - The columns in each query must have compatible data types.
 
-Read more: https://javarevisited.blogspot.com/2012/11/how-to-join-three-tables-in-sql-query-mysql-sqlserver.html#ixzz8hilI6mVl
+   **Example of Using `UNION`:**
+   ```sql
+   SELECT emp_id, emp_name FROM employees
+   UNION
+   SELECT customer_id, customer_name FROM customers;
+   ```
+
+   **Example of Using `UNION ALL`:**
+   ```sql
+   SELECT emp_id, emp_name FROM employees
+   UNION ALL
+   SELECT customer_id, customer_name FROM customers;
+   ```
+
+#### **5. Performance Considerations (Bandwidth and Data Transfer):**
+   - While `UNION ALL` is faster in terms of query execution because it doesn't remove duplicates, it can potentially transfer more data over the network (due to duplicates), which may impact performance in distributed systems with limited bandwidth.
+
+### **Summary of Key Differences Between UNION and UNION ALL:**
+
+| **Feature**             | **UNION**                         | **UNION ALL**                     |
+|-------------------------|-----------------------------------|-----------------------------------|
+| **Duplicates**          | Removes duplicates                | Keeps duplicates                  |
+| **Performance**         | Slower (due to duplicate removal)  | Faster (no duplicate removal)     |
+| **Use Case**            | When unique results are required  | When all results, including duplicates, are needed |
+| **Query Execution**    | More resources for sorting/removal | Less resources required for execution |
+| **Result Set**          | Returns only distinct rows        | Returns all rows, including duplicates |
+
+---
+
+### **Example of UNION and UNION ALL in SQL:**
+
+**Scenario:**
+Suppose we have two tables, `Employee` and `Customer`, both containing information about individuals, with some overlap. We will combine the results using both `UNION` and `UNION ALL` to observe the differences.
 
-Difference between WHERE and HAVING clause in SQL? Example
+#### **Sample Data:**
 
-The main difference between the WHERE and HAVING clauses comes when used together with the GROUP BY clause. In that case, WHERE is used to filter rows before grouping, and HAVING is used to exclude records after grouping. This is the most important difference, and if you remember this, it will help you write better SQL queries. This is also one of the important SQL concepts to understand, not just from an interview perspective but also from a day-to-day use perspective. I am sure you have used the WHERE clause because it's one of the most common clauses in SQL along with SELECT and used to specify filtering criteria or conditions.
+**Employee Table:**
+| emp_id | emp_name  |
+|--------|-----------|
+| 1      | John      |
+| 2      | Jane      |
 
-You can even use the WHERE clause without HAVING or GROUP BY, as you have seen many times. On the other hand, HAVING can only be used if grouping has been performed using the GROUP BY clause in the SQL query. 
+**Customer Table:**
+| customer_id | customer_name |
+|-------------|---------------|
+| 2           | Jane          |
+| 3           | Jake          |
 
-PlayUnmute
-Fullscreen
-Another worth noting thing about the WHERE and HAVING clause is that the WHERE clause cannot contain aggregate functions like COUNT(), SUM(), MAX(), MIN(), etc but the HAVING clause may contain aggregate functions.
+#### **Query using `UNION`:**
 
-Another worth noting the difference between WHERE and HAVING clause is that WHERE is used to impose filtering criterion on a SELECT, UPDATE, DELETE statement as well as single row function and used before group by clause but HAVING is always used after group by clause.
+```sql
+SELECT emp_id AS id, emp_name AS name FROM Employee
+UNION
+SELECT customer_id AS id, customer_name AS name FROM Customer;
+```
 
-If you are starting with SQL, then these are some of the fundamentals you need to learn, and a good course can help you a lot. If you need a recommendation, I suggest you join any of these best SQL and database courses online. This list contains the best courses from Udmey, Coursera, Pluralsight, and other websites. 
+**Result using `UNION`:**
+| id | name   |
+|----|--------|
+| 1  | John   |
+| 2  | Jane   |
+| 3  | Jake   |
 
+- **Explanation:** The `UNION` operator removes the duplicate row for `Jane` (ID 2).
 
+#### **Query using `UNION ALL`:**
 
+```sql
+SELECT emp_id AS id, emp_name AS name FROM Employee
+UNION ALL
+SELECT customer_id AS id, customer_name AS name FROM Customer;
+```
 
+**Result using `UNION ALL`:**
+| id | name   |
+|----|--------|
+| 1  | John   |
+| 2  | Jane   |
+| 2  | Jane   |
+| 3  | Jake   |
+
+- **Explanation:** The `UNION ALL` operator keeps the duplicate row for `Jane` (ID 2) since both `Employee` and `Customer` tables contain the same data for that row.
+
+### **Conclusion:**
+- Use **`UNION`** when you need distinct rows and when duplicate rows can be discarded.
+- Use **`UNION ALL`** when you need to keep all rows, including duplicates, and when performance is a priority. 
+
+Both of these operations are widely supported across major database systems like MySQL, PostgreSQL, SQL Server, and Oracle, and understanding their differences is crucial for optimizing your queries and ensuring the correctness of your results.
+
+
+Here are 20+ ArrayList-related interview questions with answers commonly asked in Java programming interviews:
+
+---
 
-Difference between WHERE vs. HAVING in SQL
-1. WHERE clause is processed right after FROM clause in the logical order of query processing, which means it is processed before GROUP BY clause while HAVING clause is executed after groups are created.
+### 1. **How to remove duplicates from an ArrayList in Java?**
+**Answer**:  
+To remove duplicates from an `ArrayList`, you can convert it to a `Set` and then back to an `ArrayList`, since `Set` does not allow duplicates.
 
-2. If used in GROUP BY, You can refer to any column from a table in the WHERE clause, but you can only use columns that are not grouped or aggregated.
+```java
+ArrayList<Integer> list = new ArrayList<>(Arrays.asList(1, 2, 3, 1, 2, 4));
+Set<Integer> set = new HashSet<>(list); // Remove duplicates
+list = new ArrayList<>(set); // Convert back to ArrayList
+```
+If maintaining the order of the elements is important, you can use `LinkedHashSet`:
+```java
+Set<Integer> set = new LinkedHashSet<>(list); // Maintains order
+```
 
-3. If you use the HAVING clause without group by, it can also refer to any column, but the index will not be used as opposed to the WHERE clause. For example, the following have the same result set, however "where" will use the id index and having will do a table scan
-select * from table where id = 1
-select * from the table having id = 1
+---
 
+### 2. **How to reverse an ArrayList in Java?**
+**Answer**:  
+You can reverse an `ArrayList` using the `Collections.reverse()` method.
 
-4. You can use an aggregate function to filter rows with the HAVING clause. Because the HAVING clause is processed after the rows have been grouped, you can refer to an aggregate function in the logical expression. For example, the following query will display only courses which have more than 10 students :
-SELECT Course, COUNT(Course) as NumOfStudent 
-FROM Training 
-GROUP BY Course 
-HAVING COUNT(Course)> 10
+```java
+ArrayList<Integer> list = new ArrayList<>(Arrays.asList(1, 2, 3, 4, 5));
+Collections.reverse(list);
+System.out.println(list); // Output: [5, 4, 3, 2, 1]
+```
 
-5. Another key difference between WHERE and HAVING clause is that WHERE will use Index and HAVING will not; for example following two queries will produce an identical result, but WHERE will use Index and HAVING will do a table scan
-SELECT * FROM Course WHERE Id = 101;
-SELECT * FROM Course HAVING Id = 102;
+Alternatively, you can manually reverse the list by iterating through it in reverse order and adding elements to a new list.
 
-6. Since the WHERE clause is evaluated before groups are formed, it evaluates for per row. On the other hand, the HAVING clause is evaluated after groups are formed; hence it evaluates per group. You can further see these free SQL online courses to learn more about it.
+---
 
-Difference between WHERE and HAVING clause in SQL?
+### 3. **Difference between an array and an ArrayList in Java?**
+**Answer**:  
+- **Array**: Fixed size, can hold elements of a specific type only, elements are indexed from 0.
+- **ArrayList**: Dynamic size, can grow or shrink as needed, part of Java Collections Framework, can hold any type of object (generics).
 
+---
 
+### 4. **How to synchronize ArrayList in Java?**
+**Answer**:  
+You can synchronize an `ArrayList` using the `Collections.synchronizedList()` method:
 
+```java
+List<Integer> synchronizedList = Collections.synchronizedList(new ArrayList<>());
+```
 
-When to use WHERE and HAVING clauses?
-Though both are used to exclude rows from the result set, you should use the WHERE clause to filter rows before grouping and use the HAVING clause to filter rows after grouping. In other words, WHERE can be used to filter on table columns while HAVING can be used to filter on aggregate functions like count, sum, avg, min, and max.
+This makes the `ArrayList` thread-safe.
 
-If filtering can be done without aggregate function then you must do it on the WHERE clause because it improves performance because counting and sorting will be done on a much smaller set. If you filter the same rows after grouping, you unnecessarily bear the cost of sorting, which is not used.
+---
 
-For example, the following statement is syntactically correct and produce the same result, but the second one is more efficient than the first one because it filters rows before grouping :
+### 5. **When to use ArrayList and LinkedList in Java?**
+**Answer**:  
+- **ArrayList** is best for frequent random access and searching operations (`O(1)` time complexity). However, adding/removing elements in the middle can be slow (`O(n)` time complexity).
+- **LinkedList** is best for adding/removing elements frequently at the beginning or middle of the list (`O(1)` time complexity for these operations). However, random access is slower (`O(n)` time complexity).
 
-SELECT Job, City, State, Count(Employee) from ... HAVING...
-SELECT ..... from .. WHERE ..
+---
 
+### 6. **Difference between ArrayList and HashSet in Java?**
+**Answer**:  
+- **ArrayList**: Allows duplicates, maintains insertion order, indexed by position.
+- **HashSet**: Does not allow duplicates, does not maintain any specific order of elements.
 
-Read more: https://www.java67.com/2019/06/difference-between-where-and-having-in-sql.html#ixzz8hilPgYQh
+---
 
-SQL is standard for querying, inserting, and modifying data in a relational database. It is categorized into DDL and DML and is powerful enough to create database objects e.g. table, view, stored procedure, and can perform CRUD operation (SELECT, INSERT, UPDATE, and DELETE) query.
+### 7. **How to loop over an ArrayList in Java?**
+**Answer**:  
+You can loop over an `ArrayList` in several ways:
 
-On the other hand, T-SQL (Transact-SQL) is a dialect used by Microsoft SQL Server and Sybase. It is an extension of SQL and provides more functionality than SQL but at the same time confirming ANSI SQL standard as well. For example, you can use conditionals and loops in T-SQL to create a more sophisticated stored procedure that is not available in standard SQL.
+1. Using a for loop:
+   ```java
+   for (int i = 0; i < list.size(); i++) {
+       System.out.println(list.get(i));
+   }
+   ```
 
-Similarly, PL/SQL (Procedural language SEQUEL) is a dialect for Oracle database, which provides T-SQL like functionality e.g. conditionals, loops, and other elements for procedural programming. Both T-SQL and PL/SQL are the supersets of SQL because they not just confirm ANSI SQL standard but also provide additional functionality that is not available in the ANSI standard but helps a lot in database programming.
+2. Using an `Iterator`:
+   ```java
+   Iterator<Integer> iterator = list.iterator();
+   while (iterator.hasNext()) {
+       System.out.println(iterator.next());
+   }
+   ```
 
-In this article, you will learn  a couple of more differences between SQL, T-SQL, and PL/SQL to understand them better.
+3. Using the enhanced for loop (for-each loop):
+   ```java
+   for (Integer num : list) {
+       System.out.println(num);
+   }
+   ```
 
+---
 
+### 8. **Difference between Vector and ArrayList in Java?**
+**Answer**:  
+- **ArrayList** is not synchronized and is generally faster for non-threaded use cases.
+- **Vector** is synchronized, making it thread-safe but slower due to the overhead of synchronization.
 
+---
 
+### 9. **How to create and initialize an ArrayList in one line?**
+**Answer**:  
+You can use `Arrays.asList()` method to initialize an `ArrayList` in one line:
 
-Why do you need T-SQL or PL/SQL?
-Though standard SQL is enough for inserting, retrieving, and modifying data from the database, they only provide set-based operations, which means there are a lot of tasks that you cannot do using plain SQL.
+```java
+ArrayList<Integer> list = new ArrayList<>(Arrays.asList(1, 2, 3, 4, 5));
+```
 
-In order to make SQL more powerful and to expand its usage from simple querying to create complex stored procedures for report generation, XSLT transformation, and many other functionalities, various database vendors started adding proprietary features on SQL supported by their platform. 
+However, note that this creates a fixed-size list (backed by an array) which cannot be resized.
 
-These efforts created different SQL dialects e.g. T-SQL, which is a SQL dialect for Microsoft SQL Server, and Sybase, PL/SQL which is a SQL dialect for Oracle.
+---
 
-In fact, every database has its own SQL dialect, which comprises features and keywords only supported in their database e.g. MySQL has the LIMIT keyword which can be used for pagination or solving problems like second highest salary, but it will not work on Oracle or Microsoft SQL Server database. Similarly, PostgreSQL has some features which are not available to other databases.
+### 10. **How to sort an ArrayList in Java?**
+**Answer**:  
+You can sort an `ArrayList` using `Collections.sort()`:
 
-It's always recommended to use standard ANSI SQL if it serves your purpose because query written in ANSI SQL is portable across different database vendors but if you use a proprietary keyword e.g. TOP in Microsoft SQL Server, LIMIT in MySQL then you need to change your query when your application migrate from one database to another.
+```java
+ArrayList<Integer> list = new ArrayList<>(Arrays.asList(5, 2, 8, 1, 3));
+Collections.sort(list);
+System.out.println(list); // Output: [1, 2, 3, 5, 8]
+```
 
+If you want to sort in custom order, you can use a `Comparator`:
 
+```java
+Collections.sort(list, Comparator.reverseOrder());
+```
 
+---
 
-Differences between SQL, T-SQL and PL/SQL
-Here are a couple of more differences between SQL, PL/SQL, and T-SQL for interviews:
+### 11. **Difference between HashMap and ArrayList in Java?**
+**Answer**:  
+- **HashMap**: Stores key-value pairs, uses keys to access the values, does not allow duplicate keys, and does not maintain order.
+- **ArrayList**: Stores a list of objects, accessed by index, allows duplicates, and maintains insertion order.
 
-1. Full form
-SQL stands for Structured Query language, T-SQL stands for Transact-SQL and PL/SQL stands for Procedural Language/SQL.
+---
 
-2. Supported Database
-SQL is supported across all database vendors like Oracle, SQL Server, MySQL, PostgreSQL, IBM DB2, and even lightweight databases like SQLLite, but T-SQL is only supported in Microsoft SQL Server and Sybase, and PL/SQL is supported only in Oracle.
+### 12. **How to use ArrayList in Java?**
+**Answer**:  
+You can use `ArrayList` by creating an instance and adding elements:
 
+```java
+ArrayList<String> list = new ArrayList<>();
+list.add("Java");
+list.add("Python");
+list.add("C++");
+```
 
-3. Performance
-Another key difference between SQL and PL/SQL, T-SQL is the performance improvement by saving database roundtrip. Both PL/SQL and T-SQL allow grouping of SQL statements which means if your code has 4 SELECT SQL queries then instead of making four round trips to the database, they can be sent as one single unit to the database and their result will also come back as one unit. 
+You can then access elements via the index:
 
-I suggest joining these best Oracle and PL/SQL online courses to learn more about PL/SQL programming. It covers versions through Oracle Database 12c.
+```java
+System.out.println(list.get(0)); // Output: Java
+```
 
-difference between SQL vs T-SQL vs PL/SQL?
+---
 
-4. SQL Query Requirement
-There is an interesting difference between SQL and T-SQL in terms of minimum SELECT query requirements. According to standard SQL, a SELECT query must have at minimum FROM and SELECT clauses, but you can create a SELECT query in T-SQL with just a SELECT clause, without FROM clause. 
+### 13. **How to convert an ArrayList to a String in Java?**
+**Answer**:  
+You can convert an `ArrayList` to a string using `toString()`:
 
-For example, the following SQL query is invalid according to SQL standard but it works fine in T-SQL supported databases like Sybase and MSSQL:
+```java
+ArrayList<Integer> list = new ArrayList<>(Arrays.asList(1, 2, 3, 4, 5));
+String result = list.toString();
+System.out.println(result); // Output: [1, 2, 3, 4, 5]
+```
 
-SELECT 'Java' AS Language, 1 AS RANK;
+For a comma-separated string, use Java 8's `String.join()`:
 
-The output of the query is a single row with attributes resulting from the expression with names assigned using the aliases e.g.
+```java
+String result = String.join(",", list.stream().map(String::valueOf).toArray(String[]::new));
+System.out.println(result); // Output: 1,2,3,4,5
+```
 
-Language Rank
-Java     1
+---
 
-If you want to learn more about T-SQL, I suggest joining these Microsoft SQL Server and T-SQL Fundamentals courses, a great reference to T-SQL but at the same time a very readable and clear explanation of key SQL concepts.
+### 14. **How to get a sublist from an ArrayList in Java?**
+**Answer**:  
+You can get a sublist using the `subList()` method:
 
+```java
+ArrayList<Integer> list = new ArrayList<>(Arrays.asList(1, 2, 3, 4, 5));
+List<Integer> sublist = list.subList(1, 4); // Index 1 to 3
+System.out.println(sublist); // Output: [2, 3, 4]
+```
 
+---
 
-5. Data Types and Keyword
-There are some data types which are supported only by PL/SQL and T-SQL e.g. TINYINT data type is only available in T-SQL and VARCHAR2 and NUMBER is only available in PL/SQL or Oracle database. Similarly, there are keywords which are only available in a particular SQL dialect like the LIMIT keyword which is only available in MySQL.
+### 15. **Difference between `length()` of an array and `size()` of ArrayList in Java?**
+**Answer**:  
+- **Array**: `length` refers to the capacity (fixed number of elements) of the array.
+- **ArrayList**: `size()` returns the number of elements currently stored in the list.
 
-If you want to learn more about features, keyword, and data types supported by different vendors I strongly suggest joining these best SQL courses, it provides a great cross-platform syntax for SQL. Absolutely must-read for those programmers who work with multiple databases
+---
 
+### 16. **What is `CopyOnWriteArrayList` in Java?**
+**Answer**:  
+`CopyOnWriteArrayList` is a thread-safe variant of `ArrayList`. It is optimized for scenarios where reads vastly outnumber writes. Instead of locking the list, it creates a new copy of the list for each modification (write operation), ensuring that readers do not block each other.
 
-Read more: https://javarevisited.blogspot.com/2017/03/difference-between-sql-tsql-and-plsql.html#ixzz8hilico1X
+---
 
-Difference between UNION vs UNION ALL in SQL? Example
+### 17. **How to remove objects from an ArrayList in Java?**
+**Answer**:  
+You can remove an element from an `ArrayList` by either index or object:
 
-Hello guys, what is the difference between UNION vs UNION ALL is one of the most popular SQL interview questions and often asked programmers during a telephonic round of interviews. Though both UNION and UNION ALL is used to combine results of two SELECT queries, the main difference between them is that UNION doesn't include duplicate record but UNION ALL does. Another difference between them is that UNION ALL is faster than UNION but may look slow because it returns more data which takes more time to travel via the network. The difference between UNION and UNION ALL can be a tricky SQL question, especially for developers, who have not used this useful keyword ever. 
+- By index:
+  ```java
+  list.remove(2); // Removes the element at index 2
+  ```
 
-Since the UNION clause is not as common as a SELECT clause in SQL, it's usually asked in a telephonic round of programming interviews to check whether the candidate is comfortable with SQL or not. It's in the same league of questions like clustered vs non-clustered index or primary vs unique key. UNION is very different than other SQL commands because it operates on data rather than columns.
-PlayUnmute
-Fullscreen
+- By object:
+  ```java
+  list.remove(Integer.valueOf(3)); // Removes the element with value 3
+  ```
 
-Anyway, the answer to this question is simple, though both UNION and UNION ALL are used to combine the result of two separate SQL queries on the same or different table,  UNION does not keep a duplicate record (a row is considered duplicate if the value of all columns is same), while UNION ALL does.
+---
 
+### 18. **How to make an ArrayList read-only in Java?**
+**Answer**:  
+You can make an `ArrayList` read-only using `Collections.unmodifiableList()`:
 
+```java
+List<Integer> readOnlyList = Collections.unmodifiableList(list);
+```
 
-Since you mostly don't want duplicate rows,  UNION is preferred over UNION ALL in reporting and application development. By the way, you should keep in mind that UNION ALL performance better than UNION because it doesn't have to remove duplicates, so no extra work.
+This prevents any modifications (like `add()` or `remove()`) to the list.
 
-This keyword is very well supported by all major databases like Oracle, Microsoft SQL Server, MySQL, and PostgreSQL. Another thing to keep in mind is the amount of data returned by UNION ALL; if your database server is quite far away and you have limited bandwidth, UNION ALL may appear slower than UNION because of the number of duplicates it returned.
+---
 
-The cost of transferring duplicate rows can exceed the query execution benefits in many cases. We will see a couple of examples UNION and UNION ALL in SQL, but before that few things to keep in mind. In order to combine the results of two queries, they must contain the same number of columns.
+### 19. **How to sort an ArrayList in descending order in Java?**
+**Answer**:  
+You can sort in descending order using `Collections.sort()` with a custom comparator:
 
-For example, if one query contains 3 columns and the other contains 4 columns then you can not use UNION or UNION ALL. This is because a row will only be considered duplicated when all columns will have the same value, irrespective of the name of the columns themselves.
+```java
+ArrayList<Integer> list = new ArrayList<>(Arrays.asList(5, 3, 8, 1));
+Collections.sort(list, Comparator.reverseOrder());
+System.out.println(list); // Output: [8, 5, 3, 1]
+```
 
-By the way, if you are just starting with SQL and not familiar with essential SQL concepts and commands then I highly recommend you to join an online SLQ course like SQL for Newbs: Data Analysis for Beginners on Udemy to start with. One of the highest-rated beginner SQL courses on Udemy and you can get it for just $10 on sales. 
+---
 
+### 20. **How to check if an ArrayList contains a specific element in Java?**
+**Answer**:  
+You can check if an element exists in an `ArrayList` using the `contains()` method:
 
+```java
+ArrayList<String> list = new ArrayList<>(Arrays.asList("Java", "Python", "C++"));
+boolean containsJava = list.contains("Java");
+System.out.println(containsJava); // Output: true
+```
 
-
-
-UNION and UNION ALL Example in Microsoft SQL Server
-Let's see one simple example of UNION and UNION ALL, this will not only show you how they work but also where you can use them. This example is from my sample database and the following screenshot is from SQL Server Management Studio.
-
- We have two tables, Employee and Customer. In order to use UNION and UNION ALL, I have kept the same persons as employee and customer, so you will see the same id on emp_id and customer_id, and the same name as well. 
-
-If you look at the result of the first two select queries, you will see that the first query returns two rows and the second query returns three rows, where two rows have exactly the same data as the first query. 
-
-Key things to note is that column names are different in both result sets, first one has emp_id and emp_name, while second data set has customer_id and customer_name, but most important both dataset has only two columns. This is a must in order to combine them using UNION and UNION ALL keywords. 
-
-The third query is an example of how to use the UNION clause in SQL, you can see that the combined result has just three columns, all are unique. Duplicate columns from the second result set were not included. This is more like how you do UNION in Set theory, where the final result contains data from both sets. 
-
-The fourth query is how you should use UNION ALL, it contains five rows, two from the first query and three from the second query. It has not removed duplicate rows from the second query, that's why you see Ken and Bob repeating twice. 
-
-This example teaches us the core concept that the UNION doesn't depend upon the column name but the data. You can combine the result of as many queries as possible until the number of columns in all of them is the same and the data is from the same set.
-
-
-Regarding performance, you need to run UNION and UNION ALL with a large database, containing millions of rows. There you can monitor how much time both takes and compare them. 
-
-Theoretically, UNION ALL should take less time to execute but more time to transfer data to the client. By the way, if are new to SQL Server then I recommend you to go through an introductory course like Microsoft SQL for Beginners on Udemy. It's a great course to start learning SQL using MSSQL and tools. 
-
-
-Difference between UNION ALL and UNION in SQL SERVER
-
-
-
-Difference between UNION and UNION ALL command in SQL
-Now we know how union and union all works and has some background by following the above examples, let's summarise the similarities and difference between them for quick revision :
-
-1. Combining Results
-
-Both UNION and UNION ALL are used to combine the results of two separate SQL queries, it could be on the same table or a different table but the data should be the same. For example, if product_id is used in two tables like Product and Order, then two SQL queries which pulls product_id from these two tables can be combined using UNION or UNION ALL.
-
-2. Duplicates
-The key difference between UNION and UNION ALL is that the former will remove duplicates but later will keep them. In other words, UNION is equal to running distinct on the output of UNION ALL. For example, if product_id 10 is returned by both SQL query then it will only appear once if you use UNION and appear twice if you use UNION ALL.
-
-3. Execution time
-Due to the above difference query execution time of UNION ALL is smaller than UNION, which means the former runs faster than the latter. So if you want faster output and don't care about duplicates use UNION ALL. 
-
-This is something you can deduce from your existing SQL knowledge and that's where working on fundamentals pays off. If you want to improve your SQL skill or just want to revise SQL concepts then An Introductory Guide to SQL course on Educative, an interactive learning platform is a good place to start with. 
-
-best interactive course to learn SQL
-
-And, if you find the Educative platform and their interview courses like Grokking the System design useful then consider getting an Educative Subscription which provides access to their 100+ courses for just $14 per month. It's very cost-effective and great for preparing for coding interviews. 
-
-
-
-4. Speed and Bandwith Usage
-You should keep in mind that benefits gained by not removing duplicates can be easily wiped out by transferring more data over a poor bandwidth network connection. That's why in practice some time UNION ALL appears slower than UNION because it returns a lot of data with duplicates which require more time to travel from database server to client machine. To evaluate the performance of UNION and UNION ALL case by case.
-
-
-
-
-5. Number of Columsn on ResultSet
-Another worth noting thing while using UNION and UNION ALL is that all queries combined using a UNION, INTERSECT, or EXCEPT operator must have an equal number of expressions in their target lists. For example, if the result of query 1 has three columns and the result of query 2 has two columns then you cannot combine them using the UNION command.
-
-
-That's all on the difference between the UNION and UNION ALL command in SQL. It's one of the useful commands to combine the result of two SELECT queries when they contain the same data. There are many practical scenarios where UNION is very useful, for example when you need to create a list out of different tables containing data from the same set. 
-
-The main difference between UNION and UNION ALL is about duplicates, the former removes it while later keeps it, other differences between them on performance and networking bandwidth usage can be easily derived by knowing this difference. Also keep in mind that it is well supported big three databases like MySQL, Oracle, and SQL Server. Let us know if you have been asked this question in your SQL interview.
-
-
-Read more: https://www.java67.com/2014/09/difference-between-union-vs-union-all-in-SQL.html#ixzz8hilvY4ue
-
-Difference between WHERE vs HAVING clause in SQL - GROUP BY Comparison with Example
-
-What is the difference between WHERE and  HAVING clause in SQL is one of the most popular questions asked on SQL and database interviews, especially to beginners? Since programming jobs, required more than one skill, it’s quite common to see a couple of SQL Interview questions in Java and .NET interviews. By the way unlike any other question, not many Java programmers or dot net developers, who are supposed to have knowledge of basic SQL, fail to answer this question. Though almost half of the programmer says that WHERE is used in any SELECT query, while HAVING clause is only used in SELECT queries, which contains aggregate function or group by clause, which is correct.
-PauseUnmute
-Fullscreen
-
-
-Though both WHERE and HAVING clause is used to specify filtering condition in SQL, there is subtle difference between them. Real twist comes into interview, when they are asked to explain result of a SELECT query, which contains both WHERE and HAVING clause, I have seen many people getting confused there. 
-
-Key point, which is also the main difference between WHERE and HAVING clause in SQL is that, condition specified in WHERE clause is used while fetching data (rows) from table, and data which doesn't pass the condition will not be fetched into result set, on the other hand HAVING clause is later used to filter summarized data or grouped data. 
-
-In short if both WHERE and HAVING clause is used in a SELECT query with aggregate function or GROUP BY clause, it will execute before HAVING clause. This will be more clear, when we will see an example of WHERE, HAVING, JOIN and GROUP BY clause together.
-
-
-
-
-
-WHERE vs HAVING Clause Example in SQL
-Difference betwen WHERE and HAVING clause in SQL - Interview QuestionIn this example of the WHERE and HAVING clause, we have two tables Employee and Department. Employee contains details of employees e.g. id, name, age, salary and department id, while Department contains id and department name. In order to show, which employee works for which department we need to join two tables on DEPT_ID to get the department name. 
-
-Our requirement is to find how many employees are working in each department and the average salary of the department. In order to use the WHERE clause, we will only include employees who are earning more than 5000. Before executing our query which contains WHERE HAVING, and GROUP BY clause, let see data from Employee and Department table:
-
-SELECT * FROM Employee;
-EMP_ID
-EMP_NAME
-EMP_AGE
-EMP_SALARY
-DEPT_ID
-1
-Virat
-23
-10000
-1
-2
-Rohit
-24
-7000
-2
-3
-Suresh
-25
-8000
-3
-4
-Shikhar
-27
-6000
-1
-5
-Vijay
-28
-5000
-2
-
-
-SELECT * FROM Department;
-DEPT_ID
-DEPT_NAME
-1
-Accounting
-2
-Marketing
-3
-Sales
-
-
-SELECT d.DEPT_NAME, count(e.EMP_NAME) as NUM_EMPLOYEE, avg(e.EMP_SALARY) as AVG_SALARY FROM Employee e,
-Department d WHERE e.DEPT_ID=d.DEPT_ID AND EMP_SALARY > 5000 GROUP BY d.DEPT_NAME;
-DEPT_NAME
-NUM_EMPLOYEE
-AVG_SALARY
-Accounting
-1
-8000
-Marketing
-1
-7000
-Sales
-2
-8000
-
-
-From the number of employees (NUM_EMPLOYEE) column you can see that only Vijay who work for Marketing department is not included in result set because his earning 5000. This example shows that, condition in WHERE clause is used to filter rows before you aggregate them and then HAVING clause comes in picture for final filtering, which is clear from following query, now Marketing department is excluded because it doesn't pass condition in HAVING clause I mean AVG_SALARY > 7000
-
-SELECT d.DEPT_NAME, count(e.EMP_NAME) as NUM_EMPLOYEE, avg(e.EMP_SALARY) as AVG_SALARY FROM Employee e,
-Department d WHERE e.DEPT_ID=d.DEPT_ID AND EMP_SALARY > 5000 GROUP BY d.DEPT_NAME HAVING AVG_SALARY > 7000;
-DEPT_NAME
-NUM_EMPLOYEE
-AVG_SALARY
-Accounting
-1
-8000
-Sales
-2
-8000
-
-
-
-
-Difference between WHERE and HAVING in SQL
-Apart from this key difference we have seen in this article, here are few more differences between WHERE and HAVING clause, which is worth remembering and can be used to compare both of them :
-
-1) Apart from SELECT queries, you can use the WHERE clause with UPDATE and DELETE clause but the HAVING clause can only be used with SELECT query. For example following query, which involves WHERE clause will work but others which uses HAVING clause will not work :
-
-update DEPARTMENT set DEPT_NAME="NewSales" WHERE DEPT_ID=1 ;  // works fine
-
-update DEPARTMENT set DEPT_NAME="NewSales" HAVING DEPT_ID=1 ; // error
-Incorrect syntax near the keyword 'HAVING'.: update DEPARTMENT set DEPT_NAME='NewSales' HAVING DEPT_ID=1
-
-2) WHERE clause is used for filtering rows and it applies on each and every row, while HAVING clause is used to filter groups in SQL.
-
-3) One syntax level difference between WHERE and HAVING clause is that, former is used before GROUP BY clause, while later is used after GROUP BY clause.
-
-4) When WHERE and HAVING clause are used together in a SELECT query with aggregate function,  WHERE clause is applied first on individual rows and only rows which pass the condition is included for creating groups. Once group is created, HAVING clause is used to filter groups based upon condition specified.
-
-
-Here is a list of difference between WHERE and HAVING clause in point format:
-
-ifference between WHERE vs HAVING clause in SQL
-
-
-That's all on the difference between WHERE and HAVING clause in SQL. As I said this is very popular question and you can't afford not to prepare it. Always remember key difference between WHERE and HAVING clause in SQL, if WHERE and HAVING clause is used together, first WHERE clause is applied to filter rows and only after grouping HAVING clause is applied.
-
-
-Read more: https://javarevisited.blogspot.com/2013/08/difference-between-where-vs-having-clause-SQL-databse-group-by-comparision.html#ixzz8himKSi32
-
-20+ ArrayList Questions with Answers from Java Interviews
-So without wasting any more time, let's start with the questions. The questions are mainly divided into two categories, one is a fact-based question, which checks how much you know about ArrayList, and the other is the task-based question, which evaluates how good you are at doing things with ArrayList. In my list, I have combined both of them.
-
-
-1. How to remove duplicates from ArrayList in Java?  (Answer)
-This is a task-based question. Since the List interface allows duplicates, ArrayList also allowed it but if you remember Set interface doesn't allow duplicates, which means you can remove duplicates from ArrayList by converting it into a Set and then back to ArrayList, but how will you keep the order intact? See the answer for a more detailed explanation.
-
-
-2. How to reverse ArrayList in Java? (Answer)
-You can reverse ArrayList by using the Collections.reverse() method.  There are a couple of more ways like iterating through the list and copying elements into a new list. See the answer for more ways to do this task.
-
-
-And if you want to learn more about ArrayList and other collection classes, you can also check out Java Fundamentals: Collections course by Richard Warburton on Pluralsight. Richard is a Java champion and this course is the best online course to learn the Collection framework in depth. 
-
-
-
-
-
-
-
-3. Difference between an array and an ArrayList in Java? (Answer)
-This is a fresher-level interview question, the main difference between array and ArrayList is that the former is static and the latter is dynamic. You cannot change the size of the array once created, but ArrayList can grow and increase its size automatically.
-
-
-4. How to synchronize ArrayList in Java? (Answer)
-This is a very good task-based question. If you remember, ArrayList is not thread-safe, its not synchronized either, which means you cannot share it between multiple threads if one of them modifies it. Don't worry, you can synchronize ArrayList by using Collections.synchronizedList() method. Check the answer to understand the steps.
-
-
-5. When to use ArrayList and LinkedList in Java? (Answer)
-This is by far the most popular ArrayList based question from Java Interviews and you can answer it very easily if you are familiar with two key data structures, array, and linked list. 
-
-
-Since array provides constant-time search operation, it's better to use ArrayList if search outnumbers add and remove operation, otherwise use LinkedList which provides constant time add and remove operation. See the answer for a more detailed discussion on this topic.
-
-
-Java ArrayList Interview Questions and Answers
-
-
-6. Difference between ArrayList and HashSet in Java? (Answer)
-One of the simplest questions you will ever see on a Java interview. The main difference is the former is List while the later is Set which means ArrayList allowed duplicates, keeps elements in order while HashSet doesn't allow duplicates and provides no ordering guarantee.
-
-
-7. How to loop over ArrayList in Java? (Answer)
-There are many ways to traverse over ArrayList, you can use classic for loop with index, or you can take iterator from ArrayList and can use while loop in conjunction with Iterator.hasNext() method, Or you can use the new foreach loop introduced in Java 5, which doesn't require an index. See the answer to live examples.
-
-
-8. Difference between Vector and ArrayList in Java? (Answer)
-This is the second most popular question based on ArrayList in Java. Though both Vector and ArrayList implement List interface, Vector is synchronized while ArrayList is not synchronized, which means the former is thread-safe and fast while the latter is not thread-safe and slow.
-
-
-9. How to create and initialize ArrayList in one line? (Answer)
-There is a nice little trick to do this by using the Arrays.asList() method, but remember the List returned by this class has some differences with ArrayList, please check the answer to understand what are those differences.
-
-
-10. How to sort ArrayList in Java? (Answer)
-Another task-based ArrayList interview question. You can easily sort the ArrayList by using Collections.sort() method, all you need to make sure is that elements implement either the Comparable or Comparator interface. The former is used to sort on natural order while the latter is used while sorting in the custom order.
-
-
-11. Difference between HashMap and ArrayList in Java? (Answer)
-There is a huge difference between HashMap and ArrayList, fundamental is former is a Map data structure that stores key-value pairs while the latter stores just an object. HashMap access object using key while ArrayList access elements using an index. Though both provide O(1) search performance, ArrayList's performance is guaranteed but HashMap can vary depending upon collision level.
-
-
-12. How to use ArrayList in Java? (Answer)
-Just see the article to learn different ways of using this popular class in Java.
-
-
-13. How to convert ArrayList to String in Java? (Answer)
-Simple, just call toString()  right? unfortunately, the String representation is not very helpful. If you are looking for a comma-separated String containing all elements of ArrayList then you can either use Java 8 String joiner or some older library method as shown in the answer page.
-
-
-14. How to get a sublist from ArrayList in Java? (Answer)
-This is another task-based question, but you can easily do it if you remember API. You can get a list of elements in a range by using the subList() method from the ArrayList class. This would be very helpful in case of a sorted list.
-
-
-15. Difference between length() of array and size() of ArrayList in Java? (Answer)
-This is one of the tricky questions, if you get the backed array and call the length() it will return how many elements you can store in this array, also known as capacity, but if you call the size() function of ArrayList class then it will return a total number of elements currently stored in ArrayList, which is always less than or equal to capacity.
-
-
-16, What is CopyOnWriteArrayList in Java? (Answer)
-It's a concurrent collection class that is introduced as an alternative to synchronized List in Java. This class takes advantage of the advanced thread-safety technique instead of locking. It's very efficient if ArrayList is mostly used for reading purposes because it allows multiple threads to read data without locking, which was not possible with synchronized ArrayList. See the answer to learn more about the CopyOnWriteArrayList class.
-
-
-17. How to remove objects from ArrayList in Java? (Answer)
-There are two ways to remove elements from ArrayList, first, you can call the remove(int index) method and pass on the index of the element you want to remove, and second, you can call the remove(Object obj) method and pass the element you want to remove. By the way, just be careful while working with ArrayList of integers because autoboxing can cause issues by creating an ambiguity between two remove methods. See the answer for a more detailed discussion on the topic.
-
-
-18. How to make ArrayList read-only in Java? (Answer)
-Another task and API-based interview question. You can answer it easily if you are about the Collections utility class, which provides several wrappers of the standard ArrayList class e.g. you can use Collections to create a synchronized version or read-only version of ArrayList in Java.
-
-
-19. How to sort ArrayList in descending order in Java? (Answer)
-This is the follow-up question of one of the previous questions related to sorting. By default, elements are sorted in increasing order as this is how their compareTo() or compare() method compares them. If you want to sort into descending order, just reverse the comparison logic using the Collections.reverseComparator() method.
+--- 
 
 And, if you need more ArrayList questions for practice then here is a list of new ArrayList questions to answer:
 
@@ -7296,262 +7066,1003 @@ public class RemoveCharacter {
 These solutions cover a range of common string manipulation tasks and showcase how to approach these problems in Java.
 
 
-30 Array Coding Problems for Programming Interviews
-Ok, let's now start with my list of array interview questions, my solutions are in Java, but you are free to solve in any programming language of your choice.
+Here are solutions for a few of the array-related coding problems from the list you provided. I'll focus on explaining the approach and then provide Java code for each problem.
+
+### 1. **Find the Missing Number in an Array of Numbers from 1 to 100**
+
+**Approach**:
+You can solve this problem using the formula for the sum of the first `n` integers. The sum of numbers from 1 to 100 is `sum = n * (n + 1) / 2`, where `n = 100`. You can calculate the sum of the array and subtract it from the expected sum to find the missing number.
+
+**Java Code**:
+```java
+public class MissingNumber {
+    public static int findMissingNumber(int[] arr) {
+        int n = 100; // As the numbers range from 1 to 100
+        int expectedSum = n * (n + 1) / 2;
+        int actualSum = 0;
+        
+        for (int num : arr) {
+            actualSum += num;
+        }
+        
+        return expectedSum - actualSum;
+    }
+
+    public static void main(String[] args) {
+        int[] arr = {1, 2, 3, 4, 5, 6, 8, 9, 10}; // Example array with 7 missing
+        System.out.println("Missing number: " + findMissingNumber(arr)); // Output: 7
+    }
+}
+```
+
+### 2. **Find Duplicate Number in an Array**
+
+**Approach**:
+You can use the sum difference approach similar to the missing number problem, but here you are looking for a repeated number in a range from 0 to `n-2`. Another efficient way is to use Floyd's Tortoise and Hare algorithm (Cycle Detection) if you want to avoid additional space usage.
+
+**Java Code** (using the sum difference approach):
+```java
+public class FindDuplicate {
+    public static int findDuplicate(int[] arr) {
+        int n = arr.length;
+        int expectedSum = (n - 1) * (n - 2) / 2;  // Sum of numbers from 0 to n-2
+        int actualSum = 0;
+        
+        for (int num : arr) {
+            actualSum += num;
+        }
+        
+        return actualSum - expectedSum;
+    }
+
+    public static void main(String[] args) {
+        int[] arr = {0, 3, 1, 2, 3}; // Example array with duplicate number 3
+        System.out.println("Duplicate number: " + findDuplicate(arr)); // Output: 3
+    }
+}
+```
+
+### 3. **Check if an Array Contains a Number**
+
+**Approach**:
+- If the array is sorted, you can use binary search (O(log n)).
+- If the array is unsorted, you would perform a linear search (O(n)).
+
+**Java Code** (for unsorted array with linear search):
+```java
+public class CheckNumber {
+    public static boolean contains(int[] arr, int target) {
+        for (int num : arr) {
+            if (num == target) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static void main(String[] args) {
+        int[] arr = {4, 2, 3, 5, 1}; // Example array
+        int target = 3;
+        System.out.println("Contains " + target + ": " + contains(arr, target)); // Output: true
+    }
+}
+```
+
+### 4. **Find Largest and Smallest Number in an Unsorted Array**
+
+**Approach**:
+You can do this in one pass by initializing two variables (`largest` and `smallest`) and updating them as you traverse through the array.
+
+**Java Code**:
+```java
+public class FindLargestSmallest {
+    public static int[] findLargestSmallest(int[] arr) {
+        int largest = Integer.MIN_VALUE;
+        int smallest = Integer.MAX_VALUE;
+
+        for (int num : arr) {
+            if (num > largest) largest = num;
+            if (num < smallest) smallest = num;
+        }
+
+        return new int[]{largest, smallest};
+    }
+
+    public static void main(String[] args) {
+        int[] arr = {10, 2, 34, 45, -6, 7};
+        int[] result = findLargestSmallest(arr);
+        System.out.println("Largest: " + result[0] + ", Smallest: " + result[1]);
+    }
+}
+```
+
+### 5. **Find All Pairs in an Array Whose Sum is Equal to a Given Number**
+
+**Approach**:
+A straightforward solution involves using two loops to check all pairs. However, a more efficient approach is to use a HashSet to track the elements you've already seen.
+
+**Java Code**:
+```java
+import java.util.HashSet;
+
+public class FindPairs {
+    public static void findPairs(int[] arr, int sum) {
+        HashSet<Integer> set = new HashSet<>();
+        
+        for (int num : arr) {
+            int complement = sum - num;
+            if (set.contains(complement)) {
+                System.out.println("Pair: (" + num + ", " + complement + ")");
+            }
+            set.add(num);
+        }
+    }
+
+    public static void main(String[] args) {
+        int[] arr = {1, 2, 3, 4, 5, 6};
+        int sum = 7;
+        findPairs(arr, sum);
+    }
+}
+```
+
+### 6. **Remove Duplicates from an Array**
+
+**Approach**:
+You can use a HashSet to keep track of the unique elements and overwrite the array with the unique elements.
+
+**Java Code**:
+```java
+import java.util.HashSet;
+
+public class RemoveDuplicates {
+    public static int[] removeDuplicates(int[] arr) {
+        HashSet<Integer> set = new HashSet<>();
+        int index = 0;
+
+        for (int num : arr) {
+            if (!set.contains(num)) {
+                set.add(num);
+                arr[index++] = num;
+            }
+        }
+
+        // Resize the array to only contain the unique elements
+        int[] uniqueArr = new int[set.size()];
+        System.arraycopy(arr, 0, uniqueArr, 0, set.size());
+        return uniqueArr;
+    }
+
+    public static void main(String[] args) {
+        int[] arr = {1, 2, 2, 3, 3, 4};
+        int[] result = removeDuplicates(arr);
+        for (int num : result) {
+            System.out.print(num + " ");
+        }
+    }
+}
+```
+
+### 7. **Sort an Array In-Place Using QuickSort Algorithm**
+
+**Approach**:
+QuickSort is a divide-and-conquer algorithm that selects a pivot and partitions the array into elements smaller and greater than the pivot, then recursively sorts the sub-arrays.
+
+**Java Code**:
+```java
+public class QuickSort {
+    public static void quickSort(int[] arr, int low, int high) {
+        if (low < high) {
+            int pivotIndex = partition(arr, low, high);
+            quickSort(arr, low, pivotIndex - 1);
+            quickSort(arr, pivotIndex + 1, high);
+        }
+    }
+
+    private static int partition(int[] arr, int low, int high) {
+        int pivot = arr[high];
+        int i = low - 1;
+
+        for (int j = low; j < high; j++) {
+            if (arr[j] <= pivot) {
+                i++;
+                int temp = arr[i];
+                arr[i] = arr[j];
+                arr[j] = temp;
+            }
+        }
+
+        int temp = arr[i + 1];
+        arr[i + 1] = arr[high];
+        arr[high] = temp;
+        
+        return i + 1;
+    }
+
+    public static void main(String[] args) {
+        int[] arr = {10, 7, 8, 9, 1, 5};
+        quickSort(arr, 0, arr.length - 1);
+        for (int num : arr) {
+            System.out.print(num + " ");
+        }
+    }
+}
+```
+
+---
+
+Here are the solutions for array problems numbered 8 to 30, based on your provided list:
+
+---
+
+### 8. **How to sort an array in place using QuickSort algorithm?**
+
+**Solution:**
+
+```java
+public class QuickSort {
+    public static void quickSort(int[] arr, int low, int high) {
+        if (low < high) {
+            int pivotIndex = partition(arr, low, high);
+            quickSort(arr, low, pivotIndex - 1);
+            quickSort(arr, pivotIndex + 1, high);
+        }
+    }
+
+    private static int partition(int[] arr, int low, int high) {
+        int pivot = arr[high];
+        int i = low - 1;
+        for (int j = low; j < high; j++) {
+            if (arr[j] <= pivot) {
+                i++;
+                swap(arr, i, j);
+            }
+        }
+        swap(arr, i + 1, high);
+        return i + 1;
+    }
+
+    private static void swap(int[] arr, int i, int j) {
+        int temp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = temp;
+    }
+
+    public static void main(String[] args) {
+        int[] arr = {10, 7, 8, 9, 1, 5};
+        quickSort(arr, 0, arr.length - 1);
+        System.out.println(Arrays.toString(arr));
+    }
+}
+```
+
+---
+
+### 9. **Write a program to find intersection of two sorted arrays in Java?**
+
+**Solution:**
+
+```java
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+public class IntersectionOfSortedArrays {
+    public static List<Integer> findIntersection(int[] arr1, int[] arr2) {
+        List<Integer> intersection = new ArrayList<>();
+        int i = 0, j = 0;
+
+        while (i < arr1.length && j < arr2.length) {
+            if (arr1[i] < arr2[j]) {
+                i++;
+            } else if (arr1[i] > arr2[j]) {
+                j++;
+            } else {
+                intersection.add(arr1[i]);
+                i++;
+                j++;
+            }
+        }
+        return intersection;
+    }
+
+    public static void main(String[] args) {
+        int[] arr1 = {21, 34, 41, 22, 35};
+        int[] arr2 = {61, 34, 45, 21, 11};
+        System.out.println(findIntersection(arr1, arr2));
+    }
+}
+```
+
+---
+
+### 10. **There is an array with every element repeated twice except one. Find that element?**
+
+**Solution:**
+
+```java
+public class SingleNonRepeatedElement {
+    public static int findSingle(int[] arr) {
+        int result = 0;
+        for (int num : arr) {
+            result ^= num;  // XOR operation
+        }
+        return result;
+    }
+
+    public static void main(String[] args) {
+        int[] arr = {1, 1, 2, 2, 3, 4, 4, 5, 5};
+        System.out.println(findSingle(arr)); // Output: 3
+    }
+}
+```
+
+---
+
+### 11. **How to find kth smallest element in unsorted array?**
+
+**Solution (using Quickselect):**
+
+```java
+import java.util.Random;
+
+public class KthSmallestElement {
+    public static int quickSelect(int[] arr, int left, int right, int k) {
+        if (left == right) return arr[left];
+
+        Random rand = new Random();
+        int pivotIndex = rand.nextInt(right - left + 1) + left;
+        pivotIndex = partition(arr, left, right, pivotIndex);
+
+        if (k == pivotIndex) {
+            return arr[k];
+        } else if (k < pivotIndex) {
+            return quickSelect(arr, left, pivotIndex - 1, k);
+        } else {
+            return quickSelect(arr, pivotIndex + 1, right, k);
+        }
+    }
+
+    private static int partition(int[] arr, int left, int right, int pivotIndex) {
+        int pivotValue = arr[pivotIndex];
+        swap(arr, pivotIndex, right);
+        int storeIndex = left;
+        for (int i = left; i < right; i++) {
+            if (arr[i] < pivotValue) {
+                swap(arr, storeIndex, i);
+                storeIndex++;
+            }
+        }
+        swap(arr, right, storeIndex);
+        return storeIndex;
+    }
+
+    private static void swap(int[] arr, int i, int j) {
+        int temp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = temp;
+    }
+
+    public static void main(String[] args) {
+        int[] arr = {12, 3, 5, 7, 19};
+        int k = 2; // 2nd smallest element
+        System.out.println(quickSelect(arr, 0, arr.length - 1, k - 1));
+    }
+}
+```
+
+---
+
+### 12. **How to find kth largest element in unsorted array?**
+
+**Solution:**
+
+The solution is similar to the one for the kth smallest element; just pass `n-k` to find the kth largest element.
+
+---
+
+### 13. **How to find common elements in three sorted arrays?**
+
+**Solution:**
+
+```java
+import java.util.ArrayList;
+import java.util.List;
+
+public class CommonElementsInThreeSortedArrays {
+    public static List<Integer> findCommonElements(int[] arr1, int[] arr2, int[] arr3) {
+        List<Integer> common = new ArrayList<>();
+        int i = 0, j = 0, k = 0;
+
+        while (i < arr1.length && j < arr2.length && k < arr3.length) {
+            if (arr1[i] == arr2[j] && arr2[j] == arr3[k]) {
+                common.add(arr1[i]);
+                i++;
+                j++;
+                k++;
+            } else if (arr1[i] < arr2[j]) {
+                i++;
+            } else if (arr2[j] < arr3[k]) {
+                j++;
+            } else {
+                k++;
+            }
+        }
+        return common;
+    }
+
+    public static void main(String[] args) {
+        int[] arr1 = {1, 5, 10, 20, 40, 80};
+        int[] arr2 = {6, 7, 20, 80, 100};
+        int[] arr3 = {3, 4, 15, 20, 30, 70, 80, 120};
+        System.out.println(findCommonElements(arr1, arr2, arr3));
+    }
+}
+```
+
+---
+
+### 14. **How to find the first repeating element in an array of integers?**
+
+**Solution:**
+
+```java
+import java.util.HashSet;
+
+public class FirstRepeatingElement {
+    public static int findFirstRepeating(int[] arr) {
+        HashSet<Integer> seen = new HashSet<>();
+        for (int num : arr) {
+            if (!seen.add(num)) {
+                return num; // First repeating element
+            }
+        }
+        return -1; // No repetition
+    }
+
+    public static void main(String[] args) {
+        int[] arr = {10, 5, 3, 4, 3, 5, 6};
+        System.out.println(findFirstRepeating(arr)); // Output: 3
+    }
+}
+```
+
+---
+
+### 15. **How to find first non-repeating element in array of integers?**
+
+**Solution:**
+
+```java
+import java.util.HashMap;
+
+public class FirstNonRepeatingElement {
+    public static int findFirstNonRepeating(int[] arr) {
+        HashMap<Integer, Integer> countMap = new HashMap<>();
+        for (int num : arr) {
+            countMap.put(num, countMap.getOrDefault(num, 0) + 1);
+        }
+
+        for (int num : arr) {
+            if (countMap.get(num) == 1) {
+                return num;
+            }
+        }
+        return -1; // No non-repeating element
+    }
+
+    public static void main(String[] args) {
+        int[] arr = {10, 5, 3, 4, 3, 5, 6};
+        System.out.println(findFirstNonRepeating(arr)); // Output: 10
+    }
+}
+```
+
+---
+
+### 16. **How to find top two numbers from an integer array?**
+
+**Solution:**
+
+```java
+public class TopTwoNumbers {
+    public static void findTopTwo(int[] arr) {
+        int first = Integer.MIN_VALUE, second = Integer.MIN_VALUE;
+        for (int num : arr) {
+            if (num > first) {
+                second = first;
+                first = num;
+            } else if (num > second && num != first) {
+                second = num;
+            }
+        }
+        System.out.println("Top two numbers: " + first + ", " + second);
+    }
+
+    public static void main(String[] args) {
+        int[] arr = {10, 20, 4, 45, 99};
+        findTopTwo(arr);
+    }
+}
+```
+
+---
+
+### 17. **How to find the smallest positive integer value that cannot be represented as sum of any subset of a given array?**
+
+**Solution:**
+
+```java
+import java.util.Arrays;
+
+public class SmallestNonRepresentableSum {
+    public static int findSmallest(int[] arr) {
+        Arrays.sort
+
+(arr);
+        int smallest = 1; // The smallest sum we can represent so far
+        
+        for (int num : arr) {
+            if (num > smallest) {
+                break;
+            }
+            smallest += num;
+        }
+        return smallest;
+    }
+
+    public static void main(String[] args) {
+        int[] arr = {1, 1, 3, 5, 6};
+        System.out.println(findSmallest(arr)); // Output: 18
+    }
+}
+```
+
+---
+
+### 18. **Find longest consecutive subsequence in an array of integers?**
+
+**Solution:**
+
+```java
+import java.util.HashSet;
+
+public class LongestConsecutiveSubsequence {
+    public static int findLongestConsecutiveSubsequence(int[] arr) {
+        HashSet<Integer> set = new HashSet<>();
+        for (int num : arr) {
+            set.add(num);
+        }
+
+        int longestStreak = 0;
+
+        for (int num : arr) {
+            if (!set.contains(num - 1)) {  // Starting point of a sequence
+                int currentNum = num;
+                int currentStreak = 1;
+
+                while (set.contains(currentNum + 1)) {
+                    currentNum++;
+                    currentStreak++;
+                }
+
+                longestStreak = Math.max(longestStreak, currentStreak);
+            }
+        }
+        return longestStreak;
+    }
+
+    public static void main(String[] args) {
+        int[] arr = {100, 4, 200, 1, 3, 2};
+        System.out.println(findLongestConsecutiveSubsequence(arr)); // Output: 4
+    }
+}
+```
+
+---
+
+Here are the solutions for array problems numbered 19 to 30:
+
+---
+
+### 19. **Find the missing number in a given integer array of 1 to N.**
+
+**Solution:**
+
+```java
+public class MissingNumber {
+    public static int findMissingNumber(int[] arr, int n) {
+        int totalSum = n * (n + 1) / 2; // Sum of first N natural numbers
+        int arrSum = 0;
+
+        for (int num : arr) {
+            arrSum += num;
+        }
+
+        return totalSum - arrSum; // Missing number is the difference
+    }
+
+    public static void main(String[] args) {
+        int[] arr = {1, 2, 3, 5}; // N is 5
+        int n = 5;
+        System.out.println(findMissingNumber(arr, n)); // Output: 4
+    }
+}
+```
+
+---
+
+### 20. **How to find duplicate numbers in an array?**
+
+**Solution:**
+
+```java
+import java.util.HashSet;
+
+public class FindDuplicates {
+    public static void findDuplicates(int[] arr) {
+        HashSet<Integer> set = new HashSet<>();
+        for (int num : arr) {
+            if (!set.add(num)) {
+                System.out.println("Duplicate found: " + num);
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        int[] arr = {1, 2, 3, 4, 3, 2, 1};
+        findDuplicates(arr);
+    }
+}
+```
+
+---
+
+### 21. **How to rotate an array by `k` positions?**
+
+**Solution (using reversal algorithm):**
+
+```java
+public class RotateArray {
+    public static void rotate(int[] arr, int k) {
+        int n = arr.length;
+        k = k % n; // In case k is larger than the length of the array
+
+        // Reverse the whole array
+        reverse(arr, 0, n - 1);
+        // Reverse the first part
+        reverse(arr, 0, k - 1);
+        // Reverse the second part
+        reverse(arr, k, n - 1);
+    }
+
+    private static void reverse(int[] arr, int start, int end) {
+        while (start < end) {
+            int temp = arr[start];
+            arr[start] = arr[end];
+            arr[end] = temp;
+            start++;
+            end--;
+        }
+    }
+
+    public static void main(String[] args) {
+        int[] arr = {1, 2, 3, 4, 5, 6, 7};
+        int k = 3;
+        rotate(arr, k);
+        for (int num : arr) {
+            System.out.print(num + " ");
+        }
+    }
+}
+```
+
+---
+
+### 22. **How to move all zeros to the end of an array without changing the order of non-zero elements?**
+
+**Solution:**
+
+```java
+public class MoveZeros {
+    public static void moveZerosToEnd(int[] arr) {
+        int nonZeroIndex = 0;
+
+        // Move non-zero elements to the front
+        for (int num : arr) {
+            if (num != 0) {
+                arr[nonZeroIndex++] = num;
+            }
+        }
+
+        // Fill the rest of the array with zeros
+        while (nonZeroIndex < arr.length) {
+            arr[nonZeroIndex++] = 0;
+        }
+    }
+
+    public static void main(String[] args) {
+        int[] arr = {0, 1, 9, 0, 3, 12};
+        moveZerosToEnd(arr);
+        for (int num : arr) {
+            System.out.print(num + " ");
+        }
+    }
+}
+```
+
+---
+
+### 23. **How to find the majority element (appears more than `n/2` times) in an array?**
+
+**Solution (using Boyer-Moore Voting Algorithm):**
+
+```java
+public class MajorityElement {
+    public static int majorityElement(int[] arr) {
+        int candidate = -1, count = 0;
+
+        // Find potential candidate
+        for (int num : arr) {
+            if (count == 0) {
+                candidate = num;
+            }
+            count += (num == candidate) ? 1 : -1;
+        }
+
+        // Verify if the candidate is the majority element
+        count = 0;
+        for (int num : arr) {
+            if (num == candidate) {
+                count++;
+            }
+        }
+
+        return (count > arr.length / 2) ? candidate : -1;
+    }
+
+    public static void main(String[] args) {
+        int[] arr = {3, 3, 4, 2, 4, 4, 2, 4, 4};
+        System.out.println(majorityElement(arr)); // Output: 4
+    }
+}
+```
+
+---
+
+### 24. **How to find the second largest element in an array?**
+
+**Solution:**
+
+```java
+public class SecondLargestElement {
+    public static int findSecondLargest(int[] arr) {
+        int largest = Integer.MIN_VALUE;
+        int secondLargest = Integer.MIN_VALUE;
+
+        for (int num : arr) {
+            if (num > largest) {
+                secondLargest = largest;
+                largest = num;
+            } else if (num > secondLargest && num != largest) {
+                secondLargest = num;
+            }
+        }
+
+        return (secondLargest == Integer.MIN_VALUE) ? -1 : secondLargest;
+    }
+
+    public static void main(String[] args) {
+        int[] arr = {10, 5, 20, 8};
+        System.out.println(findSecondLargest(arr)); // Output: 10
+    }
+}
+```
+
+---
+
+### 25. **How to find the longest increasing subsequence in an array?**
+
+**Solution (using Dynamic Programming):**
+
+```java
+public class LongestIncreasingSubsequence {
+    public static int longestIncreasingSubsequence(int[] arr) {
+        int n = arr.length;
+        int[] dp = new int[n];
+
+        // Initialize dp array
+        for (int i = 0; i < n; i++) {
+            dp[i] = 1;  // Every element is a subsequence of length 1
+        }
+
+        for (int i = 1; i < n; i++) {
+            for (int j = 0; j < i; j++) {
+                if (arr[i] > arr[j] && dp[i] < dp[j] + 1) {
+                    dp[i] = dp[j] + 1;
+                }
+            }
+        }
+
+        int maxLength = 0;
+        for (int len : dp) {
+            maxLength = Math.max(maxLength, len);
+        }
+
+        return maxLength;
+    }
+
+    public static void main(String[] args) {
+        int[] arr = {10, 22, 9, 33, 21, 50, 41, 60, 80};
+        System.out.println(longestIncreasingSubsequence(arr)); // Output: 6
+    }
+}
+```
+
+---
+
+### 26. **How to find the minimum difference between any two elements in an array?**
+
+**Solution:**
+
+```java
+import java.util.Arrays;
+
+public class MinDifference {
+    public static int findMinDifference(int[] arr) {
+        Arrays.sort(arr);
+        int minDiff = Integer.MAX_VALUE;
+
+        for (int i = 1; i < arr.length; i++) {
+            minDiff = Math.min(minDiff, arr[i] - arr[i - 1]);
+        }
+
+        return minDiff;
+    }
+
+    public static void main(String[] args) {
+        int[] arr = {1, 5, 3, 19, 18, 25};
+        System.out.println(findMinDifference(arr)); // Output: 1
+    }
+}
+```
+
+---
+
+### 27. **How to find the maximum product of two integers in an array?**
+
+**Solution:**
+
+```java
+public class MaxProduct {
+    public static int findMaxProduct(int[] arr) {
+        int max1 = Integer.MIN_VALUE, max2 = Integer.MIN_VALUE;
+
+        for (int num : arr) {
+            if (num > max1) {
+                max2 = max1;
+                max1 = num;
+            } else if (num > max2) {
+                max2 = num;
+            }
+        }
+
+        return max1 * max2;
+    }
+
+    public static void main(String[] args) {
+        int[] arr = {1, 5, 3, 9, 7};
+        System.out.println(findMaxProduct(arr)); // Output: 63 (9 * 7)
+    }
+}
+```
+
+---
+
+### 28. **How to rearrange positive and negative numbers in an array?**
+
+**Solution (Alternating Positive and Negative):**
+
+```java
+public class RearrangePositiveNegative {
+    public static void rearrange(int[] arr) {
+        int n = arr.length;
+        int[] result = new int[n];
+        int posIndex = 0, negIndex = 1;
+
+        for (int num : arr) {
+            if (num >= 0) {
+                if (posIndex < n) {
+                    result[posIndex] = num;
+                    posIndex += 2;
+                }
+            } else {
+                if (negIndex < n) {
+                    result[negIndex] = num;
+                    negIndex += 2;
+                }
+            }
+        }
+
+        // Copy result back to original array
+        System.arraycopy(result, 0, arr, 0, n);
+    }
+
+    public static void main(String[] args) {
+        int[] arr = {1, -2
+
+, 3, -4, 5, -6};
+        rearrange(arr);
+        for (int num : arr) {
+            System.out.print(num + " ");
+        }
+    }
+}
+```
+
+---
+
+### 29. **Find the subarray with the largest sum (Kadane's Algorithm)**
+
+**Solution:**
+
+```java
+public class MaximumSubarraySum {
+    public static int maxSubArraySum(int[] arr) {
+        int maxSoFar = arr[0];
+        int maxEndingHere = arr[0];
+
+        for (int i = 1; i < arr.length; i++) {
+            maxEndingHere = Math.max(arr[i], maxEndingHere + arr[i]);
+            maxSoFar = Math.max(maxSoFar, maxEndingHere);
+        }
+
+        return maxSoFar;
+    }
+
+    public static void main(String[] args) {
+        int[] arr = {-2, 1, -3, 4, -1, 2, 1, -5, 4};
+        System.out.println(maxSubArraySum(arr)); // Output: 6
+    }
+}
+```
+
+---
+
+### 30. **Find if an array is a subset of another array.**
+
+**Solution:**
+
+```java
+import java.util.HashSet;
+
+public class ArraySubset {
+    public static boolean isSubset(int[] arr1, int[] arr2) {
+        HashSet<Integer> set = new HashSet<>();
+        for (int num : arr1) {
+            set.add(num);
+        }
+
+        for (int num : arr2) {
+            if (!set.contains(num)) {
+                return false; // Element not found in arr1
+            }
+        }
+
+        return true; // All elements of arr2 are in arr1
+    }
+
+    public static void main(String[] args) {
+        int[] arr1 = {11, 1, 13, 21, 3, 7};
+        int[] arr2 = {11, 3, 7, 1};
+        System.out.println(isSubset(arr1, arr2)); // Output: true
+    }
+}
+```
+
+---
 
 
-1. How to find the missing number in integer array of 1 to 100? (solution)
-This is one of the most simple array problems you will see, mostly asked in a telephonic round of Interview. You have given an integer array which contains numbers from 1 to 100 but one number is missing, you need to write a Java program to find that missing number in an array. 
-
-You cannot use any open source library or Java API method which solves this problem. 
-
-One trick to solve this problem is to calculate sum of all numbers in the array and compare with expected sum, the difference would be the missing number.
-
-Array Interview Questions and Answer Java C++
-
-
-
-2. How to find duplicate number on Integer array in Java? (solution)
-An array contains n numbers ranging from 0 to n-2. There is exactly one number is repeated in the array. You need to write a program to find that duplicate number. For example, if an array with length 6 contains numbers {0, 3, 1, 2, 3}, then duplicated number is 3. 
-
-Actually, this problem is very similar to previous one and you can apply the same trick of comparing actual sum of an array to expected sum of series to find out that duplicate. 
-
-This is generally asked as follow-up question of previous problem.
-
-
-
-
-3. How to check if array contains a number in Java? (solution)
-Another interesting array problem, because array doesn't provide any built-in method to check if any number exists or not. This problem is essentially how to search an element in the array. There are two options sequential search or binary search. 
-
-You should ask the interviewer about whether an array is sorted or not, if the array is sorted then you can use binary search to check if given number is present in an array or not. The complexity of binary search is O(logN). 
-
-BTW, if interviewer says that array is not sorted then you can still sort and perform binary search otherwise you can use sequential search. Time complexity of sequential search in array is O(n).
-
-
-4. How to find largest and smallest number in unsorted array? (solution)
-This is a rather simple array interview question. You have given an unsorted integer array and you need to find the largest and smallest element in the array. 
-
-Of course, you can sort the array and then pick the top and bottom element but that would cost you O(NLogN) because of sorting, getting element in array with index is O(1) operation.
-
-
-5. How to find all pairs on integer array whose sum is equal to given number? (solution)
-This is an intermediate level of array coding question, it's neither too easy nor too difficult. You have given an integer array and a number, you need to write a program to find all elements in the array whose sum is equal to the given number. 
-
-Remember, the array may contain both positive and negative numbers, so your solution should consider that. 
-
-Don't forget to write unit test though, even if the interviewer is not asked for it, that would separate you from a lot of developers. Unit testing is always expected from a professional developer.
-
-
-6.   How to find repeated numbers in an array if it contains multiple duplicates? (solution)
-This is actually the follow-up question of problem 2, how to find a duplicate number on integer array. In that case, an array contains only one duplicate but what if it contains multiple duplicates? 
-
-Suppose, an array contains n numbers ranging from 0 to n-1 and there are 5 duplicates on it, how do you find it? You can use the approach, we have learned in similar String based problem of finding repeated characters in given String.
-
-
-7. Write a program to remove duplicates from array in Java? (solution)
-This is another follow-up question from problem 2 and 6. You have given an array which contains duplicates, could be one or more. You need to write a program to remove all duplicates from array in Java. 
-
-For example if given array is {1, 2, 1, 2, 3, 4, 5} then your program should return an array which contains just {1, 2, 3, 4, 5}. 
-
-This array question is also comes at intermediate category because there is no way to delete an element from an array. If substituting with another value is not an option then you need to create another array to mimic deletion.
-
-
-
-8. How to sort an array in place using QuickSort algorithm? (solution)
-You will often see sorting problems on array related questions because sorting mostly happen on array data structure. 
-
-You need to write a program to implement in place quick sort algorithm in Java. You can implement either recursive or iterative quicksort, it's your choice but you cannot use additional buffer, array or list, you must sort array in place.
-
-
-9.   Write a program to find intersection of two sorted arrays in Java? (solution)
-Another interesting array interview question, where you need to treat the array as Set. Your task is to write a function in your favorite language e.g. Java, Python, C or C++ to return the intersection of two sorted arrays.
-
- For example, if the two sorted arrays as input are {21, 34, 41, 22, 35} and {61, 34, 45, 21, 11}, it should return an intersection array with numbers {34, 21}, For the sake of this problem you can assume that numbers in each integer array are unique.
-
-
-10. There is an array with every element repeated twice except one. Find that element? (solution)
-This is an interesting array coding problem, just opposite of question related to finding duplicates in array. Here you need to find the unique number which is not repeated twice. 
-
-For example if given array is {1, 1, 2, 2, 3, 4, 4, 5, 5} then your program should return 3. Also, don't forget to write couple of unit test for your solution. This program is quite similar to finding the first non-repeated character on String because you can treat String as character array and use the same algorithm to solve this problem. 
-
-Java Array Interview Question Answer
-
-
-11. How to find kth smallest element in unsorted array? (solution)
-You are given an unsorted array of numbers and k, you need to find the kth smallest number in the array. For example if given array is {1, 2, 3, 9, 4} and k=2 then you need to find the 2nd smallest number in the array, which is 2. 
-
-One way to solve this problem is to sort the array in ascending order then pick the k-1th element, that would be your kth smallest number in array because array index starts at zero, but can you do better? 
-
-Once you are able to solve this array coding question, you can solve many similar questions easily e.g. our next question.
-
-
-12. How to find kth largest element in unsorted array? (solution)
-This problem is exactly same as previous question with only difference being finding kth largest element instead of kth smallest number. For example if given array is {10, 20, 30, 50, 40} and k = 3 then your program should return 30 because 30 is the 3rd largest number in array. 
-
-You can also solve this problem by sorting the array in decreasing order and picking k-1th element. I often seen this array question on Java interviews with 2 to 3 years experienced guys.
-
-
-
-
-13 How to find common elements in three sorted array? (solution)
-Now we are coming on territory of tough array questions. Given three arrays sorted in non-decreasing order, print all common elements in these arrays.
-
-Examples:
-input1 = {1, 5, 10, 20, 40, 80}
-input2 = {6, 7, 20, 80, 100}
-input3 = {3, 4, 15, 20, 30, 70, 80, 120}
-Output: 20, 80
-
-
-14. How find the first repeating element in an array of integers? (solution)
-Given an array of integers, find the first repeating element in it. We need to find the element that occurs more than once and whose index of the first occurrence is smallest.
-
-Examples:
-
-Input:  input [] = {10, 5, 3, 4, 3, 5, 6}
-Output: 5 [5 is the first element that repeats]
-
-
-15. How to find first non-repeating element in array of integers? (solution)
-This array interview question is exactly opposite of previous problem, In that you need to find first repeating element while in this you need to find first non-repeating element. I am sure you can use similar approach to solve this problem, just need to consider non repeating element though.
-
-
-16. How to find top two numbers from an integer array? (solution)
-This is another one of the easy array questions you will find on telephonic round of Interviews, but its also little bit tricky. You are asked to find top two numbers not just the top or highest numbers? Can you think of how you would do it without sorting? before looking at solution.
-
-
-17. How to find the smallest positive integer value that cannot be represented as sum of any subset of a given array? (solution)
-This is another tough array question you will see on Amazon, Microsoft or Google. You have given a sorted array (sorted in non-decreasing order) of positive numbers, find the smallest positive integer value that cannot be represented as sum of elements of any subset of given set. 
-
-What makes it more challenging is expected time complexity of O(n).
-
-Examples:
-
-Input: {1, 3, 6, 10, 11, 15};
-Output: 2
-
-
-18. How to rearrange array in alternating positive and negative number? (solution)
-Given an array of positive and negative numbers, arrange them in an alternate fashion such that every positive number is followed by negative and vice-versa maintaining the order of appearance.
-Number of positive and negative numbers need not be equal. If there are more positive numbers they appear at the end of the array. 
-
-If there are more negative numbers, they too appear in the end of the array. This is also a difficult array problem to solve and you need lot of practice to solve this kind of problems in real interviews, especially when you see it first time. 
-
-If you have time constraint then always attempt these kind of questions once you are done with easier ones. 
-
-Example:
-
-Input: {1, 2, 3, -4, -1, 4}
-Output: {-4, 1, -1, 2, 3, 4}
-
-Input: {-5, -2, 5, 2, 4, 7, 1, 8, 0, -8}
-output: {-5, 5, -2, 2, -8, 4, 7, 1, 8, 0} 
-
-
-
-
-19. How to find if there is a sub array with sum equal to zero? (solution)
-There is whole set of array related questions which are based upon sub-array or only selective elements of array e.g. from some range, this is one of such problem. Here you are given an array of positive and negative numbers, find if there is a sub-array with 0 sum.
-
-Examples:
-
-Input: {4, 2, -3, 1, 6}
-Output: true 
-
-There is a sub-array with zero sum from index 1 to 3.
-
-20. How to remove duplicates from array in place? (solution)
-Given a sorted array, remove the duplicates in place such that each element appear only once and return the new length.
-
-Do not allocate extra space for another array, you must do this in place with constant memory.
-
-For example,
-Given input array A = [1,1,2],
-
-Your function should return length = 2, and A is now [1,2]. 
-
-When you see a questions which asked you do to sorting or task in place, it means you cannot use additional array or buffer, but using couple of variables is fine.
-
-
-21. How to remove a given element from array in Java? (solution)
-This is another array coding questions similar to previous one. Here you don't have to find and remove duplicates but a given number. In this problem you are given an array and a value, remove all instances of that value in place and return the new length. The order of elements can be changed. It doesn't matter what you leave beyond the new length. 
-
-
-22. How to merge sorted array? (solution)
-Given two sorted integer arrays A and B, merge B into A as one sorted array. You may assume that A has enough space (size that is greater or equal to m + n) to hold additional elements from B. The number of elements initialized in A and B are m and n respectively. This is another intermediate array coding question, its not as simple as previous one but neither very difficult.
-
-
-23. How to find sub array with maximum sum in an array of positive and negative number? (solution)
-Another array coding question based upon sub-array. Here you have to find the contiguous sub-array within an array (containing at least one number) which has the largest sum.
-
-For example, given the array [−2,1,−3,4,−1,2,1,−5,4],
-the contiguous subarray [4,−1,2,1] has the largest sum = 6. 
-
-
-24. How to find sub array with largest product in array of both positive and negative number? (solution) 
-In this problem, your task is to write a program in Java or C++ to find the contiguous sub-array within an array (containing at least one number) which has the largest product.
-
-For example, given the array [2,3,-2,4],
-the contiguous subarray [2,3] has the largest product = 6. 
-
-
-25. Write a program to find length of longest consecutive sequence in array of integers? (solution)
-Given an unsorted array of integers, find the length of the longest consecutive elements sequence.
-
-For example,
-Given [100, 4, 200, 1, 3, 2],
-
-The longest consecutive elements sequence is [1, 2, 3, 4]. Return its length: 4.
-
-Challenging part of this question is that your algorithm should run in O(n) complexity. 
-
-
-26. How to find minimum value in a rotated sorted array? (solution)
-This is another advanced level array coding question and you should only attempt this one, once you have solved the easier ones. Suppose a sorted array is rotated at some pivot unknown to you beforehand.
-
-(i.e., 0 1 2 4 5 6 7 might become 4 5 6 7 0 1 2).
-
-Find the minimum element.
-
-You may assume no duplicate exists in the array. One follow-up question of this question is What if duplicates are allowed? Would this affect the run-time complexity? How and why?
-
-
-
-
-27. Given an array of of size n and a number k, find all elements that appear more than n/k times? (solution)
-Another tough array based coding questions from Interviews. You are given an array of size n, find all elements in array that appear more than n/k times. For example, if the input arrays is {3, 1, 2, 2, 1, 2, 3, 3} and k is 4, then the output should be [2, 3]. Note that size of array is 8 (or n = 8), so we need to find all elements that appear more than 2 (or 8/4) times. There are two elements that appear more than two times, 2 and 3.
-
-1. Returns the largest sum of contiguous integers in the array
-Example: if the input is (-10, 2, 3, -2, 0, 5, -15), the largest sum is 8
-
-2. Return the sum two largest integers in an array
-
-3. Given an array of integers write a program that will determine if any two numbers add up to a specified number N. Do this without using hash tables
-
-
-28. How to reverse array in place in Java? (solution)
-Now let's see one of the most frequently asked array interview question. You need to write a program which accepts an integer array and your program needs to reverse that array in place, which means you cannot use additional buffer or array, but one or two variables will be fine. 
-
-Of course you cannot use any open source library or Java API method to directly solve this problem, you need to create your own logic. 
-
-Here is one such logic to solve this problem :
-
-
-Array Coding Interview Questions and Answers
-
-
-29. Difference between array and linked list data structure? (answer)
-This is a theoretical questions from phone interviews. There are several differences between array and linked list e.g. array stores element in contiguous memory location while linked list stores at random places, this means linked list better utilizes the places. 
-
-Consequently, its possible to have large linked list in limited memory environment compare to array of same size. Advantage of using array is random access it provides if you know the index, while in linked list you need to search an element by traversing which is O(n) operation.
-
-
-30. How to check if array contains a duplicate number? (answer)
-This may look a repeated question because we have already done similar question, but in this question, most from Java interviews, you need to write a contains() like method from Collections, which returns true or false if you pass an element and it is repeated or not.
-
-
-Read more: https://javarevisited.blogspot.com/2015/06/top-20-array-interview-questions-and-answers.html#ixzz8hioiCHLH
 
 50 Common Algorithms Interview Questions
 Without any further ado, here is my list of some of the most frequently asked coding interview questions from programming job interviews:
@@ -8693,14 +9204,126 @@ public class VendingMachine {
 
 This solution provides the basic implementation and example usage for various sorting algorithms, number swapping, rectangle overlap checks, and a simple vending machine design in Java.
 
+### When to Use `ArrayList` vs. `LinkedList` in Java
+
+**ArrayList** and **LinkedList** are two commonly used implementations of the `List` interface in Java. While they share many characteristics, such as supporting ordered collections, allowing duplicates, and being index-based, their internal implementations differ significantly, which affects their performance characteristics. 
+
+Here's a detailed guide on when to use **ArrayList** vs **LinkedList**:
+
+---
+
+### 1. **Underlying Data Structure**
+
+- **ArrayList** is backed by a **dynamic array**. It stores elements in contiguous memory locations, meaning it offers fast access to elements by index (`O(1)` time complexity for retrieval).
+  
+- **LinkedList** is backed by a **doubly linked list**. It stores elements in nodes, where each node contains a reference to the next and previous node. As a result, accessing an element by index requires traversal (`O(n)` time complexity).
+
+**When to use:**
+- Use `ArrayList` when you need fast random access by index and when your application requires frequent reads of elements.
+- Use `LinkedList` if you need to frequently add or remove elements from the beginning or middle of the list (since `ArrayList` will require shifting elements).
+
+---
+
+### 2. **Insertion and Deletion**
+
+- **ArrayList**: Adding or removing elements in the **middle** or **start** of the list takes **O(n)** time, because elements need to be shifted to accommodate the changes.
+  
+- **LinkedList**: Adding or removing elements at the **beginning** or **middle** takes **O(1)** time (once you have a reference to the node). However, accessing the position of insertion/deletion takes **O(n)** time because you need to traverse the list.
+
+**When to use:**
+- Use `ArrayList` if your application involves more **frequent random access** and **less frequent insertions or deletions**.
+- Use `LinkedList` if your application requires frequent insertions or deletions, especially from the **beginning** or **middle** of the list.
+
+---
+
+### 3. **Memory Usage**
+
+- **ArrayList**: Uses a **contiguous block of memory** for storing elements, which can sometimes cause resizing overhead when the array runs out of space. If resizing occurs (for example, when adding an element to a full list), it requires copying the entire array to a new one.
+  
+- **LinkedList**: Each element in a `LinkedList` is stored in a **separate node** that holds references to the next and previous elements. This extra overhead for each node means it generally consumes **more memory** per element than an `ArrayList`.
+
+**When to use:**
+- Use `ArrayList` when memory consumption is a concern, especially if the list is not frequently resized.
+- Use `LinkedList` when you need constant-time insertions and deletions, and memory consumption isn't a critical factor.
+
+---
+
+### 4. **Performance: Iteration**
+
+- **ArrayList**: Iterating through an `ArrayList` is generally **faster** because elements are stored in contiguous memory locations, making better use of CPU cache.
+  
+- **LinkedList**: Iterating through a `LinkedList` is generally **slower** since it requires following pointers from one node to the next.
+
+**When to use:**
+- Use `ArrayList` when you expect to **iterate over the collection frequently**.
+- Use `LinkedList` when the list size is large and **random access is less important**, but you still need frequent modifications like insertions and deletions.
+
+---
+
+### 5. **Accessing Elements by Index**
+
+- **ArrayList**: Provides **O(1)** time complexity for getting an element at a particular index due to its array-based structure.
+  
+- **LinkedList**: Provides **O(n)** time complexity for getting an element by index, because it needs to traverse the list from the beginning or the end (whichever is closer).
+
+**When to use:**
+- Use `ArrayList` when **random access** is a frequent operation in your program.
+- Avoid `LinkedList` if your program requires a lot of direct index-based access to elements.
+
+---
+
+### 6. **Deque Operations**
+
+- **LinkedList**: Implements the `Deque` interface (Double-ended queue). This means it can efficiently add or remove elements from both the **head** and **tail** of the list with **O(1)** time complexity for both operations.
+
+- **ArrayList**: Does not directly support efficient deque operations. Adding or removing elements from the beginning or middle can cause shifting of elements.
+
+**When to use:**
+- Use `LinkedList` when your application needs to perform frequent operations at both ends of the list, such as a **queue** or **stack**.
+
+---
+
+### 7. **Iteration Performance:**
+
+- Both `ArrayList` and `LinkedList` have **O(n)** time complexity for iteration (where `n` is the number of elements). However, `ArrayList` tends to perform better in iteration because it benefits from **locality of reference** (elements are stored in contiguous memory), whereas `LinkedList` has **pointer dereferencing overhead**.
+
+**When to use:**
+- If you need to **iterate frequently** and the collection size is large, use `ArrayList` for better performance.
+
+---
+
+### **Summary of When to Use `ArrayList` vs `LinkedList`:**
+
+| **Operation**                        | **ArrayList**                               | **LinkedList**                                |
+|--------------------------------------|--------------------------------------------|---------------------------------------------|
+| **Access by index**                 | O(1)                                       | O(n)                                        |
+| **Add/remove from the end**          | O(1) (amortized, except resize)            | O(1)                                        |
+| **Add/remove from the start/middle** | O(n) (shift elements)                     | O(1) (if node is known) or O(n) (for search) |
+| **Memory usage**                     | Less memory (no node overhead)             | More memory (due to node storage)            |
+| **Iteration**                        | Faster (contiguous memory)                 | Slower (pointer dereferencing)               |
+| **Deque operations**                 | Not efficient                              | Efficient (supports `addFirst`, `removeFirst`, etc.) |
+| **Use case**                         | Frequent access, minimal modifications     | Frequent insertions/removals (especially from ends) |
+
+---
+
+### **When to Prefer `ArrayList`:**
+- When you need fast **random access**.
+- When your operations involve **more reads** than writes.
+- When you need **low memory overhead** and efficient iteration.
+
+### **When to Prefer `LinkedList`:**
+- When you need frequent **insertions and deletions**, especially at the beginning or middle of the list.
+- When your application involves **queue-like** operations (using `Deque` interface).
+- When **memory is not a concern** and you require constant-time additions/removals from the ends.
+
+In most cases, `ArrayList` is a better default choice unless your specific use case (e.g., frequent additions/removals from the middle or ends of the list) favors `LinkedList`.
+
+
 When to use ArrayList vs LinkedList in Java? [Answered]
 
 When to use ArrayList or LinkedList in Java is one of the most popular Java interview questions and also asked as a difference between ArrayList and LinkedList. Earlier, I have shared common Java collections interview questions and in this article, I will explain the difference between them. ArrayList and LinkedList are two popular concrete implementations of the List interface from Java's popular Collection framework. Being List implementation both ArrayList and LinkedList are ordered, the index-based and allows duplicate. Despite being from the same type of hierarchy there are a lot of differences between these two classes which makes them popular among Java interviewers.
 
-
 The main difference between ArrayList vs LinkedList is that the former is backed by an array while the latter is based upon the linked list data structure, which makes the performance of add(), remove(), contains(), and iterator() different for both ArrayList and LinkedList.
-PlayUnmute
-Fullscreen
 
 The difference between ArrayList and LinkedList is also an important Java collection interview question, as much popular as Vector vs ArrayList or HashMap vs HashSet in Java. Sometimes this is also asked as for when to use LinkedList and when to use ArrayList in Java. 
 
@@ -8711,11 +9334,6 @@ Btw, we will not focus on the array and linked list data structure much, which i
 If you want to learn more about the array and linked list data structure itself, I suggest you check Data Structures and Algorithms: Deep Dive Using Java course by Tim Buchalaka on Udemy.
 
 It explains essential data structure in Java programming language and most importantly teaches you when to use which data structure, a good refresher for those who are preparing for coding interviews too. 
-
-
-
-
-
 
 When to use ArrayList vs LinkedList in Java
 Before comparing differences between ArrayList and LinkedList, let's see What is common between ArrayList and LinkedList in Java :
@@ -8736,35 +9354,25 @@ When to use ArrayList vs LinkedList in Java
 
 5) An iterator of both LinkedList and ArrayList are fail-fast which means they will throw ConcurrentModificationException if a collection is modified structurally once the Iterator is created. They are different than CopyOnWriteArrayList whose Iterator is fail-safe.
 
-
-
-
 Difference between LinkedList and ArrayList in Java
 Now let's see some differences between ArrayList and LinkedList and when to use ArrayList and LinkedList in Java.
 
-
 1. Underlying Data Structure
 The first difference between ArrayList and LinkedList comes with the fact that ArrayList is backed by Array while LinkedList is backed by LinkedList. This will lead to further differences in performance.
-
 
 2. LinkedList implements Deque
 Another difference between ArrayList and LinkedList is that apart from the List interface, LinkedList also implements the Deque interface, which provides first in first out operations for add() and poll() and several other Deque functions. 
 
 Also, LinkedList is implemented as a doubly-linked list and for index-based operation, navigation can happen from either end (see Complete Java MasterClass).
 
-
 3. Adding elements in ArrayList
 Adding an element in ArrayList is O(1) operation if it doesn't trigger re-size of Array, in which case it becomes O(log(n)), On the other hand, appending an element in LinkedList is O(1) operation, as it doesn't require any navigation.
-
-
 
 4. Removing an element from a position
 In order to remove an element from a particular index e.g. by calling remove(index), ArrayList performs a copy operation which makes it close to O(n) while LinkedList needs to traverse to that point which also makes it O(n/2), as it can traverse from either direction based upon proximity.
 
-
 5. Iterating over ArrayList or LinkedList
 Iteration is the O(n) operation for both LinkedList and ArrayList where n is a number of an element.
-
 
 6. Retrieving element from a position
 The get(index) operation is O(1) in ArrayList while its O(n/2) in LinkedList, as it needs to traverse till that entry. Though, in Big O notation O(n/2) is just O(n) because we ignore constants there. 
@@ -8772,8 +9380,6 @@ The get(index) operation is O(1) in ArrayList while its O(n/2) in LinkedList, as
 If you want to learn more about how to calculate time and space complexity for your algorithms using Big O notation, I recommend reading Grokking Algorithms by Aditya Bhargava, one of the most interesting books on this topic I have read ever. 
 
 Difference between linked list and arraylist in Java
-
-
 
 7. Memory
 LinkedList uses a wrapper object, Entry, which is a static nested class for storing data and two nodes next and previous while ArrayList just stores data in Array. 
@@ -8790,8 +9396,6 @@ In other words, you don't need to traverse through the linked list to reach the 
 
 In my opinion, use ArrayList over LinkedList for most of the practical purposes in Java
 
-
-
 Read more: https://www.java67.com/2012/12/difference-between-arraylist-vs-LinkedList-java.html#ixzz8hiql6tHi
 
 Difference between HashMap and LinkedHashMap in Java
@@ -8799,15 +9403,12 @@ Difference between HashMap and LinkedHashMap in Java
 Difference between LinkedHashMap and HashMap in Java
 HashMap and LinkedHashMap are two of the most commonly used Map implementation in Java. The main difference between HashMap and LinkedHashMap is that LinkedHashMap maintains the insertion order of keys, the order in which keys are inserted into LinkedHashMap. On the other hand, HashMap doesn't maintain any order or keys, or values. In terms of performance, there is not much difference between HashMap and LinkedHashMap but yes LinkedHashMap has more memory footprint than HashMap to maintain doubly LinkedList which it uses to keep track of the insertion order of keys. 
 
-PauseUnmute
-Fullscreen
+
+
 Sometimes you notice that HashMap also returns elements in order e.g. before Java 8 when you use the Integer key and then iterate over Map, you would see it returning entries in a particular order, but those are not guaranteed. 
 
 
 Any code which is dependent upon ordering provided by HashMap will likely break in a future release when that behavior changes.
-
-
-
 
 LinkedHashMap and HashMap in Java - Similarities
 There are a lot of similarities between LinkedHashMap and HashMap in Java, as they both implement Map interface.  let's have a look :
@@ -8973,8 +9574,8 @@ Difference between TreeMap and TreeSet in Java? Answer
 Difference between TreeSet and TreeMap in Java
 The main difference between TreeMap and TreeSet is that TreeMap is an implementation of Map interface while TreeSet is an implementation of the Set interface. There are some similarities between both TreeMap and TreeSet and few differences as well. In this Java tutorial, we will first see similarities between TreeMap and TreeSet, and then you will learn some differences between TreeMap and TreeSet in Java. 
 
-PauseUnmute
-Fullscreen
+
+
 The key point to remember about TreeMap and TreeSet is that they use compareTo() or compare() method to compare object, So if uses put a String object in TreeSet of Integers, add() method will throw ClassCastException at runtime prior to Java 5.
 
 From Java 5 you can use Generics to avoid this happening by declaring TreeMap and TreeSet with parametrized version. If you want to master the Java Collection framework by heart, you can see the Java Generics and Collection book by Maurice Naftalin, one of the best works on the Java Collections framework.
@@ -9034,8 +9635,8 @@ Difference between HashSet and TreeSet in Java
 There are several differences between a HashSet and a TreeSet are similar to what we discussed as a difference between TreeMap and HashMap. Anyway, Set and Map are two completely different interfaces so we will revisit those differences here. Probably the most important difference between HashSet and TreeSet is the performance. HashSet is faster than TreeSet which means if you need performance use HashSet but HashSet doesn't provide any kind of ordering so if you need ordering then you need to switch to TreeSet which provides sorting of keys. 
 
 Sorting can be natural order defined by a Comparable interface or any particular order defined by a Comparator interface in Java.
-PlayUnmute
-Fullscreen
+
+
 
 Apart from the differences between HashSet and TreeSet, there are some common things between them. let's see what is common between HashSet and TreeSet in Java.
 
@@ -9106,8 +9707,8 @@ Read more: https://www.java67.com/2012/08/difference-between-hashset-and-treeset
 
 Hashtable vs HashMap in Java
 Hashtable and HashMap are two hash-based collections in Java and are used to store objects as key-value pairs. Despite being hash-based and similar in functionality there is a significant difference between Hashtable and HashMap and without understanding those differences if you use Hashtable in place of HashMap then you may run into series of subtle programs which is hard to find and debug. Unlike the Difference between ArrayList and HashMap, Differences between Hashtable and HashMap are more subtle because both are similar kinds of collections. Before seeing the difference between HashMap and Hashtable let's see some common things between HashMap and Hashtable in Java.
-PlayUnmute
-Fullscreen
+
+
 
 
 
@@ -9166,8 +9767,8 @@ How to Sort HashMap in Java based on Keys and Values
 
 HashMap is not meant to keep entries in sorted order, but if you have to sort HashMap based upon keys or values, you can do that in Java. Sorting HashMap on keys is quite easy, all you need to do is to create a TreeMap by copying entries from HashMap. TreeMap is an implementation of SortedMap and keeps keys in their natural order or a custom order specified by Comparator provided while creating TreeMap. This means you can process entries of HashMap in sorted order but you cannot pass a HashMap containing mappings in a specific order, this is just not possible because HashMap doesn't guarantee any order.
 
-PauseUnmute
-Fullscreen
+
+
 On other hand, sorting HashMap by values is rather complex because there is no direct method to support that operation. You need to write code for that. In order to sort HashMap by values you can first create a Comparator, which can compare two entries based on values. 
 
 Then get the Set of entries from Map, convert Set to List, and use Collections.sort(List) method to sort your list of entries by values by passing your customized value comparator. This is similar to how you sort an ArrayList in Java. 
@@ -9346,8 +9947,8 @@ How to Convert a LinkedList to an Array in Java? Example
 
 You can convert a LinkedList to an array in Java by using the toArray() method of the java.util.LinkedList class. The toArray() method accepts an array of relevant type to store contents of LinkedList. It stores the elements in the array in the same order they are currently inside the LinkedList. By using the toArray() method you can convert any type of LinkedList e.g. Integer, String or Float to any type of Array, only catch is this you cannot convert a LinkedList to an array of primitives i.e. a LinkedList of Integer cannot be converted into an array of ints by using toArray() method, but you can convert it to an array of Integer objects, that's perfectly Ok.
 
-PauseUnmute
-Fullscreen
+
+
 Similarly, you can convert a LinkedList of Double to an array of Double and LinkedList of Float objects to an array of Float objects in Java.
 
 Btw, the Java Collection framework is vast as it contains so many classes for different purposes. The best way to master the Collection framework is to pick up a good book and follow it from start to end like Java Generics and Collection, which provides comprehensive coverage of all important classes of Java Collection framework like ArrayList, Vector, HashMap, HashSet, etc.
@@ -9455,8 +10056,8 @@ Read more: https://www.java67.com/2016/02/how-to-convert-linkedlist-to-array-in-
 How to find First and Last element in LinkedList Java? Doubly linked list Example
 
 In this article, you will learn how to get the first and last element of a linked list with the help of getFirst() and getLast() of the LinkedList class. If you have programming or even gone to a computer science course you probably know what is a linked list? It's a data structure that allows you to store objects in such a way that you can don't need a big chunk of contiguous memory like another popular data structure array. It works perfectly even if you have a fragmented heap. LinkedList is Java's implementation of this fundamental data structure. 
-PauseUnmute
-Fullscreen
+
+
 
 There are two types of linked list, singly and doubly linked list, and Java's LinkedList is a doubly linked list. If you are wondering what is difference between a singly and doubly linked list, well in singly linked list you can traverse only in one direction from head to tail, or from first to last element because every node has address of only next node. 
 
@@ -9542,8 +10143,8 @@ Read more: https://javarevisited.blogspot.com/2015/02/how-to-find-first-and-last
 How to find Middle Element of Linked List in Java in Single Pass
 
 ow do you find the middle element of LinkedList in one pass is a programming question often asked Java and non-Java programmers in telephonic Interview. This question is similar to checking palindrome or calculating the factorial, where the Interviewer sometimes also asks to write code. In order to answer this question candidate must be familiar with the LinkedList data structure i.e. In the case of the singly LinkedList, each node of Linked List contains data and pointer, which is the address of the next Linked List and the last element of Singly Linked List points towards the null. Since in order to find the middle element of the Linked List you need to find the length of the linked list, which is counting elements till the end i.e. until you find the last element of the Linked List.
-PlayUnmute
-Fullscreen
+
+
 
 
 What makes this data structure Interview question interesting is that you need to find the middle element of LinkedList in one pass and you don’t know the length of LinkedList.
@@ -9696,8 +10297,8 @@ Read more: https://javarevisited.blogspot.com/2012/12/how-to-find-middle-element
 Difference between LinkedList and ArrayList in Java
 
 LinkedList and ArrayList both implement List Interface but how they work internally is where the differences lie. The main difference between ArrayList and LinkedList is that ArrayList is implemented using a resizable array while LinkedList is implemented using doubly LinkedList. ArrayList is more popular among Java programmers than LinkedList as there are few scenarios on which LinkedList is a suitable collection than ArrayList. In this article, we will see some differences between LinkedList and ArrayList and try to find out when and where to use LinkedList over ArrayList.
-PlayUnmute
-Fullscreen
+
+
 
 
 LinkedList vs ArrayList in Java
@@ -9739,8 +10340,8 @@ You can search an element inside LinkedList in Java by using indexOf() and lastI
 
 You can also use these two methods to find out duplicate elements. If an element has appeared twice in the linked list then the indexOf() and lastIndexOf() method will return different positions for that because it will be found at different positions from head and tail. 
 
-PlayUnmute
-Fullscreen
+
+
 For unique elements, both these methods will return the same position.
 
 In this article, you will see examples of both indexOf() and lastIndexOf() methods to search a given element inside LinkedList. As I said before since LinkedList doesn't support random search and searching an element requires list traversal, which means time complexity will be O(n).
@@ -9840,8 +10441,8 @@ How to Reverse an Array in place in Java? Example Solution
 
 It's relatively easy to reverse an array if you have the luxury to use another array, but how would you reverse an array if a temporary buffer is not allowed? This is one of the testing array interview questions, which often proved tricky for Java and other beginner Programmers. But, don't worry, I'll tell you how you can solve this problem without losing your cool. Well, you can also reverse an array in place without using an additional buffer. If you know how to access array elements and how to loop over an array in Java using traditional for loop, you can easily solve this problem without using additional space or in-place as described in many Algorithms books and courses, and on Coding interviews.
 
-PlayUnmute
-Fullscreen
+
+
 All you need to do is a loop over the array from start to the middle element and swap the first element to the last, second element to the second last until you reach the middle element. Once you reach the middle element, your array is already sorted, and that too without using any additional space or in-place as asked in this question.
 
 You can even use this algorithm to reverse a String in Java as well. After all, a String is backed by a character array in Java and other programming languages like C and C++.  This is as simple as it could be, but you know, this is also the fastest way to reverse an array in Java.
@@ -9956,8 +10557,8 @@ Read more: https://www.java67.com/2016/01/java-program-to-reverse-array-in-place
 How to reverse a linked list in Java using Recursion and Iteration (Loop) - Example
 
 This is one of the class coding problems from Programming job interviews. It may seem easy to reverse a linked list but when you go around doing the actual task, it's not that easy, especially for first-timers. There are a couple of algorithms exists to reverse a singly linked list in Java, like you can use the three-pointers approach or solve this problem using a Stack, or simply using Recursion without the external stack. As I had pointed out in the earlier post about the linked list, that reversing a linked list is one of the most popular linked list-based data structure interview question. This means, you just can't afford to prepare this one, before going for any programming interview. Despite being so common, It's not easy to solve this problem on the fly.
-PlayUnmute
-Fullscreen
+
+
 
 
 Many Java programmers struggle to reverse a linked list using both recursion and iteration, which makes this question very useful for filtering programmers who can code and who are not so good with coding.
@@ -10177,8 +10778,8 @@ Read more: https://javarevisited.blogspot.com/2017/03/how-to-reverse-linked-list
 How to Find all Pairs in Array of Integers Whose sum is Equal to a Given Number in Java? Solution Example
 
 Practicing coding problems are very important to do well in any programming interview. You should at your best on data structures like an array, linked list, and string to clear any programming interview and believe me, you can not do this in one day or one week. It's rather a long process of learning through coding, and that's where these small coding problems help. Today, we are going to look at another interesting programming question from the array; write a program to find all pairs of integers whose sum is equal to a given number. For example, if the input integer array is {2, 6, 3, 9, 11} and the given sum is 9, the output should be {6,3}.
-PauseUnmute
-Fullscreen
+
+
 
 
 Sounds simple? maybe, but this exact question has appeared in a technical interview at Amazon, Microsoft, Facebook, and a couple of other Fortune five tech companies in the past. Many of you might already hear about this question and some of you may already know the solution to this problem as well, but it's not enough to know just the answer.
@@ -10462,8 +11063,8 @@ How to Find Missing Number in a Sorted Array in Java [Solved]
 
 Today's coding problem is not very new, it's an age-old classic Programming interview Question. You have a sorted array containing n - 1 unique number starting from 0 to n - 1. There is only one number missing in this range and you need to find that out. I mean you need to write a Java method to find the missing number and print its value in the console. Some of you might have seen this question before, but if you have not been asked this question before, what is the first approach comes into your mind to solve this question? Since only one number is missing, many programmers come up with the approach of iterating over the array, and comparing each element with the expected one like the first element should be 0, the second element should be 1, and so on.
 
-PlayUnmute
-Fullscreen
+
+
 Though this will solve the problem, it will cost you O(n) time. I mean time complexity of your solution would be O(n) which is not good for a big array, like with 100 million entries. What can you do to improve performance?
 
 The key here is that you already have a sorted array, do you think our earlier solution is taking full advantage of this knowledge, well it is but not fully. 
@@ -10561,8 +11162,8 @@ Read more: https://www.java67.com/2014/12/how-to-find-missing-number-in-sorted.h
 
 Hello guys, today, you will learn how to solve another popular coding problem. You have given an array of objects, which could be an array of integers and or an array of Strings or any object which implements the Comparable interface. How would you find duplicate elements from an array? Can you solve this problem in O(n) complexity? This is actually one of the frequently asked coding questions from Java interviews. There are multiple ways to solve this problem, and you will learn two popular ways here, first the brute force way, which involves comparing each element with every other element, and other which uses a hash table-like data structure to reduce the time complexity of the problem from quadratic to linear, of course by trading off some space complexity.
 
-PlayUnmute
-Fullscreen
+
+
 This also shows how by using a suitable data structure, you can come up with a better algorithm to solve a problem. That's why a good knowledge of Data Structure and Algorithms are very important for all programmers.
 
 If you are new to the programming world or want to refresh your knowledge about essential data structures like an array, string, linked list, hash table, binary tree, balanced tree, stack, queue, priority queue, etc then I suggest you go through a comprehensive data structure and algorithms course.
@@ -10721,8 +11322,8 @@ How to Check if Given Number is Prime in Java - With Example
 
 Hello guys, today, we are going to discuss one of the most common programming exercises for beginners is, write a program to check if a given number is prime or not? There are many ways to check if a number is prime or not, but the most common of them is the trial division, which is what we will see in this tutorial. In my opinion, these kinds of programs are their first steps towards algorithmic understanding. You first come up with a solution, which is driven by the fact that prime numbers are natural numbers, that are not divisible by any positive number other than 1 and themselves. Then, you write a for loop to check every number, starting from 1 to a given number, to see if the given number is divisible by any positive number or not. This leads you to the solution.
 
-PlayUnmute
-Fullscreen
+
+
 Then you find some more the fact that there is no need to check till N-1, where N is the number we are checking for primeness, and checking till the square root of N is enough. This reduces a lot of time, especially while checking a large number is prime or not.
 
 Further, you come to know that if it's not divisible by 2, then there is no need to checking for any other even number, and you increment the counter by 2 instead of 1. So in a way, you learn how to optimize your solution by taking advantage of the facts available.
@@ -10869,8 +11470,8 @@ Hello guys, if you are looking for a Java program to print the word and their co
 In the first step, you need to build a word Map by reading the contents of a Text File. This Map should contain words as a key and their count as value. Once you have this Map ready, you can simply sort the Map based upon values. 
 
 
-PlayUnmute
-Fullscreen
+
+
 Btw, If you don't know how to sort a Map on values, see this tutorial first. It will teach you how to sort  HashMap on values in Java.
 
 Now getting key and value sorted should be easy, but remember HashMap doesn't maintain order, so you need to use a List to keep the entry in sorted order.
@@ -11014,8 +11615,8 @@ How to Remove Duplicates from ArrayList in Java [Example]
 ArrayList is the most popular implementation of the List interface from Java's Collection framework, but it allows duplicates. Though there is another collection called Set which is primarily designed to store unique elements, there are situations when you receive a List like ArrayList in your code and you need to ensure that it doesn't contain any duplicate before processing. Since with ArrayList you cannot guarantee uniqueness, there is no other choice but to remove repeated elements from ArrayList. 
 
 There are multiple ways to do this, you can follow the approach we used for removing duplicates from array in Java, where we loop through array and inserting each element in a Set, which ensures that we discard duplicate because Set doesn't allow them to insert, or you can also use remove method of ArrayList to get rid of them, once you found that those are duplicates.
-PlayUnmute
-Fullscreen
+
+
 
 Btw, the simplest approach to remove repeated objects from ArrayList is to copy them to a Set e.g. HashSet and then copy it back to ArrayList. This will remove all duplicates without writing any more code.
 
@@ -11109,8 +11710,8 @@ How to check is given String is a Palindrome in Java using Recursion
 
 In this tutorial, you will learn how to check if a string is a palindrome in Java using Recursion. A String is nothing but a collection of characters like "Java," and String literals are encoded in double-quotes in Java. A String is said to be a palindrome if the reverse of String is equal to itself like "aba" is a palindrome because the opposite of "aba" is also "aba", but "abc" is not a palindrome because the reverse of "abc" is "cba" which is not equal. Recursion means solving a problem by writing a function which calls itself. In order to check if String is a palindrome in Java, we need a function that can reverse the String.
 
-PauseUnmute
-Fullscreen
+
+
 Once you have the original and reversed String, all you need to do is check if they are equal to each other or not. If they are equal then String is palindrome or not. You can write this reverse() function by using either for loop or by using Recursion.
 
 
@@ -11285,8 +11886,8 @@ How to Find Duplicate Characters in String [Java Coding Problems]
 
 Hello guys, today's programming exercise is to write a program to find repeated characters in a String. For example, if given input to your program is "Java", it should print all duplicates characters, i.e. characters appear more than once in String and their count like a = 2 because of character 'a' has appeared twice in String "Java". This is also a very popular coding question on the various level of Java interviews and written tests, where you need to write code. On the difficulty level, this question is at par with the prime numbers or Fibonacci series, which are also very popular on junior level Java programming interviews and it's expected from every programmer to know how to solve them.
 
-PauseUnmute
-Fullscreen
+
+
 I personally like this exercise because it gives beginners an opportunity to familiarize themselves with the concept of Map data structure, which allows you to store mappings in the form of key and value.
 
 Since Map and Hash table data structure is heavily used in any enterprise Java application, good knowledge of this data structure is highly desirable among any level of Java programmers.
@@ -11386,8 +11987,8 @@ Hello guys, if you are looking for a Java program to calculate factorial with an
 
 If you come from a Maths background then you know that the factorial of a number is number*(factorial of number -1), once you know that, your next task is how to convert that formula into a computer program and that's what you will learn in this article. 
 
-PauseUnmute
-Fullscreen
+
+
 We will use Java programming constructs like variables, operators, methods, and algorithms like recursion and loops to calculate the factorial of a number in Java, but before that let's get the problem statement right. 
 
 Problem: Write a Java program to calculate the factorial of a given number in Java, using both recursion and iteration.
@@ -11525,8 +12126,8 @@ How to Reverse words in String Java? [Solution]
 
 Hello guys, if you are wondering how to reverse words in a given String in Java then you have come to the right place. Earlier, I have shared 75 Programming interview questions and In this Java Coding tutorial, you will learn how to reverse words in String. It's also one of the popular coding questions, so you will also learn how to take a requirement, how to fill gaps in the requirement by asking the right question. A String is nothing but a sentence, which may contain multiple works, or just contain a single word or it may be empty. Your program must produce a String that contains the word in reverse order, for example, if the given input is "Java is Great" then your program should return "Great is Java".  
 
-PauseUnmute
-Fullscreen
+
+
 Now, if you are a good programmer then you should have some right questions for the Interviewer. Never assume you know everything, even if it looks like a simple problem.
 
 Always remember "Devil is in detail". Also asking a question, not only fill the gaps in requirement but also help you to make an impression.
@@ -11623,8 +12224,8 @@ How to Find Duplicate Characters in String [Java Coding Problems]
 
 Hello guys, today's programming exercise is to write a program to find repeated characters in a String. For example, if given input to your program is "Java", it should print all duplicates characters, i.e. characters appear more than once in String and their count like a = 2 because of character 'a' has appeared twice in String "Java". This is also a very popular coding question on the various level of Java interviews and written tests, where you need to write code. On the difficulty level, this question is at par with the prime numbers or Fibonacci series, which are also very popular on junior level Java programming interviews and it's expected from every programmer to know how to solve them.
 
-PlayUnmute
-Fullscreen
+
+
 I personally like this exercise because it gives beginners an opportunity to familiarize themselves with the concept of Map data structure, which allows you to store mappings in the form of key and value.
 
 Since Map and Hash table data structure is heavily used in any enterprise Java application, good knowledge of this data structure is highly desirable among any level of Java programmers.
@@ -11723,8 +12324,8 @@ How to Reverse an Integer in Java without converting to String? Example and Solu
 
 Hello guys, LeetCode has a problem reversing digits of an integer number without using any library method like the reverse() method of StringBuffer. In LeetCode, you can solve this problem with many different languages like Java, C, C++, C#, Python, Ruby, and even JavaScript. Btw, in the article, you will learn how to solve this problem in Java. Before approaching a solution let's first read the problem statement :
 
-PauseUnmute
-Fullscreen
+
+
 Reverse digits of an integer.
 
 Example 1: x = 123, return 321
@@ -11829,8 +12430,8 @@ How to check leap year in Java - program example
 
 Write a Java program to find if a year is a leap year or not is a standard Java programming exercise during various Java programming courses on schools, colleges, and various training institutes both online and offline,  along with other popular homework's e.g. printing Fibonacci numbers, checking palindromes, or finding prime numbers. Just to recap a leap year is a year with 366 days which is 1 extra day than a normal year. This extra day comes in the month of February and on leap year Feb month has 29 days than normal 28 days. If you are following then you might know that leap year comes in an interval of 4 years. This year 2012 is a leap year and Feb has 29 days, you can check.
 
-PlayUnmute
-Fullscreen
+
+
 
 Now if you are in programming before you might be familiar that there is standard logic to find leap year i.e. if a year is multiple of 400 or multiple of 4 but not multiple of 100 then it's a leap year. In addition to this standard logic, you can also use Java's Date, Time, and Calendar API to check how many days any year has and by comparing that number with 365 you can find whether that year is a leap year or not. 
 
@@ -11928,8 +12529,8 @@ Bubble sort in Java - Program to sort an Integer Array [Example]
 
 Bubble sort is one of the classic sorting algorithms,s which is used to explain sorting during various computer and engineering courses. Because of its algorithmic nature and simplicity, it's often used in various Java and C++ programming exercises. You may expect questions like the Write Java program to sort integer arrays using bubble sort during any programming interview. Since algorithmic questions are always tricky questions and not easy to code. Even the simplest of them can lead to confusion, especially if you are not gifted with a natural programming head. I have seen many developers fumble if asked to code on the spot. That's why it's advisable to do algorithmic and logical programming during training and learning programming and OOPS to get this skill of converting logic into code.
 
-PlayUnmute
-Fullscreen
+
+
 Let's come back to Bubble sort, In the Bubble sort algorithm we sort an unsorted array by starting from the first element and comparing it with the adjacent element. If the former is greater than later then we swap and by doing this we get the largest number at the end after the first iteration. 
 
 So in order to sort n elements you require n-1 iteration and almost n-1 comparison. To recap here is the logic for the bubble sort sorting algorithm :
@@ -12052,8 +12653,8 @@ QuickSort Algorithm Example in Java using Recursion - Tutorial
 The Quicksort algorithm is one of the very popular sorting algorithms in programming, often used to sort a large array of numbers. Though there is numerous algorithm available to sort a list of objects, including integer, string, and floating-point number, quicksort is best for general purpose. It's a divide and conquers algorithm, where we divide the given array with respect to a particular element, known as 'pivot' such that the lower partition of the array is less than the pivot and upper partition elements of the array are higher than the pivot.
 The Quicksort is also one of the best examples of recursion, a key programming technique to solve Algorithmic problems. This algorithm is naturally recursive because it sorts the large list by dividing it into smaller sub-list and then applying the same algorithm to those.
 
-PlayUnmute
-Fullscreen
+
+
 The base case of recursion is when a list contains either one or zero elements, in that case, they are already sorted. Quicksort is well ahead with primitive sorting algorithms like Insertion sort, selection sort, and Bubble sort. The average time complexity of quicksort is O(N log N), while in the worst case its performance is similar to bubble sort, I mean O(n^2).
 
 Apparently, the worst case of quicksort is the best case of insertion sort, where they have to sort an already sorted list. In this article, we will learn how to implement a quicksort algorithm in Java using recursion.
@@ -12575,8 +13176,8 @@ How to Reverse String in Java with or without StringBuffer Example
 Reverse String in Java
 There are many ways to reverse a given String in Java. For example, you can use rich Java API to quickly reverse the contents of any String object. Java library provides StringBuffer and StringBuilder class with the reverse() method which can be used to reverse String in Java. Since converting between String and StringBuffer or StringBuilder is very easy it's the easiest way available to reverse String in Java. But, in a coding interview, you may not be allowed to use the JDK API methods to solve this problem. That's why, writing a Java program to reverse String in Java without StringBuffer is one of the popular Java String interview questions, which requires you to reverse String by applying logic and by not using API methods.
 
-PlayUnmute
-Fullscreen
+
+
 Since reverse is a recursive job, you can use recursion as well as a loop to reverse String in Java. In this Java tutorial, you will learn how to reverse String using StringBuffer, StringBuilder, and using a pure loop with logic.
 
 Btw, if you are preparing for coding interviews then a  good knowledge of techniques like Recursion, Dynamic Programming, Greedy Algorithms, and essential data structures like an array, string, linked list, binary tree, stack, queue, etc are very important.
@@ -12686,8 +13287,8 @@ Insertion Sort Algorithm in Java with Example
 
 Insertion sort is another simple sorting algorithm like Bubble Sort. You may not have realized but you must have used Insertion sort in a lot of places in your life. One of the best examples of Insertion sort in the real-world is, how you sort your hand in playing cards. You pick one card from the deck, you assume it's sorted, and then we insert subsequent cards in their proper position. For example, if your first card is Jack, and the next card is Queen then you put the queen after Jack. Now if the next card is King, we put it after the queen, and if we get 9, we put it before jack.
 
-PauseUnmute
-Fullscreen
+
+
 So if you look closely, Insertion sort is a perfect sorting algorithm to insert a new value into an already sorted array. That's why the best-case complexity of insertion sort is O(n), in which case you can just insert a new number in the already sorted list of integers.
 
 
@@ -13188,8 +13789,8 @@ How to Remove an Element from Array in Java with Example
 
 There is no direct way to remove elements from an Array in Java. Though Array in Java objects, it doesn't provide any methods to add(), remove(), or search an element in Array. This is the reason Collection classes like ArrayList and HashSet are very popular. Thanks to Apache Commons Utils, You can use their ArrayUtils class to remove an element from the array more easily than by doing it yourself. One thing to remember is that Arrays are fixed size in Java, once you create an array you can not change their size, which means removing or deleting an item doesn't reduce the size of the array. This is, in fact, the main difference between Array and ArrayList in Java.
 
-PlayUnmute
-Fullscreen
+
+
 What you need to do is create a new array and copy the remaining content of this array into a new array using System.arrayCopy() or any other means. In fact, all other APIs and functions you will use do this but then you don't need to reinvent the wheel. 
 
 For an Object or Reference array, you can also convert Array to List and then remove a particular object and convert List back to the array. One way to avoid this hassle is by using ArrayList instead of Array in the first place.
@@ -13268,8 +13869,8 @@ How to find largest and smallest number from integer array - Java Solution
 
 Hello guys, if you have gone through any coding interview or have done some professional Software development then you know that a good understanding of array data structure is crucial for any software developer but it doesn't come for free, you need to spend time and effort. The best way to develop this understanding by solving coding problems and there are lots of programming exercises beginners can do. One of them is writing a program to find the smallest and largest number in an integer array. Java programmers are no different than others, so they can do this program in Java, not just to understand array but also different relational operators available in Java.  
 
-PlayUnmute
-Fullscreen
+
+
 In this program, you need to write a method, yes we call the function a method in Java, which will accept an integer array and then print the largest and smallest number from that array. Use of any third-party library or API method is not allowed, which means you need to do this exercise by using essential tools of Java programming language, which includes operators, control statements, keywords, and some classes from java.lang package.
 
 This problem is also known as finding maximum and minimum numbers in an array, and the technique mentioned here can be used in any other programming language as well. As a bonus point, you can also write JUnit test cases to test your method, I have not done so and relied on a simple main method to test my code to show the output and keep it short, essential for any example or demo.
@@ -13728,8 +14329,8 @@ Read more: https://javarevisited.blogspot.com/2015/06/top-20-array-interview-que
 How to Remove Duplicates from Array without Using Java Collection API? Example
 
 This is a coding question recently asked to one of my readers in a Java Technical interview on investment bank. The question was to remove duplicates from an integer array without using any collection API classes like Set, HashSet, TreeSet or LinkedHashSet, which can make this task trivial. In general, if you need to do this for any project work, I suggest better using the Set interface, particularly LinkedHashSet, because that also keeps the order on which elements are inserted into Set. Why Set? because it doesn't allow duplicates and if you insert duplicate the add() method of Set interface will return false. 
-PlayUnmute
-Fullscreen
+
+
 
 Now coming to this coding problem, only from a technical interview perspective, you need to do this using either loops or recursion,  depending upon what is your strongest area. 
 
@@ -13836,8 +14437,8 @@ Read more: https://javarevisited.blogspot.com/2014/01/how-to-remove-duplicates-f
 
 The difference between an array and a linked list is one of the frequently asked data structure and algorithm interview questions and you might have seen it before on your telephonic or face-to-face interview. It is also a very popular question during practical exams in Computer Science degree courses like B.E. and B.Tech. It's very simple and easy to answer but you just can't afford to miss this question in an interview. Both array and linked list are two of the most popular and fundamental data structures in Computer Science and Programming, and Java supports both of them.
 
-PlayUnmute
-Fullscreen
+
+
 One of the traits of a good programmer is extensive knowledge of data structure and algorithm and that's why it's very important for you to learn the difference between array and linked list data structure and understand when to use an array over a linked list and vice-versa.
 
 Though this discussion is valid from C/C++ and other programming language perspectives, I'll give you examples and explanations in Java.
@@ -14959,8 +15560,8 @@ https://hackernoon.com/50-data-structure-and-algorithms-interview-questions-for-
 
 Whenever someone talks about Java 8, the first thing they speak about is lambda expression and how lambda expression has changed the way you use Collections API today. In truth, lambda expression would not be that useful had language not been enhanced to support default methods on Java Interface. Also known as virtual extension or defender methods, they allow you to declare a non-abstract method inside the Java interface. This means, finally you can add new methods without breaking all classes, which implements a certain interface. This opens a new path for enhancing and evolving the existing Collection API to take advantage of lambda expressions. For example, now you can iterate over all elements of Collection in just one line, as opposed to four lines it requires you to do prior to Java 8.
 
-PlayUnmute
-Fullscreen
+
+
 The forEach is a default method declared inside java.lang.Iterable, which allows Java to iterate over collection internally and execute action asked by the client. Since now iteration is internally handled by Java, they can do a lot of things that were not possible earlier like parallel iteration.
 
 Parallel libraries are long been due on the Java platform to leverage the immense power of multiple CPUs available to modern servers. Since handling parallelism on the client-side is both difficult and error-prone, programmers have been asking for libraries, which can do things in parallel, leaving you to only define what to do, instead of how to do.
@@ -15090,8 +15691,8 @@ How to Join Multiple Strings in Java 8 - String join() Example
 
 Hello guys, I have been writing about the new features of Java SE 8 for quite some time. Initially, my focus areas on much talked about lambda expressions and streams, but slowly I realized that Java 8 is not just about them, it's much more than that. It has many more new features and API enhancements that will help Java developers in their day-to-day job as much as lambdas and streams. One of such less talked features is the ability to join multiple String objects into one separated with any delimiter. It has added a class called StringJoiner in java.util package which we have seen earlier, but it has also added a new method on String class, the join() method, which finally allows you to join Strings in Java.
 
-PlayUnmute
-Fullscreen
+
+
 You might have faced scenarios in the past where you have a list of String or an array of String and you want to join them by a comma.
 
 Unfortunately, Java didn't have anything like Android's TextUtils.join() or JavaScript's Array.join() method which can join String on a delimiter.
@@ -15395,8 +15996,8 @@ Let's now compare array in Java with the Hashtable or HashMap class in Java. Mos
 
 
 
-PlayUnmute
-Fullscreen
+
+
 
 
 
@@ -15480,8 +16081,8 @@ Firstly, before going about finding the first and the last item of an array in j
 
 
 Oftentimes you may have to work on a task whereby you will have to store a large number of values during the execution of a program. for instance, you need to read 50 numbers, calculate their average, and find out how many numbers are above the average, and how many numbers are below average.
-PauseUnmute
-Fullscreen
+
+
 
 Your program first reads the numbers and calculates their average, then compares each number with the average to determine whether it is above the average or below. To accomplish this task, the numbers must all be stored in variables.
 
@@ -15616,8 +16217,8 @@ What is try with resource in Java? Example tutorial
 
 In Java we normally use resources like file, network connection, socket connection, database connection etc ,dealing with resources is not a difficult task but what if after using the resources programmers forget to close the resources. As we know in Java everything is Object so if we forget to close or shut down the resource its responsibility of GC that will recollect it when its no longer used but we can reduce resource exhaustion by explicitly closing the resources as soon we done with our job with the resources. Some resources like database connection are very precious and would surely run out of resources if waited for finalization. Many database servers only accept a certain number of connections so if forget to close properly will create problem.
  
-PlayUnmute
-Fullscreen
+
+
 So JDK 7 come with the solution of try with resource also called automatic resource management where when try block ended automatically it will close or release our resource. Let see one example how to use try with resource in JDK 7
 
 The try-with-resources statement is a feature introduced in Java 7. It simplifies the resource management and improves the code readability by automatically closing the resources that are opened in a try block. In this article, we will learn how to use try-with-resources in Java to handle resources like file streams, database connections, and network sockets. We will also discuss the benefits of using try-with-resources over traditional try-catch-finally blocks.
@@ -15678,8 +16279,8 @@ How to write to a File with try-with-resource in Java? Example Tutorial
 Hello Java programmers and all people learning Java, if you are familiar with try-wit-resource statement then you know that its a great language functionality and tool to open files, sockets, streams, and network connections or any resource which are require closing. Before try-with-resource was introduce in Java 7, Java developers have to manually write try catch finally block to close the connections for both success and failure cases to prevent resource leak but it was also tricky and many programmer make mistakes which actually resulted in resource leaks. One common example of that is running out of file descriptors which is used for both opening file and socket in Java.  
 
 If you have worked with web servers like Tomcat and Weblogic then you may have seen the dreaded java.net.SocketException: Too many files open java.io.IOException  which is a popular case of resource leak. 
-PlayUnmute
-Fullscreen
+
+
 
 I have explained that on my earlier post about right way to close streams in Java, but try-with-resource really makes it easy to use resources like files and sockets in Java as you don't need to manually close them anymore, try-with-resource will take care of it. 
 
@@ -15770,8 +16371,8 @@ Read more: https://www.java67.com/2023/01/how-to-write-file-in-java-with-try.htm
 TCP/IP is one of the most important protocol as its backbone of HTTP, internet and most of the communication happens today. It's also important from technical interview perspective, you might have already seen difference between TCP and UDP multiple time during interviews ( I have seen). I believe every programmer, not just Java developer should know what is TCP/IP protocol? How it works and the below points I am going to mention. These are basic points and most of you already know but during Interview I have found many developers who doesn't really know what TCP/IP offers and how it works and what are the pros and cons of TCP/IP protocol. That's where, I think this article will help you. Anyway, let's jump into technical details now. 
 
 
-PlayUnmute
-Fullscreen
+
+
 10 points on TCP/IP Protocol, Java Programmers Should Know
 Here are the 10 essential point about TCP/IP protocol every programmer should know and remember. 
 
@@ -15853,8 +16454,8 @@ Hello guys, Data types are first few things you should learn when you start lear
 
 
 
-PlayUnmute
-Fullscreen
+
+
 8 Examples Of Primitive Data Types In Java
 In Java, int data type is used for a 32-bit integer value, char is used for a 16-bit character, boolean is used for a true or false value, short is used for a 16-bit integer value, and so on and so forth. 
 In this list, we have compiled all of the primitive data types in Java along with some examples. Keep reading to find out more. 
@@ -15995,8 +16596,8 @@ Note the following:
 
 
 
-PlayUnmute
-Fullscreen
+
+
 
 
 
@@ -16055,11 +16656,6 @@ OUTPUT:
 
 
 Line 1 was the class declaration with an embedded Node class with instance variables: data of type int, right, and left of type node respectively. Constructor was declared in line 5 that takes in parameter “data” of type int and was assigned to the instance variable in line 6. In line 7, right was assigned to left, and null was assigned to the right. 
-
-
-
-
-
 
 In other words, it means left is null. The method LCA was declared in line 10 with three parameters which are the root of type node, int n1, and n2 respectively. If the root is null then it should return -1 in line 12. 
 
