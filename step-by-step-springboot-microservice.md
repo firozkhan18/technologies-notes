@@ -6243,18 +6243,18 @@ Sure! Below is a **Mermaid diagram** that you can use to visually compare the fl
 
 ```mermaid
 graph TD;
-    A[User] -->|Login| B[Web Server (JWT)]
+    A[User] -->|Login| B[Web Server - JWT]
     B -->|Generate JWT| A
     A -->|Send JWT in Request| C[API Server]
     C -->|Validate JWT| D[API]
     
-    A1[User] -->|Login and Authorize| B1[Client App (OAuth)]
+    A1[User] -->|Login and Authorize| B1[Client App - OAuth]
     B1 -->|Redirect to| C1[Authorization Server]
     C1 -->|Generate Access Token| B1
     B1 -->|Access Resources with Token| D1[Resource Server]
     
-    E[User] -->|Access Service| F[Service Provider (SAML)]
-    F -->|Redirect to IdP for Authentication| G[Identity Provider (IdP)]
+    E[User] -->|Access Service| F[Service Provider - SAML]
+    F -->|Redirect to IdP for Authentication| G[Identity Provider - IdP]
     G -->|Send SAML Assertion| F
     F -->|Validate SAML Assertion| E
 ```
