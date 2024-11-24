@@ -13821,285 +13821,7 @@ That's all about how to use String.join() method in Java 8 to join String. Now, 
 
 Read more: https://www.java67.com/2016/08/java-8-stringjoin-example.html#ixzz8hjGJofxn
 
-convert a List to Map in Java
-Now, let's see different ways to solve this problem in the pre-JDK 8 worlds and in Java 8. This comparative analysis will help you to learn the concept and Java 8 API better.
 
-
-
-1. Before Java 8
-Here is how you can convert a List to Map in Java 5, 6 or 7:
-
-private Map<String, Choice> toMap(List books) {
-        final Map hashMap = new HashMap<>();
-        for (final Book book : books) {
-            hashMap.put(book.getISBN(), book);
-        }
-        return hashMap;
-    }
-
-You can see we have iterated through the List using enhanced for loop of Java 5 and put each element into a HashMap, where ISBN code is the key, and the book object itself is the value. This is the best way to convert a List to Map in pre-JDK 8 worlds. It's clear, concise, and self-explanatory, but iterative.
-
-
-2. Java 8 using Lambdas
-Now, let's see how we can do the same in Java 8 by using lambda expression and Stream API, here is my first attempt:
-
-Map<String, Book> result  = books.stream()
-            .collect(Collectors.toMap(book -> book.getISBN, book -> book));
-
-In the above code example, the stream() method returns a stream of Book object from the list, and then I have used collect() method of Stream class to collect all elements. All the magic of how to collect elements happening in this method.
-
-I have passed the method Collectors.toMap(), which means elements will be collected in a Map, where the key will be ISBN code and value will be the object itself. We have used a lambda expression to simplify the code.
-
-
-
-
-
-3. Using Java 8 method reference
-You can further simplify the code in Java 8 by using method reference, as shown below:
-
-Map<String, Book> result =  books.stream()
-        .collect(Collectors.toMap(Book::getISBN, b -> b));
-
-Here we have called the getISBN() method using method reference instead of using a lambda expression.
-
-
-You can further remove the last remaining lambda expression from this code, where we are passing the object itself by using Function.identify() method in Java 8 when the value of the Map is the object itself, as shown below:
-
-Map<String, Book> result = choices.stream()
-        .collect(Collectors.toMap(Book::getISBN, Function.identity()))
-
-What does identify function do here? It's just a substitute of b ->b and you can use if you want to pass the object itself. See Java SE 8 for Really Impatient book to learn more about Function.identity() method.
-
-10 Examples of converting List to Map with duplicates
-
-
-
-
-How to convert a List with Duplicates into Map in JDK 8
-What if the List has duplicates? When you are converting List to Map, you must pay attention to a different characteristic of these two collection classes, a List allows duplicate elements, but Map doesn't allow duplicate keys. What will happen if you try to convert a List with duplicate elements into a Map in Java 8?
-
-Well, the above method will throw IllegalStateException as shown in the following example:
-
-List cards = Arrays.asList("Visa", "MasterCard", "American Express", "Visa");
-Map cards2Length = cards.stream()
-                .collect(Collectors.toMap(Function.identity(), String::length));
-
-Exception in thread "main" java.lang.IllegalStateException: Duplicate key 4
- at java.util.stream.Collectors.lambda$throwingMerger$90(Collectors.java:133)
-
-
- at java.util.stream.Collectors$$Lambda$3/1555009629.apply(Unknown Source)
- at java.util.HashMap.merge(HashMap.java:1245)
- at java.util.stream.Collectors.lambda$toMap$148(Collectors.java:1320)
- at java.util.stream.Collectors$$Lambda$5/258952499.accept(Unknown Source)
- at java.util.stream.ReduceOps$3ReducingSink.accept(ReduceOps.java:169)
- at java.util.Spliterators$ArraySpliterator.forEachRemaining(Spliterators.java:948)
- at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:512)
- at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:502)
-
-
- at java.util.stream.ReduceOps$ReduceOp.evaluateSequential(ReduceOps.java:708)
- at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
- at java.util.stream.ReferencePipeline.collect(ReferencePipeline.java:499)
- at Java8Demo.main(Java8Demo.java:20)
-
-This exception is suggesting that 4th element of the List is a duplicate key. Now how do you solve this problem? Well, Java 8 has provided another overloaded version of Collectors.toMap() function which accepts a merge function to decide what to do in case of the duplicate key. If you use that version, instead of throwing an exception, Collector will use that merge function to resolve a conflict.
-
-In the following example, I have used that version and instructed to use the first object in case of the duplicate key, the lambda expression (e1, e2) -> e1 is suggesting that.
-
-
-
-You can do whatever you want e.g. you can combine the keys or choose any one of them.
-
-List cards = Arrays.asList("Visa", "MasterCard", "American Express", "Visa");
-System.out.println("list: " + cards);
-        
-Map cards2Length = cards.stream()
-                .collect(Collectors.toMap(Function.identity(),
-                            String::length, (e1, e2) -> e1));
-System.out.println("map: " + cards2Length);
-
-Output:
-list: [Visa, MasterCard, American Express, Visa] 
- map: {American Express=16, Visa=4, MasterCard=10}
-
-You can see that the List contains 4 elements but our Map contains only three mappings because one of the elements "Visa" is duplicate. The Collector only kept the first reference of "Visa" and discarded the second one. Alternatively, you can also remove duplicates from the List before converting it to Map as shown here.
-
-How to convert a List to map and keep order
-
-
-
-How to Preserve Order of Elements when converting a List to Map
-Remember I said that Map returned by the Collectors.toMap() is a just a simple implementation of Map interface and because Map doesn't guarantee the order of mappings, you will likely lose the ordering of elements provided by the List interface.
-
-If you really need elements in Map in the same order they were in the List, you can use another version of the Collectors.toMap() method which accepts four parameters and the last one of them is to ask for a specific Map implementation e.g. HashMap or LinkedHaashMap.
-
-
-
-Since LinkedHashMap maintains the insertion order of elements (see here), you can collection elements in the LinkedHashMap as shown in the following example:
-
-import java.util.Arrays;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-
-/*
- * Java Program to convert a List to map in Java 8.
- * This example shows a trick to preserve order of element
- * in the list while converting to Map using LinkedHashMap. 
- */
-public class Java8Demo {
-
-    public static void main(String args[]) {
-
-        List<String> hostingProviders = Arrays.asList("Bluehost",
-                       "GoDaddy", "Amazon AWS", "LiquidWeb", "FatCow");
-        System.out.println("list: " + hostingProviders);
-
-        Map<String, Integer> cards2Length = hostingProviders.stream()
-                .collect(Collectors.toMap(Function.identity(),
-                                String::length,
-                                (e1, e2) -> e1,
-                                LinkedHashMap::new));
-        System.out.println("map: " + cards2Length);
-
-    }
-
-}
-
-Output:
-list: [Bluehost, GoDaddy, Amazon AWS, LiquidWeb, FatCow]
-map: {Bluehost=8, GoDaddy=7, Amazon AWS=10, LiquidWeb=9, FatCow=6}
-
-You can see that order of elements in both List and Map is exactly the same. So use this version of the Collectors.toMap() method if you want to preserve the ordering of elements in the Map.
-
-
-
-
-That's all about how to convert a List to Map in Java 8 using lambda expression and Streams. You can see it's much easier and concise using the lambda expression. Just remember that the Map returned by the Collectors.toMap() is not your regular HashMap, it is just a  class that implements the Map interface. It will not preserve the order of elements if you want to keep the order the same as in the original list then use the LinkedHashMap as shown in the last example.
-
-
-
-Also, don't forget to provide a merge function if you are not sure about whether your List will contain duplicates or not. It will prevent the IllegalStateException you get when your List contains duplicates and you want to convert it to a Map, which doesn't allow duplicate keys.
-
-Read more: https://javarevisited.blogspot.com/2016/04/10-examples-of-converting-list-to-map.html#ixzz8hjGRtIhf
-
-Difference between Abstract class vs Interface  in Java 8
-Prima facia, in Java 8, an interface looks like an abstract class and one can reason about, can we use an interface with default methods in place of an abstract class in Java?
-
-Well, I believe they are for two different purposes and we will learn more once we start using Java 8 regularly, but following the semantics difference between abstract class and interface with default method will guide you further :
-
-1) Abstract classes are classes, so they are not restricted to other restrictions of the interface in Java, like abstract class can have the state, but you cannot have the state on the interface in Java.
-
-2) Another semantic difference between an interface with default methods and an abstract class is that you can define constructors inside an abstract class, but you cannot define constructors inside an interface in Java.
-
-In reality, default or defender methods are introduced to maintain backward compatibility and the same time making Collection API more suitable to be used inside key Java 8 features like lambda expressions.
-
-Without adding default methods, it wasn't possible to declare any new method on the existing interface in Java without breaking all classes which implement it, but because of the default method, you can now better evolve your API.
-
-They defend your code against implementing new methods hence they are also called defender methods. If you want to know more about default methods or new changes in Java 8 in general, I suggest you check out these Java 8 to Java 21 courses from sites like Udemy and Pluralsight. 
-
-Difference between Abstract class and Interface  in Java 8
-
-
-
-That's all about the difference between an Abstract class and an Interface in Java 8. Though I certainly agree that the difference between abstract class and the interface has reduced with the introduction of default methods, as well as allowing static methods inside the interface and their usage will evolve once Java 8 becomes a mainstream Java development version, but you must remember that an abstract class is a class and an interface is an interface.
-
-The key difference is that an abstract class can maintain a state but the interface cannot, and an abstract class can also have a constructor that is not allowed inside the interface even in Java 8. If you are designing API then use interface and if you are abstracting both state and behavior then use an abstract class.
-
-Read more: https://www.java67.com/2017/08/difference-between-abstract-class-and-interface-in-java8.html#ixzz8hjGXU7q5
-
-Difference between array and Hashtable or HashMap in Java
-
-A couple of days back someone asked me about the difference between an array and a hashtable, though this is a generic data structure and programming question, I'll answer it from both a general programming perspective as well on Java perspective where Hashtable is not just a data structure but also a class from Java Collection API. Even though both array and hashtable data structure are intended for fast search i.e. constant time search operation also known as O(1) search, the fundamental difference between them is that array require an index while hash table requires a key which could be another object. 
-
-Actually, the hash table is an extension of the array where the hash function is used to convert the key into an index required by the array, which is further used to locate the element in the internal array. Yes, a Hashtable or HashMap is also backed by an array, but that's not the full story. 
-
-It also uses a linked list and binary tree data structure to deal with collision and maintain acceptable performance. In this article, you will learn about both structural and performance differences between array and hashtable in Java. 
-
-Let's now compare array in Java with the Hashtable or HashMap class in Java. Most of the differences are also valid for general array vs hash table data structure in computer science programming. Hash table data structure is also known as dictionary in Python and Map in many other programming languages. 
-
-
-
-
-
-
-
-
-
-Difference between Array vs hash table in Java
-Now, let's see some more details to understand the difference between Array and Hashtable in Java: 
-
-
-
-1. Index based vs  Key Based
-
-The first and foremost difference between a hash table and the array is that array needs an index while the hash table needs a key to search the value. 
-
-
-
-2. Fixed Capacity vs Dynamic Capacity
-
-The second difference is that array has a fixed capacity but the hashtable can accommodate more elements than the capacity on the internal array by using chaining and a linked list. 
-
-
-
-3. Performance
-
-The third difference between a hash table and the array is that the array always gives you O(1) performance if you know the index but hash table performance can be O(n) in the worst case where due to collision you need to traverse through linked list to find the correct value object. 
-
-
-This has been slightly improved now when JDK uses binary tree instead of linked list from Java 8 and worst-case performance is now pegged to O(logN)
-
-Difference between array and Hashtable or HashMap in Java
-
-
-
-
-
-4. Usage
-
- Array stores just one object but the hash table stores mapping, I mean pair of key and value objects. 
-
-
-
-5. Sorting
-
-Array doesn't enforce any requirement on storing objects but hash tables usually require the key object to implement some interface so that it can calculate hash values. For example, in Java, we have Hashtable and HashMap classes in java.util package which is our general-purpose hash table data structure requires key objects to implement equals() and hashcode() method.
-
-
-
-6. Collision
-
-There is a collision in the array but collision is possible in the hash table
-
-
-
-7. Synchronization
-
-the array is not synchronized and cannot be made synchronized but Hashtable is synchronized in Java.
-
-
-
-Similarities
-
-Now that we have seen some differences between array and hash table data structure, now let's see some similarities. 
-
-1. both are linear data structure
-
-2. hashtable is internally backed by an array
-
-3. both provide fast search performance when a search is by key or index.  
-
-
-
-That's all about the difference between array and hash table data structure in Java. I have used the Hashtable class as a representative of hash table data structure in Java but you can put HashMap, ConcurrentHashMap or any other Map implementation in place of Hashtable and most of the differences will be valid. 
-
-
-
-Read more: https://www.java67.com/2021/08/difference-between-array-and-hashtable.html#ixzz8hjGgtFsr
 
 
 How to get the first and last item in an array in Java? Example Tutorial
@@ -14124,8 +13846,211 @@ You have to declare 50 variables and repeatedly write almost identical code 50 t
 How to get the first and last item in an array in Java?
 So, how do you solve this problem? An efficient, organized approach is needed. Java and most other high-level languages provide a data structure, the array, which stores a fixed-size sequential collection of elements of the same type. In the present case, you can store all 50 numbers into an array and access them through a single array variable.
 
+### Converting a List to Map in Java
 
-Java array is an object which contains elements of a similar data type. Additionally, The elements of an array are stored in a contiguous memory location. It is a data structure where we store similar elements. We can store only a fixed set of elements in a Java array. 
+In Java, converting a List to a Map is a common operation. Prior to Java 8, it required manual iteration through the list and inserting each element into a map. Starting from Java 8, you can use the Stream API to make this conversion more concise and readable. Let's walk through both the pre-Java 8 and Java 8 approaches for converting a List to Map.
+
+---
+
+### 1. **Before Java 8 (Traditional Approach)**
+
+In pre-Java 8 versions, you would iterate over a list manually and add the elements to a map using a loop. Here's how you could do it:
+
+#### Example (Before Java 8):
+
+```java
+import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
+
+public class ConvertListToMap {
+    public Map<String, Book> toMap(List<Book> books) {
+        Map<String, Book> hashMap = new HashMap<>();
+        for (Book book : books) {
+            hashMap.put(book.getISBN(), book); // ISBN as the key, book object as value
+        }
+        return hashMap;
+    }
+}
+```
+
+In this example:
+- We manually create a `HashMap`.
+- We iterate through the list of books and put each book's `ISBN` as the key and the book object itself as the value in the map.
+
+This approach is straightforward but becomes more cumbersome as the logic grows.
+
+---
+
+### 2. **Java 8 Approach Using Streams and Lambda Expressions**
+
+With Java 8, we can leverage the Stream API and the `Collectors.toMap()` method to convert a List to a Map. This makes the code more concise and readable.
+
+#### Example (Java 8 with Lambda Expressions):
+
+```java
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+public class ConvertListToMap {
+    public Map<String, Book> toMap(List<Book> books) {
+        return books.stream()
+                    .collect(Collectors.toMap(book -> book.getISBN(), book -> book));
+    }
+}
+```
+
+In this Java 8 approach:
+- We call `stream()` on the list of books to create a stream.
+- We then use the `collect()` method with the `Collectors.toMap()` collector.
+- The first lambda expression (`book -> book.getISBN()`) specifies that the `ISBN` will be the key in the map.
+- The second lambda expression (`book -> book`) specifies that the book itself will be the value.
+
+This is a more declarative way to perform the conversion, but there are more advanced uses with Java 8 features.
+
+---
+
+### 3. **Java 8 Approach Using Method References**
+
+You can further simplify the above code by using method references instead of lambda expressions. This is especially useful when the logic is straightforward (like calling a getter method).
+
+#### Example (Java 8 with Method References):
+
+```java
+import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
+public class ConvertListToMap {
+    public Map<String, Book> toMap(List<Book> books) {
+        return books.stream()
+                    .collect(Collectors.toMap(Book::getISBN, Function.identity()));
+    }
+}
+```
+
+In this version:
+- `Book::getISBN` is a method reference that is equivalent to the lambda expression `book -> book.getISBN()`.
+- `Function.identity()` is used to return the book itself as the value, which is equivalent to `book -> book`.
+
+This version is more concise and cleaner.
+
+---
+
+### 4. **Handling Duplicates When Converting a List to Map**
+
+In some cases, your List might contain duplicate elements (i.e., books with the same ISBN). Since a Map does not allow duplicate keys, calling `Collectors.toMap()` directly with a list containing duplicate keys will throw an `IllegalStateException`.
+
+#### Example (With Duplicate Keys):
+
+```java
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+public class ConvertListToMap {
+    public static void main(String[] args) {
+        List<String> cards = Arrays.asList("Visa", "MasterCard", "American Express", "Visa");
+        
+        Map<String, Integer> cardsLengthMap = cards.stream()
+                .collect(Collectors.toMap(Function.identity(), String::length));
+    }
+}
+```
+
+Running this code will throw:
+
+```
+Exception in thread "main" java.lang.IllegalStateException: Duplicate key Visa
+```
+
+This happens because the key `"Visa"` is duplicated in the list.
+
+To handle this, you can provide a **merge function** to decide how to handle duplicates. For example, you could retain the first value encountered for duplicate keys, as shown below:
+
+#### Example (With Duplicate Key Handling):
+
+```java
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
+public class ConvertListToMap {
+    public static void main(String[] args) {
+        List<String> cards = Arrays.asList("Visa", "MasterCard", "American Express", "Visa");
+        
+        Map<String, Integer> cardsLengthMap = cards.stream()
+                .collect(Collectors.toMap(
+                        Function.identity(),
+                        String::length,
+                        (existing, replacement) -> existing)); // Retain the first occurrence
+                        
+        System.out.println(cardsLengthMap);
+    }
+}
+```
+
+Output:
+```
+{American Express=16, Visa=4, MasterCard=10}
+```
+
+In this case, we use the merge function `(existing, replacement) -> existing`, which keeps the first occurrence of a duplicate key and discards the later ones.
+
+---
+
+### 5. **Preserving the Order of Elements When Converting List to Map**
+
+The `toMap()` collector returns a `HashMap`, which does not guarantee any specific order. If you want to preserve the insertion order, you should use a `LinkedHashMap`, which maintains the order of insertion.
+
+#### Example (Preserving Order):
+
+```java
+import java.util.Arrays;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
+public class ConvertListToMap {
+    public static void main(String[] args) {
+        List<String> hostingProviders = Arrays.asList("Bluehost", "GoDaddy", "Amazon AWS", "LiquidWeb", "FatCow");
+        
+        Map<String, Integer> cardsLengthMap = hostingProviders.stream()
+                .collect(Collectors.toMap(
+                        Function.identity(),
+                        String::length,
+                        (e1, e2) -> e1,
+                        LinkedHashMap::new)); // Use LinkedHashMap to preserve order
+        
+        System.out.println(cardsLengthMap);
+    }
+}
+```
+
+Output:
+```
+{Bluehost=8, GoDaddy=7, Amazon AWS=10, LiquidWeb=9, FatCow=6}
+```
+
+Here, by passing `LinkedHashMap::new` as the last argument to `Collectors.toMap()`, the map will maintain the same order as the original list.
+
+---
+
+### Conclusion
+
+- **Before Java 8:** You manually iterate through the list and insert elements into a `Map`.
+- **Java 8 (Stream API):** You can use `Collectors.toMap()` with lambda expressions or method references to convert a `List` to a `Map` in a concise way.
+- **Handling Duplicates:** Use a merge function to resolve conflicts if your list contains duplicate keys.
+- **Preserving Order:** Use `LinkedHashMap` if you need to maintain the insertion order of elements.
+
+By using the Stream API and `Collectors.toMap()`, Java 8 makes converting a `List` to a `Map` simpler and more declarative.Java array is an object which contains elements of a similar data type. Additionally, The elements of an array are stored in a contiguous memory location. It is a data structure where we store similar elements. We can store only a fixed set of elements in a Java array. 
 
 
 
@@ -14240,463 +14165,329 @@ How to sort array using bubble sort algorithm? (algorithm)
 
 Read more: https://www.java67.com/2021/12/how-to-get-first-and-last-item-in-array.html#ixzz8hjH2Ai1L
 
-What is try with resource in Java? Example tutorial
+### **What is Try-With-Resources in Java?**
 
-In Java we normally use resources like file, network connection, socket connection, database connection etc ,dealing with resources is not a difficult task but what if after using the resources programmers forget to close the resources. As we know in Java everything is Object so if we forget to close or shut down the resource its responsibility of GC that will recollect it when its no longer used but we can reduce resource exhaustion by explicitly closing the resources as soon we done with our job with the resources. Some resources like database connection are very precious and would surely run out of resources if waited for finalization. Many database servers only accept a certain number of connections so if forget to close properly will create problem.
- 
+In Java, **Try-With-Resources** (introduced in JDK 7) is a feature designed to make resource management easier and more efficient. It simplifies the process of working with resources like files, network connections, sockets, or database connections, which need to be explicitly closed after use. 
 
+The main benefit of using Try-With-Resources is that it automatically handles closing resources, ensuring that they are released even when an exception occurs, thereby preventing resource leaks. This feature is also known as **Automatic Resource Management (ARM)**.
 
-So JDK 7 come with the solution of try with resource also called automatic resource management where when try block ended automatically it will close or release our resource. Let see one example how to use try with resource in JDK 7
+### **Why Try-With-Resources is Important?**
 
-The try-with-resources statement is a feature introduced in Java 7. It simplifies the resource management and improves the code readability by automatically closing the resources that are opened in a try block. In this article, we will learn how to use try-with-resources in Java to handle resources like file streams, database connections, and network sockets. We will also discuss the benefits of using try-with-resources over traditional try-catch-finally blocks.
+In earlier versions of Java (before JDK 7), programmers had to manually close resources using a `finally` block. Forgetting to close resources could lead to resource leaks (e.g., file handles or database connections not being released), which can cause issues like running out of file descriptors or database connection limits.
 
+**Example of a resource leak in traditional try-catch-finally:**
 
-How to Use try with resource in Java - JDK 7
-Here's an example of using try with resources in Java
-public void readFile(String fileName) throws IOException {
-    try (FileReader fileReader = new FileReader(fileName);
-         BufferedReader bufferedReader = new BufferedReader(fileReader)) {
-        String line;
-        while ((line = bufferedReader.readLine()) != null) {
-            System.out.println(line);
+```java
+FileReader fileReader = null;
+BufferedReader bufferedReader = null;
+try {
+    fileReader = new FileReader("example.txt");
+    bufferedReader = new BufferedReader(fileReader);
+    String line;
+    while ((line = bufferedReader.readLine()) != null) {
+        System.out.println(line);
+    }
+} catch (IOException e) {
+    e.printStackTrace();
+} finally {
+    try {
+        if (bufferedReader != null) {
+            bufferedReader.close();
+        }
+        if (fileReader != null) {
+            fileReader.close();
+        }
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+}
+```
+
+This can result in bloated code and potential issues if resources are not closed correctly. Try-With-Resources simplifies this process.
+
+### **Try-With-Resources Syntax**
+
+The syntax for Try-With-Resources is simple: resources that need to be closed are declared in the `try` statement within parentheses. These resources **must** implement the `AutoCloseable` interface, which includes most I/O classes (like `FileReader`, `BufferedReader`, etc.).
+
+#### **Basic Syntax:**
+```java
+try (ResourceType resource = new ResourceType()) {
+    // Code that uses the resource
+} catch (Exception e) {
+    // Handle exception
+}
+```
+
+When the `try` block is completed, Java automatically calls the `close()` method on each resource, even if an exception occurs. This eliminates the need for explicit `finally` blocks.
+
+### **Example of Try-With-Resources:**
+
+Here's a simple example of reading a file using Try-With-Resources:
+
+```java
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+
+public class FileReaderExample {
+    public static void readFile(String fileName) throws IOException {
+        try (FileReader fileReader = new FileReader(fileName);
+             BufferedReader bufferedReader = new BufferedReader(fileReader)) {
+
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                System.out.println(line);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void main(String[] args) {
+        try {
+            readFile("example.txt");
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }
+```
 
+### **Key Points:**
 
+1. **Resource Declaration:** Resources (like `FileReader` and `BufferedReader`) are declared inside the `try` statement and are automatically closed at the end of the block.
+2. **No Need for Finally Block:** Since the resources are closed automatically, there's no need to write a `finally` block for closing them.
+3. **Multiple Resources:** You can manage multiple resources in a single `try` statement by separating them with semicolons.
 
-In this example, we're reading from a file using a FileReader and a BufferedReader. Instead of manually closing these resources, we're using try with resources to automatically close them once the block of code inside the try statement completes. This helps to ensure that the resources are properly released and avoids potential resource leaks.
+### **Writing to a File with Try-With-Resources:**
 
-Here is another example of using try-with-resource statement in Java:
+Here's how you can use Try-With-Resources to write to a file:
 
-
-What is try with resource in Java? Example tutorial
-
-
-
-Difference between try-with-resource and try-catch-finally pattern in Java
-Yes, there are several benefits of using the try-with-resources statement over the traditional try-catch-finally block:
-
-1. Simplified Code
-
-The try-with-resources statement simplifies code by reducing the number of lines required to create, use, and close a resource.
-
-2. Automatic Resource Management
-When a try block is exited, the resources are automatically closed. There is no need to explicitly close the resources, reducing the risk of resource leaks.
-
-3. Exception Handling
-The try-with-resources statement ensures that any exceptions thrown when closing resources are handled correctly. If an exception is thrown when closing a resource, it will be suppressed, and any exceptions thrown in the try block will still be thrown.
-
-4. Support for Multiple Resources
-The try-with-resources statement supports managing multiple resources in a single statement, further simplifying code and reducing the chance of errors.
-
-Overall, the try-with-resources statement is a significant improvement over the traditional try-catch-finally block when dealing with resources in Java. It is more concise, less error-prone, and handles exceptions more efficiently. Though you must note that your resource must implement AutoCloseable interface in order to be used inside try-with-resource statement. This concept is also frequently tested on Java interviews. 
-
-
-
-That's all about what is try with resource in Java and how to use it for automatica resource management in Java. The try-with-resources statement in Java simplifies the process of handling resources by eliminating the need for explicit finally blocks. This reduces the amount of code and makes it easier to read and maintain. 
-
-Additionally, it ensures that resources are always properly closed, even in the presence of exceptions. The try-with-resources statement is a great addition to Java 7 and is highly recommended for use in any code that deals with resources such as files, sockets, and database connections.
-
-
-Read more: https://www.java67.com/2012/12/how-to-use-try-with-resource-in-java.html#ixzz8hjHDs9j1
-
-How to write to a File with try-with-resource in Java? Example Tutorial
-
-Hello Java programmers and all people learning Java, if you are familiar with try-wit-resource statement then you know that its a great language functionality and tool to open files, sockets, streams, and network connections or any resource which are require closing. Before try-with-resource was introduce in Java 7, Java developers have to manually write try catch finally block to close the connections for both success and failure cases to prevent resource leak but it was also tricky and many programmer make mistakes which actually resulted in resource leaks. One common example of that is running out of file descriptors which is used for both opening file and socket in Java.  
-
-If you have worked with web servers like Tomcat and Weblogic then you may have seen the dreaded java.net.SocketException: Too many files open java.io.IOException  which is a popular case of resource leak. 
-
-
-
-I have explained that on my earlier post about right way to close streams in Java, but try-with-resource really makes it easy to use resources like files and sockets in Java as you don't need to manually close them anymore, try-with-resource will take care of it. 
-
-This means you also don't need to write code which can hinder business logic and bloat your codebase.  All in all, this result in better and more cleaner and readable code. 
-
-
-
-How to write file using try-with-resource in Java? Example
-Here is a code example of writing a file using try-with-resource statement in Java. In this program, I have opened file inside try() statement and as long as Resource implement AutoCloseable interface, try-with-resource functionality in Java will take care of closing it.  
-
-This functionality is also known as ARM or Automatic Resource management in Java and you need minimum JDK 7 to us this language feature, its not available in Java 6 and earlier version.
-
-package dto;
-
+```java
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 
-/**
- * How to write to a file using try-with-resource statement
- * in Java. 
- * 
- * @author java67
- */
+public class FileWriterExample {
+    public static void writeFile(String fileName) {
+        try (FileWriter writer = new FileWriter(fileName);
+             BufferedWriter bufferedWriter = new BufferedWriter(writer)) {
 
-public class Helloworld {
-
-    public static void main(String args[]) {
-
-        // Writing to a file using try-with-resource statement in Java
-        // This means any resource opened in try statement will be
-        // automatically closed by Java. 
-        // This is valid for all classes which implements AutoCloseable
-        // interface. JDBC 4.1 classes are also retrofitted to implement
-        // AutoCloseable so that they can be used with try-with-resource
-        // statement in Java. 
-        
-        try (FileWriter writer = new FileWriter("programming.txt");
-             BufferedWriter bwr = new BufferedWriter(writer);) {
-            
-            bwr.write("Java");
-            bwr.write("\n");
-            bwr.write("C++");
-            bwr.write("\n");
-            bwr.write("JavaScript");
-            bwr.close();
-            System.out.println("succesfully written to a file");
-            
-        } catch (IOException ioe) {
-            ioe.printStackTrace();
+            bufferedWriter.write("Hello, Java!");
+            bufferedWriter.newLine();
+            bufferedWriter.write("Try-with-resources makes resource management easy.");
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        
-        
     }
 
+    public static void main(String[] args) {
+        writeFile("output.txt");
+    }
 }
+```
 
+### **Key Benefits of Try-With-Resources:**
 
-You can see that how we have opened resource inside try(), it looks like function arguments 
+1. **Automatic Resource Management:** Resources are closed automatically, reducing the risk of leaks.
+2. **Simplified Code:** No need for explicit `finally` blocks to close resources.
+3. **Better Exception Handling:** Exceptions thrown by resources during closing are suppressed and can be retrieved via `getSuppressed()`.
+4. **Multiple Resources:** You can manage multiple resources in a single `try` block.
 
-   try (FileWriter writer = new FileWriter("programming.txt");
-             BufferedWriter bwr = new BufferedWriter(writer);) {
-You can also see that we can open multiple resources as long as they are separated by semi-colon. If you notice, we only have catch block and there is no finally block in the end because we don't really need any code for closing these resources, they will be automatically be closed when the code inside try block is finished.
+### **Comparison: Traditional try-catch-finally vs Try-With-Resources**
 
-How to write File with try-with-resource in Java? Example Tutorial
+- **Traditional Try-Catch-Finally:** Requires manually closing resources in a `finally` block, which increases code verbosity and the potential for mistakes.
+- **Try-With-Resources:** Automatically handles closing resources and makes code more readable and less error-prone.
 
+### **Important Notes:**
 
+1. **`AutoCloseable` Interface:** For a resource to be used in a try-with-resources statement, it must implement the `AutoCloseable` interface. Most I/O classes in Java, like `InputStream`, `OutputStream`, and database connections, already implement this interface.
+   
+2. **Exception Handling:** If an exception is thrown while closing the resource, it will be suppressed, and the primary exception will still be thrown. You can access the suppressed exceptions using `getSuppressed()`.
 
-Important points about try with resource functionality in Java:
-Here are a couple of worth remembering points about this awesome functionality in Java:
+3. **JDK Version:** Try-with-resources is available from JDK 7 onwards.
 
-1. This functionality is known as try-with-resource or Automatic resource management, ARM in Java which is obvious because it care of closing resources. 
+### **Conclusion:**
 
-2. Only requirement for this functionality is that resource must be opened inside try statement and they must implement AutoCloseable interface, without this it will not work. 
+Try-With-Resources is a significant improvement in Java for handling resources. It simplifies code, reduces the risk of resource leaks, and automatically handles resource cleanup. It should be the preferred way to work with any resource that requires closing, such as file streams, database connections, or network sockets.
 
-3. You can still use finally block with try and catch but its not mandatory.
+### 10 Points on TCP/IP Protocol Java Programmers Should Know
 
+TCP/IP (Transmission Control Protocol/Internet Protocol) is the backbone of networking and communication in modern systems. As a Java developer, understanding TCP/IP is crucial for networking, multi-threaded programming, and for answering questions in technical interviews. Here are the 10 essential points Java developers should know:
 
+---
 
-That's all about how to use try-with-resource statement in Java. This should be now the standard way to open resources in Java which require closing. The basic requirement is that the resource like InputStream, File, or Socket must implement AutoCloseable statement. As long as they do, try-with-resource functionality will close them. 
+1. **Connection-Oriented Protocol**
+   - **TCP** is a connection-oriented protocol, meaning a connection is established before data transfer begins. It uses a 3-way handshake to establish a connection, ensuring reliable data delivery.
 
+2. **Maintains Data Order**
+   - TCP/IP guarantees that data will be received in the same order as it is sent. This is essential for applications that require ordered delivery of packets, such as web browsers, email clients, and file transfers.
 
+3. **Delivery Guarantee**
+   - TCP ensures data delivery through acknowledgments (ACKs). If a packet is lost or corrupted, it is retransmitted. The sender waits for the acknowledgment from the receiver before sending the next packet.
 
-Read more: https://www.java67.com/2023/01/how-to-write-file-in-java-with-try.html#ixzz8hjHK7gS0
+4. **Unique Connection Identification**
+   - A TCP/IP connection is uniquely identified by a combination of the local IP address, local port, remote IP address, and remote port. This helps in distinguishing multiple connections on the same machine.
 
-10 points on TCP/IP Protocol, Java Programmers should Know
+5. **TCP_NODELAY and Nagle’s Algorithm**
+   - TCP uses **Nagle’s Algorithm** to optimize small packet transmissions. It consolidates small packets into larger ones to avoid congestion. Disabling Nagle’s Algorithm (`TCP_NODELAY`) ensures immediate data transmission, which can be critical in low-latency environments like financial systems.
 
-TCP/IP is one of the most important protocol as its backbone of HTTP, internet and most of the communication happens today. It's also important from technical interview perspective, you might have already seen difference between TCP and UDP multiple time during interviews ( I have seen). I believe every programmer, not just Java developer should know what is TCP/IP protocol? How it works and the below points I am going to mention. These are basic points and most of you already know but during Interview I have found many developers who doesn't really know what TCP/IP offers and how it works and what are the pros and cons of TCP/IP protocol. That's where, I think this article will help you. Anyway, let's jump into technical details now. 
+6. **TIME_WAIT State**
+   - The **TIME_WAIT** state occurs after a TCP connection is closed, during which the system ensures that any delayed packets in the network are properly handled. It prevents data from being mistakenly routed to an old connection.
 
+7. **Congestion Control**
+   - TCP implements **congestion control** by gradually increasing the transmission rate based on network conditions. This avoids overloading the network, helping in better traffic management.
 
+8. **TCP States**
+   - A TCP connection goes through several states during its lifecycle:
+     - **ESTABLISHED**: Connection is open and data is being exchanged.
+     - **SYN_SENT**: Request to establish connection is sent.
+     - **SYN_RECV**: Connection request received.
+     - **FIN_WAIT1/2**: Connection is being closed.
+     - **TIME_WAIT**: Waiting for delayed packets.
+     - **CLOSE_WAIT**: Remote end closed connection.
+     - **LAST_ACK**: Waiting for acknowledgment before fully closing.
+     - **LISTEN**: Waiting for incoming connection requests.
+     - **CLOSED**: Connection is closed.
 
+9. **Using `netstat` for Troubleshooting**
+   - The `netstat` command is helpful for monitoring active TCP connections, their states, and identifying issues with the networking stack. Common usages include:
+     - `netstat -na` to list all active connections.
+     - `netstat -na | grep tcp` to list only TCP connections.
 
-10 points on TCP/IP Protocol, Java Programmers Should Know
-Here are the 10 essential point about TCP/IP protocol every programmer should know and remember. 
+10. **Sliding Window Protocol**
+    - The **Sliding Window Protocol** is used to control flow and manage the number of packets in transit. It ensures efficient, in-order delivery by maintaining a window of data to be acknowledged before more data is sent.
 
-1) TCP/IP is a Connection oriented Protocol, which means connection is established before sending data. Here is how TCP/IP works and how connections are established. 
+---
 
+### 8 Examples of Primitive Data Types in Java
 
+Java provides 8 primitive data types, which are the building blocks of the language. These are not objects and are stored directly in memory. Here's a breakdown:
 
+1. **int**
+   - A 32-bit signed integer that can represent values from `-2^31` to `2^31-1`.
+   ```java
+   int x = 42;
+   ```
 
+2. **byte**
+   - An 8-bit signed integer that can store values between `-128` and `127`.
+   ```java
+   byte b = 100;
+   ```
 
-2) TCP/IP maintains order of data, which means receiver will receive data in same order as sender has sent to them. This prevents lots of out-of-order handling in application.
+3. **short**
+   - A 16-bit signed integer with a value range from `-32,768` to `32,767`.
+   ```java
+   short s = 10000;
+   ```
 
-3) TCP/IP provides delivery guarantee, which means no message is lost in transit. TCP/IP achieves this guarantee by acknowledgement. When Sender sends data, a TCP packet, it waits for receiver’s ack. If no ack received than it sends the data again, till then it holds data in its buffer. When receiver responds, it also indicate size of unused buffer and receive window, to say how much more data it can accept.
+4. **long**
+   - A 64-bit signed integer that can represent values from `-2^63` to `2^63-1`.
+   ```java
+   long l = 123456789L;
+   ```
 
+5. **float**
+   - A 32-bit floating-point number, suitable for storing fractional values with up to 6-7 decimal digits of precision.
+   ```java
+   float f = 3.14f;
+   ```
 
+6. **double**
+   - A 64-bit floating-point number that offers double the precision of `float` (up to 15-16 decimal digits).
+   ```java
+   double d = 3.14159265359;
+   ```
 
-4) Each TCP/IP connection is identified by combination of local IP, local port, remote IP address and remote port. You can use netstat command to see all TCP/IP connection for a host. netstat works in both windows and Linux.
+7. **boolean**
+   - A simple type that can only store two values: `true` or `false`.
+   ```java
+   boolean isJavaFun = true;
+   ```
 
-$ netstat -na | grep tcp
-tcp        0      0 0.0.0.0:7500                0.0.0.0:*                   LISTEN    
-tcp        0      0 127.0.0.1:36655             127.0.0.1:1521   
+8. **char**
+   - A 16-bit Unicode character, capable of holding a single character or digit.
+   ```java
+   char letter = 'A';
+   ```
 
-Since TCP connection also has different state, you can use them to find only ESTABLISHED connection or Server connection, which are listening. You can check netstat command to learn more options.
+---
 
+### How to Find the Lowest Common Ancestor of a Binary Tree in Java?
 
-5) TCP No Delay and Naggle's algorithm
-This question was asked to me during an interview with a big investment bank where I was interviewing for a low latency Java developer role, mainly working with FIX protocol or developing similar protocol.  You now might have guessed it that its related to performance. 
+The Lowest Common Ancestor (LCA) of two nodes in a binary tree is defined as the deepest node that is an ancestor to both nodes. This concept is important for problems related to trees and graphs, commonly asked in technical interviews.
 
-Yes, Nagle's algorithm is a way of improving the efficiency of TCP/IP networks by reducing the number of packets that need to be sent over the network and its controlled using an option called TCP_NODELAY. 
+#### Solution in Java:
 
-6) TIME_WAIT state
-This is one of the state of socket which you will see when you query using Linux commands like netstat. You will mostly see the state with TCP connection and not with UDP connections because there are no states used in UDP, this column is usually blank.  TIME_WAIT state means  the socket is waiting after close to handle packets still in the network.
+To find the LCA of a binary tree, we can follow a recursive approach, assuming there is no parent pointer available.
 
-7) Congestion control
-TCP protocol also does congestion control which means it doesn't operate in full speed at the start instead it slowly increased the speed depending upon how receiver is performing to avoid congestion and exhausting bandwidth. 
-
-8) TCP States
-Here are the different states on which a TCP Socket can be. 
-       ESTABLISHED
-              The socket has an established connection.
-       SYN_SENT
-              The socket is actively attempting to establish a connection.
-       SYN_RECV
-              A connection request has been received from the network.
-       FIN_WAIT1
-              The socket is closed, and the connection is shutting down.
-       FIN_WAIT2
-              Connection is closed, and the socket is waiting for a shutdown from the remote end.
-       TIME_WAIT
-              TIME_WAIT state means  the socket is waiting after close to handle packets still in the network.
-       CLOSED The socket is not being used.
-       CLOSE_WAIT
-              The remote end has shut down, waiting for the socket to close.
-       LAST_ACK
-              The remote end has shut down, and the socket is closed. Waiting for acknowledgement.
-       LISTEN The socket is listening for incoming connections.  Such sockets are not included in the output unless you specify the --listening  (-l)  or
-              --all (-a) option.
-       CLOSING
-              Both sockets are shut down but we still don't have all our data sent.
-       UNKNOWN
-              The state of the socket is unknown.
-
-
-9) netstat
-You can see this article about how to use netstat command to find TCP connections as well as process id of the process which opens that connection. 
-
-
-
-10) sliding window protocol
-This is another key concept associated with TCP connection and a useful algorithms to know. As per Wikipedia, A sliding window protocol is a feature of packet-based data transmission protocols. Sliding window protocols are used where reliable in-order delivery of packets is required, such as in the data link layer (OSI layer 2) as well as in the Transmission Control Protocol (TCP).
-
-
-Read more: https://www.java67.com/2015/03/10-points-on-tcpip-protocol-java.html#ixzz8hjHRDugg
-
-
-8 Examples of Primitive Data Types In Java (int, long, boolean, float, double, byte, char, and short)
-
-Hello guys, Data types are first few things you should learn when you start learning a programming language and when it comes to learn Java, there are 8 primitive data types which you should know. These are divided into three categories, numeric, text, and boolean values. Numeric data types can be further divided into two like natural numbers and floating pointing numbers. But, Before we get to a list of the 10 examples of primitive data types in Java, let me tell you a little bit more about what the primitive data types are.  There are essentially 8 primitive data types in Java. They are int, byte, short, long, float, double, boolean, and char. The primitive data types are not considered objects and represent raw values. These primitive data types are also stored directly on the stack.
-
-
-
-
-
-
-8 Examples Of Primitive Data Types In Java
-In Java, int data type is used for a 32-bit integer value, char is used for a 16-bit character, boolean is used for a true or false value, short is used for a 16-bit integer value, and so on and so forth. 
-In this list, we have compiled all of the primitive data types in Java along with some examples. Keep reading to find out more. 
-
-1. int
-int is actually one of the most commonly used primitive data types in Java. It is also known as an integer and can hold a wide range of non-fractional number values. What you need to understand is that Java stores int using 32 bits of memory. 
-
-What this means is that it can represent values from -2,147,483,648 (-2^31) to 2,147,483,647 (2^31-1). Sounds amazing, right?
-
-It is very simple to declare an int in Java. 
-
-int x = 424_242;
-
-int y;
-
-By default, the value of an unassigned int will be 0. It is also possible to define an int in a method. But then, you must assign a value to the variable before you can use it.  You can also easily perform any of the arithmetic operations on int. But you need to keep in mind that decimal values will be removed from the variable value when you perform calculations. 
-
-2. byte
-A byte is very similar to an int. The key difference is that a byte only takes up 8 bits of memory. As you can see, we call it a byte because it is basically made up of 8 bits. Since the memory size of a byte is really small, it can only store values between -128 (-2^7) and 127 (2^7 – 1).
-
-It is very easy to declare a byte in Java:
-
-byte b = 100;
-
-byte empty;
-
-primitive data types in Java with range and size
-
-
-3. short
-You can think of short as basically a compromise between int and byte. A short is made up of 16 bits of memory; so it is larger than a byte but smaller than an int. A short is able to store values from -32,768(-2^15) to 32,767(2^15 – 1). You can declare a short in Java like this:
-
-short s = 20_020;
-
-short s;
-
-The default value of a short is also 0.
-
-4. long
-A long is another primitive data type that is related to int. You can think of long as basically the big brother of int. A long makes use of a massive 64 bits of memory. This makes it possible for long to hold a larger set of possible values.  
-
-A long can store values between -9,223,372,036,854,775,808 (-2^63) and 9,223,372,036,854,775,807 (2^63 – 1).
-
-The default value of a long is also 0. You can declare a long in Java with the following syntax:
-
-long l = 1_234_567_890;
-
-long l;
-8 Examples Of Primitive Data Types In Java
-
-
-
-
-5. float
-The float type is used to represent basic fractional numbers in Java. It is very precise up to 6 decimal points. After that. the number can become less precise and more of an estimate. 
-
-Just like int, a float is also stored in 32 bits of memory. But since it deals with decimal points, the range of a float is different from an int. It can store values between 1.40239846 x 10-45, and 3.40282347 x 1038.
-
-You can see below how to declare a float type in Java:
-
-float f = 3.45f;
-
-float f;
-
-6. double
-A double type in Java can be seen as the big brother of the float type. It is stored in 64 bits of memory and offers double the precision in the case of decimal numbers. It can represent a much larger range of possible numbers. But, the precision of a float is not unlimited. 
-
-The range of a double type in Java is between  4.9406564584124654 x 10-324 and 1.7976931348623157 x 10308. That range can also be positive or negative.
-
-It is very easy to declare a double in Java:
-
-double d = 3.13457599923384753929348D;
-
-double d;
-
-Just like float, the default value of a double type is 0.0. 
-
-how to convert primitive data types in Java
-
-
-7. boolean
-A boolean is actually one of the most simple primitive data types in Java. As you may already know, a boolean can contain only 2 values: true or false. A boolean is stored in just one bit of data. But, for convenience, Java stores a boolean in a single byte instead of just a bit.  It is very easy to declare a boolean in Java:
-
-boolean b = true;
-
-boolean b;
-
-The default value of a boolean is false. The boolean type is actually the cornerstone of controlling the flow of programs. You can also use the boolean type on other operators. 
-
-8. char 
-Now we come to the final entry in the list of primitive data types in Java: char. It is also called a character and is stored in 16 bits of memory that represent a Unicode-encoded character. The range of a char type is from 0 to 65,535. This represents \u0000' to ‘\uffff' in Unicode. You can declare a char in Java with the following syntax:
-
-char c = 'a';
-
-char c = 65;
-
-char c;
-
-When you are defining variables in Java, you can use any literal character and it will automatically get transformed into the respective Unicode encoding. The default value of a character type is /u0000'. 
-
-
-Read more: https://www.java67.com/2022/11/examples-of-primitive-data-types-in-java.html#ixzz8hjHbucq8
-
-How to Find Lowest Common Ancestor of a Binary Tree in Java? Example Tutorial
-
-Hello guys, if you are wondering how to find the lowest common ancestor of a binary tree in Java then you are at the right place. Earlier, I have shared 40+ binary tree questions and today I am going to share solution of one of the popular binary tree question here. To find the lowest common ancestor of a binary tree in java requires that we run through a binary search tree and how it operates.  What then is a binary search tree? A Binary tree is a data structure in which each node can have at most two children. That is, each node in the binary tree will have data, left child and right child. The first node of the tree is called the Root.
-
-Below is the image of the Binary search tree, the first circle with 15 is called the root node and it has two children, left and right nodes with the values,10 and 20 respectively. Node 10 has two children too with 5 and 13 as values. The left child of node 10 does not have any child but, the right node with value 13 has two children nodes 12 and 14 respectively.
-How to Find Lowest Common Ancestor of a Binary Tree in Java? Example Tutorial
-Fig 1.0: Finding the lowest common ancestor.
-
-There are some important things to note when determining is if a tree is a binary tree or not, which are :
-
- All data in the nodes of the left sub-tree are lesser than the right.
-
-
- In the Children nodes, all data on the left are lesser than the right.
-
- All data in the nodes of the left sub-tree is lesser than the root
-
- All data in the nodes of the right sub-tree is greater than the root.
-
- So, with all these bullet points you can determine if a tree is a binary tree or not.
-
-Now, before looking into codes what do we mean by the lowest common ancestor? Let’s see.
-
-The lowest common ancestor is defined between two nodes n1 and n2 as the lowest node in T that has both n1 and n2 as descendants(where we allow a node to be a descendant of itself). 
-
-Or we can say The lowest common Ancestor (LCA) of two nodes and in a rooted tree is the lowest (deepest) node that is an ancestor of both and remember that an ancestor of a node in a rooted tree is any node that lies on the path from the root to (including).
-
-Note the following:
-
-· All of the node’s values will be unique.
-
-· node1 and node2 are different and both values will exist in the binary tree.
-
-· You can use extra memory, helper functions, and can modify the node structure but, you can’t add a parent pointer.
-
-
-
-
-
-
-
-
-Java Program to find the Lowest Common Ancestor of a Binary Tree
-We would be looking at how to find the lowest common ancestor of a binary search tree in java. I'm sure the picture above communicates something about the problem we are about to solve. Let's check some codes!
-
+```java
 public class LowestCommonAncestor {
-static class Node {
-int data;
-Node left, right;
-public Node(int data) {
-this.data = data;
-left = right = null;
+    static class Node {
+        int data;
+        Node left, right;
+        public Node(int data) {
+            this.data = data;
+            left = right = null;
+        }
+    }
+
+    // Function to find LCA
+    public static Node LCA(Node root, int n1, int n2) {
+        // Base case
+        if (root == null) return null;
+
+        // If either n1 or n2 is found, return the current node
+        if (root.data == n1 || root.data == n2) return root;
+
+        // Recursively search for LCA in left and right subtrees
+        Node leftLCA = LCA(root.left, n1, n2);
+        Node rightLCA = LCA(root.right, n1, n2);
+
+        // If both left and right subtrees contain one node each, root is the LCA
+        if (leftLCA != null && rightLCA != null) return root;
+
+        // Otherwise return the non-null child
+        return (leftLCA != null) ? leftLCA : rightLCA;
+    }
+
+    public static void main(String[] args) {
+        Node root = new Node(20);
+        root.left = new Node(11);
+        root.right = new Node(24);
+        root.right.left = new Node(21);
+        root.right.right = new Node(35);
+        root.right.right.left = new Node(32);
+        root.right.right.right = new Node(40);
+
+        // Example LCA queries
+        System.out.println("LCA of 24 and 40: " + LCA(root, 24, 40).data);
+        System.out.println("LCA of 11 and 21: " + LCA(root, 11, 21).data);
+        System.out.println("LCA of 32 and 40: " + LCA(root, 32, 40).data);
+    }
 }
-}
-public static int LCA(Node root, int n1, int n2) {
-if (root == null) {
-return -1;
-}
-Node current= root;
-int lca = -1;
-while (current != null) {
-if (current.data < n1 && current.data < n2) {
-// LCA is present in the right sub tree
-current = current.right;
-} else if (current.data > n1 &¤t.data > n2) {
-// LCA is present in left sub tree
-current = current.left;
-} else {
-lca = current.data;
-break;
-}
-}
-return lca;
-}
-public static void main(String[] args) {
-LowestCommonAncestor.Node root = new LowestCommonAncestor.Node(20);
-root.left = new LowestCommonAncestor.Node(11);
-root.right = new LowestCommonAncestor.Node(24);
-root.right.left = new LowestCommonAncestor.Node(21);
-root.right.right = new LowestCommonAncestor.Node(35);
-root.right.right.left = new LowestCommonAncestor.Node(32);
-root.right.right.right = new LowestCommonAncestor.Node(40);
-System.out.println(LCA(root, 24, 40));
-System.out.println(LCA(root, 11, 21));
-System.out.println(LCA(root, 32, 40));
-}
-}
-OUTPUT:
+```
 
-24
+#### Explanation:
+1. The function `LCA` takes the root node and two values, `n1` and `n2`, as inputs.
+2. It recursively checks the left and right subtrees.
+3. If it finds either `n1` or `n2`, it returns that node.
+4. If it finds one node in the left subtree and another in the right, the current node is the LCA.
+5. If both nodes are found in one subtree, the function returns the non-null child.
 
-20
+#### Example Output:
+```
+LCA of 24 and 40: 24
+LCA of 11 and 21: 20
+LCA of 32 and 40: 35
+```
 
-35
+This solution runs in O(N) time, where N is the number of nodes in the tree.
 
+---
 
-Line 1 was the class declaration with an embedded Node class with instance variables: data of type int, right, and left of type node respectively. Constructor was declared in line 5 that takes in parameter “data” of type int and was assigned to the instance variable in line 6. In line 7, right was assigned to left, and null was assigned to the right. 
-
-In other words, it means left is null. The method LCA was declared in line 10 with three parameters which are the root of type node, int n1, and n2 respectively. If the root is null then it should return -1 in line 12. 
-
-Line 14 stored the root parameter into the variable "current" of the type node. Variable "lca" of type int was set to -1 too. 
-
-So, from line 17, inasmuch as the root is not null it would proceed to check if the data in the current node is less than n1 and n2 and if so current.right is assigned to current(which means  "lca" is present in the right sub-tree) else, if the data in the current node is greater than n1 and n2, current.left is assigned to current(which means  "lca" is present in the left sub-tree). 
-
-
-But if the two conditions are not met. Variable "lca" should still hold current.data. Line 25 breaks the loop and "lca" was returned in line 28
-
-The main method starts from line 30 and line 31 created the instance of the “LowestCommonAncestor” class, with the value of 20 as the root.
-
-Line 32 to line 37 were adding data to the nodes as specified from the root whether left or right. Line 38,39 and 40 called the method “LCA” respectively and was printed out.
-
+Understanding TCP/IP and the basics of Java's primitive data types, along with key algorithms like finding the Lowest Common Ancestor, are essential concepts for any Java programmer. These concepts not only help in coding but also enhance performance optimization and problem-solving skills in interviews.
 
 Read more: https://www.java67.com/2022/01/how-to-find-lowest-common-ancestor-of.html#ixzz8hjHym0AY
 
