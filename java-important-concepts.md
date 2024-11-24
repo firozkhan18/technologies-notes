@@ -9319,159 +9319,7 @@ Here's a detailed guide on when to use **ArrayList** vs **LinkedList**:
 In most cases, `ArrayList` is a better default choice unless your specific use case (e.g., frequent additions/removals from the middle or ends of the list) favors `LinkedList`.
 
 
-When to use ArrayList vs LinkedList in Java? [Answered]
 
-When to use ArrayList or LinkedList in Java is one of the most popular Java interview questions and also asked as a difference between ArrayList and LinkedList. Earlier, I have shared common Java collections interview questions and in this article, I will explain the difference between them. ArrayList and LinkedList are two popular concrete implementations of the List interface from Java's popular Collection framework. Being List implementation both ArrayList and LinkedList are ordered, the index-based and allows duplicate. Despite being from the same type of hierarchy there are a lot of differences between these two classes which makes them popular among Java interviewers.
-
-The main difference between ArrayList vs LinkedList is that the former is backed by an array while the latter is based upon the linked list data structure, which makes the performance of add(), remove(), contains(), and iterator() different for both ArrayList and LinkedList.
-
-The difference between ArrayList and LinkedList is also an important Java collection interview question, as much popular as Vector vs ArrayList or HashMap vs HashSet in Java. Sometimes this is also asked as for when to use LinkedList and when to use ArrayList in Java. 
-
-In this Java collection tutorial, we will compare LinkedList vs ArrayList on various parameters which will help us to decide when to use ArrayList over LinkedList in Java. 
-
-Btw, we will not focus on the array and linked list data structure much, which is subject to data structure and algorithm, we'll only focus on the Java implementations of these data structures which are ArrayList and LinkedList. 
-
-If you want to learn more about the array and linked list data structure itself, I suggest you check Data Structures and Algorithms: Deep Dive Using Java course by Tim Buchalaka on Udemy.
-
-It explains essential data structure in Java programming language and most importantly teaches you when to use which data structure, a good refresher for those who are preparing for coding interviews too. 
-
-When to use ArrayList vs LinkedList in Java
-Before comparing differences between ArrayList and LinkedList, let's see What is common between ArrayList and LinkedList in Java :
-
-1) Both ArrayList and LinkedList are an implementation of the List interface, which means you can pass either ArrayList or LinkedList if a method accepts the java.util.List interface. 
-
-Btw, if you are new to Java's collections framework then I suggest you first go through Java Fundamentals: Collections by Richard Warburton. It's an online Java course on Pluralsight, which you can avail of free by signing their 10-day free trial. IMHO, it's worth going through that course to learn Java collections in the right way. 
-
-When to use ArrayList vs LinkedList in Java
-
-
-2) Both ArrayList and LinkedList are not synchronized, which means you can not share them between multiple threads without external synchronization. See here to know How to make ArrayList synchronized in Java.
-
-3) ArrayList and LinkedList are ordered collection e.g. they maintain insertion order of elements i.e. the first element will be added to the first position.
-
-
-4) ArrayList and LinkedList also allow duplicates and null, unlike any other List implementation e.g. Vector.
-
-5) An iterator of both LinkedList and ArrayList are fail-fast which means they will throw ConcurrentModificationException if a collection is modified structurally once the Iterator is created. They are different than CopyOnWriteArrayList whose Iterator is fail-safe.
-
-Difference between LinkedList and ArrayList in Java
-Now let's see some differences between ArrayList and LinkedList and when to use ArrayList and LinkedList in Java.
-
-1. Underlying Data Structure
-The first difference between ArrayList and LinkedList comes with the fact that ArrayList is backed by Array while LinkedList is backed by LinkedList. This will lead to further differences in performance.
-
-2. LinkedList implements Deque
-Another difference between ArrayList and LinkedList is that apart from the List interface, LinkedList also implements the Deque interface, which provides first in first out operations for add() and poll() and several other Deque functions. 
-
-Also, LinkedList is implemented as a doubly-linked list and for index-based operation, navigation can happen from either end (see Complete Java MasterClass).
-
-3. Adding elements in ArrayList
-Adding an element in ArrayList is O(1) operation if it doesn't trigger re-size of Array, in which case it becomes O(log(n)), On the other hand, appending an element in LinkedList is O(1) operation, as it doesn't require any navigation.
-
-4. Removing an element from a position
-In order to remove an element from a particular index e.g. by calling remove(index), ArrayList performs a copy operation which makes it close to O(n) while LinkedList needs to traverse to that point which also makes it O(n/2), as it can traverse from either direction based upon proximity.
-
-5. Iterating over ArrayList or LinkedList
-Iteration is the O(n) operation for both LinkedList and ArrayList where n is a number of an element.
-
-6. Retrieving element from a position
-The get(index) operation is O(1) in ArrayList while its O(n/2) in LinkedList, as it needs to traverse till that entry. Though, in Big O notation O(n/2) is just O(n) because we ignore constants there. 
-
-If you want to learn more about how to calculate time and space complexity for your algorithms using Big O notation, I recommend reading Grokking Algorithms by Aditya Bhargava, one of the most interesting books on this topic I have read ever. 
-
-Difference between linked list and arraylist in Java
-
-7. Memory
-LinkedList uses a wrapper object, Entry, which is a static nested class for storing data and two nodes next and previous while ArrayList just stores data in Array. 
-
-So memory requirement seems less in the case of ArrayList than LinkedList except for the case where Array performs the re-size operation when it copies content from one Array to another. 
-
-If Array is large enough it may take a lot of memory at that point and trigger Garbage collection, which can slow response time.
-
-From all the above differences between ArrayList vs LinkedList, It looks like ArrayList is the better choice than LinkedList in almost all cases, except when you do a frequent add() operation than remove(), or get(). 
-
-It's easier to modify a linked list than ArrayList, especially if you are adding or removing elements from start or end because the linked list internally keeps references of those positions and they are accessible in O(1) time. 
-
-In other words, you don't need to traverse through the linked list to reach the position where you want to add elements, in that case, addition becomes an O(n) operation. For example, inserting or deleting an element in the middle of a linked list.  
-
-In my opinion, use ArrayList over LinkedList for most of the practical purposes in Java
-
-Read more: https://www.java67.com/2012/12/difference-between-arraylist-vs-LinkedList-java.html#ixzz8hiql6tHi
-
-Difference between HashMap and LinkedHashMap in Java
-
-Difference between LinkedHashMap and HashMap in Java
-HashMap and LinkedHashMap are two of the most commonly used Map implementation in Java. The main difference between HashMap and LinkedHashMap is that LinkedHashMap maintains the insertion order of keys, the order in which keys are inserted into LinkedHashMap. On the other hand, HashMap doesn't maintain any order or keys, or values. In terms of performance, there is not much difference between HashMap and LinkedHashMap but yes LinkedHashMap has more memory footprint than HashMap to maintain doubly LinkedList which it uses to keep track of the insertion order of keys. 
-
-
-
-Sometimes you notice that HashMap also returns elements in order e.g. before Java 8 when you use the Integer key and then iterate over Map, you would see it returning entries in a particular order, but those are not guaranteed. 
-
-
-Any code which is dependent upon ordering provided by HashMap will likely break in a future release when that behavior changes.
-
-LinkedHashMap and HashMap in Java - Similarities
-There are a lot of similarities between LinkedHashMap and HashMap in Java, as they both implement Map interface.  let's have a look :
-
-
-1. Thread safety
- Both LinkedHashMap and HashMap are not synchronized and subject to race conditions if shared between multiple threads without proper synchronization. You can also use Collections.synchronizedMap() for making them synchronized.
-
-
-2. Fail Fast Iterator
-Iterator returned by HashMap and LinkedHashMap is fail-fast in nature.
-
-
-3. Performance
-
-The performance of HashMap and LinkedHashMap are similar also.
-
-
-
-
-Difference between LinkedHashMap and HashMap in Java
-Now let's see some differences between LinkedHashMap and HashMap in Java:
-
-
-1. Order
-The first and foremost difference between LinkedHashMap and HashMap is order, HashMap doesn't maintain any order while LinkedHashMap maintains the insertion order of elements in Java.
-
-
-2. Memory Requirement
-LinkedHashMap also requires more memory than HashMap because of this ordering feature. As I said before LinkedHashMap uses doubly LinkedList to keep the order of elements.
-
-
-3. Class Hierarchy
- LinkedHashMap actually extends HashMap and implements the Map interface.
-
-Here is how LinkedHashMap is implemented in Java, which is also important to understand for Java developers. 
-
-
-Difference between HashMap and LinkedHashMap in Java
-
-
-
-
-Few things to note, while using LinkedHashMap in Java 
-Here are a couple of important things to note while using LinkedHashMap in Java :
-
-
-1. Default ordering provided by LinkedHashMap is the order on which key is inserted, known as insertion order, but LinkedHashMap can be created with another ordering called access order, which is defined by accessing entries.
-
-2. Re-entering a mapping, doesn't alter the insertion order of LinkedHashMap. For example, if you already have mapping for a key, and want to update its value by calling put(key, newValue), the insertion order of LinkedHashMap will remain the same.
-
-3. Access order is affected by calling get(key), put(key, value), or putAll(). When a particular entry is accessed, it moves towards the end of the doubly linked list, maintained by LinkedHashMap.
-
-4. LinkedHashMap can be used to create an LRU cache in Java. Since in LRU or Least Recently Used Cache, the oldest non accessed entry is removed, which is the head of the doubly linked list maintained by LinkedHashMap.
-
-5. Iterator of LinkedHashMap returns elements in the order e.g. either insertion order or access order.
-
-6. LinkedHashMap also provides a method called removeEldestEntry(), which is protected, and default implementation return false. If overridden, an implementation can return true to remove the oldest entry, when a new entry is added.
-
-Given the insertion order guarantee of LinkedHashMap, It's a good compromise between HashMap and TreeMap in Java because with TreeMap you get increased cost of iteration due to sorting and performance drops on to log(n) level from constant time. That's all about the difference between LinkedHashMap and HashMap in Java.
-
-
-Read more: https://www.java67.com/2012/08/difference-between-hashmap-and-LinkedHashMap-Java.html#ixzz8hir8soxi
 
 Difference between ArrayList and HashSet in Java? Answer with Example
 
@@ -9499,208 +9347,72 @@ Now let's see some differences between ArrayList and HashSet in Java
 
 
 
+### When to Use `ArrayList` vs `LinkedList` in Java
+
+`ArrayList` and `LinkedList` are both implementations of the `List` interface in Java, but their underlying data structures differ significantly, which affects their performance and usage scenarios. Understanding these differences is essential for making the right choice depending on the operations you need to perform.
+
+#### **Common Features of `ArrayList` and `LinkedList`**:
+- **Both are ordered collections**: They maintain the order of elements as they were added.
+- **Allow duplicates**: Both collections can contain duplicate elements and `null`.
+- **Index-based access**: Both provide access to elements via their index, although the underlying mechanics differ.
+- **Not synchronized**: Neither `ArrayList` nor `LinkedList` is synchronized, so they are not thread-safe by default.
+
+---
+
+### Key Differences Between `ArrayList` and `LinkedList`
+
+1. **Underlying Data Structure**:
+   - **ArrayList**: Internally backed by an array.
+   - **LinkedList**: Implemented as a doubly-linked list (nodes containing both data and pointers to the next and previous elements).
+
+2. **Performance Characteristics**:
+   - **Adding Elements**:
+     - **ArrayList**: Appending to the end is **O(1)** if no resize is triggered. However, resizing the underlying array is an **O(n)** operation.
+     - **LinkedList**: Appending is always **O(1)**, since it maintains references to the start and end.
+   
+   - **Removing Elements**:
+     - **ArrayList**: Removing an element (e.g., by index) requires shifting all subsequent elements, resulting in **O(n)** time complexity.
+     - **LinkedList**: Removing an element is **O(n)** in the worst case, but it can start from either the head or the tail, making it **O(n/2)** in practice.
+   
+   - **Retrieving Elements (get(index))**:
+     - **ArrayList**: **O(1)**, as it uses direct indexing into the array.
+     - **LinkedList**: **O(n)**, since it must traverse the list from the head or tail to the given index.
+   
+3. **Iteration**:
+   - Both `ArrayList` and `LinkedList` have an iteration time complexity of **O(n)**, as they both require visiting each element at least once.
+
+4. **Memory Consumption**:
+   - **ArrayList**: Stores data in a single contiguous block of memory (array). Typically, it uses less memory per element than `LinkedList`, but resizing operations may cause overhead.
+   - **LinkedList**: Uses more memory per element because each element needs to store two additional pointers (for the previous and next elements).
+
+5. **Use Case**: 
+   - **ArrayList** is generally more efficient when:
+     - You need fast random access (via `get()`).
+     - You add elements mostly to the end of the list and don't often remove or insert in the middle or beginning.
+   - **LinkedList** is more efficient when:
+     - You frequently perform insertions or deletions at the beginning or middle of the list.
+     - Memory overhead is not a primary concern, and you don't need random access to elements.
+
+6. **Thread Safety**:
+   - Neither `ArrayList` nor `LinkedList` is synchronized. If you need thread safety, consider using `Vector` (synchronized version of `ArrayList`), `CopyOnWriteArrayList`, or managing synchronization externally.
+
+---
+
+### When to Use `ArrayList`:
+- **Frequent access by index**: Since `ArrayList` provides constant time `O(1)` access to elements by index, it is ideal for applications that require frequent access to random elements.
+- **Mostly appending or iterating**: `ArrayList` is a better choice when elements are added mainly at the end (with occasional resizing overhead), or when you need to iterate over the list frequently.
+
+### When to Use `LinkedList`:
+- **Frequent insertions and deletions**: If your application involves frequent insertion and removal of elements from the beginning or middle of the list, a `LinkedList` will perform better due to its efficient pointer manipulation.
+- **Deque operations**: If you need to perform operations that involve adding or removing elements at both ends (such as in a queue or stack), `LinkedList` is a natural fit as it implements the `Deque` interface.
+
+### Example Scenario:
+- **ArrayList** is suitable for a program that requires quick access to data, like looking up the elements of a list by index frequently (e.g., when working with static data that doesn’t change often).
+- **LinkedList** is a good choice for a program that needs efficient insertions/removals from the middle or ends of the list, like in a queue where you enqueue and dequeue elements from both ends.
+
+### Conclusion:
+In most cases, **`ArrayList`** will be your default choice because of its fast access times and simplicity. **`LinkedList`** should be used when your use case involves a lot of insertions and deletions at arbitrary positions or requires operations at both ends (head and tail) of the list.
 
-
-Difference between ArrayList vs HashSet in Java
-Here are a couple of differences between ArrayList and HashSet in Java:
-
-1. First and most important difference between ArrayList and HashSet is that ArrayList implements List interface while HashSet implements Set interface in Java.
-
-2. Another difference between ArrayList and HashSet is that ArrayList allows duplicates while HashSet doesn't allow duplicates. This is the side effect of first difference and property of implementing List and Set interface.
-
-3. The differences between ArrayList and HashSet is that ArrayList is an ordered collection and maintains insertion order of elements while HashSet is an unordered collection and doesn't maintain any order.
-
-4. The difference between ArrayList and HashSet is that ArrayList is backed by an Array while HashSet is backed by a HashMap instance. See how HashSet internally works in Java for more details.
-
-5. Fifth difference between HashSet and ArrayList is that it's index-based you can retrieve objects by calling get(index) or remove objects by calling remove(index) while HashSet is completely object-based. HashSet also doesn't provide the get() method.
-
-
-ArrayList and HashSet Example in Java
-Here's an example that demonstrates the difference between ArrayList and HashSet:
-
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Iterator;
-
-public class ArrayListVsHashSetExample {
-    public static void main(String[] args) {
-        // Example using ArrayList
-        ArrayList<String> arrayList = new ArrayList<>();
-
-        // Adding elements to ArrayList
-        arrayList.add("Apple");
-        arrayList.add("Banana");
-        arrayList.add("Orange");
-        arrayList.add("Apple"); // Duplicate element
-
-        // Displaying elements of ArrayList
-        System.out.println("ArrayList Elements:");
-        for (String fruit : arrayList) {
-            System.out.println(fruit);
-        }
-
-        // Example using HashSet
-        HashSet<String> hashSet = new HashSet<>();
-
-        // Adding elements to HashSet
-        hashSet.add("Apple");
-        hashSet.add("Banana");
-        hashSet.add("Orange");
-        hashSet.add("Apple"); // Duplicate element (ignored in a HashSet)
-
-        // Displaying elements of HashSet using Iterator
-        System.out.println("\nHashSet Elements:");
-        Iterator<String> iterator = hashSet.iterator();
-        while (iterator.hasNext()) {
-            System.out.println(iterator.next());
-        }
-    }
-}
-
-In the example, you can observe that the ArrayList allows the addition of duplicate elements, while the HashSet automatically ignores duplicates. The order of elements in the ArrayList is maintained, whereas the HashSet does not guarantee any specific order when iterating over elements.
-
-Here is a nice summary of the differences between ArrayList and HashSet in Java:
-
-Difference between ArrayList and HashSet in Java
-
-
-That's all on the difference between ArrayList and HashSet. these differences help you to decide where to use ArrayList and where to use HashSet in Java. in terms of performance between ArrayList and HashSet, choose what suits best to you. the raw array has fasted among them.
-
-
-Read more: https://www.java67.com/2012/07/difference-between-arraylist-hashset-in-java.html#ixzz8hirQd9En
-
-Difference between TreeMap and TreeSet in Java? Answer
-
-Difference between TreeSet and TreeMap in Java
-The main difference between TreeMap and TreeSet is that TreeMap is an implementation of Map interface while TreeSet is an implementation of the Set interface. There are some similarities between both TreeMap and TreeSet and few differences as well. In this Java tutorial, we will first see similarities between TreeMap and TreeSet, and then you will learn some differences between TreeMap and TreeSet in Java. 
-
-
-
-The key point to remember about TreeMap and TreeSet is that they use compareTo() or compare() method to compare object, So if uses put a String object in TreeSet of Integers, add() method will throw ClassCastException at runtime prior to Java 5.
-
-From Java 5 you can use Generics to avoid this happening by declaring TreeMap and TreeSet with parametrized version. If you want to master the Java Collection framework by heart, you can see the Java Generics and Collection book by Maurice Naftalin, one of the best works on the Java Collections framework.
-
-
-
-Similarities between TreeMap and TreeSet in Java
-Here is a list of similarities between TreeMap and TreeSet in Java:
-
-1. Both TreeMap and TreeSet are sorted data structures, which means they keep their element in predefined Sorted order. Sorting order can be natural sorting order defined by Comparable interface or custom sorting Order defined by Comparator interface. 
-
-Both TreeMap and TreeSet has overloaded constructor which accepts a Comparator, if provided all elements inside TreeSet or TreeMap will be compared and Sorted using this Comparator.
-
-
-2. Both TreeSet and TreeMap implements base interfaces e.g. TreeSet implements Collection and Set interface so that they can be passed to a method where a Collection is expected and TreeMap implements java.util.Map interface, which means you can pass it when a Map is expected.
-
-3. TreeSet is practically implemented using TreeMap instance, similar to HashSet which is internally backed by HashMap instance. See my post Internal Implementation of HashSet to learn more. 
-
-4. Both TreeMap and TreeSet are non-synchronized Collections, hence can not be shared between multiple threads. You can make both TreeSet and TreeMap synchronized by wrapping them into the Synchronized collection by calling Collections.synchroinzedMap() method.
-
-
-5. Iterator returned by TreeMap and TreeSet are fail-fast, which means they will throw ConcurrentModificationException when TreeMap or TreeSet is modified structurally once Iterator is created. this fail-fast behavior is not guaranteed but works in the best effort.
-
-
-6. Both TreeMap and TreeSet are slower than there Hash counterpart like HashSet and HashMap and instead of providing constant-time performance for add, remove, and get operation they provide performance in O(log(n)) order.
-
-Difference between TreeMap and TreeSet in Java
-
-
-
-
-TreeSet vs TreeMap in Java
-Now let's see some differences between TreeSet vs TreeMap in Java:
-
-1. Major difference between TreeSet and TreeMap is that TreeSet implements Set interface while TreeMap implements Map interface in Java.
-
-
-2.Second difference between TreeMap and TreeSet is the way they store objects. TreeSet stores only one object while TreeMap uses two objects called key and Value. Objects in TreeSet are sorted while keys in TreeMap remain in sorted order.
-
-
-3. Third difference between TreeSet and TreeMap is that, former implements NavigableSet while later implements NavigableMap in Java.
-
-
-4. Fourth difference is that duplicate objects are not allowed in TreeSet but duplicates values are allowed in TreeMap.
-
-
-That's all on the difference between TreeSet and TreeMap in Java. Both provide sorting but their usage is different. TreeMap is used to keep mappings between key and values in sorted order while TreeSet is used to keep just one element in sorted order. 
-
-TreeSet also doesn't allow duplicates but TreeMap does allow duplicate values. If you find any other significant difference between TreeMap and TreeSet then please post as a comment.
-
-
-Read more: https://www.java67.com/2012/08/difference-between-treemap-and-treeset-java.html#ixzz8hirYwR7X
-
-Difference between HashSet and TreeSet in Java
-
-Difference between HashSet and TreeSet in Java
-There are several differences between a HashSet and a TreeSet are similar to what we discussed as a difference between TreeMap and HashMap. Anyway, Set and Map are two completely different interfaces so we will revisit those differences here. Probably the most important difference between HashSet and TreeSet is the performance. HashSet is faster than TreeSet which means if you need performance use HashSet but HashSet doesn't provide any kind of ordering so if you need ordering then you need to switch to TreeSet which provides sorting of keys. 
-
-Sorting can be natural order defined by a Comparable interface or any particular order defined by a Comparator interface in Java.
-
-
-
-Apart from the differences between HashSet and TreeSet, there are some common things between them. let's see what is common between HashSet and TreeSet in Java.
-
- By the way, this is one of the popular Java collection interview questions much like ArrayList vs Vector and Hashtable vs HashMap. If you are going for any Java programming interview, it's worth preparing.
-
-
-
-What is Common in HashSet and TreeSet in Java
-As I said there are a lot of things that are common between HashSet and TreeSet in Java, let’s have a look:
-
-1)Both HashSet and TreeSet implements java.util.Set interface which means they follow contract of Set interface and doesn't allow any duplicates.
-
-2)Both HashSet and TreeSet are not thread-safe and not synchronized. Though you can make them synchronized by using the Collections.synchronizedSet() method.
-
-3) The third similarity between TreeSet and HashSet is that Iterator of both classes is fail-fast in nature. They will throw ConcurrentModificationException if Iterator is modified once Iterator is created. this is not guaranteed and application code should not rely on this code but Java makes best effort to fail as soon as it detects a structural change in underlying Set.
-
-
-
-HashSet vs TreeSet in Java
-Now let's see a couple of differences between HashSet vs TreeSet in Java. This is enough to decide whether you should use HashSet or TreeSet in a given scenario.
-
-1) The first major difference between HashSet and TreeSet is performance. HashSet is faster than TreeSet and should be the preferred choice if sorting of elements is not required. TreeSet is internally backed by a Red-Black tree. For a detailed description of the Red-Black Tree, you should read a good book on data structure and algorithms like Introduction to Algorithms by Thomas Corman.
-
-The performance difference comes from the underlying data structure used by TreeSet and HashSet i.e. a tree and a hash table. Adding an element of a tree is slower than adding it to a hash table but it is still much faster than adding it into the right place in the linked list or array. 
-
-If the tree contains n elements, then an average log2N comparisons are required to find the correct position for a new element. For example, if the tree contains 1000 elements then adding a new element requires about 10 comparisons.
-
-
-2) Second difference between HashSet and TreeSet is that HashSet allows null object but TreeSet doesn't allow null Object and throw NullPointerException, Why, because TreeSet uses compareTo() method to compare keys and compareTo() will throw java.lang.NullPointerException as shown in below example :
-
-HashSet<String> hashSet = new HashSet<String>();
-hashSet.add("Java");
-hashSet.add(null);
-       
-TreeSet<String> treeSet = new TreeSet<String>();
-treeSet.add("C++");
-treeSet.add(null); //Java.lang.NullPointerException
-Output:
-Exception in thread "main" java.lang.NullPointerException
-        at java.util.TreeMap.put(TreeMap.java:541)
-        at java.util.TreeSet.add(TreeSet.java:238)
-        at test.CollectionTest.main(CollectionTest.java:27)
-Java Result: 1
-
-
-3) Another significant difference between HashSet and TreeSet is that HashSet is backed by HashMap while TreeSet is backed by TreeMap in Java.
-
-
-4) One more difference between HashSet and TreeSet which is worth remembering is that HashSet uses equals() method to compare two objects in Set and for detecting duplicates while TreeSet uses the compareTo() method for the same purpose. 
-
-If equals() and compareTo() are not consistent, i.e. for two equal object equals should return true while compareTo() should return zero then it will break the contract of Set interface and will allow duplicates in Set implementations like TreeSet
-
-
-5) Now the most important difference between HashSet and TreeSet is ordering. HashSet doesn't guarantee any order while TreeSet maintains objects in the Sorted order defined by either Comparable or Comparator method in Java.
-
-Here is a nice summary slide of key differences between TreeSet and HashSet in Java, which compares both of these collections on ordering, sorting, performance, underlying data structure, the method used for duplicate detection, and how they are implemented in JDK.
-
-
-
-
-That's all on the difference between HashSet and TreeSet in Java. Use HashSet if you don't need sorting and looking for better performance while TreeSet is the first choice if you need to maintain objects in sorted order in Java. Both of them will not allow duplicates and maintain a unique set of elements. 
-
-
-Read more: https://www.java67.com/2012/08/difference-between-hashset-and-treeset-java.html#ixzz8hirhXG00
 
 
 5 Difference between Hashtable vs HashMap in Java? Answer
@@ -9728,389 +9440,261 @@ Hashtable and HashMap both are hash-based collections and works on the principle
 4. Common Framework
 From JDK 4 both Hashtable and HashMap are part of the Java collection framework.
 
+Here’s a concise breakdown of the differences between `ArrayList` and `HashSet` in Java, and their specific use cases:
 
+### **Key Differences Between `ArrayList` and `HashSet`:**
 
+1. **Interface Implementation:**
+   - `ArrayList`: Implements the `List` interface.
+   - `HashSet`: Implements the `Set` interface.
 
+2. **Duplicate Elements:**
+   - `ArrayList`: Allows duplicate elements.
+   - `HashSet`: Does **not** allow duplicate elements (only unique elements are stored).
 
-Difference between Hashtable and HashMap in Java
-Despite being so similar there are some differences between Hashtable and HashMap in Java which separates them completely, let's have a look :
+3. **Ordering of Elements:**
+   - `ArrayList`: Maintains **insertion order** (elements are stored in the order they were added).
+   - `HashSet`: Does **not guarantee any order** for the elements. The elements can appear in any order when iterated.
 
-1. Thread safety
-The first and most significant difference between Hashtable and HashMap is that HashMap is not thread-safe while Hashtable is a thread-safe collection.
+4. **Indexing:**
+   - `ArrayList`: Allows index-based access to elements (you can retrieve elements using `get(index)`).
+   - `HashSet`: Does not support indexing. It only allows object-based access and iteration.
 
-2. Performance
-The second important difference between Hashtable and HashMap is performance since HashMap is not synchronized it perform better than Hashtable.
+5. **Underlying Data Structure:**
+   - `ArrayList`: Backed by an array.
+   - `HashSet`: Internally backed by a `HashMap`.
 
-3. Old vs New
+6. **Performance:**
+   - **Insertion**: Both `ArrayList` and `HashSet` provide O(1) performance for adding elements (except in cases where resizing is required for `ArrayList`).
+   - **Search/Remove**:
+     - `ArrayList`: Searching and removing elements (by index) is O(n) since elements need to be shifted.
+     - `HashSet`: Provides O(1) average-time complexity for `contains()` and `remove()` due to its hash-based structure.
+   - **Iteration**: Iteration over both collections is O(n), but in `HashSet`, this is unordered.
 
-The third difference on Hashtable vs HashMap is that Hashtable is an obsolete class and you should be using ConcurrentHashMap in place of Hashtable in Java.
+### **Example Code:**
 
-4. Synchronized
-Hashtable is a synchronized collection but HashMap is not. All methods of Hashtable are synchronized to prevent multithreading issues. 
-
-5. Null Key
-Since Hashtable is a synchronized collection it doesn't allow Null keys but HashMap does allow null keys and values. 
-
-6. Fail fast (Iteraotr vs Enumeration)
-Enumeration is used to iterate over keys and values in Hashtable which is not fail-fast, while Iterator is used to go over keys and values in HashMap and its fail-fast. 
-
-Here is all the difference between HashMap and Hashtable in the nice tabular format: 
-
-
-
-That's all about HashMap vs Hashtable in Java. These were some important differences between Hashtable and HashMap in Java. If you know any other difference which is not included here then feels free to add them in the comment section. Remember this is an important question on Java interview and good to prepare it well.
-
-
-Read more: https://www.java67.com/2012/08/5-difference-between-hashtable-hashmap-Java-collection.html#ixzz8his4W25Y
-
-How to Sort HashMap in Java based on Keys and Values
-
-HashMap is not meant to keep entries in sorted order, but if you have to sort HashMap based upon keys or values, you can do that in Java. Sorting HashMap on keys is quite easy, all you need to do is to create a TreeMap by copying entries from HashMap. TreeMap is an implementation of SortedMap and keeps keys in their natural order or a custom order specified by Comparator provided while creating TreeMap. This means you can process entries of HashMap in sorted order but you cannot pass a HashMap containing mappings in a specific order, this is just not possible because HashMap doesn't guarantee any order.
-
-
-
-On other hand, sorting HashMap by values is rather complex because there is no direct method to support that operation. You need to write code for that. In order to sort HashMap by values you can first create a Comparator, which can compare two entries based on values. 
-
-Then get the Set of entries from Map, convert Set to List, and use Collections.sort(List) method to sort your list of entries by values by passing your customized value comparator. This is similar to how you sort an ArrayList in Java. 
-
-
-Half of the job is done by now. Now create a new LinkedHashMap and add sorted entries into that. Since LinkedHashMap guarantees insertion order of mappings, you will finally have a Map where contents are sorted by values.
-
-
-5 Steps to sort HashMap by values
-One difference between sorting HashMap by keys and values is that it can contain duplicate values by not duplicate keys. You cannot use TreeMap here because it only sorts entries by keys. In this case, you need to :
-Get all entries by calling entrySet() method of Map
-Create a custom Comparator to sort entries based upon values
-Convert entry set to list
-Sort entry list by using Collections.sort() method by passing your value comparator
-Create a LinkedHashMap by adding entries in sorted order.
-
-
-
-
-
-Steps to sort HashMap by keys
-There are two ways to sort HashMap by keys, first by using TreeMap and second by using LinkedHashMap. If you want to sort using TreeMap then it's simple, just create a TreeMap by copying the content of HashMap. 
-
-
-On the other hand, if you want to create a LinkedHashMap then you first need to get a key set, convert that Set to a List, sort that List, and then add them into LHM in the same order. Remember HashMap can contain one null key but duplicate keys are not allowed.
-
-
-
-
-
-
-HashMap Sorting by Keys and Values in Java Example
-Here is our sample Java program to sort a HashMap first by keys and then by values. This program is divided into two part, the first part sorts HashMap by keys, and the second part sorts it by values. The second part is more tricky the first part as there is no native Map implementation that supports any order for values. 
-
-In order to sort a HashMap by values, we had to create our own Comparator implementation which compares each entry by values to arrange them in a particular order. You can see that our valueComparator overrides compare() method and accepts two entries. Later it retrieves values from those entries and compare them and return result. 
-
-
-Since there is no method in Java Collection API to sort Map, we need to use Collections.sort() method which accepts a List. This involves creating a temporary ArrayList with entries for sorting purpose and then again copying entries from sorted ArrayList to a new LinkedHashMap to keep them in sorted order. 
-
-Finally, we create a HashMap from that LinkedHashMap, which is what we needed.
-
-import java.text.ParseException;
+```java
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map.Entry;
-import java.util.Set;
-import java.util.TreeMap;
+import java.util.HashSet;
+import java.util.Iterator;
 
-/**
- * How to sort HashMap in Java by keys and values. 
- * HashMap doesn't guarantee any order, so you cannot rely on it, even if
- * it appear that it storing entries in a particular order, because
- * it may not be available in future version e.g. earlier HashMap stores
- * integer keys on the order they are inserted but from Java 8 it has changed.
- * 
- * @author WINDOWS 8
- */
+public class ArrayListVsHashSetExample {
+    public static void main(String[] args) {
+        // Example using ArrayList
+        ArrayList<String> arrayList = new ArrayList<>();
+        arrayList.add("Apple");
+        arrayList.add("Banana");
+        arrayList.add("Orange");
+        arrayList.add("Apple"); // Duplicate allowed
 
-public class HashMapSorting{
+        System.out.println("ArrayList Elements:");
+        for (String fruit : arrayList) {
+            System.out.println(fruit);
+        }
 
-    public static void main(String args[]) throws ParseException {
-        
-        // let's create a map with Java releases and their code names
-        HashMap<String, String> codenames = new HashMap<String, String>();
-        
-        codenames.put("JDK 1.1.4", "Sparkler");
-        codenames.put("J2SE 1.2", "Playground");
-        codenames.put("J2SE 1.3", "Kestrel");
-        codenames.put("J2SE 1.4", "Merlin");
-        codenames.put("J2SE 5.0", "Tiger");
-        codenames.put("Java SE 6", "Mustang");
-        codenames.put("Java SE 7", "Dolphin");
-        
-        System.out.println("HashMap before sorting, random order ");
-        Set<Entry<String, String>> entries = codenames.entrySet();
-       
-        for(Entry<String, String> entry : entries){
-            System.out.println(entry.getKey() + " ==> " + entry.getValue());
-        }
-        
-        // Now let's sort HashMap by keys first 
-        // all you need to do is create a TreeMap with mappings of HashMap
-        // TreeMap keeps all entries in sorted order
-        TreeMap<String, String> sorted = new TreeMap<>(codenames);
-        Set<Entry<String, String>> mappings = sorted.entrySet();
-        
-        System.out.println("HashMap after sorting by keys in ascending order ");
-        for(Entry<String, String> mapping : mappings){
-            System.out.println(mapping.getKey() + " ==> " + mapping.getValue());
-        }
-        
-        
-        // Now let's sort the HashMap by values
-        // there is no direct way to sort HashMap by values but you
-        // can do this by writing your own comparator, which takes
-        // Map.Entry object and arrange them in order increasing 
-        // or decreasing by values.
-        
-        Comparator<Entry<String, String>> valueComparator 
-               = new Comparator<Entry<String,String>>() {
-            
-            @Override
-            public int compare(Entry<String, String> e1, Entry<String, String> e2) {
-                String v1 = e1.getValue();
-                String v2 = e2.getValue();
-                return v1.compareTo(v2);
-            }
-        };
-        
-        // Sort method needs a List, so let's first convert Set to List in Java
-        List<Entry<String, String>> listOfEntries 
-                  = new ArrayList<Entry<String, String>>(entries);
-        
-        // sorting HashMap by values using comparator
-        Collections.sort(listOfEntries, valueComparator);
-        
-        LinkedHashMap<String, String> sortedByValue 
-                    = new LinkedHashMap<String, String>(listOfEntries.size());
-        
-        // copying entries from List to Map
-        for(Entry<String, String> entry : listOfEntries){
-            sortedByValue.put(entry.getKey(), entry.getValue());
-        }
-        
-        System.out.println("HashMap after sorting entries by values ");
-        Set<Entry<String, String>> entrySetSortedByValue = sortedByValue.entrySet();
-        
-        for(Entry<String, String> mapping : entrySetSortedByValue){
-            System.out.println(mapping.getKey() + " ==> " + mapping.getValue());
+        // Example using HashSet
+        HashSet<String> hashSet = new HashSet<>();
+        hashSet.add("Apple");
+        hashSet.add("Banana");
+        hashSet.add("Orange");
+        hashSet.add("Apple"); // Duplicate ignored
+
+        System.out.println("\nHashSet Elements:");
+        Iterator<String> iterator = hashSet.iterator();
+        while (iterator.hasNext()) {
+            System.out.println(iterator.next());
         }
     }
+}
+```
 
-    
+### **Explanation of the Code:**
+
+- **`ArrayList`:**
+  - Allows duplicate values. In this example, "Apple" is added twice and will be present twice in the list.
+  - Maintains insertion order, so the elements will be printed in the order they were added.
+
+- **`HashSet`:**
+  - Does not allow duplicates. The second "Apple" will be ignored when added.
+  - The iteration order is not guaranteed and may differ on each run, reflecting the unordered nature of `HashSet`.
+
+### **When to Use `ArrayList` vs `HashSet`:**
+
+- **Use `ArrayList`** when:
+  - You need to maintain the **order of insertion**.
+  - You need to access elements via indices (random access).
+  - You need to allow **duplicates**.
+
+- **Use `HashSet`** when:
+  - You need to store **unique elements** (no duplicates).
+  - You don’t need to preserve any order of elements.
+  - You require **faster searching** (constant-time performance for `contains()` and `remove()`).
+
+### **Summary Table:**
+
+| Feature            | **`ArrayList`**                     | **`HashSet`**                          |
+|--------------------|-------------------------------------|----------------------------------------|
+| **Interface**       | Implements `List`                  | Implements `Set`                       |
+| **Duplicates**      | Allows duplicates                  | Does not allow duplicates              |
+| **Ordering**        | Maintains insertion order          | No specific order (unordered)          |
+| **Access Type**     | Index-based access (`get(index)`)  | Object-based access (no indexing)      |
+| **Underlying Data Structure** | Backed by an Array          | Backed by a `HashMap`                  |
+| **Performance**     | O(1) for adding, O(n) for search/removal by index | O(1) for adding/searching/removal      |
+
+**Conclusion:**
+- `ArrayList` is ideal when you need an ordered collection that can have duplicates and requires random access.
+- `HashSet` is preferable when you need a collection with unique elements and don't care about the order of elements.
+
+### Key Differences Between `Hashtable` and `HashMap` in Java
+
+1. **Thread Safety**:
+   - **Hashtable**: Thread-safe, meaning multiple threads can access a `Hashtable` simultaneously without causing data corruption. Methods are synchronized to ensure thread safety.
+   - **HashMap**: Not thread-safe, meaning it is not synchronized. If multiple threads access a `HashMap` concurrently and at least one of them modifies the map structurally, it can lead to inconsistent data.
+
+2. **Performance**:
+   - **Hashtable**: Due to synchronization, its performance is slower than `HashMap` in multi-threaded environments.
+   - **HashMap**: Since it does not synchronize, it is faster compared to `Hashtable` when thread safety is not a concern.
+
+3. **Obsolescence**:
+   - **Hashtable**: It's considered legacy and is obsolete in newer Java versions. It has been replaced by more efficient alternatives such as `ConcurrentHashMap`.
+   - **HashMap**: A more modern and widely used implementation of the `Map` interface. Preferred for most non-thread-safe use cases.
+
+4. **Null Keys/Values**:
+   - **Hashtable**: Does not allow `null` keys or `null` values. Any attempt to insert `null` into a `Hashtable` will result in a `NullPointerException`.
+   - **HashMap**: Allows one `null` key and multiple `null` values. This is a notable feature that differentiates it from `Hashtable`.
+
+5. **Iteration**:
+   - **Hashtable**: Uses `Enumeration` to iterate through its keys and values. `Enumeration` is considered obsolete and is not fail-fast, meaning it doesn't throw `ConcurrentModificationException` if the map is modified during iteration.
+   - **HashMap**: Uses `Iterator` for iteration, which is fail-fast. If the map is modified while iterating, a `ConcurrentModificationException` is thrown.
+
+6. **Synchronized Nature**:
+   - **Hashtable**: All of its methods are synchronized, ensuring thread-safety but also leading to slower performance.
+   - **HashMap**: Not synchronized, meaning it’s faster but not safe for concurrent access.
+
+### Sorting a `HashMap` in Java
+
+While a `HashMap` does not maintain any specific order of its elements, you can sort it either by **keys** or **values**.
+
+#### Sorting by Keys:
+You can use a `TreeMap` to automatically sort the `HashMap` by keys because `TreeMap` implements `SortedMap` and arranges keys in their natural order (or according to a provided `Comparator`).
+
+```java
+HashMap<String, String> map = new HashMap<>();
+map.put("JDK 1.1.4", "Sparkler");
+map.put("J2SE 1.2", "Playground");
+map.put("Java SE 6", "Mustang");
+
+TreeMap<String, String> sortedMap = new TreeMap<>(map);
+System.out.println(sortedMap);
+```
+
+#### Sorting by Values:
+To sort a `HashMap` by values, you need to manually implement sorting. This involves:
+1. Creating a custom `Comparator` that compares entries based on their values.
+2. Converting the `HashMap` entries into a `List`.
+3. Using `Collections.sort()` to sort the list of entries.
+4. Putting the sorted entries into a `LinkedHashMap` (which preserves insertion order).
+
+```java
+// Sorting HashMap by values
+HashMap<String, String> map = new HashMap<>();
+map.put("JDK 1.1.4", "Sparkler");
+map.put("J2SE 1.2", "Playground");
+map.put("Java SE 6", "Mustang");
+
+// Convert HashMap to List
+List<Map.Entry<String, String>> list = new ArrayList<>(map.entrySet());
+
+// Comparator to sort by values
+list.sort(Map.Entry.comparingByValue());
+
+// Convert the sorted List back to LinkedHashMap
+LinkedHashMap<String, String> sortedByValues = new LinkedHashMap<>();
+for (Map.Entry<String, String> entry : list) {
+    sortedByValues.put(entry.getKey(), entry.getValue());
 }
 
-Output:
-HashMap before sorting, random order 
-Java SE 7 ==> Dolphin
-J2SE 1.2 ==> Playground
-Java SE 6 ==> Mustang
-J2SE 5.0 ==> Tiger
-J2SE 1.3 ==> Kestrel
-J2SE 1.4 ==> Merlin
-JDK 1.1.4 ==> Sparkler
-HashMap after sorting by keys in ascending order 
-J2SE 1.2 ==> Playground
-J2SE 1.3 ==> Kestrel
-J2SE 1.4 ==> Merlin
-J2SE 5.0 ==> Tiger
-JDK 1.1.4 ==> Sparkler
-Java SE 6 ==> Mustang
-Java SE 7 ==> Dolphin
-HashMap after sorting entries by values 
-Java SE 7 ==> Dolphin
-J2SE 1.3 ==> Kestrel
-J2SE 1.4 ==> Merlin
-Java SE 6 ==> Mustang
-J2SE 1.2 ==> Playground
-JDK 1.1.4 ==> Sparkler
-J2SE 5.0 ==> Tiger
+System.out.println(sortedByValues);
+```
 
-That's all about how to sort HashMap by keys and values in Java. Remember, HashMap is not intended to keep entries in sorted order, so if you have a requirement to always keep entries in a particular order, don't use HashMap instead use TreeMap or LinkedHashMap. 
+### Converting a `LinkedList` to an Array
 
-This method should only be used to cater to Adhoc needs where you receive a HashMap from some part of legacy code and you have to sort it first to process entries. If you have control of creating the Map initially prefer the right implementation of Map than just HashMap.
+You can convert a `LinkedList` to an array in Java using the `toArray()` method.
 
-And, now is the quiz time? Does sorting a HashMap really make sense? Shouldn't you be using TreeMap or LinkedHashMap if you need to keep your data in sorted order of keys? 
+#### Example for String LinkedList:
 
+```java
+LinkedList<String> list = new LinkedList<>();
+list.add("Effective Java");
+list.add("Clean Code");
+list.add("The Pragmatic Programmer");
 
-Read more: https://www.java67.com/2015/01/how-to-sort-hashmap-in-java-based-on.html#ixzz8hj3fd3ge
+String[] array = list.toArray(new String[list.size()]);
+System.out.println(Arrays.toString(array));
+```
 
-How to Convert a LinkedList to an Array in Java? Example
+#### Example for Integer LinkedList:
+Note that you cannot directly convert a `LinkedList<Integer>` to a primitive `int[]`, but you can convert it to an array of `Integer` objects.
 
-You can convert a LinkedList to an array in Java by using the toArray() method of the java.util.LinkedList class. The toArray() method accepts an array of relevant type to store contents of LinkedList. It stores the elements in the array in the same order they are currently inside the LinkedList. By using the toArray() method you can convert any type of LinkedList e.g. Integer, String or Float to any type of Array, only catch is this you cannot convert a LinkedList to an array of primitives i.e. a LinkedList of Integer cannot be converted into an array of ints by using toArray() method, but you can convert it to an array of Integer objects, that's perfectly Ok.
+```java
+LinkedList<Integer> list = new LinkedList<>();
+list.add(100);
+list.add(200);
+list.add(300);
 
+Integer[] array = list.toArray(new Integer[list.size()]);
+System.out.println(Arrays.toString(array));
+```
 
+#### Important Notes:
+- The `toArray()` method maintains the order of the elements.
+- The provided array must be of the correct type. If the provided array is not large enough, a new array of the same runtime type will be created.
 
-Similarly, you can convert a LinkedList of Double to an array of Double and LinkedList of Float objects to an array of Float objects in Java.
+### Conclusion
+- **Hashtable** and **HashMap** serve similar purposes but have key differences in terms of thread safety, performance, and handling of null values.
+- Sorting a `HashMap` either by keys or by values requires specific steps, as `HashMap` itself does not maintain any order.
+- Converting a `LinkedList` to an array is simple using the `toArray()` method, but you need to ensure the correct type of array (e.g., you cannot convert a `LinkedList<Integer>` directly to a primitive `int[]`).
 
-Btw, the Java Collection framework is vast as it contains so many classes for different purposes. The best way to master the Collection framework is to pick up a good book and follow it from start to end like Java Generics and Collection, which provides comprehensive coverage of all important classes of Java Collection framework like ArrayList, Vector, HashMap, HashSet, etc.
+These concepts are fundamental in Java, especially when working with collections and handling data in a structured way.
 
-Alternatively, you can also follow a good core Java course like The Complete Java MasterClass, which also coverers changes made in Java 8  like lambda expression and streams, which has completely changed how you use Collection classes in Java.
 
-The bottom line is that a good knowledge of the Java Collection framework is essential for any Java programmer. In fact, these classes are the bread and butter of Java programming and you will often find them using in your day-to-day programming tasks.
 
 
 
+The article provides a detailed explanation on how to work with **LinkedList** in Java, specifically focusing on how to find the **first**, **last**, and **middle** elements of a **Doubly LinkedList**. Below, I’ll summarize the key points and provide additional explanations where needed.
 
-Important points about toArray() methods
-Since the toArray() method is used to convert LinkedList to an array in Java, it's important to learn more about it. In fact, you can use this method to convert any type of list to an array in Java as I have previously discussed while we are converting ArrayList to an array in Java.
+### Key Concepts and Explanations
 
-Let's revise some of the important points about this useful method:
+#### **Doubly LinkedList in Java**
+In Java, the `LinkedList` class is implemented as a **doubly linked list**, which means each node has references to both the previous and next node. This enables traversal in both directions (forward and backward).
 
-1) This method returns an array containing all of the elements in the given linked list in the same sequence i.e. it keeps the order intact. This is possible because LinkedList implements java.util.List interface which is an ordered collection and guarantees insertion order of elements.
+Here is the structure of the node in a `LinkedList`:
 
-2) The toArray() method expects the caller to provide an array of a specified type, but it's also smart enough to make some adjustments into length.
-
-
-
-3) If the given array is not big enough to store all elements of the LinkedList a new array is created of the same runtime type and size of the LinkedList.
-
-4) If the given array is bigger than the linked list then spare buckets are set to null. You can use them to determine the true length of the array if you know that list cannot contain null elements.
-
-If you are interested in learning more about this method or in general, the Java Collection framework, I strongly suggest you join the Java Fundamentals: Collections course on Pluralsight. One of the most comprehensive courses on this topic.
-
-How to Convert LinkedList to Array in Java? Example
-
-
-
-
-
-Java Program to convert LinkedList to an array
-Here is a sample Java program that shows you can convert a LinkedList to an array in Java. This program contains two examples, the first one converts a LinkedList of String to an array and the second one converts the LinkedList of Integer to an array of Integer.
-
-As I have said, you cannot convert LinkedList of wrapper objects to an array of primitive objects e.g. LinkedList of Double cannot be converted to an array of double primitives, for that you need to loop through the list and manually insert each element into an array to take advantage of autoboxing.
-
-
-
-Btw, after Java 8, you can also use the map() method to convert a list of Integer objects into an array of Integer objects.
-
-Btw, If you are yet to start Java 8 then I suggest you take a look a these free Java 8 courses to start with. It's very important for a Java developer to get familiar with Java 8 changes.
-
-Anyway, here is our sample program to convert a LinkedList to an array of the same type in Java:
-
-import java.util.Arrays;
-import java.util.LinkedList;
-
-
-public class LinkedListToArray {
-
-public static void main(String args[]){
-
-// creating and initializing a LinkedList of String
-LinkedList<String> listOfBooks = new LinkedList<>();
-listOfBooks.add("Effective Java");
-listOfBooks.add("Clean Code");
-listOfBooks.add("Clean Coder");
-
-// printing the contents of LinkedList before conversion
-System.out.println("LinkedList: " + listOfBooks);
-
-// Converting the LinkedList to array
-String[] arrayOfBooks = listOfBooks.toArray(new String[listOfBooks.size()]);
-
-
-// printing contents of array after conversion
-System.out.println("String array: " + Arrays.toString(arrayOfBooks));
-
-
-// Second example - Creating LinkedList of Integers
-LinkedList<Integer> listOfScores = new LinkedList<>();
-listOfScores.add(100);
-listOfScores.add(171);
-listOfScores.add(264);
-
-// printiing LinkedList
-System.out.println("LinkedList: " + listOfScores);
-
-// converting LinkedList of Integer to array of integers
-// int[] score = listOfScores.toArray(new int[listOfScores.size()]);
-// compile time error
-Integer[] scores = listOfScores.toArray(new Integer[listOfScores.size()]); 
-// this is ok
-
-// printing array
-System.out.println("Integer array: " + Arrays.toString(scores));
-}
-}
-
-Output:
-LinkedList: [Effective Java, Clean Code, Clean Coder]
-String array: [Effective Java, Clean Code, Clean Coder]
-LinkedList: [100, 171, 264]
-Integer array: [100, 171, 264]
-
-
-That's all about how to convert a LinkedList to the array in Java. Just remember that you can use the toArray() method for this conversion. It also maintains the order of elements and can create a new array if a given array is not big enough to store all elements.
-
-
-Read more: https://www.java67.com/2016/02/how-to-convert-linkedlist-to-array-in-java.html#ixzz8hj3s0hyr
-
-How to find First and Last element in LinkedList Java? Doubly linked list Example
-
-In this article, you will learn how to get the first and last element of a linked list with the help of getFirst() and getLast() of the LinkedList class. If you have programming or even gone to a computer science course you probably know what is a linked list? It's a data structure that allows you to store objects in such a way that you can don't need a big chunk of contiguous memory like another popular data structure array. It works perfectly even if you have a fragmented heap. LinkedList is Java's implementation of this fundamental data structure. 
-
-
-
-There are two types of linked list, singly and doubly linked list, and Java's LinkedList is a doubly linked list. If you are wondering what is difference between a singly and doubly linked list, well in singly linked list you can traverse only in one direction from head to tail, or from first to last element because every node has address of only next node. 
-
-While in a doubly linked list, every node has reference to both previous and next node, thus allows you to traverse in both directions, from head to tail and backward. You can verify this by yourself by looking at the code of java.util.LinkedList in Eclipse, just use shortcut Ctrl + T and type the name, if you have added Java source code in Eclipse, it will open the class. 
-
-You will find that LinkedList class in Java has a private static class called Node, which has reference to both the previous and next node.
-
-For those, who can't see the code of LinkedList, here is the snippet of the Node class.
-
-
+```java
 private static class Node {
-        E item;
-        Node next;
-        Node prev;
+    E item;    // Data in the node
+    Node next; // Reference to the next node
+    Node prev; // Reference to the previous node
 
-        Node(Node prev, E element, Node next) {
-            this.item = element;
-            this.next = next;
-            this.prev = prev;
-        }
+    Node(Node prev, E element, Node next) {
+        this.item = element;
+        this.next = next;
+        this.prev = prev;
     }
+}
+```
 
-You can clearly see that Node has reference to two other nodes, which makes LinkedList a doubly linked list and allows you to traverse in both direction, from first to last and vice-versa.
+#### **Finding the First and Last Element**
+You can use `getFirst()` and `getLast()` methods to retrieve the first and last elements in a `LinkedList`.
 
+**Example:**
 
-Getting First and the Last Element of LinkedList in Java - Example
-Here is our sample Java program to find the first and last object from LinkedList in Java. We will be using Java's Collection framework API to get our done. In this example, I have created a  linked list of String to store different programming languages.  You can store objects into LinkedList by calling add() method. 
-
-This method encapsulates data into a private static nested class Node, which represent a node in a doubly linked list and keep reference of both previous and next node in linked list. Also this method adds the new element at the end of linked list i.e. on the tail, which means last method you add into linked list will be the last element in the LinkedList itself. 
-
-The angle bracket you see while creating instance of LinkedList is known as diamond operator, added backed in Java 7 and help you to avoid declaring types on right hand side of assignment operator as well. The compiler can now infer it by looking at left-hand side. You should use it every time you are using JDK 1.7 to reduce at least a little bit of boiler plate coding.
-
-
-Doubly linked list in Java
-
-
-
-Now coming back to our task, how do we retrieve the first and last element from linked list? Of course we don't know which elements are added, unlike this example, where we know. 
-
-Since a linked list is a sequential data structure, by looking at how you add elements you can guess which one is first and which one is last, but this example is more for situation, where you receive a linked list from other part of your application and need to find first and last element.
-
-LinkedList has getFirst() and getLast() method to retrieve first and last element from LinkedList in Java. I would have liked just first() and last() method but anyway.
-
+```java
 import java.util.LinkedList;
 
-/**
- * Java program to find first and last element of linked list in Java.
- */
-public class LinkedListDemo{
-
+public class LinkedListDemo {
     public static void main(String args[]) {
-
-        LinkedList programmingLanguages = new LinkedList<>();
+        LinkedList<String> programmingLanguages = new LinkedList<>();
         programmingLanguages.add("Java");
         programmingLanguages.add("Perl");
         programmingLanguages.add("Ruby");
@@ -10119,153 +9703,60 @@ public class LinkedListDemo{
         programmingLanguages.add("C++");
         programmingLanguages.add("C#");
         programmingLanguages.add("Scala");
-       
-        // getting first element of linked list in Java
+
+        // Get first element
         String first = programmingLanguages.getFirst();
-        System.out.printf("First element of LinkedList is : %s %n", first);
-     
-        // getting last element from linked list in Java
+        System.out.printf("First element of LinkedList is: %s %n", first);
+
+        // Get last element
         String last = programmingLanguages.getLast();
-        System.out.printf("Last element of LinkedList is  : %s %n", last);
+        System.out.printf("Last element of LinkedList is: %s %n", last);
     }
- 
 }
+```
 
-Output:
-First element of LinkedList is : Java
-Last element of LinkedList is  : Scala
+**Output:**
+```
+First element of LinkedList is: Java
+Last element of LinkedList is: Scala
+```
 
-That's all about how to find first and last node of a linked list in Java. Remember, Java's implementation of linked list data structure is a doubly linked list, which means each node has reference to both previous and next node. You can iterate over LinkedList but iterator doesn't guarantee any order, so beware of that as well.
+The `getFirst()` method returns the first node, and `getLast()` returns the last node. Since it's a doubly linked list, accessing both is fast because the list maintains references to both ends.
 
+#### **Finding the Middle Element in a LinkedList**
+To find the middle element of a linked list in one pass (i.e., without needing to know the length upfront), you can use the **two-pointer technique**. One pointer moves one step at a time, while the other moves two steps at a time. When the fast pointer (moving two steps) reaches the end of the list, the slow pointer will be at the middle element.
 
-Read more: https://javarevisited.blogspot.com/2015/02/how-to-find-first-and-last-element-of.html#ixzz8hj4Dw55l
+**Example:**
 
-How to find Middle Element of Linked List in Java in Single Pass
-
-ow do you find the middle element of LinkedList in one pass is a programming question often asked Java and non-Java programmers in telephonic Interview. This question is similar to checking palindrome or calculating the factorial, where the Interviewer sometimes also asks to write code. In order to answer this question candidate must be familiar with the LinkedList data structure i.e. In the case of the singly LinkedList, each node of Linked List contains data and pointer, which is the address of the next Linked List and the last element of Singly Linked List points towards the null. Since in order to find the middle element of the Linked List you need to find the length of the linked list, which is counting elements till the end i.e. until you find the last element of the Linked List.
-
-
-
-
-What makes this data structure Interview question interesting is that you need to find the middle element of LinkedList in one pass and you don’t know the length of LinkedList.
-
-This is where candidates' logical ability puts into the test,  whether he is familiar with space and time trade-off or not etc.
-
-As if you think carefully you can solve this problem by using two pointers as mentioned in my last post on How to find the length of the Singly Linked List in Java.
-
-By using two pointers, incrementing one at each iteration and other at every second iteration. When the first pointer will point at end of Linked List, the second pointer will be pointing at a middle node of the Linked List.  
-
-In fact, this two pointer approach can solve multiple similar problems like how to find the third node from last in a Linked List in one Iteration or how to find an Nth element from last in a Linked List. In this Java programming tutorial, we will see a Java program that finds the middle element of Linked List in one Iteration.
-
-Btw, if you are new to Algorithms and Data Structure and not familiar with an essential data structure like a linked list, array or binary tree then  I suggest you go through a good, comprehensive online course like Data Structures and Algorithms: Deep Dive Using Java to learn the basics and brush up the fundamentals.
-
-
-
-
-
-How to Find Middle Element of LinkedList in One Pass
-Here is a complete Java program to find the middle node of Linked List in Java. Remember LinkedList class here is our custom class and don’t confuse this class with java.util.LinkedList is a popular Collection class in Java.
-
-In this Java program, our class LinkedList represents a linked list data structure that contains a collection of the node and has a head and tail.
-
-Each node contains data and addresses part. The main method of LinkedListTest class is used to simulate the problem, where we created Linked List and added few elements on it and then iterate over them to find the middle element of linked list in one pass in Java.
-
-If you want to learn more about linked list data structure and different types of linked lists like a singly linked list, doubly linked list, circularly linked list et all then you can also check the Algorithms and Data Structures - Part 1 and 2 courses on Pluralsight. One of the better course to learn data structure and algorithms.
-
-
-
-Btw, you would need a Pluralsight membership to access this course. If you are not a member, you can still access this course by using the 10-day free pass provided by Pluralsight to explorer its portal and online courses.
-
-
-
-
-Java Program to Find the Middle Node of a Linked list in a Single-pass
-Here is our complete Java program to find the middle node of a singly linked list in just one pass, it uses two-pointer pattern, also known as fast and slow pointer or hare and tortoise pattern  to solve this coding problem:
-
-import test.LinkedList.Node;
-
-/**
- * Java program to find middle element of linked list in one pass.
- * In order to find middle element of a linked list
- * we need to find the length first but since we can only
- * traverse linked list one time, we will have to use two pointers
- * one which we will increment on each iteration while 
- * other which will be incremented every second iteration.
- * So when the first pointer will point to the end of a
- * linked list, second will be pointing to the middle
- * element of a linked list
- *
- * @author Javin Paul
- */
-public class LinkedListTest {
- 
- 
-    public static void main(String args[]) {
-        //creating LinkedList with 5 elements including head
-      LinkedList linkedList = new LinkedList();
-      LinkedList.Node head = linkedList.head();
-      linkedList.add( new LinkedList.Node("1"));
-      linkedList.add( new LinkedList.Node("2"));
-      linkedList.add( new LinkedList.Node("3"));
-      linkedList.add( new LinkedList.Node("4"));
-   
-      //finding middle element of LinkedList in single pass
-      LinkedList.Node current = head;
-      int length = 0;
-      LinkedList.Node middle = head;
-   
-      while(current.next() != null){
-          length++;
-          if(length%2 ==0){
-              middle = middle.next();
-          }
-          current = current.next();
-      }
-    
-      if(length%2 == 1){
-          middle = middle.next();
-      }
-
-
-      System.out.println("length of LinkedList: " + length);
-      System.out.println("middle element of LinkedList : "                                  + middle);
-     
-    }
- 
-}
-
-class LinkedList{
+```java
+class LinkedList {
     private Node head;
     private Node tail;
- 
-    public LinkedList(){
+
+    public LinkedList() {
         this.head = new Node("head");
-        tail = head;
+        this.tail = head;
     }
- 
-    public Node head(){
+
+    public Node head() {
         return head;
     }
- 
-    public void add(Node node){
+
+    public void add(Node node) {
         tail.next = node;
         tail = node;
     }
- 
-    public static class Node{
+
+    public static class Node {
         private Node next;
         private String data;
 
-        public Node(String data){
+        public Node(String data) {
             this.data = data;
-        }
-     
-        public String data() {
-            return data;
         }
 
-        public void setData(String data) {
-            this.data = data;
+        public String data() {
+            return data;
         }
 
         public Node next() {
@@ -10275,505 +9766,119 @@ class LinkedList{
         public void setNext(Node next) {
             this.next = next;
         }
-     
-        public String toString(){
+
+        public String toString() {
             return this.data;
         }
     }
 }
 
-Output:
-length of LinkedList: 4
-the middle element of LinkedList: 2
+public class LinkedListTest {
+    public static void main(String[] args) {
+        LinkedList linkedList = new LinkedList();
+        linkedList.add(new LinkedList.Node("1"));
+        linkedList.add(new LinkedList.Node("2"));
+        linkedList.add(new LinkedList.Node("3"));
+        linkedList.add(new LinkedList.Node("4"));
 
+        // Find the middle element in one pass
+        LinkedList.Node current = linkedList.head();
+        int length = 0;
+        LinkedList.Node middle = linkedList.head();
 
+        while (current.next() != null) {
+            length++;
+            if (length % 2 == 0) {
+                middle = middle.next();
+            }
+            current = current.next();
+        }
 
+        if (length % 2 == 1) {
+            middle = middle.next();
+        }
 
-That’s all on How to find the middle element of LinkedList in one pass. As I said this is a good interview question to separate programmers from non-programmers. Also, the technique mentioned here to find the middle node of LinkedList can be used to find the 3rd element from Last or nth element from last in a LinkedList as well.
+        System.out.println("Length of LinkedList: " + length);
+        System.out.println("Middle element of LinkedList: " + middle);
+    }
+}
+```
 
+**Output:**
+```
+Length of LinkedList: 4
+Middle element of LinkedList: 2
+```
 
-Read more: https://javarevisited.blogspot.com/2012/12/how-to-find-middle-element-of-linked-list-one-pass.html#ixzz8hj4MWE2G
+This technique ensures that the middle element is found in just one traversal (one pass), with a time complexity of **O(n)**.
 
-Difference between LinkedList and ArrayList in Java
+#### **Searching in a LinkedList**
+To search for an element in a `LinkedList`, you can use methods like `indexOf()` and `lastIndexOf()`. These methods return the index of the element from the start and end of the list, respectively. Searching is O(n) because you need to traverse the list to find the element.
 
-LinkedList and ArrayList both implement List Interface but how they work internally is where the differences lie. The main difference between ArrayList and LinkedList is that ArrayList is implemented using a resizable array while LinkedList is implemented using doubly LinkedList. ArrayList is more popular among Java programmers than LinkedList as there are few scenarios on which LinkedList is a suitable collection than ArrayList. In this article, we will see some differences between LinkedList and ArrayList and try to find out when and where to use LinkedList over ArrayList.
+**Example:**
 
-
-
-
-LinkedList vs ArrayList in Java
-All the differences between LinkedList and ArrayList have their root in the difference between Array and LinkedList data structure. If you are familiar with Array and LinkedList data structure you will most likely derive the following differences between them:
-
-1. Since Array is an index based data-structure searching or getting element from Array with index is pretty fast. Array provides O(1) performance for get(index) method but remove is costly in ArrayList as you need to rearrange all elements. 
-
-On the Other hand, LinkedList doesn't provide Random or index-based access and you need to iterate over the linked list to retrieve any element which is of order O(n).
-
-2. Insertions are easy and fast in LinkedList as compared to ArrayList because there is no risk of resizing the array and copying content to the new array if the array gets full which makes adding into ArrayList of O(n) in the worst case while adding is O(1) operation in LinkedList in Java. ArrayList also needs to update its index if you insert something anywhere except at the end of the array.
-
-3. Removal is like insertions better in LinkedList than ArrayList.
-
-4. LinkedList has more memory overhead than ArrayList because in ArrayList each index only holds an actual object (data) but in the case of LinkedList, each node holds both data and address of the next and previous node.
-
-
-
-When to use LinkedList and ArrayList in Java?
-As I said LinkedList is not as popular as ArrayList but still, there are situations where a LinkedList is a better choice than ArrayList in Java. Use LinkedList in Java if:
-
-1. Your application can live without Random access. Because if you need nth element in LinkedList you need to first traverse up to nth element O(n) and then you get data from that node.
-
-2. Your application is more insertion and deletion driver and you insert or remove more than retrieval. Since insertion or removal doesn't involve resizing it's much faster than ArrayList.
-
-And, if you need to know more diffrences betwen ArrayList and LinkedList in Java then here is a nice talbe which you can refer:
-
-Difference between LinkedList vs ArrayList in Java? Answer
-
-
-
-Difference between LinkedList and ArrayList in JavaThat’s all on the difference between ArrayList and LinkedList in Java. Use ArrayList in Java for all their situation where you need non-synchronized index-based access. ArrayList is fast and easy to use, just try to minimize array resizing by constructing ArrayList with a proper initial size.
-
-
-Read more: https://javarevisited.blogspot.com/2012/02/difference-between-linkedlist-vs.html#ixzz8hj4i1MIs
-
-How to search a LinkedList in Java? Example
-
-You can search an element inside LinkedList in Java by using indexOf() and lastIndexOf() methods. Though LinkedList doesn't support random search like ArrayList, you can still go through the list, check each element and find out whether it's an interesting element or not. Since java.util.LinkedList is an implementation of a doubly-linked list, these two methods are quite handy to search from either end e.g. indexOf() method starts the search from the head and returns an element's position while lastIndexOf() starts the search from the tail. Though the position is not relative to the ends, they are always calculated from the head. 
-
-You can also use these two methods to find out duplicate elements. If an element has appeared twice in the linked list then the indexOf() and lastIndexOf() method will return different positions for that because it will be found at different positions from head and tail. 
-
-
-
-For unique elements, both these methods will return the same position.
-
-In this article, you will see examples of both indexOf() and lastIndexOf() methods to search a given element inside LinkedList. As I said before since LinkedList doesn't support random search and searching an element requires list traversal, which means time complexity will be O(n).
-
-Also, If you are good in Java but lacks data structure and algorithm skills, I strongly suggest reading Data Structures and Algorithm Analysis in Java by Mark A. Wiess. It's a great book to build your foundation on data structure and algorithms using Java programming language.
-
-
-
-
-
-Java Program to search element inside linked list
-Here is our sample program to search a given node inside LinkedList in Java.  We first build our linked list of numbers and insert 1003 twice to make it a duplicate number. Later we have used the indexOf() and lastIndexOf() method to search for a duplicate element like 1003 and a unique element  1002 inside the linked list. 
-
-From the result, you can see that indexOf() starts the search from the first element and that's why it found 1003 at the 3rd position, which is index 2. On the other hand, lastIndexOf() starts the search from the last element and that's why it found 1003 at 6th position i.e. index 5.
-
-Here is a sample doubly linked list data structure :
-
-How to search nodes inside LinkedList in Java
-
-
-and here is our example to search duplicate and unique nodes inside LinkedList in Java.
-
+```java
 import java.util.LinkedList;
 
-/**
- * Java Program to search an element inside LinkedList.
- * LinkedList doesn't provide random search and 
- * time complexity of searching is O(n)
- * 
- * @author java67
- */
-
 public class LinkedListSearch {
-
     public static void main(String args[]) {
-
-       LinkedList<Integer> ints = new LinkedList<>();
+        LinkedList<Integer> ints = new LinkedList<>();
         ints.add(1001);
         ints.add(1002);
         ints.add(1003);
         ints.add(1004);
         ints.add(1005);
         ints.add(1003);
-        
-        
-        // let's search a duplicate element in linked list
-        // for duplicate elements indexOf() and lastIndexOf() will
-        // return different indexes.
+
+        // Searching for duplicate elements
         System.out.println("First index of 1003 is : " + ints.indexOf(1003));
         System.out.println("Last index of 1003 is : " + ints.lastIndexOf(1003));
-        
 
-        // let's search an element which is not appeared twice
-        // for unique elements both indexOf() and lastIndexOf() will return
-        // same position
+        // Searching for a unique element
         System.out.println("First index of 1002 is : " + ints.indexOf(1002));
         System.out.println("Last index of 1002 is : " + ints.lastIndexOf(1002));
-
     }
-
 }
+```
 
-Output :
+**Output:**
+```
 First index of 1003 is : 2
 Last index of 1003 is : 5
 First index of 1002 is : 1
 Last index of 1002 is : 1
+```
 
+The `indexOf()` method starts searching from the head, while `lastIndexOf()` starts from the tail.
 
-From the output, you can also see those duplicate nodes has two different positions returned by indexOf() and lastIndexOf() method while for unique elements both methods return the same index.
+### **Differences Between `LinkedList` and `ArrayList`**
 
-Btw, If you are good in Java but lacks data structure and algorithm skills, I strongly suggest reading Data Structures and Algorithm Analysis in Java by Mark A. Wiess. It's a great book to build your foundation on data structure and algorithms using Java programming language.
+- **Implementation:**
+  - `ArrayList` is backed by a dynamic array.
+  - `LinkedList` is implemented as a doubly linked list.
 
+- **Performance:**
+  - **ArrayList** provides fast random access to elements (O(1) for get) but slower insertions and deletions (O(n) in worst case).
+  - **LinkedList** provides slower random access (O(n)) but faster insertions and deletions (O(1)) when adding/removing elements at the ends.
 
-That's all about how to search an element inside LinkedList in Java. Searching an element requires traversing the list from either end, for example from head to tail or tail to head, which is what indexOf() and lastIndexOf() method does. 
+- **Memory Overhead:**
+  - **ArrayList** stores only the data.
+  - **LinkedList** stores the data along with two additional pointers (for the previous and next nodes).
 
-You can use any of these methods to find out the index of a given element in Java, but just remember that if the element is repeated then both methods can return different indices.
+### When to Use `LinkedList`:
+Use a `LinkedList` when:
+- You frequently add or remove elements from the middle or ends of the list.
+- You don’t need fast random access to elements.
+- Memory overhead is not a primary concern.
 
+### When to Use `ArrayList`:
+Use an `ArrayList` when:
+- You need fast random access to elements.
+- You don’t perform frequent insertions or deletions in the middle of the list.
 
-If you like this tutorial and interested to learn more about linked list data structure in Java, You can also check the following Java LinkedList tutorials :
-How to add elements at the first and last position in LinkedList in Java? [example]
-The difference between LinkedList and ArrayList in Java? [answer]
-Top 5 data structures from Java Collections framework? [article]
-How to implement a linked list in Java? [solution]
-How to find the middle node of the linked list in one pass? [solution]
-How do you find the length of a singly linked list in Java? [solution]
-What is the difference between a linked list and an array in Java? [answer]
-How to find the first and last element from LinkedList in Java? [example]
-How to check if the linked list contains a loop in Java? [solution]
+In summary, understanding the differences between `ArrayList` and `LinkedList` and knowing how to manipulate a `LinkedList` (such as finding the first, last, or middle element) is crucial in efficiently managing data in Java applications.
 
-And, now is the quiz time, what is difference between an ArrayList and a LinkedList in Java? Can you pass an ArrayList to a method which is expecting a LinkedList in Java?
 
-
-Read more: https://www.java67.com/2015/07/how-to-search-element-inside-linkedlist-java-example.html#ixzz8hj4wwsVb
-
-How to Reverse an Array in place in Java? Example Solution
-
-It's relatively easy to reverse an array if you have the luxury to use another array, but how would you reverse an array if a temporary buffer is not allowed? This is one of the testing array interview questions, which often proved tricky for Java and other beginner Programmers. But, don't worry, I'll tell you how you can solve this problem without losing your cool. Well, you can also reverse an array in place without using an additional buffer. If you know how to access array elements and how to loop over an array in Java using traditional for loop, you can easily solve this problem without using additional space or in-place as described in many Algorithms books and courses, and on Coding interviews.
-
-
-
-All you need to do is a loop over the array from start to the middle element and swap the first element to the last, second element to the second last until you reach the middle element. Once you reach the middle element, your array is already sorted, and that too without using any additional space or in-place as asked in this question.
-
-You can even use this algorithm to reverse a String in Java as well. After all, a String is backed by a character array in Java and other programming languages like C and C++.  This is as simple as it could be, but you know, this is also the fastest way to reverse an array in Java.
-
-In general, Data structure and Algorithm questions like ones based upon the array, linked list, binary tree, hash table, and searching/sorting algorithms are very important for programming job interviews and you should have a good knowledge of them.
-
-If you feel that your data structure and algorithm skills are lacking or you want to learn them from scratch, I suggest you join a comprehensive course like Data Structures and Algorithms: Deep Dive Using Java on Udemy, which will teach you all of these and much more useful stuff on Algorithms. It's one of my favorite courses on this topic.
-
-
-
-
-
-How to Reverse an array in-place in Java
-In the last section, I have explained to you the logic or algorithm to reverse an array in place, now is the time to convert that algorithm into pseudo-code and then real code in Java. You will also calculate the time and space complexity of our solution, which is often required in Interviews as well as in the real world to meet your performance SLA.
-
-So, let's see an example of how you can reverse an array of String in Java in place.
-
-This program doesn't use a temporary buffer or another array, instead, it just loops over the array and swaps elements like starting from the first element, it swaps the first to last, second to the second last, until it reaches the middle of the array.
-
-At this point all elements are already swapped, so your array is fully reversed.
-
-
-
-This is a simple algorithm and time complexity is O(n/2) or O(n) because it needs to iterate over almost half the elements and perform n/2 swapping as well. The space complexity of the algorithm is O(1) because no matter how big the array is, it requires the same space.
-
-Obviously, all-in-place algorithms have constant space complexity. Btw, if you have trouble understanding Big O notation and how to calculate the time and space complexity of any arbitrary algorithm then I suggest you check out Algorithms and Data Structures - Part 1 and 2 courses on Pluralsight, which will teach you the technique of calculating these numbers.
-
-Fastest way to reverse array in place in Java
-
-
-
-
-
-
-
-Java Program to Reverse an array of String in place
-Here is our Java program which implements this algorithm to sort a string array. You can use this algorithm to sort any kind of array like a boolean array, int array, String array, or any custom object array.
-
-This is also the fastest way to reverse an array in Java. It cannot be faster than this because we are only accessing an array which is a constant time operation. The only thing you can optimize is to minimize swapping. Do you know any other way to make this algorithm faster? If yes, then please let us know.
-
-If you want to solve this problem by using recursion instead of the iterative way (using for loop), you can customize your algorithm like below:
-
-package coding;
-
-import java.util.Arrays;
-
-/**
- * Java Program to reverse array in place. Time complexity is O(n)
-  *You cannot use additional buffer but one or two variables are fine.
- *
- * @author WINDOWS 8
- *
- */
-public class ReverseArrayInPlace {
-   
-    public static void main(String args[]){
-       
-        String[] names = {"John", "Jammy", "Luke"};
-        System.out.println("original array: " + Arrays.toString(names) );
-       
-        // reversing array with three elements
-        reverse(names);
-        System.out.println("reversed array: " + Arrays.toString(names) );
-       
-        String[] test = {"John"};
-        System.out.println("original array: " + Arrays.toString(test) );
-       
-        // testing reverse array function with array of just one element
-        reverse(test);
-        System.out.println("reversed array: " + Arrays.toString(test) );
-    }
-
-    /**
-     * Java Method to reverse String array in place
-     *
-     * @param array
-     */
-    public static void reverse(String[] array) {
-
-        if (array == null || array.length < 2) {
-            return;
-        }
-
-        for (int i = 0; i < array.length / 2; i++) {
-            String temp = array[i];
-            array[i] = array[array.length - 1 - i];
-            array[array.length - 1 - i] = temp;
-        }
-
-    }
-
-}
-
-Output :
-original array: [John, Jammy, Luke]
-reversed array: [Luke, Jammy, John]
-original array: [John]
-reversed array: [John]
-
-You can see from the output that our program is working fine for an odd number of elements. I haven't tested it for all kinds of input like reversing an array of the even number of elements, but I expect it to work.
-
-Please drop a note, if you find any bug or issue and the program is not working for any input.
-
-
-
-
-That's all about how to reverse an array in place in Java. This is one of the essential coding exercises for Java programmers learning data structure and algorithms. Remember, it's an in-place algorithm hence, the space complexity is O(1) and the time complexity of this solution is O(n). This is also the fastest way to reverse the array in Java.
-
-
-Read more: https://www.java67.com/2016/01/java-program-to-reverse-array-in-place.html#ixzz8hj57C6Y7
-
-How to reverse a linked list in Java using Recursion and Iteration (Loop) - Example
-
-This is one of the class coding problems from Programming job interviews. It may seem easy to reverse a linked list but when you go around doing the actual task, it's not that easy, especially for first-timers. There are a couple of algorithms exists to reverse a singly linked list in Java, like you can use the three-pointers approach or solve this problem using a Stack, or simply using Recursion without the external stack. As I had pointed out in the earlier post about the linked list, that reversing a linked list is one of the most popular linked list-based data structure interview question. This means, you just can't afford to prepare this one, before going for any programming interview. Despite being so common, It's not easy to solve this problem on the fly.
-
-
-
-
-Many Java programmers struggle to reverse a linked list using both recursion and iteration, which makes this question very useful for filtering programmers who can code and who are not so good with coding.
-
-Indeed, this is one of the confusing algorithms to understand and it's not easy to grasp, especially if you haven't practiced linked list based questions like finding middle node of linked list in one pass or inserting and removing an element from the linked list data structure.
-
-
-
-Since Java programmer gets a linked list implementation in the form of the java.util.LinkedList, they never bother to do this exercise by hand. Yes, there are some exceptions but many Java programmer doesn't focus enough on data structure and hand-coding, which is really important to improve your problem-solving skills for the interview.
-
-So, when it comes to design a whole system using Object-oriented analysis and design like implementing a vending machine in Java, sometimes they fail to choose the correct data structure and devising simple algorithms.
-
-Before going for a programming/coding interview, It's absolutely necessary to do as much practice in data structure and algorithm as possible to take advantage of all the knowledge available. You can also join a comprehensive Data Structure and Algorithms course like Data Structures and Algorithms: Deep Dive Using Java on Udemy to fill the gaps in your understanding.
-
-This will improve your thinking ability, problem-solving skill and you will be more comfortable with dealing with the unknown set of problems. This advice is irrespective of whether you are a Java, C++, or Python developer.
-
-
-
-
-
-Java Program to Reverse a singly linked list using recursion and Iteration
-A linked list is a data structure which contains nodes, every node keep data and pointer to the next node. This way linked list grows and can store as many elements as much memory allows it. It's not like an array that requires a contiguous chunk of memory because here node can be stored at any memory location.
-
-This structure means, adding and removing elements in a linked list is easy but searching an element is expensive because you need to traverse the entire list to find the element. It doesn't help even if you know that element is the 5th node or 6th node because you cannot access them by index like an array.
-
-This is the biggest difference between an array and a linked list data structure. In the array, searching the index is O(1) operation but in linked list searching is O(n) operation.
-
-It is said that a picture is worth a thousand word and it is very true in the case of problem-solving and understanding algorithms. If you are a visual learner, I strongly suggest checking out the Visualizing Data Structures and Algorithms in Java course which explains all fundamental data structures and algorithms with animations and interesting diagrams.  Here are a diagram and a flowchart to reverse a singly linked list using recursion.
-
-How to Reverse a linked list in Java using Recursion and Loops
-
-It divides the list into two parts first node and rest of the list, and then link rest to head in reverse order. It then recursively applies the same division until it reaches the last node, at that point whole linked list, is reversed.
-
-Coming back to our code which represents a singly linked list in Java (see the next section), with limited operations. I have already removed some non-relevant code for performing different operations on a linked list like checking if the linked list is cyclic or not, inserting an element at the middle, and removing the element. Since we don't need this code for reversing a linked list, I have simply deleted them for now.
-
-
-
-This class is similar to the SinglyLinkedList class, which we have seen in how to implement a linked list in Java using generics (see here), with two more methods for reversing linked list using iteration and recursion.
-
-The reverseRecursively() method reverses the linked list using recursion. It uses the call stack to store data, and once we reached tail, which becomes the new head for the reversed linked list, it starts adding nodes in reverse order. Look at some comments around those methods, which will make you understand the algorithm of reversing the linked list better.
-
-The reverseIteratively() method reverses the linked list using the three-pointers approach and using loops, that's why it is called an iterative solution. It traverses through the linked list and adding nodes at the beginning of the singly linked list in each iteration. It uses three reference variables (pointers) to keep track of previous, current, and next nodes.
-
-Btw, If you are not very familiar with a linked list data structure or want to learn more about linked list data structure, you should first read a good course on data structure and algorithm like Algorithms and Data Structures - Part 1 and 2 on Pluralsight, one of the best course to learn data structure and algorithms.
-
-How to Reverse a linked list in Java using Recursion
-
-
-
-Java Class to Represent Singly Linked List
-Here is our Java program to solve this problem. As I said, it contains a class to represent a singly linked list and it contains another class that has the main method for testing. That class creates an instance of a linked list and then call relevant methods to reverse the linked list by using iteration and recursion. 
-
-/**
-  * Java Class to represent singly linked list for demonstration purpose.
-  * In order to understand How to reverse linked list, focus on two methods
-  * reverseIteratively() and reverseRecursively().
-
-  * @author Javin Paul
-  */
-public class SinglyLinkedList {
-    private Node head;  // Head is the first node in linked list
-
-    public void append(T data){
-        if(head == null){
-            head = new Node(data);
-            return;
-        }
-        tail().next = new Node(data);
-    }
- 
-    private Node tail() {
-        Node tail = head;
-     
-        // Find last element of linked list known as tail
-        while(tail.next != null){
-            tail = tail.next;
-        }      
-        return tail;
-     
-    }
-
- 
-    @Override
-    public String toString(){
-        StringBuilder sb = new StringBuilder();
-        Node current = head;
-        while(current != null){
-           sb.append(current).append("-->");
-           current = current.next;
-        }    
-        if(sb.length() &gt;=3){
-            sb.delete(sb.length() - 3, sb.length()); 
-            // to remove --> from last node
-        }
-     
-        return sb.toString();
-    }
-
-    /**
-      * Reverse linked list using 3 pointers approach in O(n) time
-      * It basically creates a new list by reversing direction, and
-      * subsequently insert the element at the start of the list.
-      */
-    public void reverseIteratively() {
-        Node current = head;
-        Node previous = null;
-        Node forward = null;
-     
-        // traversing linked list until there is no more element
-        while(current.next != null){
-         
-            // Saving reference of next node, since we are changing current node
-            forward = current.next;
-         
-            // Inserting node at start of new list
-            current.next = previous;
-            previous = current;
-         
-            // Advancing to next node
-            current = forward;
-        }
-     
-        head = current;
-        head.next = previous;
-    }
- 
-    /*
-     * Reverse a singly linked list using recursion. In recursion Stack is
-     * used to store data.   
-     * 1. Traverse linked list till we find the tail, 
-     * that would be new head for reversed linked list.
-     */
-    private Node reverseRecursively(Node node){
-       Node newHead;
-     
-       //base case - tail of original linked list
-       if((node.next == null)){
-           return node;
-       }
-       newHead = reverseRecursively(node.next);
-     
-       //reverse the link e.g. C->D->null will be null       
-       node.next.next = node;
-       node.next = null;    
-       return newHead;
-    }
-  
-    public void reverseRecursively(){
-        head = reverseRecursively(head);
-    }  
- 
-   private static class Node {
-        private Node next;
-        private T data;
-
-        public Node(T data) {
-            this.data = data;
-        }
-
-        @Override
-        public String toString() {
-            return data.toString();
-        }
-    }
- 
-}
-
-
-
-Test Class
-Here is our test class, which will test both methods of reversing a linked list, reverseIteratively() and reverseRecursively(). You have first created a singly linked list with 6 nodes A-B-C-D-E-F and first reversed them iteratively using 3 points approach and later reversed the same list recursively.
-
-Since the same instance of the singly linked list is reversed two times, you can see in the output that the final list is the same as the original linked list.
-
-
-/**
-  * Java program to test code of reversing singly linked list in Java.
-  * This test class test both iterative and recursive solution. Since
-  * the same list is first reversed using loops, and then again using recursion.
-  * You can see that final output is same as original linked list.
-
-  * @author Javin Paul
-  */
-public class SinglyLinkedListTest {
-
-    public static void main(String args[]) {
-       SinglyLinkedList linkedlist = getDefaultList();
-       System.out.println("linked list before reversing : " + linkedlist);     
-       linkedlist.reverseIteratively();     
-       System.out.println("linked list after reversing : " + linkedlist);
-       linkedlist.reverseRecursively();
-       System.out.println("linked list after reversing recursively: "
-                                   + linkedlist);
-           
-    }
-  
-     private static SinglyLinkedList getDefaultList(){
-        SinglyLinkedList linkedlist = new SinglyLinkedList();       
-        linkedlist.append("A"); linkedlist.append("B"); linkedlist.append("C");
-        linkedlist.append("D"); linkedlist.append("E"); linkedlist.append("F");
-        return linkedlist;
-    }
-  
-}
-
-Output:
-linked list before reversing : A-->B-->C-->D-->E-->F
-linked list after reversing : F-->E-->D-->C-->B-->A
-linked list after reversing recursively: A-->B-->C-->D-->E-->F
-
-
-That's all on how to reverse a linked list in Java. We have seen two approaches to reverse a singly linked list, first using Iterations, which involves 3 pointers or reference variable; and second, which reversed linked list using recursion.
-
-
-Read more: https://javarevisited.blogspot.com/2017/03/how-to-reverse-linked-list-in-java-using-iteration-and-recursion.html#ixzz8hj5TMTxe
 
 How to Find all Pairs in Array of Integers Whose sum is Equal to a Given Number in Java? Solution Example
 
@@ -10797,366 +9902,267 @@ Many programmers are afraid to ask questions instead they like to assume about i
 Now let's go back to the question, for simplicity we can assume that we just need to print a pair of integers once or twice depending upon their occurrence, but the pair has to be distinct, (2,2) or (3, 3) is not valid pair.
 
 
+Reversing an array or a linked list is a common algorithmic problem, and it's often used in interviews to test understanding of data structures and manipulation of pointers or indices. Below, I'll explain how to reverse an array in Java in place (without using additional space) and then move on to a linked list reversal using both recursion and iteration.
 
+---
 
-3 Solutions to Find Pair Of Integers in Array whose Sum is Given Number
-The first solution which comes to my mind is our friend brute-force, naive but genuine. You take one number from the array and then loop through an array and output pairs which are equal to a given sum. You do this for all numbers in the first array, as shown in the following Java program :
+### **1. How to Reverse an Array In-place in Java**
 
-1. Brute Force Solution
+Reversing an array **in-place** means rearranging the array elements without using any additional memory (except for a few temporary variables, if needed). The main approach is to swap the first element with the last element, the second element with the second-last, and so on, until you reach the middle.
 
+**Steps to Reverse an Array:**
+
+1. **Two-pointer approach:** Start with one pointer at the beginning of the array and the other at the end.
+2. **Swap the elements** at the two pointers.
+3. Move the pointers toward the center (i.e., increment the start pointer and decrement the end pointer).
+4. Repeat the process until the pointers cross or meet at the middle of the array.
+
+**Java Program to Reverse an Array in-place:**
+
+```java
 import java.util.Arrays;
 
-/**
- * Java Program to find pairs on integer array whose sum is equal to k
- * 
- * @author WINDOWS 8
- */
-public class ProblemInArray{
+public class ReverseArrayInPlace {
 
-    public static void main(String args[]) {
-        int[] numbers = { 2, 4, 3, 5, 7, 8, 9 };
-        int[] numbersWithDuplicates = { 2, 4, 3, 5, 6, -2, 4, 7, 8, 9 };
-        prettyPrint(numbers, 7);
-        prettyPrint(numbersWithDuplicates, 7);
+    public static void main(String[] args) {
+        String[] names = {"John", "Jammy", "Luke"};
+        System.out.println("Original Array: " + Arrays.toString(names));
+
+        // Reversing array in place
+        reverse(names);
+        System.out.println("Reversed Array: " + Arrays.toString(names));
+
+        // Testing with a single-element array
+        String[] test = {"John"};
+        System.out.println("Original Array: " + Arrays.toString(test));
+        reverse(test);
+        System.out.println("Reversed Array: " + Arrays.toString(test));
     }
 
     /**
-     * Prints all pair of integer values from given array whose sum is 
-     * is equal to given number.
-     * complexity of this solution is O(n^2)
+     * Method to reverse the array in place
+     * @param array The array to be reversed
      */
-    public static void printPairs(int[] array, int sum) {
+    public static void reverse(String[] array) {
+        if (array == null || array.length < 2) {
+            return;  // No need to reverse if the array has less than 2 elements
+        }
 
-        for (int i = 0; i < array.length; i++) {
-            int first = array[i];
-            for (int j = i + 1; j < array.length; j++) {
-                int second = array[j];
+        int start = 0;
+        int end = array.length - 1;
 
-                if ((first + second) == sum) {
-                    System.out.printf("(%d, %d) %n", first, second);
-                }
-            }
+        while (start < end) {
+            // Swap elements at start and end
+            String temp = array[start];
+            array[start] = array[end];
+            array[end] = temp;
 
+            // Move towards the center
+            start++;
+            end--;
         }
     }
-    /**
-     * Utility method to print input and output for better explanation.
-     */
-    public static void prettyPrint(int[] givenArray, int givenSum){
-        System.out.println("Given array : " + Arrays.toString(givenArray));
-        System.out.println("Given sum : " + givenSum);
-        System.out.println("Integer numbers, whose sum is equal to value : "
-                                + givenSum);
-        printPairs(givenArray, givenSum);
-    }
-
 }
+```
 
-Output:
-Given sum : 7
-Integer numbers, whose sum is equal to value : 7
-(2, 5) 
-(4, 3) 
-Given array : [2, 4, 3, 5, 6, -2, 4, 7, 8, 9]
-Given sum : 7
-Integer numbers, whose sum is equal to value : 7
-(2, 5) 
-(4, 3) 
-(3, 4) 
-(-2, 9) 
+**Explanation:**
+- The function `reverse(String[] array)` performs an in-place reversal of the array.
+- We use a `while` loop to iterate through the array, swapping elements from both ends and moving inward until the pointers meet.
+  
+**Output:**
+```
+Original Array: [John, Jammy, Luke]
+Reversed Array: [Luke, Jammy, John]
+Original Array: [John]
+Reversed Array: [John]
+```
 
-This solution is correct but its time complexity is very hight, O(n^2), which means the Interviewer will surely ask you to improve your answer and come up with a solution whose complexity is either O(1), O(n) or O(nLog(n)). So let's dig deeper to improve this answer. In order to find two numbers in an array whose sum equals a given value, we probably don't need to compare each number with other.
+**Time Complexity:** `O(n)` where `n` is the length of the array.  
+**Space Complexity:** `O(1)` because we only use a few extra variables (constant space).
 
-What we can do here is to store all numbers in a hashtable and just check if it contains second value in a pair. For example, if a given sum is 4 and one number in pair is 3, then other must be 1 or -7. Do you remember the first question we asked, if array only contains positive numbers then we don't need to check for negative values in Map. How is this solution better than previous one? It would require less comparisons.
+---
 
-Only N to iterate through array and insert values in a Set because add() and contains() both O(1) operation in the hash table. So total complexity of the solution would be O(N). Here is a Java program that find the pair of values in the array whose sum is equal to k using Hashtable or Set. 
+### **2. Reversing a Linked List in Java (Using Iteration and Recursion)**
 
-In this program we have also written a utility method to generate random numbers in a given range in Java. You can use this method for testing with random inputs.
+Reversing a **singly linked list** can be done in two primary ways: using **iteration** or **recursion**.
 
+#### **Iterative Method (Three-pointer Approach)**
 
+In the iterative method, we use three pointers (`prev`, `current`, and `next`) to traverse the list and reverse the direction of each node's `next` pointer.
 
-By the way, random numbers are only good for demonstration, don't use them in your unit test. One more good thing you can learn from printPairsUsingSet() method is pre validation, checking if inputs are valid to proceed further.
+**Steps:**
+1. Initialize three pointers: `prev` as `null`, `current` as the head of the list, and `next` as the node after `current`.
+2. For each node, store the `next` node, then reverse the `current` node's `next` pointer to point to `prev`.
+3. Move `prev` and `current` one step forward.
+4. Repeat until the end of the list is reached.
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
+**Java Code:**
 
-/**
- * Java Program to find two elements in an array that sum to k.
- * 
- * @author WINDOWS 8
- */
-public class ArraySumUsingSet {
+```java
+class SinglyLinkedList {
+    private Node head;
 
-    public static void main(String args[]) {
-       prettyPrint(getRandomArray(9), 11);
-       prettyPrint(getRandomArray(10), 12);
-    }
-
-    /**
-     * Given an array of integers finds two elements in the array 
-     * whose sum is equal to n.
-     * @param numbers
-     * @param n
-     */
-    public static void printPairsUsingSet(int[] numbers, int n){
-        if(numbers.length < 2){
-            return;
-        }        
-        Set set = new HashSet(numbers.length);
-        
-        for(int value : numbers){
-            int target = n - value;
-            
-            // if target number is not in set then add
-            if(!set.contains(target)){
-                set.add(value);
-            }else {
-                System.out.printf("(%d, %d) %n", value, target);
-            }
-        }
-    }
-    
-    /*
-     * Utility method to find two elements in an array that sum to k.
-     */
-    public static void prettyPrint(int[] random, int k){
-        System.out.println("Random Integer array : " + Arrays.toString(random));
-        System.out.println("Sum : " + k);
-        System.out.println("pair of numbers from an array whose sum equals "
-                                     + k);
-        printPairsUsingSet(random, k);
-    }
-    
-    /**
-     * Utility method to return random array of Integers in a range of 0 to 15
-     */
-    public static int[] getRandomArray(int length){
-        int[] randoms = new int[length];
-        for(int i=0; i<length; i++){
-            randoms[i] = (int) (Math.random()*15);
-        }
-        return randoms;
-    }
-
-}
-
-Output:
-Random Integer array : [0, 14, 0, 4, 7, 8, 3, 5, 7]
-Sum : 11
-pair of numbers from an array whose sum equals 11
-(7, 4) 
-(3, 8) 
-(7, 4) 
-Random Integer array : [10, 9, 5, 9, 0, 10, 2, 10, 1, 9]
-Sum : 12
-pair of numbers from an array whose sum equals 12
-(2, 10) 
-
-How to find two integers in Java array whose sum equal to given number
-
-
-One more thing, here we are using HashSet but since HashSet in Java internally uses HashMap, it would not make any difference if use either of those data structure.By the this solution has few constraints, first it would need additional space of order O(n) to store numbers in Hashtable or Set, so you need additional space which could be problem if array is very large (remember the question we asked before writing solution).
-
-For a large array, you need a solution that doesn't require additional space, also known as in-place solution. If the interviewer will ask you how do you find if two values in an array sum to a given value without any additional space, first solution will also not work because it's complexity is too high and it would too long to sort a large array. A solution with complexity e.g. O(n), O(logN) or O(NLongN) should work though.
-
-A more efficient in-place solution would be to sort the array and use two pointers to scan through array from both direction i.e. beginning and end. If sum of both the values are equal to given number then we output the pair and advance them. If the sum of two numbers is less than k then we increase the left pointer, else if the sum is greater than k we decrement the right pointer, until both pointers meet at some part of the array.
-
-The complexity of this solution would be O(NlogN) due to sorting. Remember to use a in-place sorting algorithm like quicksort to sort the array as we don't have additional space. Thankfully, Arrays.sort() method uses a two pivot quicksort algorithm to sort array of primitives.
-
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-
-/**
- * Java Program to find all pairs on integer array whose sum is equal to k
- * 
- * @author WINDOWS 7
- */
-public class PrintArrayPairs {
-
-    public static void main(String args[]) {
-       prettyPrint( new int[]{ 12, 14, 17, 15, 19, 20, -11}, 9);
-       prettyPrint( new int[]{ 2, 4, 7, 5, 9, 10, -1}, 9);
-    }
-
-    /**
-     * Given a number finds two numbers from an array so that
-     * the sum is equal to that number k.
-     * @param numbers
-     * @param k
-     */
-    public static void printPairsUsingTwoPointers(int[] numbers, int k){
-        if(numbers.length < 2){
+    public void append(String data) {
+        if (head == null) {
+            head = new Node(data);
             return;
         }
-        Arrays.sort(numbers);
-        
-        int left = 0; int right = numbers.length -1;
-        while(left < right){
-            int sum = numbers[left] + numbers[right];
-            if(sum == k){
-                System.out.printf("(%d, %d) %n", numbers[left],
-                                    numbers[right]);
-                left = left + 1;
-                right = right -1;
-                
-            }else if(sum < k){
-                left = left +1;
-                
-            }else if (sum > k) {
-                right = right -1;
-            }
+        Node current = head;
+        while (current.next != null) {
+            current = current.next;
         }
-       
-    }
-    
-    /*
-     * Utility method to print two elements in an array that sum to k.
-     */
-    public static void prettyPrint(int[] random, int k){
-        System.out.println("input int array : " + Arrays.toString(random));
-        System.out.println("All pairs in an array of integers 
-                          whose sum is equal to a given value " + k);
-        printPairsUsingTwoPointers(random, k);
-    }
-    
-}
-
-Output :
-input int array : [12, 14, 17, 15, 19, 20, -11]
-All pairs in an array of integers whose sum is equal to a given value 9
-(-11, 20) 
-input int array : [2, 4, 7, 5, 9, 10, -1]
-All pairs in an array of integers whose sum is equal to a given value 9
-(-1, 10) 
-(2, 7) 
-(4, 5) 
-
-
-That's all on this array based interview question to find all pairs in an array of integers whose sum is equal to a given integer. We have seen three ways to solve this problem starting from the simplest brute-force solution to acceptable O(N) with additional space and O(NLogN) in place.
-
-If anyone like to do some more practice, I would suggest writing JUnit test cases for this problem, given a set of constraints that only a unique pair needs to be printed even if array contains duplicated and find bugs on these solutions.
-
-Alternatively, you can also try to solve its cousin question, given an array of integers check whether there are 3 numbers that sum up to 0 or a given number. Remember more fun is in the journey than reaching the destination :)
-
-Related Data Structure and Algorithm Interview Questions from Javarevisited Blog
-Difference between array and linked list data structure? (answer)
-Difference between a binary tree and binary search tree? (answer)
-How to reverse a linked list in Java using iteration and recursion? (solution)
-How to reverse an array in place in Java? (solution)
-How to find all permutations of a String in Java? (solution)
-How to reverse a String in place in Java? (solution)
-How to remove duplicate elements from an array without using Collections? (solution)
-Top 5 Books on Data Structure and Algorithms for Java Developers (books)
-Top 5 books on Programming/Coding Interviews (list)
-
-Exercises : 
-1) Write JUnit tests for this problem and check if each of these solutions passes those tests.
-2) Come up with a better solution in terms of time and space complexity?
-3) Find boundary conditions on which this solution breaks.
-
-
-Read more: https://javarevisited.blogspot.com/2014/08/how-to-find-all-pairs-in-array-of-integers-whose-sum-equal-given-number-java.html#ixzz8hj5m2ZN3
-
-How to Find Missing Number in a Sorted Array in Java [Solved]
-
-Today's coding problem is not very new, it's an age-old classic Programming interview Question. You have a sorted array containing n - 1 unique number starting from 0 to n - 1. There is only one number missing in this range and you need to find that out. I mean you need to write a Java method to find the missing number and print its value in the console. Some of you might have seen this question before, but if you have not been asked this question before, what is the first approach comes into your mind to solve this question? Since only one number is missing, many programmers come up with the approach of iterating over the array, and comparing each element with the expected one like the first element should be 0, the second element should be 1, and so on.
-
-
-
-Though this will solve the problem, it will cost you O(n) time. I mean time complexity of your solution would be O(n) which is not good for a big array, like with 100 million entries. What can you do to improve performance?
-
-The key here is that you already have a sorted array, do you think our earlier solution is taking full advantage of this knowledge, well it is but not fully. 
-
-What it is doing is performing a linear search which is costing O(n), but if you do a binary search, which of course needs a sorted array, we can reduce the time taken in the range of O(logN).
-
-Since numbers are in the range from 0 to n - 1 and are sorted, the first number till the missing one should be the same as their indexes. I mean if 0 is not missing, then it must be in the first index, I mean at 0.
-
-If you generalize this, you will find out that if the missing number is k then all numbers less than k are located in an array with indexes the same as their value.
-
-Also, number k + 1 will be located at index k, and number k + 2 will be located at index k + 1. What does this mean? Well, it means that the missing number is the first cell whose value is not the same as its index. So our problem reduces to search in an array to find the first cell, whose value is not the same as its index.
-
-You can easily find out this by using the binary search algorithm in O(logN) time. Our solution implements this logic to find the missing integer in a sorted array in Java. You can use this solution to find the missing number in an array of numbers 1-1000 or 1 -100.
-
-
-
-This problem also shows that having a good knowledge of fundamental data structure is essential to solve any coding problems. Therefore, you must spend some time brushing up your Data Structure skills before you go for an interview. If you need a course, I highly recommend Data Structure and  Algorithms in Java: Deep Dive on Udemy. It's both comprehensive and enjoyable and also very affordable. You can buy it for just $10 on Udemy sale.
-
-
-
-
-
-
-How to Find Missing Number in Sorted Array- Solution 
-Here is our complete solution to this problem. As discussed in the first paragraph, the solution is based upon a binary search algorithm and that's why its complexity is in logarithmic order. If you asked this question in the interview, you must write production-quality code, which means is handling invalid input and boundary conditions.
-
-In our method, we are checking whether the array is not null and empty before proceeding further. If you are not familiar with the binary search algorithm then this diagram will help you with how does it work. In binary search, instead of starting from the front, we start from the middle element.
-
-If the middle element is greater than the expected number is on the left-hand side of a middle element (lower array), otherwise, it is on the right-hand side (higher array). So in each iteration, we end up reducing our problem set by half.
-
-
-
-So in the start, if you have 16 elements in the array, next iteration you only need to search in 8 elements and subsequently 4 and 2, this is how we get O(logN) complexity. This problem also shows that knowledge of coding patterns is very important for coding interviews.
-
-If you know the pattern you can solve many unseen problems and that's why you should spend some time solving coding problems to build that pattern recognition logic in your mind. A course like Grokking the Coding Interview: Patterns for Coding Questions is really a godsend course for someone who wants to master these patterns. It will teach you 15 popular coding patterns to interview questions which means you can tackle most of the unseen problems during interviews.
-
-Java Program to find missing number in a sorted integer array in Java
-
-
-
-
-Java Program to find the missing number in a sorted Integer array
-And, here is our code example to find the missing integer in a sorted array or series.
-
-import java.util.Arrays;
-/**
- * Java Program to find the missing number in a sorted array 
- * with integers in range 0 to n -1
- *
- * @author Javin Paul
- */
-public class MissingNumberFinder {
-
-    public static void main(String args[]) {
-
-        System.out.println("Test #1 : Missing number in sorted array ");
-        int[] input = new int[]{1, 2, 3, 4, 6};
-        int missing = missingNumberFromSortedArray(input);
-        System.out.println("Missing number from array : " 
-                  + Arrays.toString(input) + " is : " + missing);
-
+        current.next = new Node(data);
     }
 
+    public void reverseIteratively() {
+        Node prev = null;
+        Node current = head;
+        Node next = null;
 
-    public static int missingNumberFromSortedArray(int[] numbers) {
-        if (numbers == null || numbers.length <= 0) {
-            throw new IllegalArgumentException("Null or Empty array not permitted");
+        while (current != null) {
+            next = current.next; // Save next node
+            current.next = prev; // Reverse the current node's pointer
+            prev = current;      // Move prev and current one step forward
+            current = next;
         }
+        head = prev; // Update head to the last node
+    }
 
-        int left = 0;
-        int right = numbers.length - 1;
-        while (left <= right) {
-            int middle = (right + left) >> 1;
-            if (numbers[middle] != middle) {
-                if (middle == 0 || numbers[middle - 1] == middle - 1) {
-                    return middle;
-                }
-                right = middle - 1;
-            } else {
-                left = middle + 1;
-            }
+    public void printList() {
+        Node current = head;
+        while (current != null) {
+            System.out.print(current.data + " ");
+            current = current.next;
         }
-        throw new RuntimeException("No missing number");
+        System.out.println();
+    }
+
+    private class Node {
+        String data;
+        Node next;
+
+        Node(String data) {
+            this.data = data;
+        }
+    }
+
+    public static void main(String[] args) {
+        SinglyLinkedList list = new SinglyLinkedList();
+        list.append("A");
+        list.append("B");
+        list.append("C");
+        list.append("D");
+
+        System.out.println("Original List:");
+        list.printList();
+
+        list.reverseIteratively();
+        System.out.println("Reversed List (Iterative):");
+        list.printList();
     }
 }
+```
 
-Output:
-Test #1 : Missing number in sorted array
-Missing number from array : [1, 2, 3, 4, 6] is : 0
+**Output:**
+```
+Original List:
+A B C D 
+Reversed List (Iterative):
+D C B A
+```
+
+#### **Recursive Method**
+
+In the recursive method, we reverse the rest of the list recursively, and when the recursion reaches the last node, we reverse the pointers.
+
+**Steps:**
+1. The base case is when we reach the end of the list (the last node).
+2. On unwinding the recursion, reverse the direction of each node's `next` pointer.
+
+**Java Code for Recursion:**
+
+```java
+class SinglyLinkedList {
+    private Node head;
+
+    public void append(String data) {
+        if (head == null) {
+            head = new Node(data);
+            return;
+        }
+        Node current = head;
+        while (current.next != null) {
+            current = current.next;
+        }
+        current.next = new Node(data);
+    }
+
+    public void reverseRecursively() {
+        head = reverseRecursivelyHelper(head);
+    }
+
+    private Node reverseRecursivelyHelper(Node current) {
+        if (current == null || current.next == null) {
+            return current; // Base case: return last node
+        }
+        Node reversedListHead = reverseRecursivelyHelper(current.next); // Recurse to the end
+        current.next.next = current; // Reverse the current node's pointer
+        current.next = null; // Set current node's next to null (end of list)
+        return reversedListHead; // Return new head of reversed list
+    }
+
+    public void printList() {
+        Node current = head;
+        while (current != null) {
+            System.out.print(current.data + " ");
+            current = current.next;
+        }
+        System.out.println();
+    }
+
+    private class Node {
+        String data;
+        Node next;
+
+        Node(String data) {
+            this.data = data;
+        }
+    }
+
+    public static void main(String[] args) {
+        SinglyLinkedList list = new SinglyLinkedList();
+        list.append("A");
+        list.append("B");
+        list.append("C");
+        list.append("D");
+
+        System.out.println("Original List:");
+        list.printList();
+
+        list.reverseRecursively();
+        System.out.println("Reversed List (Recursive):");
+        list.printList();
+    }
+}
+```
+
+**Output:**
+```
+Original List:
+A B C D 
+Reversed List (Recursive):
+D C B A
+```
+
+---
+
+### **Conclusion:**
+- **Reversing an Array in Java:** We use a simple in-place two-pointer approach, making it efficient with a time complexity of `O(n)` and space complexity of `O(1)`.
+- **Reversing a Linked List in Java:** We explored both iterative (using three pointers) and recursive methods. The iterative approach is straightforward with a time complexity of `O(n)` and space complexity of `O(1)`. The recursive method uses the call stack for the reversal, and its time complexity is also `O(n)`, but it has a space complexity of `O(n)` due to recursion.
+
+These are fundamental operations that will help you understand the underlying mechanics of data structures in Java and prepare for common interview questions.
 
 
-Read more: https://www.java67.com/2014/12/how-to-find-missing-number-in-sorted.html#ixzz8hj69HbwY
 
 [Solved] 2 Ways to Find Duplicate Elements in a given Array in Java - Example
 
@@ -11179,105 +10185,203 @@ How to find duplicates in a given array on O(n^2)
 In the first solution, we compare each element of the array to every other element. If it matches then its duplicate and if it doesn't, then there are no duplicates. This is also known as a brute force algorithm to find duplicate objects from Java array.
 
 The time complexity of this problem is O(n^2) or quadratic. When you give this solution to your interviewer, he will surely ask you to come up with O(n) time complexity algorithm, which we will see next.
+The article you've provided covers multiple solutions to the problem of finding pairs in an array that sum up to a given target. The solutions range from brute force to optimized methods using data structures like hash sets and two-pointer techniques. Here's a summary of the approaches discussed:
 
+---
 
+### 1. **Brute Force (Naive) Solution:**
+   - **Time Complexity:** O(n²)
+   - **Space Complexity:** O(1)
+   - **Approach:** 
+     - This method checks all pairs of elements in the array to find the ones that sum up to the target.
+     - It uses two nested loops to iterate through each element and compare it with every other element.
 
-Here is the code to find duplicate elements using a brute force algorithm in Java:
-In this program, instead of printing the duplicate elements, we have stored them in a Set and returned from the method, but if the interviewer doesn't ask you to return duplicates, then you can simply print them into the console as I have done in next solution.
+   **Code Example:**
+   ```java
+   public static void printPairs(int[] array, int sum) {
+       for (int i = 0; i < array.length; i++) {
+           for (int j = i + 1; j < array.length; j++) {
+               if (array[i] + array[j] == sum) {
+                   System.out.printf("(%d, %d) %n", array[i], array[j]);
+               }
+           }
+       }
+   }
+   ```
+   **Output:**
+   ```
+   Given array: [2, 4, 3, 5, 7, 8, 9]
+   Given sum: 7
+   Integer numbers, whose sum is equal to value: 7
+   (2, 5)
+   (4, 3)
+   ```
 
+---
+
+### 2. **Optimized Solution Using a Hash Set (O(n) Time Complexity):**
+   - **Time Complexity:** O(n)
+   - **Space Complexity:** O(n)
+   - **Approach:** 
+     - Instead of checking every pair, the algorithm stores elements in a hash set and checks if the complementary value (i.e., `target - current number`) exists in the set.
+     - If it exists, it outputs the pair; otherwise, it adds the current element to the set.
+     - The hash set operations (add and contains) are O(1), so this reduces the complexity to O(n).
+
+   **Code Example:**
+   ```java
+   public static void printPairsUsingSet(int[] numbers, int sum) {
+       Set<Integer> set = new HashSet<>();
+       for (int value : numbers) {
+           int target = sum - value;
+           if (set.contains(target)) {
+               System.out.printf("(%d, %d) %n", value, target);
+           } else {
+               set.add(value);
+           }
+       }
+   }
+   ```
+   **Output:**
+   ```
+   Random Integer array: [0, 14, 0, 4, 7, 8, 3, 5, 7]
+   Sum: 11
+   Pair of numbers from an array whose sum equals 11:
+   (7, 4)
+   (3, 8)
+   ```
+
+---
+
+### 3. **Optimized In-Place Solution Using Two Pointers (O(n log n) Time Complexity):**
+   - **Time Complexity:** O(n log n) (due to sorting the array)
+   - **Space Complexity:** O(1) (no extra space required)
+   - **Approach:** 
+     - Sort the array first. Then, use two pointers to find pairs that sum to the target.
+     - One pointer starts from the beginning (left), and the other from the end (right). The pointers move inward based on the sum of the elements at these positions.
+     - If the sum of the elements at the two pointers equals the target, output the pair. If the sum is less than the target, move the left pointer rightward; if the sum is greater, move the right pointer leftward.
+
+   **Code Example:**
+   ```java
+   public static void printPairsUsingTwoPointers(int[] numbers, int sum) {
+       Arrays.sort(numbers);
+       int left = 0;
+       int right = numbers.length - 1;
+       while (left < right) {
+           int currentSum = numbers[left] + numbers[right];
+           if (currentSum == sum) {
+               System.out.printf("(%d, %d) %n", numbers[left], numbers[right]);
+               left++;
+               right--;
+           } else if (currentSum < sum) {
+               left++;
+           } else {
+               right--;
+           }
+       }
+   }
+   ```
+   **Output:**
+   ```
+   Input array: [12, 14, 17, 15, 19, 20, -11]
+   All pairs in an array of integers whose sum equals 9:
+   (-11, 20)
+   ```
+
+---
+
+### **Considerations:**
+- **Brute Force:** Simple but inefficient for large arrays due to its O(n²) time complexity.
+- **Hash Set Solution:** Faster with O(n) time complexity, but requires additional space for the hash set.
+- **Two Pointers Solution:** Efficient in terms of space (O(1)) but requires sorting, leading to a time complexity of O(n log n). This is a good option when you want to avoid extra space usage.
+
+### **Further Optimizations or Considerations:**
+1. **Avoiding Duplicates:** 
+   - If you need to ensure that only unique pairs are returned, you can add a check to ensure no duplicate pairs are printed.
+2. **Edge Case Handling:** 
+   - Handle cases like empty arrays or arrays with less than two elements.
+3. **Sorting Trade-off:** 
+   - For arrays that are already sorted, using two pointers without sorting can be a good solution with O(n) time complexity.
+
+---
+
+### **Conclusion:**
+This problem demonstrates various approaches, from brute force to space-optimized solutions, highlighting the importance of choosing the right algorithm based on time and space trade-offs. The two-pointer approach is typically the most efficient for large datasets where the array is sorted, but if additional space is available, using a hash set provides an even faster solution.
+
+The Java programs you provided showcase two different approaches for finding duplicate elements in an array and also demonstrate a prime number checker. Below is a breakdown of your examples, and I will clarify each solution in detail.
+
+### **Finding Duplicates in an Array Using Brute Force**
+This approach involves checking each pair of elements in the array to identify duplicates. Here is the relevant code:
+
+```java
 public static Set<Integer> findDuplicates(int[] input) {
-        Set<Integer> duplicates = new HashSet<Integer>();
+    Set<Integer> duplicates = new HashSet<Integer>();
 
-        for (int i = 0; i < input.length; i++) {
-            for (int j = 1; j < input.length; j++) {
-                if (input[i] == input[j] && i != j) {
-                    // duplicate element found
-                    duplicates.add(input[i]);
-                    break;
-                }
+    for (int i = 0; i < input.length; i++) {
+        for (int j = i + 1; j < input.length; j++) {  // start from i+1 to avoid comparing with itself
+            if (input[i] == input[j]) {
+                // Duplicate found
+                duplicates.add(input[i]);
+                break; // No need to check further once a duplicate is found for this element
             }
         }
-
-        return duplicates;
     }
 
+    return duplicates;
+}
+```
 
-If you are preparing for programming job interviews, then I also suggest you take a look at the Grokking the Coding Interview: Patterns for Coding Questions course on Educative, which contains many popular patterns for solving coding problems. This means you don't need to solve 100+ Leedcode problems but just need to learn a few patterns which are applicable to many programming problems.
-How to find duplicate elements in an Array - Java
+**Explanation:**
+- This approach has a time complexity of \( O(n^2) \) because it checks each element against all other elements.
+- A `Set` is used to store duplicates because sets automatically handle uniqueness.
+- The inner loop checks for duplicates, and once a duplicate is found, the element is added to the `Set`.
 
+### **Optimized Approach Using HashSet (O(n))**
+The second solution optimizes the previous one using a `HashSet`. This method runs in \( O(n) \) time because adding to a `HashSet` takes constant time on average.
 
-
-
-
-How to Find duplicates in array in O(n) time Complexity
-The second solution demonstrates how you can use a suitable data structure to come up with a better algorithm to solve the same problem. If you know, in Java, the Set interface doesn't allow duplicates, and it's based upon hash table data structure, so insertion takes O(1) time in the average case.
-
-By using HashSet, a general-purpose Set implementation, we can find duplicates in O(n) time. All you need to do is iterate over an array using advanced for loop and insert every element into HashSet. Since it allows only unique elements, add() method will fail and return false when you try to add duplicates.
-
-
-
-Bingo, you have to find the duplicate element, just print them off to console, as shown in the following program:
-
+```java
 public static <T extends Comparable<T>> void getDuplicates(T[] array) {
-        Set<T> dupes = new HashSet<T>();
-        for (T i : array) {
-            if (!dupes.add(i)) {
-                System.out.println("Duplicate element in array is : " + i);
-            }
+    Set<T> dupes = new HashSet<T>();
+    for (T element : array) {
+        if (!dupes.add(element)) {  // if the element was already added, it's a duplicate
+            System.out.println("Duplicate element in array is: " + element);
         }
-
     }
-This solution also demonstrates how you can use Generics to write type-safe code in Java. This method will work on any type of Java array, like Array with Integer, Array with String or any object which implements Comparable interface, but will not work with a primitive array because they are not objects in Java.
+}
+```
 
-If you are preparing for programming job interviews, then I also suggest you take a look at the Cracking the Coding Interview book by Gayle McDowell, which contains 189 programming questions and solutions, good enough to do well on any programming job interviews like Java, C++, Python or Ruby.
+**Explanation:**
+- This method uses a `HashSet` to keep track of the unique elements encountered in the array.
+- If the `add()` method returns `false`, it means the element was already in the set, indicating a duplicate.
+- The method is generic, which means it can handle arrays of any type (`Integer`, `String`, etc.) as long as the elements are `Comparable`.
 
-How to find duplicate elements in Java array coding
+### **Combined Example (Integer and String Arrays)**
+Here's the combined program that demonstrates both methods for finding duplicates, with both integer and string arrays:
 
-
-
-Java Program to find duplicate elements in Java using Generics
-Here is the Java program to combine both solutions, you can try running this solution on Eclipse IDE and see how it works. You can also write the JUnit test to see our solution work in all cases, especially corner cases like an empty array, array with null, etc.
-
+```java
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 import static java.lang.System.*;
 
-/**
- * Java Program to find duplicate elements in an array. In this program, you
- * will learn two solution to find duplicate elements in integer array e.g.
- * brute force, by using HashSet data structure.
- * 
- * @author java67
- */
-
-public class DuplicatesFromArray{
+public class DuplicatesFromArray {
 
     public static void main(String args[]) {
         int[] withDuplicates = { 1, 2, 3, 1, 2, 3, 4, 5, 3, 6 };
         Set<Integer> duplicates = findDuplicates(withDuplicates);
-        out.println("input array is : " + Arrays.toString(withDuplicates));
-        out.println("Duplicate elements found in array are : " + duplicates);
+        out.println("Input array is: " + Arrays.toString(withDuplicates));
+        out.println("Duplicate elements found in array are: " + duplicates);
 
-        // now calling our generic method to find duplicates        
         String[] myArray = { "ab", "cd", "ab", "de", "cd" };
-        out.println("input string array is : " + Arrays.toString(myArray));
+        out.println("Input string array is: " + Arrays.toString(myArray));
         getDuplicates(myArray);
     }
 
-    /**
-     * Complexity of this solution is O(n^2)
-     * 
-     * @param input
-     * @return
-     */
     public static Set<Integer> findDuplicates(int[] input) {
         Set<Integer> duplicates = new HashSet<Integer>();
 
         for (int i = 0; i < input.length; i++) {
-            for (int j = 1; j < input.length; j++) {
-                if (input[i] == input[j] && i != j) {
-                    // duplicate element found
+            for (int j = i + 1; j < input.length; j++) {
+                if (input[i] == input[j]) {
                     duplicates.add(input[i]);
                     break;
                 }
@@ -11287,1038 +10391,322 @@ public class DuplicatesFromArray{
         return duplicates;
     }
 
-    /**
-     * Generic method to find duplicates in array. Complexity of this method is
-     * O(n) because we are using HashSet data structure.
-     * 
-     * @param array
-     * @return
-     */
     public static <T extends Comparable<T>> void getDuplicates(T[] array) {
         Set<T> dupes = new HashSet<T>();
         for (T i : array) {
             if (!dupes.add(i)) {
-                System.out.println("Duplicate element in array is : " + i);
+                System.out.println("Duplicate element in array is: " + i);
             }
-        }
-
-    }
-
-}
-
-Output :
-input array is : [1, 2, 3, 1, 2, 3, 4, 5, 3, 6]
-Duplicate elements found in array are : [1, 2, 3]
-input string array is : [ab, cd, ab, de, cd]
-Duplicate element in array is : ab
-Duplicate element in array is : cd
-
-That's all about how to find duplicate elements in an array. You have now learned two ways to solve this problem in Java. The first solution is the brute force algorithm, which is demonstrated by finding duplicate elements on integer array, but you can use the logic to find a duplicate on any kind of array. The second solution uses the HashSet data structure to reduce the time complexity from O(n^2) to O(n), and it also shows you can write generic methods to find duplicates on any object array.
-
-
-Read more: https://www.java67.com/2015/10/2-ways-to-find-duplicate-elements-in-java-array.html#ixzz8hj6NmF90
-
-How to Check if Given Number is Prime in Java - With Example
-
-Hello guys, today, we are going to discuss one of the most common programming exercises for beginners is, write a program to check if a given number is prime or not? There are many ways to check if a number is prime or not, but the most common of them is the trial division, which is what we will see in this tutorial. In my opinion, these kinds of programs are their first steps towards algorithmic understanding. You first come up with a solution, which is driven by the fact that prime numbers are natural numbers, that are not divisible by any positive number other than 1 and themselves. Then, you write a for loop to check every number, starting from 1 to a given number, to see if the given number is divisible by any positive number or not. This leads you to the solution.
-
-
-
-Then you find some more the fact that there is no need to check till N-1, where N is the number we are checking for primeness, and checking till the square root of N is enough. This reduces a lot of time, especially while checking a large number is prime or not.
-
-Further, you come to know that if it's not divisible by 2, then there is no need to checking for any other even number, and you increment the counter by 2 instead of 1. So in a way, you learn how to optimize your solution by taking advantage of the facts available.
-
-After this, you can try something like the Fibonacci series or maybe finding factorial of a number in Java to do some more practice on programming. This will not only teach you language basics like loops, control statements like if-else, use of arithmetic, and relational operator but also helps to develop programming logic.
-
-By the way, you can even take this problem of checking if a number is prime or not, to the next level, by trying to implement different algorithms for finding primes like the sieve of Atkin or sieve of Eratosthenes. In fact, in programming challenges, you often need to build your prime number cache up to a specific number to progress further in finding a solution.
-
-Btw, if you need to refresh your Data Structure and algorithm skills to solve those problems, then I highly recommend checking out Data Structures and Algorithms: Deep Dive Using Java course on Udemy. It's a hands-on course and covers all essential data structures. It's also very affordable, and you can get in just $10 on Udemy flash sales, which happen every now and then.
-
-
-
-
-How to Find if a Given Integer Number is a Prime Number or Not?
-Now, we'll understand our Java program to see if a given integer number is prime or not. As I said, a number is called a prime number if it's only divisible by 1 or itself, which means the prime number doesn't have any positive divisor other than itself. There are many ways to check if the number is prime or not or generating a list of primes.
-
-
-
-The most straightforward of them is known as trial division, which is a natural way of finding prime. In the trial division, you divide. It consists of testing whether n is a multiple of any integer between 2 and sqrt{n}.
-
-In this program, I have presented three solutions or methods to check if the number is prime. The first solution is the implementation of the trial division, where we are checking from 2 to sqrt(n); we are using java.lang.Math class for calculating the square root.
-
-Since this function returns double, we need to cast the result back into an integer. Our second method of checking if a number is prime or not is a little bit optimized than this as it doesn't check division by even numbers other than two.   The third method is most optimized for all three methods of prime number checking.
-
-
-
-Btw, if you are also preparing for coding interviews or improving your algorithmic skill then I suggest you take a look at this wonderful course from Educative, Grokking the Coding Interview: Patterns for Coding Questions.
-
-This is one of its kind courses that will not just teach you to solve the problem but also the pattern behind them, which means you can remember those patterns and apply them to many problems. A great way to build your coding and problem-solving skills.
-
-How to check if Given number is prime in Java
-
-
-
-
-Prime Number Checker in Java
-And, here is the complete Java program to check if a given number is prime or not. This question is also asked on written tests and interviews as to how to print prime numbers from 1 to 100  or finding the prime factor of a number in Java.  And,  there is another exercise for you to do after this is checking if a number is Armstrong's number or not.
-
-
-import java.util.Scanner;
-/**
- * Java Program to check if a number is Prime or Not. This program accepts a
- * number from command prompt and check if it is prime or not. 
- *
- * @author  http://java67.blogspot.com
- */
-public class PrimeTester {
-
-    public static void main(String args[]) {
-        Scanner scnr = new Scanner(System.in);
-        int number = Integer.MAX_VALUE;
-        System.out.println("Enter number to check if prime or not ");
-        while (number != 0) {
-            number = scnr.nextInt();
-            System.out.printf("Does %d is prime? %s %s  %s %n", number,
-                    isPrime(number), isPrimeOrNot(number), isPrimeNumber(number));
-        }
-    }
-
-
-    /*
-     * Java method to check if an integer number is prime or not.
-     * @return true if number is prime, else false
-     */
-    public static boolean isPrime(int number) {
-        int sqrt = (int) Math.sqrt(number) + 1;
-        for (int i = 2; i < sqrt; i++) {
-            if (number % i == 0) {
-                // number is perfectly divisible - no prime
-                return false;
-            }
-        }
-        return true;
-    }
-
-
-    /*
-     * Second version of isPrimeNumber method, with improvement like not
-     * checking for division by even number, if its not divisible by 2.
-     */
-    public static boolean isPrimeNumber(int number) {
-        if (number == 2 || number == 3) {
-            return true;
-        }
-        if (number % 2 == 0) {
-            return false;
-        }
-        int sqrt = (int) Math.sqrt(number) + 1;
-        for (int i = 3; i < sqrt; i += 2) {
-            if (number % i == 0) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-
-    /*
-     * Third way to check if a number is prime or not.
-     */
-    public static String isPrimeOrNot(int num) {
-        if (num < 0) {
-            return "not valid";
-        }
-        if (num == 0 || num == 1) {
-            return "not prime";
-        }
-        if (num == 2 || num == 3) {
-            return "prime number";
-        }
-        if ((num * num - 1) % 24 == 0) {
-            return "prime";
-        } else {
-            return "not prime";
         }
     }
 }
+```
 
-Output
-Enter number to check if prime or not
-2? Does 2 is prime? true prime number  true
-3? Does 3 is prime? true prime number  true
-4? Does 4 is prime? false not prime  false
-5? Does 5 is prime? true prime  true
-6? Does 6 is prime? false not prime  false
-7? Does 7 is prime? true prime  true
-17? Does 17 is prime? true prime  true
-21? Does 21 is prime? false not prime  false
-131? Does 131 is prime? true prime  true
-139? Does 139 is prime? true prime  true
+**Explanation:**
+- The program demonstrates the brute force approach (`findDuplicates`) for an integer array and the optimized approach (`getDuplicates`) for a string array.
+- The program first prints the duplicate elements found in both arrays.
+
+### **Prime Number Check (Trial Division Method)**
+
+The code provided for checking if a number is prime demonstrates several approaches to optimize the trial division technique:
+
+1. **Basic Trial Division**:
+   This method checks divisibility from 2 to \(\sqrt{n}\), which is the most straightforward approach.
+
+```java
+public static boolean isPrime(int number) {
+    int sqrt = (int) Math.sqrt(number) + 1;
+    for (int i = 2; i < sqrt; i++) {
+        if (number % i == 0) {
+            return false;  // number is divisible, so it's not prime
+        }
+    }
+    return true;  // number is prime
+}
+```
+
+2. **Optimized Trial Division (Skip Even Numbers)**:
+   This approach avoids checking for divisibility by even numbers (other than 2) to improve efficiency.
+
+```java
+public static boolean isPrimeNumber(int number) {
+    if (number == 2 || number == 3) {
+        return true;  // 2 and 3 are prime
+    }
+    if (number % 2 == 0) {
+        return false;  // All other even numbers are not prime
+    }
+    int sqrt = (int) Math.sqrt(number) + 1;
+    for (int i = 3; i < sqrt; i += 2) {
+        if (number % i == 0) {
+            return false;  // number is divisible by i, so it's not prime
+        }
+    }
+    return true;  // number is prime
+}
+```
+
+3. **Even More Optimized Method**:
+   This method uses a property of prime numbers, where a prime number \( p \) satisfies \( (p^2 - 1) \% 24 = 0 \).
+
+```java
+public static String isPrimeOrNot(int num) {
+    if (num < 0) {
+        return "not valid";
+    }
+    if (num == 0 || num == 1) {
+        return "not prime";
+    }
+    if (num == 2 || num == 3) {
+        return "prime number";
+    }
+    if ((num * num - 1) % 24 == 0) {
+        return "prime";
+    } else {
+        return "not prime";
+    }
+}
+```
+
+**Conclusion:**
+- The first part of your code offers two methods to find duplicate elements: a brute force approach with \(O(n^2)\) time complexity and an optimized approach using `HashSet` with \(O(n)\) complexity.
+- The second part demonstrates different methods for checking if a number is prime, starting with trial division and optimizing it step by step.
+
+Both sets of solutions are common interview topics and should help you improve your understanding of algorithm design and performance optimization.
 
 
-That's all in this program about how to check if a number is prime or not. The number must be an integer, as the concept of prime is only for natural numbers and not for floating-point numbers. As I said, there are a couple of more algorithms for checking if a number is prime or not, and some of the algorithms are optimized for finding prime numbers.
+### How to Find the Highest Repeating Word from a File in Java
 
-It is imperative for every programmer to know at least one fast way of finding a prime number, as this trial division is not fast enough for real-world problems. I suggest exploring the sieve of Atkin and the sieve of Eratosthenes's way of finding prime numbers.
+In Java, finding the most frequent word in a text file involves reading the file, storing words and their occurrences, and then sorting the words based on their frequency. Here's a detailed step-by-step approach and a sample code to achieve this task.
 
+#### Steps:
+1. **Read the File**: Open and read the contents of a text file line by line.
+2. **Store Word Frequencies**: Use a `HashMap` to store words as keys and their frequencies as values.
+3. **Sort Words by Frequency**: Since `HashMap` doesn't maintain the insertion order, we can use a `List` to sort the entries of the map by values (word frequencies).
+4. **Output**: After sorting, you can output the words with the highest frequency.
 
-Read more: https://www.java67.com/2014/01/how-to-check-if-given-number-is-prime.html#ixzz8hj6oZy7t
+#### Java Code Example:
 
-How to Find Highest Repeating Word from a File in Java [Word Count Solution]
-
-Hello guys, if you are looking for a Java program to print the word and their count from a given file then you have come to the right place. Earlier, I have shared 100+ Data Strucutre and Algorithms Problems from interviews and in this article, I will show you how to find worlds and their count from a given file in Java. How to find the word and their count from a text file is another frequently asked coding question from Java interviews. The logic to solve this problem is similar to what we have seen in how to find duplicate words in a String, where we iterate through string and store word and their count on a hash table and increment them whenever we encounter the same word. 
-
-In the first step, you need to build a word Map by reading the contents of a Text File. This Map should contain words as a key and their count as value. Once you have this Map ready, you can simply sort the Map based upon values. 
-
-
-
-
-Btw, If you don't know how to sort a Map on values, see this tutorial first. It will teach you how to sort  HashMap on values in Java.
-
-Now getting key and value sorted should be easy, but remember HashMap doesn't maintain order, so you need to use a List to keep the entry in sorted order.
-
-Once you got this list, you can simply loop over the list and print each key and value from the entry. This way, you can also create a table of words and their count in decreasing order.  This problem is sometimes also asked to print all words and their count in tabular format.
-
-By the way, if you are new to Java Programming and not familiar with essential Data Structure and their implementation on Collection Farmwork then I highly recommend you to join a comprehensive Java course like The Complete Java Masterclass by Tim Buchalaka and his team on Udemy. This 80+ hour course is the most comprehensive and up-to-date course to learn Java online.
-
-
-
-
-
-
-
-How to find the highest repeated word from a File in Java
-Here is the Java program to find the duplicate word which has occurred a maximum number of times in a file. You can also print the frequency of words from highest to lowest because you have the Map, which contains the word and their count in sorted order. All you need to do is iterate over each entry of Map and print the keys and values.
-
-The most important part of this solution is sorting all entries. Since Map.Entry doesn't implement the Comparable interface, we need to write our own custom Comparator to sort the entries.
-
-If you look at my implementation, I am comparing entries on their values because that's what we want. Many programmers say that why not use the LinkedHashMap class? but remember, the LinkedHashMap class keeps the keys in sorted order, not the values. So you need this special Comparator to compare values and store them in List.
-
-Here is one approach to solving this problem using the map-reduce technique. If you are not familiar with map-reduce and functional programming in Java then I highly recommend you to join Learn Java Functional Programming with Lambdas & Streams course on Udemy. It's a great course to learn essential Functional Programming concepts and methods like map, flatmap, reduce, and filter in Java. 
-
-How to find word and their count from a file in Java
-
-
-
-Java Program to Print word and their counts from a File
-Here is our complete Java program to find and print the world their count from a given file. It also prints the world with the highest and lowest occurrence characters from the file as asked in given problem. 
+```java
 import java.io.BufferedReader;
-import java.io.DataInputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-import java.util.StringTokenizer;
-import java.util.regex.Pattern;
-/**
- * Java program to find count of repeated words in a file.
- *
- * @author
- */
-public class Problem {
+import java.util.*;
 
-    public static void main(String args[]) {
-        Map<String, Integer> wordMap = buildWordMap("C:/temp/words.txt");
-        List<Entry<String, Integer>> list 
-                  = sortByValueInDecreasingOrder(wordMap);
-        System.out.println("List of repeated word from file and their count");
-        for (Map.Entry<String, Integer> entry : list) {
-            if (entry.getValue() > 1) {
-                System.out.println(entry.getKey() + " => "
-                            + entry.getValue());
-            }
+public class HighestRepeatingWord {
+
+    public static void main(String[] args) {
+        // Change this to the path of your file
+        String filePath = "C:/temp/words.txt";  
+        // Step 1: Build a word map from the file
+        Map<String, Integer> wordMap = buildWordMap(filePath);
+        
+        // Step 2: Sort the map by values (word count)
+        List<Map.Entry<String, Integer>> sortedList = sortByValue(wordMap);
+        
+        // Step 3: Output the sorted list
+        System.out.println("List of words sorted by frequency:");
+        for (Map.Entry<String, Integer> entry : sortedList) {
+            System.out.println(entry.getKey() + " => " + entry.getValue());
         }
     }
 
+    // Method to build the word map (word -> frequency)
     public static Map<String, Integer> buildWordMap(String fileName) {
-        // Using diamond operator for clean code
         Map<String, Integer> wordMap = new HashMap<>();
-        // Using try-with-resource statement for automatic resource management
-        try (FileInputStream fis = new FileInputStream(fileName);
-                DataInputStream dis = new DataInputStream(fis);
-                BufferedReader br = new BufferedReader(
-                                     new InputStreamReader(dis))) {
-            // words are separated by whitespace
-            Pattern pattern = Pattern.compile("\\s+");
-            String line = null;
+        
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(fileName)))) {
+            String line;
+            // Regular expression to split words by whitespace
             while ((line = br.readLine()) != null) {
-                // do this if case sensitivity is not required i.e. Java = java
-                line = line.toLowerCase();
-                String[] words = pattern.split(line);
+                String[] words = line.toLowerCase().split("\\s+");
                 for (String word : words) {
-                    if (wordMap.containsKey(word)) {
-                        wordMap.put(word, (wordMap.get(word) + 1));
-                    } else {
-                        wordMap.put(word, 1);
-                    }
+                    wordMap.put(word, wordMap.getOrDefault(word, 0) + 1);
                 }
             }
-        } catch (IOException ioex) {
-            ioex.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+        
         return wordMap;
     }
 
-    public static List<Entry<String, Integer>> sortByValueInDecreasingOrder(
-                                 Map<String, Integer> wordMap) {
-        Set<Entry<String, Integer>> entries = wordMap.entrySet();
-        List<Entry<String, Integer>> list = new ArrayList<>(entries);
-        Collections.sort(list, new Comparator<Map.Entry<String, Integer>>() {
-            @Override
-            public int compare(Map.Entry<String, Integer> o1, 
-                               Map.Entry<String, Integer> o2) {
-                return (o2.getValue()).compareTo(o1.getValue());
-            }
-        });
+    // Method to sort the word map by word frequency (in descending order)
+    public static List<Map.Entry<String, Integer>> sortByValue(Map<String, Integer> wordMap) {
+        List<Map.Entry<String, Integer>> list = new ArrayList<>(wordMap.entrySet());
+        list.sort((entry1, entry2) -> entry2.getValue().compareTo(entry1.getValue()));
         return list;
     }
 }
+```
 
-Output:
-List of repeated word from file and their count
+### Explanation:
+1. **Reading the File**: We use a `BufferedReader` to read the file. The file's contents are read line by line and split into words using `split("\\s+")`, which breaks the text by whitespace.
+   
+2. **Word Map**: We store words in a `HashMap`, where the key is the word, and the value is the frequency (number of times the word appears in the file). If a word is already in the map, its value is incremented.
+
+3. **Sorting**: Since `HashMap` does not maintain order, we convert it into a `List<Map.Entry<String, Integer>>`. Then, we sort the list by word frequency using a custom comparator: `entry2.getValue().compareTo(entry1.getValue())` for descending order.
+
+4. **Output**: After sorting, we print the words and their frequencies.
+
+### Example Output:
+```text
+List of words sorted by frequency:
+java => 5
+programming => 3
+language => 2
 its => 2
 of => 2
-programming => 2
-java => 2
-language => 2
+```
 
+### Handling Large Files:
+For large files, you may run into memory issues because storing all words in memory can lead to an `OutOfMemoryError`. To handle large files efficiently:
+- **Process in Chunks**: Read the file in chunks, process each chunk individually, and update the frequency counts incrementally.
+- **External Sorting**: If the file is too large to fit into memory, you might need to use external sorting algorithms, or store counts in a database.
 
-Tips for Solving Highest Repeating Characters Count Problem and Things to Remember
-If your writing code on interviews make sure they are production quality code, which means you must handle as many errors as possible, you must write unit tests, you must comment on the code and you do proper resource management. Here are a couple of more points to remember:
+### Important Considerations:
+- **Case Sensitivity**: The program converts all words to lowercase to ensure case-insensitivity.
+- **Word Delimiters**: The program assumes words are separated by whitespace. If you have punctuation marks, you may need to adjust the regular expression to handle them (e.g., remove punctuation before counting words).
+- **Empty File Handling**: If the file is empty, the program will output nothing or you could handle it explicitly.
 
+### Conclusion:
+This approach provides a simple and efficient way to find the most frequent word in a text file. You can modify this method to suit your specific needs, like handling different delimiters or adding advanced error handling.
 
+It looks like you've shared a detailed explanation of two different Java programming challenges: checking if a string is a palindrome using recursion, and finding duplicate characters in a string using a map. Let me summarize the key points for each part:
 
-1. Close files and streams once you are through with it, see this tutorial to learn the right way to close the stream. If you are in Java 7, just use the try-with-resource statement.
+### 1. **Palindrome Check Using Recursion**
+The first program checks if a string is a palindrome by recursively reversing it and comparing it with the original string. Here’s a breakdown of the program:
 
-2. Since the size of the file is not specified, the interviewer may grill you on cases like What happens if the file is large? With a large file, your program will run out of memory and throw java.lang.OutOfMemory: Java Heap space.
-
-One solution for this is to do this task in chunks like first read 20% content, find the maximum repeated word on that, then read the next 20% content, and find repeated maximum by taking the previous maximum into consideration. This way, you don't need to store all words in memory and you can process any arbitrary length file.
-
-3. Always use Generics for type safety. It will ensure that your program is correct at compile time rather than throwing Type related exceptions at runtime. 
-
-
-That's all on how to find repeated words from a file and print their count. You can apply the same technique to find duplicate words in a String. Since now you have a sorted list of words and their count, you can also find the maximum, minimum, or repeated words which has counted more than the specified number.
-
-
-Read more: https://www.java67.com/2015/10/java-program-to-find-repeated-words-and-count.html#ixzz8hj7Bglw2
-
-How to Remove Duplicates from ArrayList in Java [Example]
-
-ArrayList is the most popular implementation of the List interface from Java's Collection framework, but it allows duplicates. Though there is another collection called Set which is primarily designed to store unique elements, there are situations when you receive a List like ArrayList in your code and you need to ensure that it doesn't contain any duplicate before processing. Since with ArrayList you cannot guarantee uniqueness, there is no other choice but to remove repeated elements from ArrayList. 
-
-There are multiple ways to do this, you can follow the approach we used for removing duplicates from array in Java, where we loop through array and inserting each element in a Set, which ensures that we discard duplicate because Set doesn't allow them to insert, or you can also use remove method of ArrayList to get rid of them, once you found that those are duplicates.
-
-
-
-Btw, the simplest approach to remove repeated objects from ArrayList is to copy them to a Set e.g. HashSet and then copy it back to ArrayList. This will remove all duplicates without writing any more code.
-
-
-
-One thing to noted is that, if original order of elements in ArrayList is important for you, as List maintains insertion order, you should use LinkedHashSet because HashSet doesn't provide any ordering guarantee.
-
-If you are using deleting duplicates while iterating, make sure you use Iterator's remove() method and not the ArrayList one to avoid ConcurrentModificationException.  In this tutorial we will see this approach to remove duplicates.
-
-
-
-
-
-Java Program to Remove duplicates from ArrayList
-Here is our sample program to learn how to remove duplicates from ArrayList. The steps followed in the below example are:
-Copying all the elements of ArrayList to LinkedHashSet. Why we choose LinkedHashSet? Because it removes duplicates and maintains the insertion order.
-Emptying the ArrayList, you can use clear() method to remove all elements of ArrayList and start fresh. 
-Copying all the elements of LinkedHashSet (non-duplicate elements) to the ArrayList. 
-
-Please find below the complete code :
-
-import java.util.ArrayList;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
-
-
-/**
- * Java Program to remove repeated elements from ArrayList in Java.
- *
- * @author WINDOWS 8
- */
-
-public class ArrayListDuplicateDemo{
- 
-   
-    public static void main(String args[]){
-   
-        // creating ArrayList with duplicate elements
-        List<Integer> primes = new ArrayList<Integer>();
-       
-        primes.add(2);
-        primes.add(3);
-        primes.add(5);
-        primes.add(7);  //duplicate
-        primes.add(7);
-        primes.add(11);
-       
-        // let's print arraylist with duplicate
-        System.out.println("list of prime numbers : " + primes);
-       
-        // Now let's remove duplicate element without affecting order
-        // LinkedHashSet will guaranteed the order and since it's set
-        // it will not allow us to insert duplicates.
-        // repeated elements will automatically filtered.
-       
-        Set<Integer> primesWithoutDuplicates
-                   = new LinkedHashSet<Integer>(primes);
-       
-        // now let's clear the ArrayList so that we can 
-        // copy all elements from LinkedHashSet
-        primes.clear();
-       
-        // copying elements but without any duplicates
-        primes.addAll(primesWithoutDuplicates);
-       
-        System.out.println("list of primes without duplicates : " + primes);
-       
-    }
- 
-}
-
-Output
-list of prime numbers : [2, 3, 5, 7, 7, 11]
-list of primes without duplicates : [2, 3, 5, 7, 11]
-
-
-In this example, you can see we have created an ArrayList and added numbers into it, all prime numbers. We added '7' twice, so that it become duplicate. Now we print the ArrayList and you can see that it contains number 7 twice.
-
-How to remove duplicates from ArrayList in Java
-
-
-After that we created a LinkedHashSet from our ArrayList, clear our original ArrayList and then added all elements from set to the list. This time we should not have any duplicates because Set doesn't allow them and they should have filtered when elements copied from ArrayList to HashSet by Java. This is proved by printing the ArrayList again, now it doesn't contain 7 twice, but only once.
-
-That's all about how to remove duplicates from ArrayList in Java. Though there are multiple ways to do this, I think using LinkedHashSet is the simplest one because its simple and also preserve the order of elements.
-
-
-Read more: https://www.java67.com/2015/03/how-to-remove-duplicates-from-arraylist.html#ixzz8hj7cnc00
-
-How to check is given String is a Palindrome in Java using Recursion
-
-In this tutorial, you will learn how to check if a string is a palindrome in Java using Recursion. A String is nothing but a collection of characters like "Java," and String literals are encoded in double-quotes in Java. A String is said to be a palindrome if the reverse of String is equal to itself like "aba" is a palindrome because the opposite of "aba" is also "aba", but "abc" is not a palindrome because the reverse of "abc" is "cba" which is not equal. Recursion means solving a problem by writing a function which calls itself. In order to check if String is a palindrome in Java, we need a function that can reverse the String.
-
-
-
-Once you have the original and reversed String, all you need to do is check if they are equal to each other or not. If they are equal then String is palindrome or not. You can write this reverse() function by using either for loop or by using Recursion.
-
-
-
-If you remember, I already shared the logic of reversing String in my earlier post,  how to reverse String in Java using Iteration and Recursion. Here we will use the same logic to check if String is palindrome or not.
-
-By the way, if you are preparing for coding interviews and looking for some coding problem to get hands-on practice, I suggest you take a look at Data Structures and Algorithms: Deep Dive Using Java by Tim Buchalaka and his team on Udemy.
-
-This is a beautiful course, which contains lots of natural and medium difficulty level coding problems, which will not only help you to prepare for an interview but also develop your programming logic and Data Structure, and Algorithms skills. It's also very affordable and you can buy in just $10 on many Udemy sales which happen every now and then.
-
-
-
-
-
-Java Program to check if String is Palindrome Using Recursion
-Here is our Java program, which checks if a given String is palindrome or not. The program is simple, and here are steps to find palindrome String :
-
-1) Reverse the given String
-2) Check if the reverse of String is equal to itself; if yes, then given String is a palindrome.
-
-In our solution, we have a static method isPalindromeString(String text), which accepts a String. It then calls the reverse(String text) method to reverse this String. This method uses Recursion to reverse String. This function first checks if the given String is null or empty, if yes then it returns the same String because they don't require to be reversed.
-
-
-
-
-After this validation, it extracts the last character of String and passes rest or String using substring() method to this method itself, hence the recursive solution. The validation also servers as base case because, after every step, String keeps getting reduced, and eventually it will become empty, there your function will stop Recursion and will use String concatenation to concatenate all character in reverse order. Finally, this method returns the reverse of String.
-
-When the call to reverse() returns back, isPalindromeString(String text) uses the equals() method to check if the reverse of String is equal to the original String or not, if yes then it returns true, which also means String is a palindrome.
-
-As I said if you are looking for more coding-based problems you can also always check the Grokking the Coding Interview: Patterns for Coding Questions course on Educative, one of the great courses to build coding sense and pattern recognition required to clear programming interviews.
-
-How to check if String is palindrome in Java using recursion
-
-
-How to check if String is Palindrome in Java using Recursion
-Here is the complete Java program to check if the given String is palindrome or not. In this program, we have used Recursion to first reverse the String and then check if both original and reversed String is the same or not.
-
-package test;
-
-/**
- * Java program to show you how to check if a String is palindrome or not.
- * An String is said to be palindrome if it is equal to itself after reversing.
- * In this program, you will learn how to check 
- * if a string is a palindrome in java using recursion
- * and for loop both. 
- *
- * @author Javin
- */
+#### Code:
+```java
 public class PalindromeTest {
 
-   
-    public static void main(String args[]) {
-        System.out.println("Is aaa palindrom?: " 
-                             + isPalindromString("aaa"));
-        System.out.println("Is abc palindrom?: " 
-                             + isPalindromString("abc"));
-       
-        System.out.println("Is bbbb palindrom?: "
-                             + isPalindromString("bbbb"));
-        System.out.println("Is defg palindrom?: " 
-                             + isPalindromString("defg"));
-     
-       
+    public static void main(String[] args) {
+        System.out.println("Is aaa palindrome?: " + isPalindrome("aaa"));
+        System.out.println("Is abc palindrome?: " + isPalindrome("abc"));
+        System.out.println("Is bbbb palindrome?: " + isPalindrome("bbbb"));
+        System.out.println("Is defg palindrome?: " + isPalindrome("defg"));
     }
 
-    /**
-     * Java method to check if given String is Palindrome
-     * @param text
-     * @return true if text is palindrome, otherwise false
-     */
-    public static boolean isPalindromString(String text){
-       String reverse = reverse(text);
-       if(text.equals(reverse)){
-           return true;
-       }
-     
-       return false;
+    public static boolean isPalindrome(String text) {
+        String reverse = reverse(text);
+        return text.equals(reverse);
     }
-   
-    /**
-     * Java method to reverse String using recursion
-     * @param input
-     * @return reversed String of input
-     */
-    public static String reverse(String input){
-        if(input == null || input.isEmpty()){
+
+    public static String reverse(String input) {
+        if (input == null || input.isEmpty()) {
             return input;
         }
-       
-        return input.charAt(input.length()- 1) 
-                   + reverse(input.substring(0, input.length() - 1));
+        return input.charAt(input.length() - 1) + reverse(input.substring(0, input.length() - 1));
     }
+}
+```
+
+#### Explanation:
+- **`isPalindrome` Method:** This checks if the string equals its reversed version.
+- **`reverse` Method:** This is a recursive method that reverses the string by taking the last character and concatenating it with the reversed substring.
+
+#### Example Output:
+```
+Is aaa palindrome?: true
+Is abc palindrome?: false
+Is bbbb palindrome?: true
+Is defg palindrome?: false
+```
+
+### 2. **Finding Duplicate Characters in a String**
+The second program identifies characters that appear more than once in a string and prints the count for each duplicate character.
+
+#### Code:
+```java
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+
+public class FindDuplicateCharacters {
+
+    public static void main(String[] args) {
+        printDuplicateCharacters("Programming");
+        printDuplicateCharacters("Combination");
+        printDuplicateCharacters("Java");
+    }
+
+    public static void printDuplicateCharacters(String word) {
+        char[] characters = word.toCharArray();
+        Map<Character, Integer> charMap = new HashMap<>();
+
+        // Count the frequency of each character
+        for (Character ch : characters) {
+            charMap.put(ch, charMap.getOrDefault(ch, 0) + 1);
+        }
+
+        // Print duplicate characters
+        Set<Map.Entry<Character, Integer>> entrySet = charMap.entrySet();
+        System.out.printf("List of duplicate characters in String '%s' %n", word);
+        for (Map.Entry<Character, Integer> entry : entrySet) {
+            if (entry.getValue() > 1) {
+                System.out.printf("%s : %d %n", entry.getKey(), entry.getValue());
+            }
+        }
+    }
+}
+```
+
+#### Explanation:
+- **`printDuplicateCharacters` Method:** This method counts the frequency of each character in the string using a `HashMap` where the character is the key and its count is the value.
+- **`charMap.getOrDefault(ch, 0) + 1`:** This is used to increment the count of the character in the map.
+
+#### Example Output:
+```
+List of duplicate characters in String 'Programming'
+g : 2
+r : 2
+m : 2
+
+List of duplicate characters in String 'Combination'
+n : 2
+o : 2
+i : 2
+
+List of duplicate characters in String 'Java'
+```
+
+### Key Concepts:
+1. **Palindrome Check:**
+   - A string is a palindrome if it reads the same forwards and backwards.
+   - The recursive method `reverse` constructs the reverse string, and `isPalindrome` compares it to the original.
+
+2. **Duplicate Characters:**
+   - A `HashMap` is used to store the frequency of each character.
+   - The program iterates through the map and prints characters that have a frequency greater than 1.
+
+### How You Can Improve or Extend These Programs:
+- **Palindrome Check:** 
+   - If performance is a concern, you can optimize the palindrome check by comparing characters from both ends of the string in a single pass instead of reversing the string.
    
-}
-
-Output
-Is aaa palindrom?: true
-Is abc palindrom?: false
-Is bbbb palindrom?: true
-Is defg palindrom?: false
-
-
-And,  if you are looking for more coding-based problems you can also always check the Cracking the Coding Interview: 150 Programming Questions and Solutions, one of the great books to build the coding sense required to clear programming interviews.
-
-How to find if a String is Palindrome in Java
-
-
-
-How to check if String is Palindrome using StringBuffer and For loop
-You can also solve this problem by retrieving the character array from String using the toCharArray() and using a for loop and StringBuffer. All you need to do is iterate through the character array from end to start i.e. from the last index to the first index and append those characters into the StringBuffer object. Once this is done, just call the toString() method of StringBuffer, it's your reversed String.
-
-Here is how your code will look like :
-
-
-import java.util.Scanner;
-
-/**
- * How to check if String is palindrome in Java 
- * using StringBuffer and for loop.
- * 
- * @author java67
- */
-
-public class Palindrome{
-
-    public static void main(String args[]) {
-       
-        Scanner reader = new Scanner(System.in);
-        System.out.println("Please enter a String");
-        String input = reader.nextLine();
-        
-        System.out.printf("Is %s a palindrome? : %b %n", 
-                              input, isPalindrome(input));
-        
-        
-        System.out.println("Please enter another String");
-        input = reader.nextLine();
-        
-        System.out.printf("Is %s a palindrome? : %b %n", 
-                              input, isPalindrome(input));
-        
-        reader.close();
-        
-
-    }
-
-    public static boolean isPalindrome(String input) {
-        if (input == null || input.isEmpty()) {
-            return true;
-        }
-
-        char[] array = input.toCharArray();
-        StringBuilder sb = new StringBuilder(input.length());
-        for (int i = input.length() - 1; i >= 0; i--) {
-            sb.append(array[i]);
-        }
-
-        String reverseOfString = sb.toString();
-
-        return input.equals(reverseOfString);
-    }
-
-}
-
-
-That's all about how to check for palindrome in Java. You have learned how to find if a given String is palindrome using Recursion as well by using StringBuffer and for a loop. More importantly, you have done it by developing your own logic and writing your own code i.e. not taking help from a third-party library.
-
-
-Read more: https://www.java67.com/2015/06/how-to-check-is-string-is-palindrome-in.html#ixzz8hj8Osdzx
-
-How to Find Duplicate Characters in String [Java Coding Problems]
-
-Hello guys, today's programming exercise is to write a program to find repeated characters in a String. For example, if given input to your program is "Java", it should print all duplicates characters, i.e. characters appear more than once in String and their count like a = 2 because of character 'a' has appeared twice in String "Java". This is also a very popular coding question on the various level of Java interviews and written tests, where you need to write code. On the difficulty level, this question is at par with the prime numbers or Fibonacci series, which are also very popular on junior level Java programming interviews and it's expected from every programmer to know how to solve them.
-
-
-
-I personally like this exercise because it gives beginners an opportunity to familiarize themselves with the concept of Map data structure, which allows you to store mappings in the form of key and value.
-
-Since Map and Hash table data structure is heavily used in any enterprise Java application, good knowledge of this data structure is highly desirable among any level of Java programmers.
-
-By the way, there are a couple of variants of this problem, which you may want to look at before going for an interview.
-
-Sometimes an interviewer will ask you to read a file and print all duplicate characters and their count, core logic will remain the same, all you need to do is demonstrate how much you know about File IO in Java, like streaming file if it's very large rather than reading the whole file in memory.
-
-Btw, a basic knowledge of data structure and algorithms is needed and if you need to brush up then do so. If you need a resource, I highly recommend checking out Data Structures and Algorithms: Deep Dive Using Java course on Udemy. It's a hands-on course and covers all essential data structures. It's also very affordable and you can get in just $10 on Udemy flash sales which happens every now and then.
-
-
-
-
-
-Java Program to find Repeated Characters of String [Solution]
-The standard way to solve this problem is to get the character array from String, iterate through that and build a Map with character and their count. Then iterate through that Map and print characters which have appeared more than once. So you actually need two loops to do the job, the first loop to build the map and the second loop to print characters and counts.
-
-If you look at the below example, there is only one static method called the printDuplicateCharacters(), which does both these jobs. We first got the character array from String by calling toCharArray().
-
-Next, we are using HashMap to store characters and their count. We use the containsKey() method to check if the key, which is a character that already exists or not already exists we get the old count from HashMap by calling the get() method and store it back after incrementing it by 1.
-
-
-
-
-Once we build our Map with each character and count, the next task is to loop through Map and check each entry, if the count, which is the value of Entry is greater than 1, then that character has occurred more than once. You can now print duplicate characters or do whatever you want with them.
-
-By the way, if you are preparing for coding interviews then I highly recommend you to join Grokking the Coding Interview: Patterns for Coding Questions course on Educative. This is an interactive, text-based coding course to learn 15 essential coding patterns like sliding window, merge interval, fast and slow pointers, etc which can be used to solve 100+ coding problems, and you can get it just for $14.9 per month membership. 
-
-How to Find Duplicate Characters in String
-
-
-And, here is the complete Java program to find duplicate characters in a given String. 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Scanner;
-import java.util.Set;
-
-/**
-* Java Program to find duplicate characters in String.
-*
-*
-* @author http://java67.blogspot.com
-*/
-public class FindDuplicateCharacters{
-
-    public static void main(String args[]) {
-        printDuplicateCharacters("Programming");
-        printDuplicateCharacters("Combination");
-        printDuplicateCharacters("Java");
-    }
-
-    /*
-     * Find all duplicate characters in a String and print each of them.
-     */
-    public static void printDuplicateCharacters(String word) {
-        char[] characters = word.toCharArray();
-
-        // build HashMap with character and number of times they appear in String
-        Map<Character, Integer> charMap = new HashMap<Character, Integer>();
-        for (Character ch : characters) {
-            if (charMap.containsKey(ch)) {
-                charMap.put(ch, charMap.get(ch) + 1);
-            } else {
-                charMap.put(ch, 1);
-            }
-        }
-
-        // Iterate through HashMap to print all duplicate characters of String
-        Set<Map.Entry<Character, Integer>> entrySet = charMap.entrySet();
-        System.out.printf("List of duplicate characters in String '%s' %n", word);
-        for (Map.Entry<Character, Integer> entry : entrySet) {
-            if (entry.getValue() > 1) {
-                System.out.printf("%s : %d %n", entry.getKey(), entry.getValue());
-            }
-        }
-    }
-
-}
-
-Output
-List of duplicate characters in String 'Programming'
-g : 2
-r : 2
-m : 2
-List of duplicate characters in String 'Combination'
-n : 2
-o : 2
-i : 2
-List of duplicate characters in String 'Java'
-
-
-Read more: https://www.java67.com/2014/03/how-to-find-duplicate-characters-in-String-Java-program.html#ixzz8hj8lDMfS
-
-How to find Factorial in Java using Recursion and Iteration - Example Tutorial
-
-Hello guys, if you are looking for a Java program to calculate factorial with and without recursion then you have come to the right place. Factorial is a common programming exercise that is great to learn to code and how to program. When I teach Java to new people, I often start with coding problems like prime numbers, Fibonacci series, and factorial because they help you to develop a coding sense and teach you how to write a program initially. In order to calculate factorial, you just need to know the factorial concepts from Mathematics, and rest I will explain this simple Java programming tutorial. 
-
-If you come from a Maths background then you know that the factorial of a number is number*(factorial of number -1), once you know that, your next task is how to convert that formula into a computer program and that's what you will learn in this article. 
-
-
-
-We will use Java programming constructs like variables, operators, methods, and algorithms like recursion and loops to calculate the factorial of a number in Java, but before that let's get the problem statement right. 
-
-Problem: Write a Java program to calculate the factorial of a given number in Java, using both recursion and iteration.
-
-Solution:  We will use this formula to calculate factorial in this  Java tutorial. Since factorial is a naturally recursive operation, it makes sense to first use recursion to solve this problem which is great and we'll also do the same but just remember that it's not always the best way to solve problems in the real world. 
-
-Iteration provides a more robust way, but don't worry you will learn how to calculate factorial with and without recursion in Java.
-
-
-By the way, the factorial of numbers grows very quickly and even the largest integral data type in Java long is not able to hold factorial of anything or above 50. In such cases, you can use BigInteger or long or data type which has theoretically no limit and can be used to represent very large integral numbers.
-
-
-
-
-How to Calculate Factorial in Java? Example Tutorial
-Without wasting any more of your time, let's jump into the two solutions we can use to calculate factorials in Java. In the first solution, we will use recursion, where a method calls itself for repetition, and in the second solution, we will use loops like for and while loop to achieve repetition. This is also known as iteration because you iterate or perform the same task again and again. 
-
-Solution 1: Factorial using recursion
-In order to create a recursive solution, you would need a base case where the program terminates and repetition stops.  In this problem, the base case is factorial of 1, which is 1 so when your function calls factorial(1) you can simply return 1 without doing any calculation. 
-
-And, if the given number is greater than 1, we keep applying the factorial formula and recursive calling the same factorial with n - 1 as shown below :
- public static long factorial(int number){        
-        //base case - factorial of 0 or 1 is 1
-        if(number <=1){
-            return 1;
-        }        
-        return number*factorial(number - 1);
-    }
-Once input becomes 1 the method stopped recursive call and return 1. From there onward method stack started to roll down and finally factorial of a number is calculated and returned. 
-
-
-
-Solution 2: Factorial without Recursion
-As I said instead of using recursion and calling the factorial method again you can also use for loop to calculate factorial because !n = n*(n-1)*(n-2).....*1, which can easily be implemented using the loop as shown below :
-public static long factorial(long input){
-        long factorial = 1L;
-        for(long i= input; i > 0; i--){
-            factorial = factorial * i;
-        }
-        
-        return factorial;
-    }
-You can see that we start with the number and multiply it with the factorial which is initialized with 1 then we reduce the number by 1 until the number becomes 1, which is nothing but n*(n-1)*(n-2).....*1.
-
-
-
-
-Java Program to calculate Factorial with and without Recursion
-Here is our complete solution to this problem. You can see that I have created two factorial() methods, one accepts an int and return long like long factorial(int number), while the other accepts a long and returns a long factorial i.e. long factorial(long number). 
-
-How to calculate factorial in Java using recursion
-
-
-Since their parameter type is different they are two different methods also known as overloaded methods. The first method uses recursion to calculate factorial while the second method uses iteration to calculate factorial.
-
-import java.math.BigInteger;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-
-/**
- * Java Program to calculate factorial using iteration and recursion
- * 
- * @author WINDOWS 8
- *
- */
-public class FactorialTest {
-
-    public static void main(String args[]) {
-       
-        System.out.println("factorial of 1 using recursion : " 
-                  + factorial(1));
-        System.out.println("factorial of 1 using iteration : " 
-                  + factorial(1L));
-        
-        System.out.println("factorial of 5 using recursion : " 
-                          + factorial(5));
-        System.out.println("factorial of 5 using loop : "  
-                             + factorial(5L));       
-        
-        System.out.println("factorial of 7 using recursive algorithm : "
-                      + factorial(7));
-        System.out.println("factorial of 7 using iterative algorithm : " 
-                      + factorial(7L)); 
-        
-    }
-
-  
-    /**
-     * Java method to calculate factorial of given integer using recursion.
-     * @param number
-     * @return factorial of number
-     */
-    public static long factorial(int number){
-        
-        //base case - factorial of 0 or 1 is 1
-        if(number <=1){
-            return 1;
-        }
-        
-        return number*factorial(number - 1);
-    }
-    
-    /**
-     * Java method to calculate factorial of given number using iteration
-     * @param input
-     * @return factorial of input
-     */
-    public static long factorial(long input){
-        long factorial = 1L;
-        for(long i= input; i > 0; i--){
-            factorial = factorial * i;
-        }
-        
-        return factorial;
-    }
-    
-}
-
-Output :
-factorial of 1 using recursion : 1
-factorial of 1 using iteration : 1
-factorial of 5 using recursion : 120
-factorial of 5 using loop : 120
-factorial of 7 using recursive algorithm : 5040
-factorial of 7 using iterative algorithm : 5040
-
-
-That's all about how to calculate the factorial of a number in Java using both recursion and iteration. This problem is often used to teach programming, particularly recursion in schools and colleges, and it's a good one as well. Just remember that even though recursive solutions are small and clear they are prone to throw StackOverFlowException, hence not suitable for production code. Iteration or use of for loop results in a more robust solution.
-
-
-Read more: https://www.java67.com/2015/09/factorial-in-java-using-recursion-and-loop.html#ixzz8hj9Lgetq
-
-How to Reverse words in String Java? [Solution]
-
-Hello guys, if you are wondering how to reverse words in a given String in Java then you have come to the right place. Earlier, I have shared 75 Programming interview questions and In this Java Coding tutorial, you will learn how to reverse words in String. It's also one of the popular coding questions, so you will also learn how to take a requirement, how to fill gaps in the requirement by asking the right question. A String is nothing but a sentence, which may contain multiple works, or just contain a single word or it may be empty. Your program must produce a String that contains the word in reverse order, for example, if the given input is "Java is Great" then your program should return "Great is Java".  
-
-
-
-Now, if you are a good programmer then you should have some right questions for the Interviewer. Never assume you know everything, even if it looks like a simple problem.
-
-Always remember "Devil is in detail". Also asking a question, not only fill the gaps in requirement but also help you to make an impression.
-
-One question the candidate should definitely ask is, what constitutes a word here? For the purpose of this program, the word is nothing but a sequence of non-space characters. Another good question you can ask to Interview is about input like is it possible for input string to contain leading or trailing spaces?
-
-Yes, it's possible. However, your reversed string should not any contain leading or trailing spaces.
-
-One more important question for the Interviewer is about spacing between words, is it possible to have multiple spaces between two words? Yes, it could be possible but you can reduce them to a single space in the reversed string.
-
-
-
-
-
-Reversing the order of words in a Sentence in Java - Solution
-Here is our Java solution to this problem. It's simple and straightforward.  In this code example, I have shown two ways to reverse words in a String, first one is using, Java's regular expression support to split the string into spaces and then using the reverse() method of Collections utility class. 
-
-Once you split the String using regex "\\s", it will return you an array of words. It will also handle words separated by multiple spaces, so you don't need to worry.
-
-
-
-Once you got the array, you can create an ArrayList from an array, and then you are eligible to use Collections.reverse() method. 
-
-
-This will reverse your ArrayList and you will have all the words in reverse order, now all you need to do is concatenate multiple String by iterating over ArrayList.
-
-I have used StringBuilder for concatenating String here. Also make sure to specify size, because resizing of StringBuilder is costly as it involves the creation of a new array and copying content from the old to the new array.
-
-As I said earlier, for more coding problems from programming interviews, you can also check the Grokking the Coding Interview: Patterns for Coding Questions, one of the best resources to learn essential coding patterns like sliding window, merge interval, fast and slow pointers, etc which can be used to solve 100+ Leetcode problems. 
-
-How to Reverse words in String Java
-
-
-
-The second method to reverse words in a given string is, even more, easier, instead of using the Collections.reverse() method, I have just used the traditional for loop and started looping over array from the end and performing String concatenation. 
-
-This way, you even don't need to convert your String array to ArrayList of String. This solution is more memory efficient and faster than the previous one.
-
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
- 
-/**
- * Java Program to reverse words in String. There are multiple way to solve this
- * problem. you can either use any collection class like List and reverse the
- * List and later create reverse String by joining individual words.
- *
- * @author Javin Paul
- */
-public class Testing {
- 
-  public static void main(String args[]) {
- 
-  }
- 
-  /*
-  * Method to reverse words in String in Java
-  */
-  public static String reverseWords(String sentence) {
-    List< String> words = Arrays.asList(sentence.split("\\s"));
-    Collections.reverse(words);
-    StringBuilder sb = new StringBuilder(sentence.length());
- 
-    for (int i = words.size() - 1; i >= 0; i--) {
-      sb.append(words.get(i));
-      sb.append(' ');
-    }
- 
-    return sb.toString().trim();
+   ```java
+   public static boolean isPalindromeOptimized(String text) {
+       int left = 0, right = text.length() - 1;
+       while (left < right) {
+           if (text.charAt(left) != text.charAt(right)) {
+               return false;
+           }
+           left++;
+           right--;
+       }
+       return true;
    }
- 
-  public static String reverseString(String line) {
-    if (line.trim().isEmpty()) {
-      return line;
-    }
- 
-    StringBuilder reverse = new StringBuilder();
-    String[] sa = line.trim().split("\\s");
- 
-     for (int i = sa.length - 1; i >= 0; i--) {
-        reverse.append(sa[i]);
-        reverse.append(' ');
-     }
- 
-     return reverse.toString().trim();
-   }
- }
-}
+   ```
+
+- **Duplicate Characters:** 
+   - You could also make the duplicate character detection case-insensitive or ignore spaces and punctuation.
+   - Alternatively, you can use a `LinkedHashMap` to maintain the order of characters as they appear in the original string.
+
+Let me know if you need any further clarification or assistance with either of these programs!
 
 
-Read more: https://www.java67.com/2015/06/how-to-reverse-words-in-string-java.html#ixzz8hj9w4NmS
-
-How to Find Duplicate Characters in String [Java Coding Problems]
-
-Hello guys, today's programming exercise is to write a program to find repeated characters in a String. For example, if given input to your program is "Java", it should print all duplicates characters, i.e. characters appear more than once in String and their count like a = 2 because of character 'a' has appeared twice in String "Java". This is also a very popular coding question on the various level of Java interviews and written tests, where you need to write code. On the difficulty level, this question is at par with the prime numbers or Fibonacci series, which are also very popular on junior level Java programming interviews and it's expected from every programmer to know how to solve them.
-
-
-
-I personally like this exercise because it gives beginners an opportunity to familiarize themselves with the concept of Map data structure, which allows you to store mappings in the form of key and value.
-
-Since Map and Hash table data structure is heavily used in any enterprise Java application, good knowledge of this data structure is highly desirable among any level of Java programmers.
-
-By the way, there are a couple of variants of this problem, which you may want to look at before going for an interview.
-
-Sometimes an interviewer will ask you to read a file and print all duplicate characters and their count, core logic will remain the same, all you need to do is demonstrate how much you know about File IO in Java, like streaming file if it's very large rather than reading the whole file in memory.
-
-Btw, a basic knowledge of data structure and algorithms is needed and if you need to brush up then do so. If you need a resource, I highly recommend checking out Data Structures and Algorithms: Deep Dive Using Java course on Udemy. It's a hands-on course and covers all essential data structures. It's also very affordable and you can get in just $10 on Udemy flash sales which happens every now and then.
-
-
-
-
-
-Java Program to find Repeated Characters of String [Solution]
-The standard way to solve this problem is to get the character array from String, iterate through that and build a Map with character and their count. Then iterate through that Map and print characters which have appeared more than once. So you actually need two loops to do the job, the first loop to build the map and the second loop to print characters and counts.
-
-If you look at the below example, there is only one static method called the printDuplicateCharacters(), which does both these jobs. We first got the character array from String by calling toCharArray().
-
-
-
-Next, we are using HashMap to store characters and their count. We use the containsKey() method to check if the key, which is a character that already exists or not already exists we get the old count from HashMap by calling the get() method and store it back after incrementing it by 1.
-
-
-
-Once we build our Map with each character and count, the next task is to loop through Map and check each entry, if the count, which is the value of Entry is greater than 1, then that character has occurred more than once. You can now print duplicate characters or do whatever you want with them.
-
-By the way, if you are preparing for coding interviews then I highly recommend you to join Grokking the Coding Interview: Patterns for Coding Questions course on Educative. This is an interactive, text-based coding course to learn 15 essential coding patterns like sliding window, merge interval, fast and slow pointers, etc which can be used to solve 100+ coding problems, and you can get it just for $14.9 per month membership. 
-
-How to Find Duplicate Characters in String
-
-
-And, here is the complete Java program to find duplicate characters in a given String. 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Scanner;
-import java.util.Set;
-
-/**
-* Java Program to find duplicate characters in String.
-*
-*
-* @author http://java67.blogspot.com
-*/
-public class FindDuplicateCharacters{
-
-    public static void main(String args[]) {
-        printDuplicateCharacters("Programming");
-        printDuplicateCharacters("Combination");
-        printDuplicateCharacters("Java");
-    }
-
-    /*
-     * Find all duplicate characters in a String and print each of them.
-     */
-    public static void printDuplicateCharacters(String word) {
-        char[] characters = word.toCharArray();
-
-        // build HashMap with character and number of times they appear in String
-        Map<Character, Integer> charMap = new HashMap<Character, Integer>();
-        for (Character ch : characters) {
-            if (charMap.containsKey(ch)) {
-                charMap.put(ch, charMap.get(ch) + 1);
-            } else {
-                charMap.put(ch, 1);
-            }
-        }
-
-        // Iterate through HashMap to print all duplicate characters of String
-        Set<Map.Entry<Character, Integer>> entrySet = charMap.entrySet();
-        System.out.printf("List of duplicate characters in String '%s' %n", word);
-        for (Map.Entry<Character, Integer> entry : entrySet) {
-            if (entry.getValue() > 1) {
-                System.out.printf("%s : %d %n", entry.getKey(), entry.getValue());
-            }
-        }
-    }
-
-}
-
-Output
-List of duplicate characters in String 'Programming'
-g : 2
-r : 2
-m : 2
-List of duplicate characters in String 'Combination'
-n : 2
-o : 2
-i : 2
-List of duplicate characters in String 'Java'
-
-
-Read more: https://www.java67.com/2014/03/how-to-find-duplicate-characters-in-String-Java-program.html#ixzz8hjA0mwrM
 
 How to Reverse an Integer in Java without converting to String? Example and Solution
 
@@ -12339,314 +10727,226 @@ If the return type of method is an integer then you can simply return 1, it's pe
 
 By the way, if you are preparing for coding interviews then you should be prepared for such kinds of questions. According to Leetcode, this is one of the common coding problems from Google interviews.
 
+### Factorial in Java Using Recursion and Iteration - Example Tutorial
 
+In this tutorial, we will explore two ways of calculating the **factorial** of a number in Java: **using recursion** and **using iteration**. Factorial is a fundamental concept in mathematics and programming. It is the product of all positive integers up to a given number. The factorial of `n` (denoted as `n!`) is calculated as:
 
+- `n! = n * (n - 1) * (n - 2) * ... * 1` for any number `n > 0`
+- `0! = 1` (by definition)
 
+### Problem: 
+Write a Java program to calculate the factorial of a number using both recursion and iteration.
 
-How to Reverse digits of an Integer in Java without converting to String?
-Here are my algorithms to solve this problem of reversing integer numbers without using any direct library method. 
+### Solution:
+We will calculate the factorial of a number using two methods:
 
-The crux of this problem is how to use division and modulo operators in Java to get the last digit of a number and get rid of the last digit as well.
+1. **Using Recursion** (method calls itself)
+2. **Using Iteration** (using loops like `for`)
 
-If you remember, I have shared this trick before when I was explaining how to use a modulo operator in Java. This is a really neat trick and will help you to solve many programming problems where you need to divide numbers into individual digits.
+### 1. Factorial Using Recursion
 
-When you divide a number by 10, you get rid of the last digit, for example, 211/10 will give you 21, and 21/10 will give you 2, so you got rid of the last 2 digits by dividing your number by 10 twice.
+In a **recursive solution**, a method calls itself with the decremented value of the input number until it reaches the base case (`1` or `0`), at which point it returns `1`.
 
-Similarly, you can use the number modulo 10 to get the last digit of the number, for example, 221%10 will return 1, which is the last digit and 22%10 will return 2, which is the last digit of 22. You can apply this logic until you processed the last digit.
+Here's how we can implement the recursive approach:
 
-How to Reverse digits of an Integer in Java without converting to String?
+```java
+public static long factorial(int number) {
+    // Base case: factorial of 0 or 1 is 1
+    if (number <= 1) {
+        return 1;
+    }
+    // Recursive case: number * factorial of (number - 1)
+    return number * factorial(number - 1);
+}
+```
 
+### 2. Factorial Using Iteration
 
-Now the question comes, how do you arrange those digits in reverse order? Well, you can use just the opposite, I mean, multiplication and addition to creating a new number with digits of the old number in reverse order.  I have used the following logic to assemble digits into reverse order :
+In an **iterative solution**, we can calculate the factorial using a loop that multiplies the current value by every integer from the input down to `1`.
 
-reverse = reverse * 10 + lastDigit;
+Here's how we can implement the iterative approach:
 
-You can see by multiplying a number by 10 you increase the number of digits by 1 and then add the last digit. For negative numbers, we multiply it by -1 to first make it positive and then apply the same logic, while returning numbers we just multiply it by -1 again to convert the reversed number into negative.
+```java
+public static long factorial(long input) {
+    long factorial = 1L;
+    for (long i = input; i > 0; i--) {
+        factorial = factorial * i;
+    }
+    return factorial;
+}
+```
 
+### Java Program to Calculate Factorial Using Recursion and Iteration
 
+```java
+public class FactorialTest {
+    public static void main(String[] args) {
+        System.out.println("Factorial of 1 using recursion: " + factorial(1));
+        System.out.println("Factorial of 1 using iteration: " + factorial(1L));
 
-This kind of little trick really helps to solve coding problems during interviews and in your day-to-day life. If you want to learn more of such patterns to boost your problem-solving skills then I also suggest you check out Grokking the Coding Interview: Patterns for Coding Questions course on Educative.
+        System.out.println("Factorial of 5 using recursion: " + factorial(5));
+        System.out.println("Factorial of 5 using iteration: " + factorial(5L));
 
-best course to learn coding patterns for interviews
-
-This course will teach you 6 essential coding patterns like Sliding Window, Two Pointers, Fast and Slow Pointers, Merge Intervals, Cyclic Sort, and Top K elements that can help you to solve zones of frequently asked coding problems.  This is very good for preparing coding interviews as well as improving your coding skills.
-
-
-
-Java Program to reverse an Integer without using String
-Here is our complete Java program to reverse a given Integer without using String. As explained in the above paragraph, I have used the Arithmetic and modulus operator to solve this problem.
-
-import java.util.Scanner;
-
-/**
- * Java Program to reverse Integer in Java, number can be negative.
- * Example 1:  x = 123, return 321
- * Example 2:  x = -123, return -321
- *
- * @author Javin Paul
- */
-
-public class ReverseInteger{
-
-    public static void main(String args[]) {
-        int input = 5678;
-        int output = reverseInteger(5678);
-        System.out.println("Input : " + input + " Output : " + output);
+        System.out.println("Factorial of 7 using recursion: " + factorial(7));
+        System.out.println("Factorial of 7 using iteration: " + factorial(7L));
     }
 
-    /*
-     * Java method to reverse an integer value. there are couple of 
-     * corner cases
-     * which this method doesn't handle e.g. integer overflow.
-     */
-    public static int reverseInteger(int number) {
-        boolean isNegative = number < 0 ? true : false;
-        if(isNegative){
-            number = number * -1;
+    // Factorial using recursion
+    public static long factorial(int number) {
+        if (number <= 1) {
+            return 1;
         }
-        int reverse = 0;
-        int lastDigit = 0;
-
-        while (number >= 1) {
-            lastDigit = number % 10; // gives you last digit
-            reverse = reverse * 10 + lastDigit;
-            number = number / 10; // get rid of last digit
-        }
-
-        return isNegative == true? reverse*-1 : reverse;
+        return number * factorial(number - 1);
     }
 
+    // Factorial using iteration
+    public static long factorial(long input) {
+        long factorial = 1L;
+        for (long i = input; i > 0; i--) {
+            factorial = factorial * i;
+        }
+        return factorial;
+    }
 }
+```
 
-Result :
-Input : 5678 Output : 8765
+### Output:
 
-You can see that output is the just reverse of input. The first digit has exchanged position with the last digit, the second with the second last, and so on.
+```
+Factorial of 1 using recursion: 1
+Factorial of 1 using iteration: 1
+Factorial of 5 using recursion: 120
+Factorial of 5 using iteration: 120
+Factorial of 7 using recursion: 5040
+Factorial of 7 using iteration: 5040
+```
 
+### Recursion vs Iteration
+- **Recursion**: The recursive approach is elegant and mirrors the mathematical formula. However, recursive calls involve overhead in terms of memory and stack frames. If the input is large, recursion could lead to a **StackOverflowError**.
+- **Iteration**: The iterative approach is usually more efficient and can handle larger inputs, as it doesn't rely on the stack. However, the code may be longer and less intuitive than the recursive solution.
 
-Read more: https://www.java67.com/2015/08/how-to-reverse-integer-in-java-leetcode-solution.html#ixzz8hjAP9zM6
+### Handling Large Factorials
+Factorial values grow very quickly. For instance, the factorial of `20` is already a very large number (`2,432,902,008,176,640,000`). The largest integer type (`long`) in Java can handle up to 19! (factorial of 19), but beyond that, you'd need to use the `BigInteger` class to store larger factorials.
 
-How to check leap year in Java - program example
+### How to Reverse Words in a String in Java?
 
-Write a Java program to find if a year is a leap year or not is a standard Java programming exercise during various Java programming courses on schools, colleges, and various training institutes both online and offline,  along with other popular homework's e.g. printing Fibonacci numbers, checking palindromes, or finding prime numbers. Just to recap a leap year is a year with 366 days which is 1 extra day than a normal year. This extra day comes in the month of February and on leap year Feb month has 29 days than normal 28 days. If you are following then you might know that leap year comes in an interval of 4 years. This year 2012 is a leap year and Feb has 29 days, you can check.
+Reversing the order of words in a given sentence is another common programming challenge. Here's how you can reverse the words of a string in Java.
 
+#### Approach:
+- Split the string into words.
+- Reverse the list of words.
+- Join them back into a single string.
 
+#### Method 1: Using `Collections.reverse()` and `StringBuilder`
 
-
-Now if you are in programming before you might be familiar that there is standard logic to find leap year i.e. if a year is multiple of 400 or multiple of 4 but not multiple of 100 then it's a leap year. In addition to this standard logic, you can also use Java's Date, Time, and Calendar API to check how many days any year has and by comparing that number with 365 you can find whether that year is a leap year or not. 
-
-In this Java programming tutorial, we will both of these examples to check if a year is a leap year or not.
-
-And, if you are new to Coding and Programming then I also suggest you check out these free Programming courses to learn programming basics like operators, functions, classes, loops, etc in Java, Python, JavaScript, and other popular programming languages.
-
-
-
-Java program to check if a year is a leap year
-Here is a complete code example of a Java program to find out whether a year is a leap year or not. isLeapYear(int year) method uses Calendar API to get the maximum number of days in that year and compare that with 365. If the year contains more than 365 days, it's a leap year. The second method doesLeapYear(int year) uses programming logic to find if a year is a leap or not.
-
-How to check leap year in Java - program example
-
-
-
-
-How to check if a year is a leap year in Java
-Here is our complete Java program to test if a given year is a leap year or not. 
-
-package test;
-
-import java.util.Calendar;
-
-/**
- *
- * Java program to find if a year is a leap year or not.
- * A leap year is a year that contains 366 days, which is 1 day more than the normal 365 day year.
- * Leap year comes in an interval of 4 years. In Gregorian
- * calendar in leap year February has 29 days which is 1 day more than 28 day in a normal year.
- *
- * @author
- */
-public class LeapYearProgram {
- 
- 
-    public static void main(String args[]) {
- 
-        //Testing some leap and non-leap year using Java library code
-        System.err.println("Is 2000 a leap year ? : " + isLeapYear(2000));
-        System.err.println("Is 2012 a leap year ? : " + isLeapYear(2012));
-        System.err.println("Is 1901 a leap year ? : " + isLeapYear(1901));
-        System.err.println("Is 1900 a leap year ? : " + isLeapYear(1900));
-     
-     
-        //Checking leap year without using library or API and applying logic
-        System.err.println("Does 2000 a leap year : " + doesLeapYear(2000));
-        System.err.println("Does 2012 a leap year : " + doesLeapYear(2012));
-        System.err.println("Does 1901 a leap year : " + doesLeapYear(1901));
-        System.err.println("Does 1900 a leap year : " + doesLeapYear(1900));
-    }  
- 
- 
-   /*
-     * This method checks whether a year is a leap or not by using Java Date
-     * and Time API. Calendar class has a utility method to return maximum
-     * number of days in a year which can be used to check if its
-     * greater than 365 or not
-     */
-   public static boolean isLeapYear(int year){
-       Calendar cal = Calendar.getInstance(); //gets Calendar based on local timezone and locale
-       cal.set(Calendar.YEAR, year); //setting the calendar year
-       int noOfDays = cal.getActualMaximum(Calendar.DAY_OF_YEAR);
-     
-       if(noOfDays > 365){
-           return true;
-       }
-     
-       return false;
-   }
- 
-   /*
-    * This method uses standard logic to check leap year in Java.
-    * A year is a leap year if its multiple of 400 or multiple of 4 but not 100
-    */
-   public static boolean doesLeapYear(int year){
-       return (year%400 == 0) || ((year%100) != 0 && (year%4 == 0));
-   }
-}
-
-Output:
-Is 2000 a leap year ? : true
-Is 2012 a leap year ? : true
-Is 1901 a leap year ? : false
-Is 1900 a leap year ? : false
-Does 2000 a leap year : true
-Does 2012 a leap year : true
-Does 1901 a leap year : false
-Does 1900 a leap year : false
-
-
-Read more: https://www.java67.com/2012/12/how-to-check-leap-year-in-java-program.html#ixzz8hjAUccRt
-
-Bubble sort in Java - Program to sort an Integer Array [Example]
-
-Bubble sort is one of the classic sorting algorithms,s which is used to explain sorting during various computer and engineering courses. Because of its algorithmic nature and simplicity, it's often used in various Java and C++ programming exercises. You may expect questions like the Write Java program to sort integer arrays using bubble sort during any programming interview. Since algorithmic questions are always tricky questions and not easy to code. Even the simplest of them can lead to confusion, especially if you are not gifted with a natural programming head. I have seen many developers fumble if asked to code on the spot. That's why it's advisable to do algorithmic and logical programming during training and learning programming and OOPS to get this skill of converting logic into code.
-
-
-
-Let's come back to Bubble sort, In the Bubble sort algorithm we sort an unsorted array by starting from the first element and comparing it with the adjacent element. If the former is greater than later then we swap and by doing this we get the largest number at the end after the first iteration. 
-
-So in order to sort n elements you require n-1 iteration and almost n-1 comparison. To recap here is the logic for the bubble sort sorting algorithm :
-
-1) Start comparing a[0] to a[1]
-
-2) If a[0] > a[1] then swap numbers e.g. a[0]=a[1] and a[1]=a[0]
-
-3) compare a[1] to a[2] and repeat till you compare last pair
-
-4) This is referred to as one pass and at the end of the first pass largest, the number is at last position and already sorted.
-
-5) Just repeat this comparison again starting from a[0] but this time going till second last pair only
-
-
-
-
-
-
-
-How to sort integer array using bubble sort in Java
-Here is a complete code example of a bubble sort in Java. It uses the same algorithm as explained in the first pass, it uses two loops. The inner loop is used to compare adjacent elements and the outer loop is used to perform Iteration. because of using two loops, it results in an order of n^2 which is not great in terms of performance. 
-
-If you are using Array List instead of the array then you can sort them using Collections.sort method for better performance, for details, check How to sort Array List in ascending and descending order.
-
-
-Bubble sort is a good sorting algorithm to start with but you also need to learn more difficult and useful ones like QuickSort, MergeSort, HeapSort, as well as some advanced constant time, also known as O(n) sorting algorithms like Radix Sort, Bucket Sort, and Counting Sort if you want to do well on technical interviews. 
-
-If you are preparing for coding interviews then I suggest you double down into Algorithms as it takes time to develop the coding sense. I also recommend you check out Grokking the Coding Interview: Patterns for Coding Questions on Educative, an interactive portal for coding interviews to learn some useful patterns which can help you to solve many common coding problems. 
-
-Bubble sort in Java - program to sort integer array
-
-
-
-Anyway, Now, let's see the Java program which implements this bubble sort logic to sort unsorted integer arrays.
-
-
-
-package test;
-
+```java
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
-/**
- * Java program to sort integer array using bubble sort sorting algorithm.
- * bubble sort is one of the simplest sorting algorithm but performance
- * of bubble sort is not good, it's average and worst-case performance
- * ranges in O(n2) and that's why it is not used to sort a large set of
- * unsorted data. Bubble sort can be used for educational and testing
- * purpose to sort a small number of data to avoid the performance penalty.
- * This program is also a good example of how to print contents of Array in Java
- *
- * @author http://java67.blogspot.com
- */
-public class BubbleSort {
- 
- 
-    public static void main(String args[]) {
-        //testing our bubble sort method in Java
-        int[] unsorted = {32, 39,21, 45, 23, 3};
-        bubbleSort(unsorted);
-     
-        //one more testing of our bubble sort code logic in Java
-        int[] test = { 5, 3, 2, 1};
-        bubbleSort(test);
-     
-    }  
- 
-    /*
-     * In bubble sort we need n-1 iteration to sort n elements
-     * at end of first iteration larget number is sorted and subsequently numbers smaller
-     * than that.
-     */
-    public static void bubbleSort(int[] unsorted){
-        System.out.println("unsorted array before sorting : " + Arrays.toString(unsorted));
-     
-        // Outer loop - need n-1 iteration to sort n elements
-        for(int i=0; i<unsorted.length -1; i++){
-         
-            //Inner loop to perform the comparison and swapping between adjacent numbers
-            //After each iteration one index from last is sorted
-            for(int j= 1; j<unsorted.length -i; j++){
-             
-                //If the current number is greater than swap those two
-                if(unsorted[j-1] > unsorted[j]){
-                    int temp = unsorted[j];
-                    unsorted[j] = unsorted[j-1];
-                    unsorted[j-1] = temp;
-                }
+public class ReverseWords {
+    public static String reverseWords(String sentence) {
+        List<String> words = Arrays.asList(sentence.split("\\s+"));
+        Collections.reverse(words);
+        StringBuilder sb = new StringBuilder();
+        for (String word : words) {
+            sb.append(word).append(" ");
+        }
+        return sb.toString().trim();
+    }
+
+    public static void main(String[] args) {
+        String input = "Java is great";
+        System.out.println(reverseWords(input)); // Output: "great is Java"
+    }
+}
+```
+
+#### Method 2: Using a traditional for loop
+
+```java
+public class ReverseWords {
+    public static String reverseWords(String sentence) {
+        String[] words = sentence.trim().split("\\s+");
+        StringBuilder reversed = new StringBuilder();
+        for (int i = words.length - 1; i >= 0; i--) {
+            reversed.append(words[i]).append(" ");
+        }
+        return reversed.toString().trim();
+    }
+
+    public static void main(String[] args) {
+        String input = "Java is great";
+        System.out.println(reverseWords(input)); // Output: "great is Java"
+    }
+}
+```
+
+### Output:
+
+```
+great is Java
+```
+
+### Find Duplicate Characters in a String in Java
+
+#### Approach:
+- Convert the string to a character array.
+- Use a `HashMap` to count the frequency of each character.
+- Print characters that have a count greater than 1.
+
+#### Java Code to Find Duplicate Characters:
+
+```java
+import java.util.HashMap;
+import java.util.Map;
+
+public class FindDuplicateCharacters {
+    public static void printDuplicateCharacters(String word) {
+        char[] characters = word.toCharArray();
+        Map<Character, Integer> charMap = new HashMap<>();
+        
+        for (Character ch : characters) {
+            charMap.put(ch, charMap.getOrDefault(ch, 0) + 1);
+        }
+
+        for (Map.Entry<Character, Integer> entry : charMap.entrySet()) {
+            if (entry.getValue() > 1) {
+                System.out.printf("%s : %d%n", entry.getKey(), entry.getValue());
             }
-            System.out.printf("unsorted array after %d pass %s: %n", i+1, Arrays.toString(unsorted));
         }
     }
 
+    public static void main(String[] args) {
+        printDuplicateCharacters("Programming");
+        printDuplicateCharacters("Combination");
+        printDuplicateCharacters("Java");
+    }
 }
+```
 
-Output:
-unsorted array before sorting : [32, 39, 21, 45, 23, 3]
-unsorted array after 1 pass [32, 21, 39, 23, 3, 45]:
-unsorted array after 2 pass [21, 32, 23, 3, 39, 45]:
-unsorted array after 3 pass [21, 23, 3, 32, 39, 45]:
-unsorted array after 4 pass [21, 3, 23, 32, 39, 45]:
-unsorted array after 5 pass [3, 21, 23, 32, 39, 45]:
-unsorted array before sorting : [5, 3, 2, 1]
-unsorted array after 1 pass [3, 2, 1, 5]:
-unsorted array after 2 pass [2, 1, 3, 5]:
-unsorted array after 3 pass [1, 2, 3, 5]
+### Output:
+
+```
+g : 2
+r : 2
+m : 2
+n : 2
+o : 2
+i : 2
+```
+
+### Conclusion
+
+This tutorial covers essential programming exercises in Java:
+1. **Factorial** using both **recursion** and **iteration**.
+2. **Reversing words** in a string using `Collections.reverse()` and a traditional `for` loop.
+3. **Finding duplicate characters** in a string using a `HashMap`.
+
+These problems are commonly asked in Java interviews and are good practice for improving your understanding of recursion, loops, and data structures in Java.
 
 
-Java program for Bubble sort algorithm with exampleThat's all on How to sort integer array using Bubble sort in Java. We have seen a complete Java program for bubble sort and also printed output after each pass or iteration if you look carefully you will find that after each pass largest number gets sorted and the number of comparisons decreased. 
 
-As I said Bubble sort is not a high-performance sorting algorithm and you should by using Collection.sort() method from standard Java library to sort Collections or Arrays.sort() to sort Array in Java. 
-
-Also this the program demonstrates How to print contents of Array using Arrays.toString() as an array in Java doesn’t override toString and simply printing array using System.out.println(array) will only show default toString from java.lang.Object class instead of the contents of the array.
-
-
-Read more: https://www.java67.com/2012/12/bubble-sort-in-java-program-to-sort-integer-array-example.html#ixzz8hjAh0hBE
 
 QuickSort Algorithm Example in Java using Recursion - Tutorial
 
@@ -12663,987 +10963,714 @@ We will also learn how quicksort works, and how it sorts a large list of unsorte
 
 Btw, if you are new to the Data Structure and Algorithm field and not familiar with essential searching and sorting algorithms like Quicksort, I suggest you take a look at the Data Structures and Algorithms: Deep Dive Using Java course on Udemy. One of the better courses to master algorithms and data structure in quick time.
 
+### Java Program to Reverse an Integer without Using String
 
+Reversing an integer without converting it to a string can be done by utilizing basic arithmetic operations like division and modulus. Here's a detailed explanation and code for this problem.
 
+#### **Concept Explanation:**
+To reverse an integer:
+1. **Extract the last digit** of the number using the modulus operator (`%`).
+2. **Remove the last digit** by dividing the number by 10 (`/`).
+3. Build the reversed number by accumulating the digits in reverse order.
+4. **Handle negative numbers** by checking the sign of the number.
 
+The process is performed until the number is reduced to zero.
 
-1. How do the QuickSort Algorithm works?
-An old saying is, a picture is worth more than a thousand words. This is completely true in the case of understanding how the sorting algorithm works.
+#### **Example:**
+Given the number `5678`:
+- The last digit is `8` (via `5678 % 10`), and the number becomes `567` (via `5678 / 10`).
+- Repeat this process until the number is zero.
+- The reversed number becomes `8765`.
 
-In the past, I have understood Insertion sort, Bubble sort, and Radix sort much better by following a diagram rather than reading about it.
+### **Java Code Example to Reverse an Integer:**
 
-That's why I am sharing this diagram which explains how the quicksort algorithm works, how it sort a list of integers. It's similar to a flowchart but doesn't use the notation flowchart uses, instead it practically shows how sorting happens.
-
-Once you go through this diagram, read the explanation, it will make more sense.
-
-How to implement QuickSort in Java - Working Example
-
-
-
-As I told before QuickSort is a recursive algorithm, it divides the big list into smaller list around pivot until those lists are individually sorted. The first step of the Quicksort algorithm is to determine pivot, it's general practice to choose the middle element of the array as a pivot, but you are free to choose any index.
-
-Now you have two lists, the next step is to ensure that the left partition only contains numbers less than the pivot and the right partition only contains numbers greater than the pivot.
-
-
-
-We start the pointer from the left and right of the pivot, and as soon as the left pointer encounter 4, it stops because 4 is greater than 3. Similarly, the right pointer stops at 3 because all numbers on the right side of the list are greater than 3.
-
-
-
-Now it's time to swap, so 3 takes place of 4 and vice-versa. Now, we move the pointer to one more step, since 2 > 3, the left pointer shifts but since 4 > 3, it stopped.
-
-Since the left point is also past the right pointer it stopped. Now if we repeat this process one more time, the list will be sorted. If you still don't get the algorithm then I suggest you join the Visualizing Data Structures and Algorithms in Java course on Udemy. A special course that will teach you data structures and algorithms in Java through animations and implementations.
-
-QuickSort Algorithm in Java
-
-
-
-
-2. The Concept of  Pivot and Partition
-Though we often select a middle element of the array as a pivot, there is no such rule and pivot can be an element of the given array. You can even consider the first element as the pivot in every partition.
-
-It's experienced that choice of pivot affects the distribution of the elements in partitioning and affects the complexity of the quicksort algorithm.
-
-As per the rule of partition, numbers in the lower partition should be less than the pivot and upper partition numbers should be higher than the pivot. The running time of partition logic is linear.
-
-
-
-
-
-3. The complexity of Quicksort Algorithm Explained
-On average Quicksort Algorithm has the complexity of O(NlogN) and in the worst case, it has O(n²) when the elements of the input array are already sorted in ascending or descending order.
-
-The good thing about Quicksort is that it's an in-place algorithm, which means it does not take any additional space, except those used by method stack.
-
-By the way, there are some tricks to improve the performance of quicksort, even in the worst case. As suggested in one of the best algorithm design books, The Algorithm Design Manual, by Steven Skiena, you can apply the following recommendation to improve your quicksort algorithm implementation.
-
-3.1. Randomization
-You can avoid the worst-case performance of O(n²) when sorting nearly-sorted data by random permutation of keys. Though it incurs some cost of permutation still gives better performance than O(n²)
-
-3.2. Leave small sub-arrays for Insertion sort
-finish Quicksort recursion and switch to insertion sort when fewer than 20 elements:
-
-There is a drawback of using recursion to implement a quicksort algorithm, It will not scale because JVM has no tail call optimization, it will simply grow the method call stack to something proportional to the array to sort, and it will fail for the very large array.
-
-
-
-Btw, if you have trouble understanding how we calculate the time and space complexity of an algorithm or solution, I suggest you check out Algorithms and Data Structures - Part 1 and 2, a two-part series in Pluralsight to learn how to calculate time complexity. It's an excellent course for beginners.
-
-QuickSort Algorithm Example in Java using Recursion
-
-
-
-
-4. Java Program to Sort Integer Array using QuickSort Algorithm
-Here is our recursive implementation of the QuickSort sorting algorithm. We have used it to sort an array of randomly distributed integers. We have two sets of inputs, one which doesn't contain any repeated numbers and the other which contains duplicates.
-
-The Logic of quicksort is encapsulated in method recursiveQuickSort(int[] array, int startIdx, int endIdx) and partition(int[] array, int left, int right), which implements partitioning logic.
-
-In order to hide implementation details, we have only exposed a convenient static utility method called quickSort(int[] array), which takes an integer array and sorts that in place.
-
-package test;
-
-import java.util.Arrays;
-
+```java
+import java.util.Scanner;
 
 /**
-* Java program to Sort integer array using QuickSort algorithm using recursion.
-* Recursive QuickSort algorithm, partitioned list into two parts by a pivot,
-* and then recursively sorts each list.
-* @author Javin Paul
-*/
-public class QuickSort{
+ * Java Program to reverse Integer in Java. The number can be negative.
+ * Example 1:  x = 123, return 321
+ * Example 2:  x = -123, return -321
+ */
+public class ReverseInteger {
 
-    public static void main(String args[]) {
-
-        int[] input = { 23, 31, 1, 21, 36, 72};
-        System.out.println("Before sorting : " + Arrays.toString(input));
-        quickSort(input); // sort the integer array using quick sort algorithm
-        System.out.println("After sorting : " + Arrays.toString(input));
-     
-        // input with duplicates
-        int[] withDuplicates = { 11, 14, 16, 12, 11, 15};
-        System.out.println("Before sorting : " 
-                              + Arrays.toString(withDuplicates));
-        quickSort(withDuplicates); // sort the array using quick sort algorithm
-        System.out.println("After sorting : " 
-                              + Arrays.toString(withDuplicates));
+    public static void main(String[] args) {
+        int input = 5678;  // Example input
+        int output = reverseInteger(input);  // Calling the reverse method
+        System.out.println("Input: " + input + " Output: " + output);
     }
 
     /**
-     * public method exposed to client, sorts given array using QuickSort
-     * Algorithm in Java
-     * @param array
+     * This method reverses the integer value.
+     * It handles negative numbers as well.
      */
+    public static int reverseInteger(int number) {
+        boolean isNegative = number < 0; // Check if the number is negative
+        if (isNegative) {
+            number = -number; // Make the number positive for processing
+        }
+        
+        int reverse = 0; // Variable to store the reversed number
+        int lastDigit = 0; // Variable to store the last digit of the number
+
+        // Loop to process each digit
+        while (number != 0) {
+            lastDigit = number % 10; // Get the last digit
+            reverse = reverse * 10 + lastDigit; // Append it to the reversed number
+            number = number / 10; // Remove the last digit from the original number
+        }
+
+        // Return the reversed number with the correct sign
+        return isNegative ? -reverse : reverse;
+    }
+}
+```
+
+### **Explanation:**
+- **`reverseInteger(int number)`**:
+  - This method first checks if the number is negative. If it's negative, it temporarily converts it to positive by multiplying by `-1`.
+  - It then initializes `reverse` as `0`, which will accumulate the reversed digits.
+  - The while loop processes each digit by:
+    1. Extracting the last digit (`lastDigit = number % 10`).
+    2. Appending it to `reverse` (`reverse = reverse * 10 + lastDigit`).
+    3. Removing the last digit (`number = number / 10`).
+  - Finally, if the number was negative, the reversed number is multiplied by `-1` before returning.
+
+### **Output:**
+For the input `5678`, the output will be:
+```
+Input: 5678 Output: 8765
+```
+
+### **Edge Cases:**
+1. **Negative numbers**: The algorithm correctly handles negative numbers.
+   - Example: Input `-123` will return `-321`.
+2. **Zero**: The number `0` remains `0`.
+3. **Large numbers**: This approach works for any integer value within the range of `Integer.MAX_VALUE` and `Integer.MIN_VALUE` as long as there's no overflow.
+
+---
+
+### **How to Check Leap Year in Java**
+
+A **Leap Year** is a year that contains **366 days** (one extra day in February), instead of the usual 365 days. A year is a leap year if:
+- It is divisible by 400, or
+- It is divisible by 4, but not divisible by 100.
+
+#### **Java Code to Check Leap Year:**
+
+```java
+import java.util.Calendar;
+
+/**
+ * Java program to find if a year is a leap year or not.
+ */
+public class LeapYearProgram {
+
+    public static void main(String[] args) {
+        // Testing some years
+        System.out.println("Is 2000 a leap year? " + isLeapYear(2000)); // true
+        System.out.println("Is 2012 a leap year? " + isLeapYear(2012)); // true
+        System.out.println("Is 1900 a leap year? " + isLeapYear(1900)); // false
+        System.out.println("Is 2015 a leap year? " + isLeapYear(2015)); // false
+    }
+
+    /**
+     * Using the Calendar class to check for a leap year.
+     */
+    public static boolean isLeapYear(int year) {
+        Calendar cal = Calendar.getInstance(); // Get Calendar instance
+        cal.set(Calendar.YEAR, year); // Set the year
+        int noOfDays = cal.getActualMaximum(Calendar.DAY_OF_YEAR); // Get number of days in the year
+        return noOfDays > 365; // If days > 365, it's a leap year
+    }
+}
+```
+
+### **Explanation:**
+- **`isLeapYear(int year)`**:
+  - Uses Java's `Calendar` class to get the number of days in the specified year.
+  - If the number of days is greater than 365, it's a leap year.
+
+#### **Output:**
+```
+Is 2000 a leap year? true
+Is 2012 a leap year? true
+Is 1900 a leap year? false
+Is 2015 a leap year? false
+```
+
+---
+
+### **Bubble Sort in Java**
+
+**Bubble Sort** is a simple sorting algorithm where each element is compared with the adjacent one, and swapped if necessary. After each pass through the array, the largest element bubbles up to the correct position.
+
+#### **Java Code for Bubble Sort:**
+
+```java
+import java.util.Arrays;
+
+/**
+ * Java program to sort an integer array using bubble sort algorithm.
+ */
+public class BubbleSort {
+
+    public static void main(String[] args) {
+        int[] unsorted = {32, 39, 21, 45, 23, 3};
+        bubbleSort(unsorted);
+    }
+
+    /**
+     * Bubble sort implementation to sort the array.
+     */
+    public static void bubbleSort(int[] arr) {
+        System.out.println("Unsorted Array: " + Arrays.toString(arr));
+
+        // Outer loop to perform n-1 passes
+        for (int i = 0; i < arr.length - 1; i++) {
+            // Inner loop to compare adjacent elements
+            for (int j = 0; j < arr.length - 1 - i; j++) {
+                if (arr[j] > arr[j + 1]) {
+                    // Swap elements
+                    int temp = arr[j];
+                    arr[j] = arr[j + 1];
+                    arr[j + 1] = temp;
+                }
+            }
+            // Print the array after each pass
+            System.out.println("After pass " + (i + 1) + ": " + Arrays.toString(arr));
+        }
+
+        System.out.println("Sorted Array: " + Arrays.toString(arr));
+    }
+}
+```
+
+### **Explanation:**
+- **Bubble Sort** works by repeatedly comparing adjacent elements and swapping them if necessary.
+- After each pass through the array, the largest element is placed in its correct position.
+
+#### **Output:**
+```
+Unsorted Array: [32, 39, 21, 45, 23, 3]
+After pass 1: [32, 21, 39, 23, 3, 45]
+After pass 2: [21, 32, 23, 3, 39, 45]
+After pass 3: [21, 23, 3, 32, 39, 45]
+After pass 4: [21, 3, 23, 32, 39, 45]
+After pass 5: [3, 21, 23, 32, 39, 45]
+Sorted Array: [3, 21, 23, 32, 39, 45]
+```
+
+### **Bubble Sort Characteristics:**
+- Time complexity is **O(n²)** in both average and worst cases, making it inefficient for large datasets.
+- It's a simple algorithm but not suitable for performance-critical applications.
+
+### How QuickSort Algorithm Works
+
+**QuickSort** is one of the most efficient and widely-used sorting algorithms due to its divide-and-conquer approach. Here’s a step-by-step explanation of how QuickSort works, followed by an implementation in Java.
+
+---
+
+### 1. **How QuickSort Works**
+
+QuickSort works by dividing the problem (the unsorted array) into smaller sub-arrays and recursively sorting those sub-arrays. Here's the core idea:
+
+- **Choose a Pivot:** First, choose an element in the array as the "pivot." The pivot can be any element, but commonly the middle element or a random element is used. The key idea is that the pivot will be placed in its correct position after sorting.
+  
+- **Partitioning:** Rearrange the array so that elements smaller than the pivot come before it, and elements greater than the pivot come after it. This is done through a **partitioning process**. After partitioning, the pivot is in its correct position, but the other elements are not yet sorted.
+
+- **Recursion:** Apply the same procedure recursively to the left and right sub-arrays (elements less than the pivot and elements greater than the pivot) until the sub-arrays are small enough to be sorted directly.
+
+---
+
+### 2. **Concept of Pivot and Partition**
+
+- **Pivot Selection:** The pivot is the central element used to divide the array into two sub-arrays. While we commonly select the middle element, the choice of pivot can affect the efficiency of the algorithm. In some cases, a random pivot is chosen to avoid worst-case scenarios.
+
+- **Partitioning:** After selecting the pivot, we move all elements less than the pivot to the left side and all elements greater than the pivot to the right side. The result is two partitions, with the pivot positioned between them.
+
+---
+
+### 3. **Time and Space Complexity of QuickSort**
+
+- **Time Complexity:**
+  - **Best and Average Case:** \(O(n \log n)\)
+  - **Worst Case:** \(O(n^2)\), which happens when the pivot divides the array into extremely unbalanced partitions (e.g., when the array is already sorted or reverse sorted).
+
+- **Space Complexity:** \(O(\log n)\), since QuickSort is an **in-place** algorithm and only uses additional space for the recursive function calls (i.e., the stack space).
+
+---
+
+### 4. **Optimizations for QuickSort**
+
+- **Randomization:** To avoid the worst-case scenario where the pivot is always the smallest or largest element, randomizing the pivot selection helps ensure a balanced partition.
+  
+- **Switch to Insertion Sort for Small Arrays:** QuickSort’s overhead for small arrays can be higher than simple sorting algorithms like Insertion Sort. For arrays with fewer than 20 elements, QuickSort can switch to Insertion Sort for better performance.
+
+---
+
+### 5. **QuickSort Java Code Implementation**
+
+Here is a basic implementation of QuickSort in Java that demonstrates the recursive partitioning and sorting:
+
+```java
+import java.util.Arrays;
+
+public class QuickSort {
+
+    public static void main(String[] args) {
+        int[] input = { 23, 31, 1, 21, 36, 72};
+        System.out.println("Before sorting: " + Arrays.toString(input));
+        quickSort(input);
+        System.out.println("After sorting: " + Arrays.toString(input));
+        
+        // Test with duplicates
+        int[] withDuplicates = { 11, 14, 16, 12, 11, 15};
+        System.out.println("Before sorting: " + Arrays.toString(withDuplicates));
+        quickSort(withDuplicates);
+        System.out.println("After sorting: " + Arrays.toString(withDuplicates));
+    }
+
+    // Public method to initiate sorting
     public static void quickSort(int[] array) {
         recursiveQuickSort(array, 0, array.length - 1);
     }
 
-    /**
-     * Recursive quicksort logic
-     *
-     * @param array input array
-     * @param startIdx start index of the array
-     * @param endIdx end index of the array
-     */
-    public static void recursiveQuickSort(int[] array, int startIdx, 
-                                                        int endIdx) {
-     
-        int idx = partition(array, startIdx, endIdx);
-
-        // Recursively call quicksort with left part of the partitioned array
-        if (startIdx < idx - 1) {
-            recursiveQuickSort(array, startIdx, idx - 1);
-        }
-
-        // Recursively call quick sort with right part of the partitioned array
-        if (endIdx > idx) {
-            recursiveQuickSort(array, idx, endIdx);
+    // Recursive method for QuickSort
+    private static void recursiveQuickSort(int[] array, int startIdx, int endIdx) {
+        if (startIdx < endIdx) {
+            int partitionIdx = partition(array, startIdx, endIdx); // Partitioning step
+            recursiveQuickSort(array, startIdx, partitionIdx - 1); // Left partition
+            recursiveQuickSort(array, partitionIdx + 1, endIdx); // Right partition
         }
     }
 
-    /**
-     * Divides array from pivot, left side contains elements less than
-     * Pivot while right side contains elements greater than pivot.
-     *
-     * @param array array to partitioned
-     * @param left lower bound of the array
-     * @param right upper bound of the array
-     * @return the partition index
-     */
-    public static int partition(int[] array, int left, int right) {
-        int pivot = array[left]; // taking first element as pivot
+    // Partition logic
+    private static int partition(int[] array, int left, int right) {
+        int pivot = array[left]; // Using the leftmost element as pivot
 
         while (left <= right) {
-            //searching number which is greater than pivot, bottom up
+            // Find element greater than pivot from the left side
             while (array[left] < pivot) {
                 left++;
             }
-            //searching number which is less than pivot, top down
+            // Find element smaller than pivot from the right side
             while (array[right] > pivot) {
                 right--;
             }
 
-            // swap the values
+            // Swap if elements are out of order
             if (left <= right) {
-                int tmp = array[left];
+                int temp = array[left];
                 array[left] = array[right];
-                array[right] = tmp;
+                array[right] = temp;
 
-                //increment left index and decrement right index
                 left++;
                 right--;
             }
         }
-        return left;
+        return left; // Returns the partition index
     }
 }
+```
 
-Output:
-Before sorting : [23, 31, 1, 21, 36, 72]
-After sorting : [1, 21, 23, 31, 36, 72]
-Before sorting : [11, 14, 16, 12, 11, 15]
-After sorting : [11, 11, 12, 14, 15, 16]
+#### **Example Output:**
 
+```
+Before sorting: [23, 31, 1, 21, 36, 72]
+After sorting: [1, 21, 23, 31, 36, 72]
 
+Before sorting: [11, 14, 16, 12, 11, 15]
+After sorting: [11, 11, 12, 14, 15, 16]
+```
 
+---
 
+### 6. **Key Characteristics of QuickSort**
 
-5. Things to know about QuickSort Algorithm in Java
-As I said, QuickSort is one of the most popular sorting algorithms between programmers, maybe just next to Bubble sort, which is ironically the worst algorithm to sort a large list of numbers. But one thing is common between QuickSort and Bubble Sort, do you know what? In the worst case, both have the complexity of O(n^2).
+- **Divide and Conquer:** It divides the array into smaller sub-arrays based on the pivot and recursively sorts each sub-array.
+- **Efficient for Large Datasets:** Average-case time complexity of \(O(n \log n)\) makes it efficient for large datasets.
+- **In-Place Sorting:** Unlike merge sort, QuickSort does not require extra space for sorting (other than for the recursion stack).
+- **Not Stable:** The relative order of equal elements may change because of the partitioning process.
 
-5.1 QuickSort is a divide and conquers algorithm, which means it sort a large array of numbers by dividing them into a smaller array and then individually sorting them (conquer).
+---
 
-5.2 Average case complexity of Quicksort is O(n log(n)) and the worst-case complexity of Quicksort is O(n²).
+### 7. **Common Interview Questions on QuickSort**
 
-5.3 Quicksort is a comparison sort and, inefficient implementations, it's not a stable sort, which means equal numbers may not retain their original position after sorting.
+Here are some of the array-based coding questions that frequently appear in programming interviews:
 
-5.4 Quicksort algorithm can be implemented in-place, which means no additional space will be required. This makes it suitable to sort a large array of numbers.
+1. **How to sort an integer array in place using QuickSort?**
+2. **How to find the missing number in an array of numbers from 1 to 100?**
+3. **How to find duplicate numbers in an array?**
+4. **How to remove duplicates from an array in place?**
+5. **How to reverse an array in place?**
+6. **How to sort an array of integers that contains duplicates?**
 
-5.5 The Arrays.sort() method in Java uses quicksort to sort an array of primitives like an array of integers or float and uses Mergesort to sot objects like an array of String.
+---
 
+### Conclusion
 
-Read more: https://www.java67.com/2014/07/quicksort-algorithm-in-java-in-place-example.html#ixzz8hjAn3q00
+QuickSort is a powerful sorting algorithm that works by dividing an array into smaller sub-arrays and sorting them. By recursively partitioning the array around a pivot, QuickSort efficiently sorts large datasets. Though its worst-case time complexity is \(O(n^2)\), it’s often faster than other algorithms like Merge Sort or Bubble Sort due to its in-place sorting and average-case \(O(n \log n)\) performance.
 
-1. Array-based Programming Interview Questions
-If you ask me just one topic to prepare really well for coding interviews, I would pick the array. It's one of the essential data structures and favorite darling of coding interviews. There are so many popular coding interview questions that are based upon the array, some of them are easy and some are tough but you can be sure that you will see some questions based upon the array in your next programming job interview.
+For an efficient QuickSort implementation, remember to choose a good pivot (preferably random) and consider switching to Insertion Sort for smaller sub-arrays to improve performance.
 
-If you don't know, an array is a data structure that holds other objects like String, int, float, etc. It holds them in a contiguous location in memory which makes them easily searchable and retrieval in O(1) time using the index.
+This is a comprehensive set of coding questions that cover a wide variety of topics often encountered in programming interviews. You've included questions on arrays, strings, linked lists, binary trees, sorting algorithms, bit manipulation, system design, and more. The additional tips on recursive thinking and logical problem-solving are also valuable.
 
-Insertion and deletion of an array are tough because you cannot change the size of an array once created and you need to create a new array and copy elements from old to new.
+Here’s a breakdown of how you can approach some of the key areas you mentioned:
 
+### 1. **String Manipulation**:
+- **Reversing a String**: As you pointed out, this can be done using built-in methods like `StringBuffer.reverse()` or `StringBuilder.reverse()`, but understanding how to implement it manually is essential for interviews.
+    - A basic iterative approach involves using a `for` loop to reverse the string character by character.
+    - Recursion can also be applied here for a more elegant solution.
 
-
-Anyway, here are some of the most popular array-based coding interview questions for your preparation:
-
-1. How to find the missing number in a given integer array of 1 to 100? (solution)
-
-2. How to find the duplicate number on a given integer array? (solution)
-
-3. How to find the largest and smallest number in an unsorted integer array? (solution)
-
-4. How to find all pairs of integer arrays whose sum is equal to a given number? (solution)
-
-5. How to find duplicate numbers in an array if it contains multiple duplicates? (solution)
-
-6. How to remove duplicates from a given array in Java? (solution)
-
-7. How to sort an integer array in place using the QuickSort algorithm? (solution)
-
-8. How to remove duplicates from an array in place? (solution)
-
-9. How to reverse an array in place in Java? (solution)
-
-10. How to find multiple missing numbers in a given integer array with duplicates? (solution)
-
-I have linked all the solutions but you should try to solve them by yourself before looking at the solution, especially if you have time. That's the only sure way to learn to program by solving these coding questions.
-
-If you find these questions difficult to solve then once again I suggest you first refresh your knowledge of fundamental data structures like an array by going through a comprehensive course. If you need recommendations, Algorithms, and Data Structures Part 1 and Part 2 by Robert Harvick are two of the best course to start with. You will also learn about Big(O) notation and how to calculate time and space complexity.
-
-Array based Programming Interview Questions Answers
-
-
-If you think these 10 questions from the array are not enough and you are interested in solving more array-based programming problems then you can also check out these 30 array-based coding questions for more practice.
-
-
-
-2. String-based Coding Interview Questions
-After array, String is the next popular topic on Programming job interviews, but if you have a good understanding of array then you can easily deal with String programming questions because String is nothing but a character array.
-
-The string is implemented differently in a different programming language like in C it's a NULL-terminated character array but in Java, it's an object. However, you can still get access to the underlying array to apply your logic.
-
-Here is a list of some of the frequently asked coding questions which are based on String. Though some of them are quite old, you can still expect this in your programming job interview:
-
-11. How to Print duplicate characters from String? (solution)
-
-12. How to check if two Strings are anagrams of each other? (solution)
-
-13. How to print the first non-repeated character from String? (solution)
-
-14. How to reverse a given string using recursion? (solution)
-
-15. How to check if a string contains only digits? (solution)
-
-16. How to find duplicate characters in a String? (solution)
-
-17. How to count a number of vowels and consonants in a given String? (solution)
-
-18. How to count the occurrence of a given character in String? (solution)
-
-19. How to find all permutations of String? (solution)
-
-20. How to reverse words in a given sentence without using any library method? (solution)
-
-21. How to check if two String is a rotation of each other? (solution)
-
-22. How to check if the given String is Palindrome? (solution)
-
-Similar to an array, I have also linked to a solution for all of these String problems but if you want to get most of this article, you better solve these questions without looking at the answers. Only when you are stuck and running out-of-time, you can look at the solution.
-
-And, if you find these frequently asked String problems difficult to solve, maybe it's time to go back to the drawing board and learn the fundamentals of String data structure again.  If you need resources then Data Structures and Algorithms Specialization on Coursera is one of the best online resources you can use to make your foundations rock solid.
-
-Top 50 Coding Interview Questions
-
-
-You can also learn from it by comparing your solution with the solution I have given. It's not necessarily to be the same but you can learn a lot by comparing them and if you need more practice, here is another list of 20 String algorithm questions and this list of 21 String coding problems21 String coding problems for tech interviews. 
-
-
-
-3. Linked list based Programming Interview Questions
-Along with array and string, a linked list is another popular data structure in the programming world as well as on coding interviews. You will find a lot of questions on a linked list like reversing a linked list, adding a new element, removing an element from the middle, etc.
-
-It's also the counterpart of an array data structure. While array stores elements on contiguous memory locations, the linked list stores them at different locations and finds them by storing their address. a linked list is made of nodes, an internal data structure that holds the value as well as the address of the next node.
-
-Because of its structure, it's easier to add and remove elements from the linked list like on O(1) time if you are adding or removing from the head but the search is equally difficult and takes O(n) time, as you have to literally walk through each element.
-
-Anyway, here is a collection of some of the simple and tricky linked list based coding questions for your practice:
-
-23. How to find the middle element of a singly linked list in one pass? (solution)
-
-24. How to check if a given linked list contains a cycle? How to find the starting node of the cycle? (solution)
-
-25. How to reverse a linked list? (solution)
-
-26. How to reverse a single linked list without recursion? (solution)
-
-27. How to remove duplicate nodes in an unsorted linked list? (solution)
-
-28. How to find the length of a singly linked list? (solution)
-
-29. How to find the 3rd node from the end in a singly linked list? (solution)
-
-30. How do you find the sum of two linked lists using Stack? (program)
-
-Similar to array and string, I have also linked to all the solutions but you should only look at them once you solved the problem on your own or you feel stuck.
-
-A key to solving the linked list is a good understanding of recursion because a linked list is a naturally recursive data structure, for example, if you take one node out of the linked list, the result is another linked list, but many programmers struggle to understand recursion.
-
-That was the case with me as well but after practice and visualizing how recursion really works, I overcome that deficiency. If you are in the same boat, I strongly suggest you go through a visual course like Visualizing Data Structures and Algorithms in Java to learn Recursion and data structure. That will help you a lot in your thought process and problem-solving skills.
-
-Top 75 Programming Interview Questions and Solutions
-
-Once you understand recursion, most of the linked list based problems have an easy recursive solution than their iterative version. And if you need more practice, here is another list of 30 linked list programming questions for your reference.
-
-
-
-4. Binary Tree-based Coding Interview Questions
-A tree is another popular data structure in the programming world and coding interviews. Unlike array and linked list, which are considered linear data structures, a tree is considered a hierarchical data structure and used to arrange information in hierarchical order.
-
-There are a lot of different types of trees e.g. a binary tree, binary search tree, AVL tree, Red-Black tree, etc but Binary tree and Binary search trees are also known as BST are two of the most popular ones and most of the questions are based upon them.
-
-Some questions are also based upon theoretical knowledge of tree data structure e.g. finding the height of the tree, finding leaf nodes, checking if the tree is balanced or not, etc, hence you should also spend some time learning the basics, along with practicing coding questions.
-
-Anyway, here is a list of popular binary tree and binary search tree based coding questions to practice before your job interview:
-
-30. Can you write a program to implement a binary search tree?  (solution)
-
-
-
-31. How do you perform Pre-order traversal in a given binary tree? (solution)
-
-32. Write a Program to traverse a given binary tree in Pre-order without recursion (solution)
-
-33. How to perform an In order traversal in a given binary tree? (solution)
-
-34. How to print all nodes of a given binary tree using inorder traversal without recursion (solution)
-
-35. How to implement a Post-order traversal algorithm? (solution)
-
-36. How to traverse a binary tree in Postorder traversal without recursion (solution)
-
-37. How to Print all leaves of a binary search tree? (solution)
-
-38. How to count a number of leaf nodes in a given binary tree? (solution)
-
-39. How to perform a binary search in a given array? (solution)
-
-Like an array, linked list, and string questions, I have also linked to all solutions for binary tree questions but you should only look at them once you have tried it yourself.
-
-One trick I would like to share with you while solving tree questions is to remember that, similar to a linked list, the tree is also a recursive data structure and most of the tree based problems has an easy recursive solution.
-
-For example, a subtree is also a tree which means you can apply the same steps to a subtree can devise a recursive solution. In the above list, many popular tree algorithms e.g. pre-order, post-order, in-order are implemented recursively as well as iterative.
-
-If you don't feel confident to solve these problems and want to refresh your knowledge of binary tree and other data structure before attempting these questions, then you should check out Data Structures and Algorithms: Deep Dive Using Java from Udemy.
-
-Top 75 Essential Programming Interview Questions to Crack Any Coding Interview
-
-
-
-
-5. Miscellaneous Programming Interview Questions
-Even though data structure-based questions make the bulk of the Coding Interview, there are always some questions from topics like sorting algorithms, bit manipulation, software design, Dynamic Programming, and other logical and tricky questions.
-
-In this list below, you will find most of the common searching and sort questions as well as a couple of design and bit manipulation questions.
-
-40. How to implement the Bubble Sort algorithm? (solution)
-
-41. How to implement Iterative Quicksort Algorithm? (solution)
-
-42. How to implement the Insertion Sort Algorithm? (solution)
-
-43. How to implement Merge Sort Algorithm? (solution)
-
-44. How to implement the Bucket Sort Algorithm? (solution)
-
-45. How to implement the Counting Sort Algorithm? (solution)
-
-46. How to implement Radix Sort Algorithm? (solution)
-
-47. How to swap two numbers without using the third variable? (solution)
-
-48. How to check if two rectangles overlap with each other? (solution)
-
-49. How to design a Vending Machine? (solution)
-
-50. How to implement an LRU Cache in your favorite programming language? (solution)
-
-51. How to check if a given number is a Palindrome? (solution)
-
-52. How do you check if a given number is an Armstrong number? (solution)
-
-53. How do you find all prime factors of a given number? (solution)
-
-54. How do you check if a given number is positive or negative in Java? (solution)
-
-55. How to find the largest prime factor of a given integral number? (solution)
-
-56. Write a Program to print all prime numbers up to a given number? (solution)
-
-57. Write a Program to print Floyd's triangle? (solution)
-
-58. Write a Program to print Pascal's triangle? (solution)
-
-59. How to calculate the square root of a given number? (solution)
-
-60. How to check if the given number is a prime number? (solution)
-
-61. How to implement the Sieve of Eratosthenes Algorithm? (solution)
-
-62. How to add two numbers without using the plus operator in Java? (solution)
-
-63. Write a Program to subtract two binary numbers? (solution)
-
-64. Write a Program to transpose a Matrix? (solution)
-
-65. Write a Program to add or subtract two Matrices? (solution)
-
-66. Write a Program to multiply two Matrices in Java? (solution)
-
-67. How to calculate the average of all numbers in a given array? (solution)
-
-68. How to check if a given number is even/odd without using an Arithmetic operator? (solution)
-
-69. Write a Program to find the GCD of two numbers using Euclid's Algorithm? (solution)
-
-70.  How to find the number of 1s (the Set bit) in a given Bit Sequence? (solution)
-
-71. Write a Program to a given Pyramid structure? (solution)
-
-72. How to find the highest repeating world from a given file in Java? (solution)
-
-73. How to reverse a given Integer in Java? (solution)
-
-74. How to convert a decimal number to binary in Java? (solution)
-
-75. How to check if a given year is a leap year in Java? (solution)
-
-Like previous topics, I have provided links to a solution but you should only look at them once you tried to solve the questions yourself. That's important for learning.
-
-
-
-5. System Design Interview Questions
-In last few years, System design and Software design questions have become an integral part of coding interviews. Either you will be asked a tough question like how to design WhatsApp or YouTube or asked theory questions like what is difference between load balancer and API gateway but you will get few questions on this topic. 
-
-Keeping that in mind, I am sharing popular System design questions for Programming and Software Engineering Job interviews. This contains both System design basics questions as well as System design problems from interviews:
-
-
-76. What is Rate Limiter? How does it work? (answer)
-
-
-77. How does Single Sign On (SSO) works? (answer)
-
-
-78. How does Apache Kafka works? why it so fast? (answer)
-
-
-79. Difference between Kafka, ActiveMQ, and RabbitMQ? (answer)
-
-
-80. Difference between API Gateway vs Load Balancer? [solution] 
-
-81. Difference between JWT, OAuth, and SAML? (answer)
-
-82. What is difference between Reverse Proxy and Forward Proxy? (answer)
-
-
-83. What is Horizontal scaling and vertical scaling? (answer)
-
-
-84. What is difference Microservices and Monolithic architecture? (Answer)
-
-
-And, now let's see System design problems from Programming job interviews where you will be asked to design real world apps like WhatsApp, YouTube, Twitter, Instagram, etc
-
-
-85. How do you design Vending Machine in Java [solution]
-
-86. How to Design URL Shortener like TinyURL [solution]
-
-87. Please give high and level design of WhatsApp (solution)
-
-88. Please Design YouTube and implement your favorite feature [solution]
-
-89. How do you design a trade aggregator or portfolio manager? (solution)
-
-90.  How to design Parking Garage [solution]
-
-91. Can you design a bounded buffer in Java? (solution)
-
-82. Can you walk through design Text Storage Service like Pastebin? [solution]
-
-93. How are you going to design Content Delivery Network (CDN) ? [solution]
-
-94. how do you design Google Map? (Solution)
-
-95. Design Instagram [solution]
-In this question you can choose which feature to implement, I suggest you should start with simple one like uploading photos and sharing them in your feed.
-
-
-Read more: https://www.java67.com/2018/05/top-75-programming-interview-questions-answers.html#ixzz8hjB5E2SF
-
-How to Reverse String in Java with or without StringBuffer Example
-
-Reverse String in Java
-There are many ways to reverse a given String in Java. For example, you can use rich Java API to quickly reverse the contents of any String object. Java library provides StringBuffer and StringBuilder class with the reverse() method which can be used to reverse String in Java. Since converting between String and StringBuffer or StringBuilder is very easy it's the easiest way available to reverse String in Java. But, in a coding interview, you may not be allowed to use the JDK API methods to solve this problem. That's why, writing a Java program to reverse String in Java without StringBuffer is one of the popular Java String interview questions, which requires you to reverse String by applying logic and by not using API methods.
-
-
-
-Since reverse is a recursive job, you can use recursion as well as a loop to reverse String in Java. In this Java tutorial, you will learn how to reverse String using StringBuffer, StringBuilder, and using a pure loop with logic.
-
-Btw, if you are preparing for coding interviews then a  good knowledge of techniques like Recursion, Dynamic Programming, Greedy Algorithms, and essential data structures like an array, string, linked list, binary tree, stack, queue, etc are very important.
-
-You should put a decent amount of time into brushing these skills before going for any coding interview or taking calls for any telephonic interviews. If you need resources, I recommend Data Structures and Algorithms: Deep Dive Using Java to brush up your Data structure and algorithms skills. This is a great and very affordable course on Udemy which you can buy for just $10 on Udemy sales which happens every now and then. 
-
-
-
-
-
-Algorithm to Reverse String in Java
-Here are the algorithm and codes to reverse a given String in Java without using StringBuffer or any other API methods. The method below shows you how to reverse the String, which you can further reuse to check if the given String is Palindrome or not.
-
-How to Reverse String in Java with or without StringBuffer Example
-
-
-
-After initial input validation, we are just iterating through String, starting from end to start and generating a reverse String.
-
-If you want to master the art of solving these kinds of coding problems then Grokking the Coding Interview: Patterns for Coding Questions on Educative is an excellent course to join. This course will teach you how to identify a pattern among different coding problems and use that skill to solve unknown problems that are asked in a coding interview on companies like Google, Amazon, and Microsoft.
-
-How to Reverse String in Java with or without StringBuffer Example
-
-
-
-Java Program to Reverse String in Java
-Java program to reverse String in Java without StringBuffer or StringBuilderHere is my complete code program to reverse any String in Java. In the main method, we have first used StringBuffer and StringBuilder to reverse the contents of String, and then we wrote our own logic to reverse String.
-
-This uses the toCharArray() method of String class which returns the character array of String. By looping through the character array and appending it into an empty String we can get a reversed String in Java, as shown in the following example.
-
-You can also check How to reverse String with recursion in Java if you want to see the recursive code. let's see the complete Java program for this beautiful Java programming exercise.
-
-
-/**
- *
- * Java program to reverse String in Java.
- * There are multiple ways to reverse
- * String in Java, you can either take help of standard
- * Java API StringBuffer to reverse String in Java.
- * StringBuffer has a reverse() method which returns StringBuffer
- * with reversed contents. 
- *
- * On the other hand, you can also reverse it by applying your
- * own logic, if asked to reverse String without
- * using StringBuffer in Java. 
- *
- * By the way you can also use StringBuilder to reverse
- * String in Java. StringBuilder is non-thread-safe
- * version of StringBuffer and provides similar API.
- * You can use StringBuilder's reverse()
- * method to reverse content and then convert it back to String
- *
- * @author http://java67.blogspot.com
- */
-public class StringReverseExample {
- 
- 
-    public static void main(String args[]) {
-     
-        //quick wasy to reverse String in Java - Use StringBuffer
-        String word = "HelloWorld";
-        String reverse = new StringBuffer(word).reverse().toString();
-        System.out.printf(" original String : %s ,
-               reversed String %s  %n", word, reverse);
-     
-        //another quick to reverse String in Java - use StringBuilder
-        word = "WakeUp";
-        reverse = new StringBuilder(word).reverse().toString();
-        System.out.printf(" original String : %s ,
-             reversed String %s %n", word, reverse);
-     
-        // one way to reverse String without using
-        // StringBuffer or StringBuilder is writing
-        // own utility method
-        word = "Band";
-        reverse = reverse(word);
-        System.out.printf(" original String : %s ,
-                            reversed String %s %n",
-                               word, reverse);
-    }  
- 
- 
-    public static String reverse(String source){
-        if(source == null || source.isEmpty()){
-            return source;
-        }      
-        String reverse = "";
-        for(int i = source.length() -1; i>=0; i--){
-            reverse = reverse + source.charAt(i);
+    ```java
+    public static String reverse(String str) {
+        if (str == null || str.length() <= 1) {
+            return str;
         }
-     
-        return reverse;
+        return reverse(str.substring(1)) + str.charAt(0);
     }
-   
-}
+    ```
 
-Output:
-original String: HelloWorld, reversed String dlroWolleH
-original String: WakeUp, reversed String pUekaW
-original String: Band, reversed String dnaB
+    Alternatively, a loop-based solution without using the `StringBuffer` or `StringBuilder` would involve converting the string to a character array and swapping elements.
+
+    ```java
+    public static String reverseUsingLoop(String str) {
+        char[] arr = str.toCharArray();
+        int left = 0, right = arr.length - 1;
+        while (left < right) {
+            char temp = arr[left];
+            arr[left] = arr[right];
+            arr[right] = temp;
+            left++;
+            right--;
+        }
+        return new String(arr);
+    }
+    ```
+
+### 2. **Linked List Problems**:
+   - **Detecting Cycles**: You can use Floyd’s Tortoise and Hare algorithm (also known as the cycle detection algorithm). This uses two pointers that move at different speeds (slow and fast), and if they meet, a cycle exists.
+
+    ```java
+    public boolean hasCycle(ListNode head) {
+        if (head == null) return false;
+        ListNode slow = head;
+        ListNode fast = head;
+        
+        while (fast != null && fast.next != null) {
+            slow = slow.next;
+            fast = fast.next.next;
+            
+            if (slow == fast) {
+                return true;
+            }
+        }
+        return false;
+    }
+    ```
+
+   - **Finding the Middle of a Linked List**: You can use the slow and fast pointer technique. The slow pointer moves one step at a time, and the fast pointer moves two steps at a time. When the fast pointer reaches the end, the slow pointer will be at the middle.
+
+    ```java
+    public ListNode findMiddle(ListNode head) {
+        if (head == null) return null;
+        ListNode slow = head;
+        ListNode fast = head;
+        
+        while (fast != null && fast.next != null) {
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+        
+        return slow;
+    }
+    ```
+
+### 3. **Binary Tree Problems**:
+   - **In-order Traversal**: For a binary tree, in-order traversal can be done recursively or iteratively. The recursive approach is straightforward:
+
+    ```java
+    public void inorderTraversal(TreeNode root) {
+        if (root == null) return;
+        inorderTraversal(root.left);
+        System.out.println(root.val);
+        inorderTraversal(root.right);
+    }
+    ```
+
+   - **Level-order Traversal** (BFS): This can be done using a queue to process each level of the tree.
+
+    ```java
+    public void levelOrder(TreeNode root) {
+        if (root == null) return;
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.offer(root);
+        
+        while (!queue.isEmpty()) {
+            TreeNode node = queue.poll();
+            System.out.print(node.val + " ");
+            if (node.left != null) queue.offer(node.left);
+            if (node.right != null) queue.offer(node.right);
+        }
+    }
+    ```
+
+### 4. **Sorting Algorithms**:
+   - **Merge Sort**: This is a classic divide-and-conquer algorithm that splits the array into smaller subarrays and then merges them back in sorted order.
+
+    ```java
+    public void mergeSort(int[] arr) {
+        if (arr.length < 2) return;
+        
+        int mid = arr.length / 2;
+        int[] left = Arrays.copyOfRange(arr, 0, mid);
+        int[] right = Arrays.copyOfRange(arr, mid, arr.length);
+        
+        mergeSort(left);
+        mergeSort(right);
+        
+        merge(arr, left, right);
+    }
+    
+    private void merge(int[] arr, int[] left, int[] right) {
+        int i = 0, j = 0, k = 0;
+        while (i < left.length && j < right.length) {
+            if (left[i] < right[j]) {
+                arr[k++] = left[i++];
+            } else {
+                arr[k++] = right[j++];
+            }
+        }
+        
+        while (i < left.length) arr[k++] = left[i++];
+        while (j < right.length) arr[k++] = right[j++];
+    }
+    ```
+
+### 5. **Bit Manipulation**:
+   - **Counting Set Bits**: One common bit manipulation task is counting the number of set bits (1s) in an integer. A fast way is to use the fact that `n & (n - 1)` removes the rightmost set bit.
+
+    ```java
+    public int countSetBits(int n) {
+        int count = 0;
+        while (n > 0) {
+            count++;
+            n &= (n - 1);  // Drop the rightmost set bit
+        }
+        return count;
+    }
+    ```
+
+### 6. **System Design**:
+   - **Designing a URL Shortener**: This problem requires you to think about scalability, uniqueness of URLs, and potential data stores. Common strategies might involve using a hash function to generate unique keys and storing the mapping in a database.
+
+    ```java
+    public class URLShortener {
+        private Map<String, String> map = new HashMap<>();
+        private String baseUrl = "http://short.ly/";
+
+        public String shorten(String url) {
+            String key = Integer.toHexString(url.hashCode());
+            map.put(key, url);
+            return baseUrl + key;
+        }
+
+        public String retrieve(String shortUrl) {
+            String key = shortUrl.substring(baseUrl.length());
+            return map.get(key);
+        }
+    }
+    ```
+
+These are just a few examples from each category. It's great that you're also stressing the importance of practicing these problems yourself before reviewing solutions. Interview success depends not just on knowing the answer but being able to communicate your thought process clearly and efficiently. Keep practicing and refining your solutions!
 
 
+You've shared a detailed explanation of the **Insertion Sort** algorithm in Java, followed by an example on finding **duplicate elements** in an array. Let's break this down:
 
-Read more: https://www.java67.com/2012/12/how-to-reverse-string-in-java-stringbuffer-stringbuilder.html#ixzz8hjBAttXE
+### 1. **Insertion Sort in Java**
 
-Insertion Sort Algorithm in Java with Example
+**Insertion Sort** works similarly to sorting a hand of playing cards, where you take one card at a time and insert it in its correct position in the already sorted portion of the hand. This algorithm has a best-case time complexity of **O(n)** (when the list is already sorted), and its worst-case time complexity is **O(n²)** (when the list is in reverse order).
 
-Insertion sort is another simple sorting algorithm like Bubble Sort. You may not have realized but you must have used Insertion sort in a lot of places in your life. One of the best examples of Insertion sort in the real-world is, how you sort your hand in playing cards. You pick one card from the deck, you assume it's sorted, and then we insert subsequent cards in their proper position. For example, if your first card is Jack, and the next card is Queen then you put the queen after Jack. Now if the next card is King, we put it after the queen, and if we get 9, we put it before jack.
+#### Steps of the Insertion Sort Algorithm:
 
+1. **Start with the second element** of the array, assuming the first element is already sorted.
+2. **Compare the current element** with the previous elements (in the sorted portion of the array).
+3. **Shift elements** that are larger than the current element to the right.
+4. **Insert the current element** in its correct position in the sorted portion.
+5. Repeat this process until all elements are sorted.
 
+#### Java Code for Insertion Sort:
 
-So if you look closely, Insertion sort is a perfect sorting algorithm to insert a new value into an already sorted array. That's why the best-case complexity of insertion sort is O(n), in which case you can just insert a new number in the already sorted list of integers.
-
-
-
-Another thing to keep in mind is the size of the list, insertion sort is very good for small list or array, but not so for a large list, where QuickSort, MergeSort, and HeapSort rules.
-
-Let's see one more example of insertion sort from real life. Have you noticed, how do tailors arrange customers' shirts in their wardrobe, according to size. So they insert a new shirt at the proper position, for that, they shift existing shirts until they find the proper place.
-
-If you consider wardrobe as an array and shirts as an element, you will find out that we need to shift existing elements to find the right place for the new element. This is the core of the insertion sort algorithm, if you understand these examples, even you can come up with a step-by-step coding algorithm to sort an array of an integer using insertion sort in Java.
-
-In this article, we will learn that by first understanding insertion sort with flowchart and by walking through an example. After that writing, a Java method to do insertion sort will be very easy.
-
-Btw, If you are a complete beginner into data structure and algorithms then I suggest you join a comprehensive course like Data Structures and Algorithms: Deep Dive Using Java on Udemy, which will not only teach you the Insertion sort algorithms but also other essential data structure and sorting algorithms. It's one of my favorite courses on this topic
-
-
-
-
-
-How the Insertion Sort Algorithm works
-If you know how to sort a hand of cards, you know how insertion sort works; but for many programmers, it's not easy to translate real-world knowledge into a working code example.
-
-This is where natural programming ability comes into play. A good programmer has the ability to code any algorithm and convert a real-life example to an algorithm.
-
-Now, how do you sort an array of an integer using this algorithm? You can say that we can treat this array as a deck of cards, and we will use another array to pick and place an element from one place to another. Well, that will work, but it's a waste of space (memory) because what you are doing is comparing and shifting, which can also be done in place in the same array.
-
-Here is the step by step guide to coding insertion sort algorithm in Java:
-
-
-
-1) Consider the first element is sorted and it's in the proper place, that is index 0 for your array.
-
-2) Now go to the second element (index 1 in the array), and compare it with what is in your hand (the part of the array, which is already sorted). This means you compare this element going backward towards index zero.
-
-3) If the current number is smaller than the previous number (which is in the proper place), we need to put our current number before that. How will we do that? Well for that we need to shift the existing number.
-
-But what if there is another element that is greater than our current element? It means we need to continue comparing until we found a proper place for our current number, which again means current number> existing number or we are at the start of the list (index 0 in the array).
-
-
-
-4) You need to repeat this process for all the numbers in the list. Once you finish that, you have a sorted list or array.
-
-In short, insertion sort is all about finding the proper place for the current number. Once you find the proper place, you need to shift the existing element to make a place for this new number.  If you want to learn more about Insertion sort and other sorting algorithms, you can also see the course Algorithms and Data Structures - Part 1 and 2 or a good book like Algorithms in Nutshell which is fantastic course to learn important Computer Science Algorithms.
-
-http://www.amazon.com/Algorithms-Nutshell-In-OReilly/dp/059651624X?tag=javamysqlanta-20
-
-
-
-
-A Visual Explanation of Insertion Sort Algorithm
-It's said that "A picture is worth a thousand words", this is quite true in the case of understanding sorting algorithms. Earlier we had seen how easy it was to understand the QuickSort algorithm using a GIF image, and now we will again learn how Insertion sort works by following this diagram, It becomes extremely easy to explain how insertion sort works with this example.
-
-Here we have an integer array of both positive and negative numbers in random order. Our task is to sort this unsorted array using Insertion Sort in ascending order, which means the smallest element should be at the start of the array and the largest element must be at the end of the array.
-
-
-
-
-To start working we assume that our first element is in the proper position (remember the first card in your hand) and start with the second integer, which is  -5. Now we compare it with 7, since - 5 is less than 7, we first move 7 in place of -5.
-
-After this, we don't need to compare -5 with any other number because we have reached the left boundary so we will put -5 at the current place. Now, we pick the third element which is 2. We compare 2 with 7 and found that 2 is also less than 7, which means 7 shifted in place of 2.
-
-Next, we compare 2 with -5, now 2 is greater than -5 so we insert it at this place. After this, we pick the fourth element which is 16. Since 16 is greater than 7, no need to shift anyone, 16 will remain in its place.
-
-Now last element 4, it is less than 16 to 16 will move in place of 4, next we compare 4 with 7, again 4 is less than so 7 will be shifted, after this we compare 4 with 2, wow it's greater than 2, so we have found a proper place for 4. We insert 4 there. Now there is no more element to process an array, so our array is now sorted.
-
-Explanation of How Insertion Sort Algorithm works
-
-You can see that at the last step our array is sorted in increasing order, starting from - 5 and ending at 16.
-
-By the way, algorithms can be better understood by looking at a flowchart or a real example with numbers or by joining a good online course like Visualizing Data Structures and Algorithms in Java, which is also a great way to learn basic data structure and algorithms.
-
-
-Insertion Sort in Java with Example
-It's very easy to implement Insertion sort in Java.  All you need to do is to iterate over the array and find the proper position of each element, for that you need to shift the element and you can do it by swapping. The logic of sorting integer array using the insertion sort algorithm is inside method insertionSort(int[]).
-
-In Java you can also sort any object e.g. String using this algorithm, all you need to do is to use a Comparable interface because that will provide you mechanism to compare two objects. Now instead of using > (greater than) or < (less than) operator, we need to use compareTo() method.
-
-
-
-For this, we have decided to overload our insertionSort() method, where an overloaded version takes an Object array instead of an int array. Both methods sort elements using insertion sort logic.
-
-By the way, in the real world, you don't need to reinvent the wheel, java.util.Arrays class provides several utility methods to operate upon arrays and one of them is sort.
-
-There is a couple of overloaded version of sort() method available to sort primitive and object arrays. This method uses double-pivot QuickSort to sort the primitive array and MergeSort to sort object array.
-
-Anyway, here is our complete code example to run the Insertion sort in Java. If you are using Eclipse IDE then just copy-paste the code in the src folder of your Java project and Eclipse will create packages and source files with the same name by itself. All you need to do is that run it as a Java program.
-
-
+```java
 import java.util.Arrays;
 
-/**
- * Java program to sort an array using Insertion sort algorithm.
- * Insertion sort works great with already sorted, small arrays but 
- * not suitable for large array with random order.
- *
- * @author Javin Paul
- */
 public class InsertionSort {
 
-  public static void main(String args[]) {
-
-  // getting unsorted integer array for sorting
-  int[] randomOrder = getRandomArray(9);
-  System.out.println("Random Integer array before Sorting : " 
-                          + Arrays.toString(randomOrder));
-
-  // sorting array using insertion sort in Java
-  insertionSort(randomOrder);
-  System.out.println("Sorted array uisng insretion sort : " 
+    public static void main(String[] args) {
+        // Example array of integers to sort
+        int[] randomOrder = getRandomArray(9);
+        System.out.println("Random Integer array before Sorting: " 
                             + Arrays.toString(randomOrder));
 
-  // one more example of sorting array using insertion sort
-  randomOrder = getRandomArray(7);
-  System.out.println("Before Sorting : " + Arrays.toString(randomOrder));
-  insertionSort(randomOrder);
-  System.out.println("After Sorting : " + Arrays.toString(randomOrder));
-
-  // Sorting String array using Insertion Sort in Java
-  String[] cities = {"London", "Paris", "Tokyo", "NewYork", "Chicago"};
-  System.out.println("String array before sorting : "
-                           + Arrays.toString(cities));
-  insertionSort(cities);
-
-  System.out.println("String array after sorting : " 
-                           + Arrays.toString(cities));
-  }
-
-  public static int[] getRandomArray(int length) {
-    int[] numbers = new int[length];
-    for (int i = 0; i < length; i++) {
-      numbers[i] = (int) (Math.random() * 100);
-    }
-    return numbers;
-  }
-
-  /*
-  * Java implementation of insertion sort algorithm to sort
-  * an integer array.
-  */
-  public static void insertionSort(int[] array) {
-  // insertion sort starts from second element
-  for (int i = 1; i < array.length; i++) {
-    int numberToInsert = array[i];
-
-    int compareIndex = i;
-    while (compareIndex > 0 && array[compareIndex - 1] > numberToInsert) {
-       array[compareIndex] = array[compareIndex - 1]; // shifting element
-       compareIndex--; // moving backwards, towards index 0
+        // Sort array using insertion sort
+        insertionSort(randomOrder);
+        System.out.println("Sorted array using Insertion sort: " 
+                            + Arrays.toString(randomOrder));
+        
+        // Sorting String array using Insertion Sort
+        String[] cities = {"London", "Paris", "Tokyo", "NewYork", "Chicago"};
+        System.out.println("String array before sorting: " + Arrays.toString(cities));
+        insertionSort(cities);
+        System.out.println("String array after sorting: " + Arrays.toString(cities));
     }
 
-    // compareIndex now denotes proper place for number to be sorted
-     array[compareIndex] = numberToInsert;
-   }
- }
+    // Helper method to generate random array
+    public static int[] getRandomArray(int length) {
+        int[] numbers = new int[length];
+        for (int i = 0; i < length; i++) {
+            numbers[i] = (int) (Math.random() * 100);
+        }
+        return numbers;
+    }
 
-  /*
-  * Method to Sort String array using insertion sort in Java.
-  * This can also sort any object array which implements
-  * Comparable interface.
-  */
-  public static void insertionSort(Comparable[] objArray) {
-  // insertion sort starts from second element
-  for (int i = 1; i < objArray.length; i++) {
-      Comparable objectToSort = objArray[i];
+    // Insertion sort for integer arrays
+    public static void insertionSort(int[] array) {
+        for (int i = 1; i < array.length; i++) {
+            int numberToInsert = array[i];
+            int j = i;
+            while (j > 0 && array[j - 1] > numberToInsert) {
+                array[j] = array[j - 1]; // Shift element to the right
+                j--;
+            }
+            array[j] = numberToInsert; // Place the number in the correct position
+        }
+    }
 
-      int j = i;
-      while (j > 0 && objArray[j - 1].compareTo(objectToSort) > 1) {
-         objArray[j] = objArray[j - 1];
-         j--;
-      }
-     objArray[j] = objectToSort;
-   }
- }
-
+    // Insertion sort for Comparable objects (generic method)
+    public static void insertionSort(Comparable[] objArray) {
+        for (int i = 1; i < objArray.length; i++) {
+            Comparable objectToSort = objArray[i];
+            int j = i;
+            while (j > 0 && objArray[j - 1].compareTo(objectToSort) > 0) {
+                objArray[j] = objArray[j - 1]; // Shift element to the right
+                j--;
+            }
+            objArray[j] = objectToSort; // Place the object in the correct position
+        }
+    }
 }
+```
 
-Output:
-Random Integer array before Sorting : [74, 87, 27, 6, 25, 94, 53, 91, 15]
-Sorted array uisng insretion sort : [6, 15, 25, 27, 53, 74, 87, 91, 94]
-Before Sorting : [71, 5, 60, 19, 4, 78, 42]
-After Sorting : [4, 5, 19, 42, 60, 71, 78]
-String array before sorting : [London, Paris, Tokyo, NewYork, Chicago]
-String array after sorting : [Chicago, London, NewYork, Paris, Tokyo]
+#### Output Example:
 
+```
+Random Integer array before Sorting: [74, 87, 27, 6, 25, 94, 53, 91, 15]
+Sorted array using Insertion sort: [6, 15, 25, 27, 53, 74, 87, 91, 94]
+String array before sorting: [London, Paris, Tokyo, NewYork, Chicago]
+String array after sorting: [Chicago, London, NewYork, Paris, Tokyo]
+```
 
-Another useful thing to learn from this example is how to generate Random numbers in Java. You can see that our getRandomArray(int length) method creates a random array of a given length.
+### 2. **Finding Duplicates in an Array in Java**
 
-This uses the static utility method Math.random() which returns a double value between 0.0 to 0.1, if you need to convert it to an integer, in the range of 0 to 99, you need to multiply it with 100. After that, you can cast it to int to get rid of decimals.
+There are **two common methods** for finding duplicate elements in an array:
 
-That's all about the Insertion sort in Java. It's one of the really beautiful algorithms and works best for the already sorted list. It has lots of practical uses but has limitations also. You should not use Insertion sort for sorting a big list of numbers, as its best-case performance is in order of O(n), which can be very high for a list of say 1 million integers.
+#### Method 1: **Brute Force** (O(n²) time complexity)
 
-To short those lists, you need sorting algorithms that have logarithmic complexity e.g. quicksort, mergesort, or heapsort, which provides the best-case complexity of O(nLogn), because log reduces the power of 10^n into n like 1 million will become 10^6 means 6.
+This method compares each element with every other element in the array, resulting in a time complexity of **O(n²)**.
 
-In order to remember the Insertion sort algorithm, just remember how you sort your hand in poker or any card game. If that is tough, just remember how you arrange your shirts in the wardrobe.
-
-
-Read more: https://www.java67.com/2014/09/insertion-sort-in-java-with-example.html#ixzz8hjBV76OE
-
-[Solved] 2 Ways to Find Duplicate Elements in a given Array in Java - Example
-
-Hello guys, today, you will learn how to solve another popular coding problem. You have given an array of objects, which could be an array of integers and or an array of Strings or any object which implements the Comparable interface. How would you find duplicate elements from an array? Can you solve this problem in O(n) complexity? This is actually one of the frequently asked coding questions from Java interviews. There are multiple ways to solve this problem, and you will learn two popular ways here, first the brute force way, which involves comparing each element with every other element, and other which uses a hash table-like data structure to reduce the time complexity of the problem from quadratic to linear, of course by trading off some space complexity.
-
-
-This also shows how by using a suitable data structure, you can come up with a better algorithm to solve a problem. That's why a good knowledge of Data Structure and Algorithms are very important for all programmers.
-
-If you are new to the programming world or want to refresh your knowledge about essential data structures like an array, string, linked list, hash table, binary tree, balanced tree, stack, queue, priority queue, etc then I suggest you go through a comprehensive data structure and algorithms course.
-
-According to Data Structures and Algorithms: Deep Dive Using Java course  learning all essential data structures and algorithms like searching, sorting, and graph-based algorithms can make you better developer and also help in cracking coding interviews. 
-
-
-
-
-
-
-How to find duplicates in a given array on O(n^2)
-In the first solution, we compare each element of the array to every other element. If it matches then its duplicate and if it doesn't, then there are no duplicates. This is also known as a brute force algorithm to find duplicate objects from Java array.
-
-The time complexity of this problem is O(n^2) or quadratic. When you give this solution to your interviewer, he will surely ask you to come up with O(n) time complexity algorithm, which we will see next.
-
-Here is the code to find duplicate elements using a brute force algorithm in Java:
-In this program, instead of printing the duplicate elements, we have stored them in a Set and returned from the method, but if the interviewer doesn't ask you to return duplicates, then you can simply print them into the console as I have done in next solution.
-
+```java
 public static Set<Integer> findDuplicates(int[] input) {
-        Set<Integer> duplicates = new HashSet<Integer>();
-
-        for (int i = 0; i < input.length; i++) {
-            for (int j = 1; j < input.length; j++) {
-                if (input[i] == input[j] && i != j) {
-                    // duplicate element found
-                    duplicates.add(input[i]);
-                    break;
-                }
+    Set<Integer> duplicates = new HashSet<>();
+    for (int i = 0; i < input.length; i++) {
+        for (int j = i + 1; j < input.length; j++) {
+            if (input[i] == input[j]) {
+                duplicates.add(input[i]); // Duplicate found
+                break;
             }
         }
-
-        return duplicates;
     }
+    return duplicates;
+}
+```
 
+#### Method 2: **Using HashSet** (O(n) time complexity)
 
-If you are preparing for programming job interviews, then I also suggest you take a look at the Grokking the Coding Interview: Patterns for Coding Questions course on Educative, which contains many popular patterns for solving coding problems. This means you don't need to solve 100+ Leedcode problems but just need to learn a few patterns which are applicable to many programming problems.
-How to find duplicate elements in an Array - Java
+The **HashSet** is a collection that automatically discards duplicates. This allows us to find duplicates in **O(n)** time by checking for already existing elements while iterating through the array.
 
-
-
-
-
-How to Find duplicates in array in O(n) time Complexity
-The second solution demonstrates how you can use a suitable data structure to come up with a better algorithm to solve the same problem. If you know, in Java, the Set interface doesn't allow duplicates, and it's based upon hash table data structure, so insertion takes O(1) time in the average case.
-
-
-
-By using HashSet, a general-purpose Set implementation, we can find duplicates in O(n) time. All you need to do is iterate over an array using advanced for loop and insert every element into HashSet. Since it allows only unique elements, add() method will fail and return false when you try to add duplicates.
-
-
-
-Bingo, you have to find the duplicate element, just print them off to console, as shown in the following program:
-
+```java
 public static <T extends Comparable<T>> void getDuplicates(T[] array) {
-        Set<T> dupes = new HashSet<T>();
-        for (T i : array) {
-            if (!dupes.add(i)) {
-                System.out.println("Duplicate element in array is : " + i);
-            }
+    Set<T> dupes = new HashSet<>();
+    for (T i : array) {
+        if (!dupes.add(i)) { // add() returns false if the element already exists
+            System.out.println("Duplicate element: " + i);
         }
-
     }
-This solution also demonstrates how you can use Generics to write type-safe code in Java. This method will work on any type of Java array, like Array with Integer, Array with String or any object which implements Comparable interface, but will not work with a primitive array because they are not objects in Java.
+}
+```
 
-If you are preparing for programming job interviews, then I also suggest you take a look at the Cracking the Coding Interview book by Gayle McDowell, which contains 189 programming questions and solutions, good enough to do well on any programming job interviews like Java, C++, Python or Ruby.
+#### Example Java Program to Find Duplicates:
 
-How to find duplicate elements in Java array coding
-
-
-
-Java Program to find duplicate elements in Java using Generics
-Here is the Java program to combine both solutions, you can try running this solution on Eclipse IDE and see how it works. You can also write the JUnit test to see our solution work in all cases, especially corner cases like an empty array, array with null, etc.
-
+```java
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
-import static java.lang.System.*;
 
-/**
- * Java Program to find duplicate elements in an array. In this program, you
- * will learn two solution to find duplicate elements in integer array e.g.
- * brute force, by using HashSet data structure.
- * 
- * @author java67
- */
-
-public class DuplicatesFromArray{
+public class DuplicatesFromArray {
 
     public static void main(String args[]) {
         int[] withDuplicates = { 1, 2, 3, 1, 2, 3, 4, 5, 3, 6 };
         Set<Integer> duplicates = findDuplicates(withDuplicates);
-        out.println("input array is : " + Arrays.toString(withDuplicates));
-        out.println("Duplicate elements found in array are : " + duplicates);
+        System.out.println("Input array: " + Arrays.toString(withDuplicates));
+        System.out.println("Duplicate elements: " + duplicates);
 
-        // now calling our generic method to find duplicates        
         String[] myArray = { "ab", "cd", "ab", "de", "cd" };
-        out.println("input string array is : " + Arrays.toString(myArray));
+        System.out.println("Input string array: " + Arrays.toString(myArray));
         getDuplicates(myArray);
     }
 
-    /**
-     * Complexity of this solution is O(n^2)
-     * 
-     * @param input
-     * @return
-     */
+    // Brute force solution (O(n²))
     public static Set<Integer> findDuplicates(int[] input) {
-        Set<Integer> duplicates = new HashSet<Integer>();
-
+        Set<Integer> duplicates = new HashSet<>();
         for (int i = 0; i < input.length; i++) {
-            for (int j = 1; j < input.length; j++) {
-                if (input[i] == input[j] && i != j) {
-                    // duplicate element found
-                    duplicates.add(input[i]);
-                    break;
+            for (int j = i + 1; j < input.length; j++) {
+                if (input[i] == input[j]) {
+                    duplicates.add(input[i]); // Duplicate found
                 }
             }
         }
-
         return duplicates;
     }
 
-    /**
-     * Generic method to find duplicates in array. Complexity of this method is
-     * O(n) because we are using HashSet data structure.
-     * 
-     * @param array
-     * @return
-     */
+    // HashSet solution (O(n))
     public static <T extends Comparable<T>> void getDuplicates(T[] array) {
-        Set<T> dupes = new HashSet<T>();
+        Set<T> dupes = new HashSet<>();
         for (T i : array) {
-            if (!dupes.add(i)) {
-                System.out.println("Duplicate element in array is : " + i);
+            if (!dupes.add(i)) { // add() returns false if duplicate found
+                System.out.println("Duplicate element: " + i);
             }
         }
-
     }
-
 }
+```
 
-Output :
-input array is : [1, 2, 3, 1, 2, 3, 4, 5, 3, 6]
-Duplicate elements found in array are : [1, 2, 3]
-input string array is : [ab, cd, ab, de, cd]
-Duplicate element in array is : ab
-Duplicate element in array is : cd
+#### Output Example:
 
-That's all about how to find duplicate elements in an array. You have now learned two ways to solve this problem in Java. The first solution is the brute force algorithm, which is demonstrated by finding duplicate elements on integer array, but you can use the logic to find a duplicate on any kind of array. The second solution uses the HashSet data structure to reduce the time complexity from O(n^2) to O(n), and it also shows you can write generic methods to find duplicates on any object array.
+```
+Input array: [1, 2, 3, 1, 2, 3, 4, 5, 3, 6]
+Duplicate elements: [1, 2, 3]
+Input string array: [ab, cd, ab, de, cd]
+Duplicate element: ab
+Duplicate element: cd
+```
 
+### Conclusion
 
-Read more: https://www.java67.com/2015/10/2-ways-to-find-duplicate-elements-in-java-array.html#ixzz8hjBcbhKy
+- **Insertion Sort** is a simple, intuitive sorting algorithm suitable for small datasets or nearly sorted data. It has a best-case time complexity of **O(n)** and a worst-case time complexity of **O(n²)**.
+- For **finding duplicates** in an array, the **brute force approach** is easy but inefficient with **O(n²)** time complexity. The **HashSet approach** is more efficient with **O(n)** time complexity, thanks to its constant time lookups and insertions.
+
+Both of these solutions are commonly used in interview questions and help develop a good understanding of sorting and data structures.
+
 
 How to check if Array contains given Number or String in Java [ Linear Search vs Binary Search]
 
