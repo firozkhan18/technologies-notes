@@ -209,3 +209,256 @@ Here are the answers to the **Atlassian Jira Plugin Development interview questi
 | **Have you worked with teams to integrate Jira plugins into larger systems? How do you ensure smooth integration?**| Yes, collaboration is key. I communicate requirements clearly, use version control (e.g., Git), perform integration testing, and ensure compatibility with other plugins or systems through proper versioning. |
 | **How do you approach project deadlines when working on a Jira plugin?**                                        | I prioritize features based on business impact, break down tasks into smaller achievable parts, and ensure continuous testing and feedback throughout the development cycle to meet deadlines. |
 | **Tell us about a challenging plugin you developed and how you overcame the challenge.**                         | One challenge was optimizing a plugin that fetched large datasets from Jira. I used caching, optimized queries, and tested for performance to ensure the plugin did not degrade Jira's performance. |
+
+In Atlassian Jira, you can create various types of modules using the Atlassian SDK command `atlas-create-jira-plugin`. Below are the common **types of modules** you can create with this command, along with an explanation and examples for each.
+
+### **1. Web Panel**
+A **Web Panel** allows you to add custom content (HTML, JavaScript, etc.) to a specific location on the Jira UI, such as issue views or dashboards.
+
+- **Example**: Adding a custom panel to the issue view to display additional data.
+  
+  **Steps**:
+  - Command: `atlas-create-jira-plugin`
+  - Select **Web Panel** when prompted.
+  
+  **Code Example (`atlassian-plugin.xml`)**:
+  ```xml
+  <web-panel key="my-web-panel" location="atl.jira.view.issue.right.context" weight="100">
+      <label>My Custom Web Panel</label>
+      <description>Displays custom information on the issue view</description>
+      <resource type="velocity" name="view" location="/templates/issue/web-panel.vm"/>
+  </web-panel>
+  ```
+  In this example, the web panel is added to the **right context** of the issue view.
+
+---
+
+### **2. Web Item**
+A **Web Item** is used to add custom links or buttons to Jira's UI, like top navigation or context menus.
+
+- **Example**: Adding a custom link in the Jira issue context menu.
+  
+  **Steps**:
+  - Command: `atlas-create-jira-plugin`
+  - Select **Web Item** when prompted.
+  
+  **Code Example (`atlassian-plugin.xml`)**:
+  ```xml
+  <web-item key="my-web-item" section="system.top.navigation.bar" weight="100">
+      <label>My Custom Link</label>
+      <link>/secure/CustomPage.jspa</link>
+      <description>Click to view custom page</description>
+  </web-item>
+  ```
+  This example adds a custom link to the **top navigation bar** in Jira.
+
+---
+
+### **3. Custom Field**
+A **Custom Field** allows you to create fields that can store and display specific types of data on Jira issues.
+
+- **Example**: Creating a custom field that stores a numeric value.
+  
+  **Steps**:
+  - Command: `atlas-create-jira-plugin`
+  - Select **Custom Field** when prompted.
+  
+  **Code Example (`atlassian-plugin.xml`)**:
+  ```xml
+  <custom-field key="my-custom-field" name="My Custom Field" type="com.atlassian.jira.plugin.system.customfieldtypes:float">
+      <description>Stores a numeric value</description>
+  </custom-field>
+  ```
+  This creates a custom field that stores floating-point numeric values.
+
+---
+
+### **4. Listener**
+A **Listener** reacts to events occurring within Jira, such as issue creation, updates, or transitions.
+
+- **Example**: A listener that sends an email when an issue is transitioned to a specific status.
+  
+  **Steps**:
+  - Command: `atlas-create-jira-plugin`
+  - Select **Listener** when prompted.
+  
+  **Code Example (`atlassian-plugin.xml`)**:
+  ```xml
+  <listener key="my-listener" class="com.example.MyListener">
+      <event>com.atlassian.jira.event.issue.IssueTransitionedEvent</event>
+  </listener>
+  ```
+  In this example, the listener will react to the **Issue Transitioned** event.
+
+  The listener's class (`com.example.MyListener`) might look like this:
+  ```java
+  public class MyListener implements EventListener {
+      public void onEvent(Event event) {
+          if (event instanceof IssueTransitionedEvent) {
+              // Send an email or perform some action
+          }
+      }
+  }
+  ```
+
+---
+
+### **5. Validator**
+A **Validator** checks whether a specific condition is met during a workflow transition before the transition is allowed to proceed.
+
+- **Example**: A validator that checks if a custom field is filled before transitioning an issue.
+  
+  **Steps**:
+  - Command: `atlas-create-jira-plugin`
+  - Select **Validator** when prompted.
+  
+  **Code Example (`atlassian-plugin.xml`)**:
+  ```xml
+  <validator key="my-validator" class="com.example.MyValidator">
+      <description>Checks if custom field is filled</description>
+  </validator>
+  ```
+  In the validator class, you would implement logic to check if the required field is filled:
+  ```java
+  public class MyValidator implements Validator {
+      public void validate(WorkflowContext context, Issue issue) {
+          if (issue.getCustomFieldValue(customField) == null) {
+              throw new ValidatorException("Custom field must be filled!");
+          }
+      }
+  }
+  ```
+
+---
+
+### **6. Transition Postfunction**
+A **Postfunction** executes an action after a workflow transition (e.g., updating a field, sending a notification).
+
+- **Example**: A post-function that updates a custom field after an issue is transitioned to "Done".
+  
+  **Steps**:
+  - Command: `atlas-create-jira-plugin`
+  - Select **Transition Postfunction** when prompted.
+  
+  **Code Example (`atlassian-plugin.xml`)**:
+  ```xml
+  <post-function key="my-post-function" class="com.example.MyPostFunction">
+      <description>Updates custom field after issue transition</description>
+  </post-function>
+  ```
+  The class would implement the logic to update the custom field:
+  ```java
+  public class MyPostFunction implements PostFunction {
+      public void execute(MutableIssue issue) {
+          issue.setCustomFieldValue(customField, "Completed");
+      }
+  }
+  ```
+
+---
+
+### **7. REST API**
+A **REST API** allows you to expose custom endpoints so that Jira data can be accessed programmatically.
+
+- **Example**: Creating a REST endpoint that returns a list of issues assigned to the current user.
+  
+  **Steps**:
+  - Command: `atlas-create-jira-plugin`
+  - Select **REST API** when prompted.
+  
+  **Code Example (`atlassian-plugin.xml`)**:
+  ```xml
+  <rest key="my-rest-api" path="/issues" version="1.0">
+      <description>Returns list of issues assigned to the current user</description>
+      <resource class="com.example.MyRestResource"/>
+  </rest>
+  ```
+  The REST resource class (`MyRestResource`) might look like this:
+  ```java
+  @Path("/issues")
+  public class MyRestResource {
+      @GET
+      @Produces("application/json")
+      public Response getIssuesForCurrentUser() {
+          // Code to fetch and return issues assigned to the current user
+      }
+  }
+  ```
+
+---
+
+### **8. Scheduled Job**
+A **Scheduled Job** is used to run background tasks at specified intervals.
+
+- **Example**: A job that runs every hour and checks if there are any issues that need attention.
+  
+  **Steps**:
+  - Command: `atlas-create-jira-plugin`
+  - Select **Scheduled Job** when prompted.
+  
+  **Code Example (`atlassian-plugin.xml`)**:
+  ```xml
+  <job key="my-scheduled-job" class="com.example.MyScheduledJob">
+      <schedule>0 0 * * * ?</schedule> <!-- Every hour -->
+      <description>Checks for issues that need attention</description>
+  </job>
+  ```
+  The job class (`MyScheduledJob`) would implement the logic to perform the task:
+  ```java
+  public class MyScheduledJob implements Job {
+      public void execute(JobExecutionContext context) {
+          // Code to check issues and take actions
+      }
+  }
+  ```
+
+---
+
+### **9. Condition (Workflow)**
+A **Condition** in Jira Workflow determines whether a transition can proceed based on specific criteria.
+
+- **Example**: A condition that checks if the user has a certain permission before they can transition an issue.
+  
+  **Steps**:
+  - Command: `atlas-create-jira-plugin`
+  - Select **Condition** when prompted.
+  
+  **Code Example (`atlassian-plugin.xml`)**:
+  ```xml
+  <condition key="my-condition" class="com.example.MyCondition">
+      <description>Checks if user has permission to transition the issue</description>
+  </condition>
+  ```
+  The condition class would implement logic to check user permissions:
+  ```java
+  public class MyCondition implements Condition {
+      public boolean passesCondition(WorkflowContext context) {
+          // Check if the user has the required permission
+          return userHasPermission(context.getUser());
+      }
+  }
+  ```
+
+---
+
+### **10. Security Level**
+A **Security Level** controls who can view a particular issue based on specific conditions.
+
+- **Example**: Defining a custom security level to restrict issue visibility to certain groups.
+  
+  **Steps**:
+  - Command: `atlas-create-jira-plugin`
+  - Select **Security Level** when prompted.
+  
+  **Code Example (`atlassian-plugin.xml`)**:
+  ```xml
+  <security-level key="my-security-level" name="Sensitive Issues" description="Only specific teams can view">
+      <scheme>com.atlassian.jira.security:issueSecurityScheme</scheme>
+      <group name="team1"/>
+  </security-level>
+  ```
+
+---
+
+### Conclusion
+The **Atlassian Jira Plugin SDK** allows you to create various types of modules using predefined templates such as Web Panels, Web Items, Custom Fields, Listeners, Validators, and many others. These modules can be created by using the `atlas-create-jira-plugin` command and selecting the appropriate module type. Each module has its own configuration and implementation details, which can be customized according to the requirements of your plugin.
