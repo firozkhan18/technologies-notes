@@ -98,9 +98,7 @@ Here’s a detailed breakdown of how you can answer the questions you provided. 
 
 #### b. **How do you assess and influence company culture?**
 - **Response Example:**  
-  "I assess company culture through employee surveys, feedback sessions
-
-, and by observing interactions in the workplace. I influence culture by modeling the behaviors I want to see, promoting open communication, and recognizing employees who contribute to positive cultural values."
+  "I assess company culture through employee surveys, feedback sessions, and by observing interactions in the workplace. I influence culture by modeling the behaviors I want to see, promoting open communication, and recognizing employees who contribute to positive cultural values."
 
 #### c. **What steps do you take to ensure a positive employee experience, from onboarding to offboarding?**
 - **Response Example:**  
