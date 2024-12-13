@@ -1,4 +1,248 @@
+## Overview of the key features introduced in Java 8
 
+---
+
+### 1. **Lambda Expressions** (Functional Programming)
+
+Lambda expressions enable you to express instances of single-method interfaces (functional interfaces) in a clear and concise way. They allow you to write more compact code and make use of functional programming constructs.
+
+**Syntax**:
+```java
+(parameters) -> expression
+```
+
+**Example**:
+```java
+// Before Java 8
+Runnable r1 = new Runnable() {
+    @Override
+    public void run() {
+        System.out.println("Hello from Runnable!");
+    }
+};
+
+// With Lambda Expression
+Runnable r2 = () -> System.out.println("Hello from Runnable!");
+```
+
+Lambda expressions allow you to pass behavior as a parameter to methods, making the code more flexible and readable.
+
+---
+
+### 2. **Functional Interfaces**
+
+A **functional interface** is an interface with a single abstract method. It can have multiple default and static methods, but it must have one and only one abstract method.
+
+- **Purpose**: Functional interfaces can be used as the target types for lambda expressions and method references.
+
+**Example**:
+```java
+@FunctionalInterface
+public interface MyFunctionalInterface {
+    void execute();
+    
+    default void printMessage() {
+        System.out.println("This is a default message");
+    }
+}
+```
+
+Common built-in functional interfaces in Java 8:
+- **`Predicate<T>`**: Represents a boolean-valued function.
+- **`Function<T, R>`**: Takes one argument and returns a result.
+- **`Consumer<T>`**: Takes an argument and performs an action.
+- **`Supplier<T>`**: Takes no argument and provides a result.
+- **`BiFunction<T, U, R>`**: Takes two arguments and returns a result.
+
+---
+
+### 3. **Streams API**
+
+The **Streams API** is one of the most powerful features in Java 8. It allows you to process sequences of elements (such as collections) in a functional style, enabling operations like filtering, mapping, and reducing in a clean and efficient way.
+
+- **Key Operations**:
+  - **Intermediate operations** (e.g., `filter()`, `map()`, `sorted()`) return a new stream.
+  - **Terminal operations** (e.g., `collect()`, `forEach()`, `reduce()`) trigger the processing of the stream.
+
+**Example**:
+```java
+List<String> names = Arrays.asList("Alice", "Bob", "Charlie", "David");
+
+names.stream()
+     .filter(name -> name.length() > 3)
+     .map(String::toUpperCase)
+     .forEach(System.out::println);
+```
+This example filters names with more than 3 characters, converts them to uppercase, and prints them.
+
+---
+
+### 4. **Default Methods in Interfaces**
+
+Java 8 allows you to define **default methods** in interfaces. These are methods with a default implementation, which means you can provide a default behavior in the interface itself without requiring implementing classes to override them.
+
+- **Why useful?** Default methods enable you to add new methods to existing interfaces without breaking existing code that implements those interfaces.
+
+**Example**:
+```java
+public interface MyInterface {
+    default void defaultMethod() {
+        System.out.println("This is a default method");
+    }
+}
+```
+
+---
+
+### 5. **Static Methods in Interfaces**
+
+Java 8 also allows you to define **static methods** in interfaces. These are similar to static methods in classes, and they can be called without an instance of the interface.
+
+**Example**:
+```java
+public interface MyInterface {
+    static void staticMethod() {
+        System.out.println("This is a static method");
+    }
+}
+```
+
+---
+
+### 6. **Method References**
+
+Method references provide a shorthand syntax for calling methods directly using the `::` operator. They are often used in combination with streams and lambdas to make the code more readable.
+
+**Example**:
+```java
+List<String> names = Arrays.asList("Alice", "Bob", "Charlie");
+names.forEach(System.out::println);  // Method reference to println
+```
+
+Method references can be used for:
+- **Static methods**: `ClassName::staticMethod`
+- **Instance methods**: `object::instanceMethod`
+- **Constructor references**: `ClassName::new`
+
+---
+
+### 7. **Optional Class**
+
+The **`Optional<T>`** class is a container object which may or may not contain a non-null value. It helps avoid `NullPointerException` by providing methods to handle the presence or absence of a value without explicitly checking for `null`.
+
+- **Usage**: Instead of returning `null` for empty or missing values, return `Optional.empty()`.
+  
+**Example**:
+```java
+Optional<String> name = Optional.ofNullable(getName());
+name.ifPresent(System.out::println);  // Prints if value is present, does nothing otherwise
+```
+
+---
+
+### 8. **New Date and Time API (java.time)**
+
+Java 8 introduced a completely new **Date and Time API** under the `java.time` package, which addresses the flaws of the old `java.util.Date` and `java.util.Calendar`. It includes classes such as:
+- **`LocalDate`**: For date without time.
+- **`LocalTime`**: For time without date.
+- **`LocalDateTime`**: For both date and time.
+- **`ZonedDateTime`**: For date and time with timezone.
+- **`Instant`**: For a point in time (timestamps).
+
+**Example**:
+```java
+LocalDate date = LocalDate.now();
+System.out.println(date);  // Prints the current date in ISO-8601 format (e.g., 2024-12-13)
+```
+
+---
+
+### 9. **Nashorn JavaScript Engine**
+
+Java 8 introduced **Nashorn**, a much faster JavaScript engine than the previous Rhino engine. It allows you to embed JavaScript code within Java applications and execute it dynamically.
+
+**Example**:
+```java
+ScriptEngine engine = new ScriptEngineManager().getEngineByName("nashorn");
+engine.eval("print('Hello from JavaScript in Java!')");
+```
+
+---
+
+### 10. **Streams and Parallel Streams**
+
+Java 8 introduced the ability to perform **parallel processing** on collections using streams. This allows you to easily process data concurrently using the **parallelStream()** method.
+
+**Example**:
+```java
+List<Integer> numbers = Arrays.asList(1, 2, 3, 4, 5);
+int sum = numbers.parallelStream()
+                  .mapToInt(Integer::intValue)
+                  .sum();
+System.out.println(sum);  // The sum of numbers will be calculated in parallel
+```
+
+---
+
+### 11. **Collectors Class**
+
+The **`Collectors`** class provides utility methods to perform common reduction operations, such as **collecting elements into collections** or **grouping** and **partitioning** data.
+
+- **Example**:
+  - `Collectors.toList()`
+  - `Collectors.joining()`
+  - `Collectors.groupingBy()`
+  - `Collectors.partitioningBy()`
+
+**Example**:
+```java
+List<String> names = Arrays.asList("Alice", "Bob", "Charlie", "David");
+
+Map<Integer, List<String>> groupedByLength = names.stream()
+    .collect(Collectors.groupingBy(String::length));
+
+System.out.println(groupedByLength);  // Group names by their length
+```
+
+---
+
+### 12. **Default Interfaces in Java 8**
+
+Another important feature of Java 8 is the ability to define **default methods** in interfaces, allowing us to add new methods to interfaces without breaking backward compatibility. This has already been covered, but it's important to highlight that it was a major change in Java's interface design philosophy.
+
+---
+
+### 13. **Type Annotations**
+
+Java 8 allows **type annotations** to be used in the program. This means you can apply annotations not only to variables, methods, and fields, but also to **type parameters** (e.g., generics).
+
+**Example**:
+```java
+public class Example<T> {
+    public void process(@NonNull T value) {
+        // ...
+    }
+}
+```
+
+---
+
+### 14. **Improved Type Inference**
+
+Java 8 introduced improved type inference with **diamond operator** (`<>`), which simplifies the creation of generics. This is useful when instantiating objects with generics.
+
+**Example**:
+```java
+List<String> list = new ArrayList<>();  // Compiler infers the type (List<String>)
+```
+
+---
+
+### Conclusion:
+
+Java 8 brought significant advancements, especially in functional programming. The addition of lambda expressions, functional interfaces, the Streams API, the new Date/Time API, and default methods in interfaces helped modernize Java and make it more expressive, concise, and flexible. These changes laid the groundwork for Java to be more competitive in the era of functional programming and to support modern, scalable applications.
+
+---
 ## Lambda Expressions
 
 In Java 8, **lambda expressions** provide a way to write concise, functional-style code. A lambda expression essentially allows you to pass behavior as an argument to a method or store it in a variable. They are primarily used to define the implementation of the abstract method of a functional interface.
