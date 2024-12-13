@@ -9,6 +9,8 @@ Java 8 Lambda Expressions can be defined as methods without names i.e anonymous 
 * Anonymous: Nameless/Unknown
 * Anonymous Function: A method who dont have any name or identifier
 
+A **Lambda Expressions** is a short way to express a function in java. It allows us to write function inline and pass it as an argument to another function as well.
+
 ## 2) Lambda Syntax
 
 Parameters &nbsp;&nbsp;&nbsp;&nbsp;   Expression  &nbsp;&nbsp;&nbsp;&nbsp;  Body
