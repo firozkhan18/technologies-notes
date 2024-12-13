@@ -2,6 +2,25 @@
 
 # Table of Contents
 
+1. [**Object-Oriented Programming (OOP) Concepts in Depth**](#object-oriented-programming-oop-concepts-in-depth)
+   - [1.1 Classes and Objects](#11-classes-and-objects)
+   - [1.2 Encapsulation](#12-encapsulation)
+   - [1.3 Abstraction](#13-abstraction)
+   - [1.4 Inheritance](#14-inheritance)
+   - [1.5 Polymorphism](#15-polymorphism)
+     - [1.5.1 What is Polymorphism?](#151-what-is-polymorphism)
+
+   [**Other OOP Concepts in Java**](#other-oop-concepts-in-java)
+   - [1.6 Composition Has-A Relationship](#16-composition-has-a-relationship)
+   - [1.7 Association](#17-association)
+   - [1.8 Aggregation](#18-Aggregation)   
+   - [1.9 Summary of When to Use Each Relationship](#summary-of-when-to-use-each-relationship)
+
+2. [**Process-Oriented Object-Oriented and Functional Programming in Java**](#process-oriented-object-oriented-and-functional-programming-in-java)
+   - [2.1 Process-Oriented Programming (POP)](#21-process-oriented-programming-pop)
+   - [2.2 Object-Oriented Programming (OOP)](#22-object-oriented-programming-oop-1)
+   - [2.3 Functional Programming (FP)](#23-functional-programming-fp)
+     
 1. [Lambda Expressions (Functional Programming)](#1-lambda-expressions-functional-programming)
 2. [Functional Interfaces](#2-functional-interfaces)
 3. [Method References](#3-method-references)
