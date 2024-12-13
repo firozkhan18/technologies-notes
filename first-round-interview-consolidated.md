@@ -3,22 +3,15 @@
 
 ### 1. **Lambda Expressions** (Functional Programming)
 
-Lambda expressions enable you to express instances of single-method interfaces (functional interfaces) in a clear and concise way. They allow you to write more compact code and make use of functional programming constructs.
+Lambda expressions in Java 8 provide a clear and concise way to express instances of **functional interfaces** (interfaces with a single abstract method). They enable you to write more compact, functional-style code by allowing behavior to be passed as an argument to methods or stored in variables. Essentially, lambda expressions are **anonymous functions** that can have parameters, a body, a return type, and throw exceptions, but they do not have names or belong to any specific class. This makes lambda expressions a powerful tool for implementing functional programming constructs in Java, simplifying code and promoting higher-order functions.
 
-In Java 8, **lambda expressions** provide a way to write concise, functional-style code. A lambda expression essentially allows you to pass behavior as an argument to a method or store it in a variable. They are primarily used to define the implementation of the abstract method of a functional interface.
-
-Java 8 Lambda Expressions can be defined as methods without names i.e anonymous functions. Like methods, they can have parameters, a body, a return type and possible list of exceptions that can be thrown. But unlike methods, neither they have names nor they are associated with any particular class.
+A **Lambda Expressions** is a short way to express a function in java. It allows us to write function inline and pass it as an argument to another function as well.
 
 **Lambda Expressions**: The Expression through which we can represnt an Anonymous Function.
 
 * Anonymous: Nameless/Unknown
 * Anonymous Function: A method who dont have any name or identifier
 
-A **Lambda Expressions** is a short way to express a function in java. It allows us to write function inline and pass it as an argument to another function as well.
-
-**Lambda Expressions in Java 8: A Consolidated Definition**
-
-Lambda expressions in Java 8 provide a clear and concise way to express instances of **functional interfaces** (interfaces with a single abstract method). They enable you to write more compact, functional-style code by allowing behavior to be passed as an argument to methods or stored in variables. Essentially, lambda expressions are **anonymous functions** that can have parameters, a body, a return type, and throw exceptions, but they do not have names or belong to any specific class. This makes lambda expressions a powerful tool for implementing functional programming constructs in Java, simplifying code and promoting higher-order functions.
 
 ### Syntax of Lambda Expression:
 The basic syntax of a lambda expression is:
