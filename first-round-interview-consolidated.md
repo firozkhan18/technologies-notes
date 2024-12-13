@@ -32,9 +32,9 @@
 9. [Collectors Class](#9-collectors-class)
 10. [Type Annotations](#10-type-annotations)
 11. [Improved Type Inference](#11-improved-type-inference)
-12. [Marker Interface](#marker-interface)
-13. [Metadata](#metadata)
-
+12. [Marker Interface](#12-marker-interface)
+13. [Metadata](#13-metadata)
+14. [Saga Pattern in Microservice](#-14-saga-pattern-in-microservice)
 
 ## 1 **Object-Oriented Programming (OOP) Concepts in Depth**
 
@@ -2019,3 +2019,177 @@ Java has several other ways to attach metadata to various program elements:
 - **Reflection** enables the inspection of metadata at runtime.
 
 Metadata makes code more flexible, allows frameworks and libraries to offer more powerful functionality, and improves code clarity and documentation.
+
+---
+
+### 14. [Saga Pattern in Microservice](#saga-pattern-in-microservice)
+
+The **Saga Pattern** is a design pattern used to manage long-running transactions and distributed transactions in microservice architectures. It is particularly useful in systems where operations span across multiple services or databases, and you need to ensure data consistency while maintaining reliability.
+
+In microservices, because services are independent and distributed, a single service failure during a long-running transaction could lead to inconsistencies. The Saga Pattern breaks down such transactions into smaller, isolated steps, each handled by a different service. It ensures that if a failure occurs at any step, the system can perform compensating actions (also known as "rollback") to restore consistency.
+
+### Overview of the Saga Pattern
+
+In a **Saga**, each service involved in the transaction performs its work and publishes an event that triggers the next service. If any service fails, a **compensating action** (rollback) is executed to ensure the system reaches a consistent state.
+
+There are two types of Sagas:
+
+1. **Choreography-based Saga**: 
+   - No central coordinator. Each service knows the next service in the sequence and emits events that other services listen to and react upon.
+   - It relies on a system of event listeners to handle the communication between services.
+
+2. **Orchestration-based Saga**:
+   - A central service (called the orchestrator) coordinates the saga by calling the services one by one and determining the flow. If a service fails, the orchestrator triggers compensating actions.
+
+In **Spring Boot microservices**, the Saga Pattern can be implemented with tools like **Spring Cloud** (with **Spring Cloud Saga**), **Apache Kafka**, or **Axon Framework** to handle messaging, state, and event-driven communication between services.
+
+### Implementing Saga in Spring Boot Microservices
+
+Here’s a high-level approach for implementing the Saga Pattern in a Spring Boot microservice architecture.
+
+#### 1. **Set up Spring Boot Microservices**
+
+Each microservice should be independent and responsible for a single part of the process. For example, if you are implementing a payment system, you might have the following microservices:
+- **Order Service**
+- **Inventory Service**
+- **Payment Service**
+
+Each of these services should expose REST endpoints or message queues to interact with each other.
+
+#### 2. **Choose Saga Communication Mechanism**
+
+You can implement Sagas in Spring Boot using either **Choreography** or **Orchestration**.
+
+- **Choreography-based Saga** can use event-driven messaging systems like **Apache Kafka**, **RabbitMQ**, or **ActiveMQ**. Each service listens to the events and triggers the next action.
+- **Orchestration-based Saga** typically uses a central **Orchestrator Service** to control the flow of events and calls microservices.
+
+#### 3. **Integrate Event-Driven Messaging**
+
+To implement a Saga, you need to choose a communication pattern that enables services to communicate asynchronously. Commonly used tools include:
+- **Apache Kafka**
+- **RabbitMQ**
+- **Spring Cloud Stream**
+  
+These tools allow services to publish and consume events (e.g., "OrderCreated", "InventoryReserved", "PaymentProcessed", etc.), enabling each service to know when to perform its part of the saga.
+
+#### 4. **Implement the Saga in Choreography Style (Event-Driven)**
+
+In **choreography**, each service listens for events and triggers the next service's action. For example, after the **Order Service** creates an order, it will publish an event like `OrderCreated`, and the **Inventory Service** will listen for it, perform its task, and then publish `InventoryReserved` for the **Payment Service** to process.
+
+Example:
+
+- **Order Service** creates an order and emits the `OrderCreated` event.
+- **Inventory Service** listens for the `OrderCreated` event, reserves the inventory, and publishes the `InventoryReserved` event.
+- **Payment Service** listens for `InventoryReserved`, processes the payment, and publishes `PaymentProcessed`.
+- If any service fails, the services can publish compensating actions (e.g., `CancelOrder`, `RollbackInventory`, `RefundPayment`).
+
+```java
+@Service
+public class OrderService {
+
+    @Autowired
+    private EventPublisher eventPublisher; // EventPublisher to send events
+
+    public void createOrder(Order order) {
+        // Business logic to create the order
+        eventPublisher.publish(new OrderCreatedEvent(order));
+    }
+}
+
+@Service
+public class InventoryService {
+
+    @Autowired
+    private EventPublisher eventPublisher;
+
+    @EventListener
+    public void handleOrderCreated(OrderCreatedEvent event) {
+        // Logic to reserve inventory
+        eventPublisher.publish(new InventoryReservedEvent(event.getOrder()));
+    }
+}
+
+@Service
+public class PaymentService {
+
+    @Autowired
+    private EventPublisher eventPublisher;
+
+    @EventListener
+    public void handleInventoryReserved(InventoryReservedEvent event) {
+        // Logic to process payment
+        eventPublisher.publish(new PaymentProcessedEvent(event.getOrder()));
+    }
+
+    @EventListener
+    public void handleFailure(InventoryReservedEvent event) {
+        // Compensating action if needed
+        eventPublisher.publish(new RefundPaymentEvent(event.getOrder()));
+    }
+}
+```
+
+#### 5. **Implement the Saga in Orchestration Style**
+
+In **orchestration**, there is a central orchestrator service that manages the flow of the saga. It calls each microservice sequentially and triggers compensating actions if any step fails.
+
+The orchestrator could call each service (e.g., **Order Service**, **Inventory Service**, **Payment Service**) and perform compensating actions in case of failure.
+
+```java
+@Service
+public class OrderOrchestrator {
+
+    @Autowired
+    private OrderService orderService;
+
+    @Autowired
+    private InventoryService inventoryService;
+
+    @Autowired
+    private PaymentService paymentService;
+
+    public void createOrderAndProcess(Order order) {
+        try {
+            orderService.createOrder(order);
+            inventoryService.reserveInventory(order);
+            paymentService.processPayment(order);
+        } catch (Exception e) {
+            // Handle compensation in case of failure
+            paymentService.refundPayment(order);
+            inventoryService.rollbackInventory(order);
+            orderService.cancelOrder(order);
+        }
+    }
+}
+```
+
+#### 6. **Handle Compensating Actions**
+
+In the case of failure, you need to define compensating actions to roll back the changes made by previous services. For example, if the **Payment Service** fails, you might need to cancel the order and release the reserved inventory.
+
+- **Order Service** can provide a `cancelOrder()` method.
+- **Inventory Service** can provide a `rollbackInventory()` method.
+- **Payment Service** can provide a `refundPayment()` method.
+
+---
+
+### Tools & Frameworks for Implementing Saga in Spring Boot
+
+1. **Spring Cloud**: 
+   - **Spring Cloud SAGA** (formerly Spring Cloud Data Flow) provides built-in tools for managing distributed transactions and sagas.
+   - **Spring Cloud Stream**: A framework that allows communication between microservices through event-driven architectures.
+   - **Spring Cloud Bus**: Helps broadcast state changes (events) to all the services in a system.
+
+2. **Apache Kafka / RabbitMQ**:
+   - Both of these messaging systems can be used to implement event-driven communication and coordination in the Saga pattern.
+   - Kafka can be particularly useful for providing event logs, ensuring the consistency of events across distributed services.
+
+3. **Axon Framework**:
+   - Axon is a framework for implementing CQRS and event-driven architectures in Java. It also supports the Saga pattern, providing a declarative way to manage long-running business transactions.
+
+---
+
+### Conclusion
+
+The **Saga Pattern** helps manage distributed transactions and ensures data consistency in a microservices environment. It provides two approaches: **Choreography** and **Orchestration**, with both approaches leveraging event-driven or orchestrated communications between services. In Spring Boot microservices, you can implement the Saga pattern using frameworks like **Spring Cloud Stream**, **Apache Kafka**, or **Axon** to handle inter-service communication and maintain consistency even during failures.
+
