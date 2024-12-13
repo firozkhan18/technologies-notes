@@ -75,6 +75,8 @@ Object-Oriented Programming (OOP) is a programming paradigm that is based on the
 
 ### 1.2 Encapsulation
 
+**Encapsulation** is mechanishm that binds together code and data it manipulates and keep both safe from outside interference and missuse. One way to think about encapsulation is as a protective warapper that prevents the code and data from being arbitrary accessed by the other code defined outside the wrapper. Access to the code and data inside the wrapper is tightly control through a well defined interfcaes.
+
 **Encapsulation** is the concept of **bundling the data (attributes)** and **methods (functions)** that operate on the data into a single unit, called a **class**. It also refers to restricting access to some of the object's components to protect the integrity of the object.
 
 #### Key Aspects of Encapsulation:
@@ -149,6 +151,14 @@ public class BankAccount {
 
 ### 1.3 Abstraction
 
+**Abstraction** refers to the act of representing essential features without including the backgraound details or explaination. 
+
+An essetial features of object oriented programming is abstarction. 
+
+A powerful way to manage abstarction through the use of hierarchical classification. This allows you to layer the semantics of complex system breaking them into more manageable piece. The data from a traditional process-oriented program can be transformed by abstarction into its component objects.
+
+A sequence of process step can become a collection messages between these objects, thus each of these objects describes own unique behaviour. You can treat these objects as concret entities that responds to messages telling them to do something. This is the essence of object oriented programming.
+
 **Abstraction** is the concept of **hiding the complexity** of the system and exposing only the necessary parts. It allows a programmer to focus on high-level functionality while hiding the implementation details.
 
 #### Key Aspects of Abstraction:
@@ -201,6 +211,64 @@ class Circle implements Shape {
 - **Separation of Concerns**: Separates the **what** from the **how**, ensuring that changes in implementation don’t affect the interface.
 - **Improved Flexibility**: You can change the implementation of an abstract class or interface without affecting the system as long as the interface remains unchanged.
 
+It seems like you're discussing **abstraction** in the context of **Object-Oriented Programming (OOP)**. I’ll refine and clarify your explanation with proper terminology and structure:
+
+---
+
+**Abstraction** is a fundamental concept in object-oriented programming (OOP), which refers to the process of simplifying complex systems by focusing only on the essential features, while ignoring irrelevant or background details. It allows you to represent an object or system in a way that hides unnecessary implementation details, making it easier to work with at a higher level of understanding.
+
+### Key Points of Abstraction in OOP:
+
+1. **Simplification of Complex Systems**:  
+   Abstraction helps in breaking down complex systems into simpler, more manageable components. By isolating the relevant features, it reduces the complexity of the system as a whole. This is achieved through **hierarchical classification** where complex ideas are broken into smaller, understandable pieces.
+
+2. **Data Encapsulation**:  
+   In a traditional procedural or process-oriented programming paradigm, data is often treated as a global entity that is manipulated through functions. In contrast, **abstraction** in OOP encapsulates data into objects. Each object represents a specific entity and is responsible for its own behavior, which is an essential aspect of OOP.
+
+3. **Interaction Between Objects**:  
+   Rather than following a sequence of procedural steps, OOP models systems as a collection of objects that interact by sending and receiving messages. Each object has its own behavior (i.e., methods) and can be treated as a concrete entity that responds to messages (method calls). The interaction between objects often describes the behavior of the system, rather than focusing on individual steps.
+
+4. **Focus on "What" not "How"**:  
+   Abstraction allows you to focus on "what" an object should do (its behavior or actions) rather than "how" it does it (its internal implementation). This is why abstraction is often associated with interfaces, abstract classes, and polymorphism in OOP, as they allow you to define the contract or the "what" while hiding the complex details of the "how."
+
+---
+
+### Example of Abstraction in OOP
+
+Consider a **Vehicle** object:
+
+```java
+abstract class Vehicle {
+    abstract void move(); // abstract method
+}
+
+class Car extends Vehicle {
+    void move() {
+        System.out.println("Car is moving on the road.");
+    }
+}
+
+class Boat extends Vehicle {
+    void move() {
+        System.out.println("Boat is moving on water.");
+    }
+}
+```
+
+Here, the **Vehicle** class is an abstraction of the common behavior (move) of different vehicles. The **Car** and **Boat** classes are concrete implementations that provide specific details about how each vehicle moves. The abstraction hides the specific details of the movement, allowing you to treat any type of **Vehicle** generically.
+
+### Hierarchical Classification of Abstraction
+
+In a real-world system, abstraction helps in organizing classes and objects into hierarchies. For example:
+
+- **Animal** (abstract class)
+  - **Mammal** (concrete class)
+    - **Dog** (concrete class)
+    - **Cat** (concrete class)
+  - **Bird** (concrete class)
+
+This hierarchy allows you to define common behavior (e.g., `eat()`, `sleep()`) in the `Animal` class and specialize it in subclasses like `Mammal` and `Bird`.
+
 Abstraction is the concept of hiding complex implementation details and showing only the essential features of an object. This can be achieved using abstract classes and interfaces.
 
 - **Abstract Class**: A class that cannot be instantiated and may contain abstract methods (methods without a body) and concrete methods.
@@ -234,6 +302,14 @@ Abstraction is the concept of hiding complex implementation details and showing 
 
 ### 1.4 Inheritance
 
+**Inheritance** is the process by which one object aquires the properties of another objects. This is important because it supports the concepts of hierarchical classification.
+In OOPs the concept of inheritance provides the idea of **code reusability**. This means that we can add additional features to an existing class without modifying it. This is possible by deriving a new class from existing one. The new class will have the combined features of both the class.
+
+In terminology of java, a class that is inherited is called superclass. The class does inheriting is called subclass. Therefore, a subclass is specialized version of a superclass. It traits all of the instance variables and metyhods defined by the superclass and add its own unique elements.
+
+Java does not support multiple inheritance. In java to inherits a class you can simply incorporate the defination of one class into another by using the **extends** keyword.
+
+
 **Inheritance** is the mechanism by which one class can **inherit properties and methods** from another class. This promotes **code reusability** and allows for hierarchical class relationships. A subclass (or child class) inherits from a superclass (or parent class), and can:
 - Reuse code from the superclass.
 - Override methods of the superclass to provide specialized behavior.
@@ -243,6 +319,7 @@ Abstraction is the concept of hiding complex implementation details and showing 
 - **Single Inheritance**: A class can inherit from only one class (in Java).
 - **Method Overriding**: A subclass can provide its own implementation of a method that is already defined in the superclass.
 - **`super` keyword**: Used to call a superclass’s method or constructor from a subclass.
+
 
 #### Example of Inheritance:
 ```java
