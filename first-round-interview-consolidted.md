@@ -1,6 +1,5 @@
 ## Overview of the key features introduced in Java 8
 
----
 
 ### 1. **Lambda Expressions** (Functional Programming)
 
