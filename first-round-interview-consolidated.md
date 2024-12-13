@@ -1,7 +1,24 @@
 ## Overview of the key features introduced in Java 8
 
+# Table of Contents
 
-### 1. **Lambda Expressions** (Functional Programming)
+1. [Lambda Expressions (Functional Programming)](#lambda-expressions-functional-programming)
+2. [Functional Interfaces](#functional-interfaces)
+3. [Streams API](#streams-api)
+4. [Default Methods in Interfaces](#default-methods-in-interfaces)
+5. [Static Methods in Interfaces](#static-methods-in-interfaces)
+6. [Method References](#method-references)
+7. [Optional Class](#optional-class)
+8. [New Date and Time API (java.time)](#new-date-and-time-api-javatime)
+9. [Nashorn JavaScript Engine](#nashorn-javascript-engine)
+10. [Streams and Parallel Streams](#streams-and-parallel-streams)
+11. [Collectors Class](#collectors-class)
+12. [Default Interfaces in Java 8](#default-interfaces-in-java-8)
+13. [Type Annotations](#type-annotations)
+14. [Improved Type Inference](#improved-type-inference)
+15. [Conclusion](#conclusion)
+
+### 1. [Lambda Expressions (Functional Programming)](#lambda-expressions-functional-programming)
 
 Lambda expressions in Java 8 provide a clear and concise way to express instances of **functional interfaces** (interfaces with a single abstract method). They enable you to write more compact, functional-style code by allowing behavior to be passed as an argument to methods or stored in variables. Essentially, lambda expressions are **anonymous functions** that can have parameters, a body, a return type, and throw exceptions, but they do not have names or belong to any specific class. This makes lambda expressions a powerful tool for implementing functional programming constructs in Java, simplifying code and promoting higher-order functions.
 
@@ -127,7 +144,7 @@ Lambda expressions in Java 8 make code more concise and readable, particularly i
 [More About Lambda](conceptsIII/java-basic-fundamental-lambda-expressions.md)
 
 ---
-### 2. **Functional Interfaces**
+### 2. [Functional Interfaces](#functional-interfaces)
 
 A **functional interface** is an interface with a single abstract method. It can have multiple default and static methods, but it must have one and only one abstract method.
 
@@ -394,7 +411,7 @@ In short, the combination of a single abstract method with optional default and 
 
 ---
 
-### 3. **Method References**
+### 3. [Method References](#method-references)
 
 Method references provide a shorthand syntax for calling methods directly using the `::` operator. They are often used in combination with streams and lambdas to make the code more readable.
 
@@ -411,7 +428,7 @@ Method references can be used for:
 
 ---
 
-### 4. **Streams API**
+### 4. [Streams API](#streams-api)
 
 The **Streams API** is one of the most powerful features in Java 8. It allows you to process sequences of elements (such as collections) in a functional style, enabling operations like filtering, mapping, and reducing in a clean and efficient way.
 
@@ -433,7 +450,7 @@ This example filters names with more than 3 characters, converts them to upperca
 ---
 
 
-### 5. **Optional Class**
+### 5. [Optional Class](#optional-class)
 
 The **`Optional<T>`** class is a container object which may or may not contain a non-null value. It helps avoid `NullPointerException` by providing methods to handle the presence or absence of a value without explicitly checking for `null`.
 
@@ -447,7 +464,7 @@ name.ifPresent(System.out::println);  // Prints if value is present, does nothin
 
 ---
 
-### 6. **New Date and Time API (java.time)**
+### 6. [New Date and Time API (java.time)](#new-date-and-time-api-javatime)
 
 Java 8 introduced a completely new **Date and Time API** under the `java.time` package, which addresses the flaws of the old `java.util.Date` and `java.util.Calendar`. It includes classes such as:
 - **`LocalDate`**: For date without time.
@@ -464,7 +481,7 @@ System.out.println(date);  // Prints the current date in ISO-8601 format (e.g., 
 
 ---
 
-### 7. **Nashorn JavaScript Engine**
+### 7. [Nashorn JavaScript Engine](#nashorn-javascript-engine)
 
 Java 8 introduced **Nashorn**, a much faster JavaScript engine than the previous Rhino engine. It allows you to embed JavaScript code within Java applications and execute it dynamically.
 
@@ -476,7 +493,7 @@ engine.eval("print('Hello from JavaScript in Java!')");
 
 ---
 
-### 8. **Streams and Parallel Streams**
+### 8. [Streams and Parallel Streams](#streams-and-parallel-streams)
 
 Java 8 introduced the ability to perform **parallel processing** on collections using streams. This allows you to easily process data concurrently using the **parallelStream()** method.
 
@@ -491,7 +508,7 @@ System.out.println(sum);  // The sum of numbers will be calculated in parallel
 
 ---
 
-### 9. **Collectors Class**
+### 9. [Collectors Class](#collectors-class)
 
 The **`Collectors`** class provides utility methods to perform common reduction operations, such as **collecting elements into collections** or **grouping** and **partitioning** data.
 
@@ -513,7 +530,7 @@ System.out.println(groupedByLength);  // Group names by their length
 
 ---
 
-### 10. **Type Annotations**
+### 10. [Type Annotations](#type-annotations)
 
 Java 8 allows **type annotations** to be used in the program. This means you can apply annotations not only to variables, methods, and fields, but also to **type parameters** (e.g., generics).
 
@@ -528,7 +545,7 @@ public class Example<T> {
 
 ---
 
-### 11. **Improved Type Inference**
+### 11. [Improved Type Inference](#improved-type-inference)
 
 Java 8 introduced improved type inference with **diamond operator** (`<>`), which simplifies the creation of generics. This is useful when instantiating objects with generics.
 
@@ -538,6 +555,8 @@ List<String> list = new ArrayList<>();  // Compiler infers the type (List<String
 ```
 
 ---
+
+### 12. [Marker Interface](#marker-interface)
 
 ### What is a Marker Interface in Java?
 
@@ -678,7 +697,7 @@ In summary, a **marker interface** is a special type of interface in Java that d
 
 ---
 
-### Metadata
+### 13. [Metadata](#metadata)
 
 The term **metadata** refers to **data about data**. In the context of programming, **metadata** provides additional information about a program's code, such as the structure of data, the behavior of objects, or the intended use of certain elements in the program. It's a way of attaching extra information to code elements like classes, methods, fields, or parameters, without affecting the actual logic of the code.
 
