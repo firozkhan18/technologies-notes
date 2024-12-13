@@ -113,6 +113,8 @@ The basic syntax of a lambda expression is:
 
 Lambda expressions in Java 8 make code more concise and readable, particularly in functional-style programming. They are particularly useful when working with collections, handling concurrency, or dealing with APIs that expect functional interfaces.
 
+[More About Lambda](conceptsIII/java-basic-fundamental-lambda-expressions.md)
+
 ---
 ### 2. **Functional Interfaces**
 
