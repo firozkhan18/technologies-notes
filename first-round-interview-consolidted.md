@@ -250,12 +250,6 @@ public interface MyFunctionalInterface {
 
 The `@FunctionalInterface` annotation is optional, but it makes the code more readable and helps catch errors at compile-time if the interface is not a valid functional interface.
 
-### Conclusion:
-
-A **functional interface** in Java 8 is an interface with a single abstract method, and it can be used with lambda expressions to provide a clean and concise way to represent behavior. Java 8's functional interfaces, especially those in the `java.util.function` package, have become an essential part of Java's functional programming features, making it easier to write code in a declarative and functional style.
-
----
-
 ### Why Only One Abstract Method in a Functional Interface?
 
 The primary reason why a **functional interface** must have exactly one abstract method is to ensure that it can be used as a **target type** for lambda expressions and method references. A lambda expression defines a single behavior or function, and it needs to map directly to one method. Having more than one abstract method in the interface would create ambiguity, making it unclear which method the lambda expression should implement.
@@ -377,11 +371,15 @@ public class Main {
 
 ### Conclusion:
 
+A **functional interface** in Java 8 is an interface with a single abstract method, and it can be used with lambda expressions to provide a clean and concise way to represent behavior. Java 8's functional interfaces, especially those in the `java.util.function` package, have become an essential part of Java's functional programming features, making it easier to write code in a declarative and functional style.
+
 - **Single Abstract Method**: The reason a functional interface must have only one abstract method is to ensure that it can represent a single, specific behavior, which is then implemented via a lambda expression or method reference. This makes lambda expressions and functional interfaces highly efficient and easy to use.
   
 - **Default and Static Methods**: These are allowed in functional interfaces to provide additional functionality, enable interface evolution without breaking existing code, and support utility methods that are tied to the interface rather than an instance. Default methods enhance flexibility by providing common implementations, while static methods support utility operations.
 
 In short, the combination of a single abstract method with optional default and static methods strikes a balance between **simplicity** (single abstract method) and **flexibility** (default and static methods), making functional interfaces powerful tools in Java's functional programming toolkit.
+
+---
 
 ### 3. **Method References**
 
