@@ -1,3 +1,6 @@
+
+## Lambda Expressions
+
 In Java 8, **lambda expressions** provide a way to write concise, functional-style code. A lambda expression essentially allows you to pass behavior as an argument to a method or store it in a variable. They are primarily used to define the implementation of the abstract method of a functional interface.
 
 ### Syntax of Lambda Expression:
@@ -105,6 +108,8 @@ The basic syntax of a lambda expression is:
 Lambda expressions in Java 8 make code more concise and readable, particularly in functional-style programming. They are particularly useful when working with collections, handling concurrency, or dealing with APIs that expect functional interfaces.
 
 ---
+## Functional Interface
+
 In Java, a **functional interface** is an interface that has exactly one abstract method (method without a body). Functional interfaces are intended to be used primarily with lambda expressions, method references, and other functional-style constructs introduced in Java 8. These interfaces enable you to pass behavior as arguments to methods and support functional programming paradigms in Java.
 
 ### Key Characteristics of a Functional Interface:
