@@ -5,31 +5,6 @@
 
 Lambda expressions enable you to express instances of single-method interfaces (functional interfaces) in a clear and concise way. They allow you to write more compact code and make use of functional programming constructs.
 
-**Syntax**:
-```java
-(parameters) -> expression
-```
-
-**Example**:
-```java
-// Before Java 8
-Runnable r1 = new Runnable() {
-    @Override
-    public void run() {
-        System.out.println("Hello from Runnable!");
-    }
-};
-
-// With Lambda Expression
-Runnable r2 = () -> System.out.println("Hello from Runnable!");
-```
-
-Lambda expressions allow you to pass behavior as a parameter to methods, making the code more flexible and readable.
-
----
-
-## Lambda Expressions
-
 In Java 8, **lambda expressions** provide a way to write concise, functional-style code. A lambda expression essentially allows you to pass behavior as an argument to a method or store it in a variable. They are primarily used to define the implementation of the abstract method of a functional interface.
 
 ### Syntax of Lambda Expression:
@@ -60,6 +35,8 @@ The basic syntax of a lambda expression is:
    ```
 
    In this case, the lambda expression `() -> System.out.println("Hello from Runnable!")` represents a `Runnable` with no parameters and a single statement.
+
+   Lambda expressions allow you to pass behavior as a parameter to methods, making the code more flexible and readable.
 
 2. **Lambda Expression with Parameters**
    A more common example would be with functional interfaces that take parameters, like `Predicate`, `Function`, etc.
