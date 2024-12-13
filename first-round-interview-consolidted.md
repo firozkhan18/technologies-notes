@@ -120,27 +120,6 @@ A **functional interface** is an interface with a single abstract method. It can
 
 - **Purpose**: Functional interfaces can be used as the target types for lambda expressions and method references.
 
-**Example**:
-```java
-@FunctionalInterface
-public interface MyFunctionalInterface {
-    void execute();
-    
-    default void printMessage() {
-        System.out.println("This is a default message");
-    }
-}
-```
-
-Common built-in functional interfaces in Java 8:
-- **`Predicate<T>`**: Represents a boolean-valued function.
-- **`Function<T, R>`**: Takes one argument and returns a result.
-- **`Consumer<T>`**: Takes an argument and performs an action.
-- **`Supplier<T>`**: Takes no argument and provides a result.
-- **`BiFunction<T, U, R>`**: Takes two arguments and returns a result.
-
----
-## Functional Interface
 
 In Java, a **functional interface** is an interface that has exactly one abstract method (method without a body). Functional interfaces are intended to be used primarily with lambda expressions, method references, and other functional-style constructs introduced in Java 8. These interfaces enable you to pass behavior as arguments to methods and support functional programming paradigms in Java.
 
@@ -203,6 +182,13 @@ In this example:
 
 Java 8 introduced several built-in functional interfaces in the `java.util.function` package. These interfaces can be used with lambda expressions or method references. Here are some commonly used functional interfaces:
 
+Common built-in functional interfaces in Java 8:
+- **`Predicate<T>`**: Represents a boolean-valued function.
+- **`Function<T, R>`**: Takes one argument and returns a result.
+- **`Consumer<T>`**: Takes an argument and performs an action.
+- **`Supplier<T>`**: Takes no argument and provides a result.
+- **`BiFunction<T, U, R>`**: Takes two arguments and returns a result.
+- 
 1. **`Predicate<T>`**: Represents a boolean-valued function (test condition).
    ```java
    Predicate<Integer> isEven = (n) -> n % 2 == 0;
@@ -270,42 +256,6 @@ A **functional interface** in Java 8 is an interface with a single abstract meth
 
 ---
 
-
-
-### 4. **Default Methods in Interfaces**
-
-Java 8 allows you to define **default methods** in interfaces. These are methods with a default implementation, which means you can provide a default behavior in the interface itself without requiring implementing classes to override them.
-
-- **Why useful?** Default methods enable you to add new methods to existing interfaces without breaking existing code that implements those interfaces.
-
-**Example**:
-```java
-public interface MyInterface {
-    default void defaultMethod() {
-        System.out.println("This is a default method");
-    }
-}
-```
-
----
-
-### 5. **Static Methods in Interfaces**
-
-Java 8 also allows you to define **static methods** in interfaces. These are similar to static methods in classes, and they can be called without an instance of the interface.
-
-**Example**:
-```java
-public interface MyInterface {
-    static void staticMethod() {
-        System.out.println("This is a static method");
-    }
-}
-```
-
----
-
-In Java, **functional interfaces** play a significant role in enabling functional programming features introduced in Java 8, such as **lambda expressions** and **method references**. To understand why functional interfaces have the constraints they do (e.g., only one abstract method) and why **default** and **static** methods are allowed, let's explore the rationale behind these design choices.
-
 ### Why Only One Abstract Method in a Functional Interface?
 
 The primary reason why a **functional interface** must have exactly one abstract method is to ensure that it can be used as a **target type** for lambda expressions and method references. A lambda expression defines a single behavior or function, and it needs to map directly to one method. Having more than one abstract method in the interface would create ambiguity, making it unclear which method the lambda expression should implement.
@@ -326,7 +276,11 @@ While a functional interface must have exactly one abstract method, it is allowe
 
 #### 1. **Default Methods**:
    - **Definition**: A `default` method is a method with a body that provides a default implementation. It allows a class (or interface) implementing the interface to use the default behavior or override it if necessary.
-   
+
+   Java 8 allows you to define **default methods** in interfaces. These are methods with a default implementation, which means you can provide a default behavior in the interface itself without requiring implementing classes to override them.
+
+   - **Why useful?** Default methods enable you to add new methods to existing interfaces without breaking existing code that implements those interfaces.
+  
    - **Why Needed**:
      - **Extensibility**: Java 8 introduced **default methods** to enable interfaces to evolve over time. Without default methods, adding new methods to an existing interface would break existing implementations of that interface. With default methods, new methods can be added without requiring existing classes to implement them.
      - **Code Reusability**: Default methods can provide a default implementation of behavior that all implementing classes can share. For example, in a functional interface, you might want to provide a common implementation of a helper method that can be used by all implementing classes but still allow the main abstract method to be defined by the implementing class.
@@ -347,6 +301,8 @@ While a functional interface must have exactly one abstract method, it is allowe
 
 #### 2. **Static Methods**:
    - **Definition**: A `static` method belongs to the interface itself rather than to instances of implementing classes. Static methods can be called without creating an instance of the interface.
+
+   Java 8 also allows you to define **static methods** in interfaces. These are similar to static methods in classes, and they can be called without an instance of the interface.
    
    - **Why Needed**:
      - **Utility Methods**: Static methods can provide utility methods related to the interface but are not part of the instance-specific behavior. These methods are useful when you need to have behavior that is tied to the interface itself, rather than to a specific instance of a class implementing the interface.
@@ -427,7 +383,7 @@ public class Main {
 
 In short, the combination of a single abstract method with optional default and static methods strikes a balance between **simplicity** (single abstract method) and **flexibility** (default and static methods), making functional interfaces powerful tools in Java's functional programming toolkit.
 
-### 6. **Method References**
+### 3. **Method References**
 
 Method references provide a shorthand syntax for calling methods directly using the `::` operator. They are often used in combination with streams and lambdas to make the code more readable.
 
@@ -444,7 +400,7 @@ Method references can be used for:
 
 ---
 
-### 3. **Streams API**
+### 4. **Streams API**
 
 The **Streams API** is one of the most powerful features in Java 8. It allows you to process sequences of elements (such as collections) in a functional style, enabling operations like filtering, mapping, and reducing in a clean and efficient way.
 
@@ -466,7 +422,7 @@ This example filters names with more than 3 characters, converts them to upperca
 ---
 
 
-### 7. **Optional Class**
+### 5. **Optional Class**
 
 The **`Optional<T>`** class is a container object which may or may not contain a non-null value. It helps avoid `NullPointerException` by providing methods to handle the presence or absence of a value without explicitly checking for `null`.
 
@@ -480,7 +436,7 @@ name.ifPresent(System.out::println);  // Prints if value is present, does nothin
 
 ---
 
-### 8. **New Date and Time API (java.time)**
+### 6. **New Date and Time API (java.time)**
 
 Java 8 introduced a completely new **Date and Time API** under the `java.time` package, which addresses the flaws of the old `java.util.Date` and `java.util.Calendar`. It includes classes such as:
 - **`LocalDate`**: For date without time.
@@ -497,7 +453,7 @@ System.out.println(date);  // Prints the current date in ISO-8601 format (e.g., 
 
 ---
 
-### 9. **Nashorn JavaScript Engine**
+### 7. **Nashorn JavaScript Engine**
 
 Java 8 introduced **Nashorn**, a much faster JavaScript engine than the previous Rhino engine. It allows you to embed JavaScript code within Java applications and execute it dynamically.
 
@@ -509,7 +465,7 @@ engine.eval("print('Hello from JavaScript in Java!')");
 
 ---
 
-### 10. **Streams and Parallel Streams**
+### 8. **Streams and Parallel Streams**
 
 Java 8 introduced the ability to perform **parallel processing** on collections using streams. This allows you to easily process data concurrently using the **parallelStream()** method.
 
@@ -524,7 +480,7 @@ System.out.println(sum);  // The sum of numbers will be calculated in parallel
 
 ---
 
-### 11. **Collectors Class**
+### 9. **Collectors Class**
 
 The **`Collectors`** class provides utility methods to perform common reduction operations, such as **collecting elements into collections** or **grouping** and **partitioning** data.
 
@@ -546,7 +502,7 @@ System.out.println(groupedByLength);  // Group names by their length
 
 ---
 
-### 13. **Type Annotations**
+### 10. **Type Annotations**
 
 Java 8 allows **type annotations** to be used in the program. This means you can apply annotations not only to variables, methods, and fields, but also to **type parameters** (e.g., generics).
 
@@ -561,7 +517,7 @@ public class Example<T> {
 
 ---
 
-### 14. **Improved Type Inference**
+### 11. **Improved Type Inference**
 
 Java 8 introduced improved type inference with **diamond operator** (`<>`), which simplifies the creation of generics. This is useful when instantiating objects with generics.
 
@@ -572,9 +528,4 @@ List<String> list = new ArrayList<>();  // Compiler infers the type (List<String
 
 ---
 
-### Conclusion:
-
-Java 8 brought significant advancements, especially in functional programming. The addition of lambda expressions, functional interfaces, the Streams API, the new Date/Time API, and default methods in interfaces helped modernize Java and make it more expressive, concise, and flexible. These changes laid the groundwork for Java to be more competitive in the era of functional programming and to support modern, scalable applications.
-
----
 
