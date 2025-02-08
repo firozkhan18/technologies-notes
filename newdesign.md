@@ -1,9 +1,5 @@
-`
 
-
-Apologies for the oversight. Here's the updated version of the project structure, including the missing `pom.xml` files for both `base-app` and `base-app-sites` modules.
-
-### Updated Structure:
+### Application Structure:
 
 ```
 parent-app
