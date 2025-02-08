@@ -1,3 +1,4 @@
+```
 parent
 ├───pom.xml  <-- Parent POM that manages dependencies and modules
 ├───base-app (sub module1)
@@ -80,3 +81,5 @@ parent
 │   │       │           └───web.xml
 │   │       └───pom.xml  <-- Brand3 module POM
 └───README.md
+
+```
