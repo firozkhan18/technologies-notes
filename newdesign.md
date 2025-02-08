@@ -1,31 +1,29 @@
 ```
 parent
-├───pom.xml  <-- Parent POM that manages dependencies and modules
 ├───base-app (sub module1)
-│   ├───pom.xml  <-- Base App module POM
-│   └───activities (sub module1 child 1)
-│       └───customerservice
-│           └───src
-│               ├───main
-│               │   ├───java
-│               │   │   └───com
-│               │   │       └───baseapp
-│               │   │           └───activities
-│               │   │               └───customerservice
-│               │   │                   ├───CustomerServiceActivity.java
-│               │   │                   └───StandardCustomerServiceActivity.java
-│               │   ├───resources
-│               │   │   └───application.properties
-│               │   └───test
-│               │       └───java
-│               │           └───com
-│               │               └───baseapp
-│               │                   └───activities
-│               │                       └───customerservice
-│               │                           ├───CustomerServiceActivityTest.java
-│               │                           └───StandardCustomerServiceActivityTest.java
-│               └───pom.xml  <-- Activities module POM
-│   └───base-app-config (sub module1 child 2)
+│   ├───activities (sub module1 child 1)
+│   │    └───customerservice
+│   │        └───src
+│   │            ├───main
+│   │            │   ├───java
+│   │            │   │   └───com
+│   │            │   │       └───baseapp
+│   │            │   │           └───activities
+│   │            │   │               └───customerservice
+│   │            │   │                   ├───CustomerServiceActivity.java
+│   │            │   │                   └───StandardCustomerServiceActivity.java
+│   │            │   ├───resources
+│   │            │   │   └───application.properties
+│   │            │   └───test
+│   │            │       └───java
+│   │            │           └───com
+│   │            │               └───baseapp
+│   │            │                   └───activities
+│   │            │                       └───customerservice
+│   │            │                           ├───CustomerServiceActivityTest.java
+│   │            │                           └───StandardCustomerServiceActivityTest.java
+│   │            └───pom.xml  <-- Activities module POM
+│   ├───base-app-config (sub module1 child 2)
 │       └───src
 │           ├───main
 │           │   ├───java
@@ -48,6 +46,7 @@ parent
 │           │                       ├───BaseAppConfigTest.java
 │           │                       └───MessagingConfigTest.java
 │           └───pom.xml  <-- Base App Config module POM
+│   └───pom.xml  <-- Base App module POM
 ├───base-app-sites (sub module2)
 │   ├───admin (sub module2 child 1)
 │   ├───brand2 (sub module2 child 2)
@@ -80,6 +79,8 @@ parent
 │   │       │       └───WEB-INF
 │   │       │           └───web.xml
 │   │       └───pom.xml  <-- Brand3 module POM
+│   └───pom.xml  <-- Brand3 module POM
+├───pom.xml  <-- Parent POM that manages dependencies and modules
 └───README.md
 
 ```
@@ -107,31 +108,31 @@ base-app (submodule)
 │   │       │                       ├───CustomerServiceActivityTest.java
 │   │       │                       └───StandartCustomerServiceActivityTest.java
 │   │       └───pom.xml  <-- Activities module POM
-├───base-app-config (submodule)
-│   └───src
-│       ├───main
-│       │   ├───java
-│       │   │   └───com
-│       │   │       └───config
-│       │   │           └───base-app
-│       │   │               ├───base-app-config.xml
-│       │   │               ├───context-config.xml
-│       │   │               ├───homepage-config.xml
-│       │   │               ├───jms-config.xml
-│       │   │               └───kafka-service-config.xml
-│       │   ├───resources
-│       │   │   ├───application.properties
-│       │   │   └───static
-│       │   │       └───css
-│       │   │           └───style.css
-│       │   └───test
-│       │       └───java
-│       │           └───com
-│       │               └───customerservice
-│       │                   └───activity
-│       │                       ├───CustomerServiceActivityTest.java
-│       │                       └───StandartCustomerServiceActivityTest.java
-│       └───pom.xml  <-- Base App Config module POM
+│   └───base-app-config (submodule)
+│       └───src
+│           ├───main
+│           │   ├───java
+│           │   │   └───com
+│           │   │       └───config
+│           │   │           └───base-app
+│           │   │               ├───base-app-config.xml
+│           │   │               ├───context-config.xml
+│           │   │               ├───homepage-config.xml
+│           │   │               ├───jms-config.xml
+│           │   │               └───kafka-service-config.xml
+│           │   ├───resources
+│           │   │   ├───application.properties
+│           │   │   └───static
+│           │   │       └───css
+│           │   │           └───style.css
+│           │   └───test
+│           │       └───java
+│           │           └───com
+│           │               └───customerservice
+│           │                   └───activity
+│           │                       ├───CustomerServiceActivityTest.java
+│           │                       └───StandartCustomerServiceActivityTest.java
+│           └───pom.xml  <-- Base App Config module POM
 base-app-sites (submodule)
 ├───admin (submodule)
 ├───brand2 (submodule)
