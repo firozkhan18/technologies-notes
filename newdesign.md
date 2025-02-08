@@ -84,6 +84,89 @@ parent
 
 ```
 
+```
+
+base-app (submodule)
+├───activities (submodule)
+│   ├───customerservice (submodule)
+│   │   └───src
+│   │       ├───main
+│   │       │   ├───java
+│   │       │   │   └───com
+│   │       │   │       └───customerservice
+│   │       │   │           └───activity
+│   │       │   │               ├───CustomerServiceActivity.java
+│   │       │   │               └───StandartCustomerServiceActivity.java
+│   │       │   ├───resources
+│   │       │   │   └───application.properties
+│   │       │   └───test
+│   │       │       └───java
+│   │       │           └───com
+│   │       │               └───customerservice
+│   │       │                   └───activity
+│   │       │                       ├───CustomerServiceActivityTest.java
+│   │       │                       └───StandartCustomerServiceActivityTest.java
+│   │       └───pom.xml  <-- Activities module POM
+├───base-app-config (submodule)
+│   └───src
+│       ├───main
+│       │   ├───java
+│       │   │   └───com
+│       │   │       └───config
+│       │   │           └───base-app
+│       │   │               ├───base-app-config.xml
+│       │   │               ├───context-config.xml
+│       │   │               ├───homepage-config.xml
+│       │   │               ├───jms-config.xml
+│       │   │               └───kafka-service-config.xml
+│       │   ├───resources
+│       │   │   ├───application.properties
+│       │   │   └───static
+│       │   │       └───css
+│       │   │           └───style.css
+│       │   └───test
+│       │       └───java
+│       │           └───com
+│       │               └───customerservice
+│       │                   └───activity
+│       │                       ├───CustomerServiceActivityTest.java
+│       │                       └───StandartCustomerServiceActivityTest.java
+│       └───pom.xml  <-- Base App Config module POM
+base-app-sites (submodule)
+├───admin (submodule)
+├───brand2 (submodule)
+├───brand3 (submodule)
+│   └───src
+│       ├───main
+│       │   ├───java
+│       │   │   └───com
+│       │   │       └───brand3
+│       │   │           └───controller
+│       │   │               └───CustomerServiceController.java
+│       │   ├───jetty
+│       │   │   ├───app-specification.properties
+│       │   │   ├───jetty.xml
+│       │   │   ├───jetty-env.xml
+│       │   │   ├───jetty-http.xml
+│       │   │   ├───jetty-https.xml
+│       │   │   ├───jetty-jmx.xml
+│       │   │   ├───jetty-ssl.xml
+│       │   │   └───log4j.properties
+│       │   ├───resources
+│       │   │   └───com
+│       │   │       ├───brand3
+│       │   │       │   ├───application.properties
+│       │   │       │   ├───services-servlet.xml
+│       │   │       │   └───spring-context.xml
+│       │   │       └───application.properties
+│       │   └───webapp
+│       │       └───WEB-INF
+│       │           └───web.xml
+│       └───pom.xml  <-- Brand3 module POM
+└───README.md
+
+```
+
 Apologies for the oversight. Here's the updated version of the project structure, including the missing `pom.xml` files for both `base-app` and `base-app-sites` modules.
 
 ### Updated Structure:
