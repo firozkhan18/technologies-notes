@@ -384,6 +384,438 @@ This will deploy your Dockerized Vue.js app to a production environment, accessi
 
 5. **Cache issues**: Ensure that your app's static assets are versioned, especially in production, to avoid caching issues after updates.
 
+
+To configure Kafka consumer and producer in a Spring MVC project using an XML-based Spring configuration, and ensuring the use of SSL certificates for secure communication, we need to define both Kafka consumer and producer settings in the `applicationContext.xml` (or a similar XML configuration file). 
+
+This guide assumes that you have the following requirements:
+
+1. **SSL certificates for Kafka communication** — A keystore and truststore need to be configured for SSL.
+2. **Spring Kafka dependencies** — Ensure that you have included Spring Kafka dependencies in your project (via Maven or Gradle).
+
+Here’s the setup for Kafka with SSL certificates:
+
+---
+
+### Step 1: Include the Required Dependencies
+
+In your `pom.xml`, ensure you have the necessary dependencies for Kafka and Spring Kafka:
+
+```xml
+<dependencies>
+    <!-- Spring Kafka -->
+    <dependency>
+        <groupId>org.springframework.kafka</groupId>
+        <artifactId>spring-kafka</artifactId>
+        <version>2.8.0</version> <!-- Choose the latest compatible version -->
+    </dependency>
+
+    <!-- Apache Kafka Client -->
+    <dependency>
+        <groupId>org.apache.kafka</groupId>
+        <artifactId>kafka-clients</artifactId>
+        <version>2.8.0</version> <!-- Choose the latest compatible version -->
+    </dependency>
+
+    <!-- SLF4J logging (for logging) -->
+    <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-api</artifactId>
+        <version>1.7.32</version>
+    </dependency>
+</dependencies>
+```
+
+---
+
+### Step 2: Configure Kafka Consumer and Producer in Spring MVC XML Configuration
+
+In the XML configuration file (e.g., `applicationContext.xml`), we will configure both the Kafka consumer and producer along with SSL settings.
+
+#### 2.1 Kafka Producer Configuration
+
+```xml
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+    <!-- Kafka Producer Configuration -->
+    <bean id="producerFactory" class="org.springframework.kafka.core.DefaultKafkaProducerFactory">
+        <constructor-arg>
+            <bean class="org.apache.kafka.common.serialization.StringSerializer"/>
+        </constructor-arg>
+        <constructor-arg>
+            <bean class="org.apache.kafka.common.serialization.StringSerializer"/>
+        </constructor-arg>
+        <property name="producerConfig">
+            <map>
+                <entry key="bootstrap.servers" value="your.kafka.server:9093"/>
+                <entry key="security.protocol" value="SSL"/>
+                <entry key="ssl.truststore.location" value="classpath:/path/to/your/truststore.jks"/>
+                <entry key="ssl.truststore.password" value="truststore-password"/>
+                <entry key="ssl.keystore.location" value="classpath:/path/to/your/keystore.jks"/>
+                <entry key="ssl.keystore.password" value="keystore-password"/>
+                <entry key="ssl.key.password" value="key-password"/>
+            </map>
+        </property>
+    </bean>
+
+    <bean id="kafkaTemplate" class="org.springframework.kafka.core.KafkaTemplate">
+        <constructor-arg ref="producerFactory"/>
+    </bean>
+</beans>
+```
+
+Explanation:
+- **`DefaultKafkaProducerFactory`**: Configures the producer factory for Kafka with key and value serializers (in this case, `StringSerializer`).
+- **SSL Configuration**: SSL-related properties like `security.protocol`, `ssl.truststore.location`, `ssl.keystore.location`, and their respective passwords are specified.
+- **`KafkaTemplate`**: This bean is used to send messages to Kafka.
+
+---
+
+#### 2.2 Kafka Consumer Configuration
+
+```xml
+<bean id="consumerFactory" class="org.springframework.kafka.core.DefaultKafkaConsumerFactory">
+    <constructor-arg>
+        <bean class="org.apache.kafka.common.serialization.StringDeserializer"/>
+    </constructor-arg>
+    <constructor-arg>
+        <bean class="org.apache.kafka.common.serialization.StringDeserializer"/>
+    </constructor-arg>
+    <property name="consumerConfig">
+        <map>
+            <entry key="bootstrap.servers" value="your.kafka.server:9093"/>
+            <entry key="security.protocol" value="SSL"/>
+            <entry key="ssl.truststore.location" value="classpath:/path/to/your/truststore.jks"/>
+            <entry key="ssl.truststore.password" value="truststore-password"/>
+            <entry key="ssl.keystore.location" value="classpath:/path/to/your/keystore.jks"/>
+            <entry key="ssl.keystore.password" value="keystore-password"/>
+            <entry key="ssl.key.password" value="key-password"/>
+            <entry key="group.id" value="your-consumer-group"/>
+        </map>
+    </property>
+</bean>
+
+<bean id="kafkaListenerContainerFactory" class="org.springframework.kafka.listener.ConcurrentMessageListenerContainer">
+    <constructor-arg ref="consumerFactory"/>
+    <constructor-arg ref="kafkaMessageListenerContainer"/>
+</bean>
+```
+
+Explanation:
+- **`DefaultKafkaConsumerFactory`**: Configures the consumer factory with key and value deserializers (`StringDeserializer` in this case).
+- **SSL Configuration**: Similar to the producer configuration, SSL properties are set.
+- **`ConcurrentMessageListenerContainer`**: The `KafkaListenerContainer` is configured to handle the consumption of messages from Kafka.
+
+---
+
+#### 2.3 Kafka Listener Bean (Optional)
+
+To consume messages from Kafka, you can define a listener method:
+
+```xml
+<bean id="kafkaListener" class="com.example.kafka.KafkaMessageListener">
+    <property name="kafkaTemplate" ref="kafkaTemplate"/>
+</bean>
+```
+
+Then, in your `KafkaMessageListener` class:
+
+```java
+package com.example.kafka;
+
+import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.stereotype.Component;
+
+@Component
+public class KafkaMessageListener {
+
+    @KafkaListener(topics = "your-topic", groupId = "your-consumer-group")
+    public void listen(String message) {
+        System.out.println("Received message: " + message);
+    }
+}
+```
+
+Explanation:
+- **`@KafkaListener`**: A Spring annotation used to create a method that listens to Kafka messages from a specific topic and consumer group.
+
+---
+
+### Step 3: Configuration in `application.properties` (Optional)
+
+Instead of specifying the Kafka SSL configuration in the XML file, you can also use `application.properties` to store the Kafka configuration if using Spring Boot. Here's how you might do that in a Spring Boot setup:
+
+```properties
+# Kafka Configuration for SSL
+spring.kafka.bootstrap-servers=your.kafka.server:9093
+spring.kafka.consumer.group-id=your-consumer-group
+spring.kafka.consumer.key-deserializer=org.apache.kafka.common.serialization.StringDeserializer
+spring.kafka.consumer.value-deserializer=org.apache.kafka.common.serialization.StringDeserializer
+spring.kafka.consumer.security.protocol=SSL
+spring.kafka.consumer.ssl.truststore-location=classpath:/path/to/your/truststore.jks
+spring.kafka.consumer.ssl.truststore-password=truststore-password
+spring.kafka.consumer.ssl.keystore-location=classpath:/path/to/your/keystore.jks
+spring.kafka.consumer.ssl.keystore-password=keystore-password
+spring.kafka.consumer.ssl.key-password=key-password
+```
+
+This is for Spring Boot projects, where you typically would not need to manually configure the beans in XML, but instead rely on auto-configuration properties in `application.properties` or `application.yml`.
+
+---
+
+### Step 4: Run Your Application
+
+- Make sure Kafka is running and configured with SSL enabled on the desired port (e.g., `9093`).
+- Use the `KafkaTemplate` to send messages to Kafka and `@KafkaListener` to listen to messages from Kafka.
+
+---
+
+### Summary:
+
+- We configured both **Kafka Producer** and **Kafka Consumer** using SSL certificates in an XML-based Spring MVC configuration.
+- For the producer, we specified `ssl.keystore` and `ssl.truststore` properties, including passwords for both the truststore and keystore.
+- We also provided configuration for a **Kafka consumer** using SSL, along with a listener method to consume messages from a specified topic.
+
+This configuration ensures secure communication with Kafka over SSL, ensuring that both sending and receiving messages are properly secured.
+
+To configure a Spring MVC application with Jetty as the embedded servlet container (along with Kafka producer and consumer configuration using SSL certificates), you'll need to set up your `applicationContext.xml`, configure Jetty in `web.xml`, and provide the necessary dependencies. This example will guide you through configuring both Kafka with SSL and Jetty for serving your Spring MVC application.
+
+### Step 1: Add Dependencies to `pom.xml`
+
+First, ensure you have the necessary dependencies for Spring Kafka, Jetty, and Spring MVC in your `pom.xml` file.
+
+```xml
+<dependencies>
+    <!-- Spring MVC -->
+    <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-webmvc</artifactId>
+        <version>5.3.12</version>
+    </dependency>
+    
+    <!-- Spring Kafka -->
+    <dependency>
+        <groupId>org.springframework.kafka</groupId>
+        <artifactId>spring-kafka</artifactId>
+        <version>2.8.0</version>
+    </dependency>
+
+    <!-- Kafka Client -->
+    <dependency>
+        <groupId>org.apache.kafka</groupId>
+        <artifactId>kafka-clients</artifactId>
+        <version>2.8.0</version>
+    </dependency>
+
+    <!-- Jetty Server -->
+    <dependency>
+        <groupId>org.eclipse.jetty</groupId>
+        <artifactId>jetty-server</artifactId>
+        <version>9.4.40.v20210413</version>
+    </dependency>
+    
+    <dependency>
+        <groupId>org.eclipse.jetty</groupId>
+        <artifactId>jetty-servlet</artifactId>
+        <version>9.4.40.v20210413</version>
+    </dependency>
+
+    <!-- Spring Web and AOP -->
+    <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-aop</artifactId>
+        <version>5.3.12</version>
+    </dependency>
+
+    <!-- Logging (SLF4J) -->
+    <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-api</artifactId>
+        <version>1.7.32</version>
+    </dependency>
+</dependencies>
+```
+
+### Step 2: Create `applicationContext.xml` for Kafka Configuration
+
+As discussed before, we configure both Kafka producer and consumer using SSL certificates. Here’s the `applicationContext.xml` with Spring Kafka setup for SSL configuration:
+
+```xml
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+    <!-- Kafka Producer Configuration -->
+    <bean id="producerFactory" class="org.springframework.kafka.core.DefaultKafkaProducerFactory">
+        <constructor-arg>
+            <bean class="org.apache.kafka.common.serialization.StringSerializer"/>
+        </constructor-arg>
+        <constructor-arg>
+            <bean class="org.apache.kafka.common.serialization.StringSerializer"/>
+        </constructor-arg>
+        <property name="producerConfig">
+            <map>
+                <entry key="bootstrap.servers" value="your.kafka.server:9093"/>
+                <entry key="security.protocol" value="SSL"/>
+                <entry key="ssl.truststore.location" value="classpath:/path/to/your/truststore.jks"/>
+                <entry key="ssl.truststore.password" value="truststore-password"/>
+                <entry key="ssl.keystore.location" value="classpath:/path/to/your/keystore.jks"/>
+                <entry key="ssl.keystore.password" value="keystore-password"/>
+                <entry key="ssl.key.password" value="key-password"/>
+            </map>
+        </property>
+    </bean>
+
+    <bean id="kafkaTemplate" class="org.springframework.kafka.core.KafkaTemplate">
+        <constructor-arg ref="producerFactory"/>
+    </bean>
+
+    <!-- Kafka Consumer Configuration -->
+    <bean id="consumerFactory" class="org.springframework.kafka.core.DefaultKafkaConsumerFactory">
+        <constructor-arg>
+            <bean class="org.apache.kafka.common.serialization.StringDeserializer"/>
+        </constructor-arg>
+        <constructor-arg>
+            <bean class="org.apache.kafka.common.serialization.StringDeserializer"/>
+        </constructor-arg>
+        <property name="consumerConfig">
+            <map>
+                <entry key="bootstrap.servers" value="your.kafka.server:9093"/>
+                <entry key="security.protocol" value="SSL"/>
+                <entry key="ssl.truststore.location" value="classpath:/path/to/your/truststore.jks"/>
+                <entry key="ssl.truststore.password" value="truststore-password"/>
+                <entry key="ssl.keystore.location" value="classpath:/path/to/your/keystore.jks"/>
+                <entry key="ssl.keystore.password" value="keystore-password"/>
+                <entry key="ssl.key.password" value="key-password"/>
+                <entry key="group.id" value="your-consumer-group"/>
+            </map>
+        </property>
+    </bean>
+
+    <bean id="kafkaListenerContainerFactory" class="org.springframework.kafka.listener.ConcurrentMessageListenerContainer">
+        <constructor-arg ref="consumerFactory"/>
+        <constructor-arg ref="kafkaMessageListenerContainer"/>
+    </bean>
+</beans>
+```
+
+### Step 3: Configure Jetty as the Embedded Server in `web.xml`
+
+Spring MVC will typically use a servlet container like Tomcat by default, but we can configure Jetty to serve our Spring application as an embedded server.
+
+#### `web.xml` Configuration:
+
+```xml
+<web-app xmlns="http://java.sun.com/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
+         http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+         version="3.0">
+
+    <!-- Spring Dispatcher Servlet -->
+    <servlet>
+        <servlet-name>dispatcher</servlet-name>
+        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+        <init-param>
+            <param-name>contextConfigLocation</param-name>
+            <param-value>/WEB-INF/applicationContext.xml</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>dispatcher</servlet-name>
+        <url-pattern>/</url-pattern>
+    </servlet-mapping>
+
+</web-app>
+```
+
+#### `web.xml` for Jetty Configuration:
+
+Since we're embedding Jetty as the servlet container, you typically would not need a traditional `web.xml` to start the server, but you still need it for servlet configuration. For the embedded Jetty configuration, Jetty will automatically pick up the `web.xml`.
+
+### Step 4: Create Jetty Server Configuration Class (Embedded Jetty)
+
+For embedded Jetty, you will need a Java class to initialize Jetty as the servlet container. This class will be responsible for launching the Jetty server.
+
+```java
+package com.example.config;
+
+import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.server.handler.ContextHandler;
+import org.eclipse.jetty.servlet.ServletContextHandler;
+import org.springframework.web.servlet.DispatcherServlet;
+import org.springframework.web.servlet.support.AbstractDispatcherServletInitializer;
+
+public class JettyServerConfig extends AbstractDispatcherServletInitializer {
+
+    @Override
+    protected Class<?>[] getRootConfigClasses() {
+        return new Class[] {AppConfig.class};
+    }
+
+    @Override
+    protected Class<?>[] getServletConfigClasses() {
+        return new Class[] {WebConfig.class};
+    }
+
+    @Override
+    protected String[] getServletMappings() {
+        return new String[] {"/"};
+    }
+
+    public static void main(String[] args) throws Exception {
+        Server server = new Server(8080);
+        ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
+        context.setContextPath("/");
+        server.setHandler(context);
+
+        // Add Spring's DispatcherServlet
+        DispatcherServlet dispatcherServlet = new DispatcherServlet();
+        context.addServlet(new ServletHolder(dispatcherServlet), "/");
+
+        server.start();
+        server.join();
+    }
+}
+```
+
+Explanation:
+- **`JettyServerConfig`** extends `AbstractDispatcherServletInitializer` to configure Spring's DispatcherServlet.
+- **`Server`**: Starts Jetty on port `8080`, and adds a handler for the Spring `DispatcherServlet`.
+
+### Step 5: Run Your Application
+
+You can now run your Spring MVC application with Jetty. The Jetty server will handle your requests and use the Spring configuration for Kafka with SSL.
+
+### Step 6: Inject Configuration into Your Application
+
+Ensure that you inject the configuration values (Kafka settings, etc.) into your services, for example:
+
+```java
+@Service
+public class RegistryService {
+
+    @Autowired
+    private KafkaTemplate<String, String> kafkaTemplate;
+
+    public void sendMessage(String message) {
+        kafkaTemplate.send("your-topic", message);
+    }
+}
+```
+
+### Conclusion
+
+- **Kafka**: The configuration of Kafka producer and consumer using SSL was demonstrated.
+- **Jetty**: The embedded Jetty server was configured to serve the Spring MVC application.
+- **XML Configuration**: Spring MVC and Kafka configurations are managed through `applicationContext.xml` and `web.xml`.
+
+This setup allows secure communication with Kafka using SSL while embedding Jetty as the server for Spring MVC.
 ### Conclusion
 
 By Dockerizing your Vue.js application, you ensure a consistent, isolated, and reproducible environment that is easy to deploy, scale, and maintain. With the help of Nginx, you can efficiently serve your app and handle any reverse proxy requirements. Docker simplifies the deployment process, making it easier to move your app between environments and manage its dependencies. By following this tutorial, you can leverage the power of Docker for seamless Vue.js development and deployment.
