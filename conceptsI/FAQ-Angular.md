@@ -286,7 +286,6 @@
 |280| [What are Angular Signals?](#what-are-angular-signals)
 |281| [Explain Angular Signals with an example](#explain-angular-signals-with-an-example)
 |282| [What are the Route Parameters? Could you explain each of them?](#what-are-the-route-parameters-could-you-explain-each-of-them)
-|283| [](#)
 
 1. ### What is Angular Framework?
 
