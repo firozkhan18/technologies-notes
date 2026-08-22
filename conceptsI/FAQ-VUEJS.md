@@ -415,6 +415,130 @@ List of 300 VueJS Interview Questions
           })
         ```
 
+A **complete Vue 3 component file** showing lifecycle hooks in both **Options API** and **Composition API** styles. This way you can see them side by side and understand how they map to each other.
+
+---
+
+## 🟢 Options API Example (`LifecycleDemoOptions.vue`)
+```vue
+<template>
+  <div>
+    <h2>Options API Lifecycle Demo</h2>
+    <p>Counter: {{ counter }}</p>
+    <button @click="increment">Increment</button>
+  </div>
+</template>
+
+<script>
+export default {
+  name: 'LifecycleDemoOptions',
+  data() {
+    return {
+      counter: 0
+    }
+  },
+  methods: {
+    increment() {
+      this.counter++
+    }
+  },
+  beforeCreate() {
+    console.log('beforeCreate: data not reactive yet')
+  },
+  created() {
+    console.log('created: counter =', this.counter)
+  },
+  beforeMount() {
+    console.log('beforeMount: DOM not yet available')
+  },
+  mounted() {
+    console.log('mounted: DOM ready, textContent =', this.$el.textContent)
+  },
+  beforeUpdate() {
+    console.log('beforeUpdate: counter about to change:', this.counter)
+  },
+  updated() {
+    console.log('updated: DOM updated, counter =', this.counter)
+  },
+  beforeUnmount() {
+    console.log('beforeUnmount: cleaning up...')
+  },
+  unmounted() {
+    console.log('unmounted: component destroyed')
+  }
+}
+</script>
+```
+
+---
+
+## 🟡 Composition API Example (`LifecycleDemoComposition.vue`)
+```vue
+<template>
+  <div>
+    <h2>Composition API Lifecycle Demo</h2>
+    <p>Counter: {{ counter }}</p>
+    <button @click="increment">Increment</button>
+  </div>
+</template>
+
+<script>
+import { ref, onMounted, onBeforeMount, onUpdated, onBeforeUpdate, onUnmounted, onBeforeUnmount } from 'vue'
+
+export default {
+  name: 'LifecycleDemoComposition',
+  setup() {
+    const counter = ref(0)
+    const increment = () => counter.value++
+
+    console.log('setup: replaces beforeCreate + created, counter =', counter.value)
+
+    onBeforeMount(() => {
+      console.log('onBeforeMount: DOM not yet available')
+    })
+
+    onMounted(() => {
+      console.log('onMounted: DOM ready')
+    })
+
+    onBeforeUpdate(() => {
+      console.log('onBeforeUpdate: counter about to change:', counter.value)
+    })
+
+    onUpdated(() => {
+      console.log('onUpdated: DOM updated, counter =', counter.value)
+    })
+
+    onBeforeUnmount(() => {
+      console.log('onBeforeUnmount: cleaning up...')
+    })
+
+    onUnmounted(() => {
+      console.log('onUnmounted: component destroyed')
+    })
+
+    return { counter, increment }
+  }
+}
+</script>
+```
+
+---
+
+## 📊 Side-by-Side Mapping
+
+| **Options API** | **Composition API** |
+|-----------------|----------------------|
+| `beforeCreate` + `created` | `setup()` |
+| `beforeMount` | `onBeforeMount()` |
+| `mounted` | `onMounted()` |
+| `beforeUpdate` | `onBeforeUpdate()` |
+| `updated` | `onUpdated()` |
+| `beforeDestroy` | `onBeforeUnmount()` |
+| `destroyed` | `onUnmounted()` |
+
+---
+
     **[⬆ Back to Top](#table-of-contents)**
 
 4.  ### What are the different API styles available?
