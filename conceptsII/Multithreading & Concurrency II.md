@@ -107,7 +107,9 @@ Salad is being prepared by Thread-1
 We created multiple threads (t1–t4) using the CookingTask class.
 Each thread represents a dish being prepared.
 Calling start() creates a new thread with its own call stack and internally invokes the run() method. This allows threads to run concurrently with the main thread and each other.
+
 **2.Implementing the Runnable Interface**
+
    We create a new class which implements java.lang.Runnable interface and define the run() method there. Then we instantiate a Thread object and call start() method on this object.
 
 Example: Restaurant Kitchen (Runnable Interface)
