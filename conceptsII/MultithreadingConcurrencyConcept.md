@@ -6436,6 +6436,3 @@ Explain why that abstraction exists
         ↓
 Discuss the implementation details
 That’s how experienced Java developers think — and how strong interview answers are built.
-
-
-https://medium.com/@sauravupadhyay193/java-concurrency-fundamentals-threads-concurrency-parallelism-more-a5a476327f72
