@@ -153,9 +153,7 @@ The Java Collections Framework (JCF) is a set of classes and interfaces that imp
   | `containsValue(Object value)` | Checks if the map contains one or more keys associated with the specified value. | `map.containsValue("value")` |
   | `keySet()` | Returns a set view of the keys contained in the map. | `map.keySet()` |
   | `values()` | Returns a collection view of the values contained in the map. | `map.values()` |
-  | `entrySet()` | Returns a set view of the mappings contained in the map. |
-
- `map.entrySet()` |
+  | `entrySet()` | Returns a set view of the mappings contained in the map. | `map.entrySet()` |
 
 #### **2. `java.util.SortedMap`**
 - **Description:** Extends `Map`. Represents a map that is sorted by keys.
