@@ -1,5 +1,3 @@
-Absolutely. For a **Spring Boot microservices interview**, observability is a major area because interviewers often test whether you can diagnose a production issue across multiple services rather than just explain Micrometer or Actuator.
-
 Below is a scenario-driven set of **observability interview questions with answers**, including **logs, metrics, tracing, correlation IDs, OpenTelemetry, Prometheus, Grafana, Loki/ELK, alerts, resilience, Kubernetes, and debugging distributed transactions**.
 
 ## 1\. What is observability?
