@@ -24341,3 +24341,328 @@ Say:
 **Async = decoupling, buffering and independent processing.**
 
 ---
+## What are P50, P90, P95, and of your P99?
+
+ These are **percentiles** used to describe **latency** (response time) of your API/service.
+
+ Imagine your API received **10,000 requests**.
+
+ Suppose we sort all response times from fastest to slowest:
+
+```
+10 ms
+12 ms
+15 ms
+...
+100 ms
+...
+500 ms
+...
+2,000 ms
+```
+
+ The percentile tells you:
+
+ > **What response time is at or below a certain percentage of requests?**
+
+---
+
+ ## P50 — Median
+
+ **P50 means 50% of requests completed at or below this latency.**
+
+ Example:
+
+```
+P50 = 100 ms
+```
+
+ Means:
+
+```
+50% requests ≤ 100 ms
+50% requests > 100 ms
+```
+
+ P50 represents the **typical/median user experience**.
+
+---
+
+ ## P90
+
+ **P90 means 90% of requests completed at or below this latency.**
+
+ Example:
+
+```
+P90 = 250 ms
+```
+
+ Means:
+
+```
+90% requests ≤ 250 ms
+10% requests > 250 ms
+```
+
+ This starts showing the slower portion of traffic.
+
+---
+
+ ## P95
+
+ **P95 means 95% of requests completed at or below this latency.**
+
+ Example:
+
+```
+P95 = 400 ms
+```
+
+ Means:
+
+```
+95% requests ≤ 400 ms
+5% requests > 400 ms
+```
+
+ P95 is commonly used for **SLOs and production monitoring** because it exposes slower requests better than P50.
+
+---
+
+ ## P99
+
+ **P99 means 99% of requests completed at or below this latency.**
+
+ Example:
+
+```
+P99 = 2 seconds
+```
+
+ Means:
+
+```
+99% requests ≤ 2 seconds
+1% requests > 2 seconds
+```
+
+ That remaining 1% can still represent a **large number of users** at high traffic.
+
+ For example:
+
+```
+1,000,000 requests
+       ↓
+1% = 10,000 requests
+```
+
+ So P99 is very important in large-scale systems.
+
+---
+
+ # Simple example
+
+ Suppose your API has:
+
+```
+P50 = 100 ms
+P90 = 200 ms
+P95 = 300 ms
+P99 = 1,500 ms
+```
+
+ You can explain it in an interview like this:
+
+```
+50% of requests finish within 100 ms
+90% finish within 200 ms
+95% finish within 300 ms
+99% finish within 1.5 seconds
+```
+
+ But:
+
+```
+1% take > 1.5 seconds
+```
+
+ If you have **1 million requests**, that's potentially:
+
+```
+10,000 slow requests
+```
+
+---
+
+ # Why P50 can be misleading
+
+ Imagine:
+
+```
+P50 = 100 ms
+P95 = 300 ms
+P99 = 5 seconds
+```
+
+ Someone might say:
+
+ > "The API is fast because P50 is only 100 ms."
+
+ That's incomplete.
+
+ The average user may be getting good performance, but a significant tail of requests is extremely slow.
+
+ This is called **tail latency**.
+
+```
+Fast requests                         Slow requests
+─────────────────────────────────────────────────────►
+
+P50             P90       P95                 P99
+ │                │         │                   │
+100ms            200ms     300ms               5sec
+```
+
+---
+
+ # Why P99 matters in microservices
+
+ Consider:
+
+```
+API Gateway
+     │
+     ▼
+Order Service
+     │
+     ├── Inventory
+     ├── Payment
+     └── Shipping
+```
+
+ Suppose each dependency has:
+
+```
+P99 = 500 ms
+```
+
+ A request that touches several services can experience significant tail latency.
+
+ This is why distributed systems care heavily about **tail latency**, not just average latency.
+
+---
+
+ # P50 vs P99 in an interview
+
+ If interviewer asks:
+
+ > **"What is the difference between P50 and P99?"**
+
+ A strong answer is:
+
+ > **"P50 represents the median latency, so half of the requests are faster and half are slower. P99 represents tail latency: 99% of requests are at or below that latency, while the slowest 1% are above it. P50 tells me about typical user experience, while P95/P99 are more useful for understanding production tail behavior and defining latency SLOs."**
+
+---
+
+ # Percentile vs average
+
+ This is very important.
+
+ Suppose 5 requests take:
+
+```
+10 ms
+10 ms
+10 ms
+10 ms
+10,000 ms
+```
+
+ Average:
+
+```
+(10 + 10 + 10 + 10 + 10000) / 5
+= 2008 ms
+```
+
+ The average says:
+
+```
+≈ 2 seconds
+```
+
+ But most requests actually took:
+
+```
+10 ms
+```
+
+ Percentiles show the distribution more clearly.
+
+---
+
+ # In production monitoring
+
+ I would typically monitor:
+
+```
+Request Rate
+Error Rate
+P50
+P95
+P99
+```
+
+ For example:
+
+```
+                 Current
+────────────────────────────
+Requests/sec       50K
+Error rate        0.2%
+P50               80 ms
+P95              250 ms
+P99             1.8 sec
+```
+
+ Now imagine:
+
+```
+P50 = 80 ms  → stable
+P95 = 250 ms → stable
+P99 = 1.8 sec → suddenly 5 sec
+```
+
+ That tells me:
+
+ > **Something is affecting the tail of the workload.**
+
+ I'd investigate:
+
+```
+DB connection pool
+Slow queries
+GC pauses
+Thread pool saturation
+External API latency
+Network
+Lock contention
+Kafka
+CPU throttling
+```
+
+---
+
+ ## Easy way to remember
+
+```
+P50 → Typical user
+P90 → Most users
+P95 → Almost all users
+P99 → Tail / slowest 1%
+```
+
+ Or:
+
+ > **P50 tells me "normal." P95 tells me "almost everyone." P99 tells me "what happens to the unlucky/slow tail."**
