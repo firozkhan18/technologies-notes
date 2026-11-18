@@ -950,10 +950,9 @@ This is one of the most important interview questions.
 
 HashMap uses the following formula:
 
-$$
-\text{index}=(n-1)\ \&\ \text{hash}
-$$
-
+```
+index = (n-1) & hash
+```
 Where:
 
 - `n` = capacity of the HashMap.
@@ -1025,13 +1024,11 @@ map.put(17, "Python");
 
 Assuming the capacity is 16 and the spread hashes are 1 and 17:
 
-$$
-(16-1)\ \&\ 1 = 1
-$$
+```
+(16-1) & 1 = 1
 
-$$
-(16-1)\ \&\ 17 = 1
-$$
+(16-1) & 17 = 1
+```
 
 Both elements go into bucket 1.
 
