@@ -1184,17 +1184,16 @@ Default load factor = 0.75.
 
 The resize threshold is:
 
-$$
-16 \times 0.75 = 12
-$$
-
+```
+16 * 0.75 = 12
+```
 When the number of entries exceeds the threshold, HashMap generally resizes its bucket array.
 
 New capacity:
 
-$$
-16 \times 2 = 32
-$$
+```
+16 * 2 = 32
+```
 
 ### Example
 
@@ -1374,9 +1373,9 @@ Answer:
 
 HashMap calculates the bucket index using the following formula:
 
-$$
-index = (n-1)\ \&\ hash
-$$
+```
+index = (n-1) & hash
+```
 
 Where:
 
@@ -1602,9 +1601,9 @@ HashMap resizes when the number of entries exceeds its threshold.
 
 Formula:
 
-$$
-Threshold = Capacity \times LoadFactor
-$$
+```
+Threshold = Capacity * LoadFactor
+```
 
 Default values:
 
