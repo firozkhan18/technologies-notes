@@ -381,22 +381,7 @@ I would also monitor dependency-specific metrics, such as database query duratio
 
 Spring Boot Actuator and Micrometer can expose application metrics. Prometheus can collect them, and Grafana can visualize them.
 
-### Q23. How would you diagnose high CPU utilization in a Java microservice?
-
-Answer:
-
-1. Check whether the CPU usage is sustained or occurs in short bursts.
-2. Determine whether the JVM is CPU-bound or waiting on external resources.
-3. Capture a CPU profile using an appropriate profiler.
-4. Inspect hot methods, tight loops, serialization, regular expressions, and excessive object processing.
-5. Examine garbage collection activity.
-6. Check synchronization and lock contention.
-7. Review recent deployments and traffic changes.
-8. Optimize the identified hot path and compare results under the same workload.
-
-A thread dump can help identify blocked or runnable threads, but CPU profiling is generally more useful for finding methods consuming the most CPU.
-
-** In Details
+### In Details
 
 For a Spring Boot microservice, I would monitor metrics across several layers: application performance, JVM health, API performance, database health, infrastructure, and business functionality.
 
@@ -686,6 +671,21 @@ If an interviewer asks, "What metrics would you monitor for a Spring Boot micros
 "I would monitor four major areas: application metrics, JVM metrics, infrastructure metrics, and dependency metrics. At the application level, I track request rate, P95/P99 latency, HTTP error rate, and throughput. At the JVM level, I track heap usage, GC pauses, CPU, and thread counts. For database and downstream dependencies, I monitor connection pool utilization, query latency, timeout rates, and circuit breaker status. Finally, I monitor business KPIs and use distributed tracing to troubleshoot requests across microservices. I would implement this using Spring Boot Actuator, Micrometer, Prometheus, and Grafana."
 
 One additional recommendation: Don't just collect metrics. Connect them to distributed tracing and centralized logging using correlation or trace IDs. Metrics tell you something is wrong, logs and traces help you understand why it is wrong.
+
+### Q23. How would you diagnose high CPU utilization in a Java microservice?
+
+Answer:
+
+1. Check whether the CPU usage is sustained or occurs in short bursts.
+2. Determine whether the JVM is CPU-bound or waiting on external resources.
+3. Capture a CPU profile using an appropriate profiler.
+4. Inspect hot methods, tight loops, serialization, regular expressions, and excessive object processing.
+5. Examine garbage collection activity.
+6. Check synchronization and lock contention.
+7. Review recent deployments and traffic changes.
+8. Optimize the identified hot path and compare results under the same workload.
+
+A thread dump can help identify blocked or runnable threads, but CPU profiling is generally more useful for finding methods consuming the most CPU.
 
 ### Q24. How would you investigate a memory leak?
 
