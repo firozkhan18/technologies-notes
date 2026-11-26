@@ -3412,8 +3412,9 @@ Resilience4j
 
 Micrometer and OpenTelemetry
 
-11. Real-World Coding Scenarios (Continued)
-    Q29. How would you implement pagination and sorting for millions of records?
+## 11. Real-World Coding Scenarios (Continued)
+    
+### Q29. How would you implement pagination and sorting for millions of records?
     Scenario
     An Order Service contains 10 million records. Returning all orders in one API response causes high memory usage and slow response times.
 
@@ -3479,7 +3480,7 @@ Avoid expensive count queries when totals are not required.
 
 For keyset pagination, use a stable ordering such as (created_at, id) and fetch records after the last returned key.
 
-Q30. How would you implement caching using Redis in Spring Boot?
+### Q30. How would you implement caching using Redis in Spring Boot?
 Scenario
 The Product Service receives 50,000 requests per minute for frequently accessed product details.
 
@@ -3551,7 +3552,7 @@ Monitor cache hit ratio and Redis memory usage.
 
 Interview trap: Redis caching does not automatically guarantee consistency between the cache and database.
 
-Q31. How do you prevent race conditions when two customers purchase the last available product?
+### Q31. How do you prevent race conditions when two customers purchase the last available product?
 Scenario
 Inventory shows one item available.
 
@@ -3613,7 +3614,7 @@ Atomic Redis operations, with a durable database consistency strategy.
 
 For critical inventory operations, the database should remain the authoritative source of truth.
 
-Q32. How would you implement global exception handling in Spring Boot?
+### Q32. How would you implement global exception handling in Spring Boot?
 Solution
 Use @RestControllerAdvice.
 
@@ -3675,7 +3676,7 @@ Log unexpected exceptions with sufficient diagnostic context.
 
 Avoid logging sensitive information.
 
-Q33. How do you handle multiple downstream API calls efficiently?
+### Q33. How do you handle multiple downstream API calls efficiently?
 Scenario
 The Dashboard Service needs information from:
 
@@ -3736,7 +3737,7 @@ Define a fallback or partial-response policy.
 
 For Java 21 deployments, virtual threads can also be evaluated for suitable blocking workloads. They do not eliminate the need for downstream concurrency limits.
 
-Q34. How would you implement optimistic locking in Spring Boot?
+### Q34. How would you implement optimistic locking in Spring Boot?
 Scenario
 Two administrators update the same product simultaneously.
 
@@ -3779,8 +3780,8 @@ Use optimistic locking when conflicts are relatively uncommon.
 
 Use pessimistic locking when concurrent modifications need stronger serialization and the resulting lock contention is acceptable.
 
-12. Production Troubleshooting Scenarios
-    Q35. Your Spring Boot application suddenly starts returning HTTP 503. How do you investigate?
+## 12. Production Troubleshooting Scenarios
+### Q35. Your Spring Boot application suddenly starts returning HTTP 503. How do you investigate?
     Scenario
     The application was working normally, but users suddenly receive:
 
@@ -3833,7 +3834,7 @@ Network policies prevent communication.
 
 Senior-level answer: Identify whether the failure is caused by the application, infrastructure, or a dependency before applying a mitigation.
 
-Q36. Database connections are exhausted. What would you do?
+### Q36. Database connections are exhausted. What would you do?
 Scenario
 Your application logs show:
 
@@ -3877,7 +3878,7 @@ If Kubernetes runs 10 replicas, each with a maximum pool size of 20, the applica
 
 Increasing pool size blindly can make database overload worse.
 
-Q37. Kafka messages are published successfully, but consumers are not receiving them. What could be wrong?
+### Q37. Kafka messages are published successfully, but consumers are not receiving them. What could be wrong?
 Possible Causes
 Incorrect topic name.
 
@@ -3922,7 +3923,7 @@ kafka-consumer-groups.sh \
 Senior-Level Consideration
 Differentiate between messages not being produced, messages being produced to the wrong topic, and messages being consumed but failing during processing.
 
-Q38. Your service is experiencing high CPU utilization. How do you debug it?
+### Q38. Your service is experiencing high CPU utilization. How do you debug it?
 Solution
 Investigate:
 
@@ -3980,7 +3981,7 @@ Use distributed tracing and thread dumps to determine where requests are spendin
 
 A low CPU metric does not necessarily mean that an application is healthy.
 
-Q40. How would you investigate a memory leak in production without restarting the service?
+### Q40. How would you investigate a memory leak in production without restarting the service?
 Solution
 Start with non-invasive diagnostics.
 
@@ -4011,8 +4012,8 @@ Use Java Flight Recorder and Java Mission Control for additional evidence.
 
 Interview answer: A memory leak is usually demonstrated by objects remaining reachable when they should have been released, not simply by high memory usage.
 
-13. Advanced System Design Questions
-    Q41. Design an e-commerce microservices architecture.
+## 13. Advanced System Design Questions
+### Q41. Design an e-commerce microservices architecture.
     Requirements
     User registration and authentication.
 
@@ -4100,7 +4101,7 @@ Use OAuth 2.0/OIDC, JWT validation, service identities, and resource-level autho
 
 Deploy services as independently managed Kubernetes workloads.
 
-Q42. Design a highly scalable notification service.
+### Q42. Design a highly scalable notification service.
 Requirements
 Send email, SMS, and push notifications.
 
@@ -4150,7 +4151,7 @@ Monitor delivery success rate and lag.
 Important Consideration
 Do not block the Order Service while waiting for an email or SMS provider to respond.
 
-Q43. Design a URL shortening system using Spring Boot microservices.
+### Q43. Design a URL shortening system using Spring Boot microservices.
 Functional Requirements
 Generate short URLs.
 
@@ -4208,7 +4209,7 @@ Security
 
 Validate submitted URLs and protect against malicious redirects.
 
-Q44. How would you design an inventory system that supports high concurrency?
+### Q44. How would you design an inventory system that supports high concurrency?
 Solution
 Use:
 
@@ -4244,7 +4245,7 @@ A reservation is not necessarily a completed sale.
 
 If payment fails or the reservation expires, the system must release the reserved inventory safely.
 
-Q45. How would you implement rate limiting in Spring Cloud Gateway?
+### Q45. How would you implement rate limiting in Spring Cloud Gateway?
 Scenario
 An external client sends 10,000 requests per second and overloads your services.
 
@@ -4281,7 +4282,7 @@ Monitor rejected requests.
 
 Protect internal services as well as the public gateway.
 
-Q46. What is CQRS, and when would you use it?
+### Q46. What is CQRS, and when would you use it?
 CQRS stands for Command Query Responsibility Segregation.
 
 It separates write operations from read operations.
@@ -4335,7 +4336,7 @@ Projection rebuilding and reconciliation requirements.
 
 Do not introduce CQRS into every CRUD application.
 
-Q47. What is eventual consistency?
+### Q47. What is eventual consistency?
 Eventual consistency means that different parts of a distributed system may temporarily have different views of data, but they are expected to converge if updates stop and processing succeeds.
 
 Example
@@ -4356,7 +4357,7 @@ Answer:
 
 "I would define the consistency requirements explicitly. If immediate confirmation is required, I would return the authoritative order result from the Order Service. Analytics can remain eventually consistent."
 
-Q48. How would you handle database schema changes across multiple microservices?
+### Q48. How would you handle database schema changes across multiple microservices?
 Solution
 Use backward-compatible database migrations.
 
@@ -4384,8 +4385,8 @@ ALTER TABLE orders
 ADD COLUMN order_reference VARCHAR(100);
 Do not make application deployment depend on all services upgrading simultaneously.
 
-14. Senior-Level Interview Questions
-    Q49. How do you decide between a monolith, modular monolith, and microservices?
+## 14. Senior-Level Interview Questions
+### Q49. How do you decide between a monolith, modular monolith, and microservices?
     Factor
 
 Monolith
@@ -4445,7 +4446,7 @@ More demanding
 Senior-Level Answer
 "I would choose the architecture based on business requirements, team structure, deployment frequency, scaling needs, and operational maturity. I would avoid microservices when the organization cannot support distributed observability, automation, and independent ownership."
 
-Q50. How do you manage backward compatibility in event-driven systems?
+### Q50. How do you manage backward compatibility in event-driven systems?
 Solution
 Use schema evolution.
 
@@ -4481,7 +4482,7 @@ json
 }
 Adding an optional field is generally safer than changing an existing field's type.
 
-Q51. How would you handle a distributed system outage?
+### Q51. How would you handle a distributed system outage?
 Senior-Level Answer
 I would follow a structured incident-management process.
 
@@ -4508,7 +4509,7 @@ Implement preventive actions.
 Important
 Restoring service availability and correcting data inconsistency are separate responsibilities. Both must be addressed.
 
-Q52. How do you handle a distributed deadlock?
+### Q52. How do you handle a distributed deadlock?
 A distributed deadlock can occur when services or workflows wait on each other in a dependency cycle.
 
 Example:
@@ -4540,7 +4541,7 @@ Monitor long-running workflows.
 
 A dependency graph can help identify circular dependencies before they reach production.
 
-Q53. How do you improve the performance of a Spring Boot application under heavy traffic?
+### Q53. How do you improve the performance of a Spring Boot application under heavy traffic?
 Solution
 Investigate and optimize systematically.
 
@@ -4592,7 +4593,7 @@ Use asynchronous processing for suitable workloads.
 
 Apply bulkheads and rate limiting.
 
-Q54. What is the difference between horizontal and vertical scaling?
+### Q54. What is the difference between horizontal and vertical scaling?
 Horizontal Scaling
 
 Vertical Scaling
@@ -4628,7 +4629,7 @@ Vertical:
 2 CPU / 4 GB -> 4 CPU / 8 GB
 For stateless Spring Boot services, horizontal scaling is often preferred.
 
-Q55. What is the difference between Kubernetes Service, Deployment, and Ingress?
+### Q55. What is the difference between Kubernetes Service, Deployment, and Ingress?
 Resource
 
 Responsibility
@@ -4681,7 +4682,7 @@ ports:
 - port: 8080
 targetPort: 8080
 type: ClusterIP
-Q56. What is the difference between OAuth 2.0 and OpenID Connect?
+### Q56. What is the difference between OAuth 2.0 and OpenID Connect?
 OAuth 2.0 is an authorization framework.
 
 It enables applications to obtain limited access to protected resources.
@@ -4693,7 +4694,7 @@ It provides authentication and identity information, commonly through an ID toke
 Common Interview Trap
 A JWT is a token format. OAuth 2.0 and OIDC are protocols/frameworks. They are not interchangeable terms.
 
-Q57. How do you ensure that one microservice cannot overload another?
+### Q57. How do you ensure that one microservice cannot overload another?
 Solution
 Use multiple protective mechanisms:
 
@@ -4717,7 +4718,7 @@ Kubernetes resource limits.
 
 The objective is to prevent one overloaded component from causing cascading failures throughout the system.
 
-Q58. What is the difference between orchestration and choreography in microservices?
+### Q58. What is the difference between orchestration and choreography in microservices?
 Orchestration
 
 Choreography
@@ -4766,7 +4767,7 @@ v
 PaymentCompleted
 Choose based on workflow complexity, ownership, observability, and recovery requirements.
 
-15. Common Interview Traps
+## 15. Common Interview Traps
     These are common questions where technically correct but incomplete answers can hurt an interview.
 
 Interview Question
@@ -5102,8 +5103,8 @@ HPA
 
 Horizontal Pod Autoscaler
 
-17. Advanced Spring Boot and Spring Cloud Questions
-    Q59. What is the difference between Spring Cloud Config Server and Kubernetes ConfigMap?
+## 17. Advanced Spring Boot and Spring Cloud Questions
+### Q59. What is the difference between Spring Cloud Config Server and Kubernetes ConfigMap?
     Spring Cloud Config
 
 Kubernetes ConfigMap
@@ -5127,7 +5128,7 @@ Changes require suitable application reload or restart behavior
 Interview Answer
 "Spring Cloud Config is useful when multiple applications need centralized configuration management. Kubernetes ConfigMaps are useful for environment-specific configuration within Kubernetes. The choice depends on deployment architecture and operational requirements."
 
-Q60. What is the difference between Feign Client, RestClient, and WebClient?
+### Q60. What is the difference between Feign Client, RestClient, and WebClient?
 Client
 
 Use Case
@@ -5177,7 +5178,7 @@ public class ProductClient {
 Interview Trap
 WebClient is not automatically faster for every application. Its non-blocking model is particularly useful when the application is designed to use reactive processing end to end.
 
-Q61. What is the difference between @Async and CompletableFuture?
+### Q61. What is the difference between @Async and CompletableFuture?
 @Async allows Spring-managed methods to execute asynchronously through a configured executor.
 
 CompletableFuture provides an API for composing asynchronous operations.
