@@ -3422,3 +3422,273 @@ These metrics tell different parts of the story. The service receives 1,000 requ
 The most important performance objective is not simply maximizing RPS. It is maximizing successful business throughput while meeting your latency, reliability, and resource-utilization targets.
 
 ---
+Below is a practical Spring Boot 3 + Spring Security 6 example demonstrating OAuth 2.0, JWT, and mTLS in a microservices architecture.
+
+We'll implement:
+
+1. OAuth 2.0 – Secure API authorization.
+2. JWT – Validate access tokens.
+3. mTLS – Secure communication between two microservices.
+
+## 1. OAuth 2.0 + JWT using Spring Security
+
+Imagine an Order Management System:
+
+- Auth Server: Issues JWT access tokens.
+- Order Service: Validates JWT tokens.
+- Client: Calls the Order Service with a Bearer token.
+
+Client Application
+
+Requests access token
+
+OAuth 2.0 Authorization Server
+
+Authenticates client/user and issues JWT
+
+Authorization: Bearer JWT
+
+Spring Boot Order Service
+
+Validates JWT and checks authorities
+
+Order Controller
+
+Returns authorized order data
+
+### Step 1: Maven dependencies
+
+xml
+
+```xml
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-security</artifactId>
+</dependency>
+
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
+</dependency>
+```
+
+### Step 2: Configure Spring Security
+
+`SecurityConfig.java`
+
+java
+
+```java
+@Configuration
+@EnableWebSecurity
+public class SecurityConfig {
+
+    @Bean
+    public SecurityFilterChain securityFilterChain(
+            HttpSecurity http) throws Exception {
+
+        http
+            .csrf(csrf -> csrf.disable())
+
+            .authorizeHttpRequests(auth -> auth
+                .requestMatchers("/public/**").permitAll()
+                .requestMatchers("/api/orders/**")
+                    .hasAuthority("SCOPE_orders.read")
+                .anyRequest().authenticated()
+            )
+
+            .oauth2ResourceServer(oauth -> oauth
+                .jwt(Customizer.withDefaults())
+            );
+
+        return http.build();
+    }
+}
+```
+
+### Step 3: Configure JWT validation
+
+`application.yml`
+
+yaml
+
+```yaml
+spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: https://auth.example.com
+```
+
+Spring Security validates:
+
+- JWT signature.
+- Token expiration.
+- Issuer.
+- Token claims and authorities.
+
+The authorization server must expose compatible issuer metadata and signing keys.
+
+### Step 4: Create REST API
+
+`OrderController.java`
+
+java
+
+```java
+@RestController
+@RequestMapping("/api/orders")
+public class OrderController {
+
+    @GetMapping
+    public ResponseEntity<String> getOrders() {
+
+        return ResponseEntity.ok(
+            "Orders retrieved successfully"
+        );
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<String> getOrder(
+            @PathVariable Long id) {
+
+        return ResponseEntity.ok(
+            "Order ID: " + id
+        );
+    }
+}
+```
+
+### Step 5: Call API with JWT
+
+bash
+
+```bash
+curl -X GET \
+  http://localhost:8080/api/orders \
+  -H "Authorization: Bearer YOUR_ACCESS_TOKEN"
+```
+
+If the token is valid and has the required authority, the request succeeds.
+
+## 2. mTLS between microservices
+
+Now imagine two services:
+
+- Order Service
+- Payment Service
+
+Normally, HTTPS verifies the server certificate. With mTLS, both services authenticate each other using certificates.
+
+Setup &amp; verify Mutual TLS Authentication (MTLS) with OpenSSL | GoLinuxCloud
+
+[golinuxcloud.com](<https://www.golinuxcloud.com/mutual-tls-authentication-mtls/?utm_source=chatgpt.com>)
+
+### Step 1: Configure server-side TLS
+
+`application.yml` for Payment Service:
+
+yaml
+
+```yaml
+server:
+  port: 8443
+  ssl:
+    enabled: true
+    key-store: classpath:payment-server.p12
+    key-store-password: ${KEYSTORE_PASSWORD}
+    key-store-type: PKCS12
+
+    trust-store: classpath:payment-truststore.p12
+    trust-store-password: ${TRUSTSTORE_PASSWORD}
+    trust-store-type: PKCS12
+
+    client-auth: need
+```
+
+`client-auth: need` means the server requires a valid client certificate.
+
+### Step 2: Configure client-side TLS
+
+Order Service needs:
+
+- Its own client certificate and private key.
+- A truststore containing the Payment Service's trusted CA certificate.
+
+Configure an SSL-enabled HTTP client using Spring's SSL support or an appropriately configured HTTP client.
+
+For example, with Apache HttpClient 5:
+
+java
+
+```java
+SSLContext sslContext = SSLContexts.custom()
+    .loadKeyMaterial(
+        clientKeyStore,
+        keyStorePassword.toCharArray()
+    )
+    .loadTrustMaterial(
+        trustStore,
+        null
+    )
+    .build();
+
+CloseableHttpClient httpClient =
+    HttpClients.custom()
+        .setConnectionManager(
+            PoolingHttpClientConnectionManagerBuilder.create()
+                .setSSLSocketFactory(
+                    SSLConnectionSocketFactoryBuilder.create()
+                        .setSslContext(sslContext)
+                        .build()
+                )
+                .build()
+        )
+        .build();
+```
+
+The client keystore provides the client identity. The truststore verifies the server identity.
+
+## 3. OAuth 2.0 vs JWT vs mTLS
+
+| Feature | OAuth 2.0 | JWT | mTLS |
+| --- | --- | --- | --- |
+| Purpose | Authorization | Token format | Mutual authentication |
+| Main use | API access | Identity/claims representation | Service-to-service security |
+| Authentication | Depends on flow | Not inherently authentication | Certificates |
+| Stateless | Depends on implementation | Usually | Not applicable |
+| Example | Access token issuance | Bearer token | Client certificate |
+
+## 4. How these work together in a real enterprise application
+
+Consider an e-commerce microservices architecture:
+
+1. User logs in through the OAuth 2.0 authorization server.
+2. Authorization server issues a JWT access token.
+3. Client calls Order Service with the JWT.
+4. Order Service validates the JWT.
+5. Order Service communicates with Payment Service over mTLS.
+6. Payment Service validates the client certificate before processing payment.
+
+This gives you two security layers:
+
+- JWT/OAuth 2.0: Application-level authorization.
+- mTLS: Transport-level mutual authentication.
+
+## 5. Interview questions you should prepare
+
+| Interview question | Key concept |
+| --- | --- |
+| What is OAuth 2.0? | Authorization framework |
+| What is JWT? | Header, payload, signature |
+| How does Spring validate JWT? | JwtDecoder and signing keys |
+| What is the difference between authentication and authorization? | Identity vs permissions |
+| What is mTLS? | Client and server certificate verification |
+| How do you secure microservice communication? | OAuth 2.0 + mTLS |
+| What happens when JWT expires? | Token renewal or re-authentication |
+| How do you prevent token tampering? | Signature verification |
+
+My recommendation: For a Java/Spring Boot microservices interview, focus especially on implementing a JWT Resource Server, understanding OAuth 2.0 Client Credentials flow for service-to-service access, and configuring mTLS with certificate-based authentication.
+
+These three topics together are very useful in enterprise architecture discussions.
