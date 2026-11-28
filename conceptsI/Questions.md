@@ -5,6 +5,262 @@ I'll organize the questions into interview-preparation topics, with questions on
 ## 1. Microservices architecture
 
 - [ ]Q1. Product Service is working, but Inventory Service is down. What should happen when a customer places an order?
+# Scenario: Inventory Service reserves stock successfully, but Payment Service goes down. What happens?
+
+This is a real-world microservices problem involving Saga Pattern, distributed transactions, eventual consistency, and compensating transactions.
+
+## 1. Understand the scenario
+
+Suppose a customer orders a mobile phone worth ₹50,000.
+
+We have four microservices:
+
+- Order Service
+- Inventory Service
+- Payment Service
+- Notification Service
+
+The flow is:
+
+1. Customer places order
+   SuccessOrder Service creates order with `PENDING` status.
+2. Inventory Service reserves stock
+   SuccessOne mobile phone is reserved.
+3. Payment Service processes payment
+   FailedPayment Service is unavailable.
+4. Compensating transaction
+   Release the reserved inventory.
+5. Update order status
+   Set order status to `PAYMENT_FAILED` or `CANCELLED`.
+6. Notify customer
+   Inform the customer that payment could not be completed.
+
+## 2. How do we implement this using Saga Pattern?
+
+Saga is a sequence of local transactions. If one transaction fails, previously completed transactions are compensated.
+
+| Service | Action | Result |
+| --- | --- | --- |
+| Order | Create order | Success |
+| Inventory | Reserve stock | Success |
+| Payment | Process payment | Failure |
+| Inventory | Release stock | Compensation |
+| Order | Cancel order | Compensation |
+
+Important: We don't use one `@Transactional` transaction across all microservices. Each service manages its own local database transaction.
+
+## 3. Spring Boot implementation example
+
+Let's implement a simplified orchestration-based Saga.
+
+### Step 1: Order Service
+
+java
+
+```java
+@Service
+public class OrderService {
+
+    private final InventoryClient inventoryClient;
+    private final PaymentClient paymentClient;
+    private final OrderRepository orderRepository;
+
+    public OrderService(
+            InventoryClient inventoryClient,
+            PaymentClient paymentClient,
+            OrderRepository orderRepository) {
+
+        this.inventoryClient = inventoryClient;
+        this.paymentClient = paymentClient;
+        this.orderRepository = orderRepository;
+    }
+
+    public String placeOrder(OrderRequest request) {
+
+        Order order = new Order();
+        order.setStatus("PENDING");
+
+        order = orderRepository.save(order);
+
+        boolean reserved = inventoryClient.reserveStock(
+                request.getProductId(),
+                request.getQuantity(),
+                order.getId()
+        );
+
+        if (!reserved) {
+            order.setStatus("INVENTORY_FAILED");
+            orderRepository.save(order);
+            return "Inventory unavailable";
+        }
+
+        try {
+            paymentClient.processPayment(
+                    order.getId(),
+                    request.getAmount()
+            );
+
+            order.setStatus("CONFIRMED");
+            orderRepository.save(order);
+
+            return "Order confirmed";
+
+        } catch (Exception ex) {
+
+            inventoryClient.releaseStock(
+                    request.getProductId(),
+                    request.getQuantity(),
+                    order.getId()
+            );
+
+            order.setStatus("PAYMENT_FAILED");
+            orderRepository.save(order);
+
+            return "Payment failed. Inventory released.";
+        }
+    }
+}
+```
+
+This is an illustrative synchronous implementation. A production implementation should persist Saga progress, use idempotent commands, and recover from failures during compensation.
+
+### Step 2: Inventory Service
+
+java
+
+```java
+@Service
+public class InventoryService {
+
+    public void reserveStock(Long productId, int quantity) {
+        // Check available stock
+        // Reduce available quantity
+        // Record reservation against order ID
+    }
+
+    public void releaseStock(Long productId, int quantity) {
+        // Release reservation
+        // Restore available quantity
+    }
+}
+```
+
+### Step 3: Payment Service
+
+java
+
+```java
+@Service
+public class PaymentService {
+
+    public void processPayment(
+            Long orderId,
+            Double amount) {
+
+        // Validate payment request
+        // Process payment
+        // Save payment transaction
+    }
+}
+```
+
+## 4. What if Inventory Service is also unavailable during compensation?
+
+This is an important senior-level follow-up.
+
+Suppose:
+
+1. Inventory successfully reserves stock.
+2. Payment fails.
+3. Order Service tries to release inventory.
+4. Inventory Service is also unavailable.
+
+Now we have a distributed consistency problem.
+
+Solution:
+
+- Keep the order in `COMPENSATION_PENDING` status.
+- Persist the compensation command.
+- Retry releasing inventory using Kafka or a durable retry mechanism.
+- Use an idempotency key so inventory isn't released twice.
+- Alert operations if compensation continues failing.
+- Use reconciliation jobs to identify stuck orders.
+
+Never assume that calling the compensation API means compensation succeeded.
+
+## 5. How would Kafka improve this architecture?
+
+Instead of tightly coupling all services through synchronous REST calls, we can use Kafka.
+
+Order Service
+
+Creates PENDING order
+
+Kafka: OrderCreated
+
+Inventory Service
+
+Reserves stock
+
+Kafka: InventoryReserved
+
+Payment Service
+
+Processes payment
+
+SuccessPaymentCompleted
+
+Order CONFIRMED
+
+FailurePaymentFailed
+
+Release inventory
+
+Kafka makes the workflow asynchronous, but it does not automatically guarantee successful payment or compensation.
+
+For reliability, implement:
+
+- Transactional Outbox Pattern.
+- Idempotent consumers.
+- Retry topics and Dead Letter Topics.
+- Saga state persistence.
+- Eventual consistency.
+
+## 6. Important interview follow-up questions
+
+| Interviewer asks | Expected concept |
+| --- | --- |
+| What if payment succeeds but response is lost? | Idempotency and payment status verification |
+| What if inventory release fails? | Compensation retry |
+| What if Kafka publishes duplicate events? | Idempotent consumer |
+| What if Kafka is unavailable? | Transactional Outbox |
+| What if two customers buy the last item? | Optimistic/pessimistic locking |
+| What if payment succeeds but order update fails? | Saga recovery and reconciliation |
+| Can `@Transactional` solve this? | No, not across independent services |
+| What if payment takes 30 seconds? | Async processing and timeout management |
+
+## 7. Interview-ready answer
+
+You can give this answer directly:
+
+> In this scenario, I would implement the Saga Pattern to maintain consistency across microservices.
+>
+> First, Order Service creates an order with PENDING status. Inventory Service reserves the stock successfully. Then Payment Service attempts to process the payment, but it is unavailable.
+>
+> I would not confirm the order until payment is successful.
+>
+> If payment fails, I would trigger a compensating transaction to release the reserved inventory and update the order status to PAYMENT\_FAILED or CANCELLED.
+>
+> If Inventory Service is also unavailable during compensation, I would persist the compensation request and retry it asynchronously using Kafka.
+>
+> I would also implement idempotency, retries, Dead Letter Topics and the Transactional Outbox Pattern to ensure reliable event processing.
+>
+> This approach provides eventual consistency without requiring a distributed database transaction.
+
+Next-level interview practiceNext question: Payment Service successfully deducts ₹50,000 from the customer's bank account, but Order Service crashes before updating the order status to CONFIRMED.
+
+How would you handle this situation without charging the customer twice?
+- 
 - [ ]Q2. Product Service has 10 million products. How would you optimize the API?
 - [ ]Q3. Should Product Service call Category Service every time it needs category information?
 - [ ]Q4. When should you use REST versus Kafka or RabbitMQ?
