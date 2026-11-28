@@ -3304,3 +3304,786 @@ retention.ms
 My recommendation for interview preparation: Focus especially on `acks`, `enable.idempotence`, `retries`, `linger.ms`, `batch.size`, `enable.auto.commit`, `auto.offset.reset`, `max.poll.records`, `max.poll.interval.ms`, `session.timeout.ms`, `heartbeat.interval.ms`, `replication.factor`, and `min.insync.replicas`.
 
 If you understand these 15 properties with real-world examples, you will be able to answer most practical Kafka configuration questions in Java developer interviews.
+
+---
+# Kafka properties explained with types, usage, examples, and interview scenarios
+
+In Kafka, properties are configuration settings that control how producers send messages, how consumers receive messages, and how brokers store and replicate data.
+
+Let's focus on the 13 important properties you mentioned, including their types, typical values, usage, and practical Java Spring Boot examples.
+
+## 1. Kafka producer properties
+
+Producer properties control message publishing, reliability, retries, and performance.
+
+### 1. `acks`
+
+Type: StringPurpose: Determines how many broker acknowledgments the producer waits for before considering a message successfully sent.
+
+| Value | Meaning | Reliability |
+| --- | --- | --- |
+| `0` | No acknowledgment required | Low |
+| `1` | Leader broker acknowledges | Medium |
+| `all` | All current in-sync replicas acknowledge | High |
+
+Configuration:
+
+properties
+
+```properties
+spring.kafka.producer.acks=all
+```
+
+Java example:
+
+java
+
+```java
+config.put(
+    ProducerConfig.ACKS_CONFIG,
+    "all"
+);
+```
+
+Real-world scenario:
+
+Suppose we have three Kafka brokers:
+
+- Broker 1: Leader
+- Broker 2: Follower
+- Broker 3: Follower
+
+With `acks=all`, the producer waits for acknowledgment from the current in-sync replicas before considering the write successful.
+
+Interview answer:
+
+"I use `acks=all` in reliability-sensitive applications because it provides stronger durability, especially when combined with replication factor 3 and minimum in-sync replicas 2."
+
+Note: `acks=all` does not necessarily mean every configured replica must acknowledge. It means all replicas currently in the ISR.
+
+### 2. `enable.idempotence`
+
+Type: BooleanPurpose: Prevents duplicate records in the Kafka log caused by producer retries.
+
+Values:
+
+- `true`
+- `false`
+
+Configuration:
+
+properties
+
+```properties
+spring.kafka.producer.properties.enable.idempotence=true
+```
+
+Java example:
+
+java
+
+```java
+config.put(
+    ProducerConfig.ENABLE_IDEMPOTENCE_CONFIG,
+    true
+);
+```
+
+Real-world scenario:
+
+Suppose a producer sends an order event:
+
+json
+
+```json
+{
+  "orderId": "ORD101",
+  "amount": 5000
+}
+```
+
+The broker writes the message, but the acknowledgment gets lost.
+
+The producer retries. With idempotence enabled, Kafka uses producer IDs and sequence numbers to recognize duplicate producer writes.
+
+Interview answer:
+
+"I enable idempotence to prevent duplicate Kafka log entries caused by retries. However, I also implement consumer-side deduplication because producer idempotence does not prevent duplicate business operations in downstream systems."
+
+### 3. `retries`
+
+Type: IntegerPurpose: Specifies the number of retry attempts for retriable producer errors.
+
+Example:
+
+properties
+
+```properties
+spring.kafka.producer.retries=10
+```
+
+Java:
+
+java
+
+```java
+config.put(
+    ProducerConfig.RETRIES_CONFIG,
+    10
+);
+```
+
+Scenario:
+
+1. Producer sends an order.
+2. Broker is temporarily unavailable.
+3. Producer attempts to resend.
+4. Broker becomes available.
+5. Message is successfully delivered.
+
+Important: Retries are bounded by `delivery.timeout.ms`. A high retry count does not guarantee unlimited retrying.
+
+Interview answer:
+
+"I configure retries for temporary network and broker failures. I combine retries with idempotence and delivery timeout to ensure reliable message publishing."
+
+### 4. `linger.ms`
+
+Type: Integer (milliseconds)Purpose: Controls how long the producer waits for additional messages before sending a batch.
+
+Example:
+
+properties
+
+```properties
+spring.kafka.producer.properties.linger.ms=10
+```
+
+Java:
+
+java
+
+```java
+config.put(
+    ProducerConfig.LINGER_MS_CONFIG,
+    10
+);
+```
+
+Scenario:
+
+Suppose the producer receives 100 messages.
+
+Without batching, messages might be sent in smaller requests.
+
+With `linger.ms=10`, the producer can wait up to 10 milliseconds for more messages to arrive, helping create larger batches.
+
+Without batching
+
+Msg 1
+
+Msg 2
+
+Msg 3
+
+Msg 4
+
+Messages may be sent in smaller requests.
+
+With batching
+
+Msg 1 + Msg 2 + Msg 3 + Msg 4
+
+One batch
+
+Potentially fewer network requests and better throughput.
+
+Interview answer:
+
+"I use `linger.ms` to improve producer throughput by allowing messages to accumulate into batches. Increasing it can improve throughput but may increase publishing latency."
+
+### 5. `batch.size`
+
+Type: Integer (bytes)Purpose: Defines the target maximum size of a batch for a single partition.
+
+Default Kafka client value is generally 16 KB.
+
+Configuration:
+
+properties
+
+```properties
+spring.kafka.producer.batch-size=32768
+```
+
+Java:
+
+java
+
+```java
+config.put(
+    ProducerConfig.BATCH_SIZE_CONFIG,
+    32768
+);
+```
+
+Here, `32768` means 32 KB.
+
+Scenario:
+
+Suppose the producer is publishing many order events to the same partition.
+
+A larger batch allows more records to be sent together.
+
+Interview answer:
+
+"I tune batch size based on message volume and throughput requirements. Larger batches can improve efficiency but increase memory consumption and may add latency."
+
+Important: `linger.ms` and `batch.size` work together. A batch may be sent before reaching its size limit when the linger time expires or other conditions trigger sending.
+
+## 2. Kafka consumer properties
+
+Consumer properties control message retrieval, offset management, and consumer group health.
+
+### 6. `enable.auto.commit`
+
+Type: BooleanPurpose: Controls whether the consumer automatically commits offsets periodically.
+
+Values:
+
+- `true`
+- `false`
+
+Configuration:
+
+properties
+
+```properties
+spring.kafka.consumer.enable-auto-commit=false
+```
+
+Java:
+
+java
+
+```java
+config.put(
+    ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG,
+    false
+);
+```
+
+Scenario:
+
+Suppose a consumer receives an order message and starts processing it.
+
+If automatic offset commits happen before business processing finishes, a failure could result in the message not being reprocessed.
+
+With manual offset management, the application can acknowledge the record after successful processing.
+
+Java example:
+
+java
+
+```java
+@KafkaListener(
+    topics = "order-topic",
+    groupId = "order-group"
+)
+public void consume(
+        OrderEvent event,
+        Acknowledgment acknowledgment) {
+
+    orderService.processOrder(event);
+
+    acknowledgment.acknowledge();
+}
+```
+
+Configuration:
+
+properties
+
+```properties
+spring.kafka.consumer.enable-auto-commit=false
+spring.kafka.listener.ack-mode=manual
+```
+
+Interview answer:
+
+"I generally disable auto commit for important business processing and acknowledge messages only after successful processing. This provides better control over offset management."
+
+### 7. `auto.offset.reset`
+
+Type: String / EnumPurpose: Defines where the consumer starts reading when it does not have a valid committed offset.
+
+Values:
+
+| Value | Usage |
+| --- | --- |
+| `earliest` | Start from the earliest retained message |
+| `latest` | Start from new messages |
+| `none` | Throw an exception if no valid offset exists |
+
+Configuration:
+
+properties
+
+```properties
+spring.kafka.consumer.auto-offset-reset=earliest
+```
+
+Java:
+
+java
+
+```java
+config.put(
+    ConsumerConfig.AUTO_OFFSET_RESET_CONFIG,
+    "earliest"
+);
+```
+
+Scenario:
+
+Suppose a new consumer group starts reading `order-topic`.
+
+- With `earliest`, it reads available historical messages.
+- With `latest`, it starts with messages arriving after the consumer begins.
+- With `none`, it fails if no valid offset exists.
+
+Interview answer:
+
+"I use earliest when a new consumer group needs to process historical data and latest when the application only needs newly arriving messages."
+
+Important: This property does not override an existing valid committed offset.
+
+### 8. `max.poll.records`
+
+Type: IntegerPurpose: Specifies the maximum number of records returned in one consumer poll.
+
+Default: 500 in standard Kafka consumer configurations.
+
+Configuration:
+
+properties
+
+```properties
+spring.kafka.consumer.max-poll-records=100
+```
+
+Java:
+
+java
+
+```java
+config.put(
+    ConsumerConfig.MAX_POLL_RECORDS_CONFIG,
+    100
+);
+```
+
+Scenario:
+
+Suppose Kafka has 1,000 messages available.
+
+With `max.poll.records=100`, a single poll returns at most 100 records.
+
+The consumer can then process them before requesting more.
+
+Interview answer:
+
+"I tune max poll records according to processing time and memory requirements. Smaller batches can help when individual messages require expensive processing."
+
+### 9. `max.poll.interval.ms`
+
+Type: Integer (milliseconds)Purpose: Maximum allowed time between two consumer poll calls.
+
+Default: 300,000 milliseconds (5 minutes).
+
+Configuration:
+
+properties
+
+```properties
+spring.kafka.consumer.properties.max.poll.interval.ms=300000
+```
+
+Java:
+
+java
+
+```java
+config.put(
+    ConsumerConfig.MAX_POLL_INTERVAL_MS_CONFIG,
+    300000
+);
+```
+
+Scenario:
+
+Suppose the consumer polls 100 messages and takes 10 minutes to process them without polling again.
+
+If the configured interval is 5 minutes, the consumer can exceed its allowed polling interval, triggering a group rebalance.
+
+How to fix it:
+
+- Reduce `max.poll.records`.
+- Optimize processing logic.
+- Increase `max.poll.interval.ms` if justified.
+- Use a suitable processing architecture for long-running work.
+
+Interview answer:
+
+"I configure max.poll.interval.ms based on the maximum expected processing duration. If processing takes longer than the configured interval, Kafka can consider the consumer unhealthy from the group's perspective and trigger reassignment."
+
+### 10. `session.timeout.ms`
+
+Type: Integer (milliseconds)Purpose: Defines how long the broker waits without receiving heartbeats before considering a consumer failed.
+
+Configuration:
+
+properties
+
+```properties
+spring.kafka.consumer.properties.session.timeout.ms=10000
+```
+
+Java:
+
+java
+
+```java
+config.put(
+    ConsumerConfig.SESSION_TIMEOUT_MS_CONFIG,
+    10000
+);
+```
+
+Here, Kafka waits approximately 10 seconds without the required heartbeats before declaring the consumer unavailable, subject to group protocol and broker settings.
+
+Scenario:
+
+1. Consumer is running.
+2. Consumer sends heartbeats.
+3. Consumer application crashes.
+4. Heartbeats stop.
+5. Session timeout expires.
+6. Kafka starts consumer group reassignment.
+
+Interview answer:
+
+"I use session.timeout.ms to control how quickly Kafka detects an unavailable consumer. A shorter timeout can improve failure detection but may cause unnecessary rebalancing during temporary network delays."
+
+### 11. `heartbeat.interval.ms`
+
+Type: Integer (milliseconds)Purpose: Controls how frequently the consumer sends heartbeats to the group coordinator under the classic consumer group protocol.
+
+Configuration:
+
+properties
+
+```properties
+spring.kafka.consumer.properties.heartbeat.interval.ms=3000
+```
+
+Java:
+
+java
+
+```java
+config.put(
+    ConsumerConfig.HEARTBEAT_INTERVAL_MS_CONFIG,
+    3000
+);
+```
+
+Scenario:
+
+Suppose:
+
+properties
+
+```properties
+heartbeat.interval.ms=3000
+session.timeout.ms=10000
+```
+
+The consumer sends heartbeats approximately every 3 seconds.
+
+If heartbeats stop and the session timeout expires, Kafka detects the failure.
+
+Interview answer:
+
+"I configure heartbeat interval lower than session timeout so Kafka can regularly detect consumer liveness. A commonly used starting point is approximately one-third of the session timeout."
+
+Note: The classic heartbeat/session settings differ from the newer consumer group protocol, where some heartbeat timing is managed through broker-side group configuration.
+
+## 3. Kafka broker and topic properties
+
+These properties control replication and fault tolerance.
+
+### 12. `replication.factor`
+
+Type: IntegerPurpose: Defines how many copies of a partition Kafka maintains across brokers.
+
+Example:
+
+properties
+
+```properties
+default.replication.factor=3
+```
+
+Or create a topic:
+
+bash
+
+```bash
+kafka-topics.sh \
+  --bootstrap-server localhost:9092 \
+  --create \
+  --topic order-topic \
+  --partitions 3 \
+  --replication-factor 3
+```
+
+Scenario:
+
+Suppose we have three brokers:
+
+Topic: order-topic
+
+Replication factor = 3
+
+LeaderBroker 1
+
+Partition 0
+
+FollowerBroker 2
+
+Partition 0
+
+FollowerBroker 3
+
+Partition 0
+
+Each broker maintains a replica of the same partition.
+
+If Broker 1 fails, Kafka can elect an eligible in-sync replica as the new leader.
+
+Interview answer:
+
+"I generally use replication factor 3 for production workloads when the cluster has enough brokers. It provides fault tolerance against broker failures."
+
+### 13. `min.insync.replicas`
+
+Type: IntegerPurpose: Defines the minimum number of in-sync replicas required for a successful write when the producer uses `acks=all`.
+
+Configuration:
+
+properties
+
+```properties
+min.insync.replicas=2
+```
+
+Scenario:
+
+Suppose:
+
+- Replication factor = 3.
+- Minimum ISR = 2.
+- Producer acknowledgment = `all`.
+
+Scenario A: Three replicas in sync
+
+Broker 1Broker 2Broker 3
+
+Write succeedsScenario B: One replica unavailable, two in sync
+
+Broker 1Broker 2Broker 3
+
+Write can succeedScenario C: Only one replica in sync
+
+Broker 1Broker 2Broker 3
+
+Write fails with NotEnoughReplicas
+
+Interview answer:
+
+"I configure min.insync.replicas to ensure that Kafka does not acknowledge important writes when too few replicas are available. For example, replication factor 3 and min.insync.replicas 2 provide a good durability starting point."
+
+## 4. All 13 properties – Quick revision table
+
+| Property | Type | Typical value | Main usage |
+| --- | --- | --- | --- |
+| `acks` | String | `all` | Producer reliability |
+| `enable.idempotence` | Boolean | `true` | Prevent producer retry duplicates |
+| `retries` | Integer | `10` | Retry failed sends |
+| `linger.ms` | Integer | `5–10` | Producer batching delay |
+| `batch.size` | Integer (bytes) | `16384–32768` | Batch size |
+| `enable.auto.commit` | Boolean | `false` | Manual offset control |
+| `auto.offset.reset` | String | `earliest` | Initial offset position |
+| `max.poll.records` | Integer | `100` | Records per poll |
+| `max.poll.interval.ms` | Integer (ms) | `300000` | Maximum poll gap |
+| `session.timeout.ms` | Integer (ms) | `10000` | Failure detection |
+| `heartbeat.interval.ms` | Integer (ms) | `3000` | Heartbeat frequency |
+| `replication.factor` | Integer | `3` | Replica count |
+| `min.insync.replicas` | Integer | `2` | Minimum in-sync replicas |
+
+These are illustrative starting values, not universal production defaults.
+
+## 5. Complete Java configuration example
+
+Here is how you can configure the important producer and consumer properties directly in Java.
+
+java
+
+```java
+
+@Configuration
+public class KafkaConfig {
+
+    @Bean
+    public ProducerFactory<String, String> producerFactory() {
+
+        Map<String, Object> config = new HashMap<>();
+
+        config.put(
+            ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,
+            "localhost:9092"
+        );
+
+        config.put(
+            ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG,
+            StringSerializer.class
+        );
+
+        config.put(
+            ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG,
+            StringSerializer.class
+        );
+
+        // Reliability
+        config.put(ProducerConfig.ACKS_CONFIG, "all");
+        config.put(ProducerConfig.ENABLE_IDEMPOTENCE_CONFIG, true);
+        config.put(ProducerConfig.RETRIES_CONFIG, 10);
+
+        // Performance
+        config.put(ProducerConfig.LINGER_MS_CONFIG, 10);
+        config.put(ProducerConfig.BATCH_SIZE_CONFIG, 32768);
+
+        return new DefaultKafkaProducerFactory<>(config);
+    }
+
+    @Bean
+    public ConsumerFactory<String, String> consumerFactory() {
+
+        Map<String, Object> config = new HashMap<>();
+
+        config.put(
+            ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG,
+            "localhost:9092"
+        );
+
+        config.put(
+            ConsumerConfig.GROUP_ID_CONFIG,
+            "order-group"
+        );
+
+        config.put(
+            ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG,
+            StringDeserializer.class
+        );
+
+        config.put(
+            ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG,
+            StringDeserializer.class
+        );
+
+        // Offset management
+        config.put(
+            ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG,
+            false
+        );
+
+        config.put(
+            ConsumerConfig.AUTO_OFFSET_RESET_CONFIG,
+            "earliest"
+        );
+
+        // Polling
+        config.put(
+            ConsumerConfig.MAX_POLL_RECORDS_CONFIG,
+            100
+        );
+
+        config.put(
+            ConsumerConfig.MAX_POLL_INTERVAL_MS_CONFIG,
+            300000
+        );
+
+        // Heartbeat and failure detection
+        config.put(
+            ConsumerConfig.SESSION_TIMEOUT_MS_CONFIG,
+            10000
+        );
+
+        config.put(
+            ConsumerConfig.HEARTBEAT_INTERVAL_MS_CONFIG,
+            3000
+        );
+
+        return new DefaultKafkaConsumerFactory<>(config);
+    }
+}
+```
+
+Broker and topic settings such as replication factor and minimum ISR are configured separately on the Kafka cluster or individual topic, not in the producer factory.
+
+## 6. Interview questions to practice
+
+1. What happens if `acks=0`?
+2. What is the difference between `acks=1` and `acks=all`?
+3. How does `enable.idempotence` prevent duplicate messages?
+4. What is the difference between `linger.ms` and `batch.size`?
+5. What happens if `enable.auto.commit=true` and the consumer crashes?
+6. What is the difference between `earliest` and `latest`?
+7. What happens if `max.poll.interval.ms` is exceeded?
+8. What is the difference between session timeout and heartbeat interval?
+9. What happens if replication factor is 3 but only one replica is in sync?
+10. What is the relationship between replication factor and minimum ISR?
+
+The most important combination to remember for interviews:
+
+properties
+
+```properties
+# Producer reliability
+acks=all
+enable.idempotence=true
+retries=10
+
+# Producer performance
+linger.ms=10
+batch.size=32768
+
+# Consumer reliability
+enable.auto.commit=false
+auto.offset.reset=earliest
+
+# Consumer performance
+max.poll.records=100
+
+# Consumer failure detection
+max.poll.interval.ms=300000
+session.timeout.ms=10000
+heartbeat.interval.ms=3000
+
+# Broker/topic reliability
+replication.factor=3
+min.insync.replicas=2
+```
+
+This configuration gives you a strong foundation for explaining Kafka reliability, performance, offset management, and fault tolerance in Java developer interviews.
