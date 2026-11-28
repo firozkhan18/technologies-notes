@@ -977,3 +977,2330 @@ Kafka retention period
  Check answers
 
 Next recommended topic: Kafka offset management in depth — `commitSync()`, `commitAsync()`, auto commit, manual acknowledgment, and how to avoid data loss in real-world Spring Boot applications.
+
+---
+Below are six important Kafka interview questions with practical explanations, real-world scenarios, and Java Spring Boot code examples.
+
+We'll use a common e-commerce project scenario throughout:
+
+- Kafka topic: `order-topic`
+- Partitions: 3
+- Consumer group: `order-group`
+- Producers: Order Service
+- Consumers: Payment Service and Notification Service
+- Technology: Java, Spring Boot, Apache Kafka
+
+# 1. How do you manage consumer lag?
+
+## Interview answer
+
+Consumer lag is the difference between the latest available offset in a Kafka partition and the consumer group's committed offset.
+
+For example:
+
+- Kafka has received 10,000 messages.
+- Consumer has processed up to offset 8,000.
+- Consumer lag is approximately 2,000 messages.
+
+Consumer lag indicates that the consumer is not processing messages as quickly as they are being produced.
+
+## How do I handle consumer lag?
+
+1. Monitor consumer lag regularly.
+2. Increase consumer concurrency if enough partitions are available.
+3. Optimize business processing logic.
+4. Increase the number of partitions when appropriate.
+5. Tune batch size and polling configurations.
+6. Identify slow database queries or external API calls.
+
+## Java configuration example
+
+java
+
+```java
+@KafkaListener(
+    topics = "order-topic",
+    groupId = "order-group",
+    concurrency = "3"
+)
+public void consume(OrderEvent event) {
+
+    orderService.processOrder(event);
+}
+```
+
+With three partitions, concurrency of three allows up to three consumers to process partitions in parallel within the group.
+
+### Consumer configuration
+
+properties
+
+```properties
+spring.kafka.consumer.max-poll-records=100
+spring.kafka.consumer.enable-auto-commit=false
+
+spring.kafka.listener.ack-mode=manual
+```
+
+### Monitoring consumer lag using Kafka CLI
+
+bash
+
+```bash
+kafka-consumer-groups.sh \
+  --bootstrap-server localhost:9092 \
+  --group order-group \
+  --describe
+```
+
+Example output:
+
+text
+
+```text
+GROUP       TOPIC        PARTITION  CURRENT-OFFSET  LOG-END-OFFSET  LAG
+order-group order-topic  0          1000            1500            500
+order-group order-topic  1          2000            2300            300
+order-group order-topic  2          3000            4200            1200
+```
+
+Total lag = 500 + 300 + 1200 = 2,000 messages.
+
+Interview point: I monitor consumer lag and processing latency. If lag continuously increases, I investigate whether the bottleneck is consumer processing, database performance, insufficient partitions, or external service latency.
+
+# 2. What is the difference between Kafka partitions and consumer groups?
+
+## Interview answer
+
+A partition is a unit of parallelism and storage within a Kafka topic.
+
+A consumer group is a collection of consumers that work together to consume messages from Kafka.
+
+### Example
+
+Suppose we have a topic with three partitions.
+
+Kafka topic: order-topic
+
+Partition 0
+
+Partition 1
+
+Partition 2
+
+Consumer group: order-group
+
+Consumer 1
+
+Consumer 2
+
+Consumer 3
+
+One partition assigned to each consumer in this example.
+
+### Important differences
+
+| Partitions | Consumer groups |
+| --- | --- |
+| Divide a topic into smaller units | Group consumers together |
+| Enable parallel processing | Enable workload distribution |
+| Store messages | Consume messages |
+| Determine maximum consumer parallelism per group | Maintain group-specific offsets |
+| Can have replicas | Can have multiple independent groups |
+
+### Java example: Two independent consumer groups
+
+java
+
+```java
+@KafkaListener(
+    topics = "order-topic",
+    groupId = "payment-group"
+)
+public void paymentConsumer(String message) {
+
+    System.out.println("Payment: " + message);
+}
+```
+
+java
+
+```java
+@KafkaListener(
+    topics = "order-topic",
+    groupId = "notification-group"
+)
+public void notificationConsumer(String message) {
+
+    System.out.println("Notification: " + message);
+}
+```
+
+Here, both consumer groups receive the same topic events independently.
+
+For example:
+
+- Payment Service processes the order.
+- Notification Service sends an email.
+- Both maintain their own consumer offsets.
+
+Interview point: Partitions provide parallelism, while consumer groups provide independent consumption and horizontal scaling.
+
+# 3. How do you handle message failures and retries?
+
+## Interview answer
+
+In Kafka, message processing can fail because of database errors, network issues, invalid data, or external service failures.
+
+I handle these failures using retry mechanisms, exponential backoff, exception handling, and Dead Letter Topics (DLT).
+
+My approach is:
+
+1. Retry temporary failures.
+2. Use exponential backoff to avoid overwhelming downstream services.
+3. Send permanently failed messages to a DLT.
+4. Log error details for troubleshooting.
+5. Monitor retry counts and DLT message volume.
+
+## Java Spring Boot example
+
+First, implement a Kafka consumer.
+
+java
+
+```java
+@Service
+public class OrderConsumer {
+
+    @KafkaListener(
+        topics = "order-topic",
+        groupId = "order-group"
+    )
+    public void consume(OrderEvent event) {
+
+        orderService.processOrder(event);
+
+        System.out.println("Order processed");
+    }
+
+    @Autowired
+    private OrderService orderService;
+}
+```
+
+Now configure retries.
+
+java
+
+```java
+@Configuration
+public class KafkaErrorConfig {
+
+    @Bean
+    public DefaultErrorHandler errorHandler(
+            KafkaTemplate<Object, Object> template) {
+
+        DeadLetterPublishingRecoverer recoverer =
+            new DeadLetterPublishingRecoverer(template);
+
+        ExponentialBackOffWithMaxRetries backOff =
+            new ExponentialBackOffWithMaxRetries(3);
+
+        backOff.setInitialInterval(1000);
+        backOff.setMultiplier(2.0);
+        backOff.setMaxInterval(10000);
+
+        return new DefaultErrorHandler(
+            recoverer,
+            backOff
+        );
+    }
+}
+```
+
+Register this error handler with the listener container factory:
+
+java
+
+```java
+factory.setCommonErrorHandler(errorHandler);
+```
+
+### How does it work?
+
+Kafka: order-topic
+
+Order Consumer
+
+Processing failure
+
+Retry 1 → Retry 2 → Retry 3
+
+Dead Letter Topic
+
+For example, if a database is temporarily unavailable, Kafka retries processing. If the message still fails after the configured attempts, it is published to the DLT.
+
+Important: Configure exception classification carefully. Invalid messages usually should not be retried repeatedly. Also, the DLT publishing operation must succeed before the failed source record is considered recovered.
+
+# 4. How do you achieve exactly-once processing in Kafka?
+
+## Interview answer
+
+Exactly-once processing means ensuring that a message's processing result is reflected only once, even when retries, failures, or application restarts occur.
+
+Kafka supports exactly-once semantics through:
+
+- Idempotent producers.
+- Kafka transactions.
+- Transactional offset commits.
+- Idempotent consumer logic for external systems.
+
+### Real-world example
+
+Suppose an Order Service publishes an order event and a Payment Service consumes it.
+
+We don't want the same payment transaction to be recorded twice if the producer retries or the consumer restarts.
+
+## Step 1: Enable idempotent producer
+
+java
+
+```java
+@Configuration
+public class KafkaProducerConfig {
+
+    @Bean
+    public ProducerFactory<String, String> producerFactory() {
+
+        Map<String, Object> config = new HashMap<>();
+
+        config.put(
+            ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,
+            "localhost:9092"
+        );
+
+        config.put(
+            ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG,
+            StringSerializer.class
+        );
+
+        config.put(
+            ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG,
+            StringSerializer.class
+        );
+
+        config.put(
+            ProducerConfig.ENABLE_IDEMPOTENCE_CONFIG,
+            true
+        );
+
+        config.put(
+            ProducerConfig.ACKS_CONFIG,
+            "all"
+        );
+
+        return new DefaultKafkaProducerFactory<>(config);
+    }
+}
+```
+
+## Step 2: Configure Kafka transactions
+
+java
+
+```java
+@Bean
+public ProducerFactory<String, String> transactionalProducerFactory() {
+
+    DefaultKafkaProducerFactory<String, String> factory =
+        new DefaultKafkaProducerFactory<>(producerConfigs());
+
+    factory.setTransactionIdPrefix("order-tx-");
+
+    return factory;
+}
+```
+
+Configure a Kafka transaction manager:
+
+java
+
+```java
+@Bean
+public KafkaTransactionManager<String, String>
+        kafkaTransactionManager(
+            ProducerFactory<String, String> factory) {
+
+    return new KafkaTransactionManager<>(factory);
+}
+```
+
+## Step 3: Process messages transactionally
+
+Suppose we consume an order event, process it, and publish a payment event.
+
+java
+
+```java
+@Service
+public class PaymentConsumer {
+
+    @Autowired
+    private KafkaTemplate<String, String> kafkaTemplate;
+
+    @KafkaListener(
+        topics = "order-topic",
+        groupId = "payment-group"
+    )
+    @Transactional("kafkaTransactionManager")
+    public void consume(String orderEvent) {
+
+        // Process incoming order
+        System.out.println("Processing order");
+
+        // Publish payment event
+        kafkaTemplate.send(
+            "payment-topic",
+            orderEvent
+        );
+
+        System.out.println("Payment event published");
+    }
+}
+```
+
+For a fully transactional consume-process-produce flow, configure the listener container to send consumed offsets to the Kafka transaction as part of the same transaction. The transaction-aware listener container and Kafka transaction manager handle this integration.
+
+Also configure downstream consumers with:
+
+properties
+
+```properties
+spring.kafka.consumer.properties.isolation.level=read_committed
+```
+
+This ensures they only read committed transactional messages.
+
+### How does it work?
+
+Order Topic
+
+Payment Consumer
+
+Kafka Transaction
+
+Process event + publish payment + commit consumed offset
+
+SuccessCommit
+
+FailureAbort
+
+Important interview point: Kafka transactions provide exactly-once semantics for Kafka-to-Kafka processing. If we update an external database, Kafka transactions alone cannot make that database update atomic with the Kafka offset. In that case, I use an idempotent consumer, database transactions, unique event IDs, or the transactional outbox pattern.
+
+# 5. How do you monitor Kafka pipeline performance?
+
+## Interview answer
+
+I monitor Kafka pipeline performance using metrics, dashboards, logs, and alerts.
+
+The important metrics I monitor include:
+
+| Metric | Why it matters |
+| --- | --- |
+| Consumer lag | Identifies slow consumers |
+| Producer throughput | Measures messages produced per second |
+| Consumer throughput | Measures messages consumed per second |
+| Processing latency | Measures message processing time |
+| Broker CPU and memory | Identifies resource bottlenecks |
+| Disk utilization | Helps prevent storage issues |
+| Under-replicated partitions | Identifies replication problems |
+| Request latency | Identifies broker/network bottlenecks |
+| Failed messages | Identifies processing issues |
+
+## Tools I use
+
+Fichier:Prometheus software logo.svg - Wikisource
+
+Prometheus
+
+Collects Kafka and application metrics.
+
+[Official website](<https://prometheus.io/?utm_source=chatgpt.com>)
+
+Meet the Unit – OpenSTEM
+
+Grafana
+
+Creates dashboards and visualizes Kafka performance.
+
+[Official website](<https://grafana.com/?utm_source=chatgpt.com>)
+
+Running Kafka on Production. Apache Kafka is an open-source… | by Pradyumna Khawas | WorkIndia.in | Medium
+
+Kafka JMX Metrics
+
+Exposes broker, producer, and consumer metrics.
+
+[Kafka monitoring documentation](<https://kafka.apache.org/documentation/?utm_source=chatgpt.com#monitoring>)
+
+INSY2S | Dev Factory
+
+Spring Boot Actuator and Micrometer
+
+Exposes application health and performance metrics.
+
+[Actuator metrics documentation](<https://docs.spring.io/spring-boot/reference/actuator/metrics.html?utm_source=chatgpt.com>)
+
+## Java Spring Boot example
+
+First, add dependencies:
+
+xml
+
+```xml
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-actuator</artifactId>
+</dependency>
+
+<dependency>
+    <groupId>io.micrometer</groupId>
+    <artifactId>micrometer-registry-prometheus</artifactId>
+</dependency>
+```
+
+Configure the application:
+
+properties
+
+```properties
+management.endpoints.web.exposure.include=health,metrics,prometheus
+
+management.endpoint.prometheus.access=unrestricted
+
+management.prometheus.metrics.export.enabled=true
+```
+
+You can access application metrics through:
+
+text
+
+```text
+http://localhost:8080/actuator/prometheus
+```
+
+### Custom message processing timer
+
+We can also measure how long Kafka message processing takes.
+
+java
+
+```java
+@Service
+public class OrderConsumer {
+
+    private final Timer processingTimer;
+
+    public OrderConsumer(MeterRegistry registry) {
+
+        this.processingTimer = Timer.builder(
+            "kafka.order.processing.time"
+        )
+        .description("Order processing duration")
+        .register(registry);
+    }
+
+    @KafkaListener(
+        topics = "order-topic",
+        groupId = "order-group"
+    )
+    public void consume(OrderEvent event) {
+
+        processingTimer.record(() -> {
+            orderService.processOrder(event);
+        });
+    }
+
+    @Autowired
+    private OrderService orderService;
+}
+```
+
+Now Prometheus can scrape this metric, and Grafana can display the processing duration.
+
+Interview point: I set alerts for continuously increasing consumer lag, high processing latency, broker failures, under-replicated partitions, and increasing DLT message counts.
+
+# 6. How do you handle schema evolution in Kafka?
+
+## Interview answer
+
+Schema evolution means modifying the structure of messages over time without breaking existing Kafka producers and consumers.
+
+For example, initially our order event looks like this:
+
+Version 1
+
+json
+
+```json
+{
+  "orderId": "ORD101",
+  "amount": 5000
+}
+```
+
+Later, the business asks us to add a customer ID.
+
+Version 2
+
+json
+
+```json
+{
+  "orderId": "ORD101",
+  "amount": 5000,
+  "customerId": "C101"
+}
+```
+
+The challenge is that older consumers may not understand the new schema.
+
+To handle this, I use a Schema Registry with Avro, Protobuf, or JSON Schema.
+
+## Schema compatibility types
+
+| Compatibility | Meaning |
+| --- | --- |
+| BACKWARD | New consumers can read old messages |
+| FORWARD | Old consumers can read new messages |
+| FULL | Both backward and forward compatible |
+| NONE | No compatibility checks |
+
+For most evolving event-driven systems, I prefer backward compatibility.
+
+## Step 1: Define Avro schema
+
+Create `order.avsc`.
+
+Version 1
+
+json
+
+```json
+{
+  "type": "record",
+  "name": "Order",
+  "namespace": "com.example",
+  "fields": [
+    {
+      "name": "orderId",
+      "type": "string"
+    },
+    {
+      "name": "amount",
+      "type": "double"
+    }
+  ]
+}
+```
+
+Version 2
+
+Add a new field with a default value.
+
+json
+
+```json
+{
+  "type": "record",
+  "name": "Order",
+  "namespace": "com.example",
+  "fields": [
+    {
+      "name": "orderId",
+      "type": "string"
+    },
+    {
+      "name": "amount",
+      "type": "double"
+    },
+    {
+      "name": "customerId",
+      "type": ["null", "string"],
+      "default": null
+    }
+  ]
+}
+```
+
+The default value allows a new consumer to read older messages that don't contain `customerId`.
+
+## Step 2: Configure Schema Registry
+
+Add Maven dependencies (versions should be aligned with your Confluent Platform version):
+
+xml
+
+```xml
+<dependency>
+    <groupId>io.confluent</groupId>
+    <artifactId>kafka-avro-serializer</artifactId>
+    <version>${confluent.version}</version>
+</dependency>
+```
+
+Configure the producer:
+
+properties
+
+```properties
+spring.kafka.producer.bootstrap-servers=localhost:9092
+
+spring.kafka.producer.value-serializer=io.confluent.kafka.serializers.KafkaAvroSerializer
+
+spring.kafka.producer.properties.schema.registry.url=http://localhost:8081
+```
+
+Configure the consumer:
+
+properties
+
+```properties
+spring.kafka.consumer.bootstrap-servers=localhost:9092
+
+spring.kafka.consumer.value-deserializer=io.confluent.kafka.serializers.KafkaAvroDeserializer
+
+spring.kafka.consumer.properties.schema.registry.url=http://localhost:8081
+
+spring.kafka.consumer.properties.specific.avro.reader=true
+```
+
+## Step 3: Java producer example
+
+java
+
+```java
+@Service
+public class OrderProducer {
+
+    @Autowired
+    private KafkaTemplate<String, Order> kafkaTemplate;
+
+    public void publishOrder() {
+
+        Order order = Order.newBuilder()
+            .setOrderId("ORD101")
+            .setAmount(5000)
+            .setCustomerId("C101")
+            .build();
+
+        kafkaTemplate.send(
+            "order-topic",
+            order.getOrderId(),
+            order
+        );
+    }
+}
+```
+
+## Step 4: Java consumer example
+
+java
+
+```java
+@Service
+public class OrderConsumer {
+
+    @KafkaListener(
+        topics = "order-topic",
+        groupId = "order-group"
+    )
+    public void consume(Order order) {
+
+        System.out.println(
+            "Order ID: " + order.getOrderId()
+        );
+
+        System.out.println(
+            "Amount: " + order.getAmount()
+        );
+
+        System.out.println(
+            "Customer: " + order.getCustomerId()
+        );
+    }
+}
+```
+
+### How does Schema Registry help?
+
+Kafka Producer
+
+Publishes Avro event
+
+Schema Registry
+
+Validates and manages schema versions
+
+Kafka Topic
+
+Stores serialized messages
+
+Kafka Consumer
+
+Deserializes using the schema version
+
+Interview point: I use Schema Registry to maintain schema compatibility, prevent breaking changes, and allow producers and consumers to evolve independently.
+
+One important detail: schema compatibility rules should be configured and enforced in Schema Registry. Adding a field with a default is a common backward-compatible Avro change, but the compatibility behavior also depends on the reader and writer schemas.
+
+# Final interview revision: All six questions
+
+| Question | Important concepts |
+| --- | --- |
+| Consumer lag | Offsets, throughput, scaling |
+| Partitions vs consumer groups | Parallelism, independent consumption |
+| Message failures | Retry, exponential backoff, DLT |
+| Exactly-once processing | Idempotence, transactions |
+| Pipeline monitoring | Prometheus, Grafana, Actuator |
+| Schema evolution | Avro, Schema Registry, compatibility |
+
+## Practical Kafka architecture to remember
+
+🚀 From Chaos to Kafka: How Event-Driven Systems Changed the Way We Move Data | by Arpit Srivastav | Medium
+
+[medium.com](<https://medium.com/%40arpitsrivastav15s/from-chaos-to-kafka-how-event-driven-systems-changed-the-way-we-move-data-2506ce71940d?utm_source=chatgpt.com>)
+
+In a real-world project, you can explain the complete flow like this:
+
+1. Order Service publishes events to Kafka.
+2. Kafka stores events across multiple partitions.
+3. Payment and Notification services consume events using independent consumer groups.
+4. Consumers process messages and update their respective databases.
+5. Retry mechanisms handle temporary failures.
+6. Dead Letter Topics store permanently failed messages.
+7. Schema Registry manages message compatibility.
+8. Prometheus and Grafana monitor pipeline performance.
+
+## My recommended interview preparation
+
+Make sure you can explain these three scenarios with code:
+
+- Scenario 1: Consumer crashes after processing a message. How do you avoid duplicate processing?
+- Scenario 2: Consumer lag increases from 1,000 to 100,000 messages. How do you troubleshoot and fix it?
+- Scenario 3: Producer changes the event schema, but older consumers are still running. How do you avoid breaking the application?
+
+These scenarios demonstrate practical Kafka knowledge beyond simply knowing the terminology.
+
+---
+
+Here are the three real-world Kafka interview scenarios with Java Spring Boot code examples, including what happens, how to troubleshoot, and how to implement the solution.
+
+# 1. Consumer crashes after processing a message. How do you avoid duplicate processing?
+
+### Interview answer
+
+Suppose a Kafka consumer receives an order event and successfully saves the order into the database. However, before committing the Kafka offset, the application crashes.
+
+When the consumer restarts, Kafka may deliver the same message again.
+
+To prevent duplicate business operations, I use:
+
+- Unique event IDs.
+- Idempotent consumer logic.
+- Database unique constraints.
+- Transactional database operations.
+- Manual offset acknowledgment after successful processing.
+
+### Step 1: Kafka message
+
+json
+
+```json
+{
+  "eventId": "EVT101",
+  "orderId": "ORD101",
+  "amount": 5000
+}
+```
+
+### Step 2: Database entity
+
+java
+
+```java
+@Entity
+@Table(
+    name = "processed_events",
+    uniqueConstraints = {
+        @UniqueConstraint(
+            name = "uk_event_id",
+            columnNames = "event_id"
+        )
+    }
+)
+public class ProcessedEvent {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(name = "event_id", nullable = false)
+    private String eventId;
+
+    // Getters and setters
+}
+```
+
+### Step 3: Repository
+
+java
+
+```java
+public interface ProcessedEventRepository
+        extends JpaRepository<ProcessedEvent, Long> {
+
+    boolean existsByEventId(String eventId);
+}
+```
+
+### Step 4: Service layer
+
+java
+
+```java
+@Service
+public class OrderService {
+
+    @Autowired
+    private ProcessedEventRepository repository;
+
+    @Autowired
+    private OrderRepository orderRepository;
+
+    @Transactional
+    public void processOrder(OrderEvent event) {
+
+        if (repository.existsByEventId(event.getEventId())) {
+            System.out.println("Duplicate event skipped");
+            return;
+        }
+
+        Order order = new Order();
+
+        order.setOrderId(event.getOrderId());
+        order.setAmount(event.getAmount());
+
+        orderRepository.save(order);
+
+        ProcessedEvent processed = new ProcessedEvent();
+        processed.setEventId(event.getEventId());
+
+        repository.save(processed);
+    }
+}
+```
+
+### Step 5: Kafka consumer
+
+java
+
+```java
+@Service
+public class OrderConsumer {
+
+    @Autowired
+    private OrderService orderService;
+
+    @KafkaListener(
+        topics = "order-topic",
+        groupId = "order-group"
+    )
+    public void consume(
+            OrderEvent event,
+            Acknowledgment acknowledgment) {
+
+        try {
+
+            orderService.processOrder(event);
+
+            // Acknowledge after database transaction completes
+            acknowledgment.acknowledge();
+
+        } catch (Exception e) {
+
+            System.out.println("Processing failed: " + e.getMessage());
+
+            throw e;
+        }
+    }
+}
+```
+
+Configuration:
+
+properties
+
+```properties
+spring.kafka.consumer.enable-auto-commit=false
+spring.kafka.listener.ack-mode=manual
+```
+
+Important: The service transaction must commit before the listener acknowledges the record. In Spring, a proxied transactional service call normally returns after its transaction commits. The database unique constraint is also essential because two concurrent deliveries can both pass the initial existence check.
+
+### Expected result
+
+| Delivery | Event ID | Result |
+| --- | --- | --- |
+| First | EVT101 | Order created |
+| Second | EVT101 | Duplicate skipped |
+| Third | EVT101 | Duplicate skipped |
+
+Interview conclusion: I use database-level idempotency because Kafka can redeliver messages when an application crashes before committing offsets. This ensures the business operation happens only once.
+
+# 2. Consumer lag increases from 1,000 to 100,000 messages. How do you troubleshoot and fix it?
+
+### Interview answer
+
+Consumer lag means the difference between the latest available Kafka offset and the consumer group's committed offset.
+
+If lag increases continuously, it indicates that messages are arriving faster than consumers can process them.
+
+I follow these steps:
+
+1. Check consumer lag using Kafka CLI.
+2. Check producer throughput versus consumer throughput.
+3. Identify slow database queries or external API calls.
+4. Check the number of topic partitions.
+5. Increase consumer instances if sufficient partitions exist.
+6. Optimize processing and use batch consumption where appropriate.
+7. Monitor performance after scaling.
+
+### Step 1: Check consumer lag
+
+Execute:
+
+bash
+
+```bash
+kafka-consumer-groups.sh \
+  --bootstrap-server localhost:9092 \
+  --group order-group \
+  --describe
+```
+
+Example:
+
+text
+
+```text
+GROUP        TOPIC        PARTITION  CURRENT-OFFSET  LOG-END-OFFSET  LAG
+order-group  order-topic  0          10000           50000           40000
+order-group  order-topic  1          15000           45000           30000
+order-group  order-topic  2          20000           50000           30000
+```
+
+Total lag = 100,000 messages.
+
+### Step 2: Increase consumer concurrency
+
+Spring Boot allows concurrent Kafka listeners.
+
+java
+
+```java
+@Service
+public class OrderConsumer {
+
+    @KafkaListener(
+        topics = "order-topic",
+        groupId = "order-group",
+        concurrency = "3"
+    )
+    public void consume(OrderEvent event) {
+
+        orderService.processOrder(event);
+    }
+
+    @Autowired
+    private OrderService orderService;
+}
+```
+
+If you increase concurrency to 6:
+
+java
+
+```java
+@KafkaListener(
+    topics = "order-topic",
+    groupId = "order-group",
+    concurrency = "6"
+)
+```
+
+You can have up to six active consumer instances, provided there are enough partitions.
+
+### Step 3: Optimize consumer configuration
+
+properties
+
+```properties
+spring.kafka.consumer.max-poll-records=200
+
+spring.kafka.consumer.fetch-min-size=1024
+
+spring.kafka.consumer.enable-auto-commit=false
+
+spring.kafka.listener.ack-mode=manual
+```
+
+These configurations help tune consumption. Actual performance should be measured because larger batches can increase memory use and processing time.
+
+### Step 4: Optimize processing logic
+
+A common problem is slow database operations.
+
+Instead of processing records with inefficient individual queries, consider batch database operations where appropriate.
+
+Example:
+
+java
+
+```java
+@Service
+public class OrderService {
+
+    @Autowired
+    private OrderRepository repository;
+
+    @Transactional
+    public void processOrders(List<OrderEvent> events) {
+
+        List<Order> orders = events.stream()
+            .map(event -> {
+                Order order = new Order();
+                order.setOrderId(event.getOrderId());
+                order.setAmount(event.getAmount());
+                return order;
+            })
+            .toList();
+
+        repository.saveAll(orders);
+    }
+}
+```
+
+You can configure a batch listener to receive multiple records:
+
+java
+
+```java
+@KafkaListener(
+    topics = "order-topic",
+    groupId = "order-group",
+    batch = "true"
+)
+public void consumeBatch(List<OrderEvent> events) {
+
+    orderService.processOrders(events);
+}
+```
+
+Configure the listener factory for batch mode and implement batch acknowledgment/error handling appropriately.
+
+### Step 5: Monitor performance
+
+Monitor:
+
+- Consumer lag.
+- Processing time per message.
+- Database response time.
+- Number of active consumers.
+- Partition distribution.
+- Failed messages.
+
+Interview conclusion:
+
+"If consumer lag increases from 1,000 to 100,000, I first identify the bottleneck rather than immediately increasing consumers. If processing capacity is insufficient, I optimize business logic, database operations, and consumer concurrency. If the number of partitions is limiting parallelism, I evaluate increasing partitions while considering ordering requirements."
+
+# 3. Producer changes the event schema, but older consumers are still running. How do you avoid breaking the application?
+
+### Interview answer
+
+This situation is called schema evolution.
+
+For example, initially the producer sends:
+
+Version 1
+
+json
+
+```json
+{
+  "orderId": "ORD101",
+  "amount": 5000
+}
+```
+
+Later, the producer adds a new field:
+
+Version 2
+
+json
+
+```json
+{
+  "orderId": "ORD101",
+  "amount": 5000,
+  "customerId": "C101"
+}
+```
+
+Older consumers may not expect the new field.
+
+I handle this using:
+
+- Schema Registry.
+- Avro or Protobuf serialization.
+- Backward compatibility.
+- Default values for new fields.
+- Gradual producer and consumer deployment.
+
+### Step 1: Define the old Avro schema
+
+`order-v1.avsc`
+
+json
+
+```json
+{
+  "type": "record",
+  "name": "Order",
+  "namespace": "com.example",
+  "fields": [
+    {
+      "name": "orderId",
+      "type": "string"
+    },
+    {
+      "name": "amount",
+      "type": "double"
+    }
+  ]
+}
+```
+
+### Step 2: Create the new schema
+
+`order-v2.avsc`
+
+json
+
+```json
+{
+  "type": "record",
+  "name": "Order",
+  "namespace": "com.example",
+  "fields": [
+    {
+      "name": "orderId",
+      "type": "string"
+    },
+    {
+      "name": "amount",
+      "type": "double"
+    },
+    {
+      "name": "customerId",
+      "type": ["null", "string"],
+      "default": null
+    }
+  ]
+}
+```
+
+Notice that `customerId` has a default value.
+
+This allows a new consumer to read old messages without the new field, assuming the schemas are compatible.
+
+### Step 3: Configure Schema Registry
+
+Maven dependency:
+
+xml
+
+```xml
+<dependency>
+    <groupId>io.confluent</groupId>
+    <artifactId>kafka-avro-serializer</artifactId>
+    <version>${confluent.version}</version>
+</dependency>
+```
+
+Producer configuration:
+
+properties
+
+```properties
+spring.kafka.producer.value-serializer=io.confluent.kafka.serializers.KafkaAvroSerializer
+
+spring.kafka.producer.properties.schema.registry.url=http://localhost:8081
+```
+
+Consumer configuration:
+
+properties
+
+```properties
+spring.kafka.consumer.value-deserializer=io.confluent.kafka.serializers.KafkaAvroDeserializer
+
+spring.kafka.consumer.properties.schema.registry.url=http://localhost:8081
+
+spring.kafka.consumer.properties.specific.avro.reader=true
+```
+
+### Step 4: Java producer
+
+java
+
+```java
+@Service
+public class OrderProducer {
+
+    @Autowired
+    private KafkaTemplate<String, Order> kafkaTemplate;
+
+    public void publishOrder() {
+
+        Order order = Order.newBuilder()
+            .setOrderId("ORD101")
+            .setAmount(5000)
+            .setCustomerId("C101")
+            .build();
+
+        kafkaTemplate.send(
+            "order-topic",
+            order.getOrderId(),
+            order
+        );
+    }
+}
+```
+
+### Step 5: Java consumer
+
+java
+
+```java
+@Service
+public class OrderConsumer {
+
+    @KafkaListener(
+        topics = "order-topic",
+        groupId = "order-group"
+    )
+    public void consume(Order order) {
+
+        System.out.println(order.getOrderId());
+
+        System.out.println(order.getAmount());
+
+        System.out.println(order.getCustomerId());
+    }
+}
+```
+
+### How I deploy schema changes safely
+
+1. Define the new schema and validate compatibility.
+2. Deploy consumers that support both old and new messages.
+3. Deploy the updated producer.
+4. Monitor serialization and deserialization errors.
+5. Remove old compatibility logic only after all older data and consumers are accounted for.
+
+Interview conclusion:
+
+"I use Schema Registry with Avro and backward-compatible schema changes. I add new fields with defaults and avoid removing or changing existing fields in ways that break old consumers. This allows independent deployments of producers and consumers."
+
+# Quick interview revision
+
+| Scenario | Solution |
+| --- | --- |
+| Consumer crashes | Idempotent consumer and manual offset management |
+| Consumer lag increases | Optimize processing and scale consumers |
+| Producer changes schema | Schema Registry and compatibility |
+| Duplicate messages | Unique event ID and database constraint |
+| Temporary processing failure | Retry with backoff |
+| Permanent processing failure | Dead Letter Topic |
+
+## Test your interview knowledge
+
+1. Consumer lag increases continuously. What should you check first?
+
+Immediately delete Kafka messages
+
+Check producer and consumer throughput and processing bottlenecks
+
+Disable all partitions
+
+2. How do you prevent duplicate order creation?
+
+Use a unique event ID and database transaction
+
+Increase heartbeat interval
+
+Increase topic retention
+
+3. What is the purpose of an Avro default value?
+
+Increase consumer concurrency
+
+Support compatible schema evolution
+
+Commit Kafka offsets
+
+ Submit answers
+
+My recommendation: For a Java Kafka developer interview, practice explaining these three scenarios by drawing the architecture and writing the consumer code. Interviewers often want to understand how you handle failures, duplicate processing, scaling, and backward compatibility in an actual production application.
+
+---
+# Apache Kafka properties and their usage – Complete interview guide
+
+Apache Kafka has many configuration properties, but as a Java Spring Boot developer, you should understand four major categories:
+
+1. Producer properties – Control how messages are published to Kafka.
+2. Consumer properties – Control how messages are consumed.
+3. Broker properties – Control Kafka server behavior.
+4. Topic properties – Control partitioning, replication, retention, and storage.
+
+There are also important Spring Boot and Spring Kafka listener properties.
+
+I'll explain the commonly used properties with their purpose, practical values, Java configuration, and interview scenarios.
+
+Note: This is a practical reference of commonly used and important properties, not literally every configuration exposed by every Kafka release. Defaults and availability can vary by Kafka version.
+
+## 1. Kafka producer properties
+
+Producer properties control how messages are sent from applications to Kafka brokers.
+
+### A. Connection and serialization properties
+
+| Property | Purpose | Example |
+| --- | --- | --- |
+| `bootstrap.servers` | Kafka broker addresses | `localhost:9092` |
+| `key.serializer` | Serializes message key | `StringSerializer` |
+| `value.serializer` | Serializes message value | `StringSerializer` |
+| `client.id` | Identifies the producer | `order-producer` |
+| `security.protocol` | Communication security protocol | `SASL_SSL` |
+
+Example:
+
+properties
+
+```properties
+bootstrap.servers=localhost:9092
+
+key.serializer=org.apache.kafka.common.serialization.StringSerializer
+
+value.serializer=org.apache.kafka.common.serialization.StringSerializer
+
+client.id=order-producer
+```
+
+### B. Reliability and acknowledgment properties
+
+These are particularly important for interviews.
+
+| Property | Purpose | Recommended example |
+| --- | --- | --- |
+| `acks` | Controls broker acknowledgment | `all` |
+| `enable.idempotence` | Prevents duplicate writes caused by producer retries | `true` |
+| `retries` | Number of send retries | High/default managed |
+| `delivery.timeout.ms` | Maximum time allowed for delivery | `120000` |
+| `request.timeout.ms` | Request acknowledgment timeout | `30000` |
+| `max.in.flight.requests.per.connection` | Maximum unacknowledged requests | `5` |
+
+1. acks
+
+Controls how many acknowledgments the producer waits for.
+
+- `acks=0`: Producer does not wait for acknowledgment.
+- `acks=1`: Leader broker acknowledges the message.
+- `acks=all`: All current in-sync replicas acknowledge the message.
+
+2. enable.idempotence
+
+properties
+
+```properties
+enable.idempotence=true
+```
+
+Prevents duplicate Kafka log entries caused by retries within the producer's supported idempotence mechanism.
+
+3. retries
+
+properties
+
+```properties
+retries=2147483647
+```
+
+Allows retries for retriable errors. Actual delivery remains bounded by `delivery.timeout.ms`.
+
+4. delivery.timeout.ms
+
+properties
+
+```properties
+delivery.timeout.ms=120000
+```
+
+Maximum time for a record to be successfully acknowledged, including batching and request waiting.
+
+### C. Performance and batching properties
+
+| Property | Purpose | Example |
+| --- | --- | --- |
+| `batch.size` | Maximum batch size in bytes | `16384` |
+| `linger.ms` | Time to wait for additional messages | `5` |
+| `buffer.memory` | Total producer buffer memory | `33554432` |
+| `compression.type` | Message compression | `lz4` |
+| `max.block.ms` | Maximum blocking time for send/buffer allocation | `60000` |
+| `max.request.size` | Maximum request size | `1048576` |
+
+Example:
+
+properties
+
+```properties
+batch.size=32768
+linger.ms=10
+buffer.memory=67108864
+compression.type=lz4
+```
+
+Explanation:
+
+- `batch.size`: Larger batches can improve throughput.
+- `linger.ms`: Gives the producer time to collect more records.
+- `buffer.memory`: Controls memory available for buffering.
+- `compression.type`: Reduces network and storage usage.
+
+### D. Message delivery and partition properties
+
+| Property | Purpose |
+| --- | --- |
+| `partitioner.class` | Controls partition selection |
+| `key.serializer` | Serializes partitioning key |
+| `interceptor.classes` | Configures producer interceptors |
+| `transactional.id` | Identifies a transactional producer |
+| `transaction.timeout.ms` | Maximum transaction duration |
+
+Example:
+
+properties
+
+```properties
+transactional.id=order-producer-tx
+enable.idempotence=true
+```
+
+`transactional.id` enables transactional producer behavior when configured appropriately.
+
+## 2. Kafka consumer properties
+
+Consumer properties control how messages are retrieved and processed.
+
+### A. Connection and deserialization properties
+
+| Property | Purpose | Example |
+| --- | --- | --- |
+| `bootstrap.servers` | Broker addresses | `localhost:9092` |
+| `group.id` | Consumer group identity | `order-group` |
+| `key.deserializer` | Converts key bytes into Java objects | `StringDeserializer` |
+| `value.deserializer` | Converts value bytes into Java objects | `StringDeserializer` |
+| `client.id` | Identifies consumer | `order-consumer` |
+| `group.instance.id` | Static consumer membership identity | `consumer-1` |
+
+Example:
+
+properties
+
+```properties
+bootstrap.servers=localhost:9092
+
+group.id=order-group
+
+key.deserializer=org.apache.kafka.common.serialization.StringDeserializer
+
+value.deserializer=org.apache.kafka.common.serialization.StringDeserializer
+```
+
+### B. Offset management properties
+
+These are among the most important Kafka interview topics.
+
+| Property | Purpose | Example |
+| --- | --- | --- |
+| `enable.auto.commit` | Enables automatic offset commits | `false` |
+| `auto.commit.interval.ms` | Automatic commit interval | `5000` |
+| `auto.offset.reset` | Starting position when no valid offset exists | `earliest` |
+| `isolation.level` | Controls visibility of transactional messages | `read_committed` |
+
+1. enable.auto.commit
+
+properties
+
+```properties
+enable.auto.commit=false
+```
+
+Disables automatic offset commits, allowing application-controlled acknowledgment.
+
+2. auto.offset.reset
+
+properties
+
+```properties
+auto.offset.reset=earliest
+```
+
+Controls where consumption starts when the group has no valid committed offset.
+
+| Value | Meaning |
+| --- | --- |
+| `earliest` | Start from the earliest retained offset |
+| `latest` | Start from the latest offset |
+| `none` | Throw an exception if no valid offset exists |
+
+Important: It does not reset an existing valid committed offset.
+
+3. isolation.level
+
+properties
+
+```properties
+isolation.level=read_committed
+```
+
+- `read_uncommitted`: Can read transactional and non-transactional records, including aborted transactional records.
+- `read_committed`: Reads only committed transactional records, along with eligible non-transactional records.
+
+### C. Consumer polling properties
+
+| Property | Purpose | Example |
+| --- | --- | --- |
+| `max.poll.records` | Maximum records returned by one poll | `500` |
+| `max.poll.interval.ms` | Maximum interval between poll calls | `300000` |
+| `fetch.min.bytes` | Minimum amount of data requested per fetch | `1` |
+| `fetch.max.bytes` | Maximum data returned in a fetch request | `52428800` |
+| `max.partition.fetch.bytes` | Maximum fetch size per partition | `1048576` |
+| `fetch.max.wait.ms` | Maximum wait for fetch data | `500` |
+
+Example:
+
+properties
+
+```properties
+max.poll.records=100
+max.poll.interval.ms=300000
+fetch.min.bytes=1024
+fetch.max.wait.ms=500
+```
+
+Use these properties to balance throughput, latency, and memory consumption.
+
+### D. Heartbeat and consumer failure detection properties
+
+| Property | Purpose | Example |
+| --- | --- | --- |
+| `heartbeat.interval.ms` | Frequency of heartbeats | `3000` |
+| `session.timeout.ms` | Time without heartbeat before failure detection | `10000` |
+| `max.poll.interval.ms` | Maximum time between poll calls | `300000` |
+| `group.instance.id` | Static membership | `order-consumer-1` |
+
+Example:
+
+properties
+
+```properties
+heartbeat.interval.ms=3000
+
+session.timeout.ms=10000
+
+max.poll.interval.ms=300000
+```
+
+Remember:
+
+- Heartbeats detect consumer liveness.
+- Session timeout determines when a missing consumer is considered unavailable.
+- Poll interval detects consumers that fail to continue polling.
+
+### E. Partition assignment properties
+
+| Property | Purpose |
+| --- | --- |
+| `partition.assignment.strategy` | Controls partition assignment |
+| `group.protocol` | Selects the consumer group protocol where supported |
+| `group.remote.assignor` | Configures remote assignment strategy for the applicable group protocol |
+
+Common assignment strategies include:
+
+- `RangeAssignor`
+- `RoundRobinAssignor`
+- `StickyAssignor`
+- `CooperativeStickyAssignor`
+
+Example:
+
+properties
+
+```properties
+partition.assignment.strategy=org.apache.kafka.clients.consumer.CooperativeStickyAssignor
+```
+
+Cooperative assignment can reduce unnecessary partition movement during rebalancing.
+
+## 3. Kafka broker properties
+
+Broker properties are configured on the Kafka server, usually in `server.properties`.
+
+They control how Kafka stores messages, handles replication, manages network connections, and recovers from failures.
+
+### A. Broker identification and networking
+
+| Property | Purpose | Example |
+| --- | --- | --- |
+| `broker.id` | Unique broker identifier in older ZooKeeper-based clusters | `1` |
+| `node.id` | Unique node identifier in KRaft clusters | `1` |
+| `listeners` | Network endpoints where broker listens | `PLAINTEXT://:9092` |
+| `advertised.listeners` | Addresses clients use to reach broker | `PLAINTEXT://localhost:9092` |
+| `log.dirs` | Kafka log storage directories | `/tmp/kafka-logs` |
+| `num.network.threads` | Network request handling threads | `3` |
+| `num.io.threads` | Disk I/O request threads | `8` |
+| `socket.send.buffer.bytes` | TCP send buffer size | `102400` |
+| `socket.receive.buffer.bytes` | TCP receive buffer size | `102400` |
+| `socket.request.max.bytes` | Maximum request size | `104857600` |
+
+Example:
+
+properties
+
+```properties
+node.id=1
+
+listeners=PLAINTEXT://:9092
+
+advertised.listeners=PLAINTEXT://localhost:9092
+
+log.dirs=/var/lib/kafka/data
+
+num.network.threads=3
+
+num.io.threads=8
+```
+
+Note: `node.id` is used in KRaft mode. Older ZooKeeper-based deployments use `broker.id`.
+
+### B. Replication and fault tolerance
+
+| Property | Purpose | Example |
+| --- | --- | --- |
+| `default.replication.factor` | Default replication factor for automatically created topics | `3` |
+| `min.insync.replicas` | Minimum in-sync replicas required for successful writes with `acks=all` | `2` |
+| `unclean.leader.election.enable` | Allows an out-of-sync replica to become leader | `false` |
+| `replica.lag.time.max.ms` | Time used to determine replica lag | `30000` |
+| `offsets.topic.replication.factor` | Replication factor for consumer offset topic | `3` |
+| `transaction.state.log.replication.factor` | Replication factor for transaction state topic | `3` |
+| `transaction.state.log.min.isr` | Minimum ISR for transaction state log | `2` |
+
+Example production configuration:
+
+properties
+
+```properties
+default.replication.factor=3
+
+min.insync.replicas=2
+
+unclean.leader.election.enable=false
+
+offsets.topic.replication.factor=3
+
+transaction.state.log.replication.factor=3
+
+transaction.state.log.min.isr=2
+```
+
+Interview scenario:
+
+Suppose a topic has three replicas:
+
+- Broker 1: Leader
+- Broker 2: Follower
+- Broker 3: Follower
+
+If the leader fails, Kafka can elect an eligible in-sync replica as the new leader.
+
+With `min.insync.replicas=2` and producer `acks=all`, Kafka requires at least two in-sync replicas for the write to succeed.
+
+### C. Storage and retention properties
+
+| Property | Purpose | Example |
+| --- | --- | --- |
+| `log.retention.hours` | Default log retention duration | `168` |
+| `log.retention.bytes` | Maximum retained log size per partition | `1073741824` |
+| `log.segment.bytes` | Maximum log segment size | `1073741824` |
+| `log.segment.ms` | Maximum segment age before rolling | `604800000` |
+| `log.cleanup.policy` | Log cleanup strategy | `delete` |
+| `log.retention.check.interval.ms` | Frequency of retention checks | `300000` |
+| `log.dirs` | Data storage location | `/var/lib/kafka/data` |
+
+For example:
+
+properties
+
+```properties
+log.retention.hours=168
+
+log.segment.bytes=1073741824
+
+log.retention.check.interval.ms=300000
+```
+
+`168` hours means seven days.
+
+### D. Performance and resource properties
+
+| Property | Purpose |
+| --- | --- |
+| `num.partitions` | Default partition count for automatically created topics |
+| `num.replica.fetchers` | Number of threads used to replicate data |
+| `queued.max.requests` | Maximum queued requests before network threads block |
+| `background.threads` | Background processing threads |
+| `compression.type` | Broker-side compression configuration where applicable |
+| `message.max.bytes` | Maximum record batch size accepted by the broker |
+
+## 4. Kafka topic properties
+
+Topic properties control how individual topics store and manage messages.
+
+These are configured when creating or altering topics.
+
+| Property | Purpose | Example |
+| --- | --- | --- |
+| `partitions` | Number of topic partitions | `3` |
+| `replication.factor` | Number of replicas | `3` |
+| `retention.ms` | Message retention time | `604800000` |
+| `retention.bytes` | Maximum retained size per partition | `1073741824` |
+| `cleanup.policy` | Retention or compaction strategy | `delete` |
+| `min.insync.replicas` | Minimum ISR for `acks=all` writes | `2` |
+| `segment.bytes` | Segment size | `1073741824` |
+| `max.message.bytes` | Maximum record batch size | `1000000` |
+| `delete.retention.ms` | Tombstone retention in compacted topics | `86400000` |
+
+### A. cleanup.policy
+
+Two important options:
+
+1. delete
+
+Kafka deletes old log segments according to retention policies.
+
+properties
+
+```properties
+cleanup.policy=delete
+```
+
+Use cases:
+
+- Application logs.
+- Transaction events.
+- Temporary event streams.
+
+2. compact
+
+Kafka retains the latest value for each key, subject to compaction.
+
+properties
+
+```properties
+cleanup.policy=compact
+```
+
+Use cases:
+
+- Customer profile updates.
+- Product configuration.
+- Latest account state.
+
+### B. Create a topic using CLI
+
+bash
+
+```bash
+kafka-topics.sh \
+  --bootstrap-server localhost:9092 \
+  --create \
+  --topic order-topic \
+  --partitions 3 \
+  --replication-factor 3 \
+  --config retention.ms=604800000 \
+  --config min.insync.replicas=2
+```
+
+Describe the topic:
+
+bash
+
+```bash
+kafka-topics.sh \
+  --bootstrap-server localhost:9092 \
+  --describe \
+  --topic order-topic
+```
+
+Interview point: Partitions control parallelism, replication controls fault tolerance, and retention controls how long Kafka keeps messages.
+
+## 5. Spring Boot Kafka properties
+
+In a Spring Boot application, you generally configure Kafka using `application.properties` or `application.yml`.
+
+Spring Boot maps these settings to the underlying Kafka client configuration.
+
+### A. Producer Spring Boot properties
+
+| Spring Boot property | Purpose |
+| --- | --- |
+| `spring.kafka.producer.bootstrap-servers` | Broker addresses |
+| `spring.kafka.producer.key-serializer` | Key serialization |
+| `spring.kafka.producer.value-serializer` | Value serialization |
+| `spring.kafka.producer.acks` | Acknowledgment level |
+| `spring.kafka.producer.retries` | Retry count |
+| `spring.kafka.producer.batch-size` | Batch size |
+| `spring.kafka.producer.buffer-memory` | Producer buffer memory |
+| `spring.kafka.producer.compression-type` | Compression algorithm |
+| `spring.kafka.producer.transaction-id-prefix` | Transactional producer prefix |
+
+### B. Consumer Spring Boot properties
+
+| Spring Boot property | Purpose |
+| --- | --- |
+| `spring.kafka.consumer.bootstrap-servers` | Broker addresses |
+| `spring.kafka.consumer.group-id` | Consumer group |
+| `spring.kafka.consumer.key-deserializer` | Key deserialization |
+| `spring.kafka.consumer.value-deserializer` | Value deserialization |
+| `spring.kafka.consumer.enable-auto-commit` | Automatic offset commit |
+| `spring.kafka.consumer.auto-offset-reset` | Initial offset behavior |
+| `spring.kafka.consumer.max-poll-records` | Records per poll |
+| `spring.kafka.consumer.properties.max.poll.interval.ms` | Maximum interval between polls |
+| `spring.kafka.consumer.properties.session.timeout.ms` | Session timeout |
+| `spring.kafka.listener.ack-mode` | Listener acknowledgment mode |
+| `spring.kafka.listener.concurrency` | Listener concurrency |
+
+### C. Complete Spring Boot application.properties example
+
+This is a useful starting configuration for an order-processing application.
+
+properties
+
+```properties
+# ==================================
+# KAFKA CONNECTION
+# ==================================
+
+spring.kafka.bootstrap-servers=localhost:9092
+
+# ==================================
+# PRODUCER CONFIGURATION
+# ==================================
+
+spring.kafka.producer.key-serializer=org.apache.kafka.common.serialization.StringSerializer
+
+spring.kafka.producer.value-serializer=org.springframework.kafka.support.serializer.JsonSerializer
+
+spring.kafka.producer.acks=all
+
+spring.kafka.producer.retries=10
+
+spring.kafka.producer.batch-size=32768
+
+spring.kafka.producer.buffer-memory=67108864
+
+spring.kafka.producer.compression-type=lz4
+
+spring.kafka.producer.properties.enable.idempotence=true
+
+# ==================================
+# CONSUMER CONFIGURATION
+# ==================================
+
+spring.kafka.consumer.group-id=order-group
+
+spring.kafka.consumer.key-deserializer=org.apache.kafka.common.serialization.StringDeserializer
+
+spring.kafka.consumer.value-deserializer=org.springframework.kafka.support.serializer.JsonDeserializer
+
+spring.kafka.consumer.auto-offset-reset=earliest
+
+spring.kafka.consumer.enable-auto-commit=false
+
+spring.kafka.consumer.max-poll-records=100
+
+spring.kafka.consumer.properties.spring.json.trusted.packages=com.example.dto
+
+spring.kafka.consumer.properties.max.poll.interval.ms=300000
+
+spring.kafka.consumer.properties.session.timeout.ms=10000
+
+spring.kafka.consumer.properties.heartbeat.interval.ms=3000
+
+# ==================================
+# LISTENER CONFIGURATION
+# ==================================
+
+spring.kafka.listener.ack-mode=manual
+
+spring.kafka.listener.concurrency=3
+```
+
+Interview tip You should be able to explain why `acks=all`, `enable.idempotence=true`, and `enable-auto-commit=false` are commonly combined in reliability-focused applications.
+
+## 6. Kafka security properties
+
+These properties help secure communication between Kafka clients and brokers.
+
+### A. Security protocol
+
+| Property | Purpose |
+| --- | --- |
+| `security.protocol` | Defines communication security |
+| `ssl.truststore.location` | Location of trusted certificates |
+| `ssl.truststore.password` | Truststore password |
+| `ssl.keystore.location` | Client certificate location |
+| `ssl.keystore.password` | Keystore password |
+| `sasl.mechanism` | Authentication mechanism |
+| `sasl.jaas.config` | Authentication credentials/configuration |
+
+Common security protocols:
+
+| Protocol | Description |
+| --- | --- |
+| `PLAINTEXT` | No encryption or authentication |
+| `SSL` | TLS encryption |
+| `SASL_PLAINTEXT` | SASL authentication without TLS |
+| `SASL_SSL` | SASL authentication with TLS |
+
+Example:
+
+properties
+
+```properties
+spring.kafka.properties.security.protocol=SASL_SSL
+
+spring.kafka.properties.sasl.mechanism=PLAIN
+
+spring.kafka.properties.sasl.jaas.config=org.apache.kafka.common.security.plain.PlainLoginModule required username="user" password="password";
+```
+
+For production, keep credentials in a secrets manager or environment variables rather than committing them to configuration files.
+
+## 7. Spring Kafka listener properties
+
+These are especially useful when implementing consumers using `@KafkaListener`.
+
+| Property / annotation | Purpose |
+| --- | --- |
+| `concurrency` | Number of listener consumer threads |
+| `ack-mode` | Offset acknowledgment strategy |
+| `poll-timeout` | Listener polling timeout |
+| `batch` | Enable batch message consumption |
+| `auto-startup` | Automatically start listener |
+| `client-id-prefix` | Listener client identifier prefix |
+| `missing-topics-fatal` | Fail startup when configured topics are missing |
+| `idle-event-interval` | Frequency of idle consumer events |
+| `@KafkaListener` | Declares a Kafka listener |
+| `@RetryableTopic` | Configures non-blocking retry topics |
+
+### Example: Listener concurrency
+
+java
+
+```java
+@KafkaListener(
+    topics = "order-topic",
+    groupId = "order-group",
+    concurrency = "3"
+)
+public void consume(String message) {
+
+    System.out.println("Received: " + message);
+}
+```
+
+This creates three consumer instances for the listener container.
+
+If the topic has three partitions, each can consume one partition.
+
+### Example: Batch listener
+
+java
+
+```java
+@KafkaListener(
+    topics = "order-topic",
+    groupId = "order-group",
+    batch = "true"
+)
+public void consumeBatch(List<String> messages) {
+
+    for (String message : messages) {
+        System.out.println(message);
+    }
+}
+```
+
+### Example: Retryable topic
+
+java
+
+```java
+@RetryableTopic(
+    attempts = "4",
+    backoff = @Backoff(
+        delay = 1000,
+        multiplier = 2
+    ),
+    dltTopicSuffix = ".DLT"
+)
+@KafkaListener(
+    topics = "order-topic",
+    groupId = "order-group"
+)
+public void consume(OrderEvent event) {
+
+    orderService.processOrder(event);
+}
+```
+
+This configures retry topics and a dead-letter topic. It is an alternative to the blocking `DefaultErrorHandler` approach discussed earlier; don't configure both approaches blindly for the same failure flow.
+
+## 8. Kafka Streams properties
+
+Kafka Streams is used for real-time stream processing, filtering, aggregation, joins, and transformations.
+
+| Property | Purpose |
+| --- | --- |
+| `application.id` | Unique Kafka Streams application identity |
+| `bootstrap.servers` | Kafka broker addresses |
+| `processing.guarantee` | Processing guarantee |
+| `commit.interval.ms` | Commit interval |
+| `num.stream.threads` | Number of stream-processing threads |
+| `state.dir` | Local state storage directory |
+| `replication.factor` | Replication for internal topics |
+| `default.key.serde` | Default key serializer/deserializer |
+| `default.value.serde` | Default value serializer/deserializer |
+
+Example:
+
+properties
+
+```properties
+spring.kafka.streams.application-id=order-stream-app
+
+spring.kafka.streams.bootstrap-servers=localhost:9092
+
+spring.kafka.streams.properties.processing.guarantee=exactly_once_v2
+
+spring.kafka.streams.properties.num.stream.threads=3
+```
+
+### Java example
+
+java
+
+```java
+@Bean
+public KStream<String, OrderEvent> orderStream(
+        StreamsBuilder builder) {
+
+    KStream<String, OrderEvent> stream =
+        builder.stream("order-topic");
+
+    stream.filter(
+        (key, order) -> order.getAmount() > 1000
+    )
+    .to("high-value-orders");
+
+    return stream;
+}
+```
+
+This reads order events and sends orders with amounts greater than 1,000 to another Kafka topic.
+
+# 9. Important Kafka properties – Quick revision sheet
+
+These are the properties I recommend memorizing for interviews.
+
+## Top 20 Kafka properties
+
+Most useful for Java Kafka developer interviews
+
+| Property | Main purpose |
+| --- | --- |
+| `bootstrap.servers` | Broker connection |
+| `acks` | Producer acknowledgment |
+| `enable.idempotence` | Producer deduplication |
+| `retries` | Retry failed sends |
+| `batch.size` | Producer batching |
+| `linger.ms` | Batching delay |
+| `compression.type` | Message compression |
+| `buffer.memory` | Producer buffering |
+| `group.id` | Consumer group |
+| `enable.auto.commit` | Offset commits |
+| `auto.offset.reset` | Initial offset selection |
+| `max.poll.records` | Records per poll |
+| `max.poll.interval.ms` | Polling timeout |
+| `session.timeout.ms` | Consumer failure detection |
+| `heartbeat.interval.ms` | Consumer heartbeats |
+| `fetch.min.bytes` | Minimum fetch data |
+| `isolation.level` | Transaction visibility |
+| `replication.factor` | Data replication |
+| `min.insync.replicas` | Minimum ISR |
+| `retention.ms` | Message retention |
+
+# 10. Real-world production configuration example
+
+For an order-processing application, this is a reasonable starting point for the client-side reliability configuration.
+
+Example configurationproperties
+
+```properties
+# =================================
+# KAFKA CONNECTION
+# =================================
+
+spring.kafka.bootstrap-servers=broker1:9092,broker2:9092,broker3:9092
+
+# =================================
+# PRODUCER
+# =================================
+
+spring.kafka.producer.acks=all
+
+spring.kafka.producer.properties.enable.idempotence=true
+
+spring.kafka.producer.compression-type=lz4
+
+spring.kafka.producer.batch-size=32768
+
+spring.kafka.producer.properties.delivery.timeout.ms=120000
+
+# =================================
+# CONSUMER
+# =================================
+
+spring.kafka.consumer.group-id=order-group
+
+spring.kafka.consumer.enable-auto-commit=false
+
+spring.kafka.consumer.auto-offset-reset=earliest
+
+spring.kafka.consumer.max-poll-records=100
+
+spring.kafka.consumer.properties.max.poll.interval.ms=300000
+
+spring.kafka.consumer.properties.session.timeout.ms=10000
+
+spring.kafka.consumer.properties.heartbeat.interval.ms=3000
+
+# =================================
+# TRANSACTION VISIBILITY
+# =================================
+
+spring.kafka.consumer.properties.isolation.level=read_committed
+
+# =================================
+# LISTENER
+# =================================
+
+spring.kafka.listener.ack-mode=manual
+
+spring.kafka.listener.concurrency=3
+```
+
+Important production notes:
+
+- The three broker addresses provide bootstrap redundancy, not a guarantee of cluster availability.
+- `acks=all` should be paired with an appropriate replication factor and `min.insync.replicas`.
+- Use `read_committed` when consumers should not see aborted transactional records.
+- Configure retries and DLT handling separately.
+- For a transactional consume-process-produce workflow, use Kafka transaction management rather than assuming manual acknowledgment alone provides exactly-once processing.
+- Tune batch size, concurrency, and polling values using actual workload measurements.
+
+# 11. Official Kafka documentation
+
+For the complete version-specific property lists, use these references:
+
+- [Apache Kafka 4.4 – Complete configuration reference](<https://kafka.apache.org/44/configuration/?utm_source=chatgpt.com>)
+- [Kafka producer configuration](<https://kafka.apache.org/44/configuration/producer-configs/?utm_source=chatgpt.com>)
+- [Kafka consumer configuration](<https://kafka.apache.org/44/configuration/consumer-configs/?utm_source=chatgpt.com>)
+- [Kafka broker configuration](<https://kafka.apache.org/44/configuration/broker-configs/?utm_source=chatgpt.com>)
+- [Kafka topic configuration](<https://kafka.apache.org/44/configuration/topic-configs/?utm_source=chatgpt.com>)
+- [Spring Kafka documentation](<https://docs.spring.io/spring-kafka/reference/?utm_source=chatgpt.com>)
+
+## 12. Test your Kafka property knowledge
+
+Kafka properties quiz
+
+0/5 answered
+
+1. Which property prevents duplicate writes caused by producer retries?
+
+enable.auto.commit
+
+enable.idempotence
+
+auto.offset.reset
+
+2. Which property controls the maximum interval between consumer poll calls?
+
+session.timeout.ms
+
+heartbeat.interval.ms
+
+max.poll.interval.ms
+
+3. What does acks=all mean?
+
+No acknowledgment
+
+Leader acknowledgment only
+
+Acknowledgment from all current in-sync replicas
+
+4. Which topic cleanup policy keeps the latest value for each key, subject to compaction?
+
+delete
+
+compact
+
+earliest
+
+5. Which property controls how many records are returned by a consumer poll?
+
+max.poll.records
+
+batch.size
+
+retention.ms
+
+ Check my answers
+
+My recommendation for interview preparation: Focus especially on `acks`, `enable.idempotence`, `retries`, `linger.ms`, `batch.size`, `enable.auto.commit`, `auto.offset.reset`, `max.poll.records`, `max.poll.interval.ms`, `session.timeout.ms`, `heartbeat.interval.ms`, `replication.factor`, and `min.insync.replicas`.
+
+If you understand these 15 properties with real-world examples, you will be able to answer most practical Kafka configuration questions in Java developer interviews.
